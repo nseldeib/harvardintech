@@ -55,4 +55,25 @@ const events = defineCollection({
   }),
 });
 
-export const collections = { blog, pages, team, events };
+// Regional chapters (NYC, SF, L.A., Japan). One markdown file per city under
+// `src/content/chapters/`, rendered at `/chapters/<slug>` and linked from the
+// nav Chapters dropdown. `leads` (named organizers) and `links` (city-specific
+// signup / social URLs) are optional so a chapter with no leads still renders;
+// the markdown body is the longer "about this chapter" copy.
+const chapters = defineCollection({
+  type: 'content',
+  schema: z.object({
+    city: z.string(),
+    region: z.string().optional(),
+    blurb: z.string().optional(),
+    leads: z
+      .array(z.object({ name: z.string(), role: z.string().optional() }))
+      .optional(),
+    links: z
+      .array(z.object({ label: z.string(), url: z.string() }))
+      .optional(),
+    order: z.number().optional(),
+  }),
+});
+
+export const collections = { blog, pages, team, events, chapters };

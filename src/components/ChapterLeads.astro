@@ -1,0 +1,35 @@
+---
+// The "Chapter Leads" block: a heading and a wrapped list of named leads with
+// optional roles. Renders nothing when there are no leads, so a chapter with no
+// leads listed simply omits the section.
+interface Lead {
+  name: string;
+  role?: string;
+}
+interface Props {
+  leads?: Lead[];
+}
+const { leads = [] } = Astro.props;
+---
+
+{
+  leads.length > 0 ? (
+    <div style="margin-bottom: var(--space-xl);">
+      <h2 style="text-transform: uppercase; letter-spacing: 0.08em; font-size: 1rem; margin: 0 0 var(--space-md);">
+        Chapter Leads
+      </h2>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-lg);">
+        {leads.map((lead) => (
+          <li>
+            <strong>{lead.name}</strong>
+            {lead.role ? (
+              <span style="color: var(--color-faint); display: block; font-size: 0.9rem;">
+                {lead.role}
+              </span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : null
+}

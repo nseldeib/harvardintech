@@ -1,0 +1,25 @@
+---
+// A chapter's call-to-action buttons (WhatsApp, Eventbrite, city socials),
+// rendered as the shared blue `.s-btn` pills. Renders nothing when there are no
+// links, so a chapter without city links simply omits the section.
+interface ChapterLink {
+  label: string;
+  url: string;
+}
+interface Props {
+  links?: ChapterLink[];
+}
+const { links = [] } = Astro.props;
+---
+
+{
+  links.length > 0 ? (
+    <div style="margin-top: var(--space-xl); display: flex; flex-wrap: wrap; gap: var(--space-md);">
+      {links.map((link) => (
+        <a class="s-btn" href={link.url} rel="noopener">
+          {link.label}
+        </a>
+      ))}
+    </div>
+  ) : null
+}

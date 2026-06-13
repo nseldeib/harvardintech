@@ -71,6 +71,105 @@
       "line": 23,
       "registeredAt": "2026-06-13T15:32:37.162204395+00:00",
       "runner": "tests"
+    },
+    {
+      "description": "Single-digit days are not zero-padded.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "formatEventDate › does not zero-pad single-digit days",
+      "line": 32,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A Date instance formats the same way as the equivalent string.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "formatEventDate › formats a Date instance the same as its ISO string",
+      "line": 26,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A UTC-midnight ISO string formats to a long en-US date.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "formatEventDate › formats an ISO date as Month D, YYYY",
+      "line": 21,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The original input array is not mutated by sorting.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "splitEvents › does not mutate the input array order",
+      "line": 78,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty input yields empty upcoming and past lists.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "splitEvents › handles an empty event list",
+      "line": 58,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "When every event is in the future, past is empty.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "splitEvents › returns no past events when all are upcoming",
+      "line": 71,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Events before `now` are past, sorted most recent first.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "splitEvents › returns past events sorted most recent first",
+      "line": 52,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Events on or after `now` are upcoming, sorted soonest first.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "splitEvents › returns upcoming events sorted soonest first",
+      "line": 46,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An event exactly at `now` counts as upcoming, not past.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "splitEvents › treats an event exactly at now as upcoming",
+      "line": 63,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An ISO date string is parsed into a Date.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "toEventDate › parses an ISO date string into a Date",
+      "line": 12,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A Date instance passes through unchanged.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "toEventDate › returns a Date instance unchanged",
+      "line": 6,
+      "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
     }
   ],
   "version": 2

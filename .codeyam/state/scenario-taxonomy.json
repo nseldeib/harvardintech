@@ -31,6 +31,71 @@
         "status": "n-a",
         "reason": "Primary actions are outbound links (Subscribe, Volunteer, View Events, mailto); no in-page interactive state to capture."
       }
+    },
+    "ChapterRoute": {
+      "empty": {
+        "status": "n-a",
+        "reason": "Each route renders one existing chapter; there is no empty state for a single-chapter page"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "Each chapter route renders exactly one chapter by design; the typical scenario is that single-chapter view"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "A chapter route renders one chapter; the set of chapters lives in the nav dropdown, not this view"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Static SSG route rendered at build time; no async loading state"
+      },
+      "edge": {
+        "status": "n-a",
+        "reason": "Sparse chapter with no leads/links is demonstrated by the ChapterPage component scenario chapterpage-sparse-no-leads"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Static SSG route; content collection validated at build, no runtime error state"
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "Presentational page; the only actions are external chapter links (WhatsApp, Eventbrite)"
+      }
+    },
+    "EventsRoute": {
+      "empty": {
+        "status": "n-a",
+        "reason": "Empty events list is demonstrated by the EventsPage component scenario eventspage-no-events; not duplicated as a route scenario"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "Single event is a data count, not a distinct layout; the auto-fit card grid is exercised by the typical scenario"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "Auto-fit card grid; the typical four-event scenario already exercises multi-card wrap across upcoming and past"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Static SSG route rendered at build time; no async loading state"
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Static SSG route; content collection is validated at build, no runtime error state"
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "Presentational page; the only actions are external links to event registration"
+      }
     }
   }
 }

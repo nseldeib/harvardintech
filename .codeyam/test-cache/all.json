@@ -1,13 +1,13 @@
 {
   "schemaVersion": 4,
-  "version": 3,
+  "version": 5,
   "partition": "all",
-  "hash": "648fba58cca612af",
+  "hash": "9d1de6bf68097cda",
   "runners": [
     {
       "name": "tests",
       "format": "vitest-json",
-      "output": "{\"numTotalTestSuites\":4,\"numPassedTestSuites\":4,\"numFailedTestSuites\":0,\"numPendingTestSuites\":0,\"numTotalTests\":8,\"numPassedTests\":8,\"numFailedTests\":0,\"numPendingTests\":0,\"numTodoTests\":0,\"snapshot\":{\"added\":0,\"failure\":false,\"filesAdded\":0,\"filesRemoved\":0,\"filesRemovedList\":[],\"filesUnmatched\":0,\"filesUpdated\":0,\"matched\":0,\"total\":0,\"unchecked\":0,\"uncheckedKeysByFile\":[],\"unmatched\":0,\"updated\":0,\"didUpdate\":false},\"startTime\":1781364927422,\"success\":true,\"testResults\":[{\"assertionResults\":[{\"ancestorTitles\":[\"Greeting\"],\"fullName\":\"Greeting renders the name in the headline\",\"status\":\"passed\",\"title\":\"renders the name in the headline\",\"duration\":77.37572999999998,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"Greeting\"],\"fullName\":\"Greeting omits the subtitle when no subtitle prop is given\",\"status\":\"passed\",\"title\":\"omits the subtitle when no subtitle prop is given\",\"duration\":7.8429969999999685,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"Greeting\"],\"fullName\":\"Greeting increments the counter on click\",\"status\":\"passed\",\"title\":\"increments the counter on click\",\"duration\":98.80193399999985,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1781364929175,\"endTime\":1781364929358.802,\"status\":\"passed\",\"message\":\"\",\"name\":\"src/components/Greeting.test.tsx\"},{\"assertionResults\":[{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto builds a bare mailto when only a recipient is given\",\"status\":\"passed\",\"title\":\"builds a bare mailto when only a recipient is given\",\"duration\":6.593222999999853,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto appends the subject as a query parameter\",\"status\":\"passed\",\"title\":\"appends the subject as a query parameter\",\"duration\":4.046180999999933,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto encodes spaces in the subject as %20 rather than plus\",\"status\":\"passed\",\"title\":\"encodes spaces in the subject as %20 rather than plus\",\"duration\":0.6798820000001342,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto includes both subject and body when supplied\",\"status\":\"passed\",\"title\":\"includes both subject and body when supplied\",\"duration\":1.1118700000001809,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto handles a body with no subject\",\"status\":\"passed\",\"title\":\"handles a body with no subject\",\"duration\":0.5213649999998324,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1781364928939,\"endTime\":1781364928953.5215,\"status\":\"passed\",\"message\":\"\",\"name\":\"src/lib/mailto.test.ts\"}]}\n",
+      "output": "{\"numTotalTestSuites\":8,\"numPassedTestSuites\":8,\"numFailedTestSuites\":0,\"numPendingTestSuites\":0,\"numTotalTests\":19,\"numPassedTests\":19,\"numFailedTests\":0,\"numPendingTests\":0,\"numTodoTests\":0,\"snapshot\":{\"added\":0,\"failure\":false,\"filesAdded\":0,\"filesRemoved\":0,\"filesRemovedList\":[],\"filesUnmatched\":0,\"filesUpdated\":0,\"matched\":0,\"total\":0,\"unchecked\":0,\"uncheckedKeysByFile\":[],\"unmatched\":0,\"updated\":0,\"didUpdate\":false},\"startTime\":1781372948002,\"success\":true,\"testResults\":[{\"assertionResults\":[{\"ancestorTitles\":[\"Greeting\"],\"fullName\":\"Greeting renders the name in the headline\",\"status\":\"passed\",\"title\":\"renders the name in the headline\",\"duration\":55.10133300000007,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"Greeting\"],\"fullName\":\"Greeting omits the subtitle when no subtitle prop is given\",\"status\":\"passed\",\"title\":\"omits the subtitle when no subtitle prop is given\",\"duration\":7.150375000000167,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"Greeting\"],\"fullName\":\"Greeting increments the counter on click\",\"status\":\"passed\",\"title\":\"increments the counter on click\",\"duration\":43.85454099999993,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1781372949538,\"endTime\":1781372949644.8545,\"status\":\"passed\",\"message\":\"\",\"name\":\"src/components/Greeting.test.tsx\"},{\"assertionResults\":[{\"ancestorTitles\":[\"toEventDate\"],\"fullName\":\"toEventDate returns a Date instance unchanged\",\"status\":\"passed\",\"title\":\"returns a Date instance unchanged\",\"duration\":1.647375000000011,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"toEventDate\"],\"fullName\":\"toEventDate parses an ISO date string into a Date\",\"status\":\"passed\",\"title\":\"parses an ISO date string into a Date\",\"duration\":0.4619589999999789,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"formatEventDate\"],\"fullName\":\"formatEventDate formats an ISO date as Month D, YYYY\",\"status\":\"passed\",\"title\":\"formats an ISO date as Month D, YYYY\",\"duration\":50.33016599999996,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"formatEventDate\"],\"fullName\":\"formatEventDate formats a Date instance the same as its ISO string\",\"status\":\"passed\",\"title\":\"formats a Date instance the same as its ISO string\",\"duration\":0.5119159999999283,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"formatEventDate\"],\"fullName\":\"formatEventDate does not zero-pad single-digit days\",\"status\":\"passed\",\"title\":\"does not zero-pad single-digit days\",\"duration\":0.34941600000001927,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"splitEvents\"],\"fullName\":\"splitEvents returns upcoming events sorted soonest first\",\"status\":\"passed\",\"title\":\"returns upcoming events sorted soonest first\",\"duration\":1.4196670000001177,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"splitEvents\"],\"fullName\":\"splitEvents returns past events sorted most recent first\",\"status\":\"passed\",\"title\":\"returns past events sorted most recent first\",\"duration\":0.5343330000000606,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"splitEvents\"],\"fullName\":\"splitEvents handles an empty event list\",\"status\":\"passed\",\"title\":\"handles an empty event list\",\"duration\":0.29674999999997453,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"splitEvents\"],\"fullName\":\"splitEvents treats an event exactly at now as upcoming\",\"status\":\"passed\",\"title\":\"treats an event exactly at now as upcoming\",\"duration\":0.6249159999999847,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"splitEvents\"],\"fullName\":\"splitEvents returns no past events when all are upcoming\",\"status\":\"passed\",\"title\":\"returns no past events when all are upcoming\",\"duration\":1.3732499999998709,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"splitEvents\"],\"fullName\":\"splitEvents does not mutate the input array order\",\"status\":\"passed\",\"title\":\"does not mutate the input array order\",\"duration\":0.30533300000001873,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1781372949301,\"endTime\":1781372949360.3054,\"status\":\"passed\",\"message\":\"\",\"name\":\"src/lib/events.test.ts\"},{\"assertionResults\":[{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto builds a bare mailto when only a recipient is given\",\"status\":\"passed\",\"title\":\"builds a bare mailto when only a recipient is given\",\"duration\":1.898542000000134,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto appends the subject as a query parameter\",\"status\":\"passed\",\"title\":\"appends the subject as a query parameter\",\"duration\":1.8239169999999376,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto encodes spaces in the subject as %20 rather than plus\",\"status\":\"passed\",\"title\":\"encodes spaces in the subject as %20 rather than plus\",\"duration\":0.28074999999989814,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto includes both subject and body when supplied\",\"status\":\"passed\",\"title\":\"includes both subject and body when supplied\",\"duration\":0.7174999999999727,\"failureMessages\":[],\"meta\":{}},{\"ancestorTitles\":[\"buildMailto\"],\"fullName\":\"buildMailto handles a body with no subject\",\"status\":\"passed\",\"title\":\"handles a body with no subject\",\"duration\":1.9423750000000837,\"failureMessages\":[],\"meta\":{}}],\"startTime\":1781372949300,\"endTime\":1781372949306.9424,\"status\":\"passed\",\"message\":\"\",\"name\":\"src/lib/mailto.test.ts\"}]}\n",
       "invoked_command": "npx vitest run --reporter=json",
       "exit_code": 0,
       "tests": [
@@ -31,6 +31,94 @@
           "key": "Greeting › increments the counter on click",
           "status": "passed",
           "file": "src/components/Greeting.test.tsx",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "toEventDate › returns a Date instance unchanged",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "toEventDate › parses an ISO date string into a Date",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "formatEventDate › formats an ISO date as Month D, YYYY",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "formatEventDate › formats a Date instance the same as its ISO string",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "formatEventDate › does not zero-pad single-digit days",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "splitEvents › returns upcoming events sorted soonest first",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "splitEvents › returns past events sorted most recent first",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "splitEvents › handles an empty event list",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "splitEvents › treats an event exactly at now as upcoming",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "splitEvents › returns no past events when all are upcoming",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
+          "line": null,
+          "runner": "tests",
+          "format": "vitest"
+        },
+        {
+          "key": "splitEvents › does not mutate the input array order",
+          "status": "passed",
+          "file": "src/lib/events.test.ts",
           "line": null,
           "runner": "tests",
           "format": "vitest"

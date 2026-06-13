@@ -1,10 +1,17 @@
-# regenerated from glossary.json on 2026-06-13T16:58:48Z; do not hand-edit
+# regenerated from glossary.json on 2026-06-13T17:41:50Z; do not hand-edit
+ChapterPage :: src/components/ChapterPage.astro :: tags=
+ChapterRoute :: src/pages/chapters/[slug].astro :: tags=
 EmbedForm :: src/components/EmbedForm.astro :: tags=
+EventsPage :: src/components/EventsPage.astro :: tags=
+EventsRoute :: src/pages/events.astro :: tags=
 Greeting :: src/components/Greeting.tsx :: tags= :: test=src/components/Greeting.test.tsx
 LandingPage :: src/pages/index.astro :: tags=
 buildMailto :: src/lib/mailto.ts :: tags= :: test=src/lib/mailto.test.ts
 escapeHtml :: cms-auth-worker/worker.js :: tags=
+formatEventDate :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts
 handlePasswordSubmit :: cms-auth-worker/worker.js :: tags=
 handshakePage :: cms-auth-worker/worker.js :: tags=
 htmlResponse :: cms-auth-worker/worker.js :: tags=
 passwordFormPage :: cms-auth-worker/worker.js :: tags=
+splitEvents :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts
+toEventDate :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts

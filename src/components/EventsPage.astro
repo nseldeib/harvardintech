@@ -1,0 +1,49 @@
+---
+// Full Events page body: an intro header, an "Upcoming" section, and a "Past
+// Events" section, split from a single flat `events` array against `now` (build
+// time on the static site) via the pure splitEvents helper. Accepts a plain
+// array so it renders from getCollection() on the /events route and from
+// isolated-component scenarios (rich / no-upcoming / empty states).
+import EventsSection from './EventsSection.astro';
+import { splitEvents, type EventLike } from '../lib/events';
+
+interface Props {
+  events?: EventLike[];
+  now?: string | Date;
+  eventbriteUrl?: string;
+}
+const {
+  events = [],
+  now,
+  eventbriteUrl = 'https://www.eventbrite.com/o/harvard-in-tech-17275560304',
+} = Astro.props;
+
+const { upcoming, past } = splitEvents(events, now ?? new Date());
+---
+
+<section class="s-section">
+  <div class="s-inner" style="text-align: center;">
+    <h1 class="s-title">Events</h1>
+    <p style="color: var(--color-muted); max-width: var(--text-width); margin: 0 auto var(--space-lg);">
+      Mixers, founder dinners, panels, and our annual summit — across our NYC, San
+      Francisco, L.A., and Japan chapters.
+    </p>
+
+    <EventsSection
+      title="Upcoming"
+      events={upcoming}
+      variant="upcoming"
+      emptyMessage="No upcoming events right now — sign up for our mailing list to hear about the next one."
+    />
+
+    {
+      past.length > 0 ? (
+        <EventsSection title="Past Events" events={past} variant="past" marginTop="var(--space-xl)" />
+      ) : null
+    }
+
+    <div style="margin-top: var(--space-xl);">
+      <a class="s-btn" href={eventbriteUrl} rel="noopener">View Upcoming Events</a>
+    </div>
+  </div>
+</section>

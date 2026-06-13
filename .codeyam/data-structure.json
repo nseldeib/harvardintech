@@ -76,5 +76,21 @@
     "fields": [
       { "name": "items", "type": "array", "required": true }
     ]
+  },
+  {
+    "name": "Chapter",
+    "description": "A regional Harvard in Tech chapter (NYC, SF, L.A., Japan). Stored as a markdown file in the `chapters` content collection; rendered on per-chapter routes at /chapters/<slug> and linked from the nav Chapters dropdown. Optional fields (`leads`, `links`) prove a chapter with no leads listed still renders.",
+    "category": "datastore",
+    "order": 7,
+    "fields": [
+      { "name": "slug", "type": "string", "isId": true, "required": true },
+      { "name": "city", "type": "string", "required": true },
+      { "name": "region", "type": "string", "required": false },
+      { "name": "blurb", "type": "string", "required": false },
+      { "name": "leads", "type": "array", "required": false },
+      { "name": "links", "type": "array", "required": false },
+      { "name": "order", "type": "number", "required": false },
+      { "name": "body", "type": "string", "required": false }
+    ]
   }
 ]

@@ -1,3 +1,14 @@
 {"timestamp":"2026-06-13T15:22:21Z","kind":"registry-add","message":"registry `Greeting › renders the name in the headline`: added from runner `tests` output"}
 {"timestamp":"2026-06-13T15:22:21Z","kind":"registry-add","message":"registry `Greeting › omits the subtitle when no subtitle prop is given`: added from runner `tests` output"}
 {"timestamp":"2026-06-13T15:22:21Z","kind":"registry-add","message":"registry `Greeting › increments the counter on click`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `toEventDate › parses an ISO date string into a Date`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `splitEvents › returns no past events when all are upcoming`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `toEventDate › returns a Date instance unchanged`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `splitEvents › returns upcoming events sorted soonest first`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `splitEvents › does not mutate the input array order`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `formatEventDate › does not zero-pad single-digit days`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `formatEventDate › formats an ISO date as Month D, YYYY`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `splitEvents › treats an event exactly at now as upcoming`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `splitEvents › handles an empty event list`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `formatEventDate › formats a Date instance the same as its ISO string`: added from runner `tests` output"}
+{"timestamp":"2026-06-13T17:26:10Z","kind":"registry-add","message":"registry `splitEvents › returns past events sorted most recent first`: added from runner `tests` output"}

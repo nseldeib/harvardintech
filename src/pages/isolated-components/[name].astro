@@ -1,6 +1,8 @@
 ---
 import Greeting from '../../components/Greeting.tsx';
 import EmbedForm from '../../components/EmbedForm.astro';
+import EventsPage from '../../components/EventsPage.astro';
+import ChapterPage from '../../components/ChapterPage.astro';
 import '../../styles/tokens.css';
 
 // Component-isolation harness. codeyam captures a single component in isolation
@@ -32,6 +34,58 @@ const embedFormStates = {
   },
 } as const;
 
+// EventsPage states. `now` is fixed so the Upcoming/Past split is deterministic
+// regardless of the build date. The Empty state proves the no-events fallback.
+const SAMPLE_EVENTS = [
+  {
+    title: 'Harvard in Tech Summit 2026',
+    date: '2026-09-24',
+    location: 'New York, NY',
+    description: 'Our flagship annual gathering of Harvard founders, operators, and investors.',
+    link: 'https://www.harvardintech.com/events/summit-2026',
+  },
+  {
+    title: 'Founders & Investors Mixer — San Francisco',
+    date: '2026-07-15',
+    location: 'San Francisco, CA',
+    description: 'An evening connecting Harvard alumni founders with active investors across the Bay Area.',
+    link: 'https://www.harvardintech.com/events/sf-mixer',
+  },
+  {
+    title: 'Spring Founder Dinner — NYC',
+    date: '2026-03-12',
+    location: 'New York, NY',
+    description: 'An intimate dinner with Harvard alumni founders and operators.',
+    link: 'https://www.harvardintech.com/events/spring-founder-dinner',
+  },
+];
+const eventsPageStates = {
+  Default: { events: SAMPLE_EVENTS, now: '2026-06-13' },
+  Empty: { events: [], now: '2026-06-13' },
+} as const;
+
+// ChapterPage states: a full NYC-style chapter vs a sparse one (city + region
+// only, no blurb / leads / links) proving the missing-optional layout.
+const chapterPageStates = {
+  Default: {
+    city: 'New York City',
+    region: 'New York, NY',
+    blurb: 'Our founding chapter and largest community, hosting monthly mixers, founder dinners, and the annual Harvard in Tech Summit.',
+    leads: [
+      { name: 'Jessica Li', role: 'Chapter Lead' },
+      { name: 'Ben Wei', role: 'Events' },
+    ],
+    links: [
+      { label: 'Join the NYC WhatsApp', url: 'https://chat.whatsapp.com/harvardintech-nyc' },
+      { label: 'NYC events on Eventbrite', url: 'https://www.eventbrite.com/o/harvard-in-tech-17275560304' },
+    ],
+  },
+  Sparse: {
+    city: 'Japan',
+    region: 'Tokyo',
+  },
+} as const;
+
 export async function getStaticPaths() {
   // getStaticPaths runs in an isolated scope and cannot reference the
   // module-level consts — enumerate route names inline.
@@ -40,6 +94,10 @@ export async function getStaticPaths() {
     { params: { name: 'EmbedForm' } },
     { params: { name: 'EmbedForm-Embedded' } },
     { params: { name: 'EmbedForm-Unconfigured' } },
+    { params: { name: 'EventsPage' } },
+    { params: { name: 'EventsPage-Empty' } },
+    { params: { name: 'ChapterPage' } },
+    { params: { name: 'ChapterPage-Sparse' } },
   ];
 }
 
@@ -52,6 +110,18 @@ let embedFormProps: (typeof embedFormStates)[keyof typeof embedFormStates] | nul
 if (name && name.startsWith('EmbedForm')) {
   const stateKey = (name === 'EmbedForm' ? 'Configured' : name.slice('EmbedForm-'.length)) as keyof typeof embedFormStates;
   embedFormProps = embedFormStates[stateKey] ?? embedFormStates.Configured;
+}
+
+let eventsPageProps: (typeof eventsPageStates)[keyof typeof eventsPageStates] | null = null;
+if (name && name.startsWith('EventsPage')) {
+  const stateKey = (name === 'EventsPage' ? 'Default' : name.slice('EventsPage-'.length)) as keyof typeof eventsPageStates;
+  eventsPageProps = eventsPageStates[stateKey] ?? eventsPageStates.Default;
+}
+
+let chapterPageProps: (typeof chapterPageStates)[keyof typeof chapterPageStates] | null = null;
+if (name && name.startsWith('ChapterPage')) {
+  const stateKey = (name === 'ChapterPage' ? 'Default' : name.slice('ChapterPage-'.length)) as keyof typeof chapterPageStates;
+  chapterPageProps = chapterPageStates[stateKey] ?? chapterPageStates.Default;
 }
 ---
 
@@ -68,6 +138,15 @@ if (name && name.startsWith('EmbedForm')) {
           <Island {...island.props} client:load />
         ) : embedFormProps ? (
           <EmbedForm {...embedFormProps} />
+        ) : eventsPageProps ? (
+          <EventsPage {...eventsPageProps} />
+        ) : chapterPageProps ? (
+          <ChapterPage {...chapterPageProps}>
+            <p>
+              A representative "about this chapter" paragraph rendered in the
+              markdown body slot, so the isolated capture matches the real route.
+            </p>
+          </ChapterPage>
         ) : (
           <p>Unknown component: {name}</p>
         )

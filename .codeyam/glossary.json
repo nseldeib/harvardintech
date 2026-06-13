@@ -1,5 +1,22 @@
 [
   {
+    "description": "A single regional chapter page body composed from ChapterHeader, ChapterLeads, the markdown body slot, and ChapterLinks. Reused by the /chapters/[slug] route and isolated scenarios.",
+    "filePath": "src/components/ChapterPage.astro",
+    "name": "ChapterPage",
+    "scenarios": [
+      "chapterpage-full-chapter",
+      "chapterpage-sparse-no-leads"
+    ]
+  },
+  {
+    "description": "Entry-point page for /chapters/<slug>. Enumerates the chapters content collection via getStaticPaths and renders each chapter through ChapterPage inside BaseLayout.",
+    "filePath": "src/pages/chapters/[slug].astro",
+    "name": "ChapterRoute",
+    "scenarios": [
+      "chapter-route-new-york-city"
+    ]
+  },
+  {
     "description": "External-form embed for the static site: renders one of three states — a MailChimp-style POST form (action prop), an embedded provider iframe (embedUrl prop), or an unconfigured fallback message. Delegates submission to a third-party service since a static build has no backend.",
     "filePath": "src/components/EmbedForm.astro",
     "name": "EmbedForm",
@@ -7,6 +24,23 @@
       "embedform-configured-form",
       "embedform-embedded-iframe",
       "embedform-unconfigured-fallback"
+    ]
+  },
+  {
+    "description": "Full Events page body: intro header plus Upcoming and Past sections, split from a flat events array via splitEvents. Reused by the /events route and isolated scenarios.",
+    "filePath": "src/components/EventsPage.astro",
+    "name": "EventsPage",
+    "scenarios": [
+      "eventspage-upcoming-and-past",
+      "eventspage-no-events"
+    ]
+  },
+  {
+    "description": "Entry-point page for /events. Loads the events content collection and renders the full Events page (Upcoming + Past) via EventsPage inside BaseLayout.",
+    "filePath": "src/pages/events.astro",
+    "name": "EventsRoute",
+    "scenarios": [
+      "events-route-upcoming-and-past"
     ]
   },
   {
@@ -38,6 +72,12 @@
       "justification": "Template CMS auth worker shipped by the astro-github-pages scaffold; not part of the landing-page feature.",
       "kind": "scaffold"
     }
+  },
+  {
+    "description": "Formats an event date as a long en-US date string (e.g. 'September 24, 2026') for display on event cards.",
+    "filePath": "src/lib/events.ts",
+    "name": "formatEventDate",
+    "testFile": "src/lib/events.test.ts"
   },
   {
     "description": "Handles the password-form submission in the CMS auth worker's OAuth handshake.",
@@ -74,5 +114,17 @@
       "justification": "Template CMS auth worker shipped by the astro-github-pages scaffold; not part of the landing-page feature.",
       "kind": "scaffold"
     }
+  },
+  {
+    "description": "Splits a flat event list into upcoming (date >= now, soonest first) and past (date < now, most recent first) relative to a reference time; events at now count as upcoming.",
+    "filePath": "src/lib/events.ts",
+    "name": "splitEvents",
+    "testFile": "src/lib/events.test.ts"
+  },
+  {
+    "description": "Coerces a string-or-Date event date into a Date, passing existing Date instances through untouched.",
+    "filePath": "src/lib/events.ts",
+    "name": "toEventDate",
+    "testFile": "src/lib/events.test.ts"
   }
 ]

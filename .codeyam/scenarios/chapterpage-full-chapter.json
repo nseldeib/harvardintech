@@ -1,0 +1,11 @@
+{
+  "name": "ChapterPage - Full Chapter",
+  "id": "2d3ba063-ccc9-4d18-be68-368ba2cc243a",
+  "url": "/isolated-components/ChapterPage",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "src/components/ChapterPage.astro"
+}

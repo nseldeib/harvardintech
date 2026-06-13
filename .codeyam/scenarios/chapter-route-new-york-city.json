@@ -1,0 +1,11 @@
+{
+  "name": "Chapter Route - New York City",
+  "id": "43c7900b-bba9-498b-adfa-311b085d646e",
+  "url": "/chapters/nyc",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/chapters/[slug].astro"
+}

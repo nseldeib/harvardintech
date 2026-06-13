@@ -1,0 +1,27 @@
+---
+// /chapters/<slug> — one page per regional chapter. Static output enumerates a
+// route per `chapters` collection entry via getStaticPaths; ChapterPage renders
+// the frontmatter (city, leads, links) and the markdown body in its slot.
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChapterPage from '../../components/ChapterPage.astro';
+
+export async function getStaticPaths() {
+  const chapters = await getCollection('chapters');
+  return chapters.map((chapter) => ({
+    params: { slug: chapter.slug },
+    props: { chapter },
+  }));
+}
+
+type Props = { chapter: CollectionEntry<'chapters'> };
+const { chapter } = Astro.props as Props;
+const { Content } = await chapter.render();
+const { city, region, blurb, leads, links } = chapter.data;
+---
+
+<BaseLayout title={city} description={blurb ?? `Harvard in Tech ${city} chapter.`}>
+  <ChapterPage city={city} region={region} blurb={blurb} leads={leads} links={links}>
+    <Content />
+  </ChapterPage>
+</BaseLayout>

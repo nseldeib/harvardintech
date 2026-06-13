@@ -1,0 +1,45 @@
+---
+// A single regional chapter page body, composed from sub-components: a back
+// link, the chapter header, optional leads, the markdown "about" body (default
+// slot), and optional city links. Accepts plain props so it renders from the
+// /chapters/<slug> route (with rendered <Content /> in the slot) and from
+// isolated scenarios (full NYC vs sparse Japan with no leads/links).
+import ChapterHeader from './ChapterHeader.astro';
+import ChapterLeads from './ChapterLeads.astro';
+import ChapterLinks from './ChapterLinks.astro';
+
+interface Lead {
+  name: string;
+  role?: string;
+}
+interface ChapterLink {
+  label: string;
+  url: string;
+}
+interface Props {
+  city: string;
+  region?: string;
+  blurb?: string;
+  leads?: Lead[];
+  links?: ChapterLink[];
+}
+const { city, region, blurb, leads = [], links = [] } = Astro.props;
+---
+
+<section class="s-section">
+  <div class="s-narrow">
+    <a href="/#events" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em;">
+      ← All chapters
+    </a>
+
+    <ChapterHeader city={city} region={region} blurb={blurb} />
+
+    <ChapterLeads leads={leads} />
+
+    <div style="line-height: 1.8;">
+      <slot />
+    </div>
+
+    <ChapterLinks links={links} />
+  </div>
+</section>

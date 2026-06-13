@@ -1,10 +1,20 @@
 {
   "Greeting › increments the counter on click": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-13T15:35:29.652653017+00:00",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:23:48.289903+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-13T15:35:29.652653017+00:00",
@@ -19,10 +29,20 @@
   },
   "Greeting › omits the subtitle when no subtitle prop is given": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-13T15:35:29.652653017+00:00",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:23:48.289903+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-13T15:35:29.652653017+00:00",
@@ -37,10 +57,20 @@
   },
   "Greeting › renders the name in the headline": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-13T15:35:29.652653017+00:00",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:23:48.289903+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-13T15:35:29.652653017+00:00",
@@ -55,10 +85,20 @@
   },
   "buildMailto › appends the subject as a query parameter": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-13T15:35:29.652653017+00:00",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:23:48.289903+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-13T15:35:29.652653017+00:00",
@@ -68,10 +108,20 @@
   },
   "buildMailto › builds a bare mailto when only a recipient is given": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-13T15:35:29.652653017+00:00",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:23:48.289903+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-13T15:35:29.652653017+00:00",
@@ -81,10 +131,20 @@
   },
   "buildMailto › encodes spaces in the subject as %20 rather than plus": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-13T15:35:29.652653017+00:00",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:23:48.289903+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-13T15:35:29.652653017+00:00",
@@ -94,10 +154,20 @@
   },
   "buildMailto › handles a body with no subject": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-13T15:35:29.652653017+00:00",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:23:48.289903+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-13T15:35:29.652653017+00:00",
@@ -107,13 +177,166 @@
   },
   "buildMailto › includes both subject and body when supplied": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-13T15:35:29.652653017+00:00",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
       {
         "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:23:48.289903+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
         "at": "2026-06-13T15:35:29.652653017+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "formatEventDate › does not zero-pad single-digit days": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "formatEventDate › formats a Date instance the same as its ISO string": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "formatEventDate › formats an ISO date as Month D, YYYY": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "splitEvents › does not mutate the input array order": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "splitEvents › handles an empty event list": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "splitEvents › returns no past events when all are upcoming": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "splitEvents › returns past events sorted most recent first": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "splitEvents › returns upcoming events sorted soonest first": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "splitEvents › treats an event exactly at now as upcoming": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "toEventDate › parses an ISO date string into a Date": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "toEventDate › returns a Date instance unchanged": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-06-13T17:49:09.988105+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]

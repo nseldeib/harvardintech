@@ -1,0 +1,20 @@
+{
+  "claimStartedAt": "2026-06-13T17:08:58Z",
+  "completedAt": "2026-06-13T17:47:37Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "machine": "Jareds-Laptop.local",
+    "pid": 26754,
+    "priority": 0,
+    "selectedPlan": "events-and-chapters-pages",
+    "sessionId": "",
+    "startedAt": "2026-06-13T17:08:58Z"
+  },
+  "createdAt": "2026-06-13T13:40:02Z",
+  "journalTimestamp": "2026-06-13T17:47:37Z",
+  "mode": "ui",
+  "planFile": "completed/events-and-chapters-pages.md",
+  "slug": "events-and-chapters-pages",
+  "title": "Events & Chapters Pages"
+}

@@ -1,9 +1,10 @@
-# regenerated from dependency-graph.json on 2026-06-13T17:05:27Z; do not hand-edit
+# regenerated from dependency-graph.json on 2026-06-13T17:49:15Z; do not hand-edit
 .claude/skills/review-session/scripts/find-last-session-helpers.mjs :: imports=0 :: imported_by=1
 src/components/Greeting.tsx :: imports=0 :: imported_by=1
 src/content/config.js :: imports=0 :: imported_by=1
 src/data/nav.json :: imports=0 :: imported_by=1
 src/data/settings.json :: imports=0 :: imported_by=1
+src/lib/events.ts :: imports=0 :: imported_by=1
 src/lib/mailto.ts :: imports=0 :: imported_by=1
 .astro/content-assets.mjs :: imports=0 :: imported_by=0
 .astro/content-modules.mjs :: imports=0 :: imported_by=0
@@ -19,6 +20,7 @@ astro.config.mjs :: imports=0 :: imported_by=0
 cms-auth-worker/worker.js :: imports=0 :: imported_by=0
 src/components/Greeting.test.tsx :: imports=1 :: imported_by=0
 src/content/config.ts :: imports=0 :: imported_by=0
+src/lib/events.test.ts :: imports=1 :: imported_by=0
 src/lib/mailto.test.ts :: imports=1 :: imported_by=0
 src/lib/site.ts :: imports=2 :: imported_by=0
 ui/src/helpers/stepLabels.generated.ts :: imports=0 :: imported_by=0

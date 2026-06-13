@@ -1,0 +1,29 @@
+---
+// A chapter's centered header: city title with the shared blue underline, an
+// optional uppercase region line, and an optional blurb. Split out of
+// ChapterPage so the page composes sub-components rather than raw markup.
+interface Props {
+  city: string;
+  region?: string;
+  blurb?: string;
+}
+const { city, region, blurb } = Astro.props;
+---
+
+<header style="text-align: center; margin: var(--space-lg) 0 var(--space-xl);">
+  <h1 class="s-title" style="margin-bottom: var(--space-md);">{city}</h1>
+  {
+    region ? (
+      <p style="color: var(--color-faint); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85rem; margin: 0;">
+        {region}
+      </p>
+    ) : null
+  }
+  {
+    blurb ? (
+      <p style="color: var(--color-muted); font-size: 1.1rem; margin: var(--space-md) auto 0; max-width: var(--text-width);">
+        {blurb}
+      </p>
+    ) : null
+  }
+</header>

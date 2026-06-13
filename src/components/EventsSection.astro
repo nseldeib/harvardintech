@@ -1,0 +1,36 @@
+---
+// A titled section of event cards: an uppercase heading, a responsive card
+// grid, and an optional empty-state fallback. Used twice on the /events page
+// (Upcoming + Past). `variant` is passed through to each EventCard.
+import EventCard from './EventCard.astro';
+import type { EventLike } from '../lib/events';
+
+interface Props {
+  title: string;
+  events: EventLike[];
+  variant?: 'upcoming' | 'past';
+  emptyMessage?: string;
+  marginTop?: string;
+}
+const { title, events, variant = 'upcoming', emptyMessage, marginTop = 'var(--space-lg)' } =
+  Astro.props;
+---
+
+<h2
+  style={`text-transform: uppercase; letter-spacing: 0.08em; font-size: 1.1rem; margin: ${marginTop} 0 var(--space-md);`}
+>
+  {title}
+</h2>
+{
+  events.length === 0 ? (
+    emptyMessage ? (
+      <p style="color: var(--color-muted);">{emptyMessage}</p>
+    ) : null
+  ) : (
+    <div style="display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 920px; margin: 0 auto;">
+      {events.map((event) => (
+        <EventCard event={event} variant={variant} />
+      ))}
+    </div>
+  )
+}

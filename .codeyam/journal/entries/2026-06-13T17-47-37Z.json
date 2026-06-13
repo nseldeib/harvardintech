@@ -1,0 +1,259 @@
+{
+  "timestamp": "2026-06-13T17:47:37Z",
+  "title": "Events & Chapters Pages",
+  "type": "feature",
+  "userRequest": "## Summary\n\n> **Stack note (updated):** the project scaffolded on the **Astro +\n> GitHub Pages** stack, not Next.js. Routes are `src/pages/**`; chapter/about\n> content lives in the `pages` content collection; the Events page reads the\n> `events` collection. Treat the Next.js paths below as intent — they'll be\n> mapped to Astro equivalents when this plan is picked up.\n\nComplete the public site's remaining top-level pages so every item in the nav\nresolves to a real page: a full **Events** page and the four **Chapters** pages\n(NYC, San Francisco, L.A., Japan). All content stays static (sourced from the\n`content/` modules established in the landing-page plan); no database. This\nfinishes the faithful reproduction of the public marketing site.\n\n## Key Decisions\n\n- **Reuse the static content model.** Events page reads the same\n  `content/events.ts` the landing page's UpcomingEvents section uses, so there is\n  one source of truth. Chapters get a new `content/chapters.ts` module.\n- **One route per nav target.** `/events` and `/chapters/[slug]` (or explicit\n  `/chapters/nyc`, `/chapters/sf`, `/chapters/la`, `/chapters/japan`) so static\n  export emits a file per chapter.\n- **Faithful, not redesigned.** Mirror whatever the live site shows on these\n  pages.\n\n## Implementation\n\n### 1. Events page\n\n**New file**: `app/events/page.tsx`\n\nFull events listing (upcoming + past), reusing the `Event` type and\n`content/events.ts`. Reuse the landing page's `UpcomingEvents` presentation\nwhere it fits; add a past-events section.\n\n### 2. Chapters content + pages\n\n**New file**: `content/chapters.ts` — `Chapter[]` (slug, city, blurb, leads,\nlinks) seeded from the live site.\n\n**New files**: `app/chapters/[slug]/page.tsx` (+ `generateStaticParams`) or\nexplicit per-city routes, plus a `ChapterPage` component. Wire the nav dropdown\n(from the landing plan's `SiteNav`) to these routes.\n\n## Reused existing code\n\n- `content/events.ts`, `Event` type, and `UpcomingEvents` component from\n  `landing-page-faithful-reproduction` (cite glossary entries once registered).\n- `SiteNav` / `SiteFooter` layout shell from the landing plan.\n\n## Scenarios to Demonstrate\n\n- Events page with upcoming + past events.\n- Events page empty state.\n- Each chapter page rendered (NYC / SF / L.A. / Japan).\n- Chapter page with missing optional fields (no leads listed).",
+  "description": "Added a full Events page at /events that splits the events content collection into Upcoming and Past sections, and per-chapter pages at /chapters/<slug> for NYC, San Francisco, L.A., and Japan backed by a new chapters content collection. Extracted shared presentational components (EventCard, EventsSection, ChapterHeader, ChapterLeads, ChapterLinks) and a pure-logic events lib (toEventDate, formatEventDate, splitEvents) covered by 14 unit tests; the landing UpcomingEvents section now reuses the shared EventCard.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/.last-reconcile.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/deps-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/events-and-chapters-pages.md\t.codeyam/plans/completed/events-and-chapters-pages.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/reconciliation-log.jsonl",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/runner-timing-history.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/session-results-snapshot.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-run-marker.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/UpcomingEvents.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-new-york-city.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterpage-full-chapter.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterpage-sparse-no-leads.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/events-route-upcoming-and-past.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/eventspage-no-events.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/eventspage-upcoming-and-past.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-sparse-no-leads--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-sparse-no-leads--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-no-events--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-no-events--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": "src/components/ChapterHeader.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/ChapterLeads.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/ChapterLinks.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/ChapterPage.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/EventCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/EventsPage.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/EventsSection.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/chapters/japan.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/chapters/la.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/chapters/nyc.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/chapters/san-francisco.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/spring-founder-dinner-nyc.md",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/events.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/events.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/chapters/[slug].astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/events.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Sparse No Leads",
+      "screenshotPath": "chapterpage-sparse-no-leads--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "EventsPage - No Events",
+      "screenshotPath": "eventspage-no-events--desktop.png"
+    },
+    {
+      "name": "EventsPage - Upcoming and Past",
+      "screenshotPath": "eventspage-upcoming-and-past--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 19,
+    "passed": 19,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 19,
+        "passed": 19
+      }
+    ]
+  }
+}

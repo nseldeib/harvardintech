@@ -1,0 +1,17 @@
+---
+// /events — the full Events page. Loads the `events` content collection and
+// hands the flat array to EventsPage, which splits it into Upcoming / Past
+// against build time. Linked from the nav (Events) and the landing page.
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EventsPage from '../components/EventsPage.astro';
+
+const events = (await getCollection('events')).map((e) => ({
+  slug: e.slug,
+  ...e.data,
+}));
+---
+
+<BaseLayout title="Events" description="Upcoming and past Harvard in Tech events.">
+  <EventsPage events={events} />
+</BaseLayout>
