@@ -48,5 +48,7 @@ cms-auth-worker/              # optional Cloudflare Worker for the password sign
 
 1. In `astro.config.mjs`, set `site` to your Pages URL and `base` to your repo
    path (drop `base` for a `<user>.github.io` root site).
-2. Repo Settings → Pages → Source: **GitHub Actions**.
-3. Push to `main` — `.github/workflows/deploy.yml` builds and deploys.
+2. Push to `main` — `.github/workflows/deploy.yml` enables Pages automatically
+   (Source: **GitHub Actions**), then builds and deploys. No manual Settings →
+   Pages toggle in the common case; see [`DEPLOY_SETUP.md`](./DEPLOY_SETUP.md)
+   for the fallback if the first deploy 404s.

@@ -20,19 +20,6 @@ const { chromium } = require("playwright");
 const PLAYWRIGHT_MISSING_BROWSER_PATTERN = "Executable doesn't exist";
 const PLAYWRIGHT_INSTALL_COMMAND = "npx playwright install chromium";
 
-// Pin the headless capture browser's `localhost` resolution to the IPv4
-// loopback the editor's listeners bind. The browser-facing preview origin is
-// now `localhost` (secure-context apps refuse a bare IP — see
-// `BROWSER_FACING_HOST`), but on a dual-stack host `localhost` can resolve to
-// `::1` first, which nothing answers on — stalling the capture or paying a
-// happy-eyeballs fallback delay. Forcing the map removes that intermittency
-// deterministically for capture. The operator's OWN preview browser is covered
-// separately by the editor binding `::1` alongside `127.0.0.1` (see start.rs).
-const CAPTURE_HOST_RESOLVER_RULES = "MAP localhost 127.0.0.1";
-const CAPTURE_LAUNCH_ARGS = [
-  `--host-resolver-rules=${CAPTURE_HOST_RESOLVER_RULES}`,
-];
-
 // One-shot self-heal around `chromium.launch()`. If the first launch
 // throws the "missing browser" error, run `npx playwright install
 // chromium` synchronously (with `stdio: "inherit"` so the user sees
@@ -41,7 +28,7 @@ const CAPTURE_LAUNCH_ARGS = [
 // `Scenario check failed: <stderr>` path keeps showing the actionable
 // message — looping would hide a real ops failure under a slow timeout.
 async function launchChromiumWithSelfHeal({
-  launch = () => chromium.launch({ args: CAPTURE_LAUNCH_ARGS }),
+  launch = () => chromium.launch(),
   install = () => execSync(PLAYWRIGHT_INSTALL_COMMAND, { stdio: "inherit" }),
   stderr = process.stderr,
 } = {}) {
@@ -92,7 +79,6 @@ const {
   assertAppPortReachable,
   loadScenarioInIframe,
   loadScenarioTopLevel,
-  resolveHarnessOrigin,
   waitForStablePage,
   createNetworkTracker,
   waitForNetworkQuiet,
@@ -505,8 +491,7 @@ async function verifySeededStorageLanded(frame, config) {
 // Returns the frame the flow ended on, so the caller's final screenshot and
 // result URL reflect the last navigated route.
 async function runFlowSteps(page, initialFrame, steps, ctx) {
-  const { url, loadingMarkers, navigation, iframeBackground, preflight, harnessOrigin } =
-    ctx;
+  const { url, loadingMarkers, navigation, iframeBackground, preflight } = ctx;
   let frame = initialFrame;
 
   for (let i = 0; i < steps.length; i++) {
@@ -522,7 +507,6 @@ async function runFlowSteps(page, initialFrame, steps, ctx) {
               : await loadScenarioInIframe(page, target, {
                   background: iframeBackground,
                   preflight,
-                  harnessOrigin,
                 });
           frame = loadResult.frame;
           await waitForStablePage(page, frame, 10000, loadingMarkers);
@@ -560,17 +544,7 @@ async function runFlowSteps(page, initialFrame, steps, ctx) {
 
 // `preflight` is injectable (defaulting to the real app-port reachability
 // check) so unit tests that mock the browser can stay network-free.
-// `harnessOrigin` is likewise injectable: it defaults to resolving the editor's
-// harness origin from `.codeyam/server-state.json`, but a test passes an
-// explicit value (e.g. `null` to force the legacy `setContent` harness) so the
-// iframe-load path never silently depends on a server-state file in cwd.
-// Resolved ONCE here and threaded into every iframe load below.
-async function runScenarioCheck(
-  config,
-  { preflight = assertAppPortReachable, harnessOrigin } = {},
-) {
-  const resolvedHarnessOrigin =
-    harnessOrigin !== undefined ? harnessOrigin : resolveHarnessOrigin();
+async function runScenarioCheck(config, { preflight = assertAppPortReachable } = {}) {
   const { url, outputPath, width, height, httpMocks = {} } = config;
   let interactionEffect = null;
   let interactionRetried = false;
@@ -598,13 +572,6 @@ async function runScenarioCheck(
   if (config.timezoneId) contextOptions.timezoneId = config.timezoneId;
   if (config.reduceMotion) contextOptions.reducedMotion = config.reduceMotion;
   if (config.forcedColors) contextOptions.forcedColors = config.forcedColors;
-  // When the opt-in HTTPS preview (`proxy.httpsPreview`) is on, the capture
-  // origin is `https://localhost:<port>` served by the reverse proxy's
-  // self-signed cert. Accept it for capture only — gated on the https origin so
-  // plain-HTTP captures keep full TLS-error fidelity.
-  if (typeof appOrigin === "string" && appOrigin.startsWith("https://")) {
-    contextOptions.ignoreHTTPSErrors = true;
-  }
   const context = await browser.newContext(contextOptions);
 
   // Apply the scenario's merged `browserState` (cookies + request
@@ -676,7 +643,6 @@ async function runScenarioCheck(
         : await loadScenarioInIframe(page, url, {
             background: config.iframeBackground,
             preflight,
-            harnessOrigin: resolvedHarnessOrigin,
           });
     // `frame` is `let` so a `navigate` flow step (below) can re-point it at the
     // freshly-loaded route's content frame; `response` is the initial load only.
@@ -815,7 +781,6 @@ async function runScenarioCheck(
         navigation: config.navigation,
         iframeBackground: config.iframeBackground,
         preflight,
-        harnessOrigin: resolvedHarnessOrigin,
       });
     } else if (config.interaction) {
       // Record fingerprint before interaction
@@ -939,8 +904,6 @@ module.exports = {
   stripMarkerHeaders,
   main,
   launchChromiumWithSelfHeal,
-  CAPTURE_LAUNCH_ARGS,
-  CAPTURE_HOST_RESOLVER_RULES,
   PLAYWRIGHT_INSTALL_COMMAND,
   PLAYWRIGHT_MISSING_BROWSER_PATTERN,
 };

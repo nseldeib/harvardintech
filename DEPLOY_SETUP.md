@@ -34,6 +34,26 @@ Depending on whether your site uses a custom domain or a default subpath, select
 
 ## Configuring GitHub Pages
 
-1. Navigate to your repository on GitHub.
-2. Go to **Settings** > **Pages**.
-3. Under **Build and deployment** > **Source**, select **GitHub Actions** (instead of Deploy from a branch). This allows the automated workflow to build and push safely.
+**It's automatic.** Pushing to the default branch runs `.github/workflows/deploy.yml`,
+whose build job enables GitHub Pages for you (Source: **GitHub Actions**) via
+`actions/configure-pages` with `enablement: true`. There is no manual
+Settings → Pages toggle in the common case — the first deploy creates the site
+and publishes it.
+
+### If the first deploy 404s
+
+Some org/permission policies block token-based enablement, so the first run can
+still fail with `HttpError: Not Found (404) ... Ensure GitHub Pages has been
+enabled`. To recover, do **either**:
+
+- Run the helper once (requires the authenticated `gh` CLI):
+  ```bash
+  ./scripts/enable-pages.sh
+  ```
+- **Or** toggle it in the UI: repo **Settings** > **Pages** > **Build and
+  deployment** > **Source** → **GitHub Actions**.
+
+Then re-run the workflow:
+```bash
+gh workflow run "Deploy to GitHub Pages" --ref <default-branch>
+```

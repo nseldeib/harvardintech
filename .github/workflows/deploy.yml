@@ -1,8 +1,12 @@
 # Build the Astro static site and publish it to GitHub Pages.
 #
-# Setup (one time): in the repo, Settings → Pages → "Build and deployment" →
-# Source: "GitHub Actions". Then push to the default branch and this workflow
-# builds `dist/` and deploys it.
+# Setup: none in the common case. The build job's "Enable / configure GitHub
+# Pages" step (actions/configure-pages with enablement: true) turns Pages on
+# automatically — Source: "GitHub Actions" — on the first push to the default
+# branch, so there is no manual Settings → Pages toggle. If your org policy
+# blocks token-based enablement and the first deploy 404s, run
+# `scripts/enable-pages.sh` once (or toggle the UI) and re-run — see
+# DEPLOY_SETUP.md.
 #
 # `base`/`site` come from the env vars below (read by astro.config.mjs), so the
 # site publishes under the project subpath jaredcosulich.github.io/harvardintech
@@ -31,6 +35,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Enable Pages (build type "workflow") if it isn't already. Idempotent —
+      # a no-op once Pages exists — so it's safe on every push. Runs before the
+      # build so the Pages site exists by the time the deploy job publishes.
+      # We use it only for this enablement side effect; base/site stay driven by
+      # the DEPLOY_BASE_PATH/PAGES_SITE env vars below (its outputs are unused).
+      - name: Enable / configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Build Astro site
         uses: withastro/action@v3
         env:

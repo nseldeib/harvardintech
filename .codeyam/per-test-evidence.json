@@ -1,10 +1,15 @@
 {
   "ADMIN_COLLECTIONS › gives every collection a non-empty label": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -39,10 +44,15 @@
   },
   "ADMIN_COLLECTIONS › lists the five editable folder collections in order": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -77,10 +87,15 @@
   },
   "Greeting › increments the counter on click": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -124,21 +139,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "Greeting › omits the subtitle when no subtitle prop is given": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -182,21 +197,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "Greeting › renders the name in the headline": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -240,21 +255,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › appends the subject as a query parameter": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -298,21 +313,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › builds a bare mailto when only a recipient is given": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -356,21 +371,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › encodes spaces in the subject as %20 rather than plus": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -414,21 +429,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › handles a body with no subject": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -472,21 +487,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › includes both subject and body when supplied": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -531,20 +546,20 @@
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
         "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
-        "kind": "full"
       }
     ]
   },
   "dashboardSummaryText › shows the empty-state nudge when there is no content": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -579,10 +594,15 @@
   },
   "dashboardSummaryText › summarizes a populated dashboard": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -617,10 +637,15 @@
   },
   "dashboardSummaryText › treats a negative total as empty": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -655,10 +680,15 @@
   },
   "dashboardSummaryText › uses the singular entry for a count of one": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -693,10 +723,15 @@
   },
   "dashboardTotals › counts empty collections without adding to the total": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -731,10 +766,15 @@
   },
   "dashboardTotals › returns zeros for an empty card list": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -769,10 +809,15 @@
   },
   "dashboardTotals › sums counts and reports the collection count": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -807,10 +852,15 @@
   },
   "formatEventDate › does not zero-pad single-digit days": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -854,21 +904,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "formatEventDate › formats a Date instance the same as its ISO string": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -912,21 +962,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "formatEventDate › formats an ISO date as Month D, YYYY": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -971,20 +1021,20 @@
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
         "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
-        "kind": "full"
       }
     ]
   },
   "initials › ignores surrounding and repeated whitespace": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -994,10 +1044,15 @@
   },
   "initials › returns an empty string for an empty name": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1007,10 +1062,15 @@
   },
   "initials › returns one letter for a single-word name": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1020,10 +1080,15 @@
   },
   "initials › returns two-letter initials for a two-word name": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1033,10 +1098,15 @@
   },
   "initials › upper-cases lowercase names": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1046,10 +1116,15 @@
   },
   "initials › uses only the first two words for a three-word name": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1059,10 +1134,15 @@
   },
   "landing image base paths › does not double-prefix a path that already carries the base": {
     "file": "src/components/landing/landing-images.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1077,10 +1157,15 @@
   },
   "landing image base paths › leaves every internal landing image unchanged at the domain root": {
     "file": "src/components/landing/landing-images.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1095,10 +1180,15 @@
   },
   "landing image base paths › prefixes every internal landing image with the project base on a subpath deploy": {
     "file": "src/components/landing/landing-images.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1113,10 +1203,15 @@
   },
   "sortBoardMembers › orders members by ascending order value": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1126,10 +1221,15 @@
   },
   "sortBoardMembers › returns a new array without mutating the input": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1139,10 +1239,15 @@
   },
   "sortBoardMembers › returns an empty array for no members": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1152,10 +1257,15 @@
   },
   "sortBoardMembers › treats a missing order as zero": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1165,10 +1275,15 @@
   },
   "splitEvents › does not mutate the input array order": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1212,21 +1327,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › handles an empty event list": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1270,21 +1385,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › returns no past events when all are upcoming": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1328,21 +1443,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › returns past events sorted most recent first": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1386,21 +1501,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › returns upcoming events sorted soonest first": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1444,21 +1559,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › treats an event exactly at now as upcoming": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1502,21 +1617,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "toEventDate › parses an ISO date string into a Date": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1560,21 +1675,21 @@
       {
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
         "kind": "full"
       }
     ]
   },
   "toEventDate › returns a Date instance unchanged": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1619,20 +1734,20 @@
         "status": "pass",
         "at": "2026-06-13T19:06:14.360206+00:00",
         "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-13T17:49:09.988105+00:00",
-        "kind": "full"
       }
     ]
   },
   "withBase › keeps the root path as a single slash when the base is root": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1677,10 +1792,15 @@
   },
   "withBase › leaves an internal path unchanged when the base is root": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1725,10 +1845,15 @@
   },
   "withBase › maps the root path to the base under a subpath": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1773,10 +1898,15 @@
   },
   "withBase › passes a bare hash anchor through untouched": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1821,10 +1951,15 @@
   },
   "withBase › passes external http URLs through untouched": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1869,10 +2004,15 @@
   },
   "withBase › passes mailto links through untouched": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1917,10 +2057,15 @@
   },
   "withBase › prefixes the subpath base onto an internal path": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",
@@ -1965,10 +2110,15 @@
   },
   "withBase › preserves a hash fragment on an absolute path under a subpath": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-14T15:58:38.695537723+00:00",
+    "lastRunAt": "2026-06-14T21:15:28.203430111+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-14T21:15:28.203430111+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-14T15:58:38.695537723+00:00",

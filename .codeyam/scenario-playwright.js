@@ -129,57 +129,6 @@ function buildIframeHarness(url, { background = "transparent" } = {}) {
 </html>`;
 }
 
-const path = require("path");
-
-// The reserved route the editor serves the secure-context iframe harness from.
-// Mirrors `HARNESS_PATH` in crates/control-api/src/preview_proxy_route.rs — the
-// canonical source of the harness markup now lives in that Rust handler; the
-// `buildIframeHarness` template above survives only as the degraded fallback
-// below for when the harness origin can't be resolved.
-const HARNESS_PATH = "/__codeyam_harness";
-
-// Read `.codeyam/server-state.json` (cwd is the project dir — see the timing
-// log note above) and return its parsed object, or null when it is absent.
-function defaultReadServerState() {
-  const statePath = path.join(process.cwd(), ".codeyam", "server-state.json");
-  if (!fs.existsSync(statePath)) return null;
-  return JSON.parse(fs.readFileSync(statePath, "utf8"));
-}
-
-// Resolve the `localhost` origin that serves the iframe-harness route. The
-// harness is mounted on the editor's control-api listener, whose port is
-// recorded in `.codeyam/server-state.json` as `controlPort` (the same file the
-// top-level loader already reads for `appPort`). Returns
-// `http://localhost:<controlPort>` — a secure context the nested iframe
-// inherits — or null when the state file is missing/unreadable, in which case
-// the caller falls back to the legacy in-page `setContent` harness.
-// `readStateFile` is injectable so the resolver is unit-testable without disk.
-function resolveHarnessOrigin({ readStateFile = defaultReadServerState } = {}) {
-  try {
-    const state = readStateFile();
-    const port = state && state.controlPort;
-    if (typeof port === "number" && port > 0) {
-      return `http://localhost:${port}`;
-    }
-  } catch (_) {
-    /* missing/unreadable state — fall back to setContent */
-  }
-  return null;
-}
-
-// Build the top-level harness URL for a scenario `url` and background. The
-// editor-served harness document embeds `src` as the iframe URL, so the nested
-// scenario inherits the harness's secure context. The background rides along as
-// `bg`. Pure — `URLSearchParams` does the percent-encoding so a scenario URL
-// with its own query string survives intact. Pure.
-function buildHarnessUrl(harnessOrigin, url, background) {
-  const params = new URLSearchParams({ src: url });
-  if (background != null && background !== "") {
-    params.set("bg", String(background));
-  }
-  return `${harnessOrigin}${HARNESS_PATH}?${params.toString()}`;
-}
-
 async function collectContentState(target) {
   return target.evaluate(() => {
     const root = document.getElementById("root");
@@ -425,13 +374,9 @@ async function waitForStablePage(page, target, timeoutMs = 10000, loadingMarkers
 async function loadScenarioInIframe(
   page,
   url,
-  { background, preflight = assertAppPortReachable, harnessOrigin } = {},
+  { background, preflight = assertAppPortReachable } = {},
 ) {
   await preflight(url);
-  // `undefined` (the default) means "resolve from server-state"; an explicit
-  // value (including `null`) is honored as-is so tests can force either path.
-  const resolvedHarnessOrigin =
-    harnessOrigin !== undefined ? harnessOrigin : resolveHarnessOrigin();
   const navStarted = Date.now();
   const responsePromise = page
     .waitForResponse(
@@ -442,25 +387,9 @@ async function loadScenarioInIframe(
     )
     .catch(() => null);
 
-  if (resolvedHarnessOrigin) {
-    // Navigate the page TOP-LEVEL to the harness document served from the
-    // editor's `localhost` origin, so the ancestor document is a secure context
-    // and the nested scenario iframe inherits it (the Sveltia-class fix). The
-    // inner iframe `src` is still `url`, so the document-response probe above is
-    // unchanged.
-    await page.goto(buildHarnessUrl(resolvedHarnessOrigin, url, background), {
-      waitUntil: "domcontentloaded",
-    });
-  } else {
-    // Degraded fallback: no resolvable harness origin (server-state missing), so
-    // use the legacy in-page harness. The top-level document is then
-    // `about:blank` — NOT a secure context — so a secure-context-gated app may
-    // refuse to mount, but every non-secure-context scenario captures exactly as
-    // before.
-    await page.setContent(buildIframeHarness(url, { background }), {
-      waitUntil: "domcontentloaded",
-    });
-  }
+  await page.setContent(buildIframeHarness(url, { background }), {
+    waitUntil: "domcontentloaded",
+  });
 
   const frameHandle = await page.waitForSelector("#scenario-frame", {
     state: "attached",
@@ -722,9 +651,6 @@ module.exports = {
   assertAppPortReachable,
   escapeHtmlAttribute,
   buildIframeHarness,
-  HARNESS_PATH,
-  resolveHarnessOrigin,
-  buildHarnessUrl,
   collectContentState,
   collectImageStates,
   waitForImagesSettled,

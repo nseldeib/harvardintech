@@ -1,0 +1,81 @@
+{
+  "timestamp": "2026-06-14T21:14:33Z",
+  "title": "github-pages: Auto-Enable Pages in Deploy Workflow",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe static-site template ships a working `.github/workflows/deploy.yml` that\nbuilds the Astro site and deploys it with `actions/deploy-pages@v4`, but the\ndeploy job fails on a fresh repo with `HttpError: Not Found (404) ... Ensure\nGitHub Pages has been enabled` until someone manually toggles **Settings →\nPages → Source: GitHub Actions**. That manual step is the single remaining\npiece of out-of-band setup in an otherwise turnkey template. This plan bakes\nthe enablement into the workflow itself by adding an `actions/configure-pages`\nstep with `enablement: true`, so the first push to `main` creates the Pages\nsite (build type \"workflow\") automatically. Because token-based enablement can\nstill be blocked under some org/permission policies, the plan also ships a\nclear, copy-paste fallback (one `gh api` call or the UI toggle) and a small\nhelper script, and rewrites the docs to lead with the now-automatic path.\n\n## Key Decisions\n\n- **Add `actions/configure-pages@v5` with `enablement: true` to the build\n  job.** This is GitHub's official, documented way to enable Pages from CI:\n  the action calls the Pages REST API to create the site with\n  `build_type: workflow` if it doesn't already exist. It's idempotent — a\n  no-op on repos where Pages is already configured — so it's safe on every\n  push. It runs before the `withastro/action` build so the site exists by the\n  time the `deploy` job calls `deploy-pages`.\n- **Keep, don't replace, the env-driven base/site config.** `configure-pages`\n  also emits a `base_path` output, but this template already drives base/site\n  from `DEPLOY_BASE_PATH`/`PAGES_SITE` (see `astro.config.mjs`). We use\n  `configure-pages` only for its enablement side effect and do **not** wire its\n  outputs into the build, so the two base modes (custom domain vs. project\n  subpath) keep working unchanged.\n- **Be honest that auto-enable is best-effort, not guaranteed.** The workflow's\n  `GITHUB_TOKEN` already has `pages: write`, which is sufficient on personal\n  repos and most orgs. But some org policies (or repos created with restricted\n  default-token permissions) still reject API-based enablement and return the\n  same 404. So the plan ships a documented fallback rather than claiming the\n  manual step is gone forever — the goal is \"no manual step in the common case,\n  with a one-command escape hatch when policy blocks it.\"\n- **Ship a helper script for the fallback** (`scripts/enable-pages.sh`) so the\n  escape hatch is one command, not a hand-assembled `gh api` invocation. It\n  infers `owner/repo` from the `origin` remote and POSTs `build_type=workflow`.\n- **Template-generic, no project-specific values.** All edits stay parameterized\n  (placeholders / remote inference) so the change is correct for any repo\n  scaffolded from this template, not just `harvardintech`.\n\n## Implementation\n\n### 1. Add the enablement step to the build job\n\n**File**: `.github/workflows/deploy.yml`\n\nIn the `build` job, before the `withastro/action@v3` \"Build Astro site\" step,\nadd a checkout-adjacent enablement step:\n\n```yaml\n      - name: Enable / configure GitHub Pages\n        uses: actions/configure-pages@v5\n        with:\n          enablement: true\n```\n\nNotes for implementation:\n- It must run in the `build` job (which already has `pages: write` via the\n  top-level `permissions:` block) and **before** the build step, so the Pages\n  site exists by the time the separate `deploy` job runs `deploy-pages@v4`.\n- Do **not** consume the action's `base_path`/`origin` outputs — base/site stay\n  driven by `DEPLOY_BASE_PATH`/`PAGES_SITE`. Adding the step purely for its\n  enablement side effect keeps the existing two-base-mode logic intact.\n- Leave the existing `permissions`, `concurrency`, and `deploy` job as-is.\n\n### 2. Refresh the workflow header comment\n\n**File**: `.github/workflows/deploy.yml`\n\nUpdate the top-of-file comment block (currently it tells the reader to manually\nset Settings → Pages → Source: GitHub Actions as a \"one time\" step). Reword it\nto say the workflow now enables Pages automatically on first push via\n`configure-pages` with `enablement: true`, and point to the fallback script /\ndocs for the rare case where org policy blocks token-based enablement.\n\n### 3. Add a fallback enablement helper script\n\n**New file**: `scripts/enable-pages.sh`\n\nA small, documented bash script that a human can run once if CI auto-enable is\nblocked. It should:\n- Require `gh` to be installed and authenticated.\n- Infer `OWNER/REPO` from `git remote get-url origin` (support both\n  `git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)`\n  forms).\n- Run `gh api -X POST repos/$OWNER/$REPO/pages -f build_type=workflow` and print\n  a friendly success / \"already enabled\" message (treat the\n  \"Pages already exists\" 4xx as success).\n- Be marked executable (`chmod +x`).\n\nThis is the codified version of the exact command that resolved the live 404 on\n`harvardintech`.\n\n### 4. Rewrite DEPLOY_SETUP.md to lead with the automated flow\n\n**File**: `DEPLOY_SETUP.md`\n\nIn the \"Configuring GitHub Pages\" section, replace the manual 3-step UI\ninstructions with:\n- A short \"It's automatic\" paragraph: pushing to the default branch runs the\n  deploy workflow, which enables Pages (Source: GitHub Actions) for you.\n- A \"If the first deploy 404s\" fallback subsection covering (a) run\n  `scripts/enable-pages.sh`, or (b) the manual UI toggle (kept as the\n  belt-and-suspenders option), then re-run the workflow\n  (`gh workflow run \"Deploy to GitHub Pages\" --ref <default-branch>`).\nKeep the two base-mode (custom domain vs. subpath) instructions unchanged.\n\n### 5. Cross-reference in README\n\n**File**: `README.md`\n\nIf README has a deploy/hosting section that references the manual Pages toggle,\nupdate that sentence to note enablement is automatic and link to\n`DEPLOY_SETUP.md` for the fallback. (Read first; only touch the deploy-related\nlines — skip if README doesn't currently mention Pages setup.)\n\n## Reused existing code\n\n- `.github/workflows/deploy.yml` — the existing build + deploy pipeline\n  (`withastro/action@v3` → `actions/deploy-pages@v4`); this plan adds one step\n  and a comment, it does not rewrite the pipeline.\n- `astro.config.mjs` — the env-driven `base`/`site` logic\n  (`DEPLOY_BASE_PATH` / `PAGES_SITE`) stays the source of truth for the base\n  path; `configure-pages` outputs are deliberately not wired in.\n- `DEPLOY_SETUP.md` — existing two-base-mode setup doc; only the \"Configuring\n  GitHub Pages\" section is rewritten.\n\n## Scenarios to Demonstrate\n\n- **Fresh repo, first push:** Pages has never been enabled → workflow's\n  `configure-pages` step creates the site → `deploy-pages` succeeds, no manual\n  toggle. (This is the case that currently 404s.)\n- **Already-enabled repo:** `configure-pages` is a no-op → deploy succeeds\n  unchanged (idempotency).\n- **Policy-blocked enablement:** token-based enable is rejected → workflow still\n  surfaces the 404, and `scripts/enable-pages.sh` (or the UI toggle) plus a\n  re-run resolves it. Demonstrates the documented fallback path.\n- **Custom-domain mode unaffected:** with `DEPLOY_BASE_PATH` unset and a\n  `public/CNAME` present, base stays `/` and the site publishes at the custom\n  domain — confirming `configure-pages` didn't hijack the base config.",
+  "description": "Baked GitHub Pages enablement into .github/workflows/deploy.yml by adding an actions/configure-pages@v5 step with enablement: true before the Astro build, so a fresh repo no longer 404s on its first push (no manual Settings → Pages toggle). The step is idempotent and the env-driven DEPLOY_BASE_PATH/PAGES_SITE base config is left untouched. Shipped scripts/enable-pages.sh as a one-command fallback for org policies that block token-based enablement (infers owner/repo from the origin remote, POSTs build_type=workflow via gh), and rewrote DEPLOY_SETUP.md and the README deploy section to lead with the now-automatic flow plus the fallback.",
+  "modifiedFiles": [
+    {
+      "path": ".claude/hooks/__pycache__/_step_metadata.cpython-310.pyc",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/hooks/__pycache__/editor-step-hook.cpython-310.pyc",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/.last-reconcile.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/capture.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/deps-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/github-pages-auto-enable-pages-in-deploy-workflow.md\t.codeyam/plans/completed/github-pages-auto-enable-pages-in-deploy-workflow.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-handlers.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-playwright.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/provider-auth-verdict.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/session-results-snapshot.json",
+      "status": "modified"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "modified"
+    },
+    {
+      "path": "DEPLOY_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/enable-pages.sh",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 49,
+    "passed": 49,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 49,
+        "passed": 49
+      }
+    ]
+  }
+}
