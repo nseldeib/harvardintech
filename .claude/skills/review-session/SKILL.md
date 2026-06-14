@@ -135,7 +135,7 @@ Combine your findings with the user's input. For each actionable problem or inef
 
 ### Step 7: Verify
 
-Run `codeyam-editor-dev editor plans` to verify the plans are parseable, then show the user what was created. Ask if they want to edit any.
+Run `codeyam-editor editor plans` to verify the plans are parseable, then show the user what was created. Ask if they want to edit any.
 
 ### Step 8: Commit each plan
 
@@ -152,10 +152,10 @@ If anything other than the plan file appears in the commit, run `git reset --sof
 
 ```bash
 # List all plans:
-codeyam-editor-dev editor plans
+codeyam-editor editor plans
 
 # Delete a plan:
-codeyam-editor-dev editor plan-delete <slug>
+codeyam-editor editor plan-delete <slug>
 ```
 
 ## Tips

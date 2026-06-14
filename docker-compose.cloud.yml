@@ -1,7 +1,7 @@
 # Template for the per-VM cloud compose file. Rendered by
 # scripts/gcp-project-bootstrap.sh into the (gitignored) docker-compose.cloud.yml
-# at provision time, substituting codeyam-editor-codeyam-editor-1 (the GCE instance name),
-# 3000 (the app dev-server port from editor.json), and
+# at provision time, substituting codeyam-editor-codeyam-editor-4 (the GCE instance name),
+# 4321 (the app dev-server port from editor.json), and
 # 12930m (the memory limit computed from the VM's total RAM).
 # EDIT THIS TEMPLATE, not
 # the rendered docker-compose.cloud.yml — the rendered file is a per-VM runtime
@@ -52,7 +52,7 @@ services:
     # same answer as $CODEYAM_MACHINE below. The env var is the
     # canonical source; this is belt-and-suspenders for code paths
     # that bypass it.
-    hostname: codeyam-editor-codeyam-editor-1
+    hostname: codeyam-editor-codeyam-editor-4
     # Inject tini as PID 1 so reparented zombies get reaped. Without
     # this flag the editor binary runs as PID 1 and any subprocess
     # whose parent exits before it (broker -> claude PTY child,
@@ -74,7 +74,7 @@ services:
       # App dev-server port, resolved from editor.json at bootstrap time
       # (apps[0].port ?? port ?? 5173) so Live Preview reaches whatever this
       # project serves on — not a hardcoded Vite default. Published == internal.
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:4321:4321"
     volumes:
       - .:/workspace
       # Per-agent credential homes — one per supported build agent so the
@@ -102,7 +102,7 @@ services:
       # Unique per-VM machine identity for branch-queue meta.machine,
       # plan-claim host_machine, audit attribution, and session logs.
       # Consumed by codeyam_types::machine::current_machine().
-      - CODEYAM_MACHINE=codeyam-editor-codeyam-editor-1
+      - CODEYAM_MACHINE=codeyam-editor-codeyam-editor-4
       # Git author identity for the in-container build agent. The entrypoint
       # runs `git config --global user.{name,email}` from these; without them
       # plan_claim_refs::create_claim's `git commit-tree` exits with "Author

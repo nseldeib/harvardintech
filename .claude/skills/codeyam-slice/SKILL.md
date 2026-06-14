@@ -2,7 +2,7 @@
 name: codeyam-slice
 autoApprove: true
 description: |
-  Adopt one vertical slice. Reads `codeyam-editor-dev editor assess`, proposes
+  Adopt one vertical slice. Reads `codeyam-editor editor assess`, proposes
   the single highest-leverage feature/route to take fully through the
   codeyam loop (deconstruct → test → scenarios) as a worked example on the
   user's own code, confirms the blast radius, then boots the formal editor
@@ -27,7 +27,7 @@ This skill does **not** reimplement deconstruction or test logic. It picks the s
 Confirm the project is initialized for codeyam-editor:
 
 ```bash
-codeyam-editor-dev editor config-show >/dev/null 2>&1 || {
+codeyam-editor editor config-show >/dev/null 2>&1 || {
   echo "Project is not initialized for codeyam-editor. Run /codeyam-onboard first."
   exit 1
 }
@@ -40,7 +40,7 @@ If the check fails, tell the user to run `/codeyam-onboard` and stop. Do not pro
 Run the read-only assessment and parse it (nothing on disk changes):
 
 ```bash
-codeyam-editor-dev editor assess --format json
+codeyam-editor editor assess --format json
 ```
 
 Relevant fields:
