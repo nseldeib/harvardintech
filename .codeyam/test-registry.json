@@ -100,6 +100,69 @@
       "runner": "tests"
     },
     {
+      "description": "The marker-change live signal even overrides a failed run phase.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "computeBanner › a marker change wins even when the run reports failed",
+      "line": 205,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A deploy running past the slow threshold escalates to the slow state.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "computeBanner › escalates to slow past the threshold",
+      "line": 227,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A marker commit differing from baseline is the authoritative live signal.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "computeBanner › flips to live once the marker commit differs from baseline and wins over everything",
+      "line": 194,
+      "registeredAt": "2026-06-15T23:23:24.757506+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "An in-progress Actions run upgrades the banner to building.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "computeBanner › shows building when the Actions run is in progress",
+      "line": 188,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Just after a save with no marker change and no run info, it is deploying.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "computeBanner › shows deploying right after a save with marker unchanged and no run info",
+      "line": 181,
+      "registeredAt": "2026-06-15T23:23:24.757506+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A failed run with an unchanged marker surfaces the failed state and a logs link.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "computeBanner › shows failed when the run failed and the marker has not moved",
+      "line": 215,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "With no active save the banner is idle and reports the last deploy time.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "computeBanner › shows idle with last-deployed time when there is no active save",
+      "line": 236,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "Zero entries shows the empty-state nudge, not a \"0 entries\" sentence.",
       "file": "src/lib/adminDashboard.test.ts",
       "format": "vitest",
@@ -160,6 +223,51 @@
       "key": "dashboardTotals › sums counts and reports the collection count",
       "line": 37,
       "registeredAt": "2026-06-14T10:43:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A path with no /admin segment has no derivable base.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "deployBaseFromPath › falls back to empty base when there is no admin segment",
+      "line": 35,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Custom-domain root: the dashboard sits at base ''.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "deployBaseFromPath › returns empty base for the custom-domain dashboard path",
+      "line": 23,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Custom-domain root: the editor sits at base ''.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "deployBaseFromPath › returns empty base for the custom-domain editor path",
+      "line": 19,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Project-subpath mode: everything before /admin is the base for the dashboard path.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "deployBaseFromPath › returns the subpath base for the project-subpath dashboard path",
+      "line": 31,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Project-subpath mode: everything before /admin is the base for the editor path.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "deployBaseFromPath › returns the subpath base for the project-subpath editor path",
+      "line": 27,
+      "registeredAt": "2026-06-15T22:56:59Z",
       "runner": "tests"
     },
     {
@@ -523,6 +631,87 @@
       "runner": "tests"
     },
     {
+      "description": "A completed failure is the failed phase.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "mapRunPhase › maps a completed failure to failed",
+      "line": 99,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A completed success is the succeeded phase.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "mapRunPhase › maps a completed success to succeeded",
+      "line": 95,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A missing run is unknown, never a phase.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "mapRunPhase › maps a missing run to unknown",
+      "line": 83,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A queued run has not started executing yet, so it is building.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "mapRunPhase › maps a queued run to building",
+      "line": 91,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A timed-out completion is treated as a failure.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "mapRunPhase › maps a timed_out completion to failed",
+      "line": 103,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An in-progress run is still building.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "mapRunPhase › maps an in-progress run to building",
+      "line": 87,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A cancelled completion is unknown so it never masquerades as a real failure.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "mapRunPhase › treats a cancelled completion as unknown, not failed",
+      "line": 107,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "At the empty base the marker and view URLs are domain-rooted.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "markerUrl / viewSiteUrl › builds root marker and view URLs at the empty base",
+      "line": 42,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Under a subpath base both URLs are prefixed with the base.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "markerUrl / viewSiteUrl › builds subpath marker and view URLs",
+      "line": 47,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "Both unfavorable → off.",
       "file": "src/lib/parallax.test.ts",
       "format": "vitest",
@@ -583,6 +772,96 @@
       "key": "parallaxOffset › returns zero when the section is flush with the viewport top",
       "line": 13,
       "registeredAt": "2026-06-15T01:41:28Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An absent branch defaults to main, matching the CMS default.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "parseBackendRepo › defaults the branch to main when omitted",
+      "line": 69,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The repo and branch are pulled straight out of the CMS config text.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "parseBackendRepo › pulls repo and branch out of the CMS config",
+      "line": 62,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "No repo means no Actions target, so the parse returns null.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "parseBackendRepo › returns null when no repo is configured",
+      "line": 76,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The most recent deploy-workflow run wins, ignoring other workflows entirely.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "pickLatestDeployRun › picks the most recent run for the deploy workflow, skipping other workflows",
+      "line": 135,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "No run for the requested workflow path yields null.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "pickLatestDeployRun › returns null when no run matches the workflow path",
+      "line": 140,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Past a day it rolls up to days.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "relativeTime › reports days",
+      "line": 164,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Past an hour it rolls up to hours.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "relativeTime › reports hours",
+      "line": 160,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Under a minute reads as just now.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "relativeTime › reports just now under a minute",
+      "line": 148,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Several minutes use the plural unit.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "relativeTime › reports plural minutes",
+      "line": 156,
+      "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Exactly one minute uses the singular unit.",
+      "file": "src/lib/deployStatus.test.ts",
+      "format": "vitest",
+      "key": "relativeTime › reports singular minute",
+      "line": 152,
+      "registeredAt": "2026-06-15T22:56:59Z",
       "runner": "tests"
     },
     {

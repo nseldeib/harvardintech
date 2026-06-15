@@ -9,9 +9,11 @@ import ChapterSignUp from '../../components/ChapterSignUp.astro';
 import ChapterConnect from '../../components/ChapterConnect.astro';
 import CollectionCountCard from '../../components/admin/CollectionCountCard.astro';
 import DashboardSummary from '../../components/admin/DashboardSummary.astro';
+import DeployStatus from '../../components/admin/DeployStatus.astro';
 import AdminGatePrompt from '../../components/admin/AdminGatePrompt.astro';
 import BoardMemberCard from '../../components/BoardMemberCard.astro';
 import ContactUs from '../../components/landing/ContactUs.astro';
+import type { BannerView } from '../../lib/deployStatus';
 import '../../styles/tokens.css';
 
 // Component-isolation harness. codeyam captures a single component in isolation
@@ -166,6 +168,50 @@ const dashboardSummaryStates = {
   Empty: { total: 0, collectionCount: 5, editorHref: ADMIN_EDITOR_HREF },
 };
 
+// DeployStatus states: one per banner state of the CMS deploy-status banner.
+// All render `mode="static"` so the client island never polls in isolation —
+// each fixed `BannerView` is captured exactly as the state machine produces it.
+const deployStatusStates: Record<string, BannerView> = {
+  Default: {
+    state: 'deploying',
+    title: 'Deploying…',
+    detail: 'Publishing your change — this usually takes about a minute.',
+  },
+  Building: {
+    state: 'building',
+    title: 'Building your change…',
+    detail: 'GitHub is building the site. It will be live shortly.',
+  },
+  Live: {
+    state: 'live',
+    title: '🎉 Your change is live',
+    detail: 'The site has finished publishing and is serving your edit.',
+    link: { href: '/', label: 'View live site' },
+  },
+  Failed: {
+    state: 'failed',
+    title: 'Deploy failed',
+    detail: 'The publish run did not complete. Your change is saved but not yet live.',
+    link: { href: 'https://github.com/jaredcosulich/harvardintech/actions', label: 'View build logs' },
+  },
+  Slow: {
+    state: 'slow',
+    title: 'Still deploying…',
+    detail: 'This is taking longer than usual. Large changes can take a few extra minutes.',
+  },
+  Idle: {
+    state: 'idle',
+    title: 'Up to date',
+    detail: 'Last deployed 2 minutes ago.',
+    link: { href: '/', label: 'View live site' },
+  },
+  Local: {
+    state: 'idle',
+    title: 'Local preview',
+    detail: 'Changes publish when committed and pushed to the live site.',
+  },
+};
+
 // BoardMemberCard states: a member WITH a photo (the real board headshot) vs a
 // member with NO photo, proving the initials-avatar fallback branch.
 const boardMemberCardStates = {
@@ -215,6 +261,13 @@ export async function getStaticPaths() {
     { params: { name: 'CollectionCountCard-Empty' } },
     { params: { name: 'DashboardSummary' } },
     { params: { name: 'DashboardSummary-Empty' } },
+    { params: { name: 'DeployStatus' } },
+    { params: { name: 'DeployStatus-Building' } },
+    { params: { name: 'DeployStatus-Live' } },
+    { params: { name: 'DeployStatus-Failed' } },
+    { params: { name: 'DeployStatus-Slow' } },
+    { params: { name: 'DeployStatus-Idle' } },
+    { params: { name: 'DeployStatus-Local' } },
     { params: { name: 'BoardMemberCard' } },
     { params: { name: 'BoardMemberCard-Initials' } },
     { params: { name: 'AdminGatePrompt' } },
@@ -288,6 +341,12 @@ if (name && name.startsWith('DashboardSummary')) {
   dashboardSummaryProps = dashboardSummaryStates[stateKey] ?? dashboardSummaryStates.Default;
 }
 
+let deployStatusBanner: BannerView | null = null;
+if (name && name.startsWith('DeployStatus')) {
+  const stateKey = name === 'DeployStatus' ? 'Default' : name.slice('DeployStatus-'.length);
+  deployStatusBanner = deployStatusStates[stateKey] ?? deployStatusStates.Default;
+}
+
 let boardMemberCardProps: (typeof boardMemberCardStates)[keyof typeof boardMemberCardStates] | null = null;
 if (name && name.startsWith('BoardMemberCard')) {
   const stateKey = (name === 'BoardMemberCard' ? 'Default' : name.slice('BoardMemberCard-'.length)) as keyof typeof boardMemberCardStates;
@@ -347,6 +406,10 @@ if (name && name.startsWith('ContactUs')) {
         ) : dashboardSummaryProps ? (
           <div style="width: 760px; max-width: 100%; background: var(--color-bg-soft); padding: var(--space-lg);">
             <DashboardSummary {...dashboardSummaryProps} />
+          </div>
+        ) : deployStatusBanner ? (
+          <div style="width: 760px; max-width: 100%; background: var(--color-bg-soft); padding: var(--space-lg);">
+            <DeployStatus initialBanner={deployStatusBanner} mode="static" />
           </div>
         ) : boardMemberCardProps ? (
           <div style="width: 200px;">

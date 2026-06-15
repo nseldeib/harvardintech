@@ -1,0 +1,11 @@
+{
+  "name": "DeployStatus - Failed",
+  "id": "5958dc38-5865-4eac-b3e5-0b7e2c4af4f2",
+  "url": "/isolated-components/DeployStatus-Failed",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component"
+}

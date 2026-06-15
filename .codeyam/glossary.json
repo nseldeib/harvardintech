@@ -103,6 +103,20 @@
     ]
   },
   {
+    "description": "The /admin deploy-status banner — server-renders an initial BannerView and a client island captures the live baseline commit, polls the build marker, and best-effort enriches with the GitHub Actions run phase; shows a Local preview note on localhost. Also the captured scenario surface for the deploy-status feature, one scenario per banner state.",
+    "filePath": "src/components/admin/DeployStatus.astro",
+    "name": "DeployStatus",
+    "scenarios": [
+      "deploystatus-deploying",
+      "deploystatus-building",
+      "deploystatus-live",
+      "deploystatus-failed",
+      "deploystatus-slow",
+      "deploystatus-idle-up-to-date",
+      "deploystatus-local-preview"
+    ]
+  },
+  {
     "description": "External-form embed for the static site: renders one of three states — a MailChimp-style POST form (action prop), an embedded provider iframe (embedUrl prop), or an unconfigured fallback message. Delegates submission to a third-party service since a static build has no backend.",
     "filePath": "src/components/EmbedForm.astro",
     "name": "EmbedForm",
@@ -130,6 +144,15 @@
     ]
   },
   {
+    "description": "Prerendered build-marker endpoint emitting {commit, runId, builtAt}; reads GITHUB_SHA/GITHUB_RUN_ID in the Actions runner and falls back to a local marker otherwise. The polled source of truth for whether a saved change is genuinely live.",
+    "filePath": "src/pages/deploy-status.json.ts",
+    "name": "GET",
+    "untestabilityReason": {
+      "justification": "reads runner env vars and emits a Response at build time; no branching logic to unit-test",
+      "kind": "platform-glue"
+    }
+  },
+  {
     "description": "Template React island: a name greeting with an interactive click counter. Not used on the Harvard in Tech landing page; retained from the scaffold.",
     "filePath": "src/components/Greeting.tsx",
     "name": "Greeting",
@@ -149,6 +172,12 @@
     "filePath": "src/lib/mailto.ts",
     "name": "buildMailto",
     "testFile": "src/lib/mailto.test.ts"
+  },
+  {
+    "description": "The deploy-status banner state machine: precedence is marker-changed (live) over Actions-failed (failed) over an active deploy (building/deploying, escalating to slow), otherwise idle. Returns the resolved BannerView the UI renders.",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "computeBanner",
+    "testFile": "src/lib/deployStatus.test.ts"
   },
   {
     "description": "Returns the directory the content collections load from: the CODEYAM_CONTENT_ROOT sandbox during a codeyam session, else the committed src/content.",
@@ -179,6 +208,12 @@
       "justification": "env boundary — returns process.env.CODEYAM_DATA_ROOT ?? 'src/data'",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "Derives the site base path from an admin URL pathname so the marker/view URLs resolve under both the custom-domain root and the project-subpath base modes.",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "deployBaseFromPath",
+    "testFile": "src/lib/deployStatus.test.ts"
   },
   {
     "description": "Returns a new array of board members visible on the public Board of Directors, keeping every member whose active field is not explicitly false — so existing entries with no active field (and members who never toggled the CMS checkbox) remain shown. Does not mutate the input.",
@@ -238,6 +273,18 @@
     "testFile": "src/lib/adminGate.test.ts"
   },
   {
+    "description": "Maps a GitHub Actions run's status/conclusion to a normalised phase (building, failed, succeeded, unknown); a cancelled completion maps to unknown so it never masquerades as a real failure.",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "mapRunPhase",
+    "testFile": "src/lib/deployStatus.test.ts"
+  },
+  {
+    "description": "Builds the build-marker URL (/deploy-status.json) for a given base path.",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "markerUrl",
+    "testFile": "src/lib/deployStatus.test.ts"
+  },
+  {
     "description": "Pure gate deciding whether the scroll parallax runs: returns fineHover && !reducedMotion. Encodes the desktop-only / prefers-reduced-motion policy (parallax is janky or ignored on touch browsers) as testable logic, separate from the matchMedia DOM reads in initParallax.",
     "filePath": "src/lib/parallax.ts",
     "name": "parallaxEnabled",
@@ -250,6 +297,18 @@
     "testFile": "src/lib/parallax.test.ts"
   },
   {
+    "description": "Pulls repo and branch out of the Sveltia/Decap config.yml text so the GitHub Actions API target is not hard-coded; defaults branch to main and returns null when no repo is present.",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "parseBackendRepo",
+    "testFile": "src/lib/deployStatus.test.ts"
+  },
+  {
+    "description": "Chooses the most recent deploy-workflow run from a GitHub Actions run list, filtering to the deploy workflow path and tolerating cancelled runs left by cancel-in-progress concurrency.",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "pickLatestDeployRun",
+    "testFile": "src/lib/deployStatus.test.ts"
+  },
+  {
     "description": "Reads and JSON-parses a singleton data file (settings.json / nav.json) from the resolved dataRoot(), so the site settings/nav honor the codeyam sandbox redirect.",
     "filePath": "src/lib/site.ts",
     "name": "readSingleton",
@@ -257,6 +316,18 @@
       "justification": "filesystem boundary — readFileSync + JSON.parse of a data-dir file",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "Coarse human N-units-ago formatter for a build timestamp, used by the banner's idle/up-to-date detail line.",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "relativeTime",
+    "testFile": "src/lib/deployStatus.test.ts"
+  },
+  {
+    "description": "Returns a GitHub Actions run start time in epoch ms (run_started_at, falling back to created_at), used to sort runs in pickLatestDeployRun. Exercised via the pickLatestDeployRun tests.",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "runStartedMs",
+    "testFile": "src/lib/deployStatus.test.ts"
   },
   {
     "description": "Maps a social link icon field (twitter/facebook/email, case-insensitive) to its self-hosted asset path under public/images/social/. Returns null for unknown or missing icons so the Contact Us section degrades to a label-only link. Icons were downloaded from the original harvardintech.com site to keep the GitHub Pages build CDN-independent.",
@@ -287,6 +358,12 @@
     "filePath": "src/lib/events.ts",
     "name": "toEventDate",
     "testFile": "src/lib/events.test.ts"
+  },
+  {
+    "description": "Builds the live-site URL for a given base path (used by the banner's View live site link).",
+    "filePath": "src/lib/deployStatus.ts",
+    "name": "viewSiteUrl",
+    "testFile": "src/lib/deployStatus.test.ts"
   },
   {
     "description": "Prefixes an internal absolute path with import.meta.env.BASE_URL so links resolve under either the domain root (custom domain, base /) or a project subpath (user.github.io/<repo>). External URLs, mailto, and bare hash anchors pass through untouched. Used by the header nav/logo, chapter back link, 404, and blog links for GitHub Pages deployment.",

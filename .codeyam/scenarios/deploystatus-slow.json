@@ -1,0 +1,11 @@
+{
+  "name": "DeployStatus - Slow",
+  "id": "8e950c04-495d-4b68-8b48-196ea346112f",
+  "url": "/isolated-components/DeployStatus-Slow",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component"
+}

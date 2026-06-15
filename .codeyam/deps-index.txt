@@ -1,4 +1,4 @@
-# regenerated from dependency-graph.json on 2026-06-15T22:10:16Z; do not hand-edit
+# regenerated from dependency-graph.json on 2026-06-15T23:26:31Z; do not hand-edit
 src/lib/gallery.ts :: imports=0 :: imported_by=5
 .codeyam/scenario-issues.js :: imports=0 :: imported_by=2
 .codeyam/scenario-metrics.js :: imports=0 :: imported_by=2
@@ -16,6 +16,7 @@ src/components/admin/DashboardSummary.astro :: imports=0 :: imported_by=1
 src/content/config.js :: imports=0 :: imported_by=1
 src/lib/adminDashboard.ts :: imports=0 :: imported_by=1
 src/lib/adminGate.ts :: imports=0 :: imported_by=1
+src/lib/deployStatus.ts :: imports=0 :: imported_by=1
 src/lib/events.ts :: imports=0 :: imported_by=1
 src/lib/mailto.ts :: imports=0 :: imported_by=1
 src/lib/socialIcon.ts :: imports=0 :: imported_by=1
@@ -34,6 +35,7 @@ src/lib/team.ts :: imports=0 :: imported_by=1
 .codeyam/seed-adapter.ts :: imports=0 :: imported_by=0
 astro.config.mjs :: imports=0 :: imported_by=0
 cms-auth-worker/worker.js :: imports=0 :: imported_by=0
+public/admin/editor/deploy-status.js :: imports=0 :: imported_by=0
 scripts/compare-shot.mjs :: imports=0 :: imported_by=0
 scripts/crop.mjs :: imports=0 :: imported_by=0
 scripts/download-assets.mjs :: imports=0 :: imported_by=0
@@ -50,6 +52,7 @@ src/data/settings.json :: imports=0 :: imported_by=0
 src/env.d.ts :: imports=0 :: imported_by=0
 src/lib/adminDashboard.test.ts :: imports=1 :: imported_by=0
 src/lib/adminGate.test.ts :: imports=1 :: imported_by=0
+src/lib/deployStatus.test.ts :: imports=1 :: imported_by=0
 src/lib/events.test.ts :: imports=1 :: imported_by=0
 src/lib/gallery.test.ts :: imports=5 :: imported_by=0
 src/lib/mailto.test.ts :: imports=1 :: imported_by=0
@@ -59,5 +62,6 @@ src/lib/socialIcon.test.ts :: imports=1 :: imported_by=0
 src/lib/team.photos.test.ts :: imports=0 :: imported_by=0
 src/lib/team.test.ts :: imports=1 :: imported_by=0
 src/lib/url.test.ts :: imports=1 :: imported_by=0
+src/pages/deploy-status.json.ts :: imports=0 :: imported_by=0
 ui/src/helpers/stepLabels.generated.ts :: imports=0 :: imported_by=0
 vitest.config.ts :: imports=0 :: imported_by=0

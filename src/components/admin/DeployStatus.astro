@@ -1,0 +1,306 @@
+---
+// Deploy-status banner for the /admin dashboard — the ambient "is the site
+// up to date / currently publishing?" indicator that complements the in-editor
+// save banner. Pure decision logic lives in `src/lib/deployStatus.ts` (tested);
+// this component is the thin wiring + presentation, and is also the captured
+// scenario surface (one isolated-components route per banner state).
+//
+// Server-renders an initial `BannerView`; the client island then captures the
+// live baseline commit, polls the build marker (`/deploy-status.json`), and —
+// best-effort, when a GitHub token with Actions:Read is available — enriches
+// with the Actions run phase. On localhost (incl. the codeyam preview) it shows
+// a muted "local preview" note instead of polling, since nothing publishes
+// locally. Pass `mode="static"` (with `initialBanner`) to render a fixed state
+// for capture without any polling.
+import { BANNER_TONE, type BannerView } from '../../lib/deployStatus';
+
+interface Props {
+  initialBanner?: BannerView;
+  mode?: 'live' | 'static';
+}
+const { initialBanner, mode = 'live' } = Astro.props;
+const view: BannerView = initialBanner ?? {
+  state: 'idle',
+  title: 'Checking deploy status…',
+  detail: 'Looking up the latest publish.',
+};
+const tone = BANNER_TONE[view.state];
+const showSpinner = tone === 'accent';
+---
+
+<section
+  id="deploy-status"
+  class={`deploy-status tone-${tone}`}
+  data-mode={mode}
+  aria-live="polite"
+>
+  <span class="ds-icon" aria-hidden="true">
+    {showSpinner ? <span class="ds-spinner"></span> : <span class="ds-glyph"></span>}
+  </span>
+  <div class="ds-text">
+    <strong class="ds-title">{view.title}</strong>
+    <span class="ds-detail">{view.detail}</span>
+  </div>
+  {
+    view.link && (
+      <a class="ds-link" href={view.link.href} target="_blank" rel="noopener">
+        {view.link.label} →
+      </a>
+    )
+  }
+</section>
+
+<style>
+  .deploy-status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-lg);
+    border: 1px solid var(--color-border);
+    border-left-width: 4px;
+    border-radius: var(--radius);
+    background: var(--color-bg-soft);
+  }
+  .ds-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+  .ds-title {
+    font-size: 0.95rem;
+    color: var(--color-fg);
+  }
+  .ds-detail {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+  .ds-link {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-link);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .ds-link:hover {
+    text-decoration: underline;
+  }
+  .ds-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+  }
+  .ds-glyph {
+    display: inline-block;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+  }
+  .ds-spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--color-border);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: ds-spin 0.8s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ds-spinner {
+      animation: none;
+    }
+  }
+  @keyframes ds-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Tone treatments — left border + icon colour. */
+  .tone-accent {
+    border-left-color: var(--color-accent);
+    color: var(--color-accent-dark);
+  }
+  .tone-success {
+    border-left-color: #2e7d32;
+    color: #2e7d32;
+    background: #eef7ee;
+  }
+  .tone-success .ds-glyph {
+    background: #2e7d32;
+  }
+  .tone-danger {
+    border-left-color: #c62828;
+    color: #c62828;
+    background: #fdeded;
+  }
+  .tone-danger .ds-glyph {
+    background: #c62828;
+  }
+  .tone-danger .ds-title {
+    color: #c62828;
+  }
+  .tone-muted {
+    border-left-color: var(--color-faint);
+    color: var(--color-faint);
+  }
+  .tone-muted .ds-glyph {
+    background: var(--color-faint);
+  }
+</style>
+
+<script>
+  import {
+    deployBaseFromPath,
+    markerUrl,
+    viewSiteUrl,
+    parseBackendRepo,
+    pickLatestDeployRun,
+    mapRunPhase,
+    computeBanner,
+    BANNER_TONE,
+    DEPLOY_WORKFLOW_PATH,
+    type BannerView,
+    type DeployMarker,
+    type RunPhase,
+  } from '../../lib/deployStatus';
+
+  // The dashboard banner is AMBIENT: there is no "save" here, so it normally
+  // shows idle / up-to-date, and only flips to building/failed/live if a deploy
+  // happens while the page is open. The in-editor banner
+  // (public/admin/editor/deploy-status.js) owns the actual save moment.
+  const root = document.getElementById('deploy-status');
+  if (root && root.dataset.mode === 'live') {
+    const isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+
+    if (isLocal) {
+      // Nothing publishes locally — render a static, honest preview note.
+      paint(root, {
+        state: 'idle',
+        title: 'Local preview',
+        detail: 'Changes publish when committed and pushed to the live site.',
+      });
+    } else {
+      runLiveWatcher(root);
+    }
+  }
+
+  function paint(el: HTMLElement, view: BannerView): void {
+    const tone = BANNER_TONE[view.state];
+    el.className = `deploy-status tone-${tone}`;
+    const title = el.querySelector('.ds-title');
+    const detail = el.querySelector('.ds-detail');
+    if (title) title.textContent = view.title;
+    if (detail) detail.textContent = view.detail;
+
+    // Swap the icon between spinner (accent) and static glyph.
+    const icon = el.querySelector('.ds-icon');
+    if (icon) {
+      icon.innerHTML =
+        tone === 'accent' ? '<span class="ds-spinner"></span>' : '<span class="ds-glyph"></span>';
+    }
+
+    // Reconcile the optional trailing link.
+    let link = el.querySelector<HTMLAnchorElement>('.ds-link');
+    if (view.link) {
+      if (!link) {
+        link = document.createElement('a');
+        link.className = 'ds-link';
+        link.target = '_blank';
+        link.rel = 'noopener';
+        el.appendChild(link);
+      }
+      link.href = view.link.href;
+      link.textContent = `${view.link.label} →`;
+    } else if (link) {
+      link.remove();
+    }
+  }
+
+  async function fetchMarker(base: string): Promise<DeployMarker | null> {
+    try {
+      const res = await fetch(`${markerUrl(base)}?_=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) return null;
+      return (await res.json()) as DeployMarker;
+    } catch {
+      return null;
+    }
+  }
+
+  // Best-effort GitHub token Sveltia persisted for the editor. Its storage key
+  // is version-specific, so scan defensively and treat absence as "no token".
+  // Never logged.
+  function readGithubToken(): string | null {
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key || !/sveltia|decap|netlify-cms/i.test(key) || !/auth|user|token/i.test(key)) {
+          continue;
+        }
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const token = raw.startsWith('{') ? JSON.parse(raw)?.token : raw;
+        if (typeof token === 'string' && token.length > 10) return token;
+      }
+    } catch {
+      /* ignore — degrade to marker-only */
+    }
+    return null;
+  }
+
+  // Strictly additive: any failure (no token, 401/403 missing Actions:Read,
+  // 404, network) silently degrades to marker-only.
+  async function fetchRunPhase(base: string): Promise<{ phase: RunPhase; url: string | null }> {
+    try {
+      const token = readGithubToken();
+      if (!token) return { phase: 'unknown', url: null };
+      const cfgRes = await fetch(`${base}/admin/editor/config.yml`, { cache: 'no-store' });
+      if (!cfgRes.ok) return { phase: 'unknown', url: null };
+      const backend = parseBackendRepo(await cfgRes.text());
+      if (!backend) return { phase: 'unknown', url: null };
+      const api = `https://api.github.com/repos/${backend.repo}/actions/runs?branch=${backend.branch}&per_page=10`;
+      const res = await fetch(api, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+      });
+      if (!res.ok) return { phase: 'unknown', url: null };
+      const body = (await res.json()) as { workflow_runs?: unknown[] };
+      const run = pickLatestDeployRun((body.workflow_runs ?? []) as never[], {
+        workflowPath: DEPLOY_WORKFLOW_PATH,
+      });
+      return { phase: mapRunPhase(run), url: run?.html_url ?? null };
+    } catch {
+      return { phase: 'unknown', url: null };
+    }
+  }
+
+  function runLiveWatcher(el: HTMLElement): void {
+    const base = deployBaseFromPath(location.pathname);
+    const viewHref = viewSiteUrl(base);
+    let baselineCommit: string | null = null;
+
+    const tick = async () => {
+      if (document.hidden) return;
+      const [marker, run] = await Promise.all([fetchMarker(base), fetchRunPhase(base)]);
+      if (marker && baselineCommit === null) baselineCommit = marker.commit;
+      const view = computeBanner({
+        baselineCommit,
+        marker,
+        runPhase: run.phase,
+        savedAtMs: null,
+        nowMs: Date.now(),
+        viewHref,
+        runUrl: run.url,
+      });
+      paint(el, view);
+    };
+
+    tick();
+    setInterval(tick, 15000);
+  }
+</script>

@@ -1,0 +1,11 @@
+{
+  "name": "DeployStatus - Live",
+  "id": "8c179b3e-16f4-4594-8585-499974d3ae1c",
+  "url": "/isolated-components/DeployStatus-Live",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component"
+}

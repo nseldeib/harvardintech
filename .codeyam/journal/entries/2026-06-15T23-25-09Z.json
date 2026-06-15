@@ -1,0 +1,243 @@
+{
+  "timestamp": "2026-06-15T23:25:09Z",
+  "title": "CMS Deploy Status Feedback After Save",
+  "type": "feature",
+  "userRequest": "## Summary\n\nWhen an editor saves in the CMS (`/admin/editor/`, Sveltia), the change is\ncommitted to `main`, which triggers the GitHub Pages deploy workflow — but the\neditor gets no signal that publishing is underway, how long it takes, or when\ntheir edit is actually visible on the live site. They're left refreshing\nharvardintech.com guessing. This adds a deploy-status banner to the CMS that, on\nsave, tells the editor \"Deploying — this usually takes about a minute,\" then\nflips to \"🎉 Your change is live\" once it's genuinely served, with a link to\nview it. Detection is **hybrid**: a build-time marker the admin polls is the\nreliable backbone (auth-free, confirms the CDN actually updated), enriched —\nwhen a capable GitHub token is available — by the Actions API so the banner can\nalso show \"Building…\" and, importantly, \"Deploy failed.\"\n\n## Key Decisions\n\n- **Build marker is the source of truth for \"live.\"** A prerendered\n  `/deploy-status.json` bakes the commit SHA in at build time; the admin polls\n  it and treats a SHA change as \"the new content is actually live\" — including\n  GitHub Pages CDN propagation, which an Actions \"completed\" status can precede.\n  No extra token scope, and it works in both hosted-token and local-repository\n  modes.\n- **GitHub Actions API is enrichment, not the backbone.** Polling the deploy\n  run (`queued`/`in_progress`/`completed` + `conclusion`) lets the banner show\n  \"Building…\" and surface **build failures** (which the marker alone can't, since\n  a failed build just never bumps the SHA). It's strictly additive: the CMS PAT\n  is scoped **Contents: Read & Write** and won't have **Actions: Read**, and\n  local mode has no token — so the Actions call is wrapped in feature-detection\n  and any 401/403/404/absent-token path silently degrades to marker-only.\n- **Don't hard-couple to Sveltia internals for the save signal.** Register the\n  Decap-compatible `postSave`/`postPublish` listeners for the instant \"Deploying\"\n  banner, but ALSO run a continuous marker watcher so the \"now live\" toast still\n  fires even if the event hook name changes in a future Sveltia version. The\n  event hook is the nicety; the watcher is the guarantee.\n- **Pure logic in a tested lib; thin wiring at the edges.** The state machine\n  and URL/parse helpers live in `src/lib/deployStatus.ts` with vitest coverage\n  and drive an Astro dashboard component (the scenario surface). The Sveltia\n  editor page is raw `public/` HTML that Astro does not bundle, so its\n  `deploy-status.js` carries a minimal mirror of just the calls it needs — the\n  lib remains the canonical, tested spec.\n\n## Implementation\n\n### 1. Build-time deploy marker\n\n**New file**: `src/pages/deploy-status.json.ts`\n\nA prerendered Astro endpoint (`export const prerender = true; export function GET()`)\nemitting JSON: `{ commit, runId, builtAt }`. Read `process.env.GITHUB_SHA` and\n`process.env.GITHUB_RUN_ID` (set automatically in the Actions runner during the\n`withastro/action` build) and stamp `builtAt` with the build time. When the env\nvars are unset (local `astro build`/dev), fall back to `{ commit: \"local\",\nrunId: null, builtAt: <now> }`. Output `output: 'static'` already prerenders\nthis to `/deploy-status.json` in `dist/`, served by GitHub Pages. No\n`deploy.yml` change is needed — `GITHUB_SHA`/`GITHUB_RUN_ID` are default\nrunner env vars available to the build step.\n\n### 2. Pure status logic (tested)\n\n**New file**: `src/lib/deployStatus.ts`\n\nFramework-free helpers (no DOM), mirroring the `src/lib/gallery.ts` /\n`src/lib/events.ts` \"pure helpers + thin wiring\" split:\n\n- `deployBaseFromPath(pathname)` — derive the site base from the admin URL so\n  it works under both the custom-domain base (`/admin/editor/` → base `''`) and\n  the project-subpath base (`/harvardintech/admin/editor/` → base\n  `/harvardintech`). Splits on `/admin/`.\n- `markerUrl(base)` / `viewSiteUrl(base)` — `${base}/deploy-status.json` and\n  `${base}/`.\n- `parseBackendRepo(configYaml)` — pull `repo` and `branch` out of the CMS\n  `config.yml` text so the Actions API target isn't hard-coded (the editor\n  script fetches its sibling `./config.yml`).\n- `pickLatestDeployRun(runs, { workflowPath })` — choose the most recent run for\n  `.github/workflows/deploy.yml` on `main`, tolerating `cancelled` runs from the\n  workflow's `cancel-in-progress` concurrency.\n- `mapRunPhase(run)` — `'building' | 'failed' | 'succeeded' | 'unknown'` from a\n  run's `status`/`conclusion`.\n- `computeBanner({ baselineCommit, marker, runPhase, savedAtMs, nowMs, slowAfterMs })`\n  — the state machine returning `{ state, title, detail, link? }` where `state`\n  ∈ `idle | deploying | building | live | failed | slow`. Rules: a marker\n  `commit` that differs from `baselineCommit` ⇒ `live` (authoritative, wins over\n  everything); `runPhase==='failed'` while the marker is unchanged ⇒ `failed`;\n  otherwise `building` (if the run is known to be running) or `deploying`,\n  escalating to `slow` once `nowMs - savedAtMs > slowAfterMs` (~3 min) so a long\n  or stuck deploy gets an honest \"taking longer than usual\" message instead of\n  spinning forever.\n\n**New file**: `src/lib/deployStatus.test.ts`\n\nvitest covering `deployBaseFromPath` (both base modes), `parseBackendRepo`,\n`mapRunPhase` across statuses/conclusions, `pickLatestDeployRun` with a\ncancelled run in the list, and `computeBanner` transitions (deploying → live,\ndeploying → failed, deploying → slow, and marker-change-wins-over-failed).\n\n### 3. Dashboard status component (scenario surface)\n\n**New file**: `src/components/admin/DeployStatus.astro`\n\nA status banner/pill rendered on the `/admin` dashboard. A small client island\nimports the helpers from `src/lib/deployStatus.ts`, captures the baseline live\ncommit on load, and — when the document is visible — polls `markerUrl(base)`\n(cache-busted, `cache: 'no-store'`) on an interval, optionally enriching with\nthe Actions API (step 5). It renders the `computeBanner` state: a spinner +\n\"Deploying…/Building…\" copy, a green \"Live\" state with a **View live site**\nlink, a red \"Deploy failed\" state linking to the run's `html_url`, and a muted\nidle state (\"Up to date — last deployed <relative time>\"). Pause polling when\n`document.hidden`.\n\n**Edit**: `src/pages/admin/index.astro`\n\nRender `<DeployStatus />` near the top of the dashboard (alongside\n`DashboardSummary`). On `localhost` the component shows a muted \"Local preview —\nchanges publish when committed and pushed\" note instead of polling, since there\nis no live deploy locally.\n\n### 4. In-editor banner (the actual save moment)\n\n**New file**: `public/admin/editor/deploy-status.js`\n\nA self-contained ESM module served verbatim (public/ is not bundled, so it can't\nimport the lib — it carries a minimal mirror of the base-parse + compare + fetch\ncalls; `src/lib/deployStatus.ts` stays the canonical tested spec). On load it:\n\n- registers `window.CMS.registerEventListener({ name: 'postSave', handler })`\n  and the same for `postPublish` (best-effort; wrapped so a missing/renamed API\n  is a no-op) — on fire, it records `savedAt`, captures the current live commit\n  as the baseline, and shows the \"Deploying — usually about a minute\" banner;\n- runs a continuous marker watcher (also armed independently of the event hook)\n  so the \"now live\" flip is guaranteed; when the polled `commit` differs from the\n  baseline, it swaps to \"🎉 Your change is live\" + a **View live site** link and\n  stops;\n- best-effort Actions enrichment (step 5) for \"Building…\"/\"Deploy failed\";\n- injects a fixed-position banner element into the editor DOM (its own node,\n  outside Sveltia's app root so Sveltia re-renders don't clobber it).\n\n**Edit**: `public/admin/editor/index.html`\n\nAdd `<script type=\"module\" src=\"./deploy-status.js\"></script>` after the Sveltia\nscript tag, plus a minimal `<style>` for the banner (or inject styles from the\nscript).\n\n### 5. Optional GitHub Actions enrichment\n\nInside both the dashboard island and the editor script, behind feature-detection:\n\n- Resolve `{ repo, branch }` via `parseBackendRepo` (editor: fetch `./config.yml`;\n  dashboard: same, fetched relative to base).\n- Best-effort obtain the GitHub token Sveltia persists for the editor (its\n  storage key is version-specific — read defensively and treat absence as \"no\n  enrichment\"). Never log the token.\n- `GET https://api.github.com/repos/{repo}/actions/runs?branch={branch}&per_page=10`\n  with `Authorization: Bearer <token>` and `Accept: application/vnd.github+json`;\n  feed results through `pickLatestDeployRun` + `mapRunPhase`.\n- Any `401/403` (token lacks **Actions: Read**), `404`, network error, or\n  missing token ⇒ silently skip enrichment and rely on the marker. The banner\n  must be fully functional with marker-only signals.\n\n## Reused existing code\n\n- `withBase` from `src/lib/url.ts` — base-aware URLs in the dashboard component\n  (glossary entry: `withBase`-family; verify exact name via `glossary-find`).\n- The `src/lib/gallery.ts` / `src/lib/events.ts` \"pure helpers + `.test.ts` +\n  thin wiring\" pattern (glossary entries: `galleryRevealImmediately`,\n  `splitEvents`) — `src/lib/deployStatus.ts` follows the same shape.\n- `src/components/admin/` section-component convention (`DashboardSummary.astro`,\n  `CollectionCountGrid.astro`) — `DeployStatus.astro` matches it and slots into\n  `src/pages/admin/index.astro` exactly like the existing sections.\n- `public/admin/editor/index.html` already loads an external script (the Sveltia\n  CDN bundle) and auto-initializes — adding a second `<script>` follows the same\n  no-inline-init convention documented in its comment.\n\n## Scenarios to Demonstrate\n\nCaptured against the `DeployStatus` dashboard component (the scenario surface),\none per banner state:\n\n- **Deploying** — just saved; marker SHA still matches baseline, no run info yet\n  (\"Deploying — usually about a minute\").\n- **Building** — Actions run `in_progress` (\"Building your change…\").\n- **Live** — marker SHA changed from baseline (green \"Your change is live\" +\n  View-site link).\n- **Deploy failed** — run `completed`/`failure`, marker unchanged (red state +\n  View-logs link).\n- **Slow / taking longer** — still deploying past the ~3-minute threshold.\n- **Idle / up to date** — no recent save; \"Last deployed <relative time>\".\n- **Local preview** — `localhost` muted note, no polling.",
+  "description": "Added a deploy-status banner to the CMS so editors get real feedback after saving: it shows \"Deploying…\" on save and flips to \"🎉 Your change is live\" once the change is genuinely served. Detection is hybrid — a prerendered /deploy-status.json build marker (commit SHA baked in at build) is the authoritative source of truth the admin polls, optionally enriched by the GitHub Actions API for \"Building…\" and \"Deploy failed\" states (degrading silently to marker-only when no token). Pure state-machine logic lives in a vitest-covered src/lib/deployStatus.ts; it drives a /admin dashboard banner (the captured scenario surface, one per state) and a self-contained in-editor Sveltia banner.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/.last-reconcile.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/deps-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/cms-deploy-status-feedback-after-save.md\t.codeyam/plans/completed/cms-deploy-status-feedback-after-save.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/reconciliation-log.jsonl",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/runner-timing-history.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/session-results-snapshot.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-run-marker.json",
+      "status": "modified"
+    },
+    {
+      "path": "public/admin/editor/index.html",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/admin/index.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-building.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-deploying.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-failed.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-idle-up-to-date.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-live.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-local-preview.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-slow.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-building--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-building--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-deploying--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-deploying--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-failed--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-failed--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-idle-up-to-date--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-idle-up-to-date--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-live--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-live--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-local-preview--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-local-preview--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-slow--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-slow--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": "public/admin/editor/deploy-status.js",
+      "status": "added"
+    },
+    {
+      "path": "src/components/admin/DeployStatus.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/deployStatus.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/deployStatus.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/deploy-status.json.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Admin Dashboard - Empty",
+      "screenshotPath": "admin-dashboard-empty--desktop.png"
+    },
+    {
+      "name": "Admin Dashboard - Populated",
+      "screenshotPath": "admin-dashboard-populated--desktop.png"
+    },
+    {
+      "name": "DeployStatus - Building",
+      "screenshotPath": "deploystatus-building--desktop.png"
+    },
+    {
+      "name": "DeployStatus - Deploying",
+      "screenshotPath": "deploystatus-deploying--desktop.png"
+    },
+    {
+      "name": "DeployStatus - Failed",
+      "screenshotPath": "deploystatus-failed--desktop.png"
+    },
+    {
+      "name": "DeployStatus - Idle Up To Date",
+      "screenshotPath": "deploystatus-idle-up-to-date--desktop.png"
+    },
+    {
+      "name": "DeployStatus - Live",
+      "screenshotPath": "deploystatus-live--desktop.png"
+    },
+    {
+      "name": "DeployStatus - Local Preview",
+      "screenshotPath": "deploystatus-local-preview--desktop.png"
+    },
+    {
+      "name": "DeployStatus - Slow",
+      "screenshotPath": "deploystatus-slow--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 138,
+    "passed": 0,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 138,
+        "passed": 0
+      }
+    ]
+  }
+}

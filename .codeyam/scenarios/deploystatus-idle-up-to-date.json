@@ -1,0 +1,11 @@
+{
+  "name": "DeployStatus - Idle Up To Date",
+  "id": "de96670c-80ea-48eb-a7d3-332e9db2f001",
+  "url": "/isolated-components/DeployStatus-Idle",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component"
+}

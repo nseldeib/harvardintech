@@ -121,3 +121,34 @@
 {"timestamp":"2026-06-15T16:33:22Z","kind":"registry-add","message":"registry `filterActiveBoardMembers › keeps a member with no active field`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T16:33:22Z","kind":"registry-add","message":"registry `filterActiveBoardMembers › removes a member with active: false`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T16:33:22Z","kind":"registry-add","message":"registry `filterActiveBoardMembers › keeps a member with active: true`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `relativeTime › reports hours`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `parseBackendRepo › returns null when no repo is configured`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `mapRunPhase › maps a timed_out completion to failed`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `deployBaseFromPath › falls back to empty base when there is no admin segment`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `mapRunPhase › maps a completed success to succeeded`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `deployBaseFromPath › returns empty base for the custom-domain editor path`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `deployBaseFromPath › returns the subpath base for the project-subpath editor path`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `computeBanner › flips to live once the marker commit differs from baseline (wins over everything)`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `mapRunPhase › maps a queued run to building`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `pickLatestDeployRun › picks the most recent run for the deploy workflow, skipping other workflows`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `parseBackendRepo › defaults the branch to main when omitted`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `computeBanner › a marker change wins even when the run reports failed`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `mapRunPhase › maps a missing run to unknown`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `computeBanner › shows deploying right after a save (marker unchanged, no run info)`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `computeBanner › shows failed when the run failed and the marker has not moved`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `relativeTime › reports plural minutes`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `mapRunPhase › maps a completed failure to failed`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `relativeTime › reports days`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `deployBaseFromPath › returns the subpath base for the project-subpath dashboard path`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `markerUrl / viewSiteUrl › builds subpath marker and view URLs`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `computeBanner › shows building when the Actions run is in progress`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `pickLatestDeployRun › returns null when no run matches the workflow path`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `markerUrl / viewSiteUrl › builds root marker and view URLs at the empty base`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `mapRunPhase › maps an in-progress run to building`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `computeBanner › shows idle with last-deployed time when there is no active save`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `mapRunPhase › treats a cancelled completion as unknown, not failed`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `relativeTime › reports singular minute`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `deployBaseFromPath › returns empty base for the custom-domain dashboard path`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `relativeTime › reports just now under a minute`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `computeBanner › escalates to slow past the threshold`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `parseBackendRepo › pulls repo and branch out of the CMS config`: added from runner `tests` output"}

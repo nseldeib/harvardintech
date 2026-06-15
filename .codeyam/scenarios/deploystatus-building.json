@@ -1,0 +1,11 @@
+{
+  "name": "DeployStatus - Building",
+  "id": "dca0a4f9-374a-4449-a4b4-624ad5b32660",
+  "url": "/isolated-components/DeployStatus-Building",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component"
+}

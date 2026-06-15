@@ -1,10 +1,20 @@
 {
   "ADMIN_COLLECTIONS › gives every collection a non-empty label": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -43,26 +53,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "ADMIN_COLLECTIONS › lists the five editable folder collections in order": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -102,25 +112,25 @@
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
         "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
-        "kind": "full"
       }
     ]
   },
   "ADMIN_GATE_STORAGE_KEY › is the stable admin-unlocked key": {
     "file": "src/lib/adminGate.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -160,25 +170,25 @@
         "status": "pass",
         "at": "2026-06-15T12:28:29.484163918+00:00",
         "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
       }
     ]
   },
   "Greeting › increments the counter on click": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -217,26 +227,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "Greeting › omits the subtitle when no subtitle prop is given": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -275,26 +285,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "Greeting › renders the name in the headline": {
     "file": "src/components/Greeting.test.tsx",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -333,26 +343,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › appends the subject as a query parameter": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -391,26 +401,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › builds a bare mailto when only a recipient is given": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -449,26 +459,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › encodes spaces in the subject as %20 rather than plus": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -507,26 +517,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › handles a body with no subject": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -565,26 +575,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "buildMailto › includes both subject and body when supplied": {
     "file": "src/lib/mailto.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -624,25 +634,116 @@
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
         "kind": "full"
-      },
+      }
+    ]
+  },
+  "computeBanner › a marker change wins even when the run reports failed": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
       {
         "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
+        "at": "2026-06-15T23:26:16.862741+00:00",
         "kind": "full"
-      },
+      }
+    ]
+  },
+  "computeBanner › escalates to slow past the threshold": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
       {
         "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "computeBanner › flips to live once the marker commit differs from baseline and wins over everything": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "computeBanner › shows building when the Actions run is in progress": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "computeBanner › shows deploying right after a save with marker unchanged and no run info": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "computeBanner › shows failed when the run failed and the marker has not moved": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "computeBanner › shows idle with last-deployed time when there is no active save": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
         "kind": "full"
       }
     ]
   },
   "dashboardSummaryText › shows the empty-state nudge when there is no content": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -681,26 +782,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "dashboardSummaryText › summarizes a populated dashboard": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -739,26 +840,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "dashboardSummaryText › treats a negative total as empty": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -797,26 +898,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "dashboardSummaryText › uses the singular entry for a count of one": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -855,26 +956,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "dashboardTotals › counts empty collections without adding to the total": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -913,26 +1014,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "dashboardTotals › returns zeros for an empty card list": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -971,26 +1072,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "dashboardTotals › sums counts and reports the collection count": {
     "file": "src/lib/adminDashboard.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1030,25 +1131,90 @@
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
         "kind": "full"
-      },
+      }
+    ]
+  },
+  "deployBaseFromPath › falls back to empty base when there is no admin segment": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
       {
         "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
+        "at": "2026-06-15T23:26:16.862741+00:00",
         "kind": "full"
-      },
+      }
+    ]
+  },
+  "deployBaseFromPath › returns empty base for the custom-domain dashboard path": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
       {
         "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "deployBaseFromPath › returns empty base for the custom-domain editor path": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "deployBaseFromPath › returns the subpath base for the project-subpath dashboard path": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "deployBaseFromPath › returns the subpath base for the project-subpath editor path": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
         "kind": "full"
       }
     ]
   },
   "filterActiveBoardMembers › keeps a member with active: true": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1068,10 +1234,20 @@
   },
   "filterActiveBoardMembers › keeps a member with no active field": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1091,10 +1267,20 @@
   },
   "filterActiveBoardMembers › keeps active and undefined members while dropping inactive ones": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1114,10 +1300,20 @@
   },
   "filterActiveBoardMembers › removes a member with active: false": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1137,10 +1333,20 @@
   },
   "filterActiveBoardMembers › returns a new array without mutating the input": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1160,10 +1366,20 @@
   },
   "filterActiveBoardMembers › returns an empty array when every member is inactive": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1183,10 +1399,20 @@
   },
   "formatEventDate › does not zero-pad single-digit days": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1225,26 +1451,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "formatEventDate › formats a Date instance the same as its ISO string": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1283,26 +1509,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "formatEventDate › formats an ISO date as Month D, YYYY": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1341,26 +1567,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "galleryRevealImmediately › animates when IntersectionObserver exists and motion is allowed": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1399,26 +1625,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "galleryRevealImmediately › reveals immediately when IntersectionObserver is unavailable": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1457,26 +1683,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "galleryRevealImmediately › reveals immediately when both reduced motion and no observer": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1515,26 +1741,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "galleryRevealImmediately › reveals immediately when the user prefers reduced motion": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1573,26 +1799,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "galleryStaggerDelay › respects a custom column count": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1631,26 +1857,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "galleryStaggerDelay › returns zero for the first column": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1689,26 +1915,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "galleryStaggerDelay › staggers later columns by 60ms each": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1747,26 +1973,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "galleryStaggerDelay › wraps the delay per row of five columns": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1805,26 +2031,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initGalleryReveal › is a no-op when there are no gallery tiles": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1863,26 +2089,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initGalleryReveal › observes tiles instead of revealing them when animation is enabled": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1921,26 +2147,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initGalleryReveal › reveals every tile immediately under reduced motion": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -1979,26 +2205,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initGalleryReveal › reveals every tile immediately when IntersectionObserver is missing": {
     "file": "src/lib/gallery.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2037,26 +2263,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initParallax › is a no-op when there are no parallax images": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2095,26 +2321,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initParallax › leaves the image untouched on a non-fine-hover device": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2153,26 +2379,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initParallax › leaves the image untouched when the user prefers reduced motion": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2211,26 +2437,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initParallax › pins the banner image to the viewport on a fine-hover desktop": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2269,26 +2495,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initials › ignores surrounding and repeated whitespace": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2327,26 +2553,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initials › returns an empty string for an empty name": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2385,26 +2611,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initials › returns one letter for a single-word name": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2443,26 +2669,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initials › returns two-letter initials for a two-word name": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2501,26 +2727,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initials › upper-cases lowercase names": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2559,26 +2785,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "initials › uses only the first two words for a three-word name": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2617,26 +2843,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "isPasscodeCorrect › accepts an exact match": {
     "file": "src/lib/adminGate.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2675,26 +2901,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:28:29.484163918+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
         "kind": "full"
       }
     ]
   },
   "isPasscodeCorrect › is case-sensitive": {
     "file": "src/lib/adminGate.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2733,26 +2959,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:28:29.484163918+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
         "kind": "full"
       }
     ]
   },
   "isPasscodeCorrect › never matches an empty expected passcode": {
     "file": "src/lib/adminGate.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2791,26 +3017,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:28:29.484163918+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
         "kind": "full"
       }
     ]
   },
   "isPasscodeCorrect › rejects a wrong value": {
     "file": "src/lib/adminGate.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2849,26 +3075,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:28:29.484163918+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
         "kind": "full"
       }
     ]
   },
   "isPasscodeCorrect › trims surrounding whitespace on the expected value": {
     "file": "src/lib/adminGate.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2907,26 +3133,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:28:29.484163918+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
         "kind": "full"
       }
     ]
   },
   "isPasscodeCorrect › trims surrounding whitespace on the input": {
     "file": "src/lib/adminGate.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -2966,25 +3192,25 @@
         "status": "pass",
         "at": "2026-06-15T12:28:29.484163918+00:00",
         "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
       }
     ]
   },
   "landing image base paths › does not double-prefix a path that already carries the base": {
     "file": "src/components/landing/landing-images.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3023,26 +3249,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "landing image base paths › leaves every internal landing image unchanged at the domain root": {
     "file": "src/components/landing/landing-images.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3081,26 +3307,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "landing image base paths › prefixes every internal landing image with the project base on a subpath deploy": {
     "file": "src/components/landing/landing-images.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3140,25 +3366,142 @@
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
         "kind": "full"
-      },
+      }
+    ]
+  },
+  "mapRunPhase › maps a completed failure to failed": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
       {
         "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
+        "at": "2026-06-15T23:26:16.862741+00:00",
         "kind": "full"
-      },
+      }
+    ]
+  },
+  "mapRunPhase › maps a completed success to succeeded": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
       {
         "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "mapRunPhase › maps a missing run to unknown": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "mapRunPhase › maps a queued run to building": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "mapRunPhase › maps a timed_out completion to failed": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "mapRunPhase › maps an in-progress run to building": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "mapRunPhase › treats a cancelled completion as unknown, not failed": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "markerUrl / viewSiteUrl › builds root marker and view URLs at the empty base": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "markerUrl / viewSiteUrl › builds subpath marker and view URLs": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
         "kind": "full"
       }
     ]
   },
   "parallaxEnabled › disables parallax for touch devices with reduced motion": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3197,26 +3540,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "parallaxEnabled › disables parallax on non-fine-hover touch devices": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3255,26 +3598,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "parallaxEnabled › disables parallax when the user prefers reduced motion": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3313,26 +3656,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "parallaxEnabled › enables parallax for fine-hover devices without reduced motion": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3371,26 +3714,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "parallaxOffset › returns a negative offset for a section below the viewport top": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3429,26 +3772,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "parallaxOffset › returns a positive offset for a section scrolled above the viewport top": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3487,26 +3830,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "parallaxOffset › returns zero when the section is flush with the viewport top": {
     "file": "src/lib/parallax.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3546,25 +3889,155 @@
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
         "kind": "full"
-      },
+      }
+    ]
+  },
+  "parseBackendRepo › defaults the branch to main when omitted": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
       {
         "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
+        "at": "2026-06-15T23:26:16.862741+00:00",
         "kind": "full"
-      },
+      }
+    ]
+  },
+  "parseBackendRepo › pulls repo and branch out of the CMS config": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
       {
         "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "parseBackendRepo › returns null when no repo is configured": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "pickLatestDeployRun › picks the most recent run for the deploy workflow, skipping other workflows": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "pickLatestDeployRun › returns null when no run matches the workflow path": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "relativeTime › reports days": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "relativeTime › reports hours": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "relativeTime › reports just now under a minute": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "relativeTime › reports plural minutes": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      }
+    ]
+  },
+  "relativeTime › reports singular minute": {
+    "file": "src/lib/deployStatus.test.ts",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
+    "lastStatus": "pass",
+    "lastRunKind": "full",
+    "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
         "kind": "full"
       }
     ]
   },
   "seeded team headshots › ben-wei.md › declares a non-empty photo": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3609,10 +4082,20 @@
   },
   "seeded team headshots › ben-wei.md › points at an image that exists under public/": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3657,10 +4140,20 @@
   },
   "seeded team headshots › finds the seeded team content files": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3705,10 +4198,20 @@
   },
   "seeded team headshots › jessica-li.md › declares a non-empty photo": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3753,10 +4256,20 @@
   },
   "seeded team headshots › jessica-li.md › points at an image that exists under public/": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3801,10 +4314,20 @@
   },
   "seeded team headshots › krysia-lenzo.md › declares a non-empty photo": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3849,10 +4372,20 @@
   },
   "seeded team headshots › krysia-lenzo.md › points at an image that exists under public/": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3897,10 +4430,20 @@
   },
   "seeded team headshots › nadia-eldeib.md › declares a non-empty photo": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3945,10 +4488,20 @@
   },
   "seeded team headshots › nadia-eldeib.md › points at an image that exists under public/": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -3993,10 +4546,20 @@
   },
   "seeded team headshots › peter-boyce.md › declares a non-empty photo": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4041,10 +4604,20 @@
   },
   "seeded team headshots › peter-boyce.md › points at an image that exists under public/": {
     "file": "src/lib/team.photos.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4089,10 +4662,20 @@
   },
   "socialIconSrc › maps email to its self-hosted asset": {
     "file": "src/lib/socialIcon.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4117,10 +4700,20 @@
   },
   "socialIconSrc › maps facebook to its self-hosted asset": {
     "file": "src/lib/socialIcon.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4145,10 +4738,20 @@
   },
   "socialIconSrc › maps twitter to its self-hosted asset": {
     "file": "src/lib/socialIcon.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4173,10 +4776,20 @@
   },
   "socialIconSrc › resolves regardless of icon casing": {
     "file": "src/lib/socialIcon.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4201,10 +4814,20 @@
   },
   "socialIconSrc › returns null for an unknown icon": {
     "file": "src/lib/socialIcon.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4229,10 +4852,20 @@
   },
   "socialIconSrc › returns null for null, undefined, or empty input": {
     "file": "src/lib/socialIcon.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4257,10 +4890,20 @@
   },
   "sortBoardMembers › orders members by ascending order value": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4299,26 +4942,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "sortBoardMembers › returns a new array without mutating the input": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4357,26 +5000,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "sortBoardMembers › returns an empty array for no members": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4415,26 +5058,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "sortBoardMembers › treats a missing order as zero": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4473,26 +5116,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › does not mutate the input array order": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4531,26 +5174,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › handles an empty event list": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4589,26 +5232,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › returns no past events when all are upcoming": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4647,26 +5290,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › returns past events sorted most recent first": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4705,26 +5348,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › returns upcoming events sorted soonest first": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4763,26 +5406,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitEvents › treats an event exactly at now as upcoming": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4821,26 +5464,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitRole › returns a single empty string for an empty role": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4879,26 +5522,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitRole › returns a single-element array when there is no separator": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4937,26 +5580,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitRole › splits a role on the middot into two lines": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -4995,26 +5638,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitRole › splits every occurrence of the separator": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5053,26 +5696,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "splitRole › trims whitespace around the separator": {
     "file": "src/lib/team.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5111,26 +5754,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "toEventDate › parses an ISO date string into a Date": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5169,26 +5812,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "toEventDate › returns a Date instance unchanged": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5227,26 +5870,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "withBase › keeps the root path as a single slash when the base is root": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5285,26 +5928,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "withBase › leaves an internal path unchanged when the base is root": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5343,26 +5986,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "withBase › maps the root path to the base under a subpath": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5401,26 +6044,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "withBase › passes a bare hash anchor through untouched": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5459,26 +6102,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "withBase › passes external http URLs through untouched": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5517,26 +6160,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "withBase › passes mailto links through untouched": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5575,26 +6218,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "withBase › prefixes the subpath base onto an internal path": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5633,26 +6276,26 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]
   },
   "withBase › preserves a hash fragment on an absolute path under a subpath": {
     "file": "src/lib/url.test.ts",
-    "lastRunAt": "2026-06-15T22:10:05.782181+00:00",
+    "lastRunAt": "2026-06-15T23:26:16.862741+00:00",
     "lastStatus": "pass",
     "lastRunKind": "full",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-06-15T23:26:16.862741+00:00",
+        "kind": "full"
+      },
+      {
+        "status": "pass",
+        "at": "2026-06-15T22:56:43.610324+00:00",
+        "kind": "full"
+      },
       {
         "status": "pass",
         "at": "2026-06-15T22:10:05.782181+00:00",
@@ -5691,16 +6334,6 @@
       {
         "status": "pass",
         "at": "2026-06-15T12:22:45.954256316+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T12:22:28.844204546+00:00",
-        "kind": "full"
-      },
-      {
-        "status": "pass",
-        "at": "2026-06-15T11:48:34.005260793+00:00",
         "kind": "full"
       }
     ]

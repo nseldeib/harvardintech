@@ -1,0 +1,20 @@
+{
+  "claimStartedAt": "2026-06-15T22:13:11Z",
+  "completedAt": "2026-06-15T23:25:09Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "machine": "Jareds-Laptop.local",
+    "pid": 75561,
+    "priority": 0,
+    "selectedPlan": "cms-deploy-status-feedback-after-save",
+    "sessionId": "",
+    "startedAt": "2026-06-15T22:13:11Z"
+  },
+  "createdAt": "2026-06-15T18:00:00Z",
+  "journalTimestamp": "2026-06-15T23:25:09Z",
+  "mode": "ui",
+  "planFile": "completed/cms-deploy-status-feedback-after-save.md",
+  "slug": "cms-deploy-status-feedback-after-save",
+  "title": "cms: Deploy Status Feedback After Save"
+}

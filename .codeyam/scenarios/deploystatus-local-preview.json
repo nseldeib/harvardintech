@@ -1,0 +1,11 @@
+{
+  "name": "DeployStatus - Local Preview",
+  "id": "83691305-eb8f-4e68-8cb7-cbc660d38e09",
+  "url": "/isolated-components/DeployStatus-Local",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component"
+}

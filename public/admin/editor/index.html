@@ -26,5 +26,13 @@
       Pinned to the v0 major from the CDN for reproducible scaffolds.
     -->
     <script src="https://unpkg.com/@sveltia/cms@0/dist/sveltia-cms.js"></script>
+    <!--
+      Deploy-status banner. Loads after the Sveltia bundle (same auto-init,
+      no-inline convention) and shows the editor a "Deploying… → 🎉 live" toast
+      after each save by polling the build marker (/deploy-status.json). Pure,
+      tested spec lives in src/lib/deployStatus.ts; this is a minimal mirror
+      because public/ is served verbatim and cannot import the bundle.
+    -->
+    <script type="module" src="./deploy-status.js"></script>
   </body>
 </html>
