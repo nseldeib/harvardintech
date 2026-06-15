@@ -20,19 +20,19 @@ const links = [
 ];
 ---
 
-<section class="s-section" id="contact">
+<section class="s-section" id="contact" style="background: var(--color-bg-blue);">
   <div class="s-narrow" style="text-align: center;">
-    <h2 class="s-title">Contact Us</h2>
-    <p style="font-size: 1.15rem; color: var(--color-muted); margin: 0 0 var(--space-lg);">
+    <h2 class="s-title">CONTACT US</h2>
+    <p style="font-size: 1.15rem; color: var(--color-fg); margin: 0 0 var(--space-lg);">
       We'd love to hear from you!
     </p>
-    <div style="display: flex; flex-wrap: wrap; gap: var(--space-lg); justify-content: center;">
+    <div style="display: flex; flex-wrap: wrap; gap: 3rem; justify-content: center;">
       {
         links.map((link) => (
           <a
             href={link.url}
             rel="noopener"
-            style="font-family: var(--font-title); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.9rem; color: var(--color-accent);"
+            style="font-family: var(--font-sans); font-size: 1.35rem; color: var(--color-link);"
           >
             {link.label}
           </a>

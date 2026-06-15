@@ -4,12 +4,17 @@
 // their role. Shared by the landing-page BoardOfDirectors section and isolated
 // component scenarios so every board card stays identical. Mirrors EventCard.
 import { withBase } from '../lib/url';
-import { initials, type BoardMemberLike } from '../lib/team';
+import { initials, splitRole, type BoardMemberLike } from '../lib/team';
 
 interface Props {
   member: BoardMemberLike;
 }
 const { member } = Astro.props;
+// The live board prints the role over two lines — the title on the first line
+// and the Harvard class on the second (e.g. "Founder" / "Harvard C'08"). Author
+// the role with a "·" separator and we split it for that stacked look; a role
+// without a separator just renders on one line.
+const roleLines = splitRole(member.role);
 ---
 
 <div style="text-align: center;">
@@ -18,14 +23,16 @@ const { member } = Astro.props;
       <img
         src={withBase(member.photo)}
         alt={member.name}
-        style="width: 130px; height: 130px; object-fit: cover; border-radius: 50%; filter: grayscale(1); margin: 0 auto var(--space-md);"
+        style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; filter: grayscale(1); margin: 0 auto var(--space-md);"
       />
     ) : (
-      <div style="width: 130px; height: 130px; border-radius: 50%; margin: 0 auto var(--space-md); background: var(--color-bg-soft); color: var(--color-fg); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 500; font-family: var(--font-title);">
+      <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto var(--space-md); background: var(--color-bg-soft); color: var(--color-fg); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 500; font-family: var(--font-title);">
         {initials(member.name)}
       </div>
     )
   }
-  <h3 style="margin: 0 0 0.2rem; font-size: 1rem;">{member.name}</h3>
-  <p style="color: var(--color-muted); margin: 0; font-size: 0.88rem; white-space: pre-line;">{member.role}</p>
+  <h3 style="margin: 0 0 0.2rem; font-size: 1rem; font-weight: 400;">{member.name}</h3>
+  <p style="color: var(--color-fg); margin: 0; font-size: 0.9rem; line-height: 1.35;">
+    {roleLines.map((line, i) => (i === 0 ? <span>{line}</span> : <><br />{line}</>))}
+  </p>
 </div>

@@ -1,55 +1,51 @@
 ---
-// WhatsApp community announcement — reproduces the live site's launch copy and
-// the two-step apply flow (verify alumni status, then request to join).
+// WhatsApp community announcement — faithful to harvardintech.com: a light
+// robin's-egg-blue band led by the full-width "JOIN OUR COMMUNITY ON WHATSAPP"
+// banner (no text heading — the banner *is* the heading), followed by the
+// left-aligned launch copy and the two-step apply flow.
 import { withBase } from '../../lib/url';
 interface Props {
   criteriaUrl?: string;
   verifyUrl?: string;
   whatsappUrl?: string;
+  banner?: string;
 }
 const {
   criteriaUrl = 'https://www.harvardintech.com/',
   verifyUrl = 'https://www.harvardintech.com/',
   whatsappUrl = 'https://chat.whatsapp.com/',
-  image = '/images/sections/whatsapp.jpeg',
-} = Astro.props as Props & { image?: string };
+  banner = '/images/sections/whatsapp-banner.jpg',
+} = Astro.props as Props;
 ---
 
-<section class="s-section" style="background: var(--color-bg-soft);">
-  <div class="s-narrow" style="text-align: center;">
-    <h2 class="s-title">WhatsApp Community</h2>
-    <p style="font-size: 1.15rem; color: var(--color-fg); margin: 0 0 var(--space-md);">
+<section class="s-section" style="background: var(--color-bg-blue);">
+  <div class="s-inner" style="max-width: 918px;">
+    <img
+      src={withBase(banner)}
+      alt="Join our community on WhatsApp"
+      style="display: block; width: 100%; height: auto; margin: 0 auto var(--space-lg);"
+    />
+    <p style="font-size: 1rem; color: var(--color-fg); margin: 0 0 var(--space-md);">
       We're excited to announce the launch of the Harvard in Tech Alumni WhatsApp
       community!
     </p>
-    <p style="color: var(--color-muted); margin: 0 0 var(--space-lg);">
+    <p style="color: var(--color-fg); margin: 0 0 var(--space-md);">
       This is a space for Harvard alumni in tech, including founders, operators,
       and investors, across industries, to connect in real time. You can learn
       more about the admissions criteria for the Harvard in Tech WhatsApp
       community <a href={criteriaUrl}>here</a>.
     </p>
-    <div style="text-align: left; max-width: 560px; margin: 0 auto;">
-      <p style="font-weight: 500; color: var(--color-fg); margin: 0 0 var(--space-md);">
-        How to apply to join the Harvard in Tech WhatsApp community:
-      </p>
-      <ol style="padding-left: 1.25rem; color: var(--color-muted); display: grid; gap: var(--space-sm);">
-        <li>
-          Fill out <a href={verifyUrl}>this short form</a> (under 2 minutes) to
-          verify your alumni status.
-        </li>
-        <li>
-          Request to join the WhatsApp group using <a href={whatsappUrl}>this link</a>.
-        </li>
-      </ol>
-    </div>
-    {
-      image ? (
-        <img
-          src={withBase(image)}
-          alt="Harvard in Tech WhatsApp community"
-          style="display: block; width: 100%; max-width: 760px; height: auto; margin: var(--space-lg) auto 0; border-radius: var(--radius);"
-        />
-      ) : null
-    }
+    <p style="color: var(--color-fg); margin: 0 0 var(--space-sm);">
+      How to apply to join the Harvard in Tech WhatsApp community:
+    </p>
+    <ol style="padding-left: 1.25rem; color: var(--color-fg); margin: 0; display: grid; gap: var(--space-sm);">
+      <li>
+        Fill out <a href={verifyUrl}>this short form</a> (under 2 minutes) to
+        verify your alumni status.
+      </li>
+      <li>
+        Request to join the WhatsApp group using <a href={whatsappUrl}>this link</a>.
+      </li>
+    </ol>
   </div>
 </section>

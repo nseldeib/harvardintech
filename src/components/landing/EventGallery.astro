@@ -1,13 +1,16 @@
 ---
-// "PHOTOS FROM LATEST HARVARD IN TECH EVENTS" — a grid of real event photos.
-// Defaults to the locally-hosted set under /public/images/gallery (downloaded
-// from the original site); accepts an `images` override for scenarios.
+// "Photos from Latest Harvard in Tech Events" — a dense 5-column grid of real
+// event photos (40 of them, downloaded from the live site) that fade + rise
+// into view as they scroll into the viewport, matching harvardintech.com.
+// Defaults to the locally-hosted set under /public/images/gallery; accepts an
+// `images` override for scenarios.
 import { withBase } from '../../lib/url';
+import { galleryStaggerDelay } from '../../lib/gallery';
 interface Props {
   images?: string[];
 }
 const defaults = Array.from(
-  { length: 12 },
+  { length: 40 },
   (_, i) => `/images/gallery/event-${String(i + 1).padStart(2, '0')}.jpg`,
 );
 const { images = defaults } = Astro.props;
@@ -16,15 +19,14 @@ const { images = defaults } = Astro.props;
 <section class="s-section" id="gallery">
   <div class="s-inner">
     <h2 class="s-title">Photos from Latest Harvard in Tech Events</h2>
-    <div style="display: grid; gap: var(--space-sm); grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); max-width: 1000px; margin: 0 auto;">
+    <div class="gallery-grid">
       {
         images.map((src, i) => (
-          <figure style="margin: 0; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; background: var(--color-bg-soft);">
+          <figure class="gallery-item" style={`transition-delay: ${galleryStaggerDelay(i)}ms;`}>
             <img
               src={withBase(src)}
               alt={`Harvard in Tech event photo ${i + 1}`}
               loading="lazy"
-              style="width: 100%; height: 100%; object-fit: cover; display: block;"
             />
           </figure>
         ))
@@ -32,3 +34,59 @@ const { images = defaults } = Astro.props;
     </div>
   </div>
 </section>
+
+<style>
+  .gallery-grid {
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .gallery-item {
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--color-bg-soft);
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+  }
+  .gallery-item.in-view {
+    opacity: 1;
+    transform: none;
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  @media (max-width: 900px) {
+    .gallery-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  @media (max-width: 600px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  /* Respect reduced motion — show everything immediately, no transform. */
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Fade each photo in as it scrolls into view. The reveal decision + DOM
+  // wiring live in the unit-tested gallery helper.
+  import { initGalleryReveal } from '../../lib/gallery';
+  initGalleryReveal();
+</script>

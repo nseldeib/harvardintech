@@ -190,6 +190,114 @@
       "runner": "tests"
     },
     {
+      "description": "Capable browser, no reduced-motion preference: animate the tiles in.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryRevealImmediately › animates when IntersectionObserver exists and motion is allowed",
+      "line": 6,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "No IntersectionObserver (old browser / SSR) → reveal immediately so the gallery never gets stuck invisible.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryRevealImmediately › reveals immediately when IntersectionObserver is unavailable",
+      "line": 21,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Both unfavorable → still reveal immediately.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryRevealImmediately › reveals immediately when both reduced motion and no observer",
+      "line": 28,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Reduced-motion preference wins even on a capable browser.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryRevealImmediately › reveals immediately when the user prefers reduced motion",
+      "line": 13,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A custom column count changes the wrap point.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryStaggerDelay › respects a custom column count",
+      "line": 55,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The first column has no delay.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryStaggerDelay › returns zero for the first column",
+      "line": 37,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Each column within a row adds 60ms.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryStaggerDelay › staggers later columns by 60ms each",
+      "line": 43,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The delay wraps per row, so tiles in the same column share a delay.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryStaggerDelay › wraps the delay per row of five columns",
+      "line": 49,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "No gallery tiles on the page → a clean no-op, not a throw.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "initGalleryReveal › is a no-op when there are no gallery tiles",
+      "line": 124,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Capable browser, motion allowed: tiles are observed, not revealed up front.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "initGalleryReveal › observes tiles instead of revealing them when animation is enabled",
+      "line": 108,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Reduced motion: every tile is revealed immediately (in-view), no observer.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "initGalleryReveal › reveals every tile immediately under reduced motion",
+      "line": 87,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "No IntersectionObserver: fall back to revealing every tile immediately.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "initGalleryReveal › reveals every tile immediately when IntersectionObserver is missing",
+      "line": 96,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
       "description": "No [data-parallax] images on the page → a clean no-op, not a throw.",
       "file": "src/lib/parallax.test.ts",
       "format": "vitest",
@@ -511,6 +619,51 @@
       "key": "splitEvents › treats an event exactly at now as upcoming",
       "line": 63,
       "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "an empty role yields a single empty line, never throws",
+      "file": "src/lib/team.test.ts",
+      "format": "vitest",
+      "key": "splitRole › returns a single empty string for an empty role",
+      "line": 88,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "a role with no separator renders on a single line",
+      "file": "src/lib/team.test.ts",
+      "format": "vitest",
+      "key": "splitRole › returns a single-element array when there is no separator",
+      "line": 78,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "a role with a separator splits into title and Harvard class lines",
+      "file": "src/lib/team.test.ts",
+      "format": "vitest",
+      "key": "splitRole › splits a role on the middot into two lines",
+      "line": 67,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "more than one separator yields more than two lines",
+      "file": "src/lib/team.test.ts",
+      "format": "vitest",
+      "key": "splitRole › splits every occurrence of the separator",
+      "line": 83,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "surrounding whitespace around the separator is trimmed",
+      "file": "src/lib/team.test.ts",
+      "format": "vitest",
+      "key": "splitRole › trims whitespace around the separator",
+      "line": 72,
+      "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
     {

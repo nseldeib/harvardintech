@@ -49,6 +49,7 @@
 {"timestamp":"2026-06-15T01:41:28Z","kind":"registry-add","message":"registry `parallaxEnabled › disables parallax when the user prefers reduced motion`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T01:41:28Z","kind":"registry-add","message":"registry `parallaxOffset › returns zero when the section is flush with the viewport top`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T01:41:28Z","kind":"registry-add","message":"registry `parallaxOffset › returns a positive offset for a section scrolled above the viewport top`: added from runner `tests` output"}
+<<<<<<< Updated upstream
 {"timestamp":"2026-06-15T11:32:43Z","kind":"registry-add","message":"registry `isPasscodeCorrect › accepts an exact match`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T11:32:43Z","kind":"registry-add","message":"registry `isPasscodeCorrect › never matches an empty expected passcode`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T11:32:43Z","kind":"registry-add","message":"registry `isPasscodeCorrect › trims surrounding whitespace on the input`: added from runner `tests` output"}
@@ -56,3 +57,39 @@
 {"timestamp":"2026-06-15T11:32:43Z","kind":"registry-add","message":"registry `isPasscodeCorrect › rejects a wrong value`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T11:32:43Z","kind":"registry-add","message":"registry `ADMIN_GATE_STORAGE_KEY › is the stable admin-unlocked key`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T11:32:43Z","kind":"registry-add","message":"registry `isPasscodeCorrect › trims surrounding whitespace on the expected value`: added from runner `tests` output"}
+=======
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `galleryStaggerDelay › respects a custom column count`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `initGalleryReveal › reveals every tile immediately when IntersectionObserver is missing`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `galleryRevealImmediately › animates when IntersectionObserver exists and motion is allowed`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `initGalleryReveal › reveals every tile immediately under reduced motion`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `galleryRevealImmediately › reveals immediately when IntersectionObserver is unavailable`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `splitRole › splits a role on the middot into two lines`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `galleryRevealImmediately › reveals immediately when both reduced motion and no observer`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `initGalleryReveal › observes tiles instead of revealing them when animation is enabled`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `galleryRevealImmediately › reveals immediately when the user prefers reduced motion`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `splitRole › trims whitespace around the separator`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `splitRole › returns a single-element array when there is no separator`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `galleryStaggerDelay › staggers later columns by 60ms each`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `initGalleryReveal › is a no-op when there are no gallery tiles`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `galleryStaggerDelay › returns zero for the first column`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `galleryStaggerDelay › wraps the delay per row of five columns`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `splitRole › splits every occurrence of the separator`: added from runner `tests` output"}
+{"timestamp":"2026-06-15T11:35:47Z","kind":"registry-add","message":"registry `splitRole › returns a single empty string for an empty role`: added from runner `tests` output"}
+>>>>>>> Stashed changes
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `galleryRevealImmediately › animates when IntersectionObserver exists and motion is allowed` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `galleryRevealImmediately › reveals immediately when IntersectionObserver is unavailable` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `galleryRevealImmediately › reveals immediately when both reduced motion and no observer` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `galleryRevealImmediately › reveals immediately when the user prefers reduced motion` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `galleryStaggerDelay › respects a custom column count` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `galleryStaggerDelay › returns zero for the first column` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `galleryStaggerDelay › staggers later columns by 60ms each` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `galleryStaggerDelay › wraps the delay per row of five columns` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `initGalleryReveal › is a no-op when there are no gallery tiles` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `initGalleryReveal › observes tiles instead of revealing them when animation is enabled` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `initGalleryReveal › reveals every tile immediately under reduced motion` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `initGalleryReveal › reveals every tile immediately when IntersectionObserver is missing` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `splitRole › returns a single empty string for an empty role` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `splitRole › returns a single-element array when there is no separator` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `splitRole › splits a role on the middot into two lines` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `splitRole › splits every occurrence of the separator` deleted: no runner emits this key and no rename candidate exists"}
+{"timestamp":"2026-06-15T11:47:05Z","kind":"registry-delete","message":"registry `splitRole › trims whitespace around the separator` deleted: no runner emits this key and no rename candidate exists"}

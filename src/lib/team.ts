@@ -36,3 +36,14 @@ export function initials(name: string): string {
 export function sortBoardMembers<T extends BoardMemberLike>(members: T[]): T[] {
   return [...members].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 }
+
+/**
+ * Split a board member's `role` into display lines. The live board prints the
+ * role over two lines — the title first, the Harvard class second (e.g.
+ * "Founder · Harvard C'08" -> ["Founder", "Harvard C'08"]). Authors separate
+ * the two parts with a "·"; surrounding whitespace is trimmed. A role without a
+ * separator returns a single-element array so it renders on one line.
+ */
+export function splitRole(role: string): string[] {
+  return role.split(/\s*·\s*/);
+}

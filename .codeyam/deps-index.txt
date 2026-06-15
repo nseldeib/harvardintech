@@ -1,4 +1,5 @@
-# regenerated from dependency-graph.json on 2026-06-15T11:43:08Z; do not hand-edit
+# regenerated from dependency-graph.json on 2026-06-15T11:48:39Z; do not hand-edit
+src/lib/gallery.ts :: imports=0 :: imported_by=5
 .codeyam/scenario-issues.js :: imports=0 :: imported_by=2
 .codeyam/scenario-metrics.js :: imports=0 :: imported_by=2
 src/lib/parallax.ts :: imports=0 :: imported_by=2
@@ -32,6 +33,12 @@ src/lib/team.ts :: imports=0 :: imported_by=1
 .codeyam/capture.js :: imports=6 :: imported_by=0
 astro.config.mjs :: imports=0 :: imported_by=0
 cms-auth-worker/worker.js :: imports=0 :: imported_by=0
+scripts/compare-shot.mjs :: imports=0 :: imported_by=0
+scripts/crop.mjs :: imports=0 :: imported_by=0
+scripts/download-assets.mjs :: imports=0 :: imported_by=0
+scripts/extract.mjs :: imports=0 :: imported_by=0
+scripts/ours-shot.mjs :: imports=0 :: imported_by=0
+scripts/section-shot.mjs :: imports=0 :: imported_by=0
 src/components/Greeting.test.tsx :: imports=1 :: imported_by=0
 src/components/admin/CollectionCountCard.test.ts :: imports=1 :: imported_by=0
 src/components/admin/DashboardSummary.test.ts :: imports=1 :: imported_by=0
@@ -41,6 +48,7 @@ src/env.d.ts :: imports=0 :: imported_by=0
 src/lib/adminDashboard.test.ts :: imports=1 :: imported_by=0
 src/lib/adminGate.test.ts :: imports=1 :: imported_by=0
 src/lib/events.test.ts :: imports=1 :: imported_by=0
+src/lib/gallery.test.ts :: imports=5 :: imported_by=0
 src/lib/mailto.test.ts :: imports=1 :: imported_by=0
 src/lib/parallax.test.ts :: imports=2 :: imported_by=0
 src/lib/site.ts :: imports=2 :: imported_by=0

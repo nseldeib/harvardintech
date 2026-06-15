@@ -15,6 +15,11 @@
   --color-accent-dark: #098f8f;
   --color-nav: #10d7d7;
   --color-border: #e3e7ea;
+  /* Section-title dark teal + light robin's-egg band, sampled from the live
+     harvardintech.com Strikingly theme. */
+  --color-title: #1d5a5a;
+  --color-bg-blue: #ebf7f4;
+  --color-link: #3377cc;
 
   --font-sans: 'Roboto', Helvetica, Arial, sans-serif;
   --font-title: Helvetica, Arial, sans-serif;
@@ -75,20 +80,41 @@ h3 {
   max-width: var(--text-width);
   margin: 0 auto;
 }
+/* Section title — matches the live theme: dark-teal Helvetica, ~36px, flanked
+   by two short horizontal rules. The rules use `currentColor`, so a title
+   placed on a dark band (Get Involved) flips to white rules automatically by
+   just setting its color. Casing is whatever the markup uses (the live site
+   mixes uppercase and title-case per section), so no text-transform here. */
 .s-title {
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 1.6rem;
+  color: var(--color-title);
+  letter-spacing: normal;
+  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.25rem);
+  font-weight: 400;
   text-align: center;
   margin: 0 0 var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.s-title::before,
 .s-title::after {
   content: '';
-  display: block;
-  width: 48px;
-  height: 3px;
-  background: var(--color-accent);
-  margin: var(--space-md) auto 0;
+  flex: none;
+  width: 80px;
+  height: 2px;
+  margin: 0 18px;
+  background: currentColor;
+}
+/* "Upcoming Events" on the live site is the odd one out: a smaller, muted grey
+   Roboto heading with no flanking rules. */
+.s-title--plain {
+  color: #50555c;
+  font-family: var(--font-sans);
+  font-size: 1.75rem;
+}
+.s-title--plain::before,
+.s-title--plain::after {
+  display: none;
 }
 .s-btn {
   display: inline-block;

@@ -1,4 +1,4 @@
-# regenerated from glossary.json on 2026-06-15T11:34:43Z; do not hand-edit
+# regenerated from glossary.json on 2026-06-15T11:46:28Z; do not hand-edit
 AdminDashboard :: src/pages/admin/index.astro :: tags=
 AdminGate :: src/components/admin/AdminGate.astro :: tags=
 BoardMemberCard :: src/components/BoardMemberCard.astro :: tags=
@@ -16,9 +16,12 @@ dashboardSummaryText :: src/lib/adminDashboard.ts :: tags= :: test=src/lib/admin
 dashboardTotals :: src/lib/adminDashboard.ts :: tags= :: test=src/lib/adminDashboard.test.ts
 escapeHtml :: cms-auth-worker/worker.js :: tags=
 formatEventDate :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts
+galleryRevealImmediately :: src/lib/gallery.ts :: tags= :: test=src/lib/gallery.test.ts
+galleryStaggerDelay :: src/lib/gallery.ts :: tags= :: test=src/lib/gallery.test.ts
 handlePasswordSubmit :: cms-auth-worker/worker.js :: tags=
 handshakePage :: cms-auth-worker/worker.js :: tags=
 htmlResponse :: cms-auth-worker/worker.js :: tags=
+initGalleryReveal :: src/lib/gallery.ts :: tags= :: test=src/lib/gallery.test.ts
 initParallax :: src/lib/parallax.ts :: tags= :: test=src/lib/parallax.test.ts
 initials :: src/lib/team.ts :: tags= :: test=src/lib/team.test.ts
 isPasscodeCorrect :: src/lib/adminGate.ts :: tags= :: test=src/lib/adminGate.test.ts
@@ -27,5 +30,6 @@ parallaxOffset :: src/lib/parallax.ts :: tags= :: test=src/lib/parallax.test.ts
 passwordFormPage :: cms-auth-worker/worker.js :: tags=
 sortBoardMembers :: src/lib/team.ts :: tags= :: test=src/lib/team.test.ts
 splitEvents :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts
+splitRole :: src/lib/team.ts :: tags= :: test=src/lib/team.test.ts
 toEventDate :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts
 withBase :: src/lib/url.ts :: tags= :: test=src/lib/url.test.ts

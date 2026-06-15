@@ -19,7 +19,7 @@ const useImage = members.length === 0 && image;
 
 <section class="s-section" id="board">
   <div class="s-inner">
-    <h2 class="s-title">Board of Directors</h2>
+    <h2 class="s-title">BOARD OF DIRECTORS</h2>
     {
       useImage ? (
         <img
@@ -30,12 +30,75 @@ const useImage = members.length === 0 && image;
       ) : members.length === 0 ? (
         <p style="text-align: center; color: var(--color-muted);">Board members will be announced soon.</p>
       ) : (
-        <div style="display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); max-width: 960px; margin: 0 auto;">
-          {members.map((member) => (
-            <BoardMemberCard member={member} />
-          ))}
-        </div>
+        <Fragment>
+          <div class="board-lockup">
+            <img
+              src={withBase('/images/sections/board-logo.png')}
+              alt="Harvard in Tech"
+              class="board-lockup-logo"
+            />
+            <img
+              src={withBase('/images/sections/board-wordmark.png')}
+              alt="Board of Directors"
+              class="board-lockup-wordmark"
+            />
+          </div>
+          <div class="board-row">
+            {members.map((member) => (
+              <BoardMemberCard member={member} />
+            ))}
+          </div>
+        </Fragment>
       )
     }
   </div>
 </section>
+
+<style>
+  /* The logo lockup the live composite bakes in above the profiles: the Harvard
+     in Tech mark on the left and the "BOARD OF DIRECTORS" wordmark on the right,
+     centered as a row above the member grid. */
+  .board-lockup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin: 0 auto var(--space-xl);
+    max-width: 1000px;
+  }
+  .board-lockup-logo {
+    height: 56px;
+    width: auto;
+  }
+  .board-lockup-wordmark {
+    height: 34px;
+    width: auto;
+  }
+  @media (max-width: 560px) {
+    .board-lockup {
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    .board-lockup-logo {
+      height: 44px;
+    }
+    .board-lockup-wordmark {
+      height: 26px;
+    }
+  }
+
+  /* A single centered row of board members, matching the live composite. Wraps
+     to a responsive grid only when the row can no longer fit. */
+  .board-row {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  @media (max-width: 820px) {
+    .board-row {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+</style>

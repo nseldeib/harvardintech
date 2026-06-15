@@ -1,0 +1,20 @@
+{
+  "claimStartedAt": "2026-06-15T11:11:08Z",
+  "completedAt": "2026-06-15T11:42:50Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "machine": "codeyam-editor-codeyam-editor-3",
+    "pid": 54596,
+    "priority": 0,
+    "selectedPlan": "home-exact-match-live-site",
+    "sessionId": "d815284b-eebf-40b1-abbb-d143c25a725c",
+    "startedAt": "2026-06-15T11:11:08Z"
+  },
+  "createdAt": "2026-06-15T11:09:00Z",
+  "journalTimestamp": "2026-06-15T11:42:50Z",
+  "mode": "ui",
+  "planFile": "completed/home-exact-match-live-site.md",
+  "slug": "home-exact-match-live-site",
+  "title": "Homepage — exact visual match to harvardintech.com"
+}

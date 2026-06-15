@@ -137,6 +137,18 @@
     "testFile": "src/lib/events.test.ts"
   },
   {
+    "description": "Pure decision for the Event Gallery fade-in: returns true when every tile should be shown immediately instead of animated — when the user prefers reduced motion, or the browser lacks IntersectionObserver (old browsers / SSR) so tiles never get stuck invisible.",
+    "filePath": "src/lib/gallery.ts",
+    "name": "galleryRevealImmediately",
+    "testFile": "src/lib/gallery.test.ts"
+  },
+  {
+    "description": "Returns the per-tile CSS transition-delay (ms) that staggers the Event Gallery fade-in across grid columns; tiles in the same column share a delay so each column ripples in together. Defaults to 5 columns, 60ms per column step.",
+    "filePath": "src/lib/gallery.ts",
+    "name": "galleryStaggerDelay",
+    "testFile": "src/lib/gallery.test.ts"
+  },
+  {
     "description": "Handles the password-form submission in the CMS auth worker's OAuth handshake.",
     "filePath": "cms-auth-worker/worker.js",
     "name": "handlePasswordSubmit",
@@ -162,6 +174,12 @@
       "justification": "Template CMS auth worker shipped by the astro-github-pages scaffold; not part of the landing-page feature.",
       "kind": "scaffold"
     }
+  },
+  {
+    "description": "Idempotent, SSR-safe DOM wiring for the Event Gallery fade-in: reveals every tile immediately when galleryRevealImmediately says to, otherwise observes each tile via IntersectionObserver and adds the in-view class as it scrolls into the viewport, unobserving once revealed.",
+    "filePath": "src/lib/gallery.ts",
+    "name": "initGalleryReveal",
+    "testFile": "src/lib/gallery.test.ts"
   },
   {
     "description": "Idempotent client-side DOM wiring for the banner parallax: no-op under SSR/vitest and on re-invocation. When parallaxEnabled (read via matchMedia) is true, sizes every [data-parallax] <img> to 100vh and, on a rAF-throttled scroll/resize listener, sets translateY(parallaxOffset(rootTop)) so the photo stays fixed while its [data-parallax-root] section scrolls over it; otherwise leaves the images as static object-fit: cover. Hoisted from Hero.astro and GetInvolved.astro.",
@@ -213,6 +231,12 @@
     "filePath": "src/lib/events.ts",
     "name": "splitEvents",
     "testFile": "src/lib/events.test.ts"
+  },
+  {
+    "description": "Splits a board member's role into display lines on a '·' separator (e.g. \"Founder · Harvard C'08\" -> [\"Founder\", \"Harvard C'08\"]), trimming surrounding whitespace; a role without a separator returns a single-element array. Used by BoardMemberCard to render the role over two lines.",
+    "filePath": "src/lib/team.ts",
+    "name": "splitRole",
+    "testFile": "src/lib/team.test.ts"
   },
   {
     "description": "Coerces a string-or-Date event date into a Date, passing existing Date instances through untouched.",

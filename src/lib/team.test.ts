@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { initials, sortBoardMembers, type BoardMemberLike } from './team';
+import { initials, sortBoardMembers, splitRole, type BoardMemberLike } from './team';
 
 describe('initials', () => {
   // takes the first letter of the first two words, upper-cased
@@ -59,5 +59,33 @@ describe('sortBoardMembers', () => {
   // an empty list stays empty
   it('returns an empty array for no members', () => {
     expect(sortBoardMembers([])).toEqual([]);
+  });
+});
+
+describe('splitRole', () => {
+  // a role with a separator splits into title and Harvard class lines
+  it('splits a role on the middot into two lines', () => {
+    expect(splitRole("Founder · Harvard C'08")).toEqual(['Founder', "Harvard C'08"]);
+  });
+
+  // surrounding whitespace around the separator is trimmed
+  it('trims whitespace around the separator', () => {
+    expect(splitRole('Founder·Harvard')).toEqual(['Founder', 'Harvard']);
+    expect(splitRole('Founder    ·    Harvard')).toEqual(['Founder', 'Harvard']);
+  });
+
+  // a role with no separator renders on a single line
+  it('returns a single-element array when there is no separator', () => {
+    expect(splitRole('Executive Director')).toEqual(['Executive Director']);
+  });
+
+  // more than one separator yields more than two lines
+  it('splits every occurrence of the separator', () => {
+    expect(splitRole('A · B · C')).toEqual(['A', 'B', 'C']);
+  });
+
+  // an empty role yields a single empty line, never throws
+  it('returns a single empty string for an empty role', () => {
+    expect(splitRole('')).toEqual(['']);
   });
 });

@@ -1,0 +1,371 @@
+{
+  "timestamp": "2026-06-15T11:42:50Z",
+  "title": "Homepage exact visual match to harvardintech.com",
+  "type": "feature",
+  "userRequest": "# Homepage — exact visual match to harvardintech.com\n\nBring the homepage into a faithful, section-by-section match with the live\nsite at https://www.harvardintech.com/. Prototyped against the live preview by\nscreenshotting both sites and reconciling each landing section. All work is on\nthe existing per-section components under `src/components/landing/` plus the\nshared title styling in `src/styles/tokens.css`; assets were downloaded from the\nlive site into `public/images/`.\n\n## What was prototyped (section by section)\n\n### WhatsApp community (`src/components/landing/WhatsappCommunity.astro`)\n- Removed the \"WhatsApp Community\" `<h2>` heading — on the live site the\n  **banner image is the header**.\n- Moved the \"JOIN OUR COMMUNITY ON WHATSAPP\" banner to the **top** of the\n  section and made it full-width (max 918px).\n- Section background changed to the live robin's-egg blue **`#ebf7f4`**\n  (new `--color-bg-blue` token).\n- Body copy + the two-step apply list are now **left-aligned** (was centered).\n- Banner asset: `public/images/sections/whatsapp-banner.jpg`.\n\n### Support Us (`src/components/landing/SupportUs.astro`)\n- Replaced the bordered card boxes with the live site's **five large circular\n  flat icons** above each label (no card chrome).\n- Icons downloaded from Strikingly's static set into\n  `public/images/support/`: `trophy.png`, `chat.png`, `briefcase.png`,\n  `quote.png`, `star.png` — mapped in order to Sponsor an Event / Host us in\n  your space / Share with us job opportunities / Speak at a future event /\n  Volunteer your time. Each is still a pre-filled `mailto` via `buildMailto`.\n- Five-across grid on desktop; wraps responsively below 780px.\n\n### Event gallery (`src/components/landing/EventGallery.astro`)\n- Bumped from 12 to **40** real event photos (downloaded at retina res to\n  `public/images/gallery/event-01..40.jpg`).\n- Dense **5-column** grid (4 cols ≤900px, 3 cols ≤600px), 6px gaps, square\n  tiles — matches the live layout.\n- Added **fade-in-on-scroll**: each tile starts at opacity 0 / translateY(24px)\n  and animates in via an `IntersectionObserver`, staggered per column.\n  Honors `prefers-reduced-motion` (shows everything immediately) and degrades\n  gracefully without `IntersectionObserver`.\n\n### Board of Directors (`src/components/landing/BoardOfDirectors.astro`, `src/components/BoardMemberCard.astro`)\n- Decision: keep the board **data-driven** (the 5 members from the `team`\n  content collection), not the static composite image — confirmed with the user.\n- Restyled the wrapping card grid into a **single centered B&W row** of 5\n  (`.board-row`), wrapping responsively below 820px.\n- `BoardMemberCard` now splits the `role` on `·` so the title and Harvard class\n  render on **two lines** (e.g. \"Founder\" / \"Harvard C'08\"), matching the live\n  composite; names are weight 400.\n- Re-added the **logo lockup** the live composite bakes in above the profiles:\n  the Harvard-in-Tech mark (`public/images/sections/board-logo.png`) and the\n  \"BOARD OF DIRECTORS\" wordmark (`public/images/sections/board-wordmark.png`),\n  cropped from the original composite and laid out centered side-by-side above\n  the member row (`.board-lockup`).\n\n### Contact (`src/components/landing/ContactUs.astro`)\n- Section background set to the same light-blue band (`--color-bg-blue`).\n- Links restyled to the live **blue `#3377cc`** (`--color-link`), larger,\n  normal case (was uppercase tracked teal).\n\n### Global section titles (`src/styles/tokens.css`)\n- `.s-title` reworked to the live theme: **dark-teal `#1d5a5a`**\n  (`--color-title`), ~36px Helvetica, weight 400, flanked by two short\n  horizontal rules via `::before`/`::after` using `currentColor` (so the\n  white-on-dark \"GET INVOLVED\" title gets white rules for free).\n- Removed the old uppercase transform + small underline; per-section casing is\n  now authored in the markup to match the live site (uppercase for GET\n  INVOLVED / SUPPORT US / CONTACT US / BOARD OF DIRECTORS; title-case for the\n  gallery heading).\n- Added `.s-title--plain` for the live \"Upcoming Events\" outlier — a smaller,\n  muted grey Roboto heading with **no** flanking rules\n  (`src/components/landing/UpcomingEvents.astro`).\n\n## New / changed assets\n- `public/images/sections/whatsapp-banner.jpg` (banner header)\n- `public/images/sections/board-logo.png`, `board-wordmark.png` (cropped lockup)\n- `public/images/support/{trophy,chat,briefcase,quote,star}.png` (5 icons)\n- `public/images/gallery/event-01..40.jpg` (40 photos, replaced the prior 12)\n\n## Decisions made\n- **Board = data-driven row**, not the static composite image (user choice) —\n  but with the live lockup graphics restored above it for fidelity.\n- **Upcoming Events** title kept as the muted grey, rule-less outlier to match\n  the live site exactly rather than normalizing it to the teal title style.\n\n## Edge cases verified in the prototype\n- Section title rules invert to white automatically on the dark \"Get Involved\"\n  band (via `currentColor`).\n- Gallery fade-in respects `prefers-reduced-motion` and the no-IO fallback.\n- Board row and support icons collapse to responsive grids on narrow screens.\n- `BoardMemberCard` role-splitting is a no-op for roles without a `·`.\n\n## Deconstruct / hardening notes for Build\n- Existing scenarios that exercise this code: **Harvard in Tech - Landing Page**\n  (Desktop + Mobile), **Harvard in Tech - Board of Directors**, **Harvard in\n  Tech - No Upcoming Events**, plus the isolated `BoardMemberCard` /\n  `EventsPage` component scenarios. Re-capture these — the visuals changed\n  substantially.\n- Pure logic to cover with tests: the `role` split in `BoardMemberCard`\n  (consider lifting into `src/lib/team.ts` as a tested helper), and the gallery\n  fade-in observer wiring (the enable/fallback decision can mirror the\n  `parallax.ts` pure-helper + thin-wiring split for unit testing).\n- Confirm the 40 gallery filenames and the new section/support assets are\n  committed and referenced via `withBase` so they survive the Pages base-path\n  rewrite.",
+  "description": "Brought the Harvard in Tech homepage into a faithful, section-by-section match with the live harvardintech.com site: the WhatsApp Community section now leads with a full-width banner header on a robin's-egg-blue band with left-aligned copy; Support Us shows five large circular flat icons (each a pre-filled mailto); the Event Gallery is a dense 5-column grid of 40 real event photos that fade in on scroll (respecting prefers-reduced-motion); the Board of Directors is a centered B&W row with the live logo lockup and two-line roles; Contact uses the blue band and blue links; and global section titles use the dark-teal Helvetica treatment with flanking rules that auto-invert to white on dark bands. Pure logic was extracted into tested lib modules: splitRole in team.ts and galleryRevealImmediately/galleryStaggerDelay/initGalleryReveal in a new gallery.ts.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/.last-reconcile.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/deps-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/home-exact-match-live-site.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/reconciliation-log.jsonl",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/runner-timing-history.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-initials-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-initials-fallback--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/session-results-snapshot.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-run-marker.json",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-01.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-02.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-03.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-04.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-05.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-06.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-07.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-08.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-09.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-10.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-11.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-12.jpg",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/BoardMemberCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/BoardOfDirectors.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/ContactUs.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/EventGallery.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/GetInvolved.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/SupportUs.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/UpcomingEvents.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/WhatsappCommunity.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/team.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/team.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "status": "modified"
+    },
+    {
+      "path": "public/images/gallery/event-13.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-14.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-15.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-16.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-17.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-18.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-19.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-20.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-21.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-22.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-23.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-24.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-25.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-26.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-27.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-28.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-29.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-30.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-31.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-32.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-33.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-34.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-35.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-36.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-37.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-38.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-39.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/gallery/event-40.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/sections/board-logo.png",
+      "status": "added"
+    },
+    {
+      "path": "public/images/sections/board-wordmark.png",
+      "status": "added"
+    },
+    {
+      "path": "public/images/sections/whatsapp-banner.jpg",
+      "status": "added"
+    },
+    {
+      "path": "public/images/support/briefcase.png",
+      "status": "added"
+    },
+    {
+      "path": "public/images/support/chat.png",
+      "status": "added"
+    },
+    {
+      "path": "public/images/support/quote.png",
+      "status": "added"
+    },
+    {
+      "path": "public/images/support/star.png",
+      "status": "added"
+    },
+    {
+      "path": "public/images/support/trophy.png",
+      "status": "added"
+    },
+    {
+      "path": "scripts/compare-shot.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/crop.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/download-assets.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/extract.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/ours-shot.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/section-shot.mjs",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/gallery.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/gallery.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "BoardMemberCard - Initials Fallback",
+      "screenshotPath": "boardmembercard-initials-fallback--desktop.png"
+    },
+    {
+      "name": "BoardMemberCard - With Photo",
+      "screenshotPath": "boardmembercard-with-photo--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 77,
+    "passed": 77,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 77,
+        "passed": 77
+      }
+    ]
+  }
+}
