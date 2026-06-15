@@ -1,7 +1,8 @@
-# regenerated from dependency-graph.json on 2026-06-15T20:07:28Z; do not hand-edit
+# regenerated from dependency-graph.json on 2026-06-15T21:04:41Z; do not hand-edit
 src/lib/gallery.ts :: imports=0 :: imported_by=5
 .codeyam/scenario-issues.js :: imports=0 :: imported_by=2
 .codeyam/scenario-metrics.js :: imports=0 :: imported_by=2
+src/lib/contentRoot.ts :: imports=0 :: imported_by=2
 src/lib/parallax.ts :: imports=0 :: imported_by=2
 src/lib/url.ts :: imports=0 :: imported_by=2
 .claude/skills/review-session/scripts/find-last-session-helpers.mjs :: imports=0 :: imported_by=1
@@ -13,8 +14,6 @@ src/components/Greeting.tsx :: imports=0 :: imported_by=1
 src/components/admin/CollectionCountCard.astro :: imports=0 :: imported_by=1
 src/components/admin/DashboardSummary.astro :: imports=0 :: imported_by=1
 src/content/config.js :: imports=0 :: imported_by=1
-src/data/nav.json :: imports=0 :: imported_by=1
-src/data/settings.json :: imports=0 :: imported_by=1
 src/lib/adminDashboard.ts :: imports=0 :: imported_by=1
 src/lib/adminGate.ts :: imports=0 :: imported_by=1
 src/lib/events.ts :: imports=0 :: imported_by=1
@@ -32,6 +31,7 @@ src/lib/team.ts :: imports=0 :: imported_by=1
 .claude/skills/review-session/scripts/extract-session.mjs :: imports=0 :: imported_by=0
 .claude/skills/review-session/scripts/find-last-session.mjs :: imports=1 :: imported_by=0
 .codeyam/capture.js :: imports=6 :: imported_by=0
+.codeyam/seed-adapter.ts :: imports=0 :: imported_by=0
 astro.config.mjs :: imports=0 :: imported_by=0
 cms-auth-worker/worker.js :: imports=0 :: imported_by=0
 scripts/compare-shot.mjs :: imports=0 :: imported_by=0
@@ -44,7 +44,9 @@ src/components/Greeting.test.tsx :: imports=1 :: imported_by=0
 src/components/admin/CollectionCountCard.test.ts :: imports=1 :: imported_by=0
 src/components/admin/DashboardSummary.test.ts :: imports=1 :: imported_by=0
 src/components/landing/landing-images.test.ts :: imports=1 :: imported_by=0
-src/content/config.ts :: imports=0 :: imported_by=0
+src/content/config.ts :: imports=1 :: imported_by=0
+src/data/nav.json :: imports=0 :: imported_by=0
+src/data/settings.json :: imports=0 :: imported_by=0
 src/env.d.ts :: imports=0 :: imported_by=0
 src/lib/adminDashboard.test.ts :: imports=1 :: imported_by=0
 src/lib/adminGate.test.ts :: imports=1 :: imported_by=0
@@ -52,7 +54,7 @@ src/lib/events.test.ts :: imports=1 :: imported_by=0
 src/lib/gallery.test.ts :: imports=5 :: imported_by=0
 src/lib/mailto.test.ts :: imports=1 :: imported_by=0
 src/lib/parallax.test.ts :: imports=2 :: imported_by=0
-src/lib/site.ts :: imports=2 :: imported_by=0
+src/lib/site.ts :: imports=1 :: imported_by=0
 src/lib/socialIcon.test.ts :: imports=1 :: imported_by=0
 src/lib/team.photos.test.ts :: imports=0 :: imported_by=0
 src/lib/team.test.ts :: imports=1 :: imported_by=0

@@ -143,6 +143,15 @@
     "testFile": "src/lib/mailto.test.ts"
   },
   {
+    "description": "Returns the directory the content collections load from: the CODEYAM_CONTENT_ROOT sandbox during a codeyam session, else the committed src/content.",
+    "filePath": "src/lib/contentRoot.ts",
+    "name": "contentRoot",
+    "untestabilityReason": {
+      "justification": "env boundary — returns process.env.CODEYAM_CONTENT_ROOT ?? 'src/content'",
+      "kind": "platform-glue"
+    }
+  },
+  {
     "description": "Builds the /admin dashboard summary sentence: an empty-state nudge at zero, otherwise the total entries and collection count with correct singular/plural grammar.",
     "filePath": "src/lib/adminDashboard.ts",
     "name": "dashboardSummaryText",
@@ -153,6 +162,15 @@
     "filePath": "src/lib/adminDashboard.ts",
     "name": "dashboardTotals",
     "testFile": "src/lib/adminDashboard.test.ts"
+  },
+  {
+    "description": "Returns the directory the JSON singletons (settings, nav) load from: the CODEYAM_DATA_ROOT sandbox during a codeyam session, else the committed src/data.",
+    "filePath": "src/lib/contentRoot.ts",
+    "name": "dataRoot",
+    "untestabilityReason": {
+      "justification": "env boundary — returns process.env.CODEYAM_DATA_ROOT ?? 'src/data'",
+      "kind": "platform-glue"
+    }
   },
   {
     "description": "Returns a new array of board members visible on the public Board of Directors, keeping every member whose active field is not explicitly false — so existing entries with no active field (and members who never toggled the CMS checkbox) remain shown. Does not mutate the input.",
@@ -177,6 +195,15 @@
     "filePath": "src/lib/gallery.ts",
     "name": "galleryStaggerDelay",
     "testFile": "src/lib/gallery.test.ts"
+  },
+  {
+    "description": "Dev-only helper that (re)creates the .codeyam/tmp/content-sandbox copy of src/content and src/data, so the codeyam dev server reads/seeds the sandbox and never the committed production markdown.",
+    "filePath": "astro.config.mjs",
+    "name": "initContentSandbox",
+    "untestabilityReason": {
+      "justification": "filesystem boundary — rmSync/cpSync of content/data dirs; no branching logic to unit-test",
+      "kind": "platform-glue"
+    }
   },
   {
     "description": "Idempotent, SSR-safe DOM wiring for the Event Gallery fade-in: reveals every tile immediately when galleryRevealImmediately says to, otherwise observes each tile via IntersectionObserver and adds the in-view class as it scrolls into the viewport, unobserving once revealed.",
@@ -213,6 +240,15 @@
     "filePath": "src/lib/parallax.ts",
     "name": "parallaxOffset",
     "testFile": "src/lib/parallax.test.ts"
+  },
+  {
+    "description": "Reads and JSON-parses a singleton data file (settings.json / nav.json) from the resolved dataRoot(), so the site settings/nav honor the codeyam sandbox redirect.",
+    "filePath": "src/lib/site.ts",
+    "name": "readSingleton",
+    "untestabilityReason": {
+      "justification": "filesystem boundary — readFileSync + JSON.parse of a data-dir file",
+      "kind": "platform-glue"
+    }
   },
   {
     "description": "Maps a social link icon field (twitter/facebook/email, case-insensitive) to its self-hosted asset path under public/images/social/. Returns null for unknown or missing icons so the Contact Us section degrades to a label-only link. Icons were downloaded from the original harvardintech.com site to keep the GitHub Pages build CDN-independent.",
