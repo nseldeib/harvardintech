@@ -1,136 +1,4 @@
 {
-  "hooks": {
-    "Notification": [
-      {
-        "hooks": [
-          {
-            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "async": true,
-            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/claude-notify.sh 'Claude needs input' >/dev/null 2>&1 || true",
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "command": "[ -n \"$CODEYAM_EDITOR_ACTIVE\" ] && curl -s -X POST \"http://127.0.0.1:${CODEYAM_EDITOR_PORT}/api/idle-hook\" -H 'content-type: application/json' -d \"{\\\"trigger\\\":\\\"notification\\\",\\\"sessionId\\\":\\\"${CODEYAM_EDITOR_SESSION_ID}\\\"}\" >/dev/null 2>&1 || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "async": true,
-            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/claude-notify.sh 'Claude is asking a question' >/dev/null 2>&1 || true",
-            "type": "command"
-          }
-        ],
-        "matcher": "AskUserQuestion"
-      },
-      {
-        "hooks": [
-          {
-            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-pretool-hook.py && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-pretool-hook.py || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "command": "[ -n \"$CODEYAM_EDITOR_ACTIVE\" ] && curl -s -X POST \"http://127.0.0.1:${CODEYAM_EDITOR_PORT}/api/idle-hook\" -H 'content-type: application/json' -d \"{\\\"trigger\\\":\\\"pre-tool-use\\\",\\\"sessionId\\\":\\\"${CODEYAM_EDITOR_SESSION_ID}\\\"}\" >/dev/null 2>&1 || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "async": true,
-            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/claude-notify.sh 'Claude finished' >/dev/null 2>&1 || true",
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "command": "[ -n \"$CODEYAM_EDITOR_ACTIVE\" ] && curl -s -X POST \"http://127.0.0.1:${CODEYAM_EDITOR_PORT}/api/idle-hook\" -H 'content-type: application/json' -d \"{\\\"trigger\\\":\\\"stop\\\",\\\"sessionId\\\":\\\"${CODEYAM_EDITOR_SESSION_ID}\\\"}\" >/dev/null 2>&1 || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "command": "[ -n \"$CODEYAM_EDITOR_ACTIVE\" ] && curl -s -X POST \"http://127.0.0.1:${CODEYAM_EDITOR_PORT}/api/idle-hook\" -H 'content-type: application/json' -d \"{\\\"trigger\\\":\\\"user-prompt-submit\\\",\\\"sessionId\\\":\\\"${CODEYAM_EDITOR_SESSION_ID}\\\"}\" >/dev/null 2>&1 || true",
-            "timeout": 5,
-            "type": "command"
-          }
-        ]
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "Bash(codeyam-editor editor *)",
@@ -160,7 +28,140 @@
       "Write(.codeyam/**)",
       "Glob(.codeyam/**)",
       "Edit(**)",
-      "Write(**)"
+      "Write(**)",
+      "WebFetch(domain:www.harvardintech.com)"
+    ]
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/claude-notify.sh 'Claude needs input' >/dev/null 2>&1 || true",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$CODEYAM_EDITOR_ACTIVE\" ] && curl -s -X POST \"http://127.0.0.1:${CODEYAM_EDITOR_PORT}/api/idle-hook\" -H 'content-type: application/json' -d \"{\\\"trigger\\\":\\\"notification\\\",\\\"sessionId\\\":\\\"${CODEYAM_EDITOR_SESSION_ID}\\\"}\" >/dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/claude-notify.sh 'Claude is asking a question' >/dev/null 2>&1 || true",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-pretool-hook.py && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-pretool-hook.py || true",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$CODEYAM_EDITOR_ACTIVE\" ] && curl -s -X POST \"http://127.0.0.1:${CODEYAM_EDITOR_PORT}/api/idle-hook\" -H 'content-type: application/json' -d \"{\\\"trigger\\\":\\\"pre-tool-use\\\",\\\"sessionId\\\":\\\"${CODEYAM_EDITOR_SESSION_ID}\\\"}\" >/dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/claude-notify.sh 'Claude finished' >/dev/null 2>&1 || true",
+            "async": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$CODEYAM_EDITOR_ACTIVE\" ] && curl -s -X POST \"http://127.0.0.1:${CODEYAM_EDITOR_PORT}/api/idle-hook\" -H 'content-type: application/json' -d \"{\\\"trigger\\\":\\\"stop\\\",\\\"sessionId\\\":\\\"${CODEYAM_EDITOR_SESSION_ID}\\\"}\" >/dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py && mkdir -p \"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs && python3 \"${CLAUDE_PROJECT_DIR:-.}\"/.claude/hooks/editor-step-hook.py 2>>\"${CLAUDE_PROJECT_DIR:-.}\"/.codeyam/logs/editor-hook-stderr.log || true",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$CODEYAM_EDITOR_ACTIVE\" ] && curl -s -X POST \"http://127.0.0.1:${CODEYAM_EDITOR_PORT}/api/idle-hook\" -H 'content-type: application/json' -d \"{\\\"trigger\\\":\\\"user-prompt-submit\\\",\\\"sessionId\\\":\\\"${CODEYAM_EDITOR_SESSION_ID}\\\"}\" >/dev/null 2>&1 || true",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }
