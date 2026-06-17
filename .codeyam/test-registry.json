@@ -532,6 +532,42 @@
       "runner": "tests"
     },
     {
+      "description": "",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "initReveal › is a no-op when there are no reveal elements",
+      "line": 192,
+      "registeredAt": "2026-06-17T18:12:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "initReveal › observes elements instead of revealing them when animation is enabled",
+      "line": 176,
+      "registeredAt": "2026-06-17T18:12:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "initReveal › reveals every element immediately under reduced motion",
+      "line": 155,
+      "registeredAt": "2026-06-17T18:12:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "initReveal › reveals every element immediately when IntersectionObserver is missing",
+      "line": 164,
+      "registeredAt": "2026-06-17T18:12:04Z",
+      "runner": "tests"
+    },
+    {
       "description": "Surrounding and repeated whitespace is collapsed rather than producing blank initials.",
       "file": "src/lib/team.test.ts",
       "format": "vitest",

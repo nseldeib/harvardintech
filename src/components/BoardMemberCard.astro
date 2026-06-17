@@ -1,8 +1,9 @@
 ---
-// A single Board of Directors member card: a circular B&W headshot (or an
-// initials fallback when the member has no `photo`), the member's name, and
-// their role. Shared by the landing-page BoardOfDirectors section and isolated
-// component scenarios so every board card stays identical. Mirrors EventCard.
+// A single Board of Directors member card: a circular headshot (or an initials
+// fallback when the member has no `photo`), the member's name, and their role.
+// Shared by the landing-page BoardOfDirectors section and isolated component
+// scenarios so every board card stays identical. Redesigned with depth and a
+// hover that lifts the lockup and warms the B&W portrait to color.
 import { withBase } from '../lib/url';
 import { initials, splitRole, type BoardMemberLike } from '../lib/team';
 
@@ -17,22 +18,71 @@ const { member } = Astro.props;
 const roleLines = splitRole(member.role);
 ---
 
-<div style="text-align: center;">
+<div class="board-member">
   {
     member.photo ? (
-      <img
-        src={withBase(member.photo)}
-        alt={member.name}
-        style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; filter: grayscale(1); margin: 0 auto var(--space-md);"
-      />
+      <img class="board-photo" src={withBase(member.photo)} alt={member.name} />
     ) : (
-      <div style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto var(--space-md); background: var(--color-bg-soft); color: var(--color-fg); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 500; font-family: var(--font-title);">
-        {initials(member.name)}
-      </div>
+      <div class="board-photo board-photo--initials">{initials(member.name)}</div>
     )
   }
-  <h3 style="margin: 0 0 0.2rem; font-size: 1rem; font-weight: 400;">{member.name}</h3>
-  <p style="color: var(--color-fg); margin: 0; font-size: 0.9rem; line-height: 1.35;">
+  <h3 class="board-name">{member.name}</h3>
+  <p class="board-role">
     {roleLines.map((line, i) => (i === 0 ? <span>{line}</span> : <><br />{line}</>))}
   </p>
 </div>
+
+<style>
+  .board-member {
+    text-align: center;
+    transition: transform var(--dur) var(--ease);
+  }
+  .board-member:hover {
+    transform: translateY(-4px);
+  }
+  .board-photo {
+    width: 132px;
+    height: 132px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto var(--space-md);
+    display: block;
+    filter: grayscale(1);
+    box-shadow: var(--shadow-sm);
+    transition:
+      filter var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease);
+  }
+  .board-member:hover .board-photo {
+    filter: grayscale(0);
+    box-shadow: var(--shadow-md);
+  }
+  .board-photo--initials {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 600;
+    font-family: var(--font-display);
+    filter: none;
+  }
+  .board-name {
+    margin: 0 0 0.2rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .board-role {
+    color: var(--color-muted);
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .board-member,
+    .board-photo {
+      transition: none;
+    }
+  }
+</style>

@@ -1,37 +1,43 @@
 ---
-// Top section "HARVARD ALUMNI IN TECH" — faithful to harvardintech.com: a
-// full-bleed background photo with a dark overlay and light text, the mission
-// paragraph, and a SUBSCRIBE button to the MailChimp signup. The background is
-// rendered as an <img> (survives the preview reverse-proxy / base-path rewrite).
+// Top hero "Harvard Alumni in Tech" — redesigned into a modern editorial hero:
+// a kicker label above a large display headline, the mission paragraph
+// constrained to a readable measure, and primary + secondary CTAs. The
+// background photo keeps its proxy-safe <img> + softened parallax, with a
+// directional gradient overlay (instead of the old flat black wash) for depth
+// and legibility.
 import { withBase } from '../../lib/url';
 interface Props {
   description?: string;
   subscribeUrl?: string;
+  eventsUrl?: string;
   image?: string;
 }
 const {
-  description = 'We are the official Harvard Alumni Group for technology. We hope to further the development of technology through encouraging innovation, providing Harvard alumni technologists with resources and networks, and promoting technological activity throughout the Harvard community. We are currently active in New York City and will be growing chapters in other cities. To stay up to date about future events, please sign up for our mailing list:',
+  description = 'We are the official Harvard Alumni Group for technology — encouraging innovation, providing Harvard alumni technologists with resources and networks, and growing chapters in cities around the world.',
   subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb',
+  eventsUrl = '/events',
   image = '/images/bg/hero-bg.jpg',
 } = Astro.props;
 ---
 
 <section class="hero" id="about" data-parallax-root>
-  <div style="position: absolute; inset: 0; overflow: hidden; z-index: 0;">
+  <div class="hero-bg">
     <img
       src={withBase(image)}
       alt=""
       data-parallax
       style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
     />
-    <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.39);"></div>
+    <div class="hero-overlay"></div>
   </div>
 
   <div class="hero-inner">
-    <h2 class="hero-title">Harvard Alumni in Tech</h2>
+    <span class="s-eyebrow hero-eyebrow">Harvard Alumni Group for Technology</span>
+    <h1 class="hero-title">Harvard Alumni in Tech</h1>
     <p class="hero-text">{description}</p>
     <div class="hero-cta">
-      <a class="s-btn" href={subscribeUrl} rel="noopener">Subscribe</a>
+      <a class="s-btn" href={subscribeUrl} rel="noopener">Join our mailing list</a>
+      <a class="s-btn s-btn--on-dark" href={withBase(eventsUrl)}>See upcoming events</a>
     </div>
   </div>
 </section>
@@ -50,88 +56,74 @@ const {
        address-bar jump, with a `vh` fallback for browsers without `svh`. */
     min-height: calc(100vh - var(--header-height));
     min-height: calc(100svh - var(--header-height));
-    padding: 20px;
+    padding: clamp(2rem, 6vw, 6rem) var(--space-lg);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  /* Directional gradient — darker at the lower-left where the text sits,
+     fading to a lighter wash top-right for depth. */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(105deg, rgba(15, 16, 19, 0.82) 0%, rgba(15, 16, 19, 0.55) 42%, rgba(15, 16, 19, 0.18) 100%),
+      linear-gradient(0deg, rgba(15, 16, 19, 0.45) 0%, rgba(15, 16, 19, 0) 55%);
   }
   .hero-inner {
     position: relative;
     z-index: 2;
-    max-width: 918px;
-    margin: 0 auto;
+    max-width: 760px;
     color: #fff;
+  }
+  .hero-eyebrow {
+    color: #ff8fa3;
   }
   .hero-title {
-    text-transform: uppercase;
-    font-family: var(--font-title);
-    font-weight: 400;
+    font-family: var(--font-display);
+    font-weight: 700;
     color: #fff;
-    font-size: 58px;
-    line-height: 1.2;
-    letter-spacing: normal;
-    white-space: nowrap;
+    font-size: var(--text-5xl);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
     margin: 0 0 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  /* "fresh" theme title decoration: 80x2px white rules flanking the text */
-  .hero-title::before,
-  .hero-title::after {
-    content: '';
-    flex: none;
-    width: 80px;
-    height: 2px;
-    margin: 0 10px;
-    background: #fff;
   }
   .hero-text {
     font-family: var(--font-sans);
-    font-size: 20px;
+    font-size: var(--text-lg);
     font-weight: 400;
-    line-height: 29px;
-    color: #fff;
-    text-align: left;
-    margin: 0 0 1.5rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 60ch;
+    margin: 0 0 2rem;
   }
   .hero-cta {
-    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
   }
 
-  /* Mobile: match the real site — the title scales down, wraps to multiple
-     lines left-aligned, and the flanking rules collapse to a single underline
-     beneath it; the Subscribe button goes full-width. */
   @media (max-width: 640px) {
     .hero {
-      /* Keep the shared full-viewport `min-height`; just restore the mobile
-         horizontal padding. Content stays flex-centered. */
-      padding: 24px;
-    }
-    .hero-title {
-      display: block;
-      text-align: left;
-      white-space: normal;
-      font-size: 36px;
-      line-height: 1.15;
-      margin: 0 0 1.5rem;
-    }
-    .hero-title::before {
-      display: none;
-    }
-    .hero-title::after {
-      display: block;
-      width: 80px;
-      margin: 1rem 0 0;
+      padding: 3rem 1.5rem;
     }
     .hero-text {
-      font-size: 17px;
-      line-height: 26px;
+      font-size: 1.05rem;
+    }
+    .hero-cta {
+      width: 100%;
     }
     .hero-cta :global(.s-btn) {
-      display: block;
-      width: 100%;
+      flex: 1 1 auto;
+      justify-content: center;
     }
   }
 </style>

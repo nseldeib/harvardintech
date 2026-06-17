@@ -26,6 +26,15 @@
     ]
   },
   {
+    "description": "Long-form blog article layout: a back link, an eyebrow + display title, the publish date, a divider, and the rendered markdown body (default slot) styled for comfortable reading (headings, lists, links, blockquotes, code). Extracted from the /blog/[slug] route so the page is pure composition.",
+    "filePath": "src/components/BlogPost.astro",
+    "name": "BlogPost",
+    "scenarios": [
+      "blogpost-long-article",
+      "blogpost-short-body"
+    ]
+  },
+  {
     "description": "A single Board of Directors member card: a circular B&W headshot, or an initials-avatar fallback when the member has no photo, plus name and role. Shared by the landing BoardOfDirectors section and isolated scenarios.",
     "filePath": "src/components/BoardMemberCard.astro",
     "name": "BoardMemberCard",
@@ -168,6 +177,14 @@
     ]
   },
   {
+    "description": "The 404 page body: an eyebrow, a large crimson-to-teal gradient 404 code, an apology line, and a 'Go back home' button. Extracted from the 404 route so the page is pure composition.",
+    "filePath": "src/components/NotFound.astro",
+    "name": "NotFound",
+    "scenarios": [
+      "notfound-404-page"
+    ]
+  },
+  {
     "description": "Builds a mailto: URL with optional pre-filled subject/body, normalizing space encoding to %20. Used by the Support Us, Contact Us, and footer links.",
     "filePath": "src/lib/mailto.ts",
     "name": "buildMailto",
@@ -272,6 +289,12 @@
     "filePath": "src/lib/parallax.ts",
     "name": "initParallax",
     "testFile": "src/lib/parallax.test.ts"
+  },
+  {
+    "description": "Idempotent, SSR-safe site-wide scroll reveal: finds every .s-reveal element and, reusing galleryRevealImmediately, either reveals them all immediately (reduced motion / no IntersectionObserver) or observes each and adds the is-visible class as it scrolls into view, unobserving once revealed. Wired once from BaseLayout.",
+    "filePath": "src/lib/gallery.ts",
+    "name": "initReveal",
+    "testFile": "src/lib/gallery.test.ts"
   },
   {
     "description": "Derives up-to-two-letter uppercase initials from a board member name, used as the BoardMemberCard avatar fallback when a member has no photo.",

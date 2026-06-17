@@ -20,7 +20,10 @@ const { events = [], city } = Astro.props;
   events.length > 0 ? (
     <section class="s-section" id="chapter-events">
       <div class="s-inner" style="text-align: center;">
-        <h2 class="s-title s-title--plain">Upcoming Events in {city}</h2>
+        <header style="margin-bottom: var(--space-xl);">
+          <span class="s-eyebrow">What's next</span>
+          <h2 class="s-title" style="margin-bottom: 0;">Upcoming Events in {city}</h2>
+        </header>
         <div style="display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 920px; margin: 0 auto;">
           {events.map((event) => (
             <EventCard event={event} variant="upcoming" />

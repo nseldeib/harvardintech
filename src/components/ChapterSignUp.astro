@@ -11,9 +11,10 @@ const { subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb' } = Astro.pr
 ---
 
 <section class="s-section" id="sign-up" style="background: var(--color-bg-blue);">
-  <div class="s-narrow" style="text-align: center;">
+  <div class="s-narrow s-reveal" style="text-align: center;">
+    <span class="s-eyebrow">Stay in the loop</span>
     <h2 class="s-title">Sign Up</h2>
-    <p style="font-size: 1.15rem; color: var(--color-fg); margin: 0 0 var(--space-lg);">
+    <p style="font-size: var(--text-lg); color: var(--color-muted); margin: 0 0 var(--space-lg);">
       Join the Harvard in Tech Community
     </p>
     <a class="s-btn" href={subscribeUrl} rel="noopener">Subscribe</a>

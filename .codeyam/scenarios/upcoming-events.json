@@ -1,12 +1,11 @@
 {
   "name": "Upcoming Events",
-  "id": "0a5dfc37-43e2-43a4-a2d4-3f2a58c14417",
+  "id": "f334e210-55e8-414f-bbfe-bac08ad1e2bb",
   "url": "/isolated-components/UpcomingEvents",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "UpcomingEvents",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/landing/UpcomingEvents.astro"
+  "scenarioType": "component"
 }

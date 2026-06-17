@@ -1,0 +1,11 @@
+{
+  "name": "BlogPost - Short Body",
+  "id": "01d331b6-fa8e-4df8-aba3-d23b8f8c97dd",
+  "url": "/isolated-components/BlogPost-Short",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BlogPost-Short",
+  "scenarioType": "component"
+}

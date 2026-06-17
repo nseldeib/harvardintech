@@ -1,7 +1,8 @@
-# regenerated from glossary.json on 2026-06-17T11:20:16Z; do not hand-edit
+# regenerated from glossary.json on 2026-06-17T18:18:21Z; do not hand-edit
 AdminDashboard :: src/pages/admin/index.astro :: tags=
 AdminGate :: src/components/admin/AdminGate.astro :: tags=
 AdminGatePrompt :: src/components/admin/AdminGatePrompt.astro :: tags=
+BlogPost :: src/components/BlogPost.astro :: tags=
 BoardMemberCard :: src/components/BoardMemberCard.astro :: tags=
 ChapterConnect :: src/components/ChapterConnect.astro :: tags=
 ChapterEvents :: src/components/ChapterEvents.astro :: tags=
@@ -18,6 +19,7 @@ EventsRoute :: src/pages/events.astro :: tags=
 GET :: src/pages/deploy-status.json.ts :: tags=
 Greeting :: src/components/Greeting.tsx :: tags= :: test=src/components/Greeting.test.tsx
 LandingPage :: src/pages/index.astro :: tags=
+NotFound :: src/components/NotFound.astro :: tags=
 buildMailto :: src/lib/mailto.ts :: tags= :: test=src/lib/mailto.test.ts
 computeBanner :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
 contentRoot :: src/lib/contentRoot.ts :: tags= :: test=src/lib/contentRoot.test.ts
@@ -34,6 +36,7 @@ getStaticPaths :: src/pages/chapters/[slug].astro :: tags=
 initContentSandbox :: astro.config.mjs :: tags=
 initGalleryReveal :: src/lib/gallery.ts :: tags= :: test=src/lib/gallery.test.ts
 initParallax :: src/lib/parallax.ts :: tags= :: test=src/lib/parallax.test.ts
+initReveal :: src/lib/gallery.ts :: tags= :: test=src/lib/gallery.test.ts
 initials :: src/lib/team.ts :: tags= :: test=src/lib/team.test.ts
 isPasscodeCorrect :: src/lib/adminGate.ts :: tags= :: test=src/lib/adminGate.test.ts
 mapRunPhase :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts

@@ -1,12 +1,11 @@
 {
   "name": "Get Involved",
-  "id": "ce4f6858-0094-4edd-a939-4cbf78405f84",
+  "id": "c7ca73a4-e304-4010-918b-d5f9f6f10419",
   "url": "/isolated-components/GetInvolved",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "GetInvolved",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/landing/GetInvolved.astro"
+  "scenarioType": "component"
 }

@@ -20,17 +20,21 @@ const {
     data-parallax
     style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;"
   />
-  <div style="position: absolute; inset: 0; background: rgba(20,24,33,0.62); z-index: 1;"></div>
+  <div
+    style="position: absolute; inset: 0; z-index: 1; background: linear-gradient(115deg, rgba(15,16,19,0.84) 0%, rgba(15,16,19,0.55) 55%, rgba(128,17,42,0.45) 100%);"
+  >
+  </div>
   <div class="s-section" style="position: relative; z-index: 2;">
-    <div class="s-narrow" style="text-align: center; color: #fff;">
-      <h2 class="s-title" style="color: #fff;">GET INVOLVED</h2>
-      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.92); margin: 0 0 var(--space-lg);">
+    <div class="s-narrow s-reveal" style="text-align: center; color: #fff;">
+      <span class="s-eyebrow s-eyebrow--on-dark">Get involved</span>
+      <h2 class="s-title" style="color: #fff;">Help us build the community</h2>
+      <p style="font-size: var(--text-lg); color: rgba(255,255,255,0.92); margin: 0 0 var(--space-lg);">
         We're a volunteer-run organization focused on building a community that
         supports Harvard hi-tech entrepreneurs and technologists. If you're
         interested in helping support our organization, either as a speaker,
         host, sponsor, or volunteer, please don't hesitate to contact us.
       </p>
-      <a class="s-btn" href={contactUrl} rel="noopener">Volunteer</a>
+      <a class="s-btn" href={contactUrl} rel="noopener">Volunteer with us</a>
     </div>
   </div>
 </section>

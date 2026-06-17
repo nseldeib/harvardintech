@@ -128,3 +128,71 @@ describe('initGalleryReveal', () => {
     expect(() => initGalleryReveal()).not.toThrow();
   });
 });
+
+describe('initReveal', () => {
+  // jsdom lacks matchMedia; stub it so `prefers-reduced-motion` answers `reduce`.
+  function stubMatchMedia(reduce: boolean) {
+    window.matchMedia = vi.fn((query: string) => {
+      const matches = query.includes('prefers-reduced-motion') ? reduce : false;
+      return { matches, media: query } as MediaQueryList;
+    }) as unknown as typeof window.matchMedia;
+  }
+
+  // Mount `count` elements carrying the site-wide `.s-reveal` opt-in class.
+  function mountReveal(count: number) {
+    const els = Array.from({ length: count }, () => '<div class="s-reveal"></div>').join('');
+    document.body.innerHTML = els;
+    return document.querySelectorAll<HTMLElement>('.s-reveal');
+  }
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+    vi.unstubAllGlobals();
+    vi.resetModules();
+  });
+
+  // Reduced motion: every reveal element is shown immediately (is-visible).
+  it('reveals every element immediately under reduced motion', async () => {
+    stubMatchMedia(true);
+    const els = mountReveal(3);
+    const { initReveal } = await import('./gallery');
+    initReveal();
+    els.forEach((el) => expect(el.classList.contains('is-visible')).toBe(true));
+  });
+
+  // No IntersectionObserver: fall back to revealing every element immediately.
+  it('reveals every element immediately when IntersectionObserver is missing', async () => {
+    stubMatchMedia(false);
+    const original = (window as { IntersectionObserver?: unknown }).IntersectionObserver;
+    delete (window as { IntersectionObserver?: unknown }).IntersectionObserver;
+    const els = mountReveal(2);
+    const { initReveal } = await import('./gallery');
+    initReveal();
+    els.forEach((el) => expect(el.classList.contains('is-visible')).toBe(true));
+    (window as { IntersectionObserver?: unknown }).IntersectionObserver = original;
+  });
+
+  // Capable browser, motion allowed: elements are observed, not revealed up front.
+  it('observes elements instead of revealing them when animation is enabled', async () => {
+    stubMatchMedia(false);
+    const observe = vi.fn();
+    (window as { IntersectionObserver?: unknown }).IntersectionObserver = vi.fn(() => ({
+      observe,
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
+    })) as unknown as typeof IntersectionObserver;
+    const els = mountReveal(4);
+    const { initReveal } = await import('./gallery');
+    initReveal();
+    expect(observe).toHaveBeenCalledTimes(4);
+    els.forEach((el) => expect(el.classList.contains('is-visible')).toBe(false));
+  });
+
+  // No reveal elements on the page → a clean no-op, not a throw.
+  it('is a no-op when there are no reveal elements', async () => {
+    stubMatchMedia(false);
+    document.body.innerHTML = '<main></main>';
+    const { initReveal } = await import('./gallery');
+    expect(() => initReveal()).not.toThrow();
+  });
+});

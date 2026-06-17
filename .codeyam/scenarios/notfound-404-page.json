@@ -1,0 +1,11 @@
+{
+  "name": "NotFound - 404 Page",
+  "id": "2cbdad8d-cb07-4855-be64-08f7dfe9e87c",
+  "url": "/isolated-components/NotFound",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "NotFound",
+  "scenarioType": "component"
+}

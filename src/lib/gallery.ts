@@ -56,3 +56,39 @@ export function initGalleryReveal(): void {
   );
   items.forEach((el) => io.observe(el));
 }
+
+// Site-wide scroll reveal for any `.s-reveal` element (the generic sibling of
+// the gallery reveal above). Wired once from BaseLayout so every section/card
+// that opts into `.s-reveal` animates in as it scrolls into view. Adds
+// `.is-visible` once and unobserves. Reveals everything immediately under
+// reduced motion or when IntersectionObserver is unavailable, reusing the same
+// decision helper as the gallery so neither can get stuck invisible.
+export function initReveal(): void {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  const items = document.querySelectorAll<HTMLElement>('.s-reveal');
+  if (items.length === 0) return;
+
+  const immediate = galleryRevealImmediately({
+    reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    hasIntersectionObserver: 'IntersectionObserver' in window,
+  });
+
+  if (immediate) {
+    items.forEach((el) => el.classList.add('is-visible'));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      }
+    },
+    { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+  );
+  items.forEach((el) => io.observe(el));
+}

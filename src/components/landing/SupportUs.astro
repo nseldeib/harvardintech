@@ -22,20 +22,19 @@ const options = [
 
 <section class="s-section" id="support">
   <div class="s-inner">
-    <h2 class="s-title">SUPPORT US</h2>
-    <div style="display: grid; gap: var(--space-md); grid-template-columns: repeat(5, 1fr); max-width: 920px; margin: 0 auto;">
+    <header class="support-head s-reveal">
+      <span class="s-eyebrow">Get behind us</span>
+      <h2 class="s-title">Support Us</h2>
+    </header>
+    <div class="support-grid">
       {
         options.map((opt) => (
-          <a
-            href={buildMailto({ to: email, subject: opt.subject })}
-            style="display: flex; flex-direction: column; align-items: center; gap: var(--space-md); color: var(--color-fg); font-weight: 400; text-align: center;"
-          >
+          <a class="support-option s-reveal" href={buildMailto({ to: email, subject: opt.subject })}>
             <img
               src={withBase(`/images/support/${opt.icon}.png`)}
               alt=""
               width="151"
               height="151"
-              style="width: 151px; height: 151px; max-width: 100%;"
             />
             <span>{opt.label}</span>
           </a>
@@ -46,11 +45,60 @@ const options = [
 </section>
 
 <style>
+  .support-head {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+  .support-head .s-title {
+    margin-bottom: 0;
+  }
+  .support-grid {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .support-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-sm);
+    border-radius: var(--radius-lg);
+    color: var(--color-fg);
+    font-weight: 500;
+    text-align: center;
+    transition:
+      transform var(--dur) var(--ease),
+      background var(--dur) var(--ease);
+  }
+  .support-option img {
+    width: 132px;
+    height: 132px;
+    max-width: 100%;
+    transition: transform var(--dur) var(--ease);
+  }
+  .support-option:hover {
+    background: var(--color-bg-soft);
+    text-decoration: none;
+    color: var(--color-primary);
+    transform: translateY(-4px);
+  }
+  .support-option:hover img {
+    transform: scale(1.05);
+  }
   /* On narrow screens the five icons wrap to a responsive grid instead of
      squeezing into one row. */
   @media (max-width: 780px) {
-    #support > .s-inner > div {
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+    .support-grid {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .support-option,
+    .support-option img {
+      transition: none;
     }
   }
 </style>

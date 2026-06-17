@@ -1,8 +1,8 @@
 ---
-// WhatsApp community announcement — faithful to harvardintech.com: a light
-// robin's-egg-blue band led by the full-width "JOIN OUR COMMUNITY ON WHATSAPP"
-// banner (no text heading — the banner *is* the heading), followed by the
-// left-aligned launch copy and the two-step apply flow.
+// WhatsApp community announcement — redesigned: a soft crimson brand band with
+// an eyebrow + display heading, the launch copy, the banner image, and the
+// two-step apply flow rendered as clean numbered step cards (replacing the bare
+// ordered list). Content and links are unchanged.
 import { withBase } from '../../lib/url';
 interface Props {
   criteriaUrl?: string;
@@ -18,34 +18,99 @@ const {
 } = Astro.props as Props;
 ---
 
-<section class="s-section" style="background: var(--color-bg-blue);">
-  <div class="s-inner" style="max-width: 918px;">
+<section class="s-section whatsapp" style="background: var(--color-bg-blue);">
+  <div class="s-inner whatsapp-inner">
+    <div class="whatsapp-intro s-reveal">
+      <span class="s-eyebrow">Now live</span>
+      <h2 class="s-title">Join our WhatsApp community</h2>
+      <p class="whatsapp-lead">
+        A space for Harvard alumni in tech — founders, operators, and investors,
+        across industries — to connect in real time. Learn more about the
+        admissions criteria <a href={criteriaUrl}>here</a>.
+      </p>
+    </div>
+
     <img
+      class="whatsapp-banner s-reveal"
       src={withBase(banner)}
       alt="Join our community on WhatsApp"
-      style="display: block; width: 100%; height: auto; margin: 0 auto var(--space-lg);"
     />
-    <p style="font-size: 1rem; color: var(--color-fg); margin: 0 0 var(--space-md);">
-      We're excited to announce the launch of the Harvard in Tech Alumni WhatsApp
-      community!
-    </p>
-    <p style="color: var(--color-fg); margin: 0 0 var(--space-md);">
-      This is a space for Harvard alumni in tech, including founders, operators,
-      and investors, across industries, to connect in real time. You can learn
-      more about the admissions criteria for the Harvard in Tech WhatsApp
-      community <a href={criteriaUrl}>here</a>.
-    </p>
-    <p style="color: var(--color-fg); margin: 0 0 var(--space-sm);">
-      How to apply to join the Harvard in Tech WhatsApp community:
-    </p>
-    <ol style="padding-left: 1.25rem; color: var(--color-fg); margin: 0; display: grid; gap: var(--space-sm);">
-      <li>
-        Fill out <a href={verifyUrl}>this short form</a> (under 2 minutes) to
-        verify your alumni status.
-      </li>
-      <li>
-        Request to join the WhatsApp group using <a href={whatsappUrl}>this link</a>.
-      </li>
-    </ol>
+
+    <div class="whatsapp-steps">
+      <div class="whatsapp-step s-card s-reveal">
+        <span class="step-num">1</span>
+        <p>
+          Fill out <a href={verifyUrl}>this short form</a> (under 2 minutes) to
+          verify your alumni status.
+        </p>
+      </div>
+      <div class="whatsapp-step s-card s-reveal">
+        <span class="step-num">2</span>
+        <p>
+          Request to join the WhatsApp group using <a href={whatsappUrl}>this link</a>.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .whatsapp-inner {
+    max-width: 960px;
+  }
+  .whatsapp-intro {
+    text-align: center;
+    max-width: var(--text-width);
+    margin: 0 auto var(--space-lg);
+  }
+  .whatsapp-intro .s-title {
+    margin-bottom: var(--space-md);
+  }
+  .whatsapp-lead {
+    color: var(--color-muted);
+    font-size: var(--text-lg);
+    margin: 0;
+  }
+  .whatsapp-banner {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin: 0 auto var(--space-xl);
+  }
+  .whatsapp-steps {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+  }
+  .whatsapp-step {
+    padding: var(--space-lg);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+  .whatsapp-step p {
+    margin: 0;
+    color: var(--color-fg);
+  }
+  .step-num {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  @media (max-width: 640px) {
+    .whatsapp-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,11 @@
+{
+  "name": "BlogPost - Long Article",
+  "id": "a949d159-6942-4cda-a35f-4fa3b5343c42",
+  "url": "/isolated-components/BlogPost",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BlogPost",
+  "scenarioType": "component"
+}

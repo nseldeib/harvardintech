@@ -1,12 +1,11 @@
 {
   "name": "Board of Directors - Empty",
-  "id": "d5b35c81-2f87-4700-8ead-865e8d0feff1",
+  "id": "ab943f55-90c0-4aa0-84ce-9fdf5e57981c",
   "url": "/isolated-components/BoardOfDirectors-Empty",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "BoardOfDirectors-Empty",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/landing/BoardOfDirectors.astro"
+  "scenarioType": "component"
 }

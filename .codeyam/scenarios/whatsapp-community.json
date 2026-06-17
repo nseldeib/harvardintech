@@ -1,12 +1,11 @@
 {
   "name": "Whatsapp Community",
-  "id": "6f1f1bfd-cff7-4035-b49d-f0defd08eeac",
+  "id": "dc350e7a-e316-467b-8dd7-f8ab83326586",
   "url": "/isolated-components/WhatsappCommunity",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "WhatsappCommunity",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/landing/WhatsappCommunity.astro"
+  "scenarioType": "component"
 }

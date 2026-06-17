@@ -1,12 +1,11 @@
 {
   "name": "EventsPage - No Events",
-  "id": "ad2b65e6-fe9e-444d-a8cd-4da670e43a6b",
+  "id": "731d40f6-fc48-4ed9-abf9-0dd188ad1049",
   "url": "/isolated-components/EventsPage-Empty",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "EventsPage-Empty",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/EventsPage.astro"
+  "scenarioType": "component"
 }

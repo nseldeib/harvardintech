@@ -1,12 +1,11 @@
 {
   "name": "Hero",
-  "id": "f61128f5-5056-4ee8-af9b-daf5d7042801",
+  "id": "77aa42e6-e4bb-4663-8f70-51be14605ee2",
   "url": "/isolated-components/Hero",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "Hero",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/landing/Hero.astro"
+  "scenarioType": "component"
 }

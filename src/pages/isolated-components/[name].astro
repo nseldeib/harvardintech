@@ -20,6 +20,8 @@ import SupportUs from '../../components/landing/SupportUs.astro';
 import EventGallery from '../../components/landing/EventGallery.astro';
 import UpcomingEvents from '../../components/landing/UpcomingEvents.astro';
 import BoardOfDirectors from '../../components/landing/BoardOfDirectors.astro';
+import BlogPost from '../../components/BlogPost.astro';
+import NotFound from '../../components/NotFound.astro';
 import type { BannerView } from '../../lib/deployStatus';
 import '../../styles/tokens.css';
 
@@ -267,6 +269,16 @@ const boardOfDirectorsStates = {
   Empty: { members: [] as typeof SAMPLE_BOARD },
 };
 
+// BlogPost states: the long-form article layout (back link + eyebrow + display
+// title + date + body). Default shows a rich multi-paragraph body with a
+// heading, a list, and a blockquote (exercises the article-body typography);
+// Short shows a single-paragraph post (the minimal body branch). The markdown
+// body is provided via the slot in the render branch below.
+const blogPostStates = {
+  Default: { title: 'Welcome to Harvard in Tech', date: new Date('2026-01-14') },
+  Short: { title: 'A quick note from the team', date: new Date('2026-05-02') },
+} as const;
+
 export async function getStaticPaths() {
   // getStaticPaths runs in an isolated scope and cannot reference the
   // module-level consts — enumerate route names inline.
@@ -311,6 +323,9 @@ export async function getStaticPaths() {
     { params: { name: 'UpcomingEvents-Empty' } },
     { params: { name: 'BoardOfDirectors' } },
     { params: { name: 'BoardOfDirectors-Empty' } },
+    { params: { name: 'BlogPost' } },
+    { params: { name: 'BlogPost-Short' } },
+    { params: { name: 'NotFound' } },
   ];
 }
 
@@ -417,6 +432,16 @@ if (name && name.startsWith('BoardOfDirectors')) {
   const stateKey = (name === 'BoardOfDirectors' ? 'Default' : name.slice('BoardOfDirectors-'.length)) as keyof typeof boardOfDirectorsStates;
   boardOfDirectorsProps = boardOfDirectorsStates[stateKey] ?? boardOfDirectorsStates.Default;
 }
+
+// BlogPost resolves Default (rich body) vs Short (single paragraph); the body
+// itself is branched in the render template since it lives in the slot.
+let blogPostProps: (typeof blogPostStates)[keyof typeof blogPostStates] | null = null;
+if (name && name.startsWith('BlogPost')) {
+  const stateKey = (name === 'BlogPost' ? 'Default' : name.slice('BlogPost-'.length)) as keyof typeof blogPostStates;
+  blogPostProps = blogPostStates[stateKey] ?? blogPostStates.Default;
+}
+
+const isNotFound = name === 'NotFound';
 ---
 
 <html lang="en">
@@ -487,10 +512,56 @@ if (name && name.startsWith('BoardOfDirectors')) {
           <UpcomingEvents {...upcomingEventsProps} />
         ) : boardOfDirectorsProps ? (
           <BoardOfDirectors {...boardOfDirectorsProps} />
+        ) : blogPostProps ? (
+          <BlogPost {...blogPostProps}>
+            {name === 'BlogPost-Short' ? (
+              <p>
+                We are a global community of Harvard alumni working in technology.
+                More updates coming soon.
+              </p>
+            ) : (
+              <Fragment>
+                <p>
+                  We are the official Harvard Alumni Group for technology — a global
+                  community of founders, operators, and investors building the future.
+                </p>
+                <h2>What we do</h2>
+                <p>
+                  From monthly mixers to our flagship annual summit, we connect Harvard
+                  technologists across cities and industries. Members tap a network that
+                  spans early-stage founders, senior operators, and active investors.
+                </p>
+                <ul>
+                  <li>City chapters in New York, San Francisco, L.A., and Japan</li>
+                  <li>Founder dinners, panels, and investor mixers</li>
+                  <li>A members-only WhatsApp community</li>
+                </ul>
+                <blockquote>
+                  The strongest companies are built on the strongest networks — and
+                  ours starts here.
+                </blockquote>
+                <p>
+                  Want to get involved? Sign up for our mailing list and join us at the
+                  next event in your city.
+                </p>
+              </Fragment>
+            )}
+          </BlogPost>
+        ) : isNotFound ? (
+          <NotFound />
         ) : (
           <p>Unknown component: {name}</p>
         )
       }
     </div>
+    <script>
+      // The real site wires `initReveal()` from BaseLayout so `.s-reveal`
+      // sections animate in. This isolation harness has no BaseLayout, so force
+      // every reveal element to its visible state — otherwise a component that
+      // opted into `.s-reveal` would capture as an empty (opacity:0) shell.
+      document
+        .querySelectorAll('.s-reveal')
+        .forEach((el) => el.classList.add('is-visible'));
+    </script>
   </body>
 </html>

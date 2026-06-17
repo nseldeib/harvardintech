@@ -1,12 +1,11 @@
 {
   "name": "Support Us",
-  "id": "b4bd0de3-fae0-4dd9-9ab2-0f166dd9b2e9",
+  "id": "0f93e62d-e88d-474d-bd98-dc81d4af69ed",
   "url": "/isolated-components/SupportUs",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "SupportUs",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/landing/SupportUs.astro"
+  "scenarioType": "component"
 }

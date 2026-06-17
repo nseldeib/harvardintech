@@ -1,45 +1,122 @@
 /* Design tokens as CSS custom properties. The stack.json `styling.tokenFile`
    field points here, so codeyam treats this file as the project's token source.
-   Values reproduce harvardintech.com's Strikingly "persona" theme: a blue
-   accent on near-black text, Roboto type, full-width centered sections. */
-:root {
-  --color-bg: #ffffff;
-  --color-bg-soft: #f5f7f9;
-  --color-bg-dark: #1c1d1f;
-  --color-fg: #2e2e2f;
-  --color-muted: #555555;
-  --color-faint: #999999;
-  /* Harvard in Tech brand teal (Strikingly "fresh" theme highlight color).
-     Links/nav use the brighter cyan; buttons use the slightly darker teal. */
-  --color-accent: #0ca5a5;
-  --color-accent-dark: #098f8f;
-  --color-nav: #10d7d7;
-  --color-border: #e3e7ea;
-  /* Section-title dark teal + light robin's-egg band, sampled from the live
-     harvardintech.com Strikingly theme. */
-  --color-title: #1d5a5a;
-  --color-bg-blue: #ebf7f4;
-  --color-link: #3377cc;
 
-  --font-sans: 'Roboto', Helvetica, Arial, sans-serif;
-  --font-title: Helvetica, Arial, sans-serif;
+   This is the modern redesign of the public site: a bolder Harvard-crimson +
+   teal palette, a fluid Inter/Space Grotesk type system, a real neutral ramp,
+   elevation shadows, and motion tokens. The *names* below are a superset of the
+   original Strikingly-era tokens (every consumer keeps working) remapped onto
+   the new system, plus the semantic tokens the redesign introduces. */
+:root {
+  /* ── Brand ─────────────────────────────────────────────────────────────
+     Harvard crimson is the primary brand color; a refined teal is the
+     interactive/accent color. */
+  --color-primary: #a5122f;
+  --color-primary-dark: #80112a;
+  --color-primary-soft: #fbf2f4;
+  --color-primary-contrast: #ffffff;
+
+  /* Teal accent ramp (links, accents, secondary actions). */
+  --color-accent: #0d9488;
+  --color-accent-dark: #0b7a70;
+  --color-accent-soft: #effbf8;
+
+  /* ── Neutral ramp ──────────────────────────────────────────────────────
+     Warm-leaning near-black through to white. */
+  --color-ink: #15161a;
+  --color-fg: #1f2126;
+  --color-muted: #565a63;
+  --color-faint: #8b8f98;
+  --color-border: #e6e8ec;
+  --color-border-strong: #d3d6dd;
+
+  /* ── Surfaces ──────────────────────────────────────────────────────────── */
+  --color-bg: #ffffff;
+  --color-bg-soft: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  /* Dark surface for the footer + inverted UI. */
+  --color-bg-dark: #15161a;
+  --color-bg-darker: #0f1013;
+  --color-on-dark: #e7e8ec;
+  --color-on-dark-muted: #a3a6af;
+
+  /* ── Back-compat aliases (kept so existing components don't break) ─────── */
+  /* Big section headings render in near-black ink now (editorial display),
+     with the crimson reserved for the eyebrow/kicker. */
+  --color-title: var(--color-ink);
+  --color-nav: var(--color-fg);
+  --color-link: var(--color-accent-dark);
+  /* Light brand band behind WhatsApp / Contact / Sign-Up sections — a soft
+     crimson tint to reinforce the Harvard brand. */
+  --color-bg-blue: var(--color-primary-soft);
+
+  /* ── Type ──────────────────────────────────────────────────────────────── */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Headings use the display family; alias kept for older references. */
+  --font-title: var(--font-display);
   --font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
+  /* Fluid type scale. */
+  --text-xs: 0.78rem;
+  --text-sm: 0.9rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.2rem;
+  --text-xl: clamp(1.3rem, 1.15rem + 0.6vw, 1.6rem);
+  --text-2xl: clamp(1.6rem, 1.3rem + 1.3vw, 2.1rem);
+  --text-3xl: clamp(2rem, 1.55rem + 2.1vw, 2.9rem);
+  --text-4xl: clamp(2.6rem, 1.9rem + 3.2vw, 3.9rem);
+  --text-5xl: clamp(3.1rem, 2.1rem + 4.8vw, 5rem);
+
+  /* ── Space ─────────────────────────────────────────────────────────────── */
+  --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
   --space-lg: 2rem;
   --space-xl: 5rem;
+  --space-2xl: 8rem;
+  /* Generous, fluid vertical rhythm for full-width section bands. */
+  --section-pad-y: clamp(4rem, 3rem + 6vw, 7rem);
 
-  --radius: 4px;
-  --content-width: 1080px;
-  --text-width: 760px;
+  /* ── Radius ────────────────────────────────────────────────────────────── */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+  /* Alias kept for older references (was 4px). */
+  --radius: var(--radius-md);
+
+  /* ── Elevation ─────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(16, 17, 26, 0.06), 0 1px 3px rgba(16, 17, 26, 0.07);
+  --shadow-md: 0 8px 24px rgba(16, 17, 26, 0.09), 0 2px 6px rgba(16, 17, 26, 0.06);
+  --shadow-lg: 0 24px 60px rgba(16, 17, 26, 0.16), 0 8px 20px rgba(16, 17, 26, 0.08);
+
+  /* ── Motion ────────────────────────────────────────────────────────────── */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 0.45s;
+  --dur-fast: 0.2s;
+
+  /* ── Layout ────────────────────────────────────────────────────────────── */
+  --content-width: 1120px;
+  --text-width: 720px;
   /* Header bar height — shared by the header in BaseLayout and the hero's
-     full-viewport `calc()` so the two can never drift. */
-  --header-height: 89px;
+     full-viewport `calc()` so the two can never drift. The header condenses on
+     scroll, but this is the un-scrolled height the hero offsets against. */
+  --header-height: 76px;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -47,30 +124,50 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-sans);
-  font-weight: 300;
-  line-height: 1.7;
+  font-weight: 400;
+  font-size: var(--text-base);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 a {
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
   text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
 }
 a:hover {
+  color: var(--color-primary);
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 h1,
 h2,
-h3 {
-  font-family: var(--font-title);
-  font-weight: 400;
-  color: var(--color-fg);
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
-/* Section scaffolding shared by every landing block: full-width band, centered
-   inner column, uppercase tracked title with a short blue underline. */
+img {
+  max-width: 100%;
+}
+
+/* Anchored sections must clear the sticky header when jumped to. */
+:where([id]) {
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+/* ── Section scaffolding ──────────────────────────────────────────────────
+   Full-width band with generous, fluid vertical padding and a centered inner
+   column. */
 .s-section {
-  padding: var(--space-xl) var(--space-lg);
+  padding: var(--section-pad-y) var(--space-lg);
 }
 .s-inner {
   max-width: var(--content-width);
@@ -80,56 +177,152 @@ h3 {
   max-width: var(--text-width);
   margin: 0 auto;
 }
-/* Section title — matches the live theme: dark-teal Helvetica, ~36px, flanked
-   by two short horizontal rules. The rules use `currentColor`, so a title
-   placed on a dark band (Get Involved) flips to white rules automatically by
-   just setting its color. Casing is whatever the markup uses (the live site
-   mixes uppercase and title-case per section), so no text-transform here. */
+
+/* ── Eyebrow / kicker ─────────────────────────────────────────────────────
+   The small crimson label that sits above a display heading — the redesign's
+   replacement for the old flanking-rule title decoration. */
+.s-eyebrow {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0 0 var(--space-sm);
+}
+/* On a dark band, flip the eyebrow to a light tint. */
+.s-eyebrow--on-dark {
+  color: #ff8fa3;
+}
+
+/* ── Section title ────────────────────────────────────────────────────────
+   A large editorial display heading. The old "80px rule — text — 80px rule"
+   treatment is gone; pair this with a `.s-eyebrow` above it instead. */
 .s-title {
-  color: var(--color-title);
-  letter-spacing: normal;
-  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.25rem);
-  font-weight: 400;
-  text-align: center;
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  font-size: var(--text-3xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
   margin: 0 0 var(--space-lg);
-  display: flex;
+}
+/* The former muted "Upcoming Events" variant — keep it a touch smaller. */
+.s-title--plain {
+  font-size: var(--text-2xl);
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────────
+   Modern primary action: crimson, rounded (not pill), medium weight, with a
+   hover lift + shadow. */
+.s-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-.s-title::before,
-.s-title::after {
-  content: '';
-  flex: none;
-  width: 80px;
-  height: 2px;
-  margin: 0 18px;
-  background: currentColor;
-}
-/* "Upcoming Events" on the live site is the odd one out: a smaller, muted grey
-   Roboto heading with no flanking rules. */
-.s-title--plain {
-  color: #50555c;
+  gap: 0.5em;
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
   font-family: var(--font-sans);
-  font-size: 1.75rem;
-}
-.s-title--plain::before,
-.s-title--plain::after {
-  display: none;
-}
-.s-btn {
-  display: inline-block;
-  background: var(--color-accent);
-  color: #fff;
-  font-family: var(--font-sans);
-  text-transform: uppercase;
-  letter-spacing: normal;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1;
-  padding: 12px 18px;
-  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  padding: 0.85rem 1.6rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
 }
 .s-btn:hover {
-  background: var(--color-accent-dark);
+  background: var(--color-primary-dark);
+  color: var(--color-primary-contrast);
   text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.s-btn:active {
+  transform: translateY(0);
+}
+/* Teal/accent variant for secondary-but-prominent actions. */
+.s-btn--accent {
+  background: var(--color-accent);
+}
+.s-btn--accent:hover {
+  background: var(--color-accent-dark);
+}
+/* Ghost / outline variant for secondary actions, including on dark bands. */
+.s-btn--ghost {
+  background: transparent;
+  color: var(--color-fg);
+  border-color: var(--color-border-strong);
+  box-shadow: none;
+}
+.s-btn--ghost:hover {
+  background: var(--color-bg-soft);
+  color: var(--color-ink);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
+}
+.s-btn--on-dark {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: none;
+  backdrop-filter: blur(4px);
+}
+.s-btn--on-dark:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────
+   Reusable elevated surface with a hover depth shift. */
+.s-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+.s-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-strong);
+}
+
+/* ── Scroll reveal ────────────────────────────────────────────────────────
+   Opt-in initial state; `initReveal()` adds `.is-visible` as the element
+   enters the viewport. Disabled under reduced motion. */
+.s-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+  will-change: opacity, transform;
+}
+.s-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .s-btn,
+  .s-card,
+  a {
+    transition: none;
+  }
 }

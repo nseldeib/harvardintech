@@ -1,12 +1,11 @@
 {
   "name": "EventsPage - Upcoming and Past",
-  "id": "cec6512d-c320-4599-bed3-419cf8f0cc84",
+  "id": "e24b144b-71e1-460f-bf77-9a316c3383d1",
   "url": "/isolated-components/EventsPage",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "EventsPage",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/EventsPage.astro"
+  "scenarioType": "component"
 }

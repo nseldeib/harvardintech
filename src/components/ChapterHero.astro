@@ -17,22 +17,22 @@ interface Props {
   tagline?: string;
 }
 const { city, region, blurb, heroImage, tagline } = Astro.props;
-const title = `Harvard in Tech ${city}`;
 ---
 
 {
   heroImage ? (
     <section class="chapter-hero">
-      <div style="position: absolute; inset: 0; overflow: hidden; z-index: 0;">
+      <div class="chapter-hero-bg">
         <img
           src={withBase(heroImage)}
           alt=""
           style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
         />
-        <div style="position: absolute; inset: 0; background: rgba(0, 0, 0, 0.39);" />
+        <div class="chapter-hero-overlay" />
       </div>
       <div class="chapter-hero-inner">
-        <h1 class="chapter-hero-title">{title}</h1>
+        <span class="s-eyebrow chapter-hero-eyebrow">Harvard in Tech</span>
+        <h1 class="chapter-hero-title">{city}</h1>
         {tagline ? <p class="chapter-hero-tagline">{tagline}</p> : null}
       </div>
     </section>
@@ -50,81 +50,60 @@ const title = `Harvard in Tech ${city}`;
        `svh` avoids the mobile address-bar jump, with a `vh` fallback. */
     min-height: calc(100vh - var(--header-height));
     min-height: calc(100svh - var(--header-height));
-    padding: 20px;
+    padding: clamp(2rem, 6vw, 6rem) var(--space-lg);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    overflow: hidden;
+  }
+  .chapter-hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .chapter-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(105deg, rgba(15, 16, 19, 0.82) 0%, rgba(15, 16, 19, 0.55) 42%, rgba(15, 16, 19, 0.18) 100%),
+      linear-gradient(0deg, rgba(15, 16, 19, 0.45) 0%, rgba(15, 16, 19, 0) 55%);
   }
   .chapter-hero-inner {
     position: relative;
     z-index: 2;
-    max-width: 918px;
-    margin: 0 auto;
+    max-width: 760px;
     color: #fff;
-    text-align: center;
+  }
+  .chapter-hero-eyebrow {
+    color: #ff8fa3;
   }
   .chapter-hero-title {
-    text-transform: uppercase;
-    font-family: var(--font-title);
-    font-weight: 400;
+    font-family: var(--font-display);
+    font-weight: 700;
     color: #fff;
-    font-size: 58px;
-    line-height: 1.2;
-    letter-spacing: normal;
-    white-space: nowrap;
+    font-size: var(--text-5xl);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
     margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  /* "fresh" theme title decoration: 80x2px white rules flanking the text */
-  .chapter-hero-title::before,
-  .chapter-hero-title::after {
-    content: '';
-    flex: none;
-    width: 80px;
-    height: 2px;
-    margin: 0 10px;
-    background: #fff;
   }
   .chapter-hero-tagline {
     font-family: var(--font-sans);
-    font-size: 20px;
+    font-size: var(--text-lg);
     font-weight: 400;
-    line-height: 29px;
-    color: #fff;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 56ch;
     margin: 1.5rem 0 0;
   }
 
-  /* Mobile: the title scales down, wraps left-aligned, and the flanking rules
-     collapse to a single underline beneath it — matching landing/Hero. */
   @media (max-width: 640px) {
     .chapter-hero {
-      padding: 24px;
-    }
-    .chapter-hero-inner {
-      text-align: left;
-    }
-    .chapter-hero-title {
-      display: block;
-      text-align: left;
-      white-space: normal;
-      font-size: 36px;
-      line-height: 1.15;
-      margin: 0;
-    }
-    .chapter-hero-title::before {
-      display: none;
-    }
-    .chapter-hero-title::after {
-      display: block;
-      width: 80px;
-      margin: 1rem 0 0;
+      padding: 3rem 1.5rem;
     }
     .chapter-hero-tagline {
-      font-size: 17px;
-      line-height: 26px;
+      font-size: 1.05rem;
     }
   }
 </style>

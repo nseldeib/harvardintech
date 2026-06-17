@@ -1,0 +1,20 @@
+{
+  "claimStartedAt": "2026-06-17T17:35:54Z",
+  "completedAt": "2026-06-17T18:52:16Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "machine": "Jareds-Laptop.local",
+    "pid": 5146,
+    "priority": 0,
+    "selectedPlan": "redesign-modernize-the-public-site",
+    "sessionId": "",
+    "startedAt": "2026-06-17T17:35:54Z"
+  },
+  "createdAt": "2026-06-17T16:00:00Z",
+  "journalTimestamp": "2026-06-17T18:52:16Z",
+  "mode": "ui",
+  "planFile": "completed/redesign-modernize-the-public-site.md",
+  "slug": "redesign-modernize-the-public-site",
+  "title": "redesign: Modernize the Public Site"
+}

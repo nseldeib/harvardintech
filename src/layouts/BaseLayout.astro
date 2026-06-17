@@ -1,12 +1,15 @@
 ---
-// The site-wide shell: <head> meta (via SEO), a data-driven header/nav, and a
-// footer built from the editable `settings` singleton. Reproduces the
-// harvardintech.com Strikingly "persona" header (wordmark left, nav right with
-// a Chapters dropdown) and footer. Changing the site title, a menu item, a
-// social link, or the contact email is a data edit to `src/data/*.json`.
+// The site-wide shell: <head> meta (via SEO), a data-driven sticky header/nav,
+// and a multi-column footer built from the editable `settings` singleton.
+// Redesigned: a modern sticky header that condenses on scroll (wordmark + shield
+// left, nav right, restyled Chapters dropdown), Inter + Space Grotesk webfonts,
+// a richer footer band on the dark surface token, and a site-wide scroll-reveal
+// bootstrap. Changing the site title, a menu item, a social link, or the
+// contact email remains a data edit to `src/data/*.json`.
 import '../styles/tokens.css';
 import SEO from '../components/SEO.astro';
 import { settings, nav } from '../lib/site';
+import { socialIconSrc } from '../lib/socialIcon';
 import { withBase } from '../lib/url';
 
 interface Props {
@@ -16,6 +19,7 @@ interface Props {
 }
 
 const { title, description, image } = Astro.props;
+const year = new Date().getFullYear();
 ---
 
 <html lang="en">
@@ -25,45 +29,51 @@ const { title, description, image } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
     <SEO title={title} description={description} image={image} />
   </head>
   <body>
-    <header style="position: relative; z-index: 50; background: #fff;">
-      <div
-        style="max-width: var(--content-width); margin: 0 auto; height: var(--header-height); box-sizing: border-box; padding: 34px var(--space-lg) 0; display: flex; align-items: flex-start; justify-content: center; gap: 36px;"
-      >
-        <nav>
-          <ul
-            style="list-style: none; display: flex; align-items: flex-start; gap: 36px; margin: 0; padding: 0; font-size: 15px; font-weight: 500; line-height: 15px; text-transform: none;"
-          >
+    <header class="site-header" data-site-header>
+      <div class="site-header-inner">
+        <a class="brand" href={withBase('/')} aria-label="Harvard in Tech — home">
+          <span class="brand-shield">
+            <img
+              src={withBase('/images/harvard-shield.png')}
+              alt=""
+              width="28"
+              height="28"
+            />
+          </span>
+          <span class="brand-name">{settings.siteTitle}</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary">
+          <ul>
             {
               nav.items.map((item) =>
                 item.children && item.children.length > 0 ? (
-                  <li style="position: relative;">
+                  <li class="nav-item">
                     <details class="nav-dd">
-                      <summary style="cursor: pointer; list-style: none; color: var(--color-nav);">
-                        {item.label} ▾
+                      <summary>
+                        {item.label}
+                        <svg class="nav-caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                          <path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                       </summary>
-                      <ul style="list-style: none; position: absolute; right: 0; z-index: 70; margin: var(--space-sm) 0 0; padding: var(--space-sm) 0; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius); min-width: 180px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
+                      <ul class="nav-menu">
                         {item.children.map((child) => (
-                          <li style="padding: 0;">
-                            <a
-                              href={withBase(child.url ?? '/')}
-                              style="display: block; padding: var(--space-sm) var(--space-md); color: var(--color-fg); text-transform: none; letter-spacing: 0;"
-                            >
-                              {child.label}
-                            </a>
+                          <li>
+                            <a href={withBase(child.url ?? '/')}>{child.label}</a>
                           </li>
                         ))}
                       </ul>
                     </details>
                   </li>
                 ) : (
-                  <li>
-                    <a href={withBase(item.url ?? '/')} style="color: var(--color-nav);">
+                  <li class="nav-item">
+                    <a class="nav-link" href={withBase(item.url ?? '/')}>
                       {item.label}
                     </a>
                   </li>
@@ -73,39 +83,363 @@ const { title, description, image } = Astro.props;
           </ul>
         </nav>
       </div>
-      <!-- Harvard shield in a white circle, dipping from the navbar into the
-           hero image (the "fresh" theme's circular logo badge). -->
-      <div
-        style="position: absolute; left: 50%; top: 60px; transform: translateX(-50%); width: 50px; height: 50px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 60;"
-      >
-        <img
-          src={withBase('/images/harvard-shield.png')}
-          alt="Harvard shield"
-          width="32"
-          height="32"
-          style="width: 32px; height: 32px;"
-        />
-      </div>
     </header>
 
     <main>
       <slot />
     </main>
 
-    <!-- The live site's bottom band is minimal: just the copyright + cookie
-         line. The social links live only in the "CONTACT US" section above
-         (see ContactUs.astro), so they are intentionally not repeated here. -->
-    <footer style="background: var(--color-bg-dark); color: #cfd2d6;">
-      <div
-        style="max-width: var(--content-width); margin: 0 auto; padding: var(--space-lg); text-align: center;"
-      >
-        <p style="margin: 0; color: var(--color-faint); font-size: 0.85rem;">{settings.footerText}</p>
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="footer-brand">
+          <a class="footer-wordmark" href={withBase('/')}>
+            <img src={withBase('/images/harvard-shield.png')} alt="" width="30" height="30" />
+            <span>{settings.siteTitle}</span>
+          </a>
+          <p class="footer-blurb">{settings.description}</p>
+        </div>
+
+        <nav class="footer-links" aria-label="Footer">
+          <h3>Explore</h3>
+          <ul>
+            {
+              nav.items.map((item) =>
+                item.children && item.children.length > 0
+                  ? item.children.map((child) => (
+                      <li>
+                        <a href={withBase(child.url ?? '/')}>{child.label}</a>
+                      </li>
+                    ))
+                  : (
+                      <li>
+                        <a href={withBase(item.url ?? '/')}>{item.label}</a>
+                      </li>
+                    ),
+              )
+            }
+          </ul>
+        </nav>
+
+        <div class="footer-social">
+          <h3>Connect</h3>
+          <div class="footer-social-row">
+            {
+              settings.socials.map((s) =>
+                socialIconSrc(s.icon) ? (
+                  <a href={s.url} rel="noopener" aria-label={s.label} class="footer-social-badge">
+                    <img src={socialIconSrc(s.icon)} alt="" width="20" height="20" loading="lazy" />
+                  </a>
+                ) : null,
+              )
+            }
+          </div>
+          <a class="footer-email" href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>
+        </div>
+      </div>
+
+      <div class="site-footer-base">
+        <p>{settings.footerText.replace(/\b20\d{2}\b/, String(year))}</p>
       </div>
     </footer>
 
+    <script>
+      // Condense the sticky header once the page scrolls past the hero edge.
+      // A tiny rAF-throttled scroll handler toggles `data-scrolled` so all the
+      // condensed styling lives in CSS.
+      const header = document.querySelector<HTMLElement>('[data-site-header]');
+      if (header) {
+        let ticking = false;
+        const apply = () => {
+          header.toggleAttribute('data-scrolled', window.scrollY > 24);
+          ticking = false;
+        };
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(apply);
+          },
+          { passive: true },
+        );
+        apply();
+      }
+    </script>
+    <script>
+      // Site-wide scroll reveal for any `.s-reveal` element (reuses the
+      // gallery's IntersectionObserver pattern; respects reduced motion).
+      import { initReveal } from '../lib/gallery';
+      initReveal();
+    </script>
+
     <style>
+      /* ── Sticky header ────────────────────────────────────────────────── */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(255, 255, 255, 0.86);
+        backdrop-filter: saturate(160%) blur(12px);
+        border-bottom: 1px solid transparent;
+        transition:
+          background var(--dur-fast) var(--ease),
+          border-color var(--dur-fast) var(--ease),
+          box-shadow var(--dur-fast) var(--ease);
+      }
+      .site-header[data-scrolled] {
+        background: rgba(255, 255, 255, 0.94);
+        border-bottom-color: var(--color-border);
+        box-shadow: var(--shadow-sm);
+      }
+      .site-header-inner {
+        max-width: var(--content-width);
+        margin: 0 auto;
+        height: var(--header-height);
+        padding: 0 var(--space-lg);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-lg);
+        transition: height var(--dur-fast) var(--ease);
+      }
+      .site-header[data-scrolled] .site-header-inner {
+        height: 60px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: var(--color-ink);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: -0.01em;
+        text-decoration: none;
+      }
+      .brand:hover {
+        color: var(--color-primary);
+        text-decoration: none;
+      }
+      .brand-shield {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        box-shadow: var(--shadow-sm);
+      }
+      .brand-shield img {
+        width: 22px;
+        height: 22px;
+        filter: brightness(0) invert(1);
+      }
+
+      .site-nav ul {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin: 0;
+        padding: 0;
+      }
+      .nav-item {
+        position: relative;
+      }
+      .nav-link,
+      .nav-dd summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.5rem 0.85rem;
+        border-radius: var(--radius-sm);
+        font-family: var(--font-sans);
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--color-fg);
+        cursor: pointer;
+        list-style: none;
+        transition:
+          background var(--dur-fast) var(--ease),
+          color var(--dur-fast) var(--ease);
+      }
+      .nav-link:hover,
+      .nav-dd summary:hover,
+      .nav-dd[open] summary {
+        background: var(--color-primary-soft);
+        color: var(--color-primary);
+        text-decoration: none;
+      }
       .nav-dd summary::-webkit-details-marker {
         display: none;
+      }
+      .nav-caret {
+        transition: transform var(--dur-fast) var(--ease);
+      }
+      .nav-dd[open] .nav-caret {
+        transform: rotate(180deg);
+      }
+      .nav-menu {
+        list-style: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 0.4rem);
+        z-index: 70;
+        margin: 0;
+        padding: 0.4rem;
+        min-width: 200px;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+      }
+      .nav-menu li {
+        padding: 0;
+      }
+      .nav-menu a {
+        display: block;
+        padding: 0.55rem 0.75rem;
+        border-radius: var(--radius-sm);
+        color: var(--color-fg);
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+      .nav-menu a:hover {
+        background: var(--color-primary-soft);
+        color: var(--color-primary);
+        text-decoration: none;
+      }
+
+      @media (max-width: 560px) {
+        .site-header-inner {
+          padding: 0 var(--space-md);
+          gap: var(--space-md);
+        }
+        .brand-name {
+          display: none;
+        }
+        .nav-link,
+        .nav-dd summary {
+          padding: 0.45rem 0.6rem;
+          font-size: 0.9rem;
+        }
+      }
+
+      /* ── Footer ───────────────────────────────────────────────────────── */
+      .site-footer {
+        background: var(--color-bg-dark);
+        color: var(--color-on-dark);
+      }
+      .site-footer-inner {
+        max-width: var(--content-width);
+        margin: 0 auto;
+        padding: clamp(3rem, 2rem + 4vw, 5rem) var(--space-lg) var(--space-xl);
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: var(--space-xl);
+      }
+      .footer-wordmark {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: #fff;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+      .footer-wordmark:hover {
+        color: #fff;
+        text-decoration: none;
+      }
+      .footer-wordmark img {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        padding: 5px;
+      }
+      .footer-blurb {
+        color: var(--color-on-dark-muted);
+        margin: var(--space-md) 0 0;
+        max-width: 42ch;
+        font-size: 0.95rem;
+        line-height: 1.7;
+      }
+      .footer-links h3,
+      .footer-social h3 {
+        font-family: var(--font-sans);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--color-on-dark-muted);
+        margin: 0 0 var(--space-md);
+      }
+      .footer-links ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 0.6rem;
+      }
+      .footer-links a {
+        color: var(--color-on-dark);
+        font-size: 0.95rem;
+      }
+      .footer-links a:hover {
+        color: #fff;
+      }
+      .footer-social-row {
+        display: flex;
+        gap: 0.6rem;
+        margin-bottom: var(--space-md);
+      }
+      .footer-social-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        transition:
+          background var(--dur-fast) var(--ease),
+          transform var(--dur-fast) var(--ease);
+      }
+      .footer-social-badge:hover {
+        background: rgba(255, 255, 255, 0.16);
+        transform: translateY(-2px);
+      }
+      .footer-social-badge img {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        border-radius: 4px;
+      }
+      .footer-email {
+        color: var(--color-on-dark);
+        font-size: 0.95rem;
+      }
+      .footer-email:hover {
+        color: #fff;
+      }
+      .site-footer-base {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .site-footer-base p {
+        max-width: var(--content-width);
+        margin: 0 auto;
+        padding: var(--space-md) var(--space-lg);
+        color: var(--color-on-dark-muted);
+        font-size: 0.82rem;
+      }
+
+      @media (max-width: 760px) {
+        .site-footer-inner {
+          grid-template-columns: 1fr;
+          gap: var(--space-lg);
+        }
       }
     </style>
   </body>

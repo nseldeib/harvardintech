@@ -1,0 +1,643 @@
+{
+  "timestamp": "2026-06-17T18:52:16Z",
+  "title": "Modernize the Public Site",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe entire public site is currently a faithful reproduction of harvardintech.com's\nStrikingly \"persona/fresh\" template — Roboto 300 on near-black text, a single teal\naccent, full-width centered bands with uppercase titles flanked by short 80×2px\nrules, flat dark photo overlays, and 4px-radius pill buttons. The look reads as\nearly-2010s template. This plan gives the **whole public site a bolder, contemporary\nredesign** while keeping it unmistakably Harvard in Tech: a refreshed Harvard\ncrimson + teal palette, a modern variable-font type system with large editorial\nheadings, generous whitespace, a grid-/card-driven layout with depth and overlap,\na sticky header that condenses on scroll, and tasteful scroll-reveal motion. The\nwork is anchored in `src/styles/tokens.css` and the shared `.s-*` utility classes\nso the new visual language propagates consistently, then each section/component is\nrestyled to use it. Content, copy, links, data wiring, and the CMS/admin surfaces\nare unchanged — this is purely presentational.\n\n## Key Decisions\n\n- **Token-first.** Rebuild `src/styles/tokens.css` (palette, type, spacing, radius,\n  shadow, motion tokens) and the shared `.s-section` / `.s-title` / `.s-btn`\n  classes first. Every public surface already consumes these, so the redesign\n  lands cohesively instead of component-by-component drift. Considered editing\n  components in isolation — rejected because it produces an inconsistent site and\n  duplicates style decisions.\n- **Drop the flanking-rule title cliché.** Replace the `.s-title` \"80px rule —\n  uppercase text — 80px rule\" treatment (repeated in Hero, ChapterHero, and every\n  section) with a modern editorial heading: a small colored **eyebrow/kicker**\n  label above a large, tighter-tracked display heading. This single change is the\n  strongest visual signal that the site moved past the template.\n- **Bolder but still Harvard.** Introduce **Harvard crimson** (`#A5122F`-ish) as a\n  primary brand color alongside a refined teal as the interactive/accent color,\n  plus a proper neutral ramp and a dark surface token. Keeps brand recognition\n  while giving the palette real range for contrast and hierarchy. Considered a\n  full palette swap — rejected as off-brand for a Harvard org.\n- **Modern type via Google Fonts.** Swap Roboto 300 for a contemporary variable\n  sans (Inter) for body/UI and a strong display family for headings (Inter tight,\n  or a geometric/grotesk display such as Space Grotesk), loaded through the\n  existing `<link rel=\"stylesheet\">` in `BaseLayout`. No build-tooling change.\n- **Reuse the existing motion primitives.** Keep parallax but soften it (gradient\n  overlays, gentler offset) via the existing `initParallax`, and drive\n  scroll-reveal with the existing `initGalleryReveal` / `galleryStaggerDelay`\n  pattern rather than adding a new animation dependency.\n- **Fold orphan pages into the shell.** `src/pages/blog/[slug].astro` renders its\n  own bare `<html>`/`<head>` and skips `BaseLayout`. Route it through `BaseLayout`\n  so it inherits the new header, footer, fonts, and tokens for free.\n- **Respect reduced motion.** All new reveal/parallax/hover motion is gated behind\n  `@media (prefers-reduced-motion: reduce)` and the existing `parallaxEnabled`\n  guard, so the redesign stays accessible.\n\n## Implementation\n\nOrganized by area, not execution order.\n\n### 1. Foundation — design tokens & shared utilities\n\n**File**: `src/styles/tokens.css`\n\nRebuild the token layer into a modern design system:\n\n- **Color**: add a Harvard-crimson primary ramp, refine the teal into an\n  interactive/accent ramp, add a neutral gray ramp (text/border/surface), a dark\n  surface token for inverted bands, and semantic tokens (`--color-primary`,\n  `--color-accent`, `--color-surface`, `--color-surface-elevated`,\n  `--color-on-dark`, etc.). Preserve the existing token *names* already referenced\n  across components (`--color-accent`, `--color-bg`, `--color-fg`,\n  `--color-border`, `--color-title`, `--color-bg-blue`, `--color-muted`,\n  `--color-faint`) so nothing breaks, and remap their values to the new system.\n- **Type**: replace `--font-sans`/`--font-title` with Inter (body) + a display\n  family (headings). Add a fluid type scale (`--text-xs … --text-5xl` via\n  `clamp()`), tighten heading `letter-spacing`/`line-height`, set a comfortable\n  body line-height. Bump default body weight off 300 to 400.\n- **Space / radius / shadow / motion**: expand the spacing scale, add a radius\n  scale (`--radius-sm/md/lg/pill`), add elevation shadows\n  (`--shadow-sm/md/lg`), and add motion tokens (`--ease`, `--dur`) for consistent\n  transitions.\n- **Shared classes**: redesign `.s-section` (more generous, asymmetric-friendly\n  padding), `.s-title` (remove the `::before/::after` flanking rules; restyle as a\n  large display heading), add a new `.s-eyebrow`/`.s-kicker` class for the kicker\n  label, restyle `.s-btn` (modern radius, weight, hover lift/shadow, a\n  `.s-btn--ghost`/secondary variant), and add reusable `.s-card` (surface, radius,\n  shadow, hover depth) and `.s-reveal` (scroll-reveal initial state) utilities the\n  components can opt into.\n\n### 2. Global shell — header, nav, footer\n\n**File**: `src/layouts/BaseLayout.astro`\n\n- Update the Google Fonts `<link>` to load Inter + the chosen display family.\n- Replace the centered, dipping-shield header with a **sticky header that condenses\n  on scroll** (shrinks padding, gains a subtle shadow/translucent backdrop on\n  scroll via a tiny inline script + a `data-scrolled` attribute). Modernize the nav\n  (wordmark/shield left, nav links right, restyled Chapters dropdown with the new\n  shadow/radius tokens). Keep the `nav` data wiring and `withBase` usage intact.\n- Redesign the footer into a richer multi-column band (brand blurb, quick links,\n  social) on the dark surface token, still driven by the `settings` singleton —\n  `footerText` stays, layout becomes contemporary.\n- Add a small global scroll-reveal bootstrap so any element with `.s-reveal`\n  animates in (reusing the gallery reveal pattern; see item 7).\n\n### 3. Homepage hero & inverted photo bands\n\n**Files**: `src/components/landing/Hero.astro`, `src/components/landing/GetInvolved.astro`\n\n- Hero: rework into an **asymmetric editorial hero** — large display headline,\n  kicker label, mission paragraph constrained to a readable measure, primary +\n  secondary CTA. Replace the flat `rgba(0,0,0,0.39)` overlay with a directional\n  gradient overlay for legibility and depth; keep the parallax `<img>` and\n  `initParallax`, softened.\n- GetInvolved: same inverted-band modernization (gradient overlay, kicker +\n  display heading via the new `.s-title`/`.s-eyebrow`, refreshed button).\n\n### 4. Homepage content sections\n\n**Files**: `src/components/landing/WhatsappCommunity.astro`,\n`UpcomingEvents.astro`, `SupportUs.astro`, `EventGallery.astro`, `ContactUs.astro`\n\n- Restyle each to the new system: kicker + display heading, generous spacing,\n  card/grid treatments where appropriate, and `.s-reveal` on entry.\n- WhatsApp section: turn the two-step apply flow into a cleaner numbered/stepped\n  card layout on the light brand band.\n- ContactUs: modernize the social-link row (icon buttons with hover depth).\n- EventGallery: keep the existing staggered reveal (`initGalleryReveal`,\n  `galleryStaggerDelay`) but update the grid/card styling and hover.\n\n### 5. Cards — events & board\n\n**Files**: `src/components/EventCard.astro`, `src/components/BoardMemberCard.astro`,\n`src/components/landing/BoardOfDirectors.astro`,\n`src/components/landing/UpcomingEvents.astro`\n\n- EventCard: convert the inline-styled `<article>` into the shared `.s-card` look —\n  elevation, hover lift, refined date/accent treatment, clearer \"Learn more\"\n  affordance. Preserve the `upcoming`/`past` variant logic and `formatEventDate`.\n- BoardMemberCard + BoardOfDirectors grid: modern portrait cards with depth/hover,\n  refreshed lockup spacing. Preserve the image-fallback empty state and the\n  `sortBoardMembers` / `filterActiveBoardMembers` ordering.\n\n### 6. Chapter, events, blog, and 404 pages\n\n**Files**: `src/components/ChapterHero.astro`, `ChapterPage.astro`,\n`ChapterHeader.astro`, `ChapterEvents.astro`, `ChapterConnect.astro`,\n`ChapterLeads.astro`, `ChapterLinks.astro`, `ChapterSignUp.astro`,\n`src/components/EventsPage.astro`, `src/components/EventsSection.astro`,\n`src/pages/events.astro`, `src/pages/chapters/[slug].astro`,\n`src/pages/blog/[slug].astro`, `src/pages/404.astro`\n\n- ChapterHero: mirror the new homepage hero (kicker + display heading, gradient\n  overlay) — it currently duplicates the old Hero treatment, so it should track the\n  same redesign.\n- Restyle the chapter sub-components, the events listing, and the 404 page to the\n  new tokens/utilities.\n- **Blog**: refactor `src/pages/blog/[slug].astro` to render inside `BaseLayout`\n  (drop its bare `<html>`/`<head>`) and apply a clean modern long-form **article\n  layout** (readable measure, refined headings/links/`time`, back-link as a styled\n  control).\n\n### 7. Scroll-reveal helper\n\n**New file** (or extend existing): a small `initReveal()` in `src/lib/` that\nadds the `is-visible` class to `.s-reveal` elements via `IntersectionObserver`,\nrespecting `prefers-reduced-motion`.\n\nPrefer **extending the existing `src/lib/gallery.ts`** (which already implements an\n`IntersectionObserver` reveal with `initGalleryReveal` and `galleryStaggerDelay`)\ninto a generic reveal rather than introducing a parallel implementation. Wire it up\nonce from `BaseLayout` so every `.s-reveal` element across the site animates in.\n\n## Reused existing code\n\n- `initParallax`, `parallaxEnabled`, `parallaxOffset` from `src/lib/parallax.ts`\n  (glossary: `initParallax`, `parallaxEnabled`, `parallaxOffset`) — keep parallax,\n  soften it; reuse the reduced-motion guard.\n- `initGalleryReveal`, `galleryStaggerDelay`, `galleryRevealImmediately` from\n  `src/lib/gallery.ts` (glossary: `initGalleryReveal`, `galleryStaggerDelay`,\n  `galleryRevealImmediately`) — the IntersectionObserver reveal pattern to extend\n  into the site-wide `.s-reveal` helper.\n- `formatEventDate`, `splitEvents`, `toEventDate` from `src/lib/events.ts`\n  (glossary: `formatEventDate`, `splitEvents`, `toEventDate`) — event card/listing\n  formatting, unchanged.\n- `sortBoardMembers`, `filterActiveBoardMembers` from `src/lib/team.ts`\n  (glossary: `sortBoardMembers`, `filterActiveBoardMembers`) — board ordering,\n  unchanged.\n- `withBase` from `src/lib/url.ts` — proxy-safe asset/link URLs, used throughout.\n- `settings` / `nav` singletons from `src/lib/site.ts` — footer/header data wiring,\n  unchanged.\n- `BoardMemberCard` (glossary: `BoardMemberCard`) and `EventCard` — restyled in\n  place and kept as the single source for their respective cards.\n- The `.s-section` / `.s-title` / `.s-btn` shared classes in `tokens.css` — kept as\n  the shared vocabulary, redesigned in place so every consumer updates at once.\n\n## Scenarios to Demonstrate\n\n- **Homepage, full redesign** — hero + all sections with realistic board members\n  and a mix of upcoming/past events, showing the new type, palette, spacing, cards,\n  and inverted photo bands.\n- **Sticky header condense** — header in its default (top) state vs. its condensed\n  scrolled state.\n- **Board section with members** vs. **empty board fallback** (graphic + \"announced\n  soon\" state) under the new card styling.\n- **Upcoming events present** vs. **no upcoming events** (only past / empty) to\n  exercise the redesigned `EventCard` variants and empty state.\n- **Chapter page** with a hero image (new hero treatment) vs. a chapter **without**\n  a hero image (ChapterHeader fallback).\n- **Blog post** rendered in the new `BaseLayout`-wrapped article layout (long body\n  vs. short body).\n- **404 page** in the new styling.\n- **Reduced motion** — homepage with `prefers-reduced-motion: reduce`, confirming\n  reveal/parallax are disabled gracefully.\n- **Mobile** — homepage hero and nav at a narrow viewport.",
+  "description": "Bold, contemporary redesign of the entire public Harvard in Tech site, kept token-first so the new visual language propagates consistently. Rebuilt src/styles/tokens.css into a Harvard-crimson + refined-teal design system (Inter/Space Grotesk variable type with a fluid clamp() scale, a real neutral ramp, elevation shadows, radius and motion tokens) and replaced the old Strikingly flanking-rule titles with eyebrow + large editorial headings, plus reusable .s-card, .s-btn variants, and an .s-reveal scroll-reveal utility. BaseLayout gained a sticky header that condenses on scroll and a richer multi-column dark footer; the hero, every homepage section, the event/board cards, and the chapter/events/blog/404 pages were restyled, with parallax softened via gradient overlays and all motion gated behind prefers-reduced-motion. Extracted BlogPost and NotFound components (pages are now pure composition) and added a site-wide initReveal helper (reusing the gallery IntersectionObserver pattern) with unit tests. Content, data wiring, and the CMS/admin surfaces are unchanged.",
+  "modifiedFiles": [
+    {
+      "path": ".claude/skills/codeyam-prototype/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-slice/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/.last-reconcile.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/deps-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary-index.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/redesign-modernize-the-public-site.md\t.codeyam/plans/completed/redesign-modernize-the-public-site.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/reconciliation-log.jsonl",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/runner-timing-history.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/board-of-directors-empty.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/board-of-directors.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/boardmembercard-initials-fallback.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/boardmembercard-with-photo.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-japan-with-gallery.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-los-angeles-fallback-email.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-new-york-city.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-san-francisco.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterconnect-default.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterconnect-per-chapter-email.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterevents-rich-list.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterhero-no-image-fallback.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterhero-with-image.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterpage-full-chapter.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapterpage-sparse-no-leads.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chaptersignup-default.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/contactus-default.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/event-gallery.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/events-route-upcoming-and-past.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/eventspage-no-events.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/eventspage-upcoming-and-past.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/get-involved.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-board-of-directors.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-board-with-members-hidden.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-landing-page.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-no-upcoming-events.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/hero.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/board-of-directors-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-initials-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-japan-with-gallery--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-japan-with-gallery--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-los-angeles-fallback-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-los-angeles-fallback-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-san-francisco--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-san-francisco--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-per-chapter-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-no-image-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-with-image--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-with-image--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-sparse-no-leads--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chaptersignup-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chaptersignup-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/collectioncountcard-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contactus-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dashboardsummary-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-deploying--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/event-gallery--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-no-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/get-involved--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-with-members-hidden--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-with-members-hidden--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/support-us--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/whatsapp-community--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/support-us.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/upcoming-events-empty.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/upcoming-events.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/whatsapp-community.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/finalize-debt.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/provider-auth-verdict.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/session-results-snapshot.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-run-marker.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/BoardMemberCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/ChapterConnect.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/ChapterEvents.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/ChapterHeader.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/ChapterHero.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/ChapterSignUp.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/EventCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/EventsPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/BoardOfDirectors.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/ContactUs.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/EventGallery.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/GetInvolved.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/Hero.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/SupportUs.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/UpcomingEvents.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/WhatsappCommunity.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/gallery.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/gallery.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/404.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/blog/[slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/blogpost-long-article.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/blogpost-short-body.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/notfound-404-page.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blogpost-long-article--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blogpost-short-body--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/notfound-404-page--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": "src/components/BlogPost.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/NotFound.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Admin Dashboard - Empty",
+      "screenshotPath": "admin-dashboard-empty--desktop.png"
+    },
+    {
+      "name": "Admin Dashboard - Populated",
+      "screenshotPath": "admin-dashboard-populated--desktop.png"
+    },
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "BlogPost - Long Article",
+      "screenshotPath": "blogpost-long-article--desktop.png"
+    },
+    {
+      "name": "BoardMemberCard - With Photo",
+      "screenshotPath": "boardmembercard-with-photo--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Japan With Gallery",
+      "screenshotPath": "chapter-route-japan-with-gallery--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Los Angeles Fallback Email",
+      "screenshotPath": "chapter-route-los-angeles-fallback-email--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - San Francisco",
+      "screenshotPath": "chapter-route-san-francisco--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterEvents - Rich List",
+      "screenshotPath": "chapterevents-rich-list--desktop.png"
+    },
+    {
+      "name": "ChapterHero - With Image",
+      "screenshotPath": "chapterhero-with-image--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "ChapterSignUp - Default",
+      "screenshotPath": "chaptersignup-default--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "EventsPage - Upcoming and Past",
+      "screenshotPath": "eventspage-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board With Members Hidden",
+      "screenshotPath": "harvard-in-tech-board-with-members-hidden--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "NotFound - 404 Page",
+      "screenshotPath": "notfound-404-page--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 148,
+    "passed": 148,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 148,
+        "passed": 148
+      }
+    ]
+  }
+}

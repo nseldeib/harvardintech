@@ -1,22 +1,23 @@
-# regenerated from dependency-graph.json on 2026-06-17T11:49:08Z; do not hand-edit
+# regenerated from dependency-graph.json on 2026-06-17T18:50:30Z; do not hand-edit
 src/lib/url.ts :: imports=0 :: imported_by=16
+src/lib/gallery.ts :: imports=0 :: imported_by=10
 src/lib/events.ts :: imports=0 :: imported_by=8
 src/lib/site.ts :: imports=1 :: imported_by=8
-src/lib/gallery.ts :: imports=0 :: imported_by=6
+src/layouts/BaseLayout.astro :: imports=5 :: imported_by=5
 src/lib/adminDashboard.ts :: imports=0 :: imported_by=5
-src/styles/tokens.css :: imports=0 :: imported_by=5
 src/lib/mailto.ts :: imports=0 :: imported_by=4
+src/lib/socialIcon.ts :: imports=0 :: imported_by=4
 src/lib/team.ts :: imports=0 :: imported_by=4
 src/components/EventCard.astro :: imports=1 :: imported_by=3
 src/components/admin/CollectionCountCard.astro :: imports=1 :: imported_by=3
 src/components/admin/DashboardSummary.astro :: imports=1 :: imported_by=3
 src/components/landing/EventGallery.astro :: imports=2 :: imported_by=3
-src/layouts/BaseLayout.astro :: imports=4 :: imported_by=3
 src/lib/contentRoot.ts :: imports=0 :: imported_by=3
 src/lib/deployStatus.ts :: imports=0 :: imported_by=3
-src/lib/socialIcon.ts :: imports=0 :: imported_by=3
+src/styles/tokens.css :: imports=0 :: imported_by=3
 .codeyam/scenario-issues.js :: imports=0 :: imported_by=2
 .codeyam/scenario-metrics.js :: imports=0 :: imported_by=2
+src/components/BlogPost.astro :: imports=1 :: imported_by=2
 src/components/BoardMemberCard.astro :: imports=2 :: imported_by=2
 src/components/ChapterConnect.astro :: imports=3 :: imported_by=2
 src/components/ChapterEvents.astro :: imports=2 :: imported_by=2
@@ -25,6 +26,7 @@ src/components/ChapterPage.astro :: imports=9 :: imported_by=2
 src/components/ChapterSignUp.astro :: imports=0 :: imported_by=2
 src/components/EventsPage.astro :: imports=2 :: imported_by=2
 src/components/Greeting.tsx :: imports=0 :: imported_by=2
+src/components/NotFound.astro :: imports=1 :: imported_by=2
 src/components/admin/DeployStatus.astro :: imports=1 :: imported_by=2
 src/components/landing/BoardOfDirectors.astro :: imports=3 :: imported_by=2
 src/components/landing/ContactUs.astro :: imports=3 :: imported_by=2
@@ -87,7 +89,7 @@ src/lib/adminGate.test.ts :: imports=1 :: imported_by=0
 src/lib/contentRoot.test.ts :: imports=1 :: imported_by=0
 src/lib/deployStatus.test.ts :: imports=1 :: imported_by=0
 src/lib/events.test.ts :: imports=1 :: imported_by=0
-src/lib/gallery.test.ts :: imports=5 :: imported_by=0
+src/lib/gallery.test.ts :: imports=9 :: imported_by=0
 src/lib/mailto.test.ts :: imports=1 :: imported_by=0
 src/lib/parallax.test.ts :: imports=2 :: imported_by=0
 src/lib/site.test.ts :: imports=2 :: imported_by=0
@@ -102,6 +104,6 @@ src/pages/chapters/[slug].astro :: imports=3 :: imported_by=0
 src/pages/deploy-status.json.ts :: imports=0 :: imported_by=0
 src/pages/events.astro :: imports=2 :: imported_by=0
 src/pages/index.astro :: imports=11 :: imported_by=0
-src/pages/isolated-components/[name].astro :: imports=23 :: imported_by=0
+src/pages/isolated-components/[name].astro :: imports=25 :: imported_by=0
 ui/src/helpers/stepLabels.generated.ts :: imports=0 :: imported_by=0
 vitest.config.ts :: imports=0 :: imported_by=0

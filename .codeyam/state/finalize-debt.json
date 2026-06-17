@@ -2,5 +2,7 @@
   "lastFinalizedAt": "2026-06-17T11:49:17Z",
   "lastFinalizedSha": "0c26da4c2239332e1340cd146fb8899debb7a1af",
   "lastFullFinalizeSha": "0c26da4c2239332e1340cd146fb8899debb7a1af",
-  "deferred": []
+  "deferred": [],
+  "finalizeIntent": "fast",
+  "finalizeIntentBranch": "redesign"
 }

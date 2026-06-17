@@ -19,7 +19,10 @@ const useImage = members.length === 0 && image;
 
 <section class="s-section" id="board">
   <div class="s-inner">
-    <h2 class="s-title">BOARD OF DIRECTORS</h2>
+    <header class="board-head s-reveal">
+      <span class="s-eyebrow">Leadership</span>
+      <h2 class="s-title">Board of Directors</h2>
+    </header>
     {
       useImage ? (
         <img
@@ -55,6 +58,14 @@ const useImage = members.length === 0 && image;
 </section>
 
 <style>
+  .board-head {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+  .board-head .s-title {
+    margin-bottom: 0;
+  }
+
   /* The logo lockup the live composite bakes in above the profiles: the Harvard
      in Tech mark on the left and the "BOARD OF DIRECTORS" wordmark on the right,
      centered as a row above the member grid. */

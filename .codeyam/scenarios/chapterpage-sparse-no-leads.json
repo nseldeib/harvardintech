@@ -1,12 +1,11 @@
 {
   "name": "ChapterPage - Sparse No Leads",
-  "id": "91538d5b-2e35-4bc6-a1fd-a8075830fc37",
+  "id": "50aa9ab2-ece2-4081-953a-f7a2d0378f9e",
   "url": "/isolated-components/ChapterPage-Sparse",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "componentName": "ChapterPage-Sparse",
-  "scenarioType": "component",
-  "pageFilePath": "src/components/ChapterPage.astro"
+  "scenarioType": "component"
 }

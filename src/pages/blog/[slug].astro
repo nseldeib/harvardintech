@@ -1,7 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import '../../styles/tokens.css';
-import { withBase } from '../../lib/url';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPost from '../../components/BlogPost.astro';
 
 // Static output needs every dynamic route enumerated at build time.
 // `getStaticPaths` turns each blog entry into a pre-rendered `/blog/<id>` page.
@@ -19,24 +19,8 @@ const { post } = Astro.props as Props;
 const { Content } = await render(post);
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{post.data.title}</title>
-  </head>
-  <body>
-    <main style="max-width: var(--content-width); margin: 0 auto; padding: var(--space-lg);">
-      <a href={withBase('/')}>&larr; All posts</a>
-      <article style="margin-top: var(--space-lg);">
-        <h1 style="margin-bottom: var(--space-sm);">{post.data.title}</h1>
-        <time style="color: var(--color-muted);" datetime={post.data.date.toISOString()}>
-          {post.data.date.toLocaleDateString()}
-        </time>
-        <div style="margin-top: var(--space-lg);">
-          <Content />
-        </div>
-      </article>
-    </main>
-  </body>
-</html>
+<BaseLayout title={post.data.title}>
+  <BlogPost title={post.data.title} date={post.data.date}>
+    <Content />
+  </BlogPost>
+</BaseLayout>
