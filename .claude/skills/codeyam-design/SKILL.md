@@ -176,24 +176,7 @@ Build each representational slot in **two layers**:
 
 (Note that *embedding* the asset and *deriving tokens from* it are separate jobs — Step 2's design read pulls the palette/type/mood out of the asset so it reshapes the whole mockup, not just the spot where the logo sits.)
 
-**Typography — embed the bundled inline face; the fallback remains the floor.** For each picked design system, locate its prebuilt base64 font block under `.codeyam/design/design_systems/<system>.fonts.css` (systems that intentionally use only standard system fonts will not have a file). **Inline that entire `.fonts.css` stylesheet into the mockup's `<style>` tag.** Set the `font-family` using the branded face, and always pair it with its system fallback — e.g. `font-family: 'Manrope', sans-serif;` (or `Georgia, serif` / `'JetBrains Mono', monospace` to match the system's personality). This guarantees full typographic fidelity offline with no network requests and zero IP leaks. **Never** load remote fonts via `@import url(https://fonts.googleapis.com/…)`, `<link href="https://…">`, or any other remote URL — the mockup linter will flag it immediately.
-
 **Atomic writes only.** Write the full file in one step (e.g. the `Write` tool); never streaming opens. The UI polls the directory every few seconds and a half-written file renders as a broken card.
-
-### Step 3b — self-correct against the linter before handoff
-
-The editor backend lints every mockup and exposes the findings on the same API you already curl. **These warnings are for you, the generator — not the user; the user sees no lint badge.** Before posting the numbered key (Step 4), close the loop:
-
-1. After all N files exist, read the lint findings:
-   ```bash
-   curl http://localhost:14199/api/editor-mockups
-   ```
-   The response is a JSON array; each entry carries a `warnings[]` of `{code, message, severity}`. The control port is normally `localhost:14199`; on `connection refused`, ask the user for the editor port — never guess.
-2. For **every** card with a non-empty `warnings[]`, apply the fix its `message` describes and rewrite that HTML file. The `message` is the remediation guide — e.g. *"Use single quotes inside the url() …"* (the quote-collision trap above), *"Render the content statically."* (a stray `<script>` / JS-built content), an empty media box, a remote asset, or a remote font (resolve it with the **Typography** rule: the system's `font-family` + system-font fallback, never a remote load).
-3. Re-`curl` and repeat until every card's `warnings[]` is empty, **capped at ~3 passes** so a stubborn finding can't loop forever.
-4. Anything still flagged after the cap is **named in the Step 4 numbered key as a plain-language advisory** (e.g. *"3: off-catalog — note: the hero photo loads from a remote source"*) — never left as a silent residual, and never surfaced as a cryptic badge.
-
-**If the API is unreachable** (`connection refused` and the user can't give a port), fall back to a local grep of each file for the highest-signal violations before handoff — `fonts.googleapis.com`, `@import url(http`, `<script`, `<img src="http` — and fix what it finds with the same rules. The API loop is preferred; the grep is the belt-and-suspenders floor.
 
 ## Step 4 — post the numbered key in the chat, labeled by tier
 

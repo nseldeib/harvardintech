@@ -81,7 +81,9 @@ this exact instruction string:
 > prototyped. Use frontmatter with `mode: ui` and `step: 10` (or
 > `mode: backend` and `step: 8` for backend mode) and `source: prototype`.
 > Pick a kebab-case slug that matches the feature you prototyped.
-> Once the Write succeeds, output "Done — opening Build to finalize." and stop.
+> Once the Write succeeds, run `codeyam-editor-dev editor launch-plan <slug>` to
+> switch the UI to the Build tab, then output "Done — opening Build to
+> finalize." and stop.
 
 When you receive that message:
 
@@ -103,8 +105,11 @@ When you receive that message:
    Deconstruct step will use this to drive extraction + TDD over the
    working tree's already-built code.
 
-4. After the Write succeeds, output **exactly** `Done — opening Build to finalize.` and stop. The UI's plan-watcher
-   will fire `usePlanLauncher.launchPlan` automatically.
+4. After the Write succeeds, run `codeyam-editor-dev editor launch-plan <slug>`
+   (using the same slug you just wrote). This deterministically selects the
+   plan and switches the UI to the Build tab via `usePlanLauncher.launchPlan` —
+   it no longer depends on the UI plan-watcher catching the new plan. Then
+   output **exactly** `Done — opening Build to finalize.` and stop.
 
 5. Do **NOT** commit the plan. The editor's feature-commit step at the
    end of the workflow will sweep it in alongside the source changes.
