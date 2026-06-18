@@ -48,7 +48,7 @@ jobs:
         uses: withastro/action@v3
         env:
           DEPLOY_BASE_PATH: /harvardintech
-          PAGES_SITE: https://jaredcosulich.github.io
+          PAGES_SITE: https://nseldeib.github.io
           # Admin dashboard passcode (deterrent only — ends up in the built JS).
           # Set the value as a repo secret: Settings → Secrets and variables →
           # Actions → New repository secret named ADMIN_GATE_PASSCODE. If the
