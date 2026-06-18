@@ -1,9 +1,8 @@
 ---
-active: true
-name: Nadia Eldeib
-order: 5
-photo: /images/team/nadia-eldeib.png
+name: Nadia S. Eldeib
 role: Director of Growth · Harvard C'13
+photo: /images/team/nadia-eldeib.png
+bio: ''
+order: 5
+active: true
 ---
-
-
