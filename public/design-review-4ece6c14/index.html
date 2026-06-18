@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harvard Alumni in Tech — Website Redesign Directions</title>
+<style>
+  :root{--bg:#F4F2EE;--card:#fff;--ink:#1A1A20;--soft:#5E5D66;--faint:#9A99A2;--line:rgba(26,26,32,.13);
+    --crimson:#A41034;--blue:#0000FF;--dark:#1B1C24}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  /* cover */
+  .cover{padding:56px 56px 36px;border-bottom:1px solid var(--line);position:relative}
+  .cover .tab{width:64px;height:14px;background:var(--blue);margin-bottom:22px}
+  .cover .eyebrow{font-family:ui-monospace,'SF Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+  .cover h1{font-size:clamp(32px,4.4vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.02;margin:12px 0 14px;max-width:24ch}
+  .cover h1 .a{color:var(--blue)}
+  .cover p{font-size:16px;color:var(--soft);max-width:78ch;line-height:1.5}
+  .legend{display:flex;gap:22px;margin-top:20px;flex-wrap:wrap;font-size:13px;color:var(--soft);align-items:center}
+  .legend b{color:var(--ink)}
+  .chip{display:inline-flex;align-items:center;gap:8px}
+  .sw{width:13px;height:13px;border-radius:3px}
+  /* toolbar */
+  .toolbar{display:flex;align-items:center;gap:14px;margin-top:24px;flex-wrap:wrap}
+  .tbtn{font-size:13px;font-weight:700;border-radius:8px;padding:11px 18px;cursor:pointer;border:1.5px solid var(--ink);background:#fff;color:var(--ink);text-decoration:none}
+  .tbtn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  .tbtn.ghost{border-color:var(--line);color:var(--soft);font-weight:600}
+  .tnote{font-family:ui-monospace,monospace;font-size:12px;color:var(--faint)}
+  .notes{width:100%;max-width:980px;display:block;margin-top:16px;border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:14px;font-family:inherit;color:var(--ink);resize:vertical;min-height:60px}
+  .notes:focus{outline:none;border-color:var(--blue)}
+  /* group header */
+  .gh{padding:38px 56px 0;display:flex;align-items:center;gap:14px}
+  .gh .gsw{width:16px;height:16px;border-radius:4px}
+  .gh h2{font-size:20px;font-weight:800;letter-spacing:-.01em}
+  .gh .gc{font-family:ui-monospace,monospace;font-size:12px;color:var(--faint);margin-left:auto}
+  /* grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;padding:22px 56px 8px}
+  @media(max-width:1200px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .thumb{position:relative;display:block;width:100%;aspect-ratio:1440/980;overflow:hidden;background:#e9e7e2;border-bottom:1px solid var(--line);text-decoration:none}
+  .thumb iframe{position:absolute;top:0;left:0;width:1440px;height:980px;border:0;transform:scale(.333);transform-origin:top left;pointer-events:none}
+  .thumb .open{position:absolute;inset:0;z-index:2;transition:background .15s}
+  .thumb:hover .open{background:rgba(0,0,255,.06)}
+  .badge{position:absolute;top:12px;left:12px;z-index:3;min-width:30px;height:30px;padding:0 8px;border-radius:8px;color:#fff;
+    font-size:14px;font-weight:800;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.28)}
+  .expand{position:absolute;top:12px;right:12px;z-index:3;background:rgba(20,20,30,.7);color:#fff;font-size:10px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border-radius:6px}
+  .meta{padding:18px 20px 20px}
+  .meta .nm{font-size:18px;font-weight:800;letter-spacing:-.01em}
+  .meta .sys{font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-top:4px}
+  .meta .why{font-size:14px;color:var(--soft);line-height:1.5;margin-top:10px}
+  /* feedback */
+  .fb{margin-top:16px;padding-top:16px;border-top:1px dashed var(--line)}
+  .fb-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .fb-lab{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+  .fb-val{font-size:15px;font-weight:800;color:var(--ink)}
+  .fb-val.muted{color:var(--faint);font-weight:600}
+  .fb-range{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:999px;background:linear-gradient(90deg,var(--line),var(--line));outline:none;margin:2px 0 4px}
+  .fb-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--blue);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+  .fb-range::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--blue);cursor:pointer;border:3px solid #fff}
+  .fb-scale{display:flex;justify-content:space-between;font-family:ui-monospace,monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+  .fb-note{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:var(--ink);resize:vertical;min-height:46px}
+  .fb-note:focus{outline:none;border-color:var(--blue)}
+  .fb-saved{font-family:ui-monospace,monospace;font-size:10px;color:#2d8a5a;margin-top:6px;height:12px;opacity:0;transition:opacity .2s}
+  .fb-saved.show{opacity:1}
+  .foot{padding:30px 56px 56px;color:var(--faint);font-family:ui-monospace,monospace;font-size:12px;border-top:1px solid var(--line);margin-top:24px}
+</style>
+</head>
+<body>
+  <div class="cover">
+    <div class="tab"></div>
+    <div class="eyebrow">Harvard Alumni in Tech · Board Review</div>
+    <h1>Website redesign — <span class="a">thirteen directions</span>.</h1>
+    <p>Twelve in-house concepts, plus one from your designer — thirteen full landing-page directions for the new Harvard Alumni in Tech site. Every concept uses the real brand mark, the real board, real events, the four global chapters (New York · San Francisco · Los Angeles · Tokyo), and the official palette. Same content throughout — so we're comparing <b>design direction</b>, not copy.</p>
+    <div class="legend">
+      <span class="chip"><span class="sw" style="background:var(--crimson)"></span> <b>Harvard crimson</b> — heritage, authoritative</span>
+      <span class="chip"><span class="sw" style="background:var(--blue)"></span> <b>Ultramarine</b> — modern, bold</span>
+    </div>
+    <div class="toolbar">
+      <a class="tbtn ghost" id="howto">Click a thumbnail to open full-screen</a>
+      <button class="tbtn primary" onclick="exportFeedback()">⤓ Export all feedback</button>
+      <button class="tbtn ghost" onclick="clearFeedback()">Clear feedback</button>
+      <span class="tnote">Rate each 1–10 and add a comment. Responses save in this browser; Export downloads everything.</span>
+    </div>
+    <textarea id="sessionNotes" class="notes" placeholder="Board discussion notes — overall reactions, recurring themes, must-haves, concerns… (saved automatically, included in Export)"></textarea>
+  </div>
+
+  <div class="gh"><span class="gsw" style="background:var(--crimson)"></span><h2>Harvard crimson directions</h2><span class="gc">06 concepts</span></div>
+  <div class="grid">
+    <div class="card" data-fb="atlas" data-name="1 · Atlas (crimson)"><a class="thumb" href="01-atlas-mockup.html" target="_blank"><span class="badge" style="background:var(--crimson)">1</span><span class="expand">Open ↗</span><iframe src="01-atlas-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Atlas</div><div class="sys" style="color:var(--crimson)">Institutional authority</div><div class="why">Bold, official, flagship-institution confidence. The safe, unmistakably-Harvard choice.</div></div></div>
+    <div class="card" data-fb="manifesto" data-name="2 · Manifesto (crimson)"><a class="thumb" href="02-manifesto-mockup.html" target="_blank"><span class="badge" style="background:var(--crimson)">2</span><span class="expand">Open ↗</span><iframe src="02-manifesto-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Manifesto</div><div class="sys" style="color:var(--crimson)">Big-type statement</div><div class="why">Loud typographic confidence, crimson as punctuation. Mission-forward and modern.</div></div></div>
+    <div class="card" data-fb="editorial" data-name="3 · Editorial (crimson)"><a class="thumb" href="03-editorial-mockup.html" target="_blank"><span class="badge" style="background:var(--crimson)">3</span><span class="expand">Open ↗</span><iframe src="03-editorial-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Editorial</div><div class="sys" style="color:var(--crimson)">Heritage serif</div><div class="why">Refined, literary, classically Harvard. Reads like a respected institution's journal.</div></div></div>
+    <div class="card" data-fb="plinth" data-name="4 · Plinth (crimson)"><a class="thumb" href="04-plinth-mockup.html" target="_blank"><span class="badge" style="background:var(--crimson)">4</span><span class="expand">Open ↗</span><iframe src="04-plinth-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Plinth</div><div class="sys" style="color:var(--crimson)">Mono / technical</div><div class="why">Precise, engineered, ledger-like. Signals the "tech" in the name without being cold.</div></div></div>
+    <div class="card" data-fb="neobrutalist" data-name="5 · Neo-Brutalist (crimson)"><a class="thumb" href="05-neo-brutalist-mockup.html" target="_blank"><span class="badge" style="background:var(--crimson)">5</span><span class="expand">Open ↗</span><iframe src="05-neo-brutalist-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Neo-Brutalist</div><div class="sys" style="color:var(--crimson)">Tactile &amp; bold</div><div class="why">Confident, contemporary edge — the most fashion-forward of the crimson set.</div></div></div>
+    <div class="card" data-fb="postlark" data-name="6 · Postlark (crimson)"><a class="thumb" href="06-letters-to-sean-mockup.html" target="_blank"><span class="badge" style="background:var(--crimson)">6</span><span class="expand">Open ↗</span><iframe src="06-letters-to-sean-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Postlark</div><div class="sys" style="color:var(--crimson)">Warm correspondence</div><div class="why">Distinctive and personal — a "letter from the community," with a crimson wax seal.</div></div></div>
+  </div>
+
+  <div class="gh"><span class="gsw" style="background:var(--blue)"></span><h2>Ultramarine directions</h2><span class="gc">06 concepts</span></div>
+  <div class="grid">
+    <div class="card" data-fb="charter" data-name="7 · Charter (ultramarine)"><a class="thumb" href="07-charter-mockup.html" target="_blank"><span class="badge" style="background:var(--blue)">7</span><span class="expand">Open ↗</span><iframe src="07-charter-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Charter</div><div class="sys">Brand-book flagship</div><div class="why">Your guidelines, shipped: condensed type + ultramarine accent + the stat card. Most "ready."</div></div></div>
+    <div class="card" data-fb="bureau" data-name="8 · Bureau North (ultramarine)"><a class="thumb" href="08-bureau-north-mockup.html" target="_blank"><span class="badge" style="background:var(--blue)">8</span><span class="expand">Open ↗</span><iframe src="08-bureau-north-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Bureau North</div><div class="sys">Editorial magazine</div><div class="why">Calm, considered, plate-numbered. Sophisticated without shouting.</div></div></div>
+    <div class="card" data-fb="beacon" data-name="9 · Beacon (ultramarine)"><a class="thumb" href="09-beacon-mockup.html" target="_blank"><span class="badge" style="background:var(--blue)">9</span><span class="expand">Open ↗</span><iframe src="09-beacon-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Beacon</div><div class="sys">Editorial minimal</div><div class="why">Quiet, Swiss, generous whitespace. Lets the content and photography breathe.</div></div></div>
+    <div class="card" data-fb="marquee" data-name="10 · Marquee (ultramarine)"><a class="thumb" href="10-marquee-mockup.html" target="_blank"><span class="badge" style="background:var(--blue)">10</span><span class="expand">Open ↗</span><iframe src="10-marquee-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Marquee</div><div class="sys">Condensed broadsheet</div><div class="why">High-energy newsprint with big condensed type. Bold and editorial.</div></div></div>
+    <div class="card" data-fb="community" data-name="11 · Community (ultramarine)"><a class="thumb" href="11-community-mockup.html" target="_blank"><span class="badge" style="background:var(--blue)">11</span><span class="expand">Open ↗</span><iframe src="11-community-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Community</div><div class="sys">People-first &amp; photo-led</div><div class="why">Warm and welcoming, photography forward. The most human, member-centric read.</div></div></div>
+    <div class="card" data-fb="nightfall" data-name="12 · Nightfall (dark)"><a class="thumb" href="12-nightfall-mockup.html" target="_blank"><span class="badge" style="background:var(--dark)">12</span><span class="expand">Open ↗</span><iframe src="12-nightfall-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Nightfall</div><div class="sys">Sophisticated dark</div><div class="why">Premium dark-mode gravitas, restrained blue/crimson glow. Modern, not flashy.</div></div></div>
+  </div>
+
+  <div class="gh"><span class="gsw" style="background:#111"></span><h2>From your designer</h2><span class="gc">01 concept</span></div>
+  <div class="grid">
+    <div class="card" data-fb="designer" data-name="13 · Designer concept (ultramarine)"><a class="thumb" href="13-designer-mockup.html" target="_blank"><span class="badge" style="background:var(--blue)">13</span><span class="expand">Open ↗</span><iframe src="13-designer-mockup.html" loading="lazy" tabindex="-1"></iframe><span class="open"></span></a><div class="meta"><div class="nm">Designer Concept</div><div class="sys">From your designer · ultramarine</div><div class="why">Your designer's polished take — electric blue + bold condensed type, aligned with the brand book.</div></div></div>
+  </div>
+
+  <div class="foot">Harvard Alumni in Tech · 12 redesign directions · same content, twelve aesthetics · prepared for board review.</div>
+
+<script>
+(function(){
+  var KEY='hitDeckFeedback_v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}}
+  function saveAll(d){try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+  var data=load();
+  function fbInit(card){
+    var slug=card.getAttribute('data-fb');
+    var meta=card.querySelector('.meta');
+    var fb=document.createElement('div');fb.className='fb';
+    fb.innerHTML='<div class="fb-head"><span class="fb-lab">Your rating</span><span class="fb-val muted">— / 10</span></div>'+
+      '<input type="range" class="fb-range" min="1" max="10" step="1" value="5" data-set="0" aria-label="Rating 1 to 10">'+
+      '<div class="fb-scale"><span>Weak</span><span>Strong</span></div>'+
+      '<textarea class="fb-note" rows="2" placeholder="Comments…"></textarea>'+
+      '<div class="fb-saved">✓ saved</div>';
+    meta.appendChild(fb);
+    var range=fb.querySelector('.fb-range');
+    var val=fb.querySelector('.fb-val');
+    var note=fb.querySelector('.fb-note');
+    var saved=fb.querySelector('.fb-saved');
+    var rec=data[slug]||{};
+    if(rec.rating){range.value=rec.rating;val.textContent=rec.rating+' / 10';val.classList.remove('muted');range.setAttribute('data-set','1');}
+    if(rec.comment){note.value=rec.comment;}
+    var t;
+    function flash(){if(!saved)return;saved.classList.add('show');clearTimeout(t);t=setTimeout(function(){saved.classList.remove('show');},900);}
+    function persist(){
+      var set=range.getAttribute('data-set')==='1';
+      data[slug]={name:card.getAttribute('data-name'),rating:set?parseInt(range.value,10):null,comment:note.value};
+      saveAll(data);flash();
+    }
+    range.addEventListener('input',function(){range.setAttribute('data-set','1');val.textContent=range.value+' / 10';val.classList.remove('muted');persist();});
+    note.addEventListener('input',persist);
+  }
+  document.querySelectorAll('.card[data-fb]').forEach(fbInit);
+  var notesEl=document.getElementById('sessionNotes');
+  if(notesEl){if(data._notes)notesEl.value=data._notes;notesEl.addEventListener('input',function(){data._notes=notesEl.value;saveAll(data);});}
+
+  window.exportFeedback=function(){
+    var d=load();var lines=['HARVARD ALUMNI IN TECH — DESIGN FEEDBACK','Exported '+new Date().toLocaleString(),''];
+    if((d._notes||'').trim()){lines.push('BOARD DISCUSSION NOTES','-------------------------',d._notes.trim(),'','');}
+    lines.push('PER-CONCEPT FEEDBACK','-------------------------','');
+    document.querySelectorAll('.card[data-fb]').forEach(function(card){
+      var slug=card.getAttribute('data-fb');var r=d[slug]||{};
+      var rating=(r.rating!=null)?(r.rating+'/10'):'—';
+      var c=(r.comment||'').trim()||'(no comment)';
+      lines.push(card.getAttribute('data-name'));
+      lines.push('  Rating: '+rating);
+      lines.push('  Comment: '+c);
+      lines.push('');
+    });
+    var text=lines.join('\n');
+    if(navigator.clipboard){navigator.clipboard.writeText(text).catch(function(){});}
+    try{
+      var blob=new Blob([text],{type:'text/plain'});
+      var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='hit-design-feedback.txt';
+      document.body.appendChild(a);a.click();a.remove();
+    }catch(e){alert(text);}
+  };
+  window.clearFeedback=function(){
+    if(confirm('Clear all feedback saved in this browser?')){localStorage.removeItem(KEY);location.reload();}
+  };
+})();
+</script>
+</body>
+</html>
