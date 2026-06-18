@@ -1,5 +1,5 @@
 ---
-name: Nadia S. Eldeib
+name: Nadia Eldeib
 role: Director of Growth · Harvard C'13
 photo: /images/team/nadia-eldeib.png
 bio: ''
