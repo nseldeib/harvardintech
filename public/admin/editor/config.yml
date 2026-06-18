@@ -19,7 +19,7 @@
 # See CMS_SETUP.md for the editor-facing steps (and how to add OAuth later).
 backend:
   name: github
-  repo: jaredcosulich/harvardintech
+  repo: nseldeib/harvardintech
   branch: main
   # Login screen shows only "Sign in with Token" (no unwired OAuth button).
   auth_methods: [token]
