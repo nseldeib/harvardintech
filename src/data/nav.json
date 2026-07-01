@@ -1,31 +1,60 @@
 {
   "items": [
     {
-      "label": "Home",
-      "url": "/"
-    },
-    {
-      "label": "Events",
-      "url": "/events"
+      "label": "Programs",
+      "children": [
+        { "label": "All Events", "url": "/events" },
+        { "label": "Webinars", "url": "/events#webinars" },
+        { "label": "Podcasts", "url": "/events#podcasts" }
+      ]
     },
     {
       "label": "Chapters",
       "children": [
+        { "label": "Boston & Cambridge", "url": "/chapters/boston-cambridge" },
+        { "label": "New York City", "url": "/chapters/nyc" },
+        { "label": "London", "url": "/chapters/london" },
+        { "label": "DC & DMV", "url": "/chapters/dc-dmv" },
+        { "label": "Seattle", "url": "/chapters/seattle" }
+      ]
+    },
+    {
+      "label": "Communities",
+      "children": [
+        { "label": "WhatsApp", "url": "/#community" }
+      ]
+    },
+    {
+      "label": "Content Hub",
+      "children": [
+        { "label": "Blog", "url": "/blog/welcome" },
+        { "label": "Medium", "url": "https://medium.com/harvard-in-tech" },
+        { "label": "LinkedIn", "url": "https://www.linkedin.com/company/harvardintech/" },
+        { "label": "Newsletter", "url": "https://www.linkedin.com/newsletters/harvard-in-tech-7056638759055880192/" }
+      ]
+    },
+    {
+      "label": "Membership",
+      "children": [
         {
-          "label": "NYC",
-          "url": "/chapters/nyc"
+          "label": "About",
+          "children": [
+            { "label": "Mission", "url": "/#about" },
+            { "label": "Board", "url": "/#board" }
+          ]
         },
         {
-          "label": "San Francisco",
-          "url": "/chapters/san-francisco"
+          "label": "Get Involved",
+          "children": [
+            { "label": "Volunteer Opportunities", "url": "/#get-involved" }
+          ]
         },
         {
-          "label": "L.A.",
-          "url": "/chapters/la"
-        },
-        {
-          "label": "Japan",
-          "url": "/chapters/japan"
+          "label": "Support",
+          "children": [
+            { "label": "Donate", "url": "/#giving" },
+            { "label": "Sponsorship Opportunities", "url": "/#support" }
+          ]
         }
       ]
     }

@@ -1,41 +1,58 @@
 /* Design tokens as CSS custom properties. The stack.json `styling.tokenFile`
    field points here, so codeyam treats this file as the project's token source.
-   Values reproduce harvardintech.com's Strikingly "persona" theme: a blue
-   accent on near-black text, Roboto type, full-width centered sections. */
-:root {
-  --color-bg: #ffffff;
-  --color-bg-soft: #f5f7f9;
-  --color-bg-dark: #1c1d1f;
-  --color-fg: #2e2e2f;
-  --color-muted: #555555;
-  --color-faint: #999999;
-  /* Harvard in Tech brand teal (Strikingly "fresh" theme highlight color).
-     Links/nav use the brighter cyan; buttons use the slightly darker teal. */
-  --color-accent: #0ca5a5;
-  --color-accent-dark: #098f8f;
-  --color-nav: #10d7d7;
-  --color-border: #e3e7ea;
-  /* Section-title dark teal + light robin's-egg band, sampled from the live
-     harvardintech.com Strikingly theme. */
-  --color-title: #1d5a5a;
-  --color-bg-blue: #ebf7f4;
-  --color-link: #3377cc;
 
-  --font-sans: 'Roboto', Helvetica, Arial, sans-serif;
-  --font-title: Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+   ATLAS DIRECTION (board-selected redesign): a Harvard-crimson editorial
+   system — crimson accent on near-black "ink", warm paper backgrounds,
+   Helvetica Neue display type, a Times serif for ledes/captions, and a
+   JetBrains Mono for the uppercase "kicker" eyebrow labels. The semantic
+   `--color-*` / `--font-*` tokens keep their NAMES (so every existing section
+   re-skins without per-component edits) but their VALUES now point at the
+   Atlas palette. New sections use the Atlas component classes at the bottom. */
+:root {
+  /* Atlas raw palette */
+  --crimson: #a41034;
+  --crimson-deep: #7d1424;
+  --ink: #1e1a1b;
+  --ink-2: #5c5559;
+  --ink-3: #928b8e;
+  --paper: #ffffff;
+  --paper-2: #f6f3f1;
+  --line: rgba(30, 26, 27, 0.14);
+
+  /* Semantic aliases — remapped onto Atlas so existing components adopt the
+     crimson editorial look with no markup change. */
+  --color-bg: var(--paper);
+  --color-bg-soft: var(--paper-2);
+  --color-bg-dark: var(--ink);
+  --color-fg: var(--ink);
+  --color-muted: var(--ink-2);
+  --color-faint: var(--ink-3);
+  --color-accent: var(--crimson);
+  --color-accent-dark: var(--crimson-deep);
+  --color-nav: var(--ink);
+  --color-border: var(--line);
+  --color-title: var(--ink);
+  /* Former robin's-egg band → warm paper-2 in Atlas. */
+  --color-bg-blue: var(--paper-2);
+  --color-link: var(--crimson);
+
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-title: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-serif: 'Times New Roman', Times, Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   --space-sm: 0.5rem;
   --space-md: 1rem;
   --space-lg: 2rem;
   --space-xl: 5rem;
 
-  --radius: 4px;
-  --content-width: 1080px;
+  --radius: 3px;
+  --content-width: 1220px;
   --text-width: 760px;
-  /* Header bar height — shared by the header in BaseLayout and the hero's
-     full-viewport `calc()` so the two can never drift. */
-  --header-height: 89px;
+  /* Header bar height — shared by the header in BaseLayout and any full-viewport
+     `calc()` so the two can never drift. Atlas header is a compact utility bar
+     (~26px) + nav row (~56px). */
+  --header-height: 82px;
 }
 
 * {
@@ -47,8 +64,9 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-sans);
-  font-weight: 300;
-  line-height: 1.7;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
@@ -63,14 +81,16 @@ h1,
 h2,
 h3 {
   font-family: var(--font-title);
-  font-weight: 400;
-  color: var(--color-fg);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
 }
 
-/* Section scaffolding shared by every landing block: full-width band, centered
-   inner column, uppercase tracked title with a short blue underline. */
+/* Section scaffolding shared by every landing block. In Atlas the band is a
+   full-width section with a hairline bottom rule and a centered inner column. */
 .s-section {
-  padding: var(--space-xl) var(--space-lg);
+  padding: 78px var(--space-lg);
+  border-bottom: 1px solid var(--line);
 }
 .s-inner {
   max-width: var(--content-width);
@@ -80,56 +100,126 @@ h3 {
   max-width: var(--text-width);
   margin: 0 auto;
 }
-/* Section title — matches the live theme: dark-teal Helvetica, ~36px, flanked
-   by two short horizontal rules. The rules use `currentColor`, so a title
-   placed on a dark band (Get Involved) flips to white rules automatically by
-   just setting its color. Casing is whatever the markup uses (the live site
-   mixes uppercase and title-case per section), so no text-transform here. */
+
+/* Section title — Atlas editorial heading: bold Helvetica ink, no flanking
+   rules (the teal theme's rules are dropped for the crimson system). */
 .s-title {
   color: var(--color-title);
-  letter-spacing: normal;
-  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.25rem);
-  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-size: clamp(28px, 1.2rem + 1.8vw, 44px);
+  font-weight: 800;
   text-align: center;
   margin: 0 0 var(--space-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-.s-title::before,
-.s-title::after {
-  content: '';
-  flex: none;
-  width: 80px;
-  height: 2px;
-  margin: 0 18px;
-  background: currentColor;
-}
-/* "Upcoming Events" on the live site is the odd one out: a smaller, muted grey
-   Roboto heading with no flanking rules. */
+/* "Upcoming Events" plain variant — same Atlas heading, just no override. */
 .s-title--plain {
-  color: #50555c;
-  font-family: var(--font-sans);
-  font-size: 1.75rem;
+  color: var(--ink);
+  font-family: var(--font-title);
+  font-size: clamp(28px, 1.2rem + 1.8vw, 44px);
 }
-.s-title--plain::before,
-.s-title--plain::after {
-  display: none;
-}
+
 .s-btn {
   display: inline-block;
-  background: var(--color-accent);
+  background: var(--crimson);
   color: #fff;
   font-family: var(--font-sans);
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: normal;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1;
-  padding: 12px 18px;
-  border-radius: 999px;
+  padding: 13px 22px;
+  border-radius: var(--radius);
 }
 .s-btn:hover {
-  background: var(--color-accent-dark);
+  background: var(--crimson-deep);
   text-decoration: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Atlas component classes — used by the redesigned homepage sections.
+   Lifted from the board-selected Atlas mockup (01) so the built site matches
+   the concept the team approved.
+   ───────────────────────────────────────────────────────────────────────── */
+.wrap {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 48px;
+}
+/* mono uppercase crimson eyebrow */
+.kick {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--crimson);
+}
+.btn {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 13px 22px;
+  border-radius: var(--radius);
+}
+.btn:hover {
+  text-decoration: none;
+}
+.btn-solid {
+  background: var(--crimson);
+  color: #fff;
+}
+.btn-solid:hover {
+  background: var(--crimson-deep);
+}
+.btn-out {
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+}
+.btn-out.on-dark {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
+/* Section wrapper for the editorial stack (used inside `.wrap`). */
+.sec {
+  padding: 78px 0;
+  border-bottom: 1px solid var(--line);
+}
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.sec-head h2 {
+  font-size: clamp(28px, 3.6vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 10px;
+}
+
+/* Focus-area chips */
+.areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.area {
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--paper-2);
+  border-left: 3px solid var(--crimson);
+  padding: 12px 18px;
+}
+
+@media (max-width: 900px) {
+  .wrap {
+    padding: 0 24px;
+  }
+  .sec-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

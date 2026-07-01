@@ -1036,6 +1036,15 @@
       "runner": "tests"
     },
     {
+      "description": "LinkedIn resolves to its self-hosted crimson glyph (added in the Atlas revamp).",
+      "file": "src/lib/socialIcon.test.ts",
+      "format": "vitest",
+      "key": "socialIconSrc › maps linkedin to its self-hosted asset",
+      "line": 21,
+      "registeredAt": "2026-07-01T19:46:01Z",
+      "runner": "tests"
+    },
+    {
       "description": "Each known platform maps to its self-hosted asset under public/images/social/.",
       "file": "src/lib/socialIcon.test.ts",
       "format": "vitest",
@@ -1049,7 +1058,7 @@
       "file": "src/lib/socialIcon.test.ts",
       "format": "vitest",
       "key": "socialIconSrc › resolves regardless of icon casing",
-      "line": 21,
+      "line": 26,
       "registeredAt": "2026-06-15T15:44:36Z",
       "runner": "tests"
     },
@@ -1058,7 +1067,7 @@
       "file": "src/lib/socialIcon.test.ts",
       "format": "vitest",
       "key": "socialIconSrc › returns null for an unknown icon",
-      "line": 27,
+      "line": 32,
       "registeredAt": "2026-06-15T15:44:36Z",
       "runner": "tests"
     },
@@ -1067,7 +1076,7 @@
       "file": "src/lib/socialIcon.test.ts",
       "format": "vitest",
       "key": "socialIconSrc › returns null for null, undefined, or empty input",
-      "line": 32,
+      "line": 37,
       "registeredAt": "2026-06-15T15:44:36Z",
       "runner": "tests"
     },

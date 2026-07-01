@@ -152,3 +152,4 @@
 {"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `relativeTime › reports just now under a minute`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `computeBanner › escalates to slow past the threshold`: added from runner `tests` output"}
 {"timestamp":"2026-06-15T22:56:59Z","kind":"registry-add","message":"registry `parseBackendRepo › pulls repo and branch out of the CMS config`: added from runner `tests` output"}
+{"timestamp":"2026-07-01T19:46:01Z","kind":"registry-add","message":"registry `socialIconSrc › maps linkedin to its self-hosted asset`: added from runner `tests` output"}

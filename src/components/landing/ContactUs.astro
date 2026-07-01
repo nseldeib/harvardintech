@@ -1,10 +1,8 @@
 ---
-// "CONTACT US" — reproduces the live site's contact section: "We'd love to hear
-// from you!" plus Twitter / E-mail / Facebook links. Each link renders its
-// platform logo above the text label (icon-over-label, as on the live site).
-// Icons are the real assets pulled from the original harvardintech.com site,
-// self-hosted under public/images/social/ and selected by each link's `icon`
-// field. Reads the editable socials + contact email from the settings singleton.
+// "Contact us" (Atlas): an editorial closing section — kicker + headline, a
+// serif invitation, and a row of social links (small icon + label) plus the
+// contact email. Reads the editable socials + contact email from the settings
+// singleton; the e-mail entry is synthesized so it always appears.
 import { buildMailto } from '../../lib/mailto';
 import { socialIconSrc } from '../../lib/socialIcon';
 import type { SocialLink } from '../../lib/site';
@@ -16,35 +14,30 @@ interface Props {
 const { socials, email } = Astro.props;
 const contactHref = buildMailto({ to: email, subject: 'Hello from the website' });
 
-// Render the live site's labels in order: Twitter, E-mail, Facebook. The
-// e-mail entry is synthesized from the contact email so it always renders even
-// when the socials list omits it.
 const links = [
-  ...socials.filter((s) => /twitter/i.test(s.label)),
+  ...socials.map((s) => ({ label: s.label, url: s.url, icon: s.icon })),
   { label: 'E-mail', url: contactHref, icon: 'email' },
-  ...socials.filter((s) => /facebook/i.test(s.label)),
 ];
 ---
 
-<section class="s-section" id="contact" style="background: var(--color-bg-blue);">
-  <div class="s-narrow" style="text-align: center;">
-    <h2 class="s-title">CONTACT US</h2>
-    <p style="font-size: 1.15rem; color: var(--color-fg); margin: 0 0 var(--space-lg);">
-      We'd love to hear from you!
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Say hello</span>
+        <h2>Contact us</h2>
+      </div>
+    </div>
+
+    <p class="contact-lede">
+      We'd love to hear from you — reach out on any of these, or drop us a note.
     </p>
-    <div style="display: flex; flex-wrap: wrap; gap: 3.5rem; justify-content: center; align-items: flex-start;">
+    <div class="contact-row">
       {
         links.map((link) => (
-          <a
-            href={link.url}
-            rel="noopener"
-            class="contact-link"
-            aria-label={link.label}
-          >
+          <a class="contact-link" href={link.url} rel="noopener" aria-label={link.label}>
             {socialIconSrc(link.icon) && (
-              <span class="contact-icon">
-                <img src={socialIconSrc(link.icon)} alt="" width="48" height="48" loading="lazy" />
-              </span>
+              <img class="contact-icon" src={socialIconSrc(link.icon)} alt="" width="22" height="22" loading="lazy" />
             )}
             <span class="contact-label">{link.label}</span>
           </a>
@@ -55,30 +48,43 @@ const links = [
 </section>
 
 <style>
+  .contact-lede {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0 0 26px;
+    max-width: 52ch;
+  }
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
   .contact-link {
     display: inline-flex;
-    flex-direction: column;
     align-items: center;
-    gap: var(--space-sm);
+    gap: 10px;
+    padding: 11px 18px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: #fff;
     text-decoration: none;
-    color: var(--color-link);
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 14px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .contact-link:hover {
+    text-decoration: none;
+    border-color: var(--crimson);
+    transform: translateY(-1px);
   }
   .contact-icon {
-    display: inline-flex;
-  }
-  .contact-icon img {
     display: block;
-    width: 48px;
-    height: 48px;
+    width: 22px;
+    height: 22px;
     object-fit: contain;
-    transition: transform 0.15s ease;
-  }
-  .contact-link:hover .contact-icon img {
-    transform: scale(1.08);
-  }
-  .contact-label {
-    font-family: var(--font-sans);
-    font-size: 1.35rem;
-    color: var(--color-link);
+    border-radius: 3px;
   }
 </style>

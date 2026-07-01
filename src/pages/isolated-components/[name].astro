@@ -2,6 +2,7 @@
 import Greeting from '../../components/Greeting.tsx';
 import EmbedForm from '../../components/EmbedForm.astro';
 import EventsPage from '../../components/EventsPage.astro';
+import LumaCalendar from '../../components/LumaCalendar.astro';
 import ChapterPage from '../../components/ChapterPage.astro';
 import ChapterHero from '../../components/ChapterHero.astro';
 import ChapterEvents from '../../components/ChapterEvents.astro';
@@ -14,6 +15,12 @@ import AdminGatePrompt from '../../components/admin/AdminGatePrompt.astro';
 import BoardMemberCard from '../../components/BoardMemberCard.astro';
 import ContactUs from '../../components/landing/ContactUs.astro';
 import Hero from '../../components/landing/Hero.astro';
+import HeroCarousel from '../../components/landing/HeroCarousel.astro';
+import Stats from '../../components/landing/Stats.astro';
+import OurChapters from '../../components/landing/OurChapters.astro';
+import FocusAreas from '../../components/landing/FocusAreas.astro';
+import ContentHub from '../../components/landing/ContentHub.astro';
+import GivingCampaign from '../../components/landing/GivingCampaign.astro';
 import WhatsappCommunity from '../../components/landing/WhatsappCommunity.astro';
 import GetInvolved from '../../components/landing/GetInvolved.astro';
 import SupportUs from '../../components/landing/SupportUs.astro';
@@ -267,6 +274,32 @@ const boardOfDirectorsStates = {
   Empty: { members: [] as typeof SAMPLE_BOARD },
 };
 
+// OurChapters (Atlas "Our chapters" band): Default renders the five-city row;
+// Empty proves the "coming soon" fallback (production starts with no chapters).
+const SAMPLE_CHAPTERS = [
+  { slug: 'boston-cambridge', city: 'Boston & Cambridge', blurb: 'Home of Harvard — our Cambridge and Boston community.', heroImage: '/images/bg/hero-bg.jpg', order: 1 },
+  { slug: 'nyc', city: 'New York City', blurb: 'Our founding chapter and largest community.', heroImage: '/images/chapters/nyc.jpg', order: 2 },
+  { slug: 'london', city: 'London', blurb: 'Our European hub across the London tech scene.', heroImage: '/images/gallery/event-05.jpg', order: 3 },
+  { slug: 'dc-dmv', city: 'DC & DMV Area', blurb: 'The DC, Maryland & Virginia community.', heroImage: '/images/gallery/event-18.jpg', order: 4 },
+  { slug: 'seattle', city: 'Seattle', blurb: 'The Pacific Northwest chapter.', heroImage: '/images/gallery/event-27.jpg', order: 5 },
+];
+const ourChaptersStates = {
+  Default: { chapters: SAMPLE_CHAPTERS },
+  Empty: { chapters: [] as typeof SAMPLE_CHAPTERS },
+};
+
+// ContentHub (Atlas "Content hub" band): Default shows the four channels plus a
+// "latest from the blog" list; Empty omits posts (channels only).
+const SAMPLE_POSTS = [
+  { slug: 'welcome', title: 'Welcome to the new Harvard Alumni in Tech', date: '2026-06-01', summary: 'A fresh home for our community, events, and chapters.' },
+  { slug: 'summit-recap', title: 'Recap: Harvard in Tech Summit 2026', date: '2026-05-12', summary: 'Highlights from a day of talks, panels, and networking.' },
+  { slug: 'new-chapters', title: 'Announcing our London and Seattle chapters', date: '2026-04-20', summary: 'The network keeps growing across the map.' },
+];
+const contentHubStates = {
+  Default: { posts: SAMPLE_POSTS },
+  Empty: { posts: [] as typeof SAMPLE_POSTS },
+};
+
 export async function getStaticPaths() {
   // getStaticPaths runs in an isolated scope and cannot reference the
   // module-level consts — enumerate route names inline.
@@ -311,6 +344,15 @@ export async function getStaticPaths() {
     { params: { name: 'UpcomingEvents-Empty' } },
     { params: { name: 'BoardOfDirectors' } },
     { params: { name: 'BoardOfDirectors-Empty' } },
+    { params: { name: 'HeroCarousel' } },
+    { params: { name: 'Stats' } },
+    { params: { name: 'OurChapters' } },
+    { params: { name: 'OurChapters-Empty' } },
+    { params: { name: 'FocusAreas' } },
+    { params: { name: 'ContentHub' } },
+    { params: { name: 'ContentHub-Empty' } },
+    { params: { name: 'GivingCampaign' } },
+    { params: { name: 'LumaCalendar' } },
   ];
 }
 
@@ -417,6 +459,18 @@ if (name && name.startsWith('BoardOfDirectors')) {
   const stateKey = (name === 'BoardOfDirectors' ? 'Default' : name.slice('BoardOfDirectors-'.length)) as keyof typeof boardOfDirectorsStates;
   boardOfDirectorsProps = boardOfDirectorsStates[stateKey] ?? boardOfDirectorsStates.Default;
 }
+
+let ourChaptersProps: (typeof ourChaptersStates)[keyof typeof ourChaptersStates] | null = null;
+if (name && name.startsWith('OurChapters')) {
+  const stateKey = (name === 'OurChapters' ? 'Default' : name.slice('OurChapters-'.length)) as keyof typeof ourChaptersStates;
+  ourChaptersProps = ourChaptersStates[stateKey] ?? ourChaptersStates.Default;
+}
+
+let contentHubProps: (typeof contentHubStates)[keyof typeof contentHubStates] | null = null;
+if (name && name.startsWith('ContentHub')) {
+  const stateKey = (name === 'ContentHub' ? 'Default' : name.slice('ContentHub-'.length)) as keyof typeof contentHubStates;
+  contentHubProps = contentHubStates[stateKey] ?? contentHubStates.Default;
+}
 ---
 
 <html lang="en">
@@ -475,6 +529,20 @@ if (name && name.startsWith('BoardOfDirectors')) {
           </div>
         ) : name === 'Hero' ? (
           <Hero />
+        ) : name === 'HeroCarousel' ? (
+          <HeroCarousel />
+        ) : name === 'Stats' ? (
+          <Stats />
+        ) : ourChaptersProps ? (
+          <OurChapters {...ourChaptersProps} />
+        ) : name === 'FocusAreas' ? (
+          <FocusAreas />
+        ) : contentHubProps ? (
+          <ContentHub {...contentHubProps} />
+        ) : name === 'GivingCampaign' ? (
+          <GivingCampaign />
+        ) : name === 'LumaCalendar' ? (
+          <LumaCalendar />
         ) : name === 'WhatsappCommunity' ? (
           <WhatsappCommunity />
         ) : name === 'GetInvolved' ? (

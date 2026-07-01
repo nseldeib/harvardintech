@@ -94,6 +94,15 @@
     ]
   },
   {
+    "description": "Content Hub section: the org publishing channels as linked cards plus an optional latest-from-the-blog list surfaced from the blog collection.",
+    "filePath": "src/components/landing/ContentHub.astro",
+    "name": "ContentHub",
+    "scenarios": [
+      "content-hub",
+      "content-hub-empty"
+    ]
+  },
+  {
     "description": "The /admin dashboard top row: the heading, a one-line content summary (populated counts or the empty-state nudge), and the primary Open content editor action.",
     "filePath": "src/components/admin/DashboardSummary.astro",
     "name": "DashboardSummary",
@@ -144,6 +153,14 @@
     ]
   },
   {
+    "description": "Focus Areas section: crimson-edged cards for the main program categories as visual entry points, each linking into that area.",
+    "filePath": "src/components/landing/FocusAreas.astro",
+    "name": "FocusAreas",
+    "scenarios": [
+      "focus-areas"
+    ]
+  },
+  {
     "description": "Prerendered build-marker endpoint emitting {commit, runId, builtAt}; reads GITHUB_SHA/GITHUB_RUN_ID in the Actions runner and falls back to a local marker otherwise. The polled source of truth for whether a saved change is genuinely live.",
     "filePath": "src/pages/deploy-status.json.ts",
     "name": "GET",
@@ -153,10 +170,26 @@
     }
   },
   {
+    "description": "Giving Campaign crimson CTA band: the fundraising ask with Donate and Sponsorship actions and no fabricated progress meter.",
+    "filePath": "src/components/landing/GivingCampaign.astro",
+    "name": "GivingCampaign",
+    "scenarios": [
+      "giving-campaign"
+    ]
+  },
+  {
     "description": "Template React island: a name greeting with an interactive click counter. Not used on the Harvard in Tech landing page; retained from the scaffold.",
     "filePath": "src/components/Greeting.tsx",
     "name": "Greeting",
     "testFile": "src/components/Greeting.test.tsx"
+  },
+  {
+    "description": "Sliding hero banner: a dark stage with a crimson scrim over rotating slides, each with a kicker, headline, serif lede, and CTA buttons; auto-advances with dot navigation via a track slider.",
+    "filePath": "src/components/landing/HeroCarousel.astro",
+    "name": "HeroCarousel",
+    "scenarios": [
+      "hero-carousel"
+    ]
   },
   {
     "description": "Harvard in Tech public home page — a faithful reproduction of harvardintech.com composed of section components (Hero, WhatsApp Community, Upcoming Events, Get Involved, Board of Directors, Support Us, Event Gallery, Contact Us), reading the events/team content collections and settings/nav singletons.",
@@ -165,6 +198,31 @@
     "scenarios": [
       "harvard-in-tech-landing-page",
       "harvard-in-tech-no-upcoming-events"
+    ]
+  },
+  {
+    "description": "Events-page Luma calendar block: renders an inline iframe embed when an embed URL is set, otherwise a branded card linking out to the public Luma calendar, with a fallback when neither is set.",
+    "filePath": "src/components/LumaCalendar.astro",
+    "name": "LumaCalendar",
+    "scenarios": [
+      "luma-calendar"
+    ]
+  },
+  {
+    "description": "Landing Our Chapters section: a row of photo cards with a crimson gradient wash linking to each chapter page, sorted by order; shows a quiet prompt when empty.",
+    "filePath": "src/components/landing/OurChapters.astro",
+    "name": "OurChapters",
+    "scenarios": [
+      "our-chapters",
+      "our-chapters-empty"
+    ]
+  },
+  {
+    "description": "Stat strip under the hero: a hairline-ruled band of big crimson figures with mono uppercase labels; values are prop-driven.",
+    "filePath": "src/components/landing/Stats.astro",
+    "name": "Stats",
+    "scenarios": [
+      "stats-band"
     ]
   },
   {

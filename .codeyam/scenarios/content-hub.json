@@ -1,0 +1,12 @@
+{
+  "name": "Content Hub",
+  "id": "2462818b-5389-47e4-acfb-62309643ccc9",
+  "url": "/isolated-components/ContentHub",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ContentHub",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/ContentHub.astro"
+}

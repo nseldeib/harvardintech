@@ -1,10 +1,18 @@
 ---
-// /events — the full Events page. Loads the `events` content collection and
-// hands the flat array to EventsPage, which splits it into Upcoming / Past
-// against build time. Linked from the nav (Events) and the landing page.
+// /events — the full Events page. Shows the org's Luma calendar embed at the
+// top (the HBSWA-style "one calendar" pattern), then the structured Upcoming /
+// Past listing from the `events` content collection, split against build time.
+// Linked from the nav (Programs → All Events) and the landing page.
+//
+// The Luma `calendarId` is intentionally unset by default: production starts
+// empty and the org connects its live Luma calendar via the CMS (or by setting
+// the prop here). Until then the calendar block shows its labeled fallback and
+// the collection-driven listing below carries the events.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EventsPage from '../components/EventsPage.astro';
+import LumaCalendar from '../components/LumaCalendar.astro';
+import { LUMA_CALENDAR_URL, LUMA_EMBED_URL } from '../lib/luma';
 
 const events = (await getCollection('events')).map((e) => ({
   slug: e.id,
@@ -12,6 +20,7 @@ const events = (await getCollection('events')).map((e) => ({
 }));
 ---
 
-<BaseLayout title="Events" description="Upcoming and past Harvard in Tech events.">
+<BaseLayout title="Events" description="Upcoming and past Harvard Alumni in Tech events.">
+  <LumaCalendar calendarUrl={LUMA_CALENDAR_URL} embedUrl={LUMA_EMBED_URL} />
   <EventsPage events={events} />
 </BaseLayout>

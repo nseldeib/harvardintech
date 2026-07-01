@@ -1,9 +1,12 @@
 ---
 // The site-wide shell: <head> meta (via SEO), a data-driven header/nav, and a
-// footer built from the editable `settings` singleton. Reproduces the
-// harvardintech.com Strikingly "persona" header (wordmark left, nav right with
-// a Chapters dropdown) and footer. Changing the site title, a menu item, a
-// social link, or the contact email is a data edit to `src/data/*.json`.
+// footer built from the editable `settings` singleton.
+//
+// ATLAS DIRECTION (board-selected redesign): a crimson utility bar over an
+// editorial nav row — wordmark left, a taxonomy mega-menu (Programs / Chapters
+// / Communities / Content Hub / Membership) center, a Subscribe CTA right.
+// Menu items, socials, the contact email, and the footer text are all data
+// edits to `src/data/*.json` (via the CMS), never markup changes.
 import '../styles/tokens.css';
 import SEO from '../components/SEO.astro';
 import { settings, nav } from '../lib/site';
@@ -16,6 +19,13 @@ interface Props {
 }
 
 const { title, description, image } = Astro.props;
+
+// The crimson utility strip reads as a one-line "where we are" — driven off the
+// Chapters menu group so it always tracks the live chapter list.
+const chapterGroup = nav.items.find((i) => i.label === 'Chapters');
+const utilCities = (chapterGroup?.children ?? []).map((c) => c.label).join(' · ');
+
+const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
 ---
 
 <html lang="en">
@@ -25,87 +35,310 @@ const { title, description, image } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <SEO title={title} description={description} image={image} />
   </head>
   <body>
-    <header style="position: relative; z-index: 50; background: #fff;">
-      <div
-        style="max-width: var(--content-width); margin: 0 auto; height: var(--header-height); box-sizing: border-box; padding: 34px var(--space-lg) 0; display: flex; align-items: flex-start; justify-content: center; gap: 36px;"
-      >
-        <nav>
-          <ul
-            style="list-style: none; display: flex; align-items: flex-start; gap: 36px; margin: 0; padding: 0; font-size: 15px; font-weight: 500; line-height: 15px; text-transform: none;"
-          >
-            {
-              nav.items.map((item) =>
-                item.children && item.children.length > 0 ? (
-                  <li style="position: relative;">
-                    <details class="nav-dd">
-                      <summary style="cursor: pointer; list-style: none; color: var(--color-nav);">
-                        {item.label} ▾
-                      </summary>
-                      <ul style="list-style: none; position: absolute; right: 0; z-index: 70; margin: var(--space-sm) 0 0; padding: var(--space-sm) 0; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius); min-width: 180px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
-                        {item.children.map((child) => (
-                          <li style="padding: 0;">
-                            <a
-                              href={withBase(child.url ?? '/')}
-                              style="display: block; padding: var(--space-sm) var(--space-md); color: var(--color-fg); text-transform: none; letter-spacing: 0;"
-                            >
-                              {child.label}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  </li>
-                ) : (
-                  <li>
-                    <a href={withBase(item.url ?? '/')} style="color: var(--color-nav);">
-                      {item.label}
-                    </a>
-                  </li>
-                ),
-              )
-            }
-          </ul>
-        </nav>
-      </div>
-      <!-- Harvard shield in a white circle, dipping from the navbar into the
-           hero image (the "fresh" theme's circular logo badge). -->
-      <div
-        style="position: absolute; left: 50%; top: 60px; transform: translateX(-50%); width: 50px; height: 50px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 60;"
-      >
+    <!-- Crimson utility bar: the global-community one-liner. -->
+    <div class="util">A global community · {utilCities}</div>
+
+    <header class="site-nav">
+      <a class="brand" href={withBase('/')}>
         <img
+          class="brand-shield"
           src={withBase('/images/harvard-shield.png')}
-          alt="Harvard shield"
-          width="32"
-          height="32"
-          style="width: 32px; height: 32px;"
+          alt=""
+          width="26"
+          height="26"
         />
-      </div>
+        <span class="brand-word">Harvard Alumni in Tech</span>
+      </a>
+
+      <nav class="links" aria-label="Primary">
+        {
+          nav.items.map((item) =>
+            item.children && item.children.length > 0 ? (
+              <div class="nav-item">
+                <button class="nav-top" type="button">
+                  {item.label} <span class="caret">▾</span>
+                </button>
+                <div class="mega">
+                  <div class="mega-in">
+                    {item.children.some((c) => c.children && c.children.length > 0) ? (
+                      item.children.map((group) => (
+                        <div class="mega-col">
+                          {group.children && group.children.length > 0 ? (
+                            <Fragment>
+                              <span class="mega-h">{group.label}</span>
+                              {group.children.map((leaf) => (
+                                <a href={withBase(leaf.url ?? '/')}>{leaf.label}</a>
+                              ))}
+                            </Fragment>
+                          ) : (
+                            <a class="mega-h-link" href={withBase(group.url ?? '/')}>
+                              {group.label}
+                            </a>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <div class="mega-col">
+                        {item.children.map((child) => (
+                          <a href={withBase(child.url ?? '/')}>{child.label}</a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <a class="nav-top" href={withBase(item.url ?? '/')}>
+                {item.label}
+              </a>
+            ),
+          )
+        }
+      </nav>
+
+      <a class="btn btn-solid nav-cta" href={subscribeUrl} rel="noopener">Subscribe</a>
     </header>
 
     <main>
       <slot />
     </main>
 
-    <!-- The live site's bottom band is minimal: just the copyright + cookie
-         line. The social links live only in the "CONTACT US" section above
-         (see ContactUs.astro), so they are intentionally not repeated here. -->
-    <footer style="background: var(--color-bg-dark); color: #cfd2d6;">
-      <div
-        style="max-width: var(--content-width); margin: 0 auto; padding: var(--space-lg); text-align: center;"
-      >
-        <p style="margin: 0; color: var(--color-faint); font-size: 0.85rem;">{settings.footerText}</p>
+    <footer class="site-foot">
+      <div class="wrap foot-in">
+        <div class="foot-brand">
+          <span class="kick" style="color:#fff">Harvard Alumni in Tech</span>
+          <p class="foot-copy">{settings.footerText}</p>
+        </div>
+        <div class="foot-links">
+          <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>
+          {
+            settings.socials.map((s) => (
+              <a href={s.url} rel="noopener">
+                {s.label}
+              </a>
+            ))
+          }
+        </div>
       </div>
     </footer>
 
     <style>
-      .nav-dd summary::-webkit-details-marker {
-        display: none;
+      .util {
+        background: var(--crimson);
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        text-align: center;
+        padding: 6px 16px;
+      }
+
+      .site-nav {
+        position: relative;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 11px 48px;
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        flex: none;
+      }
+      .brand:hover {
+        text-decoration: none;
+      }
+      .brand-shield {
+        display: block;
+        height: 26px;
+        width: auto;
+      }
+      .brand-word {
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        font-size: 16px;
+        white-space: nowrap;
+      }
+
+      .links {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .nav-item {
+        position: relative;
+      }
+      .nav-top {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: none;
+        border: 0;
+        padding: 6px 0;
+        margin: 0;
+        font: inherit;
+        font-weight: 600;
+        color: var(--ink);
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .nav-top:hover {
+        color: var(--crimson);
+        text-decoration: none;
+      }
+      .caret {
+        font-size: 9px;
+        color: var(--ink-3);
+      }
+
+      /* Hover mega-menu panel. */
+      .mega {
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        transform: translateX(-50%) translateY(6px);
+        z-index: 70;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.12s ease, transform 0.12s ease;
+        padding-top: 12px;
+      }
+      .nav-item:hover .mega,
+      .nav-item:focus-within .mega {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+      }
+      .mega-in {
+        display: flex;
+        gap: 28px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-top: 2px solid var(--crimson);
+        border-radius: 4px;
+        box-shadow: 0 18px 40px rgba(30, 26, 27, 0.14);
+        padding: 22px 26px;
+        white-space: nowrap;
+      }
+      .mega-col {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        min-width: 140px;
+      }
+      .mega-h {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--crimson);
+        margin-bottom: 3px;
+      }
+      .mega-col a {
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+      }
+      .mega-col a:hover {
+        color: var(--crimson);
+      }
+      .mega-h-link {
+        font-weight: 700 !important;
+      }
+
+      .nav-cta {
+        flex: none;
+        padding: 10px 18px;
+        font-size: 12px;
+      }
+
+      /* Footer */
+      .site-foot {
+        background: var(--ink);
+        color: #cfcacb;
+      }
+      .foot-in {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        padding: 34px 48px;
+      }
+      .foot-copy {
+        margin: 8px 0 0;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      .foot-links {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .foot-links a {
+        color: #fff;
+        text-decoration: none;
+      }
+      .foot-links a:hover {
+        color: var(--crimson);
+      }
+
+      @media (max-width: 1040px) {
+        .site-nav {
+          flex-wrap: wrap;
+          padding: 16px 24px;
+        }
+        .links {
+          order: 3;
+          width: 100%;
+          flex-wrap: wrap;
+          gap: 18px;
+        }
+        .mega {
+          position: static;
+          transform: none;
+          padding-top: 8px;
+          opacity: 1;
+          visibility: visible;
+        }
+        .mega-in {
+          flex-wrap: wrap;
+          box-shadow: none;
+          white-space: normal;
+        }
+      }
+      @media (max-width: 720px) {
+        .foot-in {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 28px 24px;
+        }
+        .foot-links {
+          flex-wrap: wrap;
+        }
       }
     </style>
   </body>

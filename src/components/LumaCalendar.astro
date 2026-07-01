@@ -1,0 +1,115 @@
+---
+// Luma calendar block for the Events page. Luma is HIT's event platform. Two
+// modes, driven by props:
+//  • embedUrl set  → render the calendar inline as an <iframe> (the true embed).
+//  • embedUrl empty → render a branded card linking out to the public calendar
+//    (calendarUrl) so visitors can browse and subscribe on Luma.
+// Both are real integrations; the card is the honest default until the embed
+// snippet (cal-id) is available. When neither url is set it shows a fallback.
+interface Props {
+  calendarUrl?: string;
+  embedUrl?: string;
+  title?: string;
+  height?: number;
+}
+const {
+  calendarUrl,
+  embedUrl,
+  title = 'Full events calendar',
+  height = 640,
+} = Astro.props as Props;
+---
+
+<section class="luma s-section" id="calendar">
+  <div class="s-inner">
+    <div class="luma-head">
+      <span class="kick">Powered by Luma</span>
+      <h2 class="s-title--plain" style="text-align:left;margin:6px 0 0;">{title}</h2>
+    </div>
+
+    {
+      embedUrl ? (
+        <div class="luma-frame">
+          <iframe
+            src={embedUrl}
+            title="Harvard Alumni in Tech events on Luma"
+            width="100%"
+            height={height}
+            style="border:1px solid var(--line);border-radius:6px;"
+            allowfullscreen
+          />
+        </div>
+      ) : calendarUrl ? (
+        <div class="luma-card">
+          <div class="luma-card-copy">
+            <h3>Browse & subscribe on Luma</h3>
+            <p>
+              Our full calendar of upcoming events lives on Luma. Subscribe to get
+              every new event — across all chapters — straight to your calendar.
+            </p>
+          </div>
+          <a class="btn btn-solid" href={calendarUrl} rel="noopener" target="_blank">
+            View &amp; subscribe on Luma →
+          </a>
+        </div>
+      ) : (
+        <div class="luma-empty">
+          <p>
+            Our live calendar will appear here once connected to Luma. In the
+            meantime, browse upcoming and past events below.
+          </p>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .luma-head {
+    margin-bottom: 24px;
+  }
+  .luma-frame {
+    position: relative;
+    width: 100%;
+  }
+  .luma-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    flex-wrap: wrap;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--crimson);
+    border-radius: 6px;
+    background: var(--paper-2);
+    padding: 32px 34px;
+  }
+  .luma-card-copy h3 {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+  .luma-card-copy p {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 60ch;
+    margin: 0;
+  }
+  .luma-empty {
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    background: var(--paper-2);
+    padding: 40px 32px;
+    text-align: center;
+  }
+  .luma-empty p {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    color: var(--ink-2);
+    max-width: 52ch;
+    margin: 0 auto;
+  }
+</style>

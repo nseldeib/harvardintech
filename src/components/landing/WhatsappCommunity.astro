@@ -1,51 +1,106 @@
 ---
-// WhatsApp community announcement — faithful to harvardintech.com: a light
-// robin's-egg-blue band led by the full-width "JOIN OUR COMMUNITY ON WHATSAPP"
-// banner (no text heading — the banner *is* the heading), followed by the
-// left-aligned launch copy and the two-step apply flow.
-import { withBase } from '../../lib/url';
+// "Communities → WhatsApp" (Atlas): the alumni WhatsApp community, presented in
+// the editorial section idiom — kicker + headline, a serif lede, the two-step
+// apply flow as numbered items, and a crimson "Apply to join" CTA. Replaces the
+// old robin's-egg banner-graphic band.
 interface Props {
   criteriaUrl?: string;
   verifyUrl?: string;
   whatsappUrl?: string;
-  banner?: string;
 }
 const {
   criteriaUrl = 'https://www.harvardintech.com/',
   verifyUrl = 'https://www.harvardintech.com/',
   whatsappUrl = 'https://chat.whatsapp.com/',
-  banner = '/images/sections/whatsapp-banner.jpg',
 } = Astro.props as Props;
 ---
 
-<section class="s-section" style="background: var(--color-bg-blue);">
-  <div class="s-inner" style="max-width: 918px;">
-    <img
-      src={withBase(banner)}
-      alt="Join our community on WhatsApp"
-      style="display: block; width: 100%; height: auto; margin: 0 auto var(--space-lg);"
-    />
-    <p style="font-size: 1rem; color: var(--color-fg); margin: 0 0 var(--space-md);">
-      We're excited to announce the launch of the Harvard in Tech Alumni WhatsApp
-      community!
-    </p>
-    <p style="color: var(--color-fg); margin: 0 0 var(--space-md);">
-      This is a space for Harvard alumni in tech, including founders, operators,
-      and investors, across industries, to connect in real time. You can learn
-      more about the admissions criteria for the Harvard in Tech WhatsApp
-      community <a href={criteriaUrl}>here</a>.
-    </p>
-    <p style="color: var(--color-fg); margin: 0 0 var(--space-sm);">
-      How to apply to join the Harvard in Tech WhatsApp community:
-    </p>
-    <ol style="padding-left: 1.25rem; color: var(--color-fg); margin: 0; display: grid; gap: var(--space-sm);">
-      <li>
-        Fill out <a href={verifyUrl}>this short form</a> (under 2 minutes) to
-        verify your alumni status.
-      </li>
-      <li>
-        Request to join the WhatsApp group using <a href={whatsappUrl}>this link</a>.
-      </li>
-    </ol>
+<section class="sec" id="community" style="background: var(--paper-2);">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Communities</span>
+        <h2>Join our WhatsApp community</h2>
+      </div>
+    </div>
+
+    <div class="wa">
+      <p class="wa-lede">
+        A space for Harvard alumni in tech — founders, operators, and investors,
+        across industries — to connect in real time, anywhere in the world.
+      </p>
+      <ol class="wa-steps">
+        <li>
+          <span class="wa-n">1</span>
+          <span>Fill out <a href={verifyUrl}>this short form</a> (under 2 minutes) to verify your alumni status.</span>
+        </li>
+        <li>
+          <span class="wa-n">2</span>
+          <span>Request to join the WhatsApp group using <a href={whatsappUrl}>this link</a>.</span>
+        </li>
+      </ol>
+      <div class="wa-cta">
+        <a class="btn btn-solid" href={whatsappUrl} rel="noopener">Apply to join</a>
+        <a class="wa-note" href={criteriaUrl}>See the admissions criteria →</a>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .wa {
+    max-width: 720px;
+  }
+  .wa-lede {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0 0 26px;
+  }
+  .wa-steps {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+  .wa-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .wa-n {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--crimson);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wa-cta {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+  .wa-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    text-decoration: none;
+  }
+  .wa-note:hover {
+    text-decoration: underline;
+  }
+</style>

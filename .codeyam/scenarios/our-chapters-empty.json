@@ -1,0 +1,12 @@
+{
+  "name": "Our Chapters - Empty",
+  "id": "d03bb503-1293-4d1b-811c-6ee401988cca",
+  "url": "/isolated-components/OurChapters-Empty",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "OurChapters-Empty",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/OurChapters.astro"
+}

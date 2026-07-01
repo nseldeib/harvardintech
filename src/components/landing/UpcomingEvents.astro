@@ -1,39 +1,88 @@
 ---
-// "UPCOMING EVENTS" — the landing-page section. Renders the `events` content
-// collection as shared EventCards. Accepts a plain array so it works from
-// getCollection() on the homepage and from isolated-component scenarios
-// (empty / sparse / rich / long-title states).
+// "Upcoming events" (Atlas): the landing-page events section in the editorial
+// idiom — a sec-head (kicker + heading), then either the event cards or the
+// empty state. Empty state (production's day-one default) offers the two
+// subscribe paths — the org's Luma calendar (primary) and the mailing list
+// (secondary) — so a visitor with no events yet still has a next action.
 import EventCard from '../EventCard.astro';
 import type { EventLike } from '../../lib/events';
+import { LUMA_CALENDAR_URL } from '../../lib/luma';
 
 interface Props {
   events?: EventLike[];
-  eventbriteUrl?: string;
+  lumaUrl?: string;
+  newsletterUrl?: string;
 }
 const {
   events = [],
-  eventbriteUrl = 'https://www.eventbrite.com/o/harvard-in-tech-17275560304',
+  lumaUrl = LUMA_CALENDAR_URL,
+  newsletterUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb',
 } = Astro.props;
+
+const count = String(events.length).padStart(2, '0');
 ---
 
-<section class="s-section" id="events">
-  <div class="s-inner" style="text-align: center;">
-    <h2 class="s-title s-title--plain">Upcoming Events</h2>
+<section class="sec" id="events">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Calendar</span>
+        <h2>Upcoming events</h2>
+      </div>
+      {events.length > 0 && <span class="kick">{count} scheduled</span>}
+    </div>
+
     {
       events.length === 0 ? (
-        <p style="color: var(--color-muted);">
-          No upcoming events right now — sign up for our mailing list to hear about the next one.
-        </p>
-      ) : (
-        <div style="display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 920px; margin: 0 auto;">
-          {events.map((event) => (
-            <EventCard event={event} variant="upcoming" />
-          ))}
+        <div class="ue-empty">
+          <p>
+            No upcoming events just yet — subscribe to our Luma calendar to be the
+            first to know when the next one is announced.
+          </p>
+          <div class="ue-cta">
+            <a class="btn btn-solid" href={lumaUrl} rel="noopener" target="_blank">
+              Subscribe to our Luma calendar
+            </a>
+            <a class="btn btn-out" href={newsletterUrl} rel="noopener">
+              Subscribe to our newsletter
+            </a>
+          </div>
         </div>
+      ) : (
+        <Fragment>
+          <div class="ue-grid">
+            {events.map((event) => (
+              <EventCard event={event} variant="upcoming" />
+            ))}
+          </div>
+          <div class="ue-cta" style="margin-top: 28px;">
+            <a class="btn btn-solid" href={lumaUrl} rel="noopener" target="_blank">
+              View full calendar on Luma
+            </a>
+          </div>
+        </Fragment>
       )
     }
-    <div style="margin-top: var(--space-lg);">
-      <a class="s-btn" href={eventbriteUrl} rel="noopener">View Upcoming Events</a>
-    </div>
   </div>
 </section>
+
+<style>
+  .ue-empty p {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 56ch;
+    margin: 0 0 24px;
+  }
+  .ue-grid {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  .ue-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+</style>

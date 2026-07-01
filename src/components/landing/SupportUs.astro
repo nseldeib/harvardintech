@@ -1,10 +1,9 @@
 ---
-// "SUPPORT US" — faithful to harvardintech.com: five ways to support, each a
-// large circular flat icon above a label, linking to a pre-filled mailto to the
-// organizer (uses the shared buildMailto helper). No card chrome — just the
-// icon + caption, matching the live Strikingly layout.
+// "Support us" (Atlas): five ways to support, as crimson-edged cards that each
+// open a pre-filled mailto to the organizer (via the shared buildMailto helper).
+// Replaces the old circular-icon row with the editorial card grid used across
+// the redesigned site.
 import { buildMailto } from '../../lib/mailto';
-import { withBase } from '../../lib/url';
 
 interface Props {
   email?: string;
@@ -12,32 +11,28 @@ interface Props {
 const { email = 'ben@harvardintech.com' } = Astro.props;
 
 const options = [
-  { label: 'Sponsor an Event', subject: 'Sponsoring a Harvard in Tech event', icon: 'trophy' },
-  { label: 'Host us in your space', subject: 'Hosting a Harvard in Tech event', icon: 'chat' },
-  { label: 'Share with us job opportunities', subject: 'Sharing a job opportunity', icon: 'briefcase' },
-  { label: 'Speak at a future event', subject: 'Speaking at a Harvard in Tech event', icon: 'quote' },
-  { label: 'Volunteer your time', subject: 'Volunteering with Harvard in Tech', icon: 'star' },
+  { label: 'Sponsor an event', subject: 'Sponsoring a Harvard Alumni in Tech event' },
+  { label: 'Host us in your space', subject: 'Hosting a Harvard Alumni in Tech event' },
+  { label: 'Share job opportunities', subject: 'Sharing a job opportunity' },
+  { label: 'Speak at an event', subject: 'Speaking at a Harvard Alumni in Tech event' },
+  { label: 'Volunteer your time', subject: 'Volunteering with Harvard Alumni in Tech' },
 ];
 ---
 
-<section class="s-section" id="support">
-  <div class="s-inner">
-    <h2 class="s-title">SUPPORT US</h2>
-    <div style="display: grid; gap: var(--space-md); grid-template-columns: repeat(5, 1fr); max-width: 920px; margin: 0 auto;">
+<section class="sec" id="support">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Support the mission</span>
+        <h2>Ways to support</h2>
+      </div>
+    </div>
+    <div class="support-grid">
       {
         options.map((opt) => (
-          <a
-            href={buildMailto({ to: email, subject: opt.subject })}
-            style="display: flex; flex-direction: column; align-items: center; gap: var(--space-md); color: var(--color-fg); font-weight: 400; text-align: center;"
-          >
-            <img
-              src={withBase(`/images/support/${opt.icon}.png`)}
-              alt=""
-              width="151"
-              height="151"
-              style="width: 151px; height: 151px; max-width: 100%;"
-            />
-            <span>{opt.label}</span>
+          <a class="sup" href={buildMailto({ to: email, subject: opt.subject })}>
+            <span class="sup-l">{opt.label}</span>
+            <span class="sup-go">Get in touch →</span>
           </a>
         ))
       }
@@ -46,11 +41,50 @@ const options = [
 </section>
 
 <style>
-  /* On narrow screens the five icons wrap to a responsive grid instead of
-     squeezing into one row. */
-  @media (max-width: 780px) {
-    #support > .s-inner > div {
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+  .support-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .sup {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+    min-height: 120px;
+    background: var(--paper-2);
+    border-left: 3px solid var(--crimson);
+    padding: 20px 18px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .sup:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(30, 26, 27, 0.1);
+  }
+  .sup-l {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .sup-go {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+  }
+  @media (max-width: 900px) {
+    .support-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 520px) {
+    .support-grid {
+      grid-template-columns: 1fr;
     }
   }
 </style>

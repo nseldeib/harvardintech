@@ -51,3 +51,58 @@ public/images/                # hero/section backgrounds, board graphic, event g
    (Source: **GitHub Actions**), then builds and deploys. No manual Settings →
    Pages toggle in the common case; see [`DEPLOY_SETUP.md`](./DEPLOY_SETUP.md)
    for the fallback if the first deploy 404s.
+
+<!-- codeyam:run-and-edit:start -->
+## Develop this project with codeyam-editor
+
+This project is built with [codeyam-editor](https://codeyam.com) — code and runnable data scenarios are authored side by side against a live preview.
+
+```bash
+# Launch the editor (split-screen terminal + live preview)
+codeyam-editor editor
+
+# Run the app
+npm run dev
+
+# Run the tests
+npx vitest run
+```
+<!-- codeyam:run-and-edit:end -->
+
+<!-- codeyam:scenario-gallery:start -->
+## Scenario gallery
+
+States captured as runnable scenarios with codeyam-editor:
+
+### Admin Dashboard - Empty
+
+<img src=".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png" alt="Admin Dashboard - Empty" width="280">
+
+### Admin Dashboard - Populated
+
+<img src=".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png" alt="Admin Dashboard - Populated" width="280">
+
+### Blog Post - Welcome
+
+<img src=".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png" alt="Blog Post - Welcome" width="280">
+
+### Chapter Route - New York City
+
+<img src=".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png" alt="Chapter Route - New York City" width="280">
+
+### Events Route - Upcoming and Past
+
+<img src=".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png" alt="Events Route - Upcoming and Past" width="280">
+
+### Harvard in Tech - Board of Directors
+
+<img src=".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png" alt="Harvard in Tech - Board of Directors" width="280">
+
+### Harvard in Tech - Landing Page
+
+<img src=".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png" alt="Harvard in Tech - Landing Page" width="280">
+
+### Harvard in Tech - No Upcoming Events
+
+<img src=".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png" alt="Harvard in Tech - No Upcoming Events" width="280">
+<!-- codeyam:scenario-gallery:end -->

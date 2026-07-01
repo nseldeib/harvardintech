@@ -8,67 +8,40 @@
   ],
   "mocks": {},
   "seed": {
-    "events": [
-      {
-        "body": "Join hundreds of alumni technologists for keynotes and breakout sessions on AI, climate, fintech, and the future of the startup ecosystem.",
-        "date": "2026-09-24",
-        "description": "Our flagship annual gathering of Harvard founders, operators, and investors for a day of talks, panels, and networking across the technology landscape.",
-        "link": "https://www.harvardintech.com/events/summit-2026",
-        "location": "New York, NY",
-        "slug": "harvard-in-tech-summit-2026",
-        "title": "Harvard in Tech Summit 2026"
-      },
-      {
-        "date": "2026-07-15",
-        "description": "An evening connecting Harvard alumni founders with active investors across the Bay Area.",
-        "link": "https://www.harvardintech.com/events/sf-mixer",
-        "location": "San Francisco, CA",
-        "slug": "founders-investors-mixer-sf",
-        "title": "Founders & Investors Mixer — San Francisco"
-      },
-      {
-        "date": "2026-08-06",
-        "description": "A conversation with Harvard alumnae leading engineering, product, and venture teams.",
-        "link": "https://www.harvardintech.com/events/women-in-tech-panel",
-        "location": "Cambridge, MA",
-        "slug": "women-in-tech-panel",
-        "title": "Women in Tech Leadership Panel"
-      }
-    ],
     "team": [
       {
         "name": "Ben Wei",
         "order": 1,
         "photo": "/images/team/ben-wei.png",
-        "role": "Founder · Harvard C'08",
+        "role": "Founder \u00b7 Harvard C'08",
         "slug": "ben-wei"
       },
       {
         "name": "Peter Boyce",
         "order": 2,
         "photo": "/images/team/peter-boyce.png",
-        "role": "Founder · Harvard C'13",
+        "role": "Founder \u00b7 Harvard C'13",
         "slug": "peter-boyce"
       },
       {
         "name": "Krysia Lenzo",
         "order": 3,
         "photo": "/images/team/krysia-lenzo.png",
-        "role": "Executive Director · Harvard C'12",
+        "role": "Executive Director \u00b7 Harvard C'12",
         "slug": "krysia-lenzo"
       },
       {
         "name": "Jessica Li",
         "order": 4,
         "photo": "/images/team/jessica-li.png",
-        "role": "Director of Operations · Harvard C'19",
+        "role": "Director of Operations \u00b7 Harvard C'19",
         "slug": "jessica-li"
       },
       {
         "name": "Nadia Eldeib",
         "order": 5,
         "photo": "/images/team/nadia-eldeib.png",
-        "role": "Director of Growth · Harvard C'13",
+        "role": "Director of Growth \u00b7 Harvard C'13",
         "slug": "nadia-eldeib"
       }
     ]

@@ -1,41 +1,89 @@
 ---
-// "GET INVOLVED" — faithful to harvardintech.com: a full-bleed background photo
-// with a dark overlay and light text, the volunteer-run message, and a
-// Volunteer button. Background rendered as an <img> for proxy-safe loading.
-import { withBase } from '../../lib/url';
+// "Get involved" (Atlas ink band): the "bring it to your city" call to action.
+// A dark editorial band — kicker, headline, serif lede, and two CTAs (volunteer
+// or start a chapter) — sitting between the light board grid and the crimson
+// giving band for a light → dark → crimson rhythm.
+import { buildMailto } from '../../lib/mailto';
+
 interface Props {
   contactUrl?: string;
-  image?: string;
+  email?: string;
 }
 const {
   contactUrl = 'https://hi.switchy.io/wEYK',
-  image = '/images/bg/get-involved-bg.jpg',
+  email = 'ben@harvardintech.com',
 } = Astro.props;
+
+const startChapterHref = buildMailto({ to: email, subject: 'Starting a Harvard Alumni in Tech chapter' });
 ---
 
-<section style="position: relative; overflow: hidden;" id="get-involved" data-parallax-root>
-  <img
-    src={withBase(image)}
-    alt=""
-    data-parallax
-    style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;"
-  />
-  <div style="position: absolute; inset: 0; background: rgba(20,24,33,0.62); z-index: 1;"></div>
-  <div class="s-section" style="position: relative; z-index: 2;">
-    <div class="s-narrow" style="text-align: center; color: #fff;">
-      <h2 class="s-title" style="color: #fff;">GET INVOLVED</h2>
-      <p style="font-size: 1.1rem; color: rgba(255,255,255,0.92); margin: 0 0 var(--space-lg);">
-        We're a volunteer-run organization focused on building a community that
-        supports Harvard hi-tech entrepreneurs and technologists. If you're
-        interested in helping support our organization, either as a speaker,
-        host, sponsor, or volunteer, please don't hesitate to contact us.
+<section class="getinv" id="get-involved">
+  <div class="wrap getinv-in">
+    <div>
+      <span class="kick" style="color:#fff">Get involved</span>
+      <h2>Bring Harvard Alumni in Tech to your city.</h2>
+      <p>
+        We're a volunteer-run community. Whether you want to speak, host, sponsor,
+        or start a chapter where you live — there's a place for you to help the
+        network grow.
       </p>
-      <a class="s-btn" href={contactUrl} rel="noopener">Volunteer</a>
+    </div>
+    <div class="getinv-actions">
+      <a class="btn btn-solid" href={contactUrl} rel="noopener">Volunteer</a>
+      <a class="btn btn-out on-dark" href={startChapterHref}>Start a chapter</a>
     </div>
   </div>
 </section>
 
-<script>
-  import { initParallax } from '../../lib/parallax';
-  initParallax();
-</script>
+<style>
+  .getinv {
+    background: var(--ink);
+    color: #fff;
+    border-bottom: 1px solid var(--line);
+  }
+  .getinv-in {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 40px;
+    align-items: center;
+    padding: 72px 48px;
+  }
+  .getinv h2 {
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 8px 0 12px;
+    max-width: 18ch;
+  }
+  .getinv p {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 54ch;
+    margin: 0;
+  }
+  .getinv-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .getinv .btn-solid {
+    background: #fff;
+    color: var(--ink);
+  }
+  .getinv .btn-solid:hover {
+    background: rgba(255, 255, 255, 0.9);
+  }
+  @media (max-width: 820px) {
+    .getinv-in {
+      grid-template-columns: 1fr;
+      padding: 56px 24px;
+    }
+    .getinv-actions {
+      justify-content: flex-start;
+    }
+  }
+</style>

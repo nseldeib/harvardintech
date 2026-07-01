@@ -1,0 +1,12 @@
+{
+  "name": "Hero Carousel",
+  "id": "574f5af4-0c9f-4e4f-89b8-aaa1c391d574",
+  "url": "/isolated-components/HeroCarousel",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "HeroCarousel",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/HeroCarousel.astro"
+}

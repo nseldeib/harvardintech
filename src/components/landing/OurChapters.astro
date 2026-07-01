@@ -1,0 +1,123 @@
+---
+// "Our chapters" (Atlas): a five-across row of photo cards with a crimson
+// gradient wash, each linking to its chapter page. Renders the `chapters`
+// content collection passed from the homepage; an empty list shows a quiet
+// prompt (production starts empty). Photos render as <img> for proxy-safe
+// loading, matching the other sections.
+import { withBase } from '../../lib/url';
+
+interface ChapterLike {
+  slug: string;
+  city: string;
+  blurb?: string;
+  heroImage?: string;
+  order?: number;
+}
+interface Props {
+  chapters?: ChapterLike[];
+}
+const { chapters = [] } = Astro.props as Props;
+const sorted = [...chapters].sort(
+  (a, b) => (a.order ?? 99) - (b.order ?? 99) || a.city.localeCompare(b.city),
+);
+const count = String(sorted.length).padStart(2, '0');
+---
+
+<section class="sec" id="chapters">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">A global community</span>
+        <h2>Our chapters</h2>
+      </div>
+      {sorted.length > 0 && <span class="kick">{count} cities</span>}
+    </div>
+
+    {
+      sorted.length === 0 ? (
+        <p style="color: var(--color-muted); font-family: var(--font-serif); font-size: 18px;">
+          Chapters are coming soon — sign up for the mailing list to hear when one launches near you.
+        </p>
+      ) : (
+        <div class="chap">
+          {sorted.map((c) => (
+            <a class="c" href={withBase(`/chapters/${c.slug}`)}>
+              {c.heroImage && <img class="pho" src={withBase(c.heroImage)} alt="" />}
+              <div class="c-meta">
+                <span class="cn">{c.city}</span>
+                {c.blurb && <span class="cb">{c.blurb}</span>}
+              </div>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .chap {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+  .c {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+    border-radius: 4px;
+    color: #fff;
+    display: block;
+    background: var(--ink);
+    text-decoration: none;
+  }
+  .c:hover {
+    text-decoration: none;
+  }
+  .pho {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .c::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 38%, rgba(124, 20, 36, 0.55), rgba(20, 16, 17, 0.9));
+  }
+  .c-meta {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .cn {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: #fff;
+  }
+  .cb {
+    font-family: var(--font-serif);
+    font-size: 13px;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  @media (max-width: 900px) {
+    .chap {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 520px) {
+    .chap {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

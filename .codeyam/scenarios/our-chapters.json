@@ -1,0 +1,12 @@
+{
+  "name": "Our Chapters",
+  "id": "c2ca7434-acb5-4bed-bdfa-968d60190fe7",
+  "url": "/isolated-components/OurChapters",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "OurChapters",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/OurChapters.astro"
+}

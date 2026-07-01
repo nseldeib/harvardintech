@@ -8,6 +8,7 @@ const SOCIAL_ICONS: Record<string, string> = {
   twitter: '/images/social/twitter.png',
   facebook: '/images/social/facebook.png',
   email: '/images/social/email.jpg',
+  linkedin: '/images/social/linkedin.svg',
 };
 
 export function socialIconSrc(icon: string | null | undefined): string | null {

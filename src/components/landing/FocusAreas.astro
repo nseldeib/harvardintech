@@ -1,0 +1,101 @@
+---
+// "Focus areas" (Atlas): the site's main program categories as visual entry
+// points — Programs, Chapters, Communities, Content Hub, Membership — each a
+// crimson-edged card linking into that area. Categories are a prop so the CMS
+// can reorder/relabel them; defaults mirror the approved taxonomy.
+import { withBase } from '../../lib/url';
+
+interface Area {
+  label: string;
+  blurb: string;
+  url: string;
+}
+interface Props {
+  areas?: Area[];
+}
+const {
+  areas = [
+    { label: 'Programs', blurb: 'Events, webinars, and podcasts across the year.', url: '/events' },
+    { label: 'Chapters', blurb: 'Five city communities — and growing.', url: '/#chapters' },
+    { label: 'Communities', blurb: 'Our alumni WhatsApp network.', url: '/#community' },
+    { label: 'Content Hub', blurb: 'Our blog, Medium, and LinkedIn.', url: '/#content' },
+    { label: 'Membership', blurb: 'About, get involved, and support the mission.', url: '/#get-involved' },
+  ],
+} = Astro.props as Props;
+---
+
+<section class="sec" id="focus">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Explore</span>
+        <h2>Focus areas</h2>
+      </div>
+    </div>
+
+    <div class="focus-grid">
+      {
+        areas.map((a) => (
+          <a class="fa" href={a.url.startsWith('http') ? a.url : withBase(a.url)}>
+            <span class="fa-l">{a.label}</span>
+            <span class="fa-b">{a.blurb}</span>
+            <span class="fa-go">Explore →</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .fa {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--paper-2);
+    border-left: 3px solid var(--crimson);
+    padding: 22px 20px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .fa:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(30, 26, 27, 0.1);
+  }
+  .fa-l {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .fa-b {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ink-2);
+    flex: 1;
+  }
+  .fa-go {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+  }
+  @media (max-width: 900px) {
+    .focus-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 520px) {
+    .focus-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

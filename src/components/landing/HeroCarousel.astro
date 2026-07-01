@@ -1,0 +1,250 @@
+---
+// Sliding hero banner (Atlas "intro"): a full-bleed dark stage with a crimson
+// scrim over a rotating set of slides, each carrying a kicker, headline, serif
+// lede, and up to two button-link CTAs. Implemented as a horizontal track
+// (translateX) rather than stacked/opacity slides so exactly one slide is ever
+// visible — no overlap even before the client script boots. Auto-advances; dots
+// let the visitor drive it. Backgrounds render as <img> (not CSS bg) so they
+// survive the preview reverse-proxy / base-path rewrite.
+//
+// Slides are a prop so a scenario can seed "one slide" vs "three slides" and
+// the CMS can edit copy later; the defaults reproduce the approved Atlas board.
+import { withBase } from '../../lib/url';
+
+interface Cta {
+  label: string;
+  url: string;
+  variant?: 'solid' | 'out';
+}
+interface Slide {
+  image: string;
+  kicker: string;
+  title: string;
+  lede: string;
+  ctas: Cta[];
+}
+interface Props {
+  slides?: Slide[];
+}
+
+const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
+
+const {
+  slides = [
+    {
+      image: '/images/bg/hero-bg.jpg',
+      kicker: 'The Official Harvard Alumni Group for Technology',
+      title: 'Where Harvard alumni build the future of technology.',
+      lede: 'Furthering innovation and connecting alumni technologists with the resources, networks, and community to do their best work.',
+      ctas: [
+        { label: 'Join the mailing list', url: subscribeUrl, variant: 'solid' },
+        { label: 'Join WhatsApp', url: '/#community', variant: 'out' },
+      ],
+    },
+    {
+      image: '/images/bg/get-involved-bg.jpg',
+      kicker: 'Global community · local presence',
+      title: 'A global community with a home in your city.',
+      lede: 'Connect worldwide through our alumni WhatsApp network — and in person through chapters and events in Boston & Cambridge, New York, London, DC & DMV, and Seattle.',
+      ctas: [
+        { label: 'See in-person events', url: '/events', variant: 'solid' },
+        { label: 'Explore chapters', url: '/#chapters', variant: 'out' },
+      ],
+    },
+  ],
+} = Astro.props as Props;
+---
+
+<section class="intro" id="about" data-hero-carousel>
+  <div class="track" data-track>
+    {
+      slides.map((slide) => (
+        <div class="slide">
+          <img class="pho" src={withBase(slide.image)} alt="" />
+          <div class="scrim" />
+          <div class="intro-in">
+            <span class="kick" style="color:#fff">{slide.kicker}</span>
+            <h1>{slide.title}</h1>
+            <p class="lede">{slide.lede}</p>
+            <div class="actions">
+              {slide.ctas.map((cta) => (
+                <a
+                  class={`btn ${cta.variant === 'out' ? 'btn-out on-dark' : 'btn-solid'}`}
+                  href={cta.url.startsWith('http') ? cta.url : withBase(cta.url)}
+                  rel="noopener"
+                >
+                  {cta.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    slides.length > 1 && (
+      <div class="dots" data-dots>
+        {slides.map((_, i) => (
+          <button
+            class="dot"
+            type="button"
+            data-dot
+            data-active={i === 0 ? 'true' : 'false'}
+            aria-label={`Show slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .intro {
+    position: relative;
+    background: var(--ink);
+    color: #fff;
+    overflow: hidden;
+  }
+  .track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.6s ease;
+    will-change: transform;
+  }
+  .slide {
+    position: relative;
+    flex: 0 0 100%;
+    min-width: 100%;
+    min-height: clamp(460px, 66vh, 640px);
+    overflow: hidden;
+  }
+  .pho {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.55;
+  }
+  .scrim {
+    position: absolute;
+    inset: 0;
+    /* Lighter crimson on the left, fading to near-transparent on the right, so
+       the photo reads through while the left-aligned text stays legible. */
+    background: linear-gradient(90deg, rgba(124, 20, 36, 0.66) 0%, rgba(124, 20, 36, 0.34) 45%, rgba(30, 26, 27, 0.22) 100%);
+  }
+  /* On the crimson hero, the primary CTA flips to white-on-crimson so it pops
+     against the red scrim instead of blending into it. */
+  .intro .btn-solid {
+    background: #fff;
+    color: var(--crimson);
+  }
+  .intro .btn-solid:hover {
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .intro-in {
+    position: relative;
+    z-index: 2;
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 96px 48px;
+  }
+  .intro h1 {
+    font-size: clamp(40px, 6.4vw, 82px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #fff;
+    max-width: 18ch;
+    margin: 18px 0 22px;
+  }
+  .lede {
+    font-family: var(--font-serif);
+    font-size: 21px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 46ch;
+    margin: 0 0 30px;
+  }
+  .actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .dots {
+    position: absolute;
+    z-index: 3;
+    left: 48px;
+    bottom: 26px;
+    display: flex;
+    gap: 10px;
+  }
+  .dot {
+    width: 30px;
+    height: 4px;
+    border: 0;
+    padding: 0;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .dot[data-active='true'] {
+    background: #fff;
+  }
+
+  @media (max-width: 640px) {
+    .intro-in {
+      padding: 64px 24px;
+    }
+    .lede {
+      font-size: 18px;
+    }
+    .dots {
+      left: 24px;
+    }
+  }
+</style>
+
+<script>
+  // Dependency-free track slider: translate the flex track, sync dots, pause on
+  // hover, jump on dot click. Guards on a single slide (no rotation).
+  function initHeroCarousel() {
+    document.querySelectorAll<HTMLElement>('[data-hero-carousel]').forEach((root) => {
+      const track = root.querySelector<HTMLElement>('[data-track]');
+      const dots = Array.from(root.querySelectorAll<HTMLElement>('[data-dot]'));
+      const count = track ? track.children.length : 0;
+      if (!track || count < 2) return;
+      let idx = 0;
+      let timer: number | undefined;
+
+      const show = (n: number) => {
+        idx = (n + count) % count;
+        track.style.transform = `translateX(-${idx * 100}%)`;
+        dots.forEach((d, i) => d.setAttribute('data-active', String(i === idx)));
+      };
+      const start = () => {
+        stop();
+        timer = window.setInterval(() => show(idx + 1), 6000);
+      };
+      const stop = () => {
+        if (timer) window.clearInterval(timer);
+      };
+
+      dots.forEach((d, i) =>
+        d.addEventListener('click', () => {
+          show(i);
+          start();
+        }),
+      );
+      root.addEventListener('mouseenter', stop);
+      root.addEventListener('mouseleave', start);
+      show(0);
+      start();
+    });
+  }
+  initHeroCarousel();
+  document.addEventListener('astro:page-load', initHeroCarousel);
+</script>

@@ -1,0 +1,12 @@
+{
+  "name": "Luma Calendar",
+  "id": "8c47a00c-f472-4d84-a83c-8a33b077591d",
+  "url": "/isolated-components/LumaCalendar",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "LumaCalendar",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/LumaCalendar.astro"
+}

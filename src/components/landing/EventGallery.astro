@@ -16,9 +16,14 @@ const defaults = Array.from(
 const { images = defaults } = Astro.props;
 ---
 
-<section class="s-section" id="gallery">
-  <div class="s-inner">
-    <h2 class="s-title">Photos from Latest Harvard in Tech Events</h2>
+<section class="sec" id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Community</span>
+        <h2>From our events</h2>
+      </div>
+    </div>
     <div class="gallery-grid">
       {
         images.map((src, i) => (

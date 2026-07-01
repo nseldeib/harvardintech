@@ -1,0 +1,12 @@
+{
+  "name": "Giving Campaign",
+  "id": "f43438b9-456d-4fe5-b00b-ba8769eb9e3a",
+  "url": "/isolated-components/GivingCampaign",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GivingCampaign",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/GivingCampaign.astro"
+}

@@ -1,17 +1,25 @@
 ---
-// Harvard in Tech homepage — a faithful reproduction of harvardintech.com,
-// composed from per-section components in the same order as the live site.
-// Content comes from the editable settings singleton and the `events` / `team`
-// content collections (seeded with site data; editable later via the CMS).
+// Harvard Alumni in Tech homepage — Atlas direction. Composed from per-section
+// components in the order the board approved: a sliding hero, a stat strip,
+// then the editorial section stack (events, chapters, focus areas, content hub,
+// board), the "bring it to your city" CTA, the giving campaign, and the
+// community / support / gallery / contact bands. Content comes from the
+// editable settings singleton and the `events` / `team` / `chapters` / `blog`
+// content collections; production starts empty and fills in via the CMS.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { settings } from '../lib/site';
 import { sortBoardMembers, filterActiveBoardMembers } from '../lib/team';
-import Hero from '../components/landing/Hero.astro';
-import WhatsappCommunity from '../components/landing/WhatsappCommunity.astro';
+import HeroCarousel from '../components/landing/HeroCarousel.astro';
+import Stats from '../components/landing/Stats.astro';
 import UpcomingEvents from '../components/landing/UpcomingEvents.astro';
-import GetInvolved from '../components/landing/GetInvolved.astro';
+import OurChapters from '../components/landing/OurChapters.astro';
+import FocusAreas from '../components/landing/FocusAreas.astro';
+import ContentHub from '../components/landing/ContentHub.astro';
 import BoardOfDirectors from '../components/landing/BoardOfDirectors.astro';
+import GetInvolved from '../components/landing/GetInvolved.astro';
+import GivingCampaign from '../components/landing/GivingCampaign.astro';
+import WhatsappCommunity from '../components/landing/WhatsappCommunity.astro';
 import SupportUs from '../components/landing/SupportUs.astro';
 import EventGallery from '../components/landing/EventGallery.astro';
 import ContactUs from '../components/landing/ContactUs.astro';
@@ -19,6 +27,14 @@ import ContactUs from '../components/landing/ContactUs.astro';
 const events = (await getCollection('events'))
   .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())
   .map((e) => ({ slug: e.id, ...e.data }));
+
+// Regional chapters for the "Our chapters" section, sorted in-component by `order`.
+const chapters = (await getCollection('chapters')).map((c) => ({ slug: c.id, ...c.data }));
+
+// Latest blog posts for the Content Hub, newest first.
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .map((p) => ({ slug: p.id, ...p.data }));
 
 // Board of Directors — editable via the CMS `team` collection. Members toggled
 // off (`active: false`) are filtered out, then sorted by the `order` field so
@@ -32,11 +48,16 @@ const board = sortBoardMembers(
 ---
 
 <BaseLayout title={undefined} description={settings.description}>
-  <Hero />
-  <WhatsappCommunity />
+  <HeroCarousel />
+  <Stats />
   <UpcomingEvents events={events} />
-  <GetInvolved />
+  <OurChapters chapters={chapters} />
+  <FocusAreas />
+  <ContentHub posts={posts} />
   <BoardOfDirectors members={board} />
+  <GetInvolved />
+  <GivingCampaign email={settings.contactEmail} />
+  <WhatsappCommunity />
   <SupportUs email={settings.contactEmail} />
   <EventGallery />
   <ContactUs socials={settings.socials} email={settings.contactEmail} />

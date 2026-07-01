@@ -1,0 +1,72 @@
+---
+// Stat strip (Atlas): a hairline-ruled band of big crimson figures with mono
+// labels, sitting directly under the hero. Values are a prop (CMS-editable /
+// scenario-seedable); defaults reproduce the approved Atlas board.
+interface Stat {
+  value: string;
+  label: string;
+}
+interface Props {
+  stats?: Stat[];
+}
+const {
+  stats = [
+    { value: '1,000+', label: 'Alumni technologists' },
+    { value: '5', label: 'Global chapters' },
+    { value: '40+', label: 'Events hosted' },
+    { value: 'Est. 2013', label: 'Harvard Alumni in Tech' },
+  ],
+} = Astro.props as Props;
+---
+
+<section class="stats" id="stats" style={`--n:${stats.length}`}>
+  {
+    stats.map((s) => (
+      <div class="stat">
+        <div class="v">{s.value}</div>
+        <div class="l">{s.label}</div>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(var(--n, 4), 1fr);
+    border-bottom: 1px solid var(--line);
+  }
+  .stat {
+    padding: 36px 48px;
+    border-left: 1px solid var(--line);
+  }
+  .stat:first-child {
+    border-left: none;
+  }
+  .v {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--crimson);
+    line-height: 1;
+  }
+  .l {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-top: 8px;
+  }
+  @media (max-width: 760px) {
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stat:nth-child(odd) {
+      border-left: none;
+    }
+    .stat:nth-child(n + 3) {
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "name": "Content Hub - Empty",
+  "id": "9fb35b34-a50f-44d6-88f9-b1ebf5ac281a",
+  "url": "/isolated-components/ContentHub-Empty",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ContentHub-Empty",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/ContentHub.astro"
+}

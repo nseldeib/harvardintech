@@ -17,6 +17,11 @@ describe('socialIconSrc', () => {
     expect(socialIconSrc('email')).toBe('/images/social/email.jpg');
   });
 
+  // LinkedIn resolves to its self-hosted crimson glyph (added in the Atlas revamp).
+  it('maps linkedin to its self-hosted asset', () => {
+    expect(socialIconSrc('linkedin')).toBe('/images/social/linkedin.svg');
+  });
+
   // Lookup is case-insensitive so data-layer casing variations still resolve.
   it('resolves regardless of icon casing', () => {
     expect(socialIconSrc('Twitter')).toBe('/images/social/twitter.png');
@@ -25,7 +30,7 @@ describe('socialIconSrc', () => {
 
   // An unknown platform returns null so the caller degrades to label-only.
   it('returns null for an unknown icon', () => {
-    expect(socialIconSrc('linkedin')).toBeNull();
+    expect(socialIconSrc('mastodon')).toBeNull();
   });
 
   // A missing icon value returns null rather than throwing or guessing.

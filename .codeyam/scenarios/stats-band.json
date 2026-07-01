@@ -1,0 +1,12 @@
+{
+  "name": "Stats Band",
+  "id": "8ad8150f-e5d5-4749-ace2-925f357fbd3e",
+  "url": "/isolated-components/Stats",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "Stats",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/Stats.astro"
+}

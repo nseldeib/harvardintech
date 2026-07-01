@@ -1,0 +1,12 @@
+{
+  "name": "Focus Areas",
+  "id": "4de0ffab-9954-4e3d-9694-906d2362d817",
+  "url": "/isolated-components/FocusAreas",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "FocusAreas",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/FocusAreas.astro"
+}

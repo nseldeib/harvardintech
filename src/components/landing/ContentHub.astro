@@ -1,0 +1,176 @@
+---
+// "Content hub" (Atlas): the org's publishing channels — Blog, Medium,
+// Substack, LinkedIn — as linked cards, plus an optional "latest from the blog"
+// list surfaced from the `blog` collection. Channels are a prop (CMS-editable);
+// defaults mirror the approved taxonomy. External links open the channel; the
+// Blog card stays on-site.
+import { withBase } from '../../lib/url';
+import { formatEventDate } from '../../lib/events';
+
+interface Channel {
+  label: string;
+  blurb: string;
+  url: string;
+  external?: boolean;
+}
+interface PostLike {
+  slug: string;
+  title: string;
+  date: Date | string;
+  summary?: string;
+}
+interface Props {
+  channels?: Channel[];
+  posts?: PostLike[];
+}
+const {
+  channels = [
+    { label: 'Blog', blurb: 'Essays and recaps from the community.', url: '/blog/welcome' },
+    { label: 'Medium', blurb: 'Longform writing from our members.', url: 'https://medium.com/harvard-in-tech', external: true },
+    { label: 'LinkedIn', blurb: 'Follow us for announcements and updates.', url: 'https://www.linkedin.com/company/harvardintech/', external: true },
+    { label: 'Newsletter', blurb: 'Our LinkedIn newsletter, in your feed.', url: 'https://www.linkedin.com/newsletters/harvard-in-tech-7056638759055880192/', external: true },
+  ],
+  posts = [],
+} = Astro.props as Props;
+---
+
+<section class="sec" id="content" style="background: var(--paper-2);">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Read, watch, listen</span>
+        <h2>Content hub</h2>
+      </div>
+    </div>
+
+    <div class="ch-grid">
+      {
+        channels.map((c) => (
+          <a
+            class="ch"
+            href={c.external ? c.url : withBase(c.url)}
+            rel={c.external ? 'noopener' : undefined}
+          >
+            <span class="ch-l">{c.label}</span>
+            <span class="ch-b">{c.blurb}</span>
+            <span class="ch-go">{c.external ? 'Visit →' : 'Read →'}</span>
+          </a>
+        ))
+      }
+    </div>
+
+    {
+      posts.length > 0 && (
+        <div class="latest">
+          <span class="kick">Latest from the blog</span>
+          <div class="posts">
+            {posts.slice(0, 3).map((p) => (
+              <a class="post" href={withBase(`/blog/${p.slug}`)}>
+                <span class="post-d">{formatEventDate(p.date)}</span>
+                <span class="post-t">{p.title}</span>
+                {p.summary && <span class="post-s">{p.summary}</span>}
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .ch-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .ch {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--crimson);
+    padding: 22px 20px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .ch:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(30, 26, 27, 0.1);
+  }
+  .ch-l {
+    font-size: 17px;
+    font-weight: 800;
+  }
+  .ch-b {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--ink-2);
+    flex: 1;
+  }
+  .ch-go {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+  }
+
+  .latest {
+    margin-top: 44px;
+  }
+  .posts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 16px;
+  }
+  .post {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 16px;
+    border-top: 2px solid var(--crimson);
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .post:hover {
+    text-decoration: none;
+  }
+  .post:hover .post-t {
+    color: var(--crimson);
+  }
+  .post-d {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .post-t {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .post-s {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+  @media (max-width: 900px) {
+    .ch-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .posts {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .ch-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

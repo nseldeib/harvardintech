@@ -1,0 +1,735 @@
+{
+  "timestamp": "2026-07-01T20:42:48Z",
+  "title": "Homepage & Events revamp (Atlas)",
+  "type": "feature",
+  "userRequest": "# Homepage & Events Revamp — Atlas Direction\n\nIterating on the Harvard in Tech site from HIT-team feedback. Adopt the **Atlas (01)** design and expand the homepage + Events page. *(Editorial (03) was your runner-up.)*\n\n## Design direction — Atlas re-skin (the biggest lift)\nThe implemented site currently uses the **teal Strikingly \"persona\" theme** (a faithful repro of the *original* harvardintech.com: `#0ca5a5` teal, Roboto). Atlas is a different system — **Harvard crimson editorial**: `#A41034` crimson + ink/paper palette, Helvetica Neue + Times serif + JetBrains Mono. Adopting it re-skins `tokens.css`, `BaseLayout`, and every section.\n\n## Homepage (`src/pages/index.astro`) — target structure\n1. **Menu** — full mega-menu from your doc: **Programs** (All Events · Webinars · Podcasts) · **Chapters** (Boston & Cambridge · NYC · London · DC & DMV · Seattle) · **Communities** (WhatsApp) · **Content Hub** (Blog · Medium · Substack · LinkedIn) · **Membership** (About→Mission/Board · Get Involved→Volunteer · Support→Donate/Sponsorship). *(Header currently renders only single-level dropdowns → needs a grouped mega-menu rework.)*\n2. **Sliding Hero banner** — carousel with button-link CTAs (replaces the static hero).\n3. **Stats** — new band (members · chapters · events · cities); values editable via settings.\n4. **Upcoming Events** — existing, re-skinned.\n5. **Our Chapters** — new landing section surfacing the 5 chapters.\n6. **Focus Areas** — new; cards for the main program categories (Programs, Chapters, Communities, Content Hub, Membership).\n7. **Content Hub** — new; Blog · Medium · Substack · LinkedIn.\n8. **Board of Directors** — existing, re-skinned.\n9. **Bring HIT to your city** — existing `GetInvolved` section; already has a **Volunteer** button (keep + re-skin).\n10. **Giving Campaign** — new section (from doc).\n11. **Footer** — re-skin + add **LinkedIn** (no LinkedIn icon exists yet → add asset + `socialIcon` mapping).\n12. **Logo** — swap in your new logo files *(pending — I still need those files)*.\n\n## Events page (`src/pages/events.astro` / `EventsPage.astro`)\nRework toward the HBSWA reference (structured events listing) + **Luma integration** (calendar embed, reusing the existing `EmbedForm` iframe pattern).\n\n## Content change\nReplace the current chapters (Japan / SF / LA / NYC) with **Boston & Cambridge · NYC · London · DC & DMV · Seattle** — each with Board/Committee members + Events. Updates chapter markdown, `nav.json`, and chapter scenarios/routes.\n\n## Scenarios (data states — production DB starts empty)\n- **Empty** (day-one default): hero + section shells with graceful empty states.\n- **Sparse**: a couple of events, a few chapters.\n- **Rich**: full events, all 5 chapters, full board, content-hub items — exercises carousel, grids, stats.\n- **Edge cases**: long event titles, missing images, a chapter with no upcoming events; Events page with the Luma embed present.\n- Re-capture the existing `/` and `/events` app scenarios + ~10 landing component scenarios after the re-skin.\n\n## Explicitly deferred to later iterations\nLogin / SSO / Harvard Key · Google Analytics · SEO/AEO · site-wide Custom HTML/iFrame blocks. *(The Events Luma embed is included here.)*\n\n**Mode:** UI (heavy UI work).",
+  "description": "Redesigned the Harvard in Tech site to the board-approved Atlas direction: a Harvard-crimson editorial system with a utility bar + taxonomy mega-menu (Programs / Chapters / Communities / Content Hub / Membership), a sliding hero carousel, a stats band, and an editorial section stack (Our Chapters, Focus Areas, Content Hub, Board of Directors, Get Involved, Giving Campaign, WhatsApp, Support, Gallery, Contact) plus an Events page that embeds/links the live Luma calendar. Replaced the five chapters with Boston & Cambridge / NYC / London / DC & DMV / Seattle, added a LinkedIn social + icon, and switched to real-data-only null states (removed placeholder events; the empty Upcoming Events state offers Subscribe-to-Luma and newsletter CTAs). Corrected accuracy (Est. 2013, real Content Hub links, removed the fabricated fundraising meter). Reused the tested initials/formatEventDate helpers, registered 9 new component scenarios, and recaptured all touched sections/pages to the new styling.",
+  "modifiedFiles": [
+    {
+      "path": ".claude/hooks/_step_metadata.py",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/hooks/editor-pretool-hook.py",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/hooks/editor-step-hook.py",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-audit/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-design/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-edit-plan/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-editor/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-explore/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-new-app/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-onboard/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-plan/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-prototype/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-see-app/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-see-recent-change/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-slice/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/review-session/SKILL.md",
+      "status": "deleted"
+    },
+    {
+      "path": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/review-session/scripts/extract-session.mjs",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/review-session/scripts/find-last-session.mjs",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/.last-reconcile.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/cache/step-metadata.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/capture.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/reconciliation-log.jsonl",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-handlers.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-metrics.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-playwright.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-japan-with-gallery.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-los-angeles-fallback-email.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-san-francisco.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-board-with-members-hidden.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-landing-page.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admingateprompt-initial-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-initials-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-japan-with-gallery--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-japan-with-gallery--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-los-angeles-fallback-email--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-los-angeles-fallback-email--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-san-francisco--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-san-francisco--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-per-chapter-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-no-image-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-with-image--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-with-image--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/collectioncountcard-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/collectioncountcard-populated--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/collectioncountcard-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contactus-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dashboardsummary-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dashboardsummary-populated--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dashboardsummary-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-building--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-deploying--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-deploying--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-failed--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-idle-up-to-date--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-live--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-local-preview--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-slow--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-with-members-hidden--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-with-members-hidden--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/support-us--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/provider-auth-verdict.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-run-marker.json",
+      "status": "modified"
+    },
+    {
+      "path": ".gitattributes",
+      "status": "modified"
+    },
+    {
+      "path": ".gitignore",
+      "status": "modified"
+    },
+    {
+      "path": "docker-compose.cloud.yml",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/EventsPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/BoardOfDirectors.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/ContactUs.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/EventGallery.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/GetInvolved.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/SupportUs.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/UpcomingEvents.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/WhatsappCommunity.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/chapters/japan.md",
+      "status": "deleted"
+    },
+    {
+      "path": "src/content/chapters/la.md",
+      "status": "deleted"
+    },
+    {
+      "path": "src/content/chapters/nyc.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/chapters/san-francisco.md",
+      "status": "deleted"
+    },
+    {
+      "path": "src/content/events/founders-investors-mixer-sf.md",
+      "status": "deleted"
+    },
+    {
+      "path": "src/content/events/harvard-in-tech-summit-2026.md",
+      "status": "deleted"
+    },
+    {
+      "path": "src/content/events/women-in-tech-panel.md",
+      "status": "deleted"
+    },
+    {
+      "path": "src/data/nav.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/settings.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/socialIcon.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/socialIcon.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/events.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "status": "modified"
+    },
+    {
+      "path": "ui/src/helpers/stepLabels.generated.ts",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-audit/finalize-procedure.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/content-hub-empty.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/content-hub.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/focus-areas.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/giving-campaign.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/hero-carousel.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/luma-calendar.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/our-chapters-empty.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/our-chapters.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub-empty--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/focus-areas--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giving-campaign--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero-carousel--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/luma-calendar--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters-empty--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stats-band--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/stats-band.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/last-advance.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/session-results-snapshot.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/step-highwater.json",
+      "status": "added"
+    },
+    {
+      "path": "public/images/social/linkedin.svg",
+      "status": "added"
+    },
+    {
+      "path": "src/components/LumaCalendar.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/ContentHub.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/FocusAreas.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/GivingCampaign.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/HeroCarousel.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/OurChapters.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/Stats.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/chapters/boston-cambridge.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/chapters/dc-dmv.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/chapters/london.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/chapters/seattle.md",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/luma.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Admin Dashboard - Empty",
+      "screenshotPath": "admin-dashboard-empty--desktop.png"
+    },
+    {
+      "name": "Admin Dashboard - Populated",
+      "screenshotPath": "admin-dashboard-populated--desktop.png"
+    },
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "Content Hub",
+      "screenshotPath": "content-hub--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "EventsPage - Upcoming and Past",
+      "screenshotPath": "eventspage-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Focus Areas",
+      "screenshotPath": "focus-areas--desktop.png"
+    },
+    {
+      "name": "Giving Campaign",
+      "screenshotPath": "giving-campaign--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Hero Carousel",
+      "screenshotPath": "hero-carousel--desktop.png"
+    },
+    {
+      "name": "Luma Calendar",
+      "screenshotPath": "luma-calendar--desktop.png"
+    },
+    {
+      "name": "Our Chapters",
+      "screenshotPath": "our-chapters--desktop.png"
+    },
+    {
+      "name": "Stats Band",
+      "screenshotPath": "stats-band--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 7,
+        "passed": 7
+      }
+    ]
+  }
+}
