@@ -1,0 +1,62 @@
+# regenerated from glossary.json on 2026-07-01T19:50:19Z; do not hand-edit
+AdminDashboard :: src/pages/admin/index.astro :: tags=
+AdminGate :: src/components/admin/AdminGate.astro :: tags=
+AdminGatePrompt :: src/components/admin/AdminGatePrompt.astro :: tags=
+BoardMemberCard :: src/components/BoardMemberCard.astro :: tags=
+ChapterConnect :: src/components/ChapterConnect.astro :: tags=
+ChapterEvents :: src/components/ChapterEvents.astro :: tags=
+ChapterHero :: src/components/ChapterHero.astro :: tags=
+ChapterPage :: src/components/ChapterPage.astro :: tags=
+ChapterRoute :: src/pages/chapters/[slug].astro :: tags=
+ChapterSignUp :: src/components/ChapterSignUp.astro :: tags=
+CollectionCountCard :: src/components/admin/CollectionCountCard.astro :: tags=
+ContentHub :: src/components/landing/ContentHub.astro :: tags=
+DashboardSummary :: src/components/admin/DashboardSummary.astro :: tags=
+DeployStatus :: src/components/admin/DeployStatus.astro :: tags=
+EmbedForm :: src/components/EmbedForm.astro :: tags=
+EventsPage :: src/components/EventsPage.astro :: tags=
+EventsRoute :: src/pages/events.astro :: tags=
+FocusAreas :: src/components/landing/FocusAreas.astro :: tags=
+GET :: src/pages/deploy-status.json.ts :: tags=
+GivingCampaign :: src/components/landing/GivingCampaign.astro :: tags=
+Greeting :: src/components/Greeting.tsx :: tags= :: test=src/components/Greeting.test.tsx
+HeroCarousel :: src/components/landing/HeroCarousel.astro :: tags=
+LandingPage :: src/pages/index.astro :: tags=
+LumaCalendar :: src/components/LumaCalendar.astro :: tags=
+OurChapters :: src/components/landing/OurChapters.astro :: tags=
+Stats :: src/components/landing/Stats.astro :: tags=
+buildMailto :: src/lib/mailto.ts :: tags= :: test=src/lib/mailto.test.ts
+computeBanner :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+contentRoot :: src/lib/contentRoot.ts :: tags= :: test=src/lib/contentRoot.test.ts
+dashboardSummaryText :: src/lib/adminDashboard.ts :: tags= :: test=src/lib/adminDashboard.test.ts
+dashboardTotals :: src/lib/adminDashboard.ts :: tags= :: test=src/lib/adminDashboard.test.ts
+dataRoot :: src/lib/contentRoot.ts :: tags= :: test=src/lib/contentRoot.test.ts
+deployBaseFromPath :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+filterActiveBoardMembers :: src/lib/team.ts :: tags= :: test=src/lib/team.test.ts
+formatEventDate :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts
+galleryRevealImmediately :: src/lib/gallery.ts :: tags= :: test=src/lib/gallery.test.ts
+galleryStaggerDelay :: src/lib/gallery.ts :: tags= :: test=src/lib/gallery.test.ts
+getStaticPaths :: src/pages/blog/[slug].astro :: tags=
+getStaticPaths :: src/pages/chapters/[slug].astro :: tags=
+initContentSandbox :: astro.config.mjs :: tags=
+initGalleryReveal :: src/lib/gallery.ts :: tags= :: test=src/lib/gallery.test.ts
+initParallax :: src/lib/parallax.ts :: tags= :: test=src/lib/parallax.test.ts
+initials :: src/lib/team.ts :: tags= :: test=src/lib/team.test.ts
+isPasscodeCorrect :: src/lib/adminGate.ts :: tags= :: test=src/lib/adminGate.test.ts
+mapRunPhase :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+markerUrl :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+parallaxEnabled :: src/lib/parallax.ts :: tags= :: test=src/lib/parallax.test.ts
+parallaxOffset :: src/lib/parallax.ts :: tags= :: test=src/lib/parallax.test.ts
+parseBackendRepo :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+pickLatestDeployRun :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+readSingleton :: src/lib/site.ts :: tags=
+relativeTime :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+runStartedMs :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+site :: src/lib/site.ts :: tags= :: test=src/lib/site.test.ts
+socialIconSrc :: src/lib/socialIcon.ts :: tags= :: test=src/lib/socialIcon.test.ts
+sortBoardMembers :: src/lib/team.ts :: tags= :: test=src/lib/team.test.ts
+splitEvents :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts
+splitRole :: src/lib/team.ts :: tags= :: test=src/lib/team.test.ts
+toEventDate :: src/lib/events.ts :: tags= :: test=src/lib/events.test.ts
+viewSiteUrl :: src/lib/deployStatus.ts :: tags= :: test=src/lib/deployStatus.test.ts
+withBase :: src/lib/url.ts :: tags= :: test=src/lib/url.test.ts

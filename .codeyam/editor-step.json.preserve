@@ -1,0 +1,13 @@
+{
+  "step": 26,
+  "feature": "Homepage & Events revamp (Atlas)",
+  "startedAt": "2026-07-01T21:41:08Z",
+  "featureStartedAt": "2026-07-01T16:17:17Z",
+  "mode": "ui",
+  "waiting": false,
+  "slug": "feature-complete",
+  "holderSessionId": "94e56077-ac8d-4802-8af1-e8990a862c7d",
+  "holderPid": 242491,
+  "holderAcquiredAt": "2026-07-01T21:41:07.379908129+00:00",
+  "version": 3314
+}
