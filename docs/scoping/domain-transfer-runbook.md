@@ -11,22 +11,25 @@ domain, the `MX` records must be preserved exactly. We only change the records
 that point web traffic (`A` / `AAAA` / `CNAME`) — never `MX`, and never blindly
 "replace all records."
 
-## Step 0 — Discover the current setup (do this first)
+## Step 0 — Current setup (DISCOVERED 2026-07-02)
 
-We cannot plan the cutover until we know two things:
+Confirmed via live DNS/RDAP lookup:
 
-1. **Registrar** — where is `harvardintech.com` registered? (Strikingly may have
-   registered it *for* you, or you connected an external domain from GoDaddy /
-   Namecheap / Google Domains / Cloudflare, etc.)
-2. **DNS host** — who answers DNS for the domain today? (Could be Strikingly's
-   nameservers, or the registrar, or Cloudflare.)
+| What | Value | Action |
+|---|---|---|
+| **Registrar** | GoDaddy.com, LLC | Keep — no transfer needed |
+| **DNS host** | GoDaddy (`ns05/ns06.domaincontrol.com`) | Edit records here (full control) |
+| **Apex web** (`harvardintech.com`) | `A → 54.183.102.22` (Strikingly) | **Change** → GitHub Pages IPs |
+| **`www`** | `CNAME → www.harvardintech.com.s.strikinglydns.com` (Strikingly) | **Change** → `nseldeib.github.io` |
+| **Email** | `MX → mail.harvardintech.com` (SPF `include:websitewelcome.com`, HostGator) | **PRESERVE — do not touch** |
+| **SPF/TXT** | `v=spf1 a mx include:websitewelcome.com ~all` | **PRESERVE** (email deliverability) |
 
-How to check: a `whois harvardintech.com` lookup (registrar) + a `dig NS
-harvardintech.com` lookup (nameservers). **Key risk:** if the domain is
-*registered inside Strikingly* and Strikingly only offers a limited DNS panel, we
-may need to **transfer the domain to a real registrar first** (Cloudflare
-Registrar / Namecheap) to get full DNS control. That transfer takes 5–7 days and
-requires the current owner to unlock the domain + provide an auth code.
+**Good news:** DNS lives at GoDaddy (not locked inside Strikingly), so we edit
+records directly — **no 5–7 day registrar transfer required.** Email
+(`nadia@harvardintech.com` etc.) is hosted separately (HostGator, `mail.` +
+`websitewelcome.com`), so as long as we never change the `MX` record, the mail
+`A`/host record, or the SPF `TXT`, email keeps flowing through the cutover with
+zero interruption. We only touch the apex `A` and the `www` `CNAME`.
 
 ## Recommended approach: stage first, then cut over (zero downtime)
 
