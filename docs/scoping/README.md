@@ -32,9 +32,10 @@ multi-week / externally gated.
 | 6 | Membership sections | ✅ Built | — | No — content |
 | 7 | Google Analytics / SEO / AEO / Custom HTML / iFrame | ✅ Built & shipped | — | No |
 | 8 | **Member login / Harvard Key SSO** | ❌ Not built | **XL** | **Yes — big** → [deep dive](./harvard-key-sso.md) |
-| 9 | **Domain transfer from Strikingly** | ❌ Not started | M | **Yes** → [deep dive](./domain-transfer-runbook.md) |
+| 9 | **Domain transfer from Strikingly** | 🟡 Researched, ready | M | Registrar/DNS confirmed → [deep dive](./domain-transfer-runbook.md) |
 | 10 | Content population | 🟡 framework ready | M (ongoing) | Yes — client input |
-| 11 | Publishing / shareable preview access | ❌ Not set up | S–M | **Yes — access model** |
+| 11 | Publishing / shareable preview access | ✅ Live (gated GitHub Pages) | — | Done for WIP |
+| 12 | Outbound links / no old-site pointers | ✅ Audited & clean | — | No |
 
 **Headline:** the *website* is largely built. The remaining work clusters in
 three places: (a) **member login** (the one hard, externally-gated item), (b)
@@ -95,9 +96,23 @@ The biggest *volume* of remaining work, but it's CMS data entry a non-technical
 editor can do: chapter committee members, per-chapter events, real board
 bios/photos, blog + podcast entries. Needs the client to provide the content.
 
-### 11. Publishing / shareable preview — ❌ not set up
-The GitHub Pages workflow deploys from `main` to
-`https://nseldeib.github.io/harvardintech`. To share the WIP + status page
-privately, see the access-model decision (#4 above) and
-[domain-transfer-runbook.md](./domain-transfer-runbook.md) → "Publishing the
-WIP preview".
+### 11. Publishing / shareable preview — ✅ live (gated)
+The site + this review page are deployed to `https://nseldeib.github.io/harvardintech/`
+(review at `/review/`), behind a client-side passphrase + `noindex` + robots
+`Disallow` (deterrent-level privacy). The gate auto-lifts at the custom-domain
+launch (it's keyed off `DEPLOY_BASE_PATH`).
+
+### 12. Link & experience audit (2026-07-02) — ✅ clean
+- **No pointers to the old Strikingly site** anywhere in the shipped pages.
+  Fixed this pass: the "Donate" button (was a 404 `harvardintech.com/donate`) now
+  opens a giving-inquiry email — there is **no donation platform yet**, so it
+  matches the site's email-based support model until one is chosen; the WhatsApp
+  "admissions criteria" link (was the old site) now points to the Google Form.
+- **Nav dropdowns + links all resolve** — all `/#…` homepage anchors exist, all
+  5 chapter routes render, blog/events/external links (Medium, LinkedIn,
+  Newsletter, Eventbrite, Mailchimp) are valid. WhatsApp uses the real Google
+  Form + group invite.
+- **Two known gaps:** the "Webinars" and "Podcasts" dropdown items jump to
+  `/events` (those sections aren't built yet — see item 4); add a Substack link.
+- **`/admin`** is a password-gated organizer CRM, not in the public nav — it is
+  NOT the member portal (see item 8).

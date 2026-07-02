@@ -14,9 +14,12 @@ const {
   email = 'ben@harvardintech.com',
   headline = 'Back the mission.',
   blurb = 'Your gift funds in-person events, new chapters, and our global community — keeping Harvard Alumni in Tech free and open to every alum in technology.',
-  donateUrl = 'https://www.harvardintech.com/donate',
+  // No donation platform yet — "Donate" opens a giving inquiry email (same model
+  // as Sponsorship). When a real donation link exists, pass it as `donateUrl`.
+  donateUrl,
 } = Astro.props as Props;
 
+const donateHref = donateUrl ?? buildMailto({ to: email, subject: 'Supporting Harvard Alumni in Tech' });
 const sponsorHref = buildMailto({ to: email, subject: 'Sponsoring Harvard Alumni in Tech' });
 ---
 
@@ -28,7 +31,7 @@ const sponsorHref = buildMailto({ to: email, subject: 'Sponsoring Harvard Alumni
       <p>{blurb}</p>
     </div>
     <div class="giving-actions">
-      <a class="btn btn-solid" href={donateUrl} rel="noopener">Donate</a>
+      <a class="btn btn-solid" href={donateHref} rel="noopener">Donate</a>
       <a class="btn btn-out on-dark" href={sponsorHref}>Sponsorship</a>
     </div>
   </div>

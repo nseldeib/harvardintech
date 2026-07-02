@@ -9,9 +9,10 @@ interface Props {
   whatsappUrl?: string;
 }
 const {
-  criteriaUrl = 'https://www.harvardintech.com/',
-  // Alumni-verification Google Form (step 1) and the WhatsApp group invite
-  // (step 2), matching what the live harvardintech.com WhatsApp section links to.
+  // Alumni-verification Google Form (step 1 + eligibility criteria) and the
+  // WhatsApp group invite (step 2), matching the live site's WhatsApp section.
+  // (Eligibility is defined/verified in the form — no separate criteria page.)
+  criteriaUrl = 'https://forms.gle/GqgaCDDWhWAgpJC68',
   verifyUrl = 'https://forms.gle/GqgaCDDWhWAgpJC68',
   whatsappUrl = 'https://chat.whatsapp.com/BXrshhQQ0WrHT5kUZczjcm',
 } = Astro.props as Props;
