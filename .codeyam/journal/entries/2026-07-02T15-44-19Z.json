@@ -1,0 +1,167 @@
+{
+  "timestamp": "2026-07-02T15:44:19Z",
+  "title": "Project Status & Decisions Page",
+  "type": "feature",
+  "userRequest": "## Summary\n\nBuild a **standalone, self-contained HTML page** that presents the project's\nstatus and the open decisions for the Harvard Alumni in Tech site migration, so\nNadia can share a link with **non-technical stakeholders** and collect their\ninput. It is a **project-management artifact**, not part of the product site — so\nit lives as a single static file under `public/` (deployed verbatim by GitHub\nPages), styled to match the Harvard crimson brand, with **`noindex`** and a\n**client-side password gate** (deterrent-level privacy, per the chosen access\nmodel). Content is derived from `docs/scoping/`.\n\n## Key Decisions\n\n- **Standalone static file, not a product route.** It renders as\n  `public/review/index.html` → served at `/review/` on the deploy. Self-contained\n  (inline CSS + JS, no imports) so it never couples to the product's components or\n  the CMS, mirroring how the design mockups are standalone artifacts.\n- **Privacy = deterrent, documented as such.** `<meta name=\"robots\"\n  content=\"noindex\">` + a hard-to-guess path + a client-side passphrase gate. The\n  gate is a deterrent (source is still fetchable); if real access control is\n  needed later, move the artifact to Cloudflare/Netlify with a real password. The\n  page itself notes this so reviewers understand the sharing model.\n- **Content mirrors `docs/scoping/`.** One card per item: Status · plain-language\n  description · Decision needed · Options (pros/cons) · Effort. Plus the top-level\n  decisions list. No live data, no build-time coupling — it's a snapshot the\n  author refreshes as decisions land.\n- **No product-nav entry, no analytics.** It must not appear in the site nav and\n  should not fire the site's GA — it's internal.\n\n## Implementation\n\n### 1. The status page\n**New file**: `public/review/index.html`\n\nA single self-contained HTML document:\n- `<head>`: `noindex` robots meta, page title, inline `<style>` (crimson brand\n  palette, system/serif fonts, responsive cards).\n- A **passphrase gate**: a small inline `<script>` that hides the content until a\n  passphrase is entered (stored expectation is a simple hash/string constant with\n  a clear \"deterrent only\" comment; easy to change or disable).\n- **Body sections**:\n  1. Header — project name, \"internal review — please don't share publicly\", last-updated date.\n  2. At-a-glance status table (the 11-item summary from the scoping README).\n  3. \"Decisions we need your input on\" — the 5 decisions, each with options + a\n     prompt for feedback.\n  4. Per-item cards: Homepage, Nav/IA, Chapters, Events, Content Hub, Membership,\n     Functionality (done), Member login/SSO, Domain transfer, Content population,\n     Publishing/access — each with status badge, description, decision, effort.\n  5. Footer — links to the full scoping docs (relative to the repo) + a note that\n     this is a living snapshot.\n\n### 2. Keep it out of the product surface\n- Confirm it is NOT referenced from `nav.json`, `BaseLayout`, or sitemap. Because\n  it is a raw `public/` file (not an Astro route), it is not in the content\n  collections and won't be crawled by the sitemap integration; the `noindex` meta\n  is the belt-and-suspenders.\n\n### 3. Scoping docs\nThe `docs/scoping/` markdown (README + harvard-key-sso + domain-transfer-runbook)\nis already written; it is committed as part of this feature.\n\n## Reused existing code\n\n- Brand palette/tokens mirror `src/styles/tokens.css` (copied inline, not\n  imported — the page is standalone).\n- Content is a snapshot of `docs/scoping/README.md` and the two deep-dive docs.\n\n## Scenarios to Demonstrate\n\n- **Status page — gate locked**: initial load shows the passphrase prompt, content hidden.\n- **Status page — unlocked**: after the passphrase, the full status + decisions render.\n\n## Out of scope (this cycle)\n\n- Actually publishing/deploying (merge-to-main or branch-deploy) and the final\n  access-model confirmation — a separate step once the page is reviewed.\n- Any change to the product site's routes, nav, or components.",
+  "description": "Added a standalone, self-contained status/decisions page (public/review/index.html) for internal review with non-technical stakeholders: a Harvard-crimson styled at-a-glance status table, the five decisions needing team input, and per-area detail cards, all derived from the docs/scoping/ write-ups (Harvard Key SSO options and the Strikingly->GitHub Pages domain-transfer runbook). The page is noindex and gated behind a client-side passphrase (a deterrent, documented as such), and is deployed verbatim by GitHub Pages without coupling to the product site.",
+  "modifiedFiles": [
+    {
+      "path": ".claude/hooks/_step_metadata.py",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/hooks/editor-pretool-hook.py",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/hooks/editor-step-hook.py",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-audit/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-design/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-edit-plan/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-editor/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-explore/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-new-app/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-onboard/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-plan/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-prototype/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-see-app/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-see-recent-change/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-slice/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/review-session/SKILL.md",
+      "status": "deleted"
+    },
+    {
+      "path": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/review-session/scripts/extract-session.mjs",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/review-session/scripts/find-last-session.mjs",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/status-decisions-page.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/last-advance.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/provider-auth-verdict.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/session-results-snapshot.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/step-highwater.json",
+      "status": "modified"
+    },
+    {
+      "path": ".gitignore",
+      "status": "modified"
+    },
+    {
+      "path": "docker-compose.cloud.yml",
+      "status": "modified"
+    },
+    {
+      "path": "docs/scoping/README.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/scoping/domain-transfer-runbook.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/scoping/harvard-key-sso.md",
+      "status": "added"
+    },
+    {
+      "path": "ui/src/helpers/stepLabels.generated.ts",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-audit/finalize-procedure.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/project-review-unlocked-status.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": "public/review/index.html",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Project Review - Unlocked Status",
+      "screenshotPath": "project-review-unlocked-status--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 152,
+    "passed": 152,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 152,
+        "passed": 152
+      }
+    ]
+  }
+}

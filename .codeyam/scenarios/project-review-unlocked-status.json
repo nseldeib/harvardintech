@@ -1,0 +1,22 @@
+{
+  "name": "Project Review - Unlocked Status",
+  "id": "05d10a78-e413-4eca-a579-b9acc6acec74",
+  "url": "/review/index.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/review/index.html",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    }
+  ]
+}

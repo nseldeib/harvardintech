@@ -1,58 +1,11 @@
 {
   "files": {
-    "src/lib/team.photos.test.ts": {
+    "src/components/LumaCalendar.astro": {
       "imports": [],
-      "importedBy": []
-    },
-    ".claude/hooks/_step_metadata.py": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/layouts/BaseLayout.astro": {
-      "imports": [
-        "src/styles/tokens.css",
-        "src/components/SEO.astro",
-        "src/components/HeadExtras.astro",
-        "src/lib/site.ts",
-        "src/lib/url.ts"
-      ],
       "importedBy": [
-        "src/pages/index.astro",
         "src/pages/events.astro",
-        "src/pages/chapters/[slug].astro"
+        "src/pages/isolated-components/[name].astro"
       ]
-    },
-    "src/lib/team.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/components/landing/BoardOfDirectors.astro",
-        "src/components/BoardMemberCard.astro",
-        "src/lib/team.test.ts",
-        "src/pages/index.astro"
-      ]
-    },
-    "src/components/admin/SignInGuide.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/admin/index.astro"
-      ]
-    },
-    "src/pages/404.astro": {
-      "imports": [
-        "src/styles/tokens.css",
-        "src/lib/url.ts"
-      ],
-      "importedBy": []
-    },
-    "public/admin/editor/deploy-status.js": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/lib/adminGate.test.ts": {
-      "imports": [
-        "src/lib/adminGate.ts"
-      ],
-      "importedBy": []
     },
     "src/lib/contentRoot.ts": {
       "imports": [],
@@ -62,32 +15,38 @@
         "src/content/config.ts"
       ]
     },
-    "src/lib/socialIcon.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/components/landing/ContactUs.astro",
-        "src/components/ChapterConnect.astro",
-        "src/lib/socialIcon.test.ts"
-      ]
-    },
-    "src/lib/gallery.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/components/landing/EventGallery.astro",
-        "src/lib/gallery.test.ts",
-        "src/lib/gallery.test.ts",
-        "src/lib/gallery.test.ts",
-        "src/lib/gallery.test.ts",
-        "src/lib/gallery.test.ts"
-      ]
-    },
-    "src/components/admin/AdminGate.astro": {
+    "src/components/landing/SupportUs.astro": {
       "imports": [
-        "src/lib/url.ts",
-        "src/lib/adminGate.ts"
+        "src/lib/mailto.ts"
       ],
       "importedBy": [
-        "src/layouts/AdminLayout.astro"
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/components/landing/Stats.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/components/ChapterHero.astro": {
+      "imports": [
+        "src/components/ChapterHeader.astro",
+        "src/lib/url.ts"
+      ],
+      "importedBy": [
+        "src/components/ChapterPage.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/components/Analytics.astro": {
+      "imports": [
+        "src/lib/site.ts"
+      ],
+      "importedBy": [
+        "src/components/HeadExtras.astro"
       ]
     },
     "src/components/admin/DeployStatus.astro": {
@@ -99,13 +58,74 @@
         "src/pages/isolated-components/[name].astro"
       ]
     },
-    "src/components/landing/OurChapters.astro": {
+    "src/components/landing/landing-images.test.ts": {
       "imports": [
         "src/lib/url.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/landing/ContactUs.astro": {
+      "imports": [
+        "src/lib/mailto.ts",
+        "src/lib/socialIcon.ts",
+        "src/lib/site.ts"
       ],
       "importedBy": [
         "src/pages/index.astro",
         "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/content/config.ts": {
+      "imports": [
+        "src/lib/contentRoot.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/ChapterSignUp.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/components/ChapterPage.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    ".claude/hooks/editor-step-hook.py": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/admin/AdminGate.astro": {
+      "imports": [
+        "src/lib/url.ts",
+        "src/lib/adminGate.ts"
+      ],
+      "importedBy": [
+        "src/layouts/AdminLayout.astro"
+      ]
+    },
+    "src/pages/chapters/[slug].astro": {
+      "imports": [
+        "src/layouts/BaseLayout.astro",
+        "src/components/ChapterPage.astro",
+        "src/lib/events.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/admin/CollectionCountGrid.astro": {
+      "imports": [
+        "src/components/admin/CollectionCountCard.astro",
+        "src/lib/adminDashboard.ts"
+      ],
+      "importedBy": [
+        "src/pages/admin/index.astro"
+      ]
+    },
+    "scripts/section-shot.mjs": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/ChapterHeader.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/components/ChapterHero.astro"
       ]
     },
     "src/lib/site.ts": {
@@ -129,106 +149,9 @@
         "src/layouts/AdminLayout.astro"
       ]
     },
-    ".claude/skills/review-session/scripts/extract-session-helpers.mjs": {
-      "imports": [],
-      "importedBy": [
-        ".claude/skills/review-session/scripts/extract-session.mjs"
-      ]
-    },
-    "src/components/ChapterPage.astro": {
+    ".claude/skills/review-session/scripts/find-last-session.mjs": {
       "imports": [
-        "src/components/ChapterHero.astro",
-        "src/components/ChapterEvents.astro",
-        "src/components/ChapterSignUp.astro",
-        "src/components/ChapterConnect.astro",
-        "src/components/ChapterLeads.astro",
-        "src/components/ChapterLinks.astro",
-        "src/components/landing/EventGallery.astro",
-        "src/lib/events.ts",
-        "src/lib/url.ts"
-      ],
-      "importedBy": [
-        "src/pages/chapters/[slug].astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/ChapterLinks.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/components/ChapterPage.astro"
-      ]
-    },
-    "vitest.config.ts": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/components/ChapterEvents.astro": {
-      "imports": [
-        "src/components/EventCard.astro",
-        "src/lib/events.ts"
-      ],
-      "importedBy": [
-        "src/components/ChapterPage.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/EventCard.astro": {
-      "imports": [
-        "src/lib/events.ts"
-      ],
-      "importedBy": [
-        "src/components/EventsSection.astro",
-        "src/components/landing/UpcomingEvents.astro",
-        "src/components/ChapterEvents.astro"
-      ]
-    },
-    "src/components/ChapterHero.astro": {
-      "imports": [
-        "src/components/ChapterHeader.astro",
-        "src/lib/url.ts"
-      ],
-      "importedBy": [
-        "src/components/ChapterPage.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/landing/UpcomingEvents.astro": {
-      "imports": [
-        "src/components/EventCard.astro",
-        "src/lib/events.ts",
-        "src/lib/luma.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/landing/FocusAreas.astro": {
-      "imports": [
-        "src/lib/url.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/Analytics.astro": {
-      "imports": [
-        "src/lib/site.ts"
-      ],
-      "importedBy": [
-        "src/components/HeadExtras.astro"
-      ]
-    },
-    "src/lib/adminDashboard.test.ts": {
-      "imports": [
-        "src/lib/adminDashboard.ts"
-      ],
-      "importedBy": []
-    },
-    ".claude/skills/review-session/scripts/extract-session.mjs": {
-      "imports": [
-        ".claude/skills/review-session/scripts/extract-session-helpers.mjs"
+        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs"
       ],
       "importedBy": []
     },
@@ -242,84 +165,44 @@
         "src/pages/admin/index.astro"
       ]
     },
-    "src/components/landing/WhatsappCommunity.astro": {
+    "src/lib/luma.ts": {
       "imports": [],
       "importedBy": [
-        "src/pages/index.astro",
+        "src/components/landing/UpcomingEvents.astro",
+        "src/pages/events.astro"
+      ]
+    },
+    "src/components/EmbedForm.astro": {
+      "imports": [],
+      "importedBy": [
         "src/pages/isolated-components/[name].astro"
       ]
     },
-    "src/lib/seoEndpoints.test.ts": {
-      "imports": [
-        "src/pages/robots.txt.ts",
-        "src/pages/llms.txt.ts",
-        "src/lib/site.ts"
-      ],
-      "importedBy": []
-    },
-    "ui/src/helpers/stepLabels.generated.ts": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/lib/events.test.ts": {
-      "imports": [
-        "src/lib/events.ts"
-      ],
-      "importedBy": []
-    },
-    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs": {
+    "src/lib/socialIcon.ts": {
       "imports": [],
       "importedBy": [
-        ".claude/skills/review-session/scripts/find-last-session.mjs"
-      ]
-    },
-    "src/components/HeadExtras.astro": {
-      "imports": [
-        "src/components/Analytics.astro",
-        "src/components/StructuredData.astro",
-        "src/lib/site.ts"
-      ],
-      "importedBy": [
-        "src/pages/blog/[slug].astro",
-        "src/layouts/BaseLayout.astro"
-      ]
-    },
-    "src/lib/mailto.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/components/landing/SupportUs.astro",
-        "src/components/landing/GivingCampaign.astro",
         "src/components/landing/ContactUs.astro",
-        "src/components/landing/GetInvolved.astro",
         "src/components/ChapterConnect.astro",
-        "src/lib/mailto.test.ts"
+        "src/lib/socialIcon.test.ts"
       ]
     },
-    "src/components/ChapterHeader.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/components/ChapterHero.astro"
-      ]
-    },
-    "src/styles/tokens.css": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/404.astro",
-        "src/pages/isolated-components/[name].astro",
-        "src/pages/blog/[slug].astro",
-        "src/layouts/BaseLayout.astro",
-        "src/layouts/AdminLayout.astro"
-      ]
-    },
-    "src/components/Embed.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/blog/[slug].astro"
-      ]
-    },
-    "src/components/landing/BoardOfDirectors.astro": {
+    "src/components/admin/DashboardSummary.astro": {
       "imports": [
-        "src/lib/team.ts",
+        "src/lib/adminDashboard.ts"
+      ],
+      "importedBy": [
+        "src/pages/admin/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/components/admin/SignInGuide.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/pages/admin/index.astro"
+      ]
+    },
+    "src/components/landing/OurChapters.astro": {
+      "imports": [
         "src/lib/url.ts"
       ],
       "importedBy": [
@@ -327,12 +210,13 @@
         "src/pages/isolated-components/[name].astro"
       ]
     },
-    "src/lib/parallax.test.ts": {
+    "src/components/landing/Hero.astro": {
       "imports": [
-        "src/lib/parallax.ts",
-        "src/lib/parallax.ts"
+        "src/lib/url.ts"
       ],
-      "importedBy": []
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro"
+      ]
     },
     "src/pages/isolated-components/[name].astro": {
       "imports": [
@@ -369,66 +253,69 @@
       ],
       "importedBy": []
     },
-    "src/content/config.ts": {
+    "scripts/extract.mjs": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/lib/site.test.ts": {
       "imports": [
-        "src/lib/contentRoot.ts"
+        "src/lib/site.ts",
+        "src/lib/site.ts"
       ],
       "importedBy": []
     },
-    "src/components/EventsPage.astro": {
-      "imports": [
-        "src/components/EventsSection.astro",
-        "src/lib/events.ts"
-      ],
-      "importedBy": [
-        "src/pages/events.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/pages/llms.txt.ts": {
-      "imports": [
-        "src/lib/site.ts"
-      ],
+    "src/pages/robots.txt.ts": {
+      "imports": [],
       "importedBy": [
         "src/lib/seoEndpoints.test.ts"
       ]
     },
-    "src/components/EmbedForm.astro": {
+    "src/components/StructuredData.astro": {
+      "imports": [
+        "src/lib/site.ts"
+      ],
+      "importedBy": [
+        "src/components/HeadExtras.astro"
+      ]
+    },
+    "src/lib/parallax.ts": {
       "imports": [],
       "importedBy": [
+        "src/lib/parallax.test.ts",
+        "src/lib/parallax.test.ts"
+      ]
+    },
+    "scripts/crop.mjs": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/landing/WhatsappCommunity.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/pages/index.astro",
         "src/pages/isolated-components/[name].astro"
       ]
     },
-    "src/components/LumaCalendar.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/events.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/Greeting.tsx": {
-      "imports": [],
-      "importedBy": [
-        "src/components/Greeting.test.tsx",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/landing/landing-images.test.ts": {
+    "src/lib/url.test.ts": {
       "imports": [
         "src/lib/url.ts"
       ],
       "importedBy": []
     },
-    "src/pages/chapters/[slug].astro": {
+    "src/lib/deployStatus.test.ts": {
       "imports": [
-        "src/layouts/BaseLayout.astro",
-        "src/components/ChapterPage.astro",
-        "src/lib/events.ts"
+        "src/lib/deployStatus.ts"
       ],
       "importedBy": []
     },
-    "scripts/compare-shot.mjs": {
+    "ui/src/helpers/stepLabels.generated.ts": {
       "imports": [],
+      "importedBy": []
+    },
+    "src/lib/socialIcon.test.ts": {
+      "imports": [
+        "src/lib/socialIcon.ts"
+      ],
       "importedBy": []
     },
     "src/pages/admin/index.astro": {
@@ -443,9 +330,204 @@
       ],
       "importedBy": []
     },
+    "src/components/landing/GivingCampaign.astro": {
+      "imports": [
+        "src/lib/mailto.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/components/landing/BoardOfDirectors.astro": {
+      "imports": [
+        "src/lib/team.ts",
+        "src/lib/url.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/pages/llms.txt.ts": {
+      "imports": [
+        "src/lib/site.ts"
+      ],
+      "importedBy": [
+        "src/lib/seoEndpoints.test.ts"
+      ]
+    },
+    "scripts/compare-shot.mjs": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/ChapterLinks.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/components/ChapterPage.astro"
+      ]
+    },
+    "src/pages/events.astro": {
+      "imports": [
+        "src/layouts/BaseLayout.astro",
+        "src/components/EventsPage.astro",
+        "src/components/LumaCalendar.astro",
+        "src/lib/luma.ts"
+      ],
+      "importedBy": []
+    },
+    "src/layouts/BaseLayout.astro": {
+      "imports": [
+        "src/styles/tokens.css",
+        "src/components/SEO.astro",
+        "src/components/HeadExtras.astro",
+        "src/lib/site.ts",
+        "src/lib/url.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/events.astro",
+        "src/pages/chapters/[slug].astro"
+      ]
+    },
+    "src/components/admin/AdminHeader.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/layouts/AdminLayout.astro"
+      ]
+    },
+    "src/components/landing/GetInvolved.astro": {
+      "imports": [
+        "src/lib/mailto.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "scripts/download-assets.mjs": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/EventsPage.astro": {
+      "imports": [
+        "src/components/EventsSection.astro",
+        "src/lib/events.ts"
+      ],
+      "importedBy": [
+        "src/pages/events.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/lib/adminDashboard.test.ts": {
+      "imports": [
+        "src/lib/adminDashboard.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/EventCard.astro": {
+      "imports": [
+        "src/lib/events.ts"
+      ],
+      "importedBy": [
+        "src/components/EventsSection.astro",
+        "src/components/landing/UpcomingEvents.astro",
+        "src/components/ChapterEvents.astro"
+      ]
+    },
+    "src/components/ChapterEvents.astro": {
+      "imports": [
+        "src/components/EventCard.astro",
+        "src/lib/events.ts"
+      ],
+      "importedBy": [
+        "src/components/ChapterPage.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/lib/gallery.test.ts": {
+      "imports": [
+        "src/lib/gallery.ts",
+        "src/lib/gallery.ts",
+        "src/lib/gallery.ts",
+        "src/lib/gallery.ts",
+        "src/lib/gallery.ts"
+      ],
+      "importedBy": []
+    },
+    "src/lib/parallax.test.ts": {
+      "imports": [
+        "src/lib/parallax.ts",
+        "src/lib/parallax.ts"
+      ],
+      "importedBy": []
+    },
+    "src/layouts/AdminLayout.astro": {
+      "imports": [
+        "src/styles/tokens.css",
+        "src/components/admin/AdminGate.astro",
+        "src/components/admin/AdminHeader.astro",
+        "src/lib/site.ts"
+      ],
+      "importedBy": [
+        "src/pages/admin/index.astro"
+      ]
+    },
+    "src/lib/team.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/landing/BoardOfDirectors.astro",
+        "src/components/BoardMemberCard.astro",
+        "src/lib/team.test.ts",
+        "src/pages/index.astro"
+      ]
+    },
+    "src/lib/team.photos.test.ts": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/lib/events.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/EventsSection.astro",
+        "src/components/ChapterPage.astro",
+        "src/components/landing/ContentHub.astro",
+        "src/components/landing/UpcomingEvents.astro",
+        "src/components/EventCard.astro",
+        "src/components/ChapterEvents.astro",
+        "src/components/EventsPage.astro",
+        "src/lib/events.test.ts",
+        "src/pages/chapters/[slug].astro"
+      ]
+    },
+    "src/lib/adminGate.test.ts": {
+      "imports": [
+        "src/lib/adminGate.ts"
+      ],
+      "importedBy": []
+    },
+    "src/components/admin/CollectionCountCard.astro": {
+      "imports": [
+        "src/lib/adminDashboard.ts"
+      ],
+      "importedBy": [
+        "src/components/admin/CollectionCountGrid.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
     "scripts/ours-shot.mjs": {
       "imports": [],
       "importedBy": []
+    },
+    "src/components/landing/ContentHub.astro": {
+      "imports": [
+        "src/lib/url.ts",
+        "src/lib/events.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
     },
     "src/components/landing/EventGallery.astro": {
       "imports": [
@@ -457,6 +539,94 @@
         "src/pages/index.astro",
         "src/pages/isolated-components/[name].astro"
       ]
+    },
+    "src/components/Embed.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/pages/blog/[slug].astro"
+      ]
+    },
+    "src/components/EventsSection.astro": {
+      "imports": [
+        "src/components/EventCard.astro",
+        "src/lib/events.ts"
+      ],
+      "importedBy": [
+        "src/components/EventsPage.astro"
+      ]
+    },
+    "src/components/ChapterPage.astro": {
+      "imports": [
+        "src/components/ChapterHero.astro",
+        "src/components/ChapterEvents.astro",
+        "src/components/ChapterSignUp.astro",
+        "src/components/ChapterConnect.astro",
+        "src/components/ChapterLeads.astro",
+        "src/components/ChapterLinks.astro",
+        "src/components/landing/EventGallery.astro",
+        "src/lib/events.ts",
+        "src/lib/url.ts"
+      ],
+      "importedBy": [
+        "src/pages/chapters/[slug].astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/components/landing/FocusAreas.astro": {
+      "imports": [
+        "src/lib/url.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/components/landing/HeroCarousel.astro": {
+      "imports": [
+        "src/lib/url.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/lib/mailto.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/landing/SupportUs.astro",
+        "src/components/landing/GivingCampaign.astro",
+        "src/components/landing/ContactUs.astro",
+        "src/components/landing/GetInvolved.astro",
+        "src/components/ChapterConnect.astro",
+        "src/lib/mailto.test.ts"
+      ]
+    },
+    "src/lib/seoEndpoints.test.ts": {
+      "imports": [
+        "src/pages/robots.txt.ts",
+        "src/pages/llms.txt.ts",
+        "src/lib/site.ts"
+      ],
+      "importedBy": []
+    },
+    "src/pages/blog/[slug].astro": {
+      "imports": [
+        "src/styles/tokens.css",
+        "src/lib/url.ts",
+        "src/components/SEO.astro",
+        "src/components/HeadExtras.astro",
+        "src/components/Embed.astro",
+        "src/lib/site.ts"
+      ],
+      "importedBy": []
+    },
+    "vitest.config.ts": {
+      "imports": [],
+      "importedBy": []
+    },
+    ".claude/hooks/editor-pretool-hook.py": {
+      "imports": [],
+      "importedBy": []
     },
     "src/lib/url.ts": {
       "imports": [],
@@ -488,87 +658,11 @@
         "src/pages/isolated-components/[name].astro"
       ]
     },
-    "src/lib/deployStatus.test.ts": {
-      "imports": [
-        "src/lib/deployStatus.ts"
-      ],
-      "importedBy": []
-    },
-    "astro.config.mjs": {
-      "imports": [],
-      "importedBy": []
-    },
-    ".claude/hooks/editor-step-hook.py": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/components/landing/ContentHub.astro": {
-      "imports": [
-        "src/lib/url.ts",
-        "src/lib/events.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/lib/gallery.test.ts": {
-      "imports": [
-        "src/lib/gallery.ts",
-        "src/lib/gallery.ts",
-        "src/lib/gallery.ts",
-        "src/lib/gallery.ts",
-        "src/lib/gallery.ts"
-      ],
-      "importedBy": []
-    },
-    "scripts/download-assets.mjs": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/components/admin/DashboardSummary.astro": {
-      "imports": [
-        "src/lib/adminDashboard.ts"
-      ],
-      "importedBy": [
-        "src/pages/admin/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    ".claude/skills/review-session/scripts/find-last-session.mjs": {
-      "imports": [
-        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs"
-      ],
-      "importedBy": []
-    },
-    "src/lib/adminGate.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/components/admin/AdminGate.astro",
-        "src/lib/adminGate.test.ts"
-      ]
-    },
     "src/components/ChapterLeads.astro": {
       "imports": [],
       "importedBy": [
         "src/components/ChapterPage.astro"
       ]
-    },
-    ".claude/hooks/editor-pretool-hook.py": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/lib/url.test.ts": {
-      "imports": [
-        "src/lib/url.ts"
-      ],
-      "importedBy": []
-    },
-    "src/lib/contentRoot.test.ts": {
-      "imports": [
-        "src/lib/contentRoot.ts"
-      ],
-      "importedBy": []
     },
     "src/lib/mailto.test.ts": {
       "imports": [
@@ -576,49 +670,11 @@
       ],
       "importedBy": []
     },
-    "src/components/StructuredData.astro": {
+    ".claude/skills/review-session/scripts/extract-session.mjs": {
       "imports": [
-        "src/lib/site.ts"
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs"
       ],
-      "importedBy": [
-        "src/components/HeadExtras.astro"
-      ]
-    },
-    "src/lib/luma.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/components/landing/UpcomingEvents.astro",
-        "src/pages/events.astro"
-      ]
-    },
-    "src/components/admin/CollectionCountGrid.astro": {
-      "imports": [
-        "src/components/admin/CollectionCountCard.astro",
-        "src/lib/adminDashboard.ts"
-      ],
-      "importedBy": [
-        "src/pages/admin/index.astro"
-      ]
-    },
-    "src/components/landing/HeroCarousel.astro": {
-      "imports": [
-        "src/lib/url.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/landing/ContactUs.astro": {
-      "imports": [
-        "src/lib/mailto.ts",
-        "src/lib/socialIcon.ts",
-        "src/lib/site.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
+      "importedBy": []
     },
     "src/components/Greeting.test.tsx": {
       "imports": [
@@ -626,86 +682,49 @@
       ],
       "importedBy": []
     },
-    "src/components/landing/SupportUs.astro": {
-      "imports": [
-        "src/lib/mailto.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/lib/events.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/components/EventsSection.astro",
-        "src/components/ChapterPage.astro",
-        "src/components/landing/ContentHub.astro",
-        "src/components/landing/UpcomingEvents.astro",
-        "src/components/EventCard.astro",
-        "src/components/ChapterEvents.astro",
-        "src/components/EventsPage.astro",
-        "src/lib/events.test.ts",
-        "src/pages/chapters/[slug].astro"
-      ]
-    },
-    "src/components/admin/AdminGatePrompt.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/layouts/AdminLayout.astro": {
+    "src/pages/404.astro": {
       "imports": [
         "src/styles/tokens.css",
-        "src/components/admin/AdminGate.astro",
-        "src/components/admin/AdminHeader.astro",
-        "src/lib/site.ts"
-      ],
-      "importedBy": [
-        "src/pages/admin/index.astro"
-      ]
-    },
-    "src/lib/parallax.ts": {
-      "imports": [],
-      "importedBy": [
-        "src/lib/parallax.test.ts",
-        "src/lib/parallax.test.ts"
-      ]
-    },
-    "src/components/ChapterSignUp.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/components/ChapterPage.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/lib/socialIcon.test.ts": {
-      "imports": [
-        "src/lib/socialIcon.ts"
+        "src/lib/url.ts"
       ],
       "importedBy": []
     },
-    "src/components/admin/AdminHeader.astro": {
+    "src/pages/deploy-status.json.ts": {
+      "imports": [],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs": {
       "imports": [],
       "importedBy": [
+        ".claude/skills/review-session/scripts/find-last-session.mjs"
+      ]
+    },
+    "src/components/Greeting.tsx": {
+      "imports": [],
+      "importedBy": [
+        "src/components/Greeting.test.tsx",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/styles/tokens.css": {
+      "imports": [],
+      "importedBy": [
+        "src/pages/404.astro",
+        "src/pages/isolated-components/[name].astro",
+        "src/pages/blog/[slug].astro",
+        "src/layouts/BaseLayout.astro",
         "src/layouts/AdminLayout.astro"
       ]
     },
-    "src/lib/team.test.ts": {
+    "src/lib/contentRoot.test.ts": {
       "imports": [
-        "src/lib/team.ts"
+        "src/lib/contentRoot.ts"
       ],
       "importedBy": []
     },
-    "src/components/BoardMemberCard.astro": {
-      "imports": [
-        "src/lib/url.ts",
-        "src/lib/team.ts"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/[name].astro"
-      ]
+    ".claude/hooks/_step_metadata.py": {
+      "imports": [],
+      "importedBy": []
     },
     "src/pages/index.astro": {
       "imports": [
@@ -728,25 +747,38 @@
       ],
       "importedBy": []
     },
-    "src/components/landing/GetInvolved.astro": {
-      "imports": [
-        "src/lib/mailto.ts"
-      ],
+    "src/lib/gallery.ts": {
+      "imports": [],
       "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
+        "src/components/landing/EventGallery.astro",
+        "src/lib/gallery.test.ts",
+        "src/lib/gallery.test.ts",
+        "src/lib/gallery.test.ts",
+        "src/lib/gallery.test.ts",
+        "src/lib/gallery.test.ts"
       ]
     },
-    "src/pages/events.astro": {
+    "src/components/HeadExtras.astro": {
       "imports": [
-        "src/layouts/BaseLayout.astro",
-        "src/components/EventsPage.astro",
-        "src/components/LumaCalendar.astro",
-        "src/lib/luma.ts"
+        "src/components/Analytics.astro",
+        "src/components/StructuredData.astro",
+        "src/lib/site.ts"
       ],
-      "importedBy": []
+      "importedBy": [
+        "src/pages/blog/[slug].astro",
+        "src/layouts/BaseLayout.astro"
+      ]
     },
-    "scripts/extract.mjs": {
+    "src/components/SEO.astro": {
+      "imports": [
+        "src/lib/site.ts"
+      ],
+      "importedBy": [
+        "src/pages/blog/[slug].astro",
+        "src/layouts/BaseLayout.astro"
+      ]
+    },
+    "public/admin/editor/deploy-status.js": {
       "imports": [],
       "importedBy": []
     },
@@ -761,114 +793,63 @@
         "src/pages/isolated-components/[name].astro"
       ]
     },
-    "src/pages/deploy-status.json.ts": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/pages/blog/[slug].astro": {
+    "src/lib/events.test.ts": {
       "imports": [
-        "src/styles/tokens.css",
-        "src/lib/url.ts",
-        "src/components/SEO.astro",
-        "src/components/HeadExtras.astro",
-        "src/components/Embed.astro",
-        "src/lib/site.ts"
-      ],
-      "importedBy": []
-    },
-    "src/components/landing/GivingCampaign.astro": {
-      "imports": [
-        "src/lib/mailto.ts"
-      ],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "scripts/crop.mjs": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/components/landing/Hero.astro": {
-      "imports": [
-        "src/lib/url.ts"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/lib/site.test.ts": {
-      "imports": [
-        "src/lib/site.ts",
-        "src/lib/site.ts"
-      ],
-      "importedBy": []
-    },
-    "src/components/landing/Stats.astro": {
-      "imports": [],
-      "importedBy": [
-        "src/pages/index.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/admin/CollectionCountCard.astro": {
-      "imports": [
-        "src/lib/adminDashboard.ts"
-      ],
-      "importedBy": [
-        "src/components/admin/CollectionCountGrid.astro",
-        "src/pages/isolated-components/[name].astro"
-      ]
-    },
-    "src/components/SEO.astro": {
-      "imports": [
-        "src/lib/site.ts"
-      ],
-      "importedBy": [
-        "src/pages/blog/[slug].astro",
-        "src/layouts/BaseLayout.astro"
-      ]
-    },
-    "scripts/section-shot.mjs": {
-      "imports": [],
-      "importedBy": []
-    },
-    "src/components/EventsSection.astro": {
-      "imports": [
-        "src/components/EventCard.astro",
         "src/lib/events.ts"
       ],
-      "importedBy": [
-        "src/components/EventsPage.astro"
-      ]
+      "importedBy": []
     },
-    "src/pages/robots.txt.ts": {
+    "src/lib/team.test.ts": {
+      "imports": [
+        "src/lib/team.ts"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs": {
       "imports": [],
       "importedBy": [
-        "src/lib/seoEndpoints.test.ts"
+        ".claude/skills/review-session/scripts/extract-session.mjs"
+      ]
+    },
+    "astro.config.mjs": {
+      "imports": [],
+      "importedBy": []
+    },
+    "src/components/landing/UpcomingEvents.astro": {
+      "imports": [
+        "src/components/EventCard.astro",
+        "src/lib/events.ts",
+        "src/lib/luma.ts"
+      ],
+      "importedBy": [
+        "src/pages/index.astro",
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/lib/adminGate.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/admin/AdminGate.astro",
+        "src/lib/adminGate.test.ts"
+      ]
+    },
+    "src/components/admin/AdminGatePrompt.astro": {
+      "imports": [],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro"
+      ]
+    },
+    "src/components/BoardMemberCard.astro": {
+      "imports": [
+        "src/lib/url.ts",
+        "src/lib/team.ts"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro"
       ]
     }
   },
   "entities": {
-    "src/pages/chapters/[slug].astro::__file_root__": {
-      "filePath": "src/pages/chapters/[slug].astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/layouts/BaseLayout.astro::__file_root__",
-        "src/components/ChapterPage.astro::__file_root__",
-        "src/lib/events.ts::EventLike",
-        "src/lib/events.ts::splitEvents"
-      ],
-      "importedBy": []
-    },
-    "src/lib/parallax.test.ts::freshInit": {
-      "filePath": "src/lib/parallax.test.ts",
-      "name": "freshInit",
-      "imports": [
-        "src/lib/parallax.ts::__file_root__"
-      ],
-      "importedBy": []
-    },
     "src/components/admin/AdminHeader.astro::__file_root__": {
       "filePath": "src/components/admin/AdminHeader.astro",
       "name": "__file_root__",
@@ -877,57 +858,25 @@
         "src/layouts/AdminLayout.astro::__file_root__"
       ]
     },
-    "src/components/landing/GivingCampaign.astro::__file_root__": {
-      "filePath": "src/components/landing/GivingCampaign.astro",
+    ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__": {
+      "filePath": ".claude/skills/review-session/scripts/extract-session.mjs",
       "name": "__file_root__",
       "imports": [
-        "src/lib/mailto.ts::buildMailto"
-      ],
-      "importedBy": [
-        "src/pages/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/components/Greeting.test.tsx::__file_root__": {
-      "filePath": "src/components/Greeting.test.tsx",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Greeting.tsx::Greeting"
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormat",
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormatFromPath"
       ],
       "importedBy": []
     },
-    "src/lib/deployStatus.ts::ActionsRun": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "ActionsRun",
-      "imports": [],
-      "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath": {
-      "filePath": ".claude/skills/review-session/scripts/find-last-session-helpers.mjs",
-      "name": "claudeProjectHashFromPath",
-      "imports": [],
-      "importedBy": [
-        ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__"
-      ]
-    },
-    "src/lib/events.ts::splitEvents": {
-      "filePath": "src/lib/events.ts",
-      "name": "splitEvents",
-      "imports": [],
-      "importedBy": [
-        "src/pages/chapters/[slug].astro::__file_root__"
-      ]
-    },
-    "src/components/ChapterEvents.astro::__file_root__": {
-      "filePath": "src/components/ChapterEvents.astro",
+    "src/components/EventsPage.astro::__file_root__": {
+      "filePath": "src/components/EventsPage.astro",
       "name": "__file_root__",
       "imports": [
-        "src/components/EventCard.astro::__file_root__",
-        "src/lib/events.ts::EventLike"
+        "src/components/EventsSection.astro::__file_root__",
+        "src/lib/events.ts::EventLike",
+        "src/lib/events.ts::splitEvents"
       ],
       "importedBy": [
+        "src/pages/events.astro::__file_root__",
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
@@ -944,78 +893,16 @@
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
-    "src/lib/site.test.ts::__file_root__": {
-      "filePath": "src/lib/site.test.ts",
+    "src/components/landing/ContentHub.astro::__file_root__": {
+      "filePath": "src/components/landing/ContentHub.astro",
       "name": "__file_root__",
       "imports": [
-        "src/lib/site.ts::__file_root__",
-        "src/lib/site.ts::__file_root__"
+        "src/lib/url.ts::withBase",
+        "src/lib/events.ts::formatEventDate"
       ],
-      "importedBy": []
-    },
-    "src/lib/deployStatus.test.ts::__file_root__": {
-      "filePath": "src/lib/deployStatus.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/deployStatus.ts::ActionsRun",
-        "src/lib/deployStatus.ts::DeployMarker",
-        "src/lib/deployStatus.ts::__file_root__",
-        "src/lib/deployStatus.ts::computeBanner",
-        "src/lib/deployStatus.ts::deployBaseFromPath",
-        "src/lib/deployStatus.ts::mapRunPhase",
-        "src/lib/deployStatus.ts::markerUrl",
-        "src/lib/deployStatus.ts::parseBackendRepo",
-        "src/lib/deployStatus.ts::pickLatestDeployRun",
-        "src/lib/deployStatus.ts::relativeTime",
-        "src/lib/deployStatus.ts::viewSiteUrl"
-      ],
-      "importedBy": []
-    },
-    "src/lib/luma.ts::__file_root__": {
-      "filePath": "src/lib/luma.ts",
-      "name": "__file_root__",
-      "imports": [],
       "importedBy": [
-        "src/pages/events.astro::__file_root__"
-      ]
-    },
-    "src/components/ChapterSignUp.astro::__file_root__": {
-      "filePath": "src/components/ChapterSignUp.astro",
-      "name": "__file_root__",
-      "imports": [],
-      "importedBy": [
+        "src/pages/index.astro::__file_root__",
         "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/deployStatus.ts::deployBaseFromPath": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "deployBaseFromPath",
-      "imports": [],
-      "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    "src/pages/admin/index.astro::__file_root__": {
-      "filePath": "src/pages/admin/index.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/layouts/AdminLayout.astro::__file_root__",
-        "src/components/admin/DashboardSummary.astro::__file_root__",
-        "src/components/admin/DeployStatus.astro::__file_root__",
-        "src/components/admin/CollectionCountGrid.astro::__file_root__",
-        "src/components/admin/SignInGuide.astro::__file_root__",
-        "src/lib/adminDashboard.ts::__file_root__",
-        "src/lib/adminDashboard.ts::dashboardTotals",
-        "src/lib/url.ts::withBase"
-      ],
-      "importedBy": []
-    },
-    "src/lib/contentRoot.ts::dataRoot": {
-      "filePath": "src/lib/contentRoot.ts",
-      "name": "dataRoot",
-      "imports": [],
-      "importedBy": [
-        "src/lib/site.ts::__file_root__"
       ]
     },
     "src/lib/team.test.ts::__file_root__": {
@@ -1030,127 +917,28 @@
       ],
       "importedBy": []
     },
-    "src/lib/site.ts::__file_root__": {
+    "src/lib/luma.ts::__file_root__": {
+      "filePath": "src/lib/luma.ts",
+      "name": "__file_root__",
+      "imports": [],
+      "importedBy": [
+        "src/pages/events.astro::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::mapRunPhase": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "mapRunPhase",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/site.ts::nav": {
       "filePath": "src/lib/site.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/contentRoot.ts::dataRoot"
-      ],
-      "importedBy": [
-        "src/lib/site.test.ts::__file_root__",
-        "src/lib/site.test.ts::__file_root__"
-      ]
-    },
-    "src/layouts/BaseLayout.astro::__file_root__": {
-      "filePath": "src/layouts/BaseLayout.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/styles/tokens.css::__file_root__",
-        "src/components/SEO.astro::__file_root__",
-        "src/components/HeadExtras.astro::__file_root__",
-        "src/lib/site.ts::nav",
-        "src/lib/site.ts::settings",
-        "src/lib/url.ts::withBase"
-      ],
-      "importedBy": []
-    },
-    "src/pages/llms.txt.ts::__file_root__": {
-      "filePath": "src/pages/llms.txt.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/site.ts::settings"
-      ],
-      "importedBy": []
-    },
-    "src/lib/socialIcon.test.ts::__file_root__": {
-      "filePath": "src/lib/socialIcon.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/socialIcon.ts::socialIconSrc"
-      ],
-      "importedBy": []
-    },
-    "src/components/ChapterConnect.astro::__file_root__": {
-      "filePath": "src/components/ChapterConnect.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/mailto.ts::buildMailto",
-        "src/lib/socialIcon.ts::socialIconSrc",
-        "src/lib/site.ts::settings"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/components/ChapterHero.astro::__file_root__": {
-      "filePath": "src/components/ChapterHero.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/ChapterHeader.astro::__file_root__",
-        "src/lib/url.ts::withBase"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/site.ts::settings": {
-      "filePath": "src/lib/site.ts",
-      "name": "settings",
+      "name": "nav",
       "imports": [],
       "importedBy": [
-        "src/lib/seoEndpoints.test.ts::__file_root__",
-        "src/pages/index.astro::__file_root__",
-        "src/pages/llms.txt.ts::__file_root__",
-        "src/pages/blog/[slug].astro::__file_root__",
-        "src/layouts/BaseLayout.astro::__file_root__",
-        "src/layouts/AdminLayout.astro::__file_root__"
-      ]
-    },
-    "src/components/admin/CollectionCountCard.astro::__file_root__": {
-      "filePath": "src/components/admin/CollectionCountCard.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/adminDashboard.ts::CollectionName"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/events.test.ts::__file_root__": {
-      "filePath": "src/lib/events.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/events.ts::formatEventDate",
-        "src/lib/events.ts::splitEvents",
-        "src/lib/events.ts::toEventDate"
-      ],
-      "importedBy": []
-    },
-    "src/lib/team.ts::initials": {
-      "filePath": "src/lib/team.ts",
-      "name": "initials",
-      "imports": [],
-      "importedBy": [
-        "src/lib/team.test.ts::__file_root__"
-      ]
-    },
-    "src/components/landing/GetInvolved.astro::__file_root__": {
-      "filePath": "src/components/landing/GetInvolved.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/mailto.ts::buildMailto"
-      ],
-      "importedBy": [
-        "src/pages/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/events.ts::EventLike": {
-      "filePath": "src/lib/events.ts",
-      "name": "EventLike",
-      "imports": [],
-      "importedBy": [
-        "src/pages/chapters/[slug].astro::__file_root__"
+        "src/layouts/BaseLayout.astro::__file_root__"
       ]
     },
     "src/lib/adminDashboard.ts::__file_root__": {
@@ -1161,208 +949,31 @@
         "src/pages/admin/index.astro::__file_root__"
       ]
     },
-    "src/components/EventsSection.astro::__file_root__": {
-      "filePath": "src/components/EventsSection.astro",
+    "src/components/landing/GivingCampaign.astro::__file_root__": {
+      "filePath": "src/components/landing/GivingCampaign.astro",
       "name": "__file_root__",
       "imports": [
-        "src/components/EventCard.astro::__file_root__",
-        "src/lib/events.ts::EventLike"
-      ],
-      "importedBy": [
-        "src/components/EventsPage.astro::__file_root__"
-      ]
-    },
-    "src/components/landing/FocusAreas.astro::__file_root__": {
-      "filePath": "src/components/landing/FocusAreas.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase"
+        "src/lib/mailto.ts::buildMailto"
       ],
       "importedBy": [
         "src/pages/index.astro::__file_root__",
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
-    "src/components/landing/ContactUs.astro::__file_root__": {
-      "filePath": "src/components/landing/ContactUs.astro",
+    "src/components/EmbedForm.astro::__file_root__": {
+      "filePath": "src/components/EmbedForm.astro",
       "name": "__file_root__",
-      "imports": [
-        "src/lib/mailto.ts::buildMailto",
-        "src/lib/socialIcon.ts::socialIconSrc",
-        "src/lib/site.ts::SocialLink"
-      ],
+      "imports": [],
       "importedBy": [
-        "src/pages/index.astro::__file_root__",
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
-    "src/lib/deployStatus.ts::pickLatestDeployRun": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "pickLatestDeployRun",
+    "src/components/LumaCalendar.astro::__file_root__": {
+      "filePath": "src/components/LumaCalendar.astro",
+      "name": "__file_root__",
       "imports": [],
       "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    "src/components/landing/HeroCarousel.astro::__file_root__": {
-      "filePath": "src/components/landing/HeroCarousel.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase"
-      ],
-      "importedBy": [
-        "src/pages/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/team.ts::sortBoardMembers": {
-      "filePath": "src/lib/team.ts",
-      "name": "sortBoardMembers",
-      "imports": [],
-      "importedBy": [
-        "src/lib/team.test.ts::__file_root__",
-        "src/pages/index.astro::__file_root__"
-      ]
-    },
-    "src/components/admin/DeployStatus.astro::__file_root__": {
-      "filePath": "src/components/admin/DeployStatus.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/deployStatus.ts::BannerView",
-        "src/lib/deployStatus.ts::__file_root__"
-      ],
-      "importedBy": [
-        "src/pages/admin/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/adminGate.test.ts::__file_root__": {
-      "filePath": "src/lib/adminGate.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/adminGate.ts::__file_root__",
-        "src/lib/adminGate.ts::isPasscodeCorrect"
-      ],
-      "importedBy": []
-    },
-    ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__": {
-      "filePath": ".claude/skills/review-session/scripts/extract-session.mjs",
-      "name": "__file_root__",
-      "imports": [
-        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormat",
-        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormatFromPath"
-      ],
-      "importedBy": []
-    },
-    "src/lib/deployStatus.ts::computeBanner": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "computeBanner",
-      "imports": [],
-      "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    "src/components/HeadExtras.astro::__file_root__": {
-      "filePath": "src/components/HeadExtras.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/Analytics.astro::__file_root__",
-        "src/components/StructuredData.astro::__file_root__",
-        "src/lib/site.ts::settings"
-      ],
-      "importedBy": [
-        "src/pages/blog/[slug].astro::__file_root__",
-        "src/layouts/BaseLayout.astro::__file_root__"
-      ]
-    },
-    "src/lib/deployStatus.ts::parseBackendRepo": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "parseBackendRepo",
-      "imports": [],
-      "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/contentRoot.test.ts::__file_root__": {
-      "filePath": "src/lib/contentRoot.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/contentRoot.ts::contentRoot",
-        "src/lib/contentRoot.ts::dataRoot"
-      ],
-      "importedBy": []
-    },
-    "src/components/landing/OurChapters.astro::__file_root__": {
-      "filePath": "src/components/landing/OurChapters.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase"
-      ],
-      "importedBy": [
-        "src/pages/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/components/admin/AdminGate.astro::__file_root__": {
-      "filePath": "src/components/admin/AdminGate.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase",
-        "src/lib/adminGate.ts::__file_root__"
-      ],
-      "importedBy": [
-        "src/layouts/AdminLayout.astro::__file_root__"
-      ]
-    },
-    "src/lib/contentRoot.ts::contentRoot": {
-      "filePath": "src/lib/contentRoot.ts",
-      "name": "contentRoot",
-      "imports": [],
-      "importedBy": [
-        "src/content/config.ts::__file_root__"
-      ]
-    },
-    "src/components/landing/EventGallery.astro::__file_root__": {
-      "filePath": "src/components/landing/EventGallery.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase",
-        "src/lib/gallery.ts::galleryStaggerDelay"
-      ],
-      "importedBy": [
-        "src/pages/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/gallery.test.ts::__file_root__": {
-      "filePath": "src/lib/gallery.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/gallery.ts::galleryRevealImmediately",
-        "src/lib/gallery.ts::galleryStaggerDelay",
-        "src/lib/gallery.ts::__file_root__",
-        "src/lib/gallery.ts::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/lib/deployStatus.ts::markerUrl": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "markerUrl",
-      "imports": [],
-      "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    "src/components/BoardMemberCard.astro::__file_root__": {
-      "filePath": "src/components/BoardMemberCard.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase",
-        "src/lib/team.ts::BoardMemberLike",
-        "src/lib/team.ts::initials",
-        "src/lib/team.ts::splitRole"
-      ],
-      "importedBy": [
+        "src/pages/events.astro::__file_root__",
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
@@ -1403,165 +1014,28 @@
       ],
       "importedBy": []
     },
-    "src/components/EventsPage.astro::__file_root__": {
-      "filePath": "src/components/EventsPage.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/components/EventsSection.astro::__file_root__",
-        "src/lib/events.ts::EventLike",
-        "src/lib/events.ts::splitEvents"
-      ],
-      "importedBy": [
-        "src/pages/events.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/components/LumaCalendar.astro::__file_root__": {
-      "filePath": "src/components/LumaCalendar.astro",
-      "name": "__file_root__",
-      "imports": [],
-      "importedBy": [
-        "src/pages/events.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/deployStatus.ts::mapRunPhase": {
+    "src/lib/deployStatus.ts::markerUrl": {
       "filePath": "src/lib/deployStatus.ts",
-      "name": "mapRunPhase",
+      "name": "markerUrl",
       "imports": [],
       "importedBy": [
         "src/lib/deployStatus.test.ts::__file_root__"
       ]
     },
-    "src/components/StructuredData.astro::__file_root__": {
-      "filePath": "src/components/StructuredData.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/site.ts::settings"
-      ],
-      "importedBy": [
-        "src/components/HeadExtras.astro::__file_root__"
-      ]
-    },
-    "src/components/landing/Hero.astro::__file_root__": {
-      "filePath": "src/components/landing/Hero.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase"
-      ],
-      "importedBy": [
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/components/landing/Stats.astro::__file_root__": {
-      "filePath": "src/components/landing/Stats.astro",
-      "name": "__file_root__",
+    "src/lib/events.ts::splitEvents": {
+      "filePath": "src/lib/events.ts",
+      "name": "splitEvents",
       "imports": [],
       "importedBy": [
-        "src/pages/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
+        "src/pages/chapters/[slug].astro::__file_root__"
       ]
     },
-    "src/pages/blog/[slug].astro::__file_root__": {
-      "filePath": "src/pages/blog/[slug].astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/styles/tokens.css::__file_root__",
-        "src/lib/url.ts::withBase",
-        "src/components/SEO.astro::__file_root__",
-        "src/components/HeadExtras.astro::__file_root__",
-        "src/components/Embed.astro::__file_root__",
-        "src/lib/site.ts::settings"
-      ],
-      "importedBy": []
-    },
-    "src/components/admin/DashboardSummary.astro::__file_root__": {
-      "filePath": "src/components/admin/DashboardSummary.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/adminDashboard.ts::dashboardSummaryText"
-      ],
-      "importedBy": [
-        "src/pages/admin/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/pages/events.astro::__file_root__": {
-      "filePath": "src/pages/events.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/layouts/BaseLayout.astro::__file_root__",
-        "src/components/EventsPage.astro::__file_root__",
-        "src/components/LumaCalendar.astro::__file_root__",
-        "src/lib/luma.ts::__file_root__"
-      ],
-      "importedBy": []
-    },
-    "src/components/landing/ContentHub.astro::__file_root__": {
-      "filePath": "src/components/landing/ContentHub.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase",
-        "src/lib/events.ts::formatEventDate"
-      ],
-      "importedBy": [
-        "src/pages/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/components/landing/SupportUs.astro::__file_root__": {
-      "filePath": "src/components/landing/SupportUs.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/mailto.ts::buildMailto"
-      ],
-      "importedBy": [
-        "src/pages/index.astro::__file_root__",
-        "src/pages/isolated-components/[name].astro::__file_root__"
-      ]
-    },
-    "src/lib/adminDashboard.ts::dashboardTotals": {
-      "filePath": "src/lib/adminDashboard.ts",
-      "name": "dashboardTotals",
+    "src/lib/contentRoot.ts::contentRoot": {
+      "filePath": "src/lib/contentRoot.ts",
+      "name": "contentRoot",
       "imports": [],
       "importedBy": [
-        "src/pages/admin/index.astro::__file_root__"
-      ]
-    },
-    "src/lib/url.ts::withBase": {
-      "filePath": "src/lib/url.ts",
-      "name": "withBase",
-      "imports": [],
-      "importedBy": [
-        "src/lib/url.test.ts::__file_root__",
-        "src/pages/404.astro::__file_root__",
-        "src/pages/admin/index.astro::__file_root__",
-        "src/pages/blog/[slug].astro::__file_root__",
-        "src/layouts/BaseLayout.astro::__file_root__"
-      ]
-    },
-    "src/lib/url.test.ts::__file_root__": {
-      "filePath": "src/lib/url.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/url.ts::withBase"
-      ],
-      "importedBy": []
-    },
-    "src/lib/socialIcon.ts::socialIconSrc": {
-      "filePath": "src/lib/socialIcon.ts",
-      "name": "socialIconSrc",
-      "imports": [],
-      "importedBy": [
-        "src/lib/socialIcon.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/site.ts::nav": {
-      "filePath": "src/lib/site.ts",
-      "name": "nav",
-      "imports": [],
-      "importedBy": [
-        "src/layouts/BaseLayout.astro::__file_root__"
+        "src/content/config.ts::__file_root__"
       ]
     },
     "src/components/Analytics.astro::__file_root__": {
@@ -1571,6 +1045,48 @@
         "src/lib/site.ts::settings"
       ],
       "importedBy": []
+    },
+    "src/lib/gallery.test.ts::tiles": {
+      "filePath": "src/lib/gallery.test.ts",
+      "name": "tiles",
+      "imports": [
+        "src/lib/gallery.ts::__file_root__",
+        "src/lib/gallery.ts::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/landing/ContactUs.astro::__file_root__": {
+      "filePath": "src/components/landing/ContactUs.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/mailto.ts::buildMailto",
+        "src/lib/socialIcon.ts::socialIconSrc",
+        "src/lib/site.ts::SocialLink"
+      ],
+      "importedBy": [
+        "src/pages/index.astro::__file_root__",
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/components/ChapterConnect.astro::__file_root__": {
+      "filePath": "src/components/ChapterConnect.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/mailto.ts::buildMailto",
+        "src/lib/socialIcon.ts::socialIconSrc",
+        "src/lib/site.ts::settings"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/lib/events.ts::EventLike": {
+      "filePath": "src/lib/events.ts",
+      "name": "EventLike",
+      "imports": [],
+      "importedBy": [
+        "src/pages/chapters/[slug].astro::__file_root__"
+      ]
     },
     "src/components/EventCard.astro::__file_root__": {
       "filePath": "src/components/EventCard.astro",
@@ -1583,52 +1099,16 @@
         "src/components/ChapterEvents.astro::__file_root__"
       ]
     },
-    "src/pages/404.astro::__file_root__": {
-      "filePath": "src/pages/404.astro",
+    "src/layouts/BaseLayout.astro::__file_root__": {
+      "filePath": "src/layouts/BaseLayout.astro",
       "name": "__file_root__",
       "imports": [
         "src/styles/tokens.css::__file_root__",
-        "src/lib/url.ts::withBase"
-      ],
-      "importedBy": []
-    },
-    ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__": {
-      "filePath": ".claude/skills/review-session/scripts/find-last-session.mjs",
-      "name": "__file_root__",
-      "imports": [
-        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath"
-      ],
-      "importedBy": []
-    },
-    "src/lib/mailto.test.ts::__file_root__": {
-      "filePath": "src/lib/mailto.test.ts",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/mailto.ts::buildMailto"
-      ],
-      "importedBy": []
-    },
-    "src/pages/index.astro::__file_root__": {
-      "filePath": "src/pages/index.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/layouts/BaseLayout.astro::__file_root__",
+        "src/components/SEO.astro::__file_root__",
+        "src/components/HeadExtras.astro::__file_root__",
+        "src/lib/site.ts::nav",
         "src/lib/site.ts::settings",
-        "src/lib/team.ts::filterActiveBoardMembers",
-        "src/lib/team.ts::sortBoardMembers",
-        "src/components/landing/HeroCarousel.astro::__file_root__",
-        "src/components/landing/Stats.astro::__file_root__",
-        "src/components/landing/UpcomingEvents.astro::__file_root__",
-        "src/components/landing/OurChapters.astro::__file_root__",
-        "src/components/landing/FocusAreas.astro::__file_root__",
-        "src/components/landing/ContentHub.astro::__file_root__",
-        "src/components/landing/BoardOfDirectors.astro::__file_root__",
-        "src/components/landing/GetInvolved.astro::__file_root__",
-        "src/components/landing/GivingCampaign.astro::__file_root__",
-        "src/components/landing/WhatsappCommunity.astro::__file_root__",
-        "src/components/landing/SupportUs.astro::__file_root__",
-        "src/components/landing/EventGallery.astro::__file_root__",
-        "src/components/landing/ContactUs.astro::__file_root__"
+        "src/lib/url.ts::withBase"
       ],
       "importedBy": []
     },
@@ -1644,58 +1124,36 @@
         "src/layouts/AdminLayout.astro::__file_root__"
       ]
     },
-    "src/lib/seoEndpoints.test.ts::__file_root__": {
-      "filePath": "src/lib/seoEndpoints.test.ts",
+    "src/components/landing/FocusAreas.astro::__file_root__": {
+      "filePath": "src/components/landing/FocusAreas.astro",
       "name": "__file_root__",
       "imports": [
-        "src/pages/robots.txt.ts::__file_root__",
-        "src/pages/llms.txt.ts::__file_root__",
-        "src/lib/site.ts::settings"
-      ],
-      "importedBy": []
-    },
-    "src/lib/team.ts::filterActiveBoardMembers": {
-      "filePath": "src/lib/team.ts",
-      "name": "filterActiveBoardMembers",
-      "imports": [],
-      "importedBy": [
-        "src/lib/team.test.ts::__file_root__",
-        "src/pages/index.astro::__file_root__"
-      ]
-    },
-    "src/components/SEO.astro::__file_root__": {
-      "filePath": "src/components/SEO.astro",
-      "name": "__file_root__",
-      "imports": [
-        "src/lib/site.ts::settings"
+        "src/lib/url.ts::withBase"
       ],
       "importedBy": [
-        "src/pages/blog/[slug].astro::__file_root__",
-        "src/layouts/BaseLayout.astro::__file_root__"
-      ]
-    },
-    "src/components/Greeting.tsx::Greeting": {
-      "filePath": "src/components/Greeting.tsx",
-      "name": "Greeting",
-      "imports": [],
-      "importedBy": [
+        "src/pages/index.astro::__file_root__",
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
-    "src/lib/deployStatus.ts::BannerView": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "BannerView",
-      "imports": [],
+    "src/components/EventsSection.astro::__file_root__": {
+      "filePath": "src/components/EventsSection.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/EventCard.astro::__file_root__",
+        "src/lib/events.ts::EventLike"
+      ],
       "importedBy": [
-        "src/pages/isolated-components/[name].astro::__file_root__"
+        "src/components/EventsPage.astro::__file_root__"
       ]
     },
-    "src/lib/gallery.test.ts::tiles": {
-      "filePath": "src/lib/gallery.test.ts",
-      "name": "tiles",
+    "src/pages/chapters/[slug].astro::__file_root__": {
+      "filePath": "src/pages/chapters/[slug].astro",
+      "name": "__file_root__",
       "imports": [
-        "src/lib/gallery.ts::__file_root__",
-        "src/lib/gallery.ts::__file_root__"
+        "src/layouts/BaseLayout.astro::__file_root__",
+        "src/components/ChapterPage.astro::__file_root__",
+        "src/lib/events.ts::EventLike",
+        "src/lib/events.ts::splitEvents"
       ],
       "importedBy": []
     },
@@ -1710,13 +1168,108 @@
       ],
       "importedBy": []
     },
-    "src/components/landing/landing-images.test.ts::__file_root__": {
-      "filePath": "src/components/landing/landing-images.test.ts",
+    "src/lib/socialIcon.test.ts::__file_root__": {
+      "filePath": "src/lib/socialIcon.test.ts",
       "name": "__file_root__",
       "imports": [
+        "src/lib/socialIcon.ts::socialIconSrc"
+      ],
+      "importedBy": []
+    },
+    "src/lib/contentRoot.test.ts::__file_root__": {
+      "filePath": "src/lib/contentRoot.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/contentRoot.ts::contentRoot",
+        "src/lib/contentRoot.ts::dataRoot"
+      ],
+      "importedBy": []
+    },
+    "src/lib/parallax.test.ts::__file_root__": {
+      "filePath": "src/lib/parallax.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/parallax.ts::parallaxEnabled",
+        "src/lib/parallax.ts::parallaxOffset"
+      ],
+      "importedBy": []
+    },
+    "src/pages/admin/index.astro::__file_root__": {
+      "filePath": "src/pages/admin/index.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/layouts/AdminLayout.astro::__file_root__",
+        "src/components/admin/DashboardSummary.astro::__file_root__",
+        "src/components/admin/DeployStatus.astro::__file_root__",
+        "src/components/admin/CollectionCountGrid.astro::__file_root__",
+        "src/components/admin/SignInGuide.astro::__file_root__",
+        "src/lib/adminDashboard.ts::__file_root__",
+        "src/lib/adminDashboard.ts::dashboardTotals",
         "src/lib/url.ts::withBase"
       ],
       "importedBy": []
+    },
+    "src/components/landing/SupportUs.astro::__file_root__": {
+      "filePath": "src/components/landing/SupportUs.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/mailto.ts::buildMailto"
+      ],
+      "importedBy": [
+        "src/pages/index.astro::__file_root__",
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/components/Greeting.tsx::Greeting": {
+      "filePath": "src/components/Greeting.tsx",
+      "name": "Greeting",
+      "imports": [],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/pages/llms.txt.ts::__file_root__": {
+      "filePath": "src/pages/llms.txt.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/site.ts::settings"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__": {
+      "filePath": ".claude/skills/review-session/scripts/find-last-session.mjs",
+      "name": "__file_root__",
+      "imports": [
+        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath": {
+      "filePath": ".claude/skills/review-session/scripts/find-last-session-helpers.mjs",
+      "name": "claudeProjectHashFromPath",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__"
+      ]
+    },
+    "src/components/admin/AdminGate.astro::__file_root__": {
+      "filePath": "src/components/admin/AdminGate.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/url.ts::withBase",
+        "src/lib/adminGate.ts::__file_root__"
+      ],
+      "importedBy": [
+        "src/layouts/AdminLayout.astro::__file_root__"
+      ]
+    },
+    "src/lib/socialIcon.ts::socialIconSrc": {
+      "filePath": "src/lib/socialIcon.ts",
+      "name": "socialIconSrc",
+      "imports": [],
+      "importedBy": [
+        "src/lib/socialIcon.test.ts::__file_root__"
+      ]
     },
     "src/components/admin/AdminGatePrompt.astro::__file_root__": {
       "filePath": "src/components/admin/AdminGatePrompt.astro",
@@ -1725,6 +1278,88 @@
       "importedBy": [
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
+    },
+    "src/lib/deployStatus.test.ts::__file_root__": {
+      "filePath": "src/lib/deployStatus.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/deployStatus.ts::ActionsRun",
+        "src/lib/deployStatus.ts::DeployMarker",
+        "src/lib/deployStatus.ts::__file_root__",
+        "src/lib/deployStatus.ts::computeBanner",
+        "src/lib/deployStatus.ts::deployBaseFromPath",
+        "src/lib/deployStatus.ts::mapRunPhase",
+        "src/lib/deployStatus.ts::markerUrl",
+        "src/lib/deployStatus.ts::parseBackendRepo",
+        "src/lib/deployStatus.ts::pickLatestDeployRun",
+        "src/lib/deployStatus.ts::relativeTime",
+        "src/lib/deployStatus.ts::viewSiteUrl"
+      ],
+      "importedBy": []
+    },
+    "src/lib/contentRoot.ts::dataRoot": {
+      "filePath": "src/lib/contentRoot.ts",
+      "name": "dataRoot",
+      "imports": [],
+      "importedBy": [
+        "src/lib/site.ts::__file_root__"
+      ]
+    },
+    "src/components/BoardMemberCard.astro::__file_root__": {
+      "filePath": "src/components/BoardMemberCard.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/url.ts::withBase",
+        "src/lib/team.ts::BoardMemberLike",
+        "src/lib/team.ts::initials",
+        "src/lib/team.ts::splitRole"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/lib/team.ts::filterActiveBoardMembers": {
+      "filePath": "src/lib/team.ts",
+      "name": "filterActiveBoardMembers",
+      "imports": [],
+      "importedBy": [
+        "src/lib/team.test.ts::__file_root__",
+        "src/pages/index.astro::__file_root__"
+      ]
+    },
+    "src/components/Embed.astro::__file_root__": {
+      "filePath": "src/components/Embed.astro",
+      "name": "__file_root__",
+      "imports": [],
+      "importedBy": [
+        "src/pages/blog/[slug].astro::__file_root__"
+      ]
+    },
+    "src/components/ChapterSignUp.astro::__file_root__": {
+      "filePath": "src/components/ChapterSignUp.astro",
+      "name": "__file_root__",
+      "imports": [],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::relativeTime": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "relativeTime",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/events.test.ts::__file_root__": {
+      "filePath": "src/lib/events.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/events.ts::formatEventDate",
+        "src/lib/events.ts::splitEvents",
+        "src/lib/events.ts::toEventDate"
+      ],
+      "importedBy": []
     },
     "src/components/admin/SignInGuide.astro::__file_root__": {
       "filePath": "src/components/admin/SignInGuide.astro",
@@ -1753,16 +1388,379 @@
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
-    "src/components/admin/CollectionCountGrid.astro::__file_root__": {
-      "filePath": "src/components/admin/CollectionCountGrid.astro",
+    "src/pages/index.astro::__file_root__": {
+      "filePath": "src/pages/index.astro",
       "name": "__file_root__",
       "imports": [
-        "src/components/admin/CollectionCountCard.astro::__file_root__",
-        "src/lib/adminDashboard.ts::CollectionCard"
+        "src/layouts/BaseLayout.astro::__file_root__",
+        "src/lib/site.ts::settings",
+        "src/lib/team.ts::filterActiveBoardMembers",
+        "src/lib/team.ts::sortBoardMembers",
+        "src/components/landing/HeroCarousel.astro::__file_root__",
+        "src/components/landing/Stats.astro::__file_root__",
+        "src/components/landing/UpcomingEvents.astro::__file_root__",
+        "src/components/landing/OurChapters.astro::__file_root__",
+        "src/components/landing/FocusAreas.astro::__file_root__",
+        "src/components/landing/ContentHub.astro::__file_root__",
+        "src/components/landing/BoardOfDirectors.astro::__file_root__",
+        "src/components/landing/GetInvolved.astro::__file_root__",
+        "src/components/landing/GivingCampaign.astro::__file_root__",
+        "src/components/landing/WhatsappCommunity.astro::__file_root__",
+        "src/components/landing/SupportUs.astro::__file_root__",
+        "src/components/landing/EventGallery.astro::__file_root__",
+        "src/components/landing/ContactUs.astro::__file_root__"
       ],
+      "importedBy": []
+    },
+    "src/components/landing/Stats.astro::__file_root__": {
+      "filePath": "src/components/landing/Stats.astro",
+      "name": "__file_root__",
+      "imports": [],
+      "importedBy": [
+        "src/pages/index.astro::__file_root__",
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/components/landing/landing-images.test.ts::__file_root__": {
+      "filePath": "src/components/landing/landing-images.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/url.ts::withBase"
+      ],
+      "importedBy": []
+    },
+    "src/components/landing/EventGallery.astro::__file_root__": {
+      "filePath": "src/components/landing/EventGallery.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/url.ts::withBase",
+        "src/lib/gallery.ts::galleryStaggerDelay"
+      ],
+      "importedBy": [
+        "src/pages/index.astro::__file_root__",
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::deployBaseFromPath": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "deployBaseFromPath",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::__file_root__": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "__file_root__",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/components/admin/DashboardSummary.astro::__file_root__": {
+      "filePath": "src/components/admin/DashboardSummary.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/adminDashboard.ts::dashboardSummaryText"
+      ],
+      "importedBy": [
+        "src/pages/admin/index.astro::__file_root__",
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/components/ChapterEvents.astro::__file_root__": {
+      "filePath": "src/components/ChapterEvents.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/EventCard.astro::__file_root__",
+        "src/lib/events.ts::EventLike"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/components/StructuredData.astro::__file_root__": {
+      "filePath": "src/components/StructuredData.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/site.ts::settings"
+      ],
+      "importedBy": [
+        "src/components/HeadExtras.astro::__file_root__"
+      ]
+    },
+    "src/lib/team.ts::initials": {
+      "filePath": "src/lib/team.ts",
+      "name": "initials",
+      "imports": [],
+      "importedBy": [
+        "src/lib/team.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::BannerView": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "BannerView",
+      "imports": [],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/components/landing/GetInvolved.astro::__file_root__": {
+      "filePath": "src/components/landing/GetInvolved.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/mailto.ts::buildMailto"
+      ],
+      "importedBy": [
+        "src/pages/index.astro::__file_root__",
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::DeployMarker": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "DeployMarker",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/events.astro::__file_root__": {
+      "filePath": "src/pages/events.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/layouts/BaseLayout.astro::__file_root__",
+        "src/components/EventsPage.astro::__file_root__",
+        "src/components/LumaCalendar.astro::__file_root__",
+        "src/lib/luma.ts::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/Greeting.test.tsx::__file_root__": {
+      "filePath": "src/components/Greeting.test.tsx",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/Greeting.tsx::Greeting"
+      ],
+      "importedBy": []
+    },
+    "src/components/SEO.astro::__file_root__": {
+      "filePath": "src/components/SEO.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/site.ts::settings"
+      ],
+      "importedBy": [
+        "src/pages/blog/[slug].astro::__file_root__",
+        "src/layouts/BaseLayout.astro::__file_root__"
+      ]
+    },
+    "src/components/ChapterHero.astro::__file_root__": {
+      "filePath": "src/components/ChapterHero.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/ChapterHeader.astro::__file_root__",
+        "src/lib/url.ts::withBase"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/components/admin/CollectionCountCard.astro::__file_root__": {
+      "filePath": "src/components/admin/CollectionCountCard.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/adminDashboard.ts::CollectionName"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/components/landing/OurChapters.astro::__file_root__": {
+      "filePath": "src/components/landing/OurChapters.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/url.ts::withBase"
+      ],
+      "importedBy": [
+        "src/pages/index.astro::__file_root__",
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/pages/404.astro::__file_root__": {
+      "filePath": "src/pages/404.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/styles/tokens.css::__file_root__",
+        "src/lib/url.ts::withBase"
+      ],
+      "importedBy": []
+    },
+    "src/lib/team.ts::splitRole": {
+      "filePath": "src/lib/team.ts",
+      "name": "splitRole",
+      "imports": [],
+      "importedBy": [
+        "src/lib/team.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::ActionsRun": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "ActionsRun",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::parseBackendRepo": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "parseBackendRepo",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::viewSiteUrl": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "viewSiteUrl",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/team.ts::sortBoardMembers": {
+      "filePath": "src/lib/team.ts",
+      "name": "sortBoardMembers",
+      "imports": [],
+      "importedBy": [
+        "src/lib/team.test.ts::__file_root__",
+        "src/pages/index.astro::__file_root__"
+      ]
+    },
+    "src/lib/site.test.ts::__file_root__": {
+      "filePath": "src/lib/site.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/site.ts::__file_root__",
+        "src/lib/site.ts::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/components/ChapterHeader.astro::__file_root__": {
+      "filePath": "src/components/ChapterHeader.astro",
+      "name": "__file_root__",
+      "imports": [],
+      "importedBy": [
+        "src/components/ChapterHero.astro::__file_root__"
+      ]
+    },
+    "src/components/landing/Hero.astro::__file_root__": {
+      "filePath": "src/components/landing/Hero.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/url.ts::withBase"
+      ],
+      "importedBy": [
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/lib/adminDashboard.ts::dashboardTotals": {
+      "filePath": "src/lib/adminDashboard.ts",
+      "name": "dashboardTotals",
+      "imports": [],
       "importedBy": [
         "src/pages/admin/index.astro::__file_root__"
       ]
+    },
+    "src/lib/mailto.test.ts::__file_root__": {
+      "filePath": "src/lib/mailto.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/mailto.ts::buildMailto"
+      ],
+      "importedBy": []
+    },
+    "src/lib/team.ts::BoardMemberLike": {
+      "filePath": "src/lib/team.ts",
+      "name": "BoardMemberLike",
+      "imports": [],
+      "importedBy": [
+        "src/lib/team.test.ts::__file_root__"
+      ]
+    },
+    "src/pages/blog/[slug].astro::__file_root__": {
+      "filePath": "src/pages/blog/[slug].astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/styles/tokens.css::__file_root__",
+        "src/lib/url.ts::withBase",
+        "src/components/SEO.astro::__file_root__",
+        "src/components/HeadExtras.astro::__file_root__",
+        "src/components/Embed.astro::__file_root__",
+        "src/lib/site.ts::settings"
+      ],
+      "importedBy": []
+    },
+    "src/lib/site.ts::settings": {
+      "filePath": "src/lib/site.ts",
+      "name": "settings",
+      "imports": [],
+      "importedBy": [
+        "src/lib/seoEndpoints.test.ts::__file_root__",
+        "src/pages/index.astro::__file_root__",
+        "src/pages/llms.txt.ts::__file_root__",
+        "src/pages/blog/[slug].astro::__file_root__",
+        "src/layouts/BaseLayout.astro::__file_root__",
+        "src/layouts/AdminLayout.astro::__file_root__"
+      ]
+    },
+    "src/lib/url.ts::withBase": {
+      "filePath": "src/lib/url.ts",
+      "name": "withBase",
+      "imports": [],
+      "importedBy": [
+        "src/lib/url.test.ts::__file_root__",
+        "src/pages/404.astro::__file_root__",
+        "src/pages/admin/index.astro::__file_root__",
+        "src/pages/blog/[slug].astro::__file_root__",
+        "src/layouts/BaseLayout.astro::__file_root__"
+      ]
+    },
+    "src/content/config.ts::__file_root__": {
+      "filePath": "src/content/config.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/contentRoot.ts::contentRoot"
+      ],
+      "importedBy": []
+    },
+    "src/lib/deployStatus.ts::pickLatestDeployRun": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "pickLatestDeployRun",
+      "imports": [],
+      "importedBy": [
+        "src/lib/deployStatus.test.ts::__file_root__"
+      ]
+    },
+    "src/lib/gallery.test.ts::__file_root__": {
+      "filePath": "src/lib/gallery.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/gallery.ts::galleryRevealImmediately",
+        "src/lib/gallery.ts::galleryStaggerDelay",
+        "src/lib/gallery.ts::__file_root__",
+        "src/lib/gallery.ts::__file_root__"
+      ],
+      "importedBy": []
+    },
+    "src/lib/seoEndpoints.test.ts::__file_root__": {
+      "filePath": "src/lib/seoEndpoints.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/pages/robots.txt.ts::__file_root__",
+        "src/pages/llms.txt.ts::__file_root__",
+        "src/lib/site.ts::settings"
+      ],
+      "importedBy": []
     },
     "src/components/landing/WhatsappCommunity.astro::__file_root__": {
       "filePath": "src/components/landing/WhatsappCommunity.astro",
@@ -1784,38 +1782,55 @@
       ],
       "importedBy": []
     },
-    "src/content/config.ts::__file_root__": {
-      "filePath": "src/content/config.ts",
+    "src/lib/url.test.ts::__file_root__": {
+      "filePath": "src/lib/url.test.ts",
       "name": "__file_root__",
       "imports": [
-        "src/lib/contentRoot.ts::contentRoot"
+        "src/lib/url.ts::withBase"
       ],
       "importedBy": []
     },
-    "src/lib/parallax.test.ts::__file_root__": {
-      "filePath": "src/lib/parallax.test.ts",
+    "src/components/admin/DeployStatus.astro::__file_root__": {
+      "filePath": "src/components/admin/DeployStatus.astro",
       "name": "__file_root__",
       "imports": [
-        "src/lib/parallax.ts::parallaxEnabled",
-        "src/lib/parallax.ts::parallaxOffset"
+        "src/lib/deployStatus.ts::BannerView",
+        "src/lib/deployStatus.ts::__file_root__"
       ],
-      "importedBy": []
-    },
-    "src/components/EmbedForm.astro::__file_root__": {
-      "filePath": "src/components/EmbedForm.astro",
-      "name": "__file_root__",
-      "imports": [],
       "importedBy": [
+        "src/pages/admin/index.astro::__file_root__",
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
-    "src/lib/deployStatus.ts::viewSiteUrl": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "viewSiteUrl",
-      "imports": [],
+    "src/lib/site.ts::__file_root__": {
+      "filePath": "src/lib/site.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/contentRoot.ts::dataRoot"
+      ],
       "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
+        "src/lib/site.test.ts::__file_root__",
+        "src/lib/site.test.ts::__file_root__"
       ]
+    },
+    "src/components/admin/CollectionCountGrid.astro::__file_root__": {
+      "filePath": "src/components/admin/CollectionCountGrid.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/admin/CollectionCountCard.astro::__file_root__",
+        "src/lib/adminDashboard.ts::CollectionCard"
+      ],
+      "importedBy": [
+        "src/pages/admin/index.astro::__file_root__"
+      ]
+    },
+    "src/lib/parallax.test.ts::freshInit": {
+      "filePath": "src/lib/parallax.test.ts",
+      "name": "freshInit",
+      "imports": [
+        "src/lib/parallax.ts::__file_root__"
+      ],
+      "importedBy": []
     },
     "src/components/landing/UpcomingEvents.astro::__file_root__": {
       "filePath": "src/components/landing/UpcomingEvents.astro",
@@ -1830,62 +1845,47 @@
         "src/pages/isolated-components/[name].astro::__file_root__"
       ]
     },
-    "src/lib/team.ts::BoardMemberLike": {
-      "filePath": "src/lib/team.ts",
-      "name": "BoardMemberLike",
-      "imports": [],
+    "src/lib/adminGate.test.ts::__file_root__": {
+      "filePath": "src/lib/adminGate.test.ts",
+      "name": "__file_root__",
+      "imports": [
+        "src/lib/adminGate.ts::__file_root__",
+        "src/lib/adminGate.ts::isPasscodeCorrect"
+      ],
+      "importedBy": []
+    },
+    "src/components/HeadExtras.astro::__file_root__": {
+      "filePath": "src/components/HeadExtras.astro",
+      "name": "__file_root__",
+      "imports": [
+        "src/components/Analytics.astro::__file_root__",
+        "src/components/StructuredData.astro::__file_root__",
+        "src/lib/site.ts::settings"
+      ],
       "importedBy": [
-        "src/lib/team.test.ts::__file_root__"
+        "src/pages/blog/[slug].astro::__file_root__",
+        "src/layouts/BaseLayout.astro::__file_root__"
       ]
     },
-    "src/lib/deployStatus.ts::__file_root__": {
-      "filePath": "src/lib/deployStatus.ts",
+    "src/components/landing/HeroCarousel.astro::__file_root__": {
+      "filePath": "src/components/landing/HeroCarousel.astro",
       "name": "__file_root__",
+      "imports": [
+        "src/lib/url.ts::withBase"
+      ],
+      "importedBy": [
+        "src/pages/index.astro::__file_root__",
+        "src/pages/isolated-components/[name].astro::__file_root__"
+      ]
+    },
+    "src/lib/deployStatus.ts::computeBanner": {
+      "filePath": "src/lib/deployStatus.ts",
+      "name": "computeBanner",
       "imports": [],
       "importedBy": [
         "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/deployStatus.ts::DeployMarker": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "DeployMarker",
-      "imports": [],
-      "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/team.ts::splitRole": {
-      "filePath": "src/lib/team.ts",
-      "name": "splitRole",
-      "imports": [],
-      "importedBy": [
-        "src/lib/team.test.ts::__file_root__"
-      ]
-    },
-    "src/lib/deployStatus.ts::relativeTime": {
-      "filePath": "src/lib/deployStatus.ts",
-      "name": "relativeTime",
-      "imports": [],
-      "importedBy": [
-        "src/lib/deployStatus.test.ts::__file_root__"
-      ]
-    },
-    "src/components/ChapterHeader.astro::__file_root__": {
-      "filePath": "src/components/ChapterHeader.astro",
-      "name": "__file_root__",
-      "imports": [],
-      "importedBy": [
-        "src/components/ChapterHero.astro::__file_root__"
-      ]
-    },
-    "src/components/Embed.astro::__file_root__": {
-      "filePath": "src/components/Embed.astro",
-      "name": "__file_root__",
-      "imports": [],
-      "importedBy": [
-        "src/pages/blog/[slug].astro::__file_root__"
       ]
     }
   },
-  "lastUpdated": "2026-07-02T03:04:44Z"
+  "lastUpdated": "2026-07-02T15:45:24Z"
 }
