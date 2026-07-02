@@ -1,6 +1,6 @@
 # Template for the per-VM cloud compose file. Rendered by
 # scripts/gcp-project-bootstrap.sh into the (gitignored) docker-compose.cloud.yml
-# at provision time, substituting codeyam-editor-codeyam-editor-4 (the GCE instance name),
+# at provision time, substituting codeyam-editor-codeyam-editor-7 (the GCE instance name),
 # 4321 (the app dev-server port from editor.json), and
 # 12930m (the memory limit computed from the VM's total RAM).
 # EDIT THIS TEMPLATE, not
@@ -52,7 +52,7 @@ services:
     # same answer as $CODEYAM_MACHINE below. The env var is the
     # canonical source; this is belt-and-suspenders for code paths
     # that bypass it.
-    hostname: codeyam-editor-codeyam-editor-4
+    hostname: codeyam-editor-codeyam-editor-7
     # Inject tini as PID 1 so reparented zombies get reaped. Without
     # this flag the editor binary runs as PID 1 and any subprocess
     # whose parent exits before it (broker -> claude PTY child,
@@ -70,11 +70,18 @@ services:
     memswap_limit: 12930m
     restart: unless-stopped
     ports:
-      - "127.0.0.1:14199:14199"
+      # Publish interface, resolved at bootstrap time. Default 127.0.0.1 (the
+      # SSH-forward model: reached operator-side via `gcloud ssh -L`). When the
+      # VM joins a Google-LB fleet (FLEET_DOMAIN set) it becomes 0.0.0.0 so the
+      # LB's GCE_VM_IP_PORT NEG can reach these ports on the VM's INTERNAL IP —
+      # the load-bearing difference from loopback-only publishing. Exposure stays
+      # scoped to the LB ranges by the fleet-ingress-lb-allow firewall rule,
+      # never 0.0.0.0/0. Unset = legacy parity, byte-for-byte unchanged.
+      - "0.0.0.0:14199:14199"
       # App dev-server port, resolved from editor.json at bootstrap time
       # (apps[0].port ?? port ?? 5173) so Live Preview reaches whatever this
       # project serves on — not a hardcoded Vite default. Published == internal.
-      - "127.0.0.1:4321:4321"
+      - "0.0.0.0:4321:4321"
     volumes:
       - .:/workspace
       # Per-agent credential homes — one per supported build agent so the
@@ -102,7 +109,7 @@ services:
       # Unique per-VM machine identity for branch-queue meta.machine,
       # plan-claim host_machine, audit attribution, and session logs.
       # Consumed by codeyam_types::machine::current_machine().
-      - CODEYAM_MACHINE=codeyam-editor-codeyam-editor-4
+      - CODEYAM_MACHINE=codeyam-editor-codeyam-editor-7
       # Git author identity for the in-container build agent. The entrypoint
       # runs `git config --global user.{name,email}` from these; without them
       # plan_claim_refs::create_claim's `git commit-tree` exits with "Author

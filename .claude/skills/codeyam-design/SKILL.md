@@ -1,6 +1,5 @@
 ---
 name: codeyam-design
-autoApprove: true
 description: |
   Inline design-exploration helper. Reads the user's product description
   and any uploaded design assets, derives a brief-specific design read,
@@ -13,7 +12,7 @@ description: |
 
 # Design exploration
 
-You are helping the user pick a design direction inside the new-project questionnaire's chat substep. The project files do not exist yet — **do not scaffold, install dependencies, or run any `codeyam-editor-dev editor` command**. Your only job is to read the brief and assets, read the bundled design systems, write mockup HTML, and (on the user's pick) POST a single API call.
+You are helping the user pick a design direction inside the new-project questionnaire's chat substep. The project files do not exist yet — **do not scaffold, install dependencies, or run any `codeyam-editor editor` command**. Your only job is to read the brief and assets, read the bundled design systems, write mockup HTML, and (on the user's pick) POST a single API call.
 
 **The brief drives; the systems are a floor, not a ceiling.** The user's product description and any uploaded design assets are the primary signal — every mockup must feel like *their* product, not a stock template. The curated design systems in `.codeyam/design/design_systems/` are a quality floor: a vocabulary of robust, internally-consistent languages you can adhere to, stretch, or set aside depending on a mockup's *tier* (Step 2). Your goal across a set is **genuine range** — diverse directions — anchored by at least one safe, on-brief option, and (when the set is large enough) reaching all the way to a fully bespoke, off-catalog direction.
 
@@ -94,6 +93,17 @@ Every slot — anchored, exploratory, off-catalog — threads tone / palette / t
 
 ## Step 3 — declare the count, then generate N mockups across the tiers
 
+**Resolve the control port FIRST — never hardcode 14199.** Every API call below (the tab-switch POST, the Step 3b lint GET, the Step 5 tab-switch, the Step 6 selection POST) must target the project's *live* editor control port, not a fixed `14199`. Under the Project Launcher the questionnaire's editor runs on a **launcher-allocated dynamic port** recorded in `.codeyam/server-state.json`; `14199` is the launcher's *selector* SPA, which returns the SPA shell (**HTTP 200 + HTML**) for any `/api/*` route — so a call aimed there silently no-ops or reports a phantom success. Resolve the port once, before the first API call, and reuse it everywhere. Mirror the precedence the rest of the editor uses (`server-state.json` `controlPort` → `CODEYAM_CONTROL_PORT` env → `14199` default) with a plain file read — do **not** call any `codeyam-editor editor …` command (forbidden during design):
+
+```bash
+# Resolve the live editor control port — NOT a hardcoded 14199.
+PORT=$(python3 -c "import json,os; \
+print(json.load(open('.codeyam/server-state.json')).get('controlPort') \
+or os.environ.get('CODEYAM_CONTROL_PORT') or 14199)" 2>/dev/null || echo 14199)
+```
+
+Use `http://localhost:$PORT` in every `curl` below. If any design-API response comes back as the SPA shell (an HTML body starting with `<!DOCTYPE`/`<html` instead of the expected JSON), the resolved port is pointing at the launcher selector — re-resolve, and if it still returns HTML, ask the user for the editor port. Never report success on a response you didn't confirm is JSON.
+
 **Write the target manifest FIRST, before any HTML.** The UI uses this to render placeholder cards for every upcoming slot so the right pane fills in immediately. Write `.codeyam/design/project_mockups/target.json` with exactly:
 
 ```json
@@ -105,12 +115,12 @@ Every slot — anchored, exploratory, off-catalog — threads tone / palette / t
 **The moment `target.json` is written, switch the preview to the Mockups tab.** Writing the manifest *is* the start of building, so move the user onto the Mockups tab to watch each card fill in. POST the tab-switch right after the manifest write, before the first HTML mockup:
 
 ```bash
-curl -X POST http://localhost:14199/api/editor-design-active-tab \
+curl -X POST http://localhost:$PORT/api/editor-design-active-tab \
   -H 'Content-Type: application/json' \
   -d '{"tab":"mockups"}'
 ```
 
-The control port is normally `localhost:14199`; on `connection refused`, ask the user for the editor port — never guess. This is **best-effort UX**: if the POST fails, the user can still click the Mockups tab manually, so do **not** block generation on it.
+Resolve the control port once (see Step 3's preamble); it is a dynamic per-project port under the launcher, not necessarily `14199`. On `connection refused`, ask the user for the editor port — never guess. This is **best-effort UX**: if the POST fails, the user can still click the Mockups tab manually, so do **not** block generation on it.
 
 **Filenames — zero-padded numeric prefix sets display order.**
 
@@ -176,7 +186,24 @@ Build each representational slot in **two layers**:
 
 (Note that *embedding* the asset and *deriving tokens from* it are separate jobs — Step 2's design read pulls the palette/type/mood out of the asset so it reshapes the whole mockup, not just the spot where the logo sits.)
 
+**Typography — embed the bundled inline face; the fallback remains the floor.** For each picked design system, locate its prebuilt base64 font block under `.codeyam/design/design_systems/<system>.fonts.css` (systems that intentionally use only standard system fonts will not have a file). **Inline that entire `.fonts.css` stylesheet into the mockup's `<style>` tag.** Set the `font-family` using the branded face, and always pair it with its system fallback — e.g. `font-family: 'Manrope', sans-serif;` (or `Georgia, serif` / `'JetBrains Mono', monospace` to match the system's personality). This guarantees full typographic fidelity offline with no network requests and zero IP leaks. **Never** load remote fonts via `@import url(https://fonts.googleapis.com/…)`, `<link href="https://…">`, or any other remote URL — the mockup linter will flag it immediately.
+
 **Atomic writes only.** Write the full file in one step (e.g. the `Write` tool); never streaming opens. The UI polls the directory every few seconds and a half-written file renders as a broken card.
+
+### Step 3b — self-correct against the linter before handoff
+
+The editor backend lints every mockup and exposes the findings on the same API you already curl. **These warnings are for you, the generator — not the user; the user sees no lint badge.** Before posting the numbered key (Step 4), close the loop:
+
+1. After all N files exist, read the lint findings:
+   ```bash
+   curl http://localhost:$PORT/api/editor-mockups
+   ```
+   The response is a JSON array; each entry carries a `warnings[]` of `{code, message, severity}`. Resolve the control port once (see Step 3's preamble); it is a dynamic per-project port under the launcher, not necessarily `14199`. **Validate the response shape, not just the status code:** if the body is **not** a JSON array — e.g. it starts with `<!DOCTYPE`/`<html` (the launcher selector's SPA shell, returned with HTTP 200) — the resolved port is wrong. Re-run the resolution; if it still returns HTML, ask the user for the editor port and retry. Keep the local-grep fallback below only for a genuine `connection refused`, never for an HTML 200 — a wrong-server 200 must never be mistaken for "no warnings".
+2. For **every** card with a non-empty `warnings[]`, apply the fix its `message` describes and rewrite that HTML file. The `message` is the remediation guide — e.g. *"Use single quotes inside the url() …"* (the quote-collision trap above), *"Render the content statically."* (a stray `<script>` / JS-built content), an empty media box, a remote asset, or a remote font (resolve it with the **Typography** rule: the system's `font-family` + system-font fallback, never a remote load).
+3. Re-`curl` and repeat until every card's `warnings[]` is empty, **capped at ~3 passes** so a stubborn finding can't loop forever.
+4. Anything still flagged after the cap is **named in the Step 4 numbered key as a plain-language advisory** (e.g. *"3: off-catalog — note: the hero photo loads from a remote source"*) — never left as a silent residual, and never surfaced as a cryptic badge.
+
+**If the API is unreachable** (`connection refused` and the user can't give a port), fall back to a local grep of each file for the highest-signal violations before handoff — `fonts.googleapis.com`, `@import url(http`, `<script`, `<img src="http` — and fix what it finds with the same rules. The API loop is preferred; the grep is the belt-and-suspenders floor.
 
 ## Step 4 — post the numbered key in the chat, labeled by tier
 
@@ -200,12 +227,12 @@ When the UI dispatches an Iterate trigger (an `Iterate:` keyword followed by a f
 Once the user answers, **switch the preview to the Mockups tab as the regeneration round begins** — before writing the first refreshed/placeholder card:
 
 ```bash
-curl -X POST http://localhost:14199/api/editor-design-active-tab \
+curl -X POST http://localhost:$PORT/api/editor-design-active-tab \
   -H 'Content-Type: application/json' \
   -d '{"tab":"mockups"}'
 ```
 
-Best-effort, same caveats as Step 3 (normally `localhost:14199`; on `connection refused`, ask for the port — never guess; don't block on it). Then proceed:
+Best-effort, same caveats as Step 3 (resolve `$PORT` per Step 3's preamble — a dynamic per-project port, not necessarily `14199`; on `connection refused`, ask for the port — never guess; don't block on it). Then proceed:
 
 - **For each design they choose to keep:** refine it in place using its specific feedback, keeping the same numeric prefix and tier.
 - **For every other design:** redesign it fresh from the feedback. A slot keeps its tier unless the feedback implies moving it safer (toward anchored) or bolder (toward exploratory / off-catalog) — honor that drift when the feedback signals it.
@@ -223,7 +250,7 @@ Keep all guidance about placeholder imagery, inline-only assets, and atomic writ
 When the user picks a direction with a phrase like *"Let's use 4"*, *"I want 4"*, or *"pick 4"*, POST the corresponding filename to the editor backend with `curl`:
 
 ```bash
-curl -X POST http://localhost:14199/api/editor-design-select \
+curl -X POST http://localhost:$PORT/api/editor-design-select \
   -H 'Content-Type: application/json' \
   -d '{"filename":"04-<system>-mockup.html"}'
 ```
@@ -232,11 +259,18 @@ Use the **exact filename** you wrote in Step 3, including the `0N-` prefix. For 
 
 **If the user picks an `offcatalog` mockup:** the endpoint cannot yet resolve a backing system (see the Step 3 handoff-gap note). Surface this honestly — confirm their choice, tell them the bespoke direction is captured visually in the mockup, and note that carrying its tokens into the build is backend work in progress. Still POST the selection so the choice is recorded; do not silently fall back to a stock system that doesn't match what they picked.
 
-The control port is normally `localhost:14199`. If curl returns `connection refused`, ask for the editor port and retry — never guess. Surface a one-line confirmation once the POST returns 200. If it fails, surface the error and let the user pick again.
+Resolve the control port once (see Step 3's preamble); it is a dynamic per-project port under the launcher, not necessarily `14199`. If curl returns `connection refused`, ask for the editor port and retry — never guess.
+
+**Never report "locked in" on a bare HTTP 200 — verify the side-effect.** A `200` from the launcher selector is a phantom success: it returns the SPA shell and copies nothing, so the design→build handoff is silently lost. After the POST returns, confirm the on-disk result before telling the user anything took:
+
+- **Anchored / exploratory picks:** read back `.codeyam/design/design_system.md` and confirm it now exists and contains the chosen system's content. Only then surface the one-line "locked in" confirmation. If the file is absent (the phantom-success case), tell the user honestly that the selection did **not** take, re-resolve the port (it was likely the launcher selector), and retry — do not report success.
+- **Off-catalog picks:** the endpoint writes no `design_system.md` by design (the Step 3 handoff gap), so do **not** demand that file — confirm the POST returned a JSON (non-HTML) response and record the choice per the off-catalog guidance above.
+
+If it fails, surface the error and let the user pick again.
 
 ## What NOT to do
 
-- **No scaffolding** — do not run `codeyam-editor-dev editor template`, `npm install`, `git init`, or any setup command. The project hasn't decided its tech stack yet.
+- **No scaffolding** — do not run `codeyam-editor editor template`, `npm install`, `git init`, or any setup command. The project hasn't decided its tech stack yet.
 - **No editing `.codeyam/design/design_system.md`** — that's the API's job after the selection POST.
 - **No remote fonts or scripts; remote *content photos* only with a fallback.** Never load remote fonts or `<script>` — the `sandbox=""` iframe blocks scripts outright, and a remote font that fails renders inconsistently. Remote *images*, though, the sandbox *does* load: inline is the default for **robustness** (offline / flaky environments) and **privacy** (a remote fetch leaks the viewer's IP to the host), not because the network is blocked. So — decorative imagery stays inline, and a **representational content-photo slot may use a remote image only when stacked on top of the inline depiction as its fallback layer** (the hybrid in Step 3); no bare remote `<img>` that can render as a broken icon. **User-uploaded `.codeyam/design/user_files/` assets** embedded as base64 `data:` URIs (or inline SVG) are inline content and are **required** when provided (Step 1, Step 3).
 - **No iframe-busting markup** — avoid `<meta http-equiv="refresh">`, `window.parent` access, or anything that breaks the sandbox.

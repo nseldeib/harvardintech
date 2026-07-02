@@ -63,7 +63,7 @@ const wantGemini = args.source !== 'claude';
 
 /**
  * Convert a Claude project hash dirname back to a readable path.
- * e.g. "-Users-jaredcosulich-workspace-codeyam-tea-test" → "/Users/jaredcosulich/workspace/codeyam/tea-test"
+ * e.g. "-Users-you-projects-my-app" → "/Users/you/projects/my-app"
  */
 function claudeHashToReadablePath(hash) {
   return hash.replace(/^-/, '/').replace(/-/g, '/');
