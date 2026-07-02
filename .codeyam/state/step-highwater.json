@@ -1,6 +1,6 @@
 {
-  "feature": "status-decisions-page",
-  "maxStep": 26,
-  "version": 1487,
-  "updatedAt": "2026-07-02T16:01:07.333309928+00:00"
+  "feature": "preview-gate-and-publish",
+  "maxStep": 25,
+  "version": 295,
+  "updatedAt": "2026-07-02T17:21:07.796081650+00:00"
 }

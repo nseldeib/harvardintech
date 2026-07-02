@@ -4113,10 +4113,15 @@
   },
   "llms.txt GET › includes the org name and description from settings": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-02T02:56:31.782308885+00:00",
+    "lastRunAt": "2026-07-02T16:18:31.487159681+00:00",
     "lastStatus": "pass",
-    "lastRunKind": "full",
+    "lastRunKind": "changed",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-07-02T16:18:31.487159681+00:00",
+        "kind": "changed"
+      },
       {
         "status": "pass",
         "at": "2026-07-02T02:56:31.782308885+00:00",
@@ -4131,10 +4136,15 @@
   },
   "llms.txt GET › lists key pages as absolute URLs": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-02T02:56:31.782308885+00:00",
+    "lastRunAt": "2026-07-02T16:18:31.487159681+00:00",
     "lastStatus": "pass",
-    "lastRunKind": "full",
+    "lastRunKind": "changed",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-07-02T16:18:31.487159681+00:00",
+        "kind": "changed"
+      },
       {
         "status": "pass",
         "at": "2026-07-02T02:56:31.782308885+00:00",
@@ -4149,10 +4159,15 @@
   },
   "llms.txt GET › surfaces contact email and socials": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-02T02:56:31.782308885+00:00",
+    "lastRunAt": "2026-07-02T16:18:31.487159681+00:00",
     "lastStatus": "pass",
-    "lastRunKind": "full",
+    "lastRunKind": "changed",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-07-02T16:18:31.487159681+00:00",
+        "kind": "changed"
+      },
       {
         "status": "pass",
         "at": "2026-07-02T02:56:31.782308885+00:00",
@@ -5485,10 +5500,15 @@
   },
   "robots.txt GET › allows all crawlers": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-02T02:56:31.782308885+00:00",
+    "lastRunAt": "2026-07-02T16:18:31.487159681+00:00",
     "lastStatus": "pass",
-    "lastRunKind": "full",
+    "lastRunKind": "changed",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-07-02T16:18:31.487159681+00:00",
+        "kind": "changed"
+      },
       {
         "status": "pass",
         "at": "2026-07-02T02:56:31.782308885+00:00",
@@ -5503,10 +5523,15 @@
   },
   "robots.txt GET › falls back to the request origin when site is unset": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-02T02:56:31.782308885+00:00",
+    "lastRunAt": "2026-07-02T16:18:31.487159681+00:00",
     "lastStatus": "pass",
-    "lastRunKind": "full",
+    "lastRunKind": "changed",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-07-02T16:18:31.487159681+00:00",
+        "kind": "changed"
+      },
       {
         "status": "pass",
         "at": "2026-07-02T02:56:31.782308885+00:00",
@@ -5521,10 +5546,15 @@
   },
   "robots.txt GET › points the Sitemap at the configured site origin": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-02T02:56:31.782308885+00:00",
+    "lastRunAt": "2026-07-02T16:18:31.487159681+00:00",
     "lastStatus": "pass",
-    "lastRunKind": "full",
+    "lastRunKind": "changed",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-07-02T16:18:31.487159681+00:00",
+        "kind": "changed"
+      },
       {
         "status": "pass",
         "at": "2026-07-02T02:56:31.782308885+00:00",
@@ -5539,10 +5569,15 @@
   },
   "robots.txt GET › responds as text/plain": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-02T02:56:31.782308885+00:00",
+    "lastRunAt": "2026-07-02T16:18:31.487159681+00:00",
     "lastStatus": "pass",
-    "lastRunKind": "full",
+    "lastRunKind": "changed",
     "recentStatuses": [
+      {
+        "status": "pass",
+        "at": "2026-07-02T16:18:31.487159681+00:00",
+        "kind": "changed"
+      },
       {
         "status": "pass",
         "at": "2026-07-02T02:56:31.782308885+00:00",

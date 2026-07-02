@@ -6,13 +6,18 @@
 // the Sitemap reference is always correct. `@astrojs/sitemap` already produces
 // `sitemap-index.xml`; this just points crawlers at it.
 import type { APIContext } from 'astro';
+import { PREVIEW_GATE_ENABLED } from '../lib/previewGate';
 
 export function GET(context: APIContext): Response {
   const site = context.site ?? new URL('/', context.url);
   const sitemapUrl = new URL('sitemap-index.xml', site).href;
 
+  // While the site is a gated pre-launch preview, tell crawlers to stay out.
+  // At launch (PREVIEW_GATE unset) this reverts to the normal allow-all policy.
+  const rule = PREVIEW_GATE_ENABLED ? 'Disallow: /' : 'Allow: /';
+
   const body = `User-agent: *
-Allow: /
+${rule}
 
 Sitemap: ${sitemapUrl}
 `;

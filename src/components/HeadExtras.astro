@@ -10,11 +10,13 @@
 // each shell right before </body> (it can't live in <head>).
 import Analytics from './Analytics.astro';
 import StructuredData from './StructuredData.astro';
+import PreviewGate from './PreviewGate.astro';
 import { settings } from '../lib/site';
 
 const customHeadHtml = settings.customHeadHtml?.trim();
 ---
 
+<PreviewGate />
 <Analytics />
 <StructuredData />
 {customHeadHtml ? <Fragment set:html={customHeadHtml} /> : null}

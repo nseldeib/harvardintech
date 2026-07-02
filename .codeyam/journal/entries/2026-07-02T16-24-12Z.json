@@ -1,0 +1,107 @@
+{
+  "timestamp": "2026-07-02T16:24:12Z",
+  "title": "Pre-launch Preview Gate + noindex",
+  "type": "feature",
+  "userRequest": "## Summary\n\nGate the **entire deployed WIP site** (not just the review page) behind a\nclient-side passphrase and mark it `noindex`, so the work-in-progress site can be\nshared via a GitHub Pages link with a small trusted group without being fully\npublic or search-indexed. This is a **temporary pre-launch lock**, designed to be\nremoved in one place when the site goes live. The standalone review page already\nhas its own gate; this adds the same protection to every product page.\n\n## Key Decisions\n\n- **Build-only gate.** The gate + noindex activate ONLY in the deployed\n  production build (`astro build` on GitHub Pages), never in `astro dev`. This is\n  critical: the codeyam preview and every scenario capture run against the dev\n  server, so a dev-active gate would overlay every screenshot with the passphrase\n  prompt. Gating on the deploy env keeps all scenarios capturing real content.\n- **One include point.** `HeadExtras.astro` is already wired into both\n  `BaseLayout` and the standalone blog-post shell, so adding the gate + noindex\n  there covers every public page (home, events, chapters, blog) with a single\n  edit. Admin pages keep their own existing gate; the codeyam\n  `isolated-components` harness is intentionally not gated.\n- **Deterrent, documented.** Client-side gate = the page HTML is still fetchable\n  by a determined viewer; combined with `noindex` + an obscure project URL it is\n  \"share-only enough\" for a WIP. This matches the access model the user chose.\n- **Removable at launch in one place.** Controlled by a `PREVIEW_GATE` build env\n  var set in the deploy workflow. At real launch, remove that env var (and the\n  `noindex`) — no component surgery, and the SEO/robots work already built takes\n  over.\n\n## Implementation\n\n### 1. Gate config\n**New file**: `src/lib/previewGate.ts`\n- `PREVIEW_GATE_ENABLED` = `process.env.PREVIEW_GATE === 'true'` (false in dev).\n- `PREVIEW_GATE_PASSPHRASE` = `process.env.PREVIEW_GATE_PASSPHRASE || 'crimson2026'`\n  (deterrent; shared out-of-band). Server-only module (build-time).\n\n### 2. The gate + noindex\n**New file**: `src/components/PreviewGate.astro`\n- Renders nothing when `PREVIEW_GATE_ENABLED` is false.\n- When enabled: emits `<meta name=\"robots\" content=\"noindex, nofollow\">` and an\n  `is:inline` script that, before paint, checks `sessionStorage`; if not unlocked,\n  builds a full-screen crimson passphrase overlay (same UX as the review page) and\n  locks scroll until the correct passphrase is entered. Content is behind the\n  overlay (deterrent).\n\n**Edit**: `src/components/HeadExtras.astro`\n- Include `<PreviewGate />` (first, so noindex + the overlay apply everywhere the\n  head partial is used — BaseLayout and the blog shell).\n\n### 3. robots.txt reflects the lock\n**Edit**: `src/pages/robots.txt.ts`\n- When `PREVIEW_GATE_ENABLED`, emit `User-agent: * / Disallow: /` (keep the\n  Sitemap line). When disabled (launch), the existing `Allow: /` behavior returns.\n\n### 4. Turn the gate on for the deploy\n**Edit**: `.github/workflows/deploy.yml`\n- Add `PREVIEW_GATE: 'true'` to the build step env (alongside DEPLOY_BASE_PATH /\n  PAGES_SITE). Removing this line at launch disables the gate.\n\n## Reused existing code\n\n- `HeadExtras.astro` — the single site-wide head include (already in both shells).\n- The passphrase-overlay UX mirrors `public/review/index.html`.\n- The env-driven build pattern mirrors `astro.config.mjs` (DEPLOY_BASE_PATH etc.).\n\n## Scenarios to Demonstrate\n\n- Because the gate is build-only, dev/preview scenarios render ungated (no change\n  to existing captures). The gate itself is verified against a production build\n  (`astro build` + serve) rather than a dev scenario.\n\n## Out of scope\n\n- Removing the gate at launch (a one-line env change later).\n- Real server-side auth (would require a non-static host).\n\n## Publish (after this lands)\n\nMerge `atlas-homepage-events-revamp` → `main` and push; the deploy workflow builds\nwith `PREVIEW_GATE=true` and publishes the gated site + gated review page to\n`https://nseldeib.github.io/harvardintech/` (review page at `/review/`).",
+  "description": "Gate the entire deployed WIP site behind a client-side passphrase and mark it noindex (robots.txt Disallow) so it can be shared privately before launch, matching the review page. Implemented as a build-only PreviewGate component wired through HeadExtras (covers BaseLayout + the standalone blog shell), controlled by a PREVIEW_GATE build env set in the deploy workflow; it is inert in astro dev so scenario captures are unaffected, and removable in one place at launch. Deterrent-level privacy, documented as such.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/.last-reconcile.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/preview-gate-and-publish.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/last-advance.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/session-results-snapshot.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/step-highwater.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-run-marker.json",
+      "status": "modified"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/HeadExtras.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/robots.txt.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/PreviewGate.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/previewGate.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 7,
+        "passed": 7
+      }
+    ]
+  }
+}
