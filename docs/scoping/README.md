@@ -113,6 +113,9 @@ launch (it's keyed off `DEPLOY_BASE_PATH`).
   Newsletter, Eventbrite, Mailchimp) are valid. WhatsApp uses the real Google
   Form + group invite.
 - **Two known gaps:** the "Webinars" and "Podcasts" dropdown items jump to
-  `/events` (those sections aren't built yet — see item 4); add a Substack link.
+  `/events` (those sections aren't built yet — see item 4). **Substack** is
+  intentionally omitted — the channel doesn't exist yet; add it to the Content
+  Hub once there's a URL (tracked under "What we need from you" on the review
+  page).
 - **`/admin`** is a password-gated organizer CRM, not in the public nav — it is
   NOT the member portal (see item 8).
