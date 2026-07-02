@@ -2,6 +2,10 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import '../../styles/tokens.css';
 import { withBase } from '../../lib/url';
+import SEO from '../../components/SEO.astro';
+import HeadExtras from '../../components/HeadExtras.astro';
+import Embed from '../../components/Embed.astro';
+import { settings } from '../../lib/site';
 
 // Static output needs every dynamic route enumerated at build time.
 // `getStaticPaths` turns each blog entry into a pre-rendered `/blog/<id>` page.
@@ -17,13 +21,22 @@ export async function getStaticPaths() {
 type Props = { post: CollectionEntry<'blog'> };
 const { post } = Astro.props as Props;
 const { Content } = await render(post);
+
+// Per-page SEO overrides fall back to the post's own fields, then to site
+// defaults inside <SEO />. This shell renders its own <html> (it bypasses
+// BaseLayout), so it must pull in <SEO /> and <HeadExtras /> explicitly — or
+// analytics/JSON-LD/custom HTML would silently miss every blog post.
+const seoTitle = post.data.metaTitle ?? post.data.title;
+const seoDescription = post.data.metaDescription ?? post.data.summary;
+const seoImage = post.data.ogImage ?? post.data.coverImage;
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{post.data.title}</title>
+    <SEO title={seoTitle} description={seoDescription} image={seoImage} />
+    <HeadExtras />
   </head>
   <body>
     <main style="max-width: var(--content-width); margin: 0 auto; padding: var(--space-lg);">
@@ -36,7 +49,10 @@ const { Content } = await render(post);
         <div style="margin-top: var(--space-lg);">
           <Content />
         </div>
+        <Embed embedUrl={post.data.embedUrl} embedHtml={post.data.embedHtml} title={post.data.title} />
       </article>
     </main>
+
+    {settings.customBodyHtml?.trim() ? <Fragment set:html={settings.customBodyHtml} /> : null}
   </body>
 </html>

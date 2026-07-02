@@ -1,0 +1,20 @@
+---
+// The single <head> partial every route includes. Bundles the site-wide
+// discoverability + integrations markup so a new shell (e.g. the standalone
+// blog post shell that bypasses BaseLayout) picks up analytics, structured
+// data, and custom head HTML by dropping in ONE component — no risk of a route
+// silently missing analytics because it rendered its own <html>.
+//
+// Order: analytics first (so the loader starts early), then JSON-LD, then the
+// raw custom-head escape hatch. Custom *body* HTML is injected separately in
+// each shell right before </body> (it can't live in <head>).
+import Analytics from './Analytics.astro';
+import StructuredData from './StructuredData.astro';
+import { settings } from '../lib/site';
+
+const customHeadHtml = settings.customHeadHtml?.trim();
+---
+
+<Analytics />
+<StructuredData />
+{customHeadHtml ? <Fragment set:html={customHeadHtml} /> : null}

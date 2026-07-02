@@ -1,0 +1,33 @@
+---
+// Google Analytics (GA4) via gtag.js. Renders nothing unless a Measurement ID
+// is configured in the editable `settings` singleton, so the default state of
+// the site ships zero analytics markup. Editors only ever type a
+// `G-XXXXXXXXXX` id in the CMS — this template owns the script markup, so a bad
+// value can't break page structure or inject arbitrary code (that's what the
+// separate customHeadHtml escape hatch is for).
+//
+// Included via HeadExtras so it lands in every route's <head>, blog posts
+// included. Consent-gating (a GDPR banner) is intentionally out of scope here.
+import { settings } from '../lib/site';
+
+const gaId = settings.googleAnalyticsId?.trim();
+---
+
+{
+  gaId ? (
+    <Fragment>
+      <script
+        is:inline
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+      />
+      <script
+        is:inline
+        set:html={`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${gaId}');`}
+      />
+    </Fragment>
+  ) : null
+}

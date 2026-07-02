@@ -170,6 +170,18 @@
     }
   },
   {
+    "description": "Astro endpoint that emits an llms.txt AEO summary (org name, description, key pages as absolute URLs, contact email and socials) built from site settings and the env-driven site origin.",
+    "filePath": "src/pages/llms.txt.ts",
+    "name": "GET",
+    "testFile": "src/lib/seoEndpoints.test.ts"
+  },
+  {
+    "description": "Astro endpoint that emits robots.txt with allow-all directives and a Sitemap line built from the env-driven site origin, replacing the old static file's broken placeholder URL.",
+    "filePath": "src/pages/robots.txt.ts",
+    "name": "GET",
+    "testFile": "src/lib/seoEndpoints.test.ts"
+  },
+  {
     "description": "Giving Campaign crimson CTA band: the fundraising ask with Donate and Sponsorship actions and no fabricated progress meter.",
     "filePath": "src/components/landing/GivingCampaign.astro",
     "name": "GivingCampaign",

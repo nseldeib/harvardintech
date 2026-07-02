@@ -1,0 +1,39 @@
+---
+// schema.org JSON-LD structured data (Organization + WebSite) for SEO / AEO.
+// Built entirely from the editable `settings` singleton and the build-time site
+// URL, so there is no new data to maintain — it tracks whatever the CMS holds.
+// Search engines and answer engines read this to describe the organization,
+// its canonical URL, and its social profiles.
+//
+// Included via HeadExtras so it appears on every route, blog posts included.
+import { settings } from '../lib/site';
+
+// `Astro.site` is the env-driven canonical origin (custom domain in prod, the
+// project-site URL for a subpath deploy). Fall back to the current page origin
+// if `site` is somehow unset.
+const siteUrl = (Astro.site ?? new URL('/', Astro.url)).href;
+const sameAs = settings.socials.map((s) => s.url).filter(Boolean);
+
+const organization = {
+  '@type': 'Organization',
+  name: settings.siteTitle,
+  url: siteUrl,
+  description: settings.description,
+  ...(settings.contactEmail ? { email: settings.contactEmail } : {}),
+  ...(sameAs.length > 0 ? { sameAs } : {}),
+};
+
+const website = {
+  '@type': 'WebSite',
+  name: settings.siteTitle,
+  url: siteUrl,
+  description: settings.description,
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [organization, website],
+};
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

@@ -18,6 +18,10 @@ import { contentRoot } from '../lib/contentRoot';
 const root = contentRoot();
 
 // Blog posts. `coverImage`/`summary` are optional so a minimal post renders.
+// `metaTitle`/`metaDescription`/`ogImage` are per-page SEO overrides (fall back
+// to the post's own fields, then site defaults); `embedUrl`/`embedHtml` drop a
+// third-party embed after the post body. All optional — a post without them
+// renders unchanged.
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: `${root}/blog` }),
   schema: z.object({
@@ -25,6 +29,11 @@ const blog = defineCollection({
     date: z.coerce.date(),
     summary: z.string().optional(),
     coverImage: z.string().optional(),
+    metaTitle: z.string().optional(),
+    metaDescription: z.string().optional(),
+    ogImage: z.string().optional(),
+    embedUrl: z.string().optional(),
+    embedHtml: z.string().optional(),
   }),
 });
 
@@ -36,6 +45,13 @@ const pages = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     order: z.number().optional(),
+    // Per-page SEO overrides + optional embed, matching the blog collection so
+    // the same CMS fields apply once a `pages` route renders these entries.
+    metaTitle: z.string().optional(),
+    metaDescription: z.string().optional(),
+    ogImage: z.string().optional(),
+    embedUrl: z.string().optional(),
+    embedHtml: z.string().optional(),
   }),
 });
 

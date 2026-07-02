@@ -34,6 +34,15 @@ export interface SiteSettings {
   contactEmail: string;
   footerText: string;
   socials: SocialLink[];
+  // Integrations & discoverability. All optional so existing/seeded settings
+  // without them still parse and default to "off".
+  // GA4 Measurement ID (e.g. `G-XXXXXXXXXX`); empty/absent = analytics off.
+  googleAnalyticsId?: string;
+  // Raw HTML injected verbatim into every page's <head> / before </body>
+  // (verification tags, pixels, chat widgets). Power-user escape hatch — the
+  // snippet runs on every page, so only trusted markup belongs here.
+  customHeadHtml?: string;
+  customBodyHtml?: string;
 }
 
 export interface NavItem {

@@ -667,6 +667,33 @@
       "runner": "tests"
     },
     {
+      "description": "Leads with the org name as an H1 and the description as a blockquote.",
+      "file": "src/lib/seoEndpoints.test.ts",
+      "format": "vitest",
+      "key": "llms.txt GET › includes the org name and description from settings",
+      "line": 47,
+      "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Key pages are emitted as absolute URLs against the configured origin.",
+      "file": "src/lib/seoEndpoints.test.ts",
+      "format": "vitest",
+      "key": "llms.txt GET › lists key pages as absolute URLs",
+      "line": 54,
+      "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Contact section surfaces the settings email + social links for citation.",
+      "file": "src/lib/seoEndpoints.test.ts",
+      "format": "vitest",
+      "key": "llms.txt GET › surfaces contact email and socials",
+      "line": 62,
+      "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
       "description": "A completed failure is the failed phase.",
       "file": "src/lib/deployStatus.test.ts",
       "format": "vitest",
@@ -898,6 +925,42 @@
       "key": "relativeTime › reports singular minute",
       "line": 152,
       "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Emits the standard allow-all directives.",
+      "file": "src/lib/seoEndpoints.test.ts",
+      "format": "vitest",
+      "key": "robots.txt GET › allows all crawlers",
+      "line": 19,
+      "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "With no configured site, it falls back to the request origin (never crashes).",
+      "file": "src/lib/seoEndpoints.test.ts",
+      "format": "vitest",
+      "key": "robots.txt GET › falls back to the request origin when site is unset",
+      "line": 33,
+      "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The Sitemap line uses the env-driven site origin, not a literal placeholder.",
+      "file": "src/lib/seoEndpoints.test.ts",
+      "format": "vitest",
+      "key": "robots.txt GET › points the Sitemap at the configured site origin",
+      "line": 26,
+      "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Serves as text/plain so crawlers read it verbatim.",
+      "file": "src/lib/seoEndpoints.test.ts",
+      "format": "vitest",
+      "key": "robots.txt GET › responds as text/plain",
+      "line": 39,
+      "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
       "runner": "tests"
     },
     {

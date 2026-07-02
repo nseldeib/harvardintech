@@ -67,6 +67,21 @@ collections:
           - { name: description, label: "Description", widget: text }
           - { name: contactEmail, label: "Contact email", widget: string }
           - { name: footerText, label: "Footer text", widget: string }
+          - name: googleAnalyticsId
+            label: "Google Analytics ID"
+            widget: string
+            required: false
+            hint: "GA4 Measurement ID, e.g. G-XXXXXXXXXX. Leave blank to disable analytics."
+          - name: customHeadHtml
+            label: "Custom <head> HTML"
+            widget: text
+            required: false
+            hint: "Advanced: raw HTML injected into <head> on EVERY page (search-console verification tags, pixels). It runs on every page — paste only trusted snippets."
+          - name: customBodyHtml
+            label: "Custom end-of-body HTML"
+            widget: text
+            required: false
+            hint: "Advanced: raw HTML injected right before </body> on EVERY page (chat widgets, etc.). It runs on every page — paste only trusted snippets."
           - name: socials
             label: "Social links"
             widget: list
@@ -110,6 +125,11 @@ collections:
       - { name: date, label: Date, widget: datetime }
       - { name: summary, label: Summary, widget: string, required: false }
       - { name: coverImage, label: "Cover image", widget: image, required: false }
+      - { name: metaTitle, label: "SEO title (override)", widget: string, required: false, hint: "Overrides the <title>/OG title for this post. Falls back to the post title." }
+      - { name: metaDescription, label: "SEO description (override)", widget: text, required: false, hint: "Overrides the meta/OG description. Falls back to the summary, then site default." }
+      - { name: ogImage, label: "Social share image (override)", widget: image, required: false, hint: "Open Graph / Twitter card image. Falls back to the cover image." }
+      - { name: embedUrl, label: "Embed URL", widget: string, required: false, hint: "Optional iframe embed (video, form, map) shown after the post body. Preferred over Embed HTML." }
+      - { name: embedHtml, label: "Embed HTML", widget: text, required: false, hint: "Advanced: raw embed markup shown after the post body. Use only if a URL embed isn't available." }
       - { name: body, label: Body, widget: markdown, required: false }
 
   - name: pages
@@ -121,6 +141,11 @@ collections:
       - { name: title, label: Title, widget: string }
       - { name: description, label: Description, widget: string, required: false }
       - { name: order, label: Order, widget: number, required: false }
+      - { name: metaTitle, label: "SEO title (override)", widget: string, required: false, hint: "Overrides the <title>/OG title for this page. Falls back to the page title." }
+      - { name: metaDescription, label: "SEO description (override)", widget: text, required: false, hint: "Overrides the meta/OG description. Falls back to the description, then site default." }
+      - { name: ogImage, label: "Social share image (override)", widget: image, required: false, hint: "Open Graph / Twitter card image for this page." }
+      - { name: embedUrl, label: "Embed URL", widget: string, required: false, hint: "Optional iframe embed (video, form, map). Preferred over Embed HTML." }
+      - { name: embedHtml, label: "Embed HTML", widget: text, required: false, hint: "Advanced: raw embed markup. Use only if a URL embed isn't available." }
       - { name: body, label: Body, widget: markdown, required: false }
 
   - name: team

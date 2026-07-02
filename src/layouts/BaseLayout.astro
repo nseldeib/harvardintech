@@ -9,6 +9,7 @@
 // edits to `src/data/*.json` (via the CMS), never markup changes.
 import '../styles/tokens.css';
 import SEO from '../components/SEO.astro';
+import HeadExtras from '../components/HeadExtras.astro';
 import { settings, nav } from '../lib/site';
 import { withBase } from '../lib/url';
 
@@ -39,6 +40,7 @@ const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
       rel="stylesheet"
     />
     <SEO title={title} description={description} image={image} />
+    <HeadExtras />
   </head>
   <body>
     <!-- Crimson utility bar: the global-community one-liner. -->
@@ -341,5 +343,7 @@ const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
         }
       }
     </style>
+
+    {settings.customBodyHtml?.trim() ? <Fragment set:html={settings.customBodyHtml} /> : null}
   </body>
 </html>

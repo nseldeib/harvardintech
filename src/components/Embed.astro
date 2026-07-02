@@ -1,0 +1,35 @@
+---
+// Per-page iframe / HTML embed. Lets an editor drop a video, form, map, or
+// other third-party widget into a specific page or post via structured
+// frontmatter — no markup edit needed. Mirrors the sandboxed, lazy-loaded
+// iframe pattern already used by EmbedForm.astro / LumaCalendar.astro.
+//
+// Prefer the URL form (`embedUrl`) — it's the safe default: the content is
+// isolated in a sandboxed iframe. `embedHtml` is the raw escape hatch for
+// providers that only supply a markup snippet; it's injected verbatim, so it's
+// power-user territory. Renders nothing when neither is set.
+interface Props {
+  embedUrl?: string;
+  embedHtml?: string;
+  title?: string;
+}
+
+const { embedUrl, embedHtml, title = 'Embedded content' } = Astro.props;
+const url = embedUrl?.trim();
+const html = embedHtml?.trim();
+---
+
+{
+  url ? (
+    <iframe
+      class="embed-frame"
+      src={url}
+      title={title}
+      loading="lazy"
+      sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+      style="width: 100%; min-height: 400px; border: 0;"
+    />
+  ) : html ? (
+    <div class="embed-html" set:html={html} />
+  ) : null
+}

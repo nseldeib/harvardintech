@@ -30,7 +30,7 @@
   },
   {
     "name": "Page",
-    "description": "A free-form site page (About, chapter pages, etc.) in the `pages` content collection. Body markdown is the page content.",
+    "description": "A free-form site page (About, chapter pages, etc.) in the `pages` content collection. Body markdown is the page content. Per-page SEO overrides (`metaTitle`, `metaDescription`, `ogImage`) and an optional embed (`embedUrl`/`embedHtml`) mirror the blog collection (CMS-ready for when a pages route renders these entries).",
     "category": "datastore",
     "order": 3,
     "fields": [
@@ -38,12 +38,17 @@
       { "name": "title", "type": "string", "required": true },
       { "name": "description", "type": "string", "required": false },
       { "name": "order", "type": "number", "required": false },
+      { "name": "metaTitle", "type": "string", "required": false },
+      { "name": "metaDescription", "type": "string", "required": false },
+      { "name": "ogImage", "type": "string", "required": false },
+      { "name": "embedUrl", "type": "string", "required": false },
+      { "name": "embedHtml", "type": "string", "required": false },
       { "name": "body", "type": "string", "required": false }
     ]
   },
   {
     "name": "BlogPost",
-    "description": "A news/blog post in the `blog` content collection.",
+    "description": "A news/blog post in the `blog` content collection. Per-page SEO overrides (`metaTitle`, `metaDescription`, `ogImage`) and an optional embed (`embedUrl`/`embedHtml`) are all optional.",
     "category": "datastore",
     "order": 4,
     "fields": [
@@ -52,12 +57,17 @@
       { "name": "date", "type": "date", "required": true },
       { "name": "summary", "type": "string", "required": false },
       { "name": "coverImage", "type": "string", "required": false },
+      { "name": "metaTitle", "type": "string", "required": false },
+      { "name": "metaDescription", "type": "string", "required": false },
+      { "name": "ogImage", "type": "string", "required": false },
+      { "name": "embedUrl", "type": "string", "required": false },
+      { "name": "embedHtml", "type": "string", "required": false },
       { "name": "body", "type": "string", "required": false }
     ]
   },
   {
     "name": "Settings",
-    "description": "Site-wide editable settings singleton (`src/data/settings.json`): title, description, contact email, footer, socials. Loaded by every layout; edited by the CMS as a file collection.",
+    "description": "Site-wide editable settings singleton (`src/data/settings.json`): title, description, contact email, footer, socials, plus integrations/discoverability (Google Analytics id, custom head/body HTML). Loaded by every layout; edited by the CMS as a file collection.",
     "category": "datastore",
     "order": 5,
     "fields": [
@@ -65,6 +75,9 @@
       { "name": "description", "type": "string", "required": true },
       { "name": "contactEmail", "type": "string", "required": true },
       { "name": "footerText", "type": "string", "required": true },
+      { "name": "googleAnalyticsId", "type": "string", "required": false },
+      { "name": "customHeadHtml", "type": "string", "required": false },
+      { "name": "customBodyHtml", "type": "string", "required": false },
       { "name": "socials", "type": "array", "required": false }
     ]
   },
