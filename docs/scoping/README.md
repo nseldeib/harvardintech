@@ -119,3 +119,15 @@ launch (it's keyed off `DEPLOY_BASE_PATH`).
   page).
 - **`/admin`** is a password-gated organizer CRM, not in the public nav — it is
   NOT the member portal (see item 8).
+
+### 13. Content "fill or remove" list (2026-07-02)
+Placeholders/stubs flagged on the review page ("Content to fill or remove"):
+- **Podcasts** — none exists; nav item → remove or create.
+- **Webinars** — no section; nav jumps to /events → build or remove.
+- **Events calendar** — Luma embed URL blank; shows a "subscribe on Luma"
+  fallback → provide the embed URL.
+- **Events list** — no events entered → add, or rely on Luma.
+- **Stats** — 1,000+ / 5 / 40+ / Est. 2013 are placeholder defaults → verify.
+- **Board** — 3 of 5 members missing a photo or bio → complete + confirm roster.
+- **Blog** — only a placeholder "Welcome" post → add posts or hide.
+- **Donate** — no platform → set one up or keep the email fallback.
