@@ -14,48 +14,52 @@ const pass = PREVIEW_GATE_PASSPHRASE;
     <Fragment>
       <meta name="robots" content="noindex, nofollow" />
       <script is:inline define:vars={{ pass }}>
-        {`(function () {
-  var KEY = 'hait-preview-ok';
-  if (sessionStorage.getItem(KEY) === '1') return;
-  // Hide the page immediately to avoid a flash of the real content.
-  var hideStyle = document.createElement('style');
-  hideStyle.id = 'preview-gate-hide';
-  hideStyle.textContent = 'body > *:not(#preview-gate){filter:blur(9px)!important;pointer-events:none!important;user-select:none!important;} html,body{overflow:hidden!important;}';
-  (document.head || document.documentElement).appendChild(hideStyle);
+        (function () {
+          var KEY = 'hait-preview-ok';
+          if (sessionStorage.getItem(KEY) === '1') return;
+          // Hide the page immediately to avoid a flash of the real content.
+          var hideStyle = document.createElement('style');
+          hideStyle.id = 'preview-gate-hide';
+          hideStyle.textContent =
+            'body > *:not(#preview-gate){filter:blur(9px)!important;pointer-events:none!important;user-select:none!important;} html,body{overflow:hidden!important;}';
+          (document.head || document.documentElement).appendChild(hideStyle);
 
-  function build() {
-    if (document.getElementById('preview-gate')) return;
-    var wrap = document.createElement('div');
-    wrap.id = 'preview-gate';
-    wrap.setAttribute('style', 'position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#1e1a1b;padding:24px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;');
-    wrap.innerHTML =
-      '<div style="background:#fff;border-radius:6px;padding:34px 30px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)">' +
-        '<h1 style="font-size:18px;margin:0 0 6px;color:#1e1a1b">Harvard Alumni in Tech</h1>' +
-        '<p style="color:#5c5559;font-size:13px;margin:0 0 18px">Private preview. Enter the passphrase you were given.</p>' +
-        '<input id="pg-pass" type="password" placeholder="Passphrase" autocomplete="off" style="width:100%;padding:11px 12px;font-size:15px;border:1px solid rgba(30,26,27,.2);border-radius:4px;margin-bottom:12px;box-sizing:border-box" />' +
-        '<button id="pg-enter" style="width:100%;padding:11px;font-size:14px;font-weight:700;color:#fff;background:#a41034;border:0;border-radius:4px;cursor:pointer">View</button>' +
-        '<div id="pg-err" style="color:#a4102f;font-size:12px;min-height:16px;margin-top:8px"></div>' +
-      '</div>';
-    document.body.appendChild(wrap);
-    var input = wrap.querySelector('#pg-pass');
-    var err = wrap.querySelector('#pg-err');
-    function tryEnter() {
-      if (input.value.trim() === pass) {
-        try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
-        var s = document.getElementById('preview-gate-hide'); if (s) s.remove();
-        wrap.remove();
-      } else {
-        err.textContent = 'Incorrect passphrase.';
-        input.value = ''; input.focus();
-      }
-    }
-    wrap.querySelector('#pg-enter').addEventListener('click', tryEnter);
-    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryEnter(); });
-    input.focus();
-  }
-  if (document.body) build();
-  else document.addEventListener('DOMContentLoaded', build);
-})();`}
+          function build() {
+            if (document.getElementById('preview-gate')) return;
+            var wrap = document.createElement('div');
+            wrap.id = 'preview-gate';
+            wrap.setAttribute(
+              'style',
+              'position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#1e1a1b;padding:24px;font-family:Helvetica Neue,Helvetica,Arial,sans-serif;'
+            );
+            wrap.innerHTML =
+              '<div style="background:#fff;border-radius:6px;padding:34px 30px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)">' +
+                '<h1 style="font-size:18px;margin:0 0 6px;color:#1e1a1b">Harvard Alumni in Tech</h1>' +
+                '<p style="color:#5c5559;font-size:13px;margin:0 0 18px">Private preview. Enter the passphrase you were given.</p>' +
+                '<input id="pg-pass" type="password" placeholder="Passphrase" autocomplete="off" style="width:100%;padding:11px 12px;font-size:15px;border:1px solid rgba(30,26,27,.2);border-radius:4px;margin-bottom:12px;box-sizing:border-box" />' +
+                '<button id="pg-enter" style="width:100%;padding:11px;font-size:14px;font-weight:700;color:#fff;background:#a41034;border:0;border-radius:4px;cursor:pointer">View</button>' +
+                '<div id="pg-err" style="color:#a4102f;font-size:12px;min-height:16px;margin-top:8px"></div>' +
+              '</div>';
+            document.body.appendChild(wrap);
+            var input = wrap.querySelector('#pg-pass');
+            var err = wrap.querySelector('#pg-err');
+            function tryEnter() {
+              if (input.value.trim() === pass) {
+                try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+                var s = document.getElementById('preview-gate-hide'); if (s) s.remove();
+                wrap.remove();
+              } else {
+                err.textContent = 'Incorrect passphrase.';
+                input.value = ''; input.focus();
+              }
+            }
+            wrap.querySelector('#pg-enter').addEventListener('click', tryEnter);
+            input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryEnter(); });
+            input.focus();
+          }
+          if (document.body) build();
+          else document.addEventListener('DOMContentLoaded', build);
+        })();
       </script>
     </Fragment>
   ) : null
