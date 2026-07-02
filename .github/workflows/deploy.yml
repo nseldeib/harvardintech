@@ -43,7 +43,11 @@ jobs:
       - name: Enable / configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
-          enablement: true
+          # Pages is already enabled (Settings → Pages → Source: GitHub Actions),
+          # so we do NOT ask the action to create/enable it — token-based
+          # enablement returns an HTML error on this repo. enablement:false just
+          # reads the existing Pages config for the upload/deploy steps.
+          enablement: false
       - name: Build Astro site
         uses: withastro/action@v3
         env:
