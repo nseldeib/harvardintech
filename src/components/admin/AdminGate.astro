@@ -16,11 +16,13 @@
 import { withBase } from '../../lib/url';
 import { ADMIN_GATE_STORAGE_KEY } from '../../lib/adminGate';
 
-// Build-time passcode. Real value comes from the ADMIN_GATE_PASSCODE env var set
-// in CI; the clearly-named fallback only keeps local production builds from
-// breaking when it is unset (it is not a secret — see the module caveat).
+// Build-time passcode. Overridable via the ADMIN_GATE_PASSCODE env var; the
+// default matches the site preview + review passphrase so all three review
+// surfaces share one code (`crimson2026`). Use `||` (not `??`) so a blank/unset
+// CI value falls back to the default instead of locking the gate with an empty
+// passcode (isPasscodeCorrect rejects an empty expected value).
 const expectedPasscode =
-  import.meta.env.ADMIN_GATE_PASSCODE ?? 'harvardintech-admin-preview';
+  import.meta.env.ADMIN_GATE_PASSCODE || 'crimson2026';
 
 // Base-aware public home, used when a visitor cancels or fails the prompt.
 const homePath = withBase('/');
