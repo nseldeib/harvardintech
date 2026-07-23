@@ -13,14 +13,16 @@ const card = (
 ): CollectionCard => ({ collection, label, count });
 
 describe('ADMIN_COLLECTIONS', () => {
-  // The dashboard covers the five folder collections, in display order.
-  it('lists the five editable folder collections in order', () => {
+  // The dashboard covers every folder collection, in display order.
+  it('lists the editable folder collections in order', () => {
     expect(ADMIN_COLLECTIONS.map((c) => c.collection)).toEqual([
       'events',
       'team',
       'chapters',
       'blog',
       'pages',
+      'projects',
+      'testimonials',
     ]);
   });
 

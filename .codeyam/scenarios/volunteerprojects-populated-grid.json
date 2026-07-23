@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjects - Populated Grid",
+  "id": "2debffd9-c84a-4238-9f00-aea9e0d2f5b6",
+  "url": "/isolated-components/VolunteerProjects",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjects",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerProjects.astro",
+  "description": "The open-projects section with three projects — the state /volunteer reaches once organizers post work in the CMS."
+}

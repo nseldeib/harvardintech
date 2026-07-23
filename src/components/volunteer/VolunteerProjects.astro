@@ -1,0 +1,97 @@
+---
+// The open-projects section: heading, intro, and either the card grid or the
+// empty state. `openProjects` decides what counts as open and in what order.
+import VolunteerProjectCard from './VolunteerProjectCard.astro';
+import VolunteerProjectsEmpty from './VolunteerProjectsEmpty.astro';
+import { openProjects, type ProjectLike } from '../../lib/projects';
+
+export interface VolunteerProjectLike extends ProjectLike {
+  slug?: string;
+  blurb?: string;
+  image?: string;
+  applyUrl?: string;
+  commitment?: string;
+}
+
+interface Props {
+  title?: string;
+  intro?: string;
+  emptyMessage?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  projects?: VolunteerProjectLike[];
+}
+const {
+  title = 'Projects open for volunteers',
+  intro,
+  emptyMessage,
+  ctaLabel,
+  ctaUrl,
+  projects = [],
+} = Astro.props as Props;
+
+const open = openProjects(projects);
+---
+
+<section class="sec projects" id="projects">
+  <div class="wrap">
+    <div class="head">
+      <span class="kick">Open projects</span>
+      <h2>{title}</h2>
+      {intro ? <p class="intro">{intro}</p> : null}
+    </div>
+
+    {
+      open.length > 0 ? (
+        <div class="grid">
+          {open.map((p) => (
+            <VolunteerProjectCard
+              title={p.title}
+              blurb={p.blurb}
+              image={p.image}
+              applyUrl={p.applyUrl}
+              commitment={p.commitment}
+            />
+          ))}
+        </div>
+      ) : (
+        <VolunteerProjectsEmpty message={emptyMessage} ctaLabel={ctaLabel} ctaUrl={ctaUrl} />
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .head {
+    margin-bottom: 36px;
+  }
+  h2 {
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 6px 0 0;
+  }
+  .intro {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 60ch;
+    margin: 14px 0 0;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 720px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

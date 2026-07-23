@@ -11,6 +11,7 @@
 /** Public calendar page visitors land on to browse and subscribe. */
 export const LUMA_CALENDAR_URL = 'https://lu.ma/harvardintech';
 
-/** Optional inline-embed src. Empty until the embed cal-id is provided; when
- *  set, the Events page renders the calendar as an <iframe> instead of a card. */
-export const LUMA_EMBED_URL = '';
+/** Optional inline-embed src. When set, the Events page renders the calendar as
+ *  an <iframe> instead of the link-out card. Taken from Luma → calendar
+ *  settings → Embed for calendar `cal-KK3JJjJ39Jwt9kI`. */
+export const LUMA_EMBED_URL = 'https://luma.com/embed/calendar/cal-KK3JJjJ39Jwt9kI/events';

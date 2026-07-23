@@ -1,0 +1,28 @@
+---
+import Component from "../../../src/components/donate/GiftPillarCard.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiftPillarCard — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/GiftPillarCard.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiftPillarCard</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <div style="max-width: 380px;">
+        <Component
+          icon="people"
+          title="Create Meaningful Connections"
+          body="Support events, roundtables, and gatherings that help alumni build valuable relationships and discover new opportunities."
+          linkLabel="Check out our past events"
+          linkUrl="/events"
+        />
+      </div>
+    </div>
+  </body>
+</html>

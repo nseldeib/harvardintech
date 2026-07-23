@@ -7,5 +7,6 @@
   ],
   "mocks": {},
   "componentName": "ChapterConnect-Email",
-  "scenarioType": "component"
+  "scenarioType": "component",
+  "pageFilePath": "src/components/ChapterConnect.astro"
 }

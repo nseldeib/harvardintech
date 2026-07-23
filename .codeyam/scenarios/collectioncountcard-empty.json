@@ -7,5 +7,6 @@
   ],
   "mocks": {},
   "componentName": "CollectionCountCard-Empty",
-  "scenarioType": "component"
+  "scenarioType": "component",
+  "pageFilePath": "src/components/admin/CollectionCountCard.astro"
 }

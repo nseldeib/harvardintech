@@ -7,5 +7,6 @@
   ],
   "mocks": {},
   "componentName": "BoardMemberCard-Initials",
-  "scenarioType": "component"
+  "scenarioType": "component",
+  "pageFilePath": "src/components/BoardMemberCard.astro"
 }

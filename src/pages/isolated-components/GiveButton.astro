@@ -1,0 +1,27 @@
+---
+import Component from "../../../src/components/donate/GiveButton.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiveButton — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/GiveButton.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiveButton</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      {/* Both variants: crimson on light, and the inverted one used on the
+          dark closing band. */}
+      <div style="display: flex; align-items: center; gap: 20px; padding: 24px;">
+        <Component label="Make a Gift" email="ben@harvardintech.com" campaignName="The Momentum Fund" />
+        <span style="background: var(--ink); padding: 20px; border-radius: 8px;">
+          <Component label="Make a Gift" email="ben@harvardintech.com" campaignName="The Momentum Fund" variant="light" />
+        </span>
+      </div>
+    </div>
+  </body>
+</html>

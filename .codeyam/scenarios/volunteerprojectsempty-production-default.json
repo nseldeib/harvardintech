@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjectsEmpty - Production Default",
+  "id": "dd1cb258-75b0-46d6-843f-451e00a60f27",
+  "url": "/isolated-components/VolunteerProjectsEmpty",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectsEmpty",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectsEmpty.astro",
+  "description": "What visitors actually see today: no projects open yet. The projects collection starts empty, so this is the default state, not an edge case."
+}

@@ -30,14 +30,21 @@ A fresh clone works with: `git clone` → `npm run setup` → `npm run dev`.
 ```
 src/
   pages/index.astro          # the landing page — composes the section components
+  pages/volunteer.astro       # /volunteer — the volunteer pitch + open-projects grid
+  pages/donate.astro          # /donate — the Momentum Fund campaign page
+  pages/events.astro          # /events — Luma calendar embed + upcoming/past listing
   pages/admin/index.astro     # the CRM dashboard (/admin) — content counts + editor link
   components/landing/         # one component per landing section (Hero, Board, …)
+  components/volunteer/       # /volunteer sections (hero, benefits, project cards)
+  components/donate/          # /donate campaign sections (hero, stats, gift pillars, quotes)
   components/admin/           # CRM dashboard sections (count cards, summary, sign-in)
   layouts/BaseLayout.astro    # site shell: data-driven header/nav + footer + SEO
   layouts/AdminLayout.astro   # CRM shell: header chrome + noindex + content column
-  content/                    # typed content collections (events, team, chapters, pages, blog)
-  data/                       # editable settings.json + nav.json singletons
-  lib/                        # site.ts, mailto.ts, adminDashboard.ts (count helpers)
+  content/                    # typed content collections (events, team, chapters, pages,
+                              #   blog, projects, testimonials)
+  data/                       # editable singletons: settings, nav, volunteerPage, donatePage
+  lib/                        # site.ts, mailto.ts, adminDashboard.ts (count helpers),
+                              #   personalize.ts (?name= hero personalization), giving.ts
   styles/tokens.css           # design tokens (brand blue, Roboto, spacing)
 public/admin/editor/          # Sveltia CMS app (index.html + config.yml) served at /admin/editor/
 public/images/                # hero/section backgrounds, board graphic, event gallery

@@ -3,12 +3,53 @@ import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-// site.ts loads the editable `settings`/`nav` singletons from the resolved data
-// root via `readSingleton` (fs read + JSON.parse) at module load — the logic the
-// sandbox content-redirect work introduced (replacing the old static JSON
-// imports). These tests point CODEYAM_DATA_ROOT at a temp dir with fixtures and
-// import the module fresh, proving it reads + parses from the data root rather
-// than a hardcoded path.
+// site.ts loads the editable singletons — `settings`/`nav` plus the
+// `volunteerPage`/`donatePage` copy blobs — from the resolved data root via
+// `readSingleton` (fs read + JSON.parse) at module load, the logic the sandbox
+// content-redirect work introduced (replacing the old static JSON imports).
+// These tests point CODEYAM_DATA_ROOT at a temp dir with fixtures and import the
+// module fresh, proving it reads + parses from the data root rather than a
+// hardcoded path.
+
+/** Minimal valid fixtures for every singleton site.ts reads at module load.
+ *  Adding a singleton to site.ts means adding it here, or every test in this
+ *  file fails at import with ENOENT. */
+function writeAllSingletons(
+  dir: string,
+  overrides: { settings?: object; nav?: object } = {},
+): void {
+  const settings = overrides.settings ?? {
+    siteTitle: 'Test Site',
+    description: 'A fixture site',
+    contactEmail: 'hello@example.com',
+    footerText: 'Footer',
+    socials: [{ label: 'Twitter', url: 'https://twitter.com/example', icon: 'twitter' }],
+  };
+  const nav = overrides.nav ?? {
+    items: [
+      { label: 'Home', url: '/' },
+      { label: 'Events', url: '/events' },
+    ],
+  };
+  writeFileSync(join(dir, 'settings.json'), JSON.stringify(settings));
+  writeFileSync(join(dir, 'nav.json'), JSON.stringify(nav));
+  writeFileSync(
+    join(dir, 'volunteerPage.json'),
+    JSON.stringify({
+      headline: 'Join the volunteer team',
+      intro: 'We are volunteer-run.',
+      benefits: [{ title: 'Experience', body: 'Work on real projects.' }],
+    }),
+  );
+  writeFileSync(
+    join(dir, 'donatePage.json'),
+    JSON.stringify({
+      campaignName: 'The Momentum Fund',
+      heroHeadlineNamed: "{name}, let's go further together",
+      heroHeadlineGeneric: "Let's go further together",
+    }),
+  );
+}
 
 describe('site singletons', () => {
   const prev = process.env.CODEYAM_DATA_ROOT;
@@ -28,16 +69,7 @@ describe('site singletons', () => {
   // sandbox data dir fully drives what the site renders
   it('loads settings and nav from the data root as parsed JSON', async () => {
     tmp = mkdtempSync(join(tmpdir(), 'site-test-'));
-    const settings = {
-      siteTitle: 'Test Site',
-      description: 'A fixture site',
-      contactEmail: 'hello@example.com',
-      footerText: 'Footer',
-      socials: [{ label: 'Twitter', url: 'https://twitter.com/example', icon: 'twitter' }],
-    };
-    const nav = { items: [{ label: 'Home', url: '/' }, { label: 'Events', url: '/events' }] };
-    writeFileSync(join(tmp, 'settings.json'), JSON.stringify(settings));
-    writeFileSync(join(tmp, 'nav.json'), JSON.stringify(nav));
+    writeAllSingletons(tmp);
 
     process.env.CODEYAM_DATA_ROOT = tmp;
     vi.resetModules();
@@ -50,15 +82,32 @@ describe('site singletons', () => {
     expect(mod.nav.items.map((i) => i.label)).toEqual(['Home', 'Events']);
   });
 
+  // The page-copy singletons come from the same data root, so a scenario (or the
+  // CMS) can drive the /volunteer and /donate prose without touching markup.
+  it('loads the volunteer and donate page copy from the data root', async () => {
+    tmp = mkdtempSync(join(tmpdir(), 'site-test-'));
+    writeAllSingletons(tmp);
+
+    process.env.CODEYAM_DATA_ROOT = tmp;
+    vi.resetModules();
+    const mod = await import('./site');
+
+    expect(mod.volunteerPage.headline).toBe('Join the volunteer team');
+    expect(mod.volunteerPage.benefits).toHaveLength(1);
+    expect(mod.donatePage.campaignName).toBe('The Momentum Fund');
+    // The `{name}` slot must survive the round-trip — it is what the browser
+    // fills from `?name=` (see personalize.ts).
+    expect(mod.donatePage.heroHeadlineNamed).toContain('{name}');
+  });
+
   // a different data root yields different values — the loader is not pinned to
   // a single committed file (the sandbox isolation guarantee at the read side)
   it('reflects a second data root on re-import', async () => {
     tmp = mkdtempSync(join(tmpdir(), 'site-test-'));
-    writeFileSync(
-      join(tmp, 'settings.json'),
-      JSON.stringify({ siteTitle: 'Second', description: '', contactEmail: 'x@y.z', footerText: '', socials: [] }),
-    );
-    writeFileSync(join(tmp, 'nav.json'), JSON.stringify({ items: [] }));
+    writeAllSingletons(tmp, {
+      settings: { siteTitle: 'Second', description: '', contactEmail: 'x@y.z', footerText: '', socials: [] },
+      nav: { items: [] },
+    });
 
     process.env.CODEYAM_DATA_ROOT = tmp;
     vi.resetModules();

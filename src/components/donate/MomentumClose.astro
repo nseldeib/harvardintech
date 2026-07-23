@@ -1,0 +1,58 @@
+---
+// The closing ask: a dark band repeating the giving CTA for readers who made it
+// to the bottom of the campaign narrative.
+import GiveButton from './GiveButton.astro';
+
+interface Props {
+  title?: string;
+  body?: string;
+  ctaLabel?: string;
+  donateUrl?: string;
+  email: string;
+  campaignName?: string;
+}
+const {
+  title = 'Help power what comes next.',
+  body,
+  ctaLabel,
+  donateUrl,
+  email,
+  campaignName,
+} = Astro.props as Props;
+---
+
+<section class="close" id="give">
+  <h2>{title}</h2>
+  {body ? <p>{body}</p> : null}
+  <GiveButton
+    label={ctaLabel}
+    donateUrl={donateUrl}
+    email={email}
+    campaignName={campaignName}
+    variant="light"
+  />
+</section>
+
+<style>
+  .close {
+    background: var(--ink);
+    color: #fff;
+    text-align: center;
+    padding: 84px 24px;
+  }
+  h2 {
+    font-size: clamp(26px, 3.6vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: #fff;
+    margin: 0 0 14px;
+  }
+  p {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 52ch;
+    margin: 0 auto 32px;
+  }
+</style>

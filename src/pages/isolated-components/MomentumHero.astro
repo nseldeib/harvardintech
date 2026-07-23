@@ -1,0 +1,29 @@
+---
+import Component from "../../../src/components/donate/MomentumHero.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for MomentumHero — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/MomentumHero.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: MomentumHero</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        headlineNamed="{name}, let's go further together"
+        headlineGeneric="Let's go further together"
+        subhead="Help sustain the Harvard Alumni in Tech community and the connections, opportunities, and support that move us forward."
+        image="/images/bg/hero-bg.jpg"
+        ctaLabel="Make a Gift"
+        email="ben@harvardintech.com"
+        campaignName="The Momentum Fund"
+        previewName="Ben"
+      />
+    </div>
+  </body>
+</html>

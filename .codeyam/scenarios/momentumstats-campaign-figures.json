@@ -1,0 +1,13 @@
+{
+  "name": "MomentumStats - Campaign Figures",
+  "id": "7dde650a-8fc1-4c49-98d9-24ec6d1e09ae",
+  "url": "/isolated-components/MomentumStats",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumStats",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumStats.astro",
+  "description": "The figures under the campaign hero: 100+ events, 8,000+ members, 5 chapters. The story heading that follows refers directly to these."
+}

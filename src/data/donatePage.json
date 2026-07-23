@@ -1,0 +1,66 @@
+{
+  "campaignName": "The Momentum Fund",
+  "heroHeadlineNamed": "{name}, let's go further together",
+  "heroHeadlineGeneric": "Let's go further together",
+  "heroSubhead": "Help sustain the Harvard Alumni in Tech community and the connections, opportunities, and support that move us forward.",
+  "heroImage": "/images/bg/hero-bg.jpg",
+  "stats": [
+    { "value": "100+", "label": "Events Hosted" },
+    { "value": "8,000+", "label": "Members" },
+    { "value": "5", "label": "Chapters & Growing" }
+  ],
+  "storyTitle": "And Every Number Represents a Story",
+  "storyLede": "Behind every event, chapter, and member of our network is an opportunity for a conversation, introduction, or shared experience that has helped Harvard alumni in tech move forward.",
+  "storyPullQuote": "Sometimes, the most meaningful opportunities begin with a single conversation.",
+  "storyBody": [
+    "An introduction to someone who has been where you are going. A roundtable where a new idea becomes sharper. A community gathering that turns a shared interest into a lasting collaboration.",
+    "A moment of encouragement that reminds someone they are not building alone.",
+    "Harvard Alumni in Tech exists to create more of these moments, the kind that help alumni find one another, support one another, and move further together.",
+    "Across cities, industries, and career stages, our network brings together founders, builders, operators, students, investors, and innovators who believe in the power of community.",
+    "Because when exceptional people are connected to the right community, one conversation can open a door, one relationship can shape a path, and one network can help create what comes next."
+  ],
+  "whyTitle": "Why Support Harvard in Tech?",
+  "whyBody": [
+    {
+      "title": "Harvard in Tech is at an important turning point",
+      "paragraphs": [
+        "We are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals who are building, mentoring, launching, and opening doors for one another.",
+        "Together, we can create an impact that lasts beyond any one event, message, or moment.",
+        "To meet this moment, we need the infrastructure to support the momentum we are already seeing. That means creating more consistent programming, expanding access to meaningful connections, supporting volunteers with stronger tools and resources, growing our digital presence, and building the operational foundation needed to serve our community at a higher level."
+      ]
+    },
+    {
+      "title": "This is why your support matters",
+      "paragraphs": [
+        "It gives Harvard in Tech the ability to plan ahead, invest more intentionally, and create a stronger, more sustainable alumni-powered ecosystem.",
+        "Now is the time to move from informal support to intentional investment.",
+        "Because the future of this network will not be built by chance. It will be built by alumni who believe in what this community can become and choose to help power it forward every month."
+      ]
+    }
+  ],
+  "pillarsTitle": "What Your Gift Powers",
+  "pillars": [
+    {
+      "icon": "people",
+      "title": "Create Meaningful Connections",
+      "body": "Support events, roundtables, and gatherings that help alumni build valuable relationships and discover new opportunities.",
+      "linkLabel": "Check out our past events",
+      "linkUrl": "/events"
+    },
+    {
+      "icon": "book",
+      "title": "Expand Access to Knowledge",
+      "body": "Power practical content, mentorship, and conversations that help founders, innovators, and tech professionals grow."
+    },
+    {
+      "icon": "globe",
+      "title": "Strengthen the Network",
+      "body": "Build the infrastructure, volunteer resources, and city chapters needed to serve more alumni and sustain the community."
+    }
+  ],
+  "testimonialsTitle": "From our community",
+  "ctaTitle": "Help power what comes next.",
+  "ctaBody": "Join the alumni choosing to move from informal support to intentional investment — every month.",
+  "ctaLabel": "Make a Gift",
+  "donateUrl": ""
+}

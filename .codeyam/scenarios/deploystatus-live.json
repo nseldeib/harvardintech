@@ -7,5 +7,6 @@
   ],
   "mocks": {},
   "componentName": "DeployStatus-Live",
-  "scenarioType": "component"
+  "scenarioType": "component",
+  "pageFilePath": "src/components/admin/DeployStatus.astro"
 }

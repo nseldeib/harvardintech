@@ -7,5 +7,6 @@
   ],
   "mocks": {},
   "componentName": "DashboardSummary-Empty",
-  "scenarioType": "component"
+  "scenarioType": "component",
+  "pageFilePath": "src/components/admin/DashboardSummary.astro"
 }

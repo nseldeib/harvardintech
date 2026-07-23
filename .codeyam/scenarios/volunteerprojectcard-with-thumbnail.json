@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjectCard - With Thumbnail",
+  "id": "17ded937-c595-4218-a594-7b0c27762bbc",
+  "url": "/isolated-components/VolunteerProjectCard",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectCard.astro",
+  "description": "One project card with every optional field filled: thumbnail, time commitment, blurb, and sign-up link."
+}

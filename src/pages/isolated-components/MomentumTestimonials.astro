@@ -1,0 +1,39 @@
+---
+import Component from "../../../src/components/donate/MomentumTestimonials.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for MomentumTestimonials — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/MomentumTestimonials.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: MomentumTestimonials</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component title="From our community" testimonials={[
+  {
+    quote: 'I came to a founder dinner knowing nobody. I left with two intros that turned into my first enterprise customer.',
+    name: 'Priya Raman',
+    role: 'Founder · AB \u201914',
+    order: 1,
+  },
+  {
+    quote: 'The London co-working days are the only reason I still feel connected to Harvard on this side of the Atlantic.',
+    name: 'Tom Whitfield',
+    role: 'Engineering lead · AB \u201909',
+    order: 2,
+  },
+  {
+    quote: 'Someone in this network took an hour to talk me out of a bad acquisition. That hour was worth more than any conference.',
+    name: 'Dana Osei',
+    role: 'Operator · MBA \u201918',
+    order: 3,
+  },
+]} />
+    </div>
+  </body>
+</html>

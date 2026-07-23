@@ -1,0 +1,47 @@
+---
+// Full /volunteer page body: the "Join the Volunteer Team" pitch, the "Why
+// Volunteer" benefit blocks, and the grid of open projects.
+//
+// Composition only — every section is its own component under
+// `components/volunteer/`.
+//
+// Accepts plain props (copy + a flat projects array) rather than reading the
+// collection itself, so it renders both from the /volunteer route and from
+// isolated-component scenarios (rich / sparse / empty states) — the same split
+// EventsPage.astro and ChapterPage.astro use.
+//
+// The projects grid is the part that changes: production starts with NO open
+// projects, so the empty state is the default view, not an edge case.
+import VolunteerHero from './volunteer/VolunteerHero.astro';
+import VolunteerBenefits from './volunteer/VolunteerBenefits.astro';
+import VolunteerProjects from './volunteer/VolunteerProjects.astro';
+import type { VolunteerProjectLike } from './volunteer/VolunteerProjects.astro';
+import type { VolunteerPageCopy } from '../lib/site';
+
+export type { VolunteerProjectLike };
+
+interface Props {
+  copy: VolunteerPageCopy;
+  projects?: VolunteerProjectLike[];
+}
+const { copy, projects = [] } = Astro.props as Props;
+---
+
+<VolunteerHero
+  kicker={copy.kicker}
+  headline={copy.headline}
+  intro={copy.intro}
+  ctaLabel={copy.ctaLabel}
+  ctaUrl={copy.ctaUrl}
+/>
+
+<VolunteerBenefits title={copy.benefitsTitle} benefits={copy.benefits} />
+
+<VolunteerProjects
+  title={copy.projectsTitle}
+  intro={copy.projectsIntro}
+  emptyMessage={copy.projectsEmptyMessage}
+  ctaLabel={copy.ctaLabel}
+  ctaUrl={copy.ctaUrl}
+  projects={projects}
+/>

@@ -1,0 +1,26 @@
+---
+import Component from "../../../src/components/donate/TestimonialCard.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for TestimonialCard — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/TestimonialCard.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: TestimonialCard</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <div style="max-width: 380px;">
+        <Component
+          quote="I came to a founder dinner knowing nobody. I left with two intros that turned into my first enterprise customer."
+          name="Priya Raman"
+          role="Founder · AB ’14"
+        />
+      </div>
+    </div>
+  </body>
+</html>

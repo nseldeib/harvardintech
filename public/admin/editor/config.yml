@@ -235,3 +235,113 @@ collections:
           - { name: label, label: Label, widget: string }
           - { name: url, label: URL, widget: string }
       - { name: body, label: Body, widget: markdown, required: false }
+
+  # Open volunteer projects, shown as the grid on /volunteer. Deleting an entry
+  # removes it from the page; `active: false` retires it while keeping a record.
+  - name: projects
+    label: "Volunteer Projects"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}} · {{active | default(true) | ternary('Open','Closed')}}"
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: blurb, label: Blurb, widget: text, required: false, hint: "One or two sentences on what the volunteer would actually do." }
+      - { name: image, label: "Thumbnail", widget: image, required: false }
+      - { name: applyUrl, label: "Sign-up link", widget: string, required: false, hint: "Where an interested volunteer goes — a form, an email link, or a doc." }
+      - { name: commitment, label: "Time commitment", widget: string, required: false, hint: 'Shown as a small label on the card, e.g. "~2 hrs / week".' }
+      - { name: order, label: Order, widget: number, required: false }
+      - { name: active, label: "Currently open", widget: boolean, default: true, required: false }
+      - { name: body, label: Body, widget: markdown, required: false }
+
+  # Member quotes for the Momentum Fund campaign page (/donate). With none, the
+  # testimonials band does not render at all.
+  - name: testimonials
+    label: "Testimonials"
+    folder: "src/content/testimonials"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: name
+    summary: "{{name}} — {{role}}"
+    fields:
+      - { name: quote, label: Quote, widget: text, hint: "The member's words. Quotation marks are added automatically." }
+      - { name: name, label: Name, widget: string }
+      - { name: role, label: "Role / class year", widget: string, required: false }
+      - { name: photo, label: Photo, widget: image, required: false }
+      - { name: order, label: Order, widget: number, required: false }
+
+  # ── Page copy singletons ────────────────────────────────────────────────
+  # The prose on /volunteer and /donate. Same "file collection" mechanism as
+  # Site Settings: every field here must be a top-level key in the matching
+  # src/data/*.json that src/lib/site.ts reads.
+  - name: volunteerPage
+    label: "Volunteer Page"
+    files:
+      - name: copy
+        label: "Copy"
+        file: "src/data/volunteerPage.json"
+        fields:
+          - { name: kicker, label: "Kicker", widget: string, required: false }
+          - { name: headline, label: "Headline", widget: string }
+          - { name: intro, label: "Intro", widget: text }
+          - { name: benefitsTitle, label: "Benefits heading", widget: string, required: false }
+          - name: benefits
+            label: "Why volunteer (blocks)"
+            widget: list
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: body, label: Body, widget: text }
+          - { name: projectsTitle, label: "Projects heading", widget: string, required: false }
+          - { name: projectsIntro, label: "Projects intro", widget: text, required: false }
+          - { name: projectsEmptyMessage, label: "Message when no projects are open", widget: text, required: false, hint: "Shown in place of the grid when every project is closed — the default state." }
+          - { name: ctaLabel, label: "Button label", widget: string, required: false }
+          - { name: ctaUrl, label: "Button link", widget: string, required: false }
+
+  - name: donatePage
+    label: "Donate Page"
+    files:
+      - name: copy
+        label: "Copy"
+        file: "src/data/donatePage.json"
+        fields:
+          - { name: campaignName, label: "Campaign name", widget: string }
+          - { name: heroHeadlineNamed, label: "Hero headline (with name)", widget: string, hint: "Use {name} where the subscriber's first name should appear, e.g. \"{name}, let's go further together\". Used when the email links to /donate?name=..." }
+          - { name: heroHeadlineGeneric, label: "Hero headline (no name)", widget: string, hint: "Shown to everyone who arrives without a name in the link." }
+          - { name: heroSubhead, label: "Hero subhead", widget: text, required: false }
+          - { name: heroImage, label: "Hero background photo", widget: image, required: false, media_folder: "/public/images/gallery", public_folder: "/images/gallery" }
+          - name: stats
+            label: "Stats band"
+            widget: list
+            required: false
+            hint: "The figures under the hero. The story heading ('And Every Number Represents a Story') refers to these — removing them leaves it dangling."
+            fields:
+              - { name: value, label: Figure, widget: string }
+              - { name: label, label: Label, widget: string }
+          - { name: storyTitle, label: "Story heading", widget: text, required: false }
+          - { name: storyLede, label: "Story lede", widget: text, required: false }
+          - { name: storyPullQuote, label: "Story pull quote", widget: text, required: false }
+          - { name: storyBody, label: "Story paragraphs", widget: list, required: false, field: { name: paragraph, label: Paragraph, widget: text } }
+          - { name: whyTitle, label: "'Why support' heading", widget: string, required: false }
+          - name: whyBody
+            label: "'Why support' blocks"
+            widget: list
+            required: false
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: paragraphs, label: Paragraphs, widget: list, field: { name: paragraph, label: Paragraph, widget: text } }
+          - { name: pillarsTitle, label: "'What your gift powers' heading", widget: string, required: false }
+          - name: pillars
+            label: "What your gift powers"
+            widget: list
+            required: false
+            fields:
+              - { name: icon, label: Icon, widget: select, required: false, options: [people, book, globe], default: people }
+              - { name: title, label: Title, widget: string }
+              - { name: body, label: Body, widget: text }
+              - { name: linkLabel, label: "Link label", widget: string, required: false }
+              - { name: linkUrl, label: "Link URL", widget: string, required: false }
+          - { name: testimonialsTitle, label: "Testimonials heading", widget: string, required: false }
+          - { name: ctaTitle, label: "Closing heading", widget: string, required: false }
+          - { name: ctaBody, label: "Closing body", widget: text, required: false }
+          - { name: ctaLabel, label: "Give button label", widget: string, required: false }
+          - { name: donateUrl, label: "Donation link", widget: string, required: false, hint: "Leave blank until there is a donation platform — the button then opens a giving-inquiry email instead." }

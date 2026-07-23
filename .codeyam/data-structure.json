@@ -5,13 +5,47 @@
     "category": "datastore",
     "order": 1,
     "fields": [
-      { "name": "slug", "type": "string", "isId": true, "required": true },
-      { "name": "title", "type": "string", "required": true },
-      { "name": "date", "type": "date", "required": true },
-      { "name": "location", "type": "string", "required": false },
-      { "name": "description", "type": "string", "required": false },
-      { "name": "link", "type": "string", "required": false },
-      { "name": "body", "type": "string", "required": false }
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "date",
+        "type": "date",
+        "required": true
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "link",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "chapter",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
+        "required": false
+      }
     ]
   },
   {
@@ -20,12 +54,37 @@
     "category": "datastore",
     "order": 2,
     "fields": [
-      { "name": "slug", "type": "string", "isId": true, "required": true },
-      { "name": "name", "type": "string", "required": true },
-      { "name": "role", "type": "string", "required": true },
-      { "name": "photo", "type": "string", "required": false },
-      { "name": "bio", "type": "string", "required": false },
-      { "name": "order", "type": "number", "required": false }
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "role",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "photo",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "bio",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      }
     ]
   },
   {
@@ -34,16 +93,57 @@
     "category": "datastore",
     "order": 3,
     "fields": [
-      { "name": "slug", "type": "string", "isId": true, "required": true },
-      { "name": "title", "type": "string", "required": true },
-      { "name": "description", "type": "string", "required": false },
-      { "name": "order", "type": "number", "required": false },
-      { "name": "metaTitle", "type": "string", "required": false },
-      { "name": "metaDescription", "type": "string", "required": false },
-      { "name": "ogImage", "type": "string", "required": false },
-      { "name": "embedUrl", "type": "string", "required": false },
-      { "name": "embedHtml", "type": "string", "required": false },
-      { "name": "body", "type": "string", "required": false }
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "metaTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "metaDescription",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "ogImage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "embedUrl",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "embedHtml",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
+        "required": false
+      }
     ]
   },
   {
@@ -52,17 +152,62 @@
     "category": "datastore",
     "order": 4,
     "fields": [
-      { "name": "slug", "type": "string", "isId": true, "required": true },
-      { "name": "title", "type": "string", "required": true },
-      { "name": "date", "type": "date", "required": true },
-      { "name": "summary", "type": "string", "required": false },
-      { "name": "coverImage", "type": "string", "required": false },
-      { "name": "metaTitle", "type": "string", "required": false },
-      { "name": "metaDescription", "type": "string", "required": false },
-      { "name": "ogImage", "type": "string", "required": false },
-      { "name": "embedUrl", "type": "string", "required": false },
-      { "name": "embedHtml", "type": "string", "required": false },
-      { "name": "body", "type": "string", "required": false }
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "date",
+        "type": "date",
+        "required": true
+      },
+      {
+        "name": "summary",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "coverImage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "metaTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "metaDescription",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "ogImage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "embedUrl",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "embedHtml",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
+        "required": false
+      }
     ]
   },
   {
@@ -71,23 +216,59 @@
     "category": "datastore",
     "order": 5,
     "fields": [
-      { "name": "siteTitle", "type": "string", "required": true },
-      { "name": "description", "type": "string", "required": true },
-      { "name": "contactEmail", "type": "string", "required": true },
-      { "name": "footerText", "type": "string", "required": true },
-      { "name": "googleAnalyticsId", "type": "string", "required": false },
-      { "name": "customHeadHtml", "type": "string", "required": false },
-      { "name": "customBodyHtml", "type": "string", "required": false },
-      { "name": "socials", "type": "array", "required": false }
+      {
+        "name": "siteTitle",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "contactEmail",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "footerText",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "googleAnalyticsId",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "customHeadHtml",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "customBodyHtml",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "socials",
+        "type": "array",
+        "required": false
+      }
     ]
   },
   {
     "name": "Nav",
-    "description": "Editable navigation menu singleton (`src/data/nav.json`) with nested dropdowns (e.g. Chapters → NYC/SF/LA/Japan). Loaded by the base layout.",
+    "description": "Editable navigation menu singleton (`src/data/nav.json`) with nested dropdowns (e.g. Chapters \u2192 NYC/SF/LA/Japan). Loaded by the base layout.",
     "category": "datastore",
     "order": 6,
     "fields": [
-      { "name": "items", "type": "array", "required": true }
+      {
+        "name": "items",
+        "type": "array",
+        "required": true
+      }
     ]
   },
   {
@@ -96,14 +277,271 @@
     "category": "datastore",
     "order": 7,
     "fields": [
-      { "name": "slug", "type": "string", "isId": true, "required": true },
-      { "name": "city", "type": "string", "required": true },
-      { "name": "region", "type": "string", "required": false },
-      { "name": "blurb", "type": "string", "required": false },
-      { "name": "leads", "type": "array", "required": false },
-      { "name": "links", "type": "array", "required": false },
-      { "name": "order", "type": "number", "required": false },
-      { "name": "body", "type": "string", "required": false }
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "city",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "region",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "blurb",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "leads",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "links",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "VolunteerProject",
+    "description": "An open volunteer project shown in the grid on /volunteer. Stored as a markdown file in the `projects` content collection and edited in the CMS, so organizers can open and close projects without a code change. `image` is the project thumbnail; `applyUrl` is where an interested volunteer goes. `active: false` retires a project without deleting its record.",
+    "category": "datastore",
+    "order": 8,
+    "fields": [
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "blurb",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "image",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "applyUrl",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "commitment",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "active",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "Testimonial",
+    "description": "A member quote shown in the testimonials band on the /donate Momentum Fund campaign page. Stored in the `testimonials` content collection. Production starts with none \u2014 the band hides itself entirely when the collection is empty, so the page reads as finished before any quotes are collected.",
+    "category": "datastore",
+    "order": 9,
+    "fields": [
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "quote",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "role",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "photo",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "VolunteerPageCopy",
+    "description": "Editable copy singleton for /volunteer (`src/data/volunteerPage.json`): headline, intro, the four 'Why Volunteer' benefit blocks, and the projects-section framing including the empty-state message. Loaded via the same readSingleton path as settings/nav, so changing the pitch is a CMS data edit, never a markup change.",
+    "category": "datastore",
+    "order": 10,
+    "fields": [
+      {
+        "name": "kicker",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "headline",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "intro",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "benefits",
+        "type": "array",
+        "required": true
+      },
+      {
+        "name": "projectsTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "projectsIntro",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "projectsEmptyMessage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "ctaLabel",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "ctaUrl",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "DonatePageCopy",
+    "description": "Editable copy singleton for the /donate Momentum Fund campaign page (`src/data/donatePage.json`): the hero (with the `{name}` personalization slot filled from ?name= at runtime), the story and 'why support' narrative, the three 'What Your Gift Powers' pillars, and the giving CTA. `donateUrl` is empty until a donation platform exists, in which case the CTA falls back to a giving-inquiry mailto.",
+    "category": "datastore",
+    "order": 11,
+    "fields": [
+      {
+        "name": "campaignName",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "heroGreetingNamed",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "heroGreetingGeneric",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "heroSubhead",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "storyTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "storyBody",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "whyTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "whyBody",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "pillarsTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "pillars",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "testimonialsTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "ctaLabel",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "donateUrl",
+        "type": "string",
+        "required": false
+      }
     ]
   }
 ]

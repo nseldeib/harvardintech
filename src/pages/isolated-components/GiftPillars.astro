@@ -1,0 +1,38 @@
+---
+import Component from "../../../src/components/donate/GiftPillars.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiftPillars — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/GiftPillars.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiftPillars</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component title="What Your Gift Powers" pillars={[
+  {
+    icon: 'people' as const,
+    title: 'Create Meaningful Connections',
+    body: 'Support events, roundtables, and gatherings that help alumni build valuable relationships and discover new opportunities.',
+    linkLabel: 'Check out our past events',
+    linkUrl: '/events',
+  },
+  {
+    icon: 'book' as const,
+    title: 'Expand Access to Knowledge',
+    body: 'Power practical content, mentorship, and conversations that help founders, innovators, and tech professionals grow.',
+  },
+  {
+    icon: 'globe' as const,
+    title: 'Strengthen the Network',
+    body: 'Build the infrastructure, volunteer resources, and city chapters needed to serve more alumni and sustain the community.',
+  },
+]} />
+    </div>
+  </body>
+</html>

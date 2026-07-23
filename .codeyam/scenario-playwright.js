@@ -1,3 +1,5 @@
+// codeyam-generated — DO NOT EDIT.
+// codeyam-editor: 0.1.7  source-sha256: 0eb207464481cbfca8f724d6f30116e96b30a40251d5b172f8d8460fe79cea37
 const {
   hasLoadingMarkers,
   shouldStopWaitingForImages,
@@ -677,6 +679,14 @@ async function loadScenarioTopLevel(
   }
 }
 
+// The CSS selector for "clickable / interactive" elements — buttons, links,
+// role=button, form controls, <summary>, and anything with an onclick. Shared
+// by the candidate-label collector (below) and the text-target resolver
+// (`resolveTextTarget`), which prefers an interactive element over a plain
+// text node when a click/press label matches both.
+const INTERACTIVE_SELECTOR =
+  "button, a[href], [role=button], input, select, textarea, summary, [onclick]";
+
 // Collect up to 20 distinct visible labels of interactive elements on the
 // page — buttons, links, role=button, form controls, <summary>, and anything
 // with an onclick. Used to build an ACTIONABLE error when an interaction's
@@ -685,9 +695,7 @@ async function loadScenarioTopLevel(
 // mean one of these?" hint. Pure read (no clicks); falls back to value /
 // aria-label / placeholder when an element has no text.
 async function collectInteractiveLabels(frame) {
-  return frame.evaluate(() => {
-    const selector =
-      "button, a[href], [role=button], input, select, textarea, summary, [onclick]";
+  return frame.evaluate((selector) => {
     const nodes = Array.from(document.querySelectorAll(selector));
     const labels = nodes
       .map((node) => {
@@ -701,7 +709,39 @@ async function collectInteractiveLabels(frame) {
       })
       .filter((label) => label.length > 0);
     return Array.from(new Set(labels)).slice(0, 20);
-  });
+  }, INTERACTIVE_SELECTOR);
+}
+
+// Describe the elements a substring text match resolved, so an ambiguity
+// warning can name the competing controls (e.g. the preset button "Bet" vs the
+// disclosure button "…or bet on"). Reads each matched element's inner text via
+// Playwright's `allInnerTexts`, caps the list at 5, and trims each to a single
+// short line. Pure read; degrades to a count-only description if the locator
+// API or the page can't produce texts.
+async function describeMatchCandidates(baseLocator, matchCount) {
+  const CAP = 5;
+  const MAX_LEN = 60;
+  let texts = [];
+  try {
+    if (typeof baseLocator.allInnerTexts === "function") {
+      texts = await baseLocator.allInnerTexts();
+    }
+  } catch (_) {
+    texts = [];
+  }
+  const described = texts
+    .map((t) => String(t).replace(/\s+/g, " ").trim())
+    .filter((t) => t.length > 0)
+    .slice(0, CAP)
+    .map((t) => (t.length > MAX_LEN ? `${t.slice(0, MAX_LEN)}…` : t))
+    .map((t) => `"${t}"`);
+  if (described.length === 0) {
+    return [`${matchCount} elements (text unavailable)`];
+  }
+  if (matchCount > described.length) {
+    described.push(`…and ${matchCount - described.length} more`);
+  }
+  return described;
 }
 
 // Drive a single user-style interaction against the settled frame before the
@@ -714,16 +754,103 @@ async function collectInteractiveLabels(frame) {
 // `Enter`). On a no-match target this THROWS with the list of candidate
 // interactive labels — the capture script's outer catch turns that into a
 // failed capture with an actionable message, never a silent blank screenshot.
-async function performInteraction(frame, interaction, { timeoutMs = 5000 } = {}) {
+//
+// Resolve a visible-text target to the element most likely intended, instead
+// of blindly taking the first substring hit. A bare
+// `getByText(text, { exact: false })` is a case-insensitive SUBSTRING match, so
+// a label can land on a plain text node or a placeholder rather than the chip /
+// button the agent meant (observed: a `"Japan"` click hit placeholder text, not
+// the chip; a `"Bet"` click hit a disclosure button described "or bet on"). We
+// try increasingly-loose locators in priority order and take the first that
+// matches anything:
+//   1. exact + interactive   (for click/press)
+//   2. exact
+//   3. substring + interactive   (for click/press)
+//   4. substring
+// so an exact, clickable element wins over a substring plain-text node. Returns
+// the winning tier's locator plus its match count; when nothing matches at all,
+// returns the substring locator (count 0) so the caller's zero-match error path
+// still fires with its candidate-label hint.
+async function resolveTextTarget(frame, text, action) {
+  const preferInteractive = action === "click" || action === "press";
+  const exactBase = frame.getByText(text, { exact: true });
+  const substrBase = frame.getByText(text, { exact: false });
+
+  const tiers = [];
+  // `.and()` (Playwright ≥1.34) intersects two locators to the elements
+  // matching both — here, the text element that is ALSO interactive. Guard on
+  // its presence so a locator without `.and` degrades to text-only tiers.
+  if (preferInteractive && typeof exactBase.and === "function") {
+    const interactive = frame.locator(INTERACTIVE_SELECTOR);
+    tiers.push(exactBase.and(interactive));
+    tiers.push(exactBase);
+    tiers.push(substrBase.and(interactive));
+    tiers.push(substrBase);
+  } else {
+    tiers.push(exactBase);
+    tiers.push(substrBase);
+  }
+
+  for (const loc of tiers) {
+    const count = await loc.count();
+    if (count > 0) {
+      return { baseLocator: loc, matchCount: count };
+    }
+  }
+  return { baseLocator: substrBase, matchCount: 0 };
+}
+
+// Pick the single element to act on from a resolved locator. When more than one
+// candidate remains within the winning tier, prefer a VISIBLE element over a
+// hidden one rather than acting on raw `.first()` (a hidden duplicate — an
+// off-screen menu clone, an aria-hidden mirror — is almost never the intended
+// target). Degrades to `.first()` when the locator API lacks a visible filter
+// or no candidate is visible.
+async function pickBestCandidate(baseLocator, matchCount) {
+  if (matchCount <= 1) {
+    return baseLocator.first();
+  }
+  try {
+    if (typeof baseLocator.filter === "function") {
+      const visible = baseLocator.filter({ visible: true });
+      if ((await visible.count()) > 0) {
+        return visible.first();
+      }
+    }
+  } catch (_) {
+    // Locator API without a `{ visible: true }` filter — fall through.
+  }
+  return baseLocator.first();
+}
+
+// Text matching prefers an EXACT, INTERACTIVE element over a looser substring /
+// plain-text hit (see `resolveTextTarget`), so the first attempt lands on the
+// chip or button the agent meant. When a genuine ambiguity survives that
+// resolution (>1 candidate in the winning tier), we still act — on the best
+// visible candidate — but push an actionable warning naming every candidate
+// into the optional `warnings` array so the agent can switch to an exact
+// selector; a zero-match throws an error that spells out the substring caveat
+// and the exact-selector / URL-query-param alternatives.
+async function performInteraction(
+  frame,
+  interaction,
+  { timeoutMs = 5000, warnings } = {},
+) {
   const { action, selector, text, value } = interaction || {};
 
-  let locator;
+  let baseLocator;
   let targetDesc;
+  let matchedByText = false;
+  let matchCount;
   if (typeof text === "string" && text.length > 0) {
-    locator = frame.getByText(text, { exact: false }).first();
+    const resolved = await resolveTextTarget(frame, text, action);
+    baseLocator = resolved.baseLocator;
+    matchCount = resolved.matchCount;
     targetDesc = `text "${text}"`;
+    matchedByText = true;
   } else if (typeof selector === "string" && selector.length > 0) {
-    locator = frame.locator(selector).first();
+    baseLocator = frame.locator(selector);
+    matchCount = await baseLocator.count();
     targetDesc = `selector "${selector}"`;
   } else {
     throw new Error(
@@ -731,14 +858,34 @@ async function performInteraction(frame, interaction, { timeoutMs = 5000 } = {})
     );
   }
 
-  const matchCount = await locator.count();
   if (matchCount === 0) {
     const candidates = await collectInteractiveLabels(frame);
     const candidateList =
       candidates.length > 0 ? candidates.join(", ") : "(none found on page)";
     throw new Error(
       `preview-interact: no element matched ${targetDesc}. ` +
-        `Candidate interactive labels: ${candidateList}`,
+        `Text is matched as a case-insensitive SUBSTRING, so a misspelled or ` +
+        `over-specific label matches nothing — prefer an exact/role/testid CSS ` +
+        `selector (e.g. {"selector":"[data-testid=\\"save\\"]"}) for a precise ` +
+        `target. Many filter/status/sort states are also reachable directly via a ` +
+        `URL query param (e.g. add "?status=active" to the path) with no ` +
+        `interaction at all. Candidate interactive labels: ${candidateList}`,
+    );
+  }
+
+  const locator = await pickBestCandidate(baseLocator, matchCount);
+
+  // Ambiguity warning: a text target that still resolves >1 element within the
+  // winning tier acts on the best visible candidate, which may not be the one
+  // intended. Name the competing elements instead of silently proceeding. Only
+  // fires for text matches — an explicit selector that matches many is the
+  // caller's deliberate choice.
+  if (matchedByText && matchCount > 1 && Array.isArray(warnings)) {
+    warnings.push(
+      `preview-interact: ${targetDesc} matched ${matchCount} elements — acting on the best visible candidate. ` +
+        `Text resolution prefers an exact, interactive match, but several remain, so this may not be the element you meant. ` +
+        `Candidates: ${(await describeMatchCandidates(baseLocator, matchCount)).join(" | ")}. ` +
+        `Use an exact/role/testid selector to disambiguate.`,
     );
   }
 
@@ -829,11 +976,12 @@ async function performInteractionSequence(
     settleMs = 5000,
     loadingMarkers,
     settle = waitForStablePage,
+    warnings,
   } = {},
 ) {
   for (let i = 0; i < interactions.length; i += 1) {
     try {
-      await performInteraction(frame, interactions[i], { timeoutMs });
+      await performInteraction(frame, interactions[i], { timeoutMs, warnings });
     } catch (err) {
       // Prefix the failing step's index so a miss in a multi-step sequence is
       // locatable, matching the model-side `interactions[i]` validator.
@@ -865,6 +1013,7 @@ module.exports = {
   loadScenarioInIframe,
   loadScenarioTopLevel,
   collectInteractiveLabels,
+  describeMatchCandidates,
   performInteraction,
   waitForPredicate,
   performInteractionSequence,

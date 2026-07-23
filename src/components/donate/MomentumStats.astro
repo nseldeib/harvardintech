@@ -1,0 +1,54 @@
+---
+// The figures under the Momentum Fund hero.
+//
+// Load-bearing, not decoration: the section that follows is headed "And Every
+// Number Represents a Story" and refers directly to these. Clearing the stats
+// in the CMS leaves that heading dangling, which is why the page renders the
+// band whenever any stat exists.
+interface Props {
+  stats?: { value: string; label: string }[];
+}
+const { stats = [] } = Astro.props as Props;
+---
+
+{
+  stats.length > 0 ? (
+    <section class="stats" style={`--n:${stats.length}`}>
+      {stats.map((s) => (
+        <div class="stat">
+          <div class="v">{s.value}</div>
+          <div class="l">{s.label}</div>
+        </div>
+      ))}
+    </section>
+  ) : null
+}
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(var(--n, 3), 1fr);
+    gap: 24px;
+    background: var(--paper-2);
+    padding: 56px 24px;
+    text-align: center;
+  }
+  .v {
+    font-size: clamp(32px, 4vw, 46px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .l {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    color: var(--ink-2);
+    margin-top: 6px;
+  }
+  @media (max-width: 900px) {
+    .stats {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+  }
+</style>

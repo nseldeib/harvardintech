@@ -1,0 +1,55 @@
+---
+// /volunteer hero: the "Join the Volunteer Team" pitch and the primary
+// sign-up CTA.
+import { withBase } from '../../lib/url';
+
+interface Props {
+  kicker?: string;
+  headline: string;
+  intro: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+}
+const { kicker, headline, intro, ctaLabel, ctaUrl } = Astro.props as Props;
+---
+
+<section class="hero">
+  <div class="wrap">
+    {kicker ? <span class="kick">{kicker}</span> : null}
+    <h1>{headline}</h1>
+    <p class="lede">{intro}</p>
+    {
+      ctaLabel && ctaUrl ? (
+        <a class="btn btn-solid cta" href={withBase(ctaUrl)} rel="noopener">
+          {ctaLabel}
+        </a>
+      ) : null
+    }
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--line);
+    padding: 72px 0 64px;
+  }
+  h1 {
+    font-size: clamp(30px, 4.6vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin: 10px 0 16px;
+    max-width: 20ch;
+  }
+  .lede {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 0;
+  }
+  .cta {
+    margin-top: 28px;
+  }
+</style>

@@ -1,0 +1,121 @@
+---
+// Momentum Fund hero: a full-bleed event photo, the personalized headline, the
+// supporting line, and the giving CTA.
+//
+// PERSONALIZATION lives here rather than in the page so the headline element
+// and the script that fills it stay in one file. The site is statically built,
+// so the headline ships in its GENERIC form and is upgraded in the browser when
+// the visitor arrived from the email with `?name=`. Generic-first (rather than
+// blank) means the majority with no name in the link see no flash, and a
+// visitor with JS disabled still gets a complete headline.
+import { withBase } from '../../lib/url';
+import GiveButton from './GiveButton.astro';
+
+interface Props {
+  /** Contains a `{name}` placeholder, filled client-side. */
+  headlineNamed: string;
+  headlineGeneric: string;
+  subhead?: string;
+  image?: string;
+  ctaLabel?: string;
+  donateUrl?: string;
+  email: string;
+  campaignName?: string;
+  /** Scenario hook: pin the personalized headline server-side so the state is
+   *  capturable in a screenshot (the live page fills it in the browser). */
+  previewName?: string;
+}
+const {
+  headlineNamed,
+  headlineGeneric,
+  subhead,
+  image,
+  ctaLabel,
+  donateUrl,
+  email,
+  campaignName,
+  previewName,
+} = Astro.props as Props;
+
+const initialHeadline =
+  previewName && headlineNamed.includes('{name}')
+    ? headlineNamed.replace(/\{name\}/g, previewName)
+    : headlineGeneric;
+
+const heroImage = image ? withBase(image) : null;
+---
+
+<section class="hero" style={heroImage ? `--hero-img:url('${heroImage}')` : undefined}>
+  <div class="hero-in">
+    <h1
+      class="headline"
+      data-named={headlineNamed}
+      data-generic={headlineGeneric}
+      data-preview={previewName ? 'true' : undefined}
+    >
+      {initialHeadline}
+    </h1>
+    {subhead ? <p class="sub">{subhead}</p> : null}
+    <GiveButton label={ctaLabel} donateUrl={donateUrl} email={email} campaignName={campaignName} />
+  </div>
+</section>
+
+<script>
+  // Upgrade the generic headline to the personalized one when the visitor
+  // arrived from the email campaign with `?name=`. `sanitizeFirstName` inside
+  // heroGreeting rejects anything that isn't plausibly a first name, and the
+  // value is written with textContent (never innerHTML), so a hostile `?name=`
+  // degrades to the generic headline instead of injecting markup.
+  import { heroGreeting, nameFromSearch } from '../../lib/personalize';
+
+  const el = document.querySelector<HTMLElement>('.headline[data-named]');
+  // `data-preview` means a scenario pinned the headline server-side; leave it.
+  if (el && el.dataset.preview !== 'true') {
+    el.textContent = heroGreeting(
+      el.dataset.named ?? '',
+      el.dataset.generic ?? '',
+      nameFromSearch(window.location.search),
+    );
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    background-color: var(--ink);
+    background-image: var(--hero-img);
+    background-size: cover;
+    background-position: center;
+    padding: 120px 24px 104px;
+    text-align: center;
+  }
+  /* Scrim: the headline sits over a photo of a crowded room, so it needs a
+     guaranteed contrast floor regardless of which photo is used. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(24, 20, 21, 0.72), rgba(24, 20, 21, 0.62));
+  }
+  .hero-in {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .headline {
+    font-size: clamp(34px, 5.2vw, 60px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: #fff;
+    margin: 0 0 22px;
+  }
+  .sub {
+    font-family: var(--font-serif);
+    font-size: clamp(17px, 1.6vw, 21px);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.88);
+    max-width: 46ch;
+    margin: 0 auto 34px;
+  }
+</style>

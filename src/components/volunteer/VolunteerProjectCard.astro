@@ -1,0 +1,104 @@
+---
+// One open volunteer project.
+//
+// Everything but the title is optional, because an organizer should be able to
+// post a project the moment it opens and fill in the thumbnail, commitment, and
+// sign-up link later. A card with no thumbnail keeps the same geometry as one
+// with a photo so a mixed grid stays aligned.
+import { withBase } from '../../lib/url';
+
+interface Props {
+  title: string;
+  blurb?: string;
+  image?: string;
+  applyUrl?: string;
+  commitment?: string;
+}
+const { title, blurb, image, applyUrl, commitment } = Astro.props as Props;
+---
+
+<article class="proj">
+  {
+    image ? (
+      <img class="img" src={withBase(image)} alt="" loading="lazy" />
+    ) : (
+      <div class="img img--none" aria-hidden="true" />
+    )
+  }
+  <div class="body">
+    <h3>{title}</h3>
+    {commitment ? <span class="commit">{commitment}</span> : null}
+    {blurb ? <p>{blurb}</p> : null}
+    {
+      applyUrl ? (
+        <a class="go" href={withBase(applyUrl)} rel="noopener">
+          Get involved →
+        </a>
+      ) : null
+    }
+  </div>
+</article>
+
+<style>
+  .proj {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .img {
+    width: 100%;
+    height: 168px;
+    object-fit: cover;
+    display: block;
+    background: var(--paper-2);
+  }
+  .img--none {
+    background: linear-gradient(135deg, var(--ink) 0%, var(--crimson-deep) 100%);
+    opacity: 0.15;
+  }
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px 22px 24px;
+    flex: 1;
+  }
+  h3 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0;
+    /* Long titles wrap instead of overflowing the card. */
+    overflow-wrap: anywhere;
+  }
+  .commit {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+  }
+  p {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0;
+    flex: 1;
+  }
+  .go {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    text-decoration: none;
+    margin-top: 4px;
+  }
+  .go:hover {
+    text-decoration: underline;
+  }
+</style>

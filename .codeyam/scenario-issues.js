@@ -1,3 +1,5 @@
+// codeyam-generated — DO NOT EDIT.
+// codeyam-editor: 0.1.7  source-sha256: f716c003edd7d61285497b3fa96d87deb70df246d14b515681b44ffef136050b
 function createIssue(kind, message, extra = {}) {
   const issue = {
     kind,
@@ -17,7 +19,14 @@ function pushIssue(issues, issue) {
   }
 }
 
-function buildResult({ loaded, hasContent, issues, outputPath, url }) {
+function buildResult({
+  loaded,
+  hasContent,
+  issues,
+  outputPath,
+  url,
+  unmockedRoutes = [],
+}) {
   return {
     ok: loaded && hasContent && issues.length === 0,
     loaded,
@@ -25,6 +34,11 @@ function buildResult({ loaded, hasContent, issues, outputPath, url }) {
     url,
     outputPath: outputPath ?? null,
     issues,
+    // Diagnostic-only: same-origin 4xx routes with no scenario mock. Does NOT
+    // affect `ok` — the paired console error already fails the capture; this is
+    // the actionable route list the failure message and `stub-unmocked-routes`
+    // consume. Defaults to `[]` so callers that omit it are unchanged.
+    unmockedRoutes,
   };
 }
 

@@ -1,0 +1,29 @@
+{
+  "kicker": "Get involved",
+  "headline": "Join the Harvard Alumni in Tech Volunteer Team",
+  "intro": "Harvard in Tech is 100% volunteer-run. Our volunteers are the heart of HIT's mission, connecting and empowering the Harvard tech community and beyond.",
+  "benefitsTitle": "Why Volunteer with Harvard Alumni in Tech?",
+  "benefits": [
+    {
+      "title": "Gain Valuable Experience",
+      "body": "Work on impactful projects showcasing leadership, creativity, and technical skills. Stand out to future employers by demonstrating your active involvement and leadership within the Harvard Alumni in Tech community. Your contributions reflect a strong commitment to innovation, collaboration, and continuous learning, qualities that top companies are looking for in today's dynamic job market."
+    },
+    {
+      "title": "Expand Your Network",
+      "body": "Connect with Harvard alumni and tech professionals for mentorship, collaboration, and career opportunities."
+    },
+    {
+      "title": "Make a Difference",
+      "body": "Be a part of something bigger and contribute your time and talent to initiatives that drive innovation, foster community engagement, and support the responsible growth of technology. Your impact will be felt not only within the Harvard in Tech ecosystem but also across broader communities where technology can create positive change."
+    },
+    {
+      "title": "Other Benefits",
+      "body": "Discounts on select Harvard University online courses."
+    }
+  ],
+  "projectsTitle": "Projects open for volunteers",
+  "projectsIntro": "Each project below is looking for help right now. Pick the one that fits your skills and the time you have.",
+  "projectsEmptyMessage": "We're lining up the next round of volunteer projects. Tell us what you'd like to work on and we'll match you when the next one opens.",
+  "ctaLabel": "Volunteer with us",
+  "ctaUrl": "https://hi.switchy.io/wEYK"
+}

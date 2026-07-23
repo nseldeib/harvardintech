@@ -9,7 +9,9 @@ export type CollectionName =
   | 'team'
   | 'chapters'
   | 'blog'
-  | 'pages';
+  | 'pages'
+  | 'projects'
+  | 'testimonials';
 
 export interface CollectionDef {
   /** Sveltia collection name — also the editor deep-link segment and content folder. */
@@ -35,6 +37,8 @@ export const ADMIN_COLLECTIONS: readonly CollectionDef[] = [
   { collection: 'chapters', label: 'Chapters' },
   { collection: 'blog', label: 'Blog' },
   { collection: 'pages', label: 'Pages' },
+  { collection: 'projects', label: 'Volunteer Projects' },
+  { collection: 'testimonials', label: 'Testimonials' },
 ];
 
 /**

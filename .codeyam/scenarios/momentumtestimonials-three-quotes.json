@@ -1,0 +1,13 @@
+{
+  "name": "MomentumTestimonials - Three Quotes",
+  "id": "73401a6a-a122-4ed5-a6ef-2467b36a5bd5",
+  "url": "/isolated-components/MomentumTestimonials",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumTestimonials",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumTestimonials.astro",
+  "description": "The testimonials band once real member quotes exist. Production starts empty, so this shows the state the team is working toward."
+}

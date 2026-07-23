@@ -55,5 +55,67 @@ export interface SiteNav {
   items: NavItem[];
 }
 
+/** Editable copy for /volunteer. The prose, the four "Why Volunteer" blocks,
+ *  and the projects-section framing are data so the team can rewrite the pitch
+ *  in the CMS without a code change. */
+export interface VolunteerPageCopy {
+  kicker?: string;
+  headline: string;
+  intro: string;
+  benefitsTitle?: string;
+  benefits: { title: string; body: string }[];
+  projectsTitle?: string;
+  projectsIntro?: string;
+  /** Shown in place of the grid when no projects are open — the production
+   *  default, so it is the state most visitors will actually see. */
+  projectsEmptyMessage?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+}
+
+/** Icon badge on a "What Your Gift Powers" card. Matches the campaign mockup;
+ *  drawn as inline SVG so there is no image request per card. */
+export type PillarIcon = 'people' | 'book' | 'globe';
+
+/** Editable copy for the /donate Momentum Fund campaign page. */
+export interface DonatePageCopy {
+  campaignName: string;
+  /** The hero headline itself carries the personalization — "{name}, let's go
+   *  further together" — filled from `?name=` in the browser (see
+   *  lib/personalize.ts). With no usable name, `heroHeadlineGeneric` is used. */
+  heroHeadlineNamed: string;
+  heroHeadlineGeneric: string;
+  heroSubhead?: string;
+  /** Full-bleed background photo behind the hero. */
+  heroImage?: string;
+  /** Figures in the band under the hero. The story section's title ("And Every
+   *  Number Represents a Story") refers to these, so removing them leaves that
+   *  heading dangling. */
+  stats?: { value: string; label: string }[];
+  storyTitle?: string;
+  storyLede?: string;
+  storyPullQuote?: string;
+  storyBody?: string[];
+  whyTitle?: string;
+  whyBody?: { title: string; paragraphs: string[] }[];
+  pillarsTitle?: string;
+  pillars?: {
+    icon?: PillarIcon;
+    title: string;
+    body: string;
+    linkLabel?: string;
+    linkUrl?: string;
+  }[];
+  testimonialsTitle?: string;
+  ctaTitle?: string;
+  ctaBody?: string;
+  ctaLabel?: string;
+  /** Empty until a donation platform is chosen; the CTA then falls back to a
+   *  giving-inquiry mailto (same model as Sponsorship). */
+  donateUrl?: string;
+}
+
 export const settings = readSingleton<SiteSettings>('settings.json');
 export const nav = readSingleton<SiteNav>('nav.json');
+export const volunteerPage = readSingleton<VolunteerPageCopy>('volunteerPage.json');
+export const donatePage = readSingleton<DonatePageCopy>('donatePage.json');

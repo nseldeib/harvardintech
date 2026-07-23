@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// codeyam-generated — DO NOT EDIT.
+// codeyam-editor: 0.1.7  source-sha256: 16b4a7ea96e454ea770680ab27564adfac6d7cc200b703cc8b00d02b7d33b6c5
 
 // Render environment (colorScheme, deviceScaleFactor, userAgent, locale,
 // timezoneId, reduceMotion, forcedColors) is read from config when present
@@ -161,6 +163,7 @@ const {
 const {
   attachHttpMocks,
   isDeclaredErrorMock,
+  unmockedRouteFrom,
 } = require("./scenario-mocks");
 
 const {
@@ -188,7 +191,7 @@ const {
 } = require("./scenario-handlers");
 
 const {
-  probeInteractivity,
+  waitForHydration,
 } = require("./scenario-interactivity");
 
 // Read project-specific loading markers from `.codeyam/stack.json`
@@ -235,6 +238,27 @@ function scenarioScriptsLiveSocket(config) {
   } catch (_) {
     return false;
   }
+}
+
+// Classify what a driven interaction actually did, from the DOM fingerprint on
+// either side of it plus the page's hydration state. Pure, so the distinction
+// this encodes is unit-tested without a browser.
+//
+// A click that changed nothing has two very different causes, and reporting both
+// as "none" is what let a dead page masquerade as a flaky harness: a page that
+// NEVER HYDRATED could not have responded to ANY interaction (no client JS is
+// running), whereas a hydrated page with an unchanged DOM really does mean the
+// control is inert. Keeping them apart is what tells a reader whether to go look
+// at their component or at the environment.
+//
+// `hydrated` is the three-valued signal from `waitForHydration`: only a PROVEN
+// dead page (`false`) earns "unhydrated". `null` means the wait could not judge
+// (unknown framework, no controls, probe threw) and must keep reporting "none" —
+// never invent a hydration fault we cannot prove.
+function classifyInteractionEffect(beforeFingerprint, afterFingerprint, hydrated) {
+  if (beforeFingerprint !== afterFingerprint) return "changed";
+  if (hydrated === false) return "unhydrated";
+  return "none";
 }
 
 async function getDOMFingerprint(frame) {
@@ -635,8 +659,24 @@ async function verifySeededStorageLanded(frame, config) {
 // Returns the frame the flow ended on, so the caller's final screenshot and
 // result URL reflect the last navigated route.
 async function runFlowSteps(page, initialFrame, steps, ctx) {
-  const { url, loadingMarkers, navigation, iframeBackground, preflight, harnessOrigin } =
-    ctx;
+  const {
+    url,
+    loadingMarkers,
+    navigation,
+    iframeBackground,
+    preflight,
+    harnessOrigin,
+    hydrationTimeoutMs = 10000,
+    settleMs,
+  } = ctx;
+  // Honor a caller-supplied `settleMs` for the in-flow stability windows,
+  // falling back to today's hardcoded defaults (5s for interaction steps, 10s
+  // for a navigate). This stops the field from being silently dropped — the
+  // exact trap that made a reporter's `settleMs: 8000` a no-op.
+  const navigateSettleMs =
+    typeof settleMs === "number" && settleMs > 0 ? settleMs : 10000;
+  const interactionSettleMs =
+    typeof settleMs === "number" && settleMs > 0 ? settleMs : 5000;
   let frame = initialFrame;
 
   for (let i = 0; i < steps.length; i++) {
@@ -655,14 +695,22 @@ async function runFlowSteps(page, initialFrame, steps, ctx) {
                   harnessOrigin,
                 });
           frame = loadResult.frame;
-          await waitForStablePage(page, frame, 10000, loadingMarkers);
+          await waitForStablePage(page, frame, navigateSettleMs, loadingMarkers);
+          // A navigate loads a fresh route that must re-hydrate before the next
+          // fill/click, or the interaction lands on inert SSR markup (the same
+          // bug the top-level wait fixes, one route deeper). Bounded and
+          // stack-gated exactly like the top-level wait.
+          await waitForHydration(frame, {
+            url: target,
+            timeoutMs: hydrationTimeoutMs,
+          });
           break;
         }
         case "click":
         case "fill":
         case "press":
           await performInteraction(frame, step);
-          await waitForStablePage(page, frame, 5000, loadingMarkers);
+          await waitForStablePage(page, frame, interactionSettleMs, loadingMarkers);
           break;
         case "waitFor":
           await waitForPredicate(frame, step);
@@ -709,7 +757,20 @@ async function runScenarioCheck(
   const expectedConsoleErrors = !!(config && config.expectedConsoleErrors);
   let interactionEffect = null;
   let interactionRetried = false;
+  // Non-fatal warnings raised while resolving interaction/flow targets — e.g. a
+  // substring text match that hit more than one element. Surfaced on the result
+  // so the agent sees the ambiguity instead of a silently-wrong first-match.
+  const interactionWarnings = [];
   const issues = [];
+  // Actionable set for self-healing: same-origin routes that returned 4xx with
+  // no scenario mock. A hermetic-proxy/upstream 404 is a *successful* HTTP
+  // response with status 404 (not a Playwright `requestfailed`), so the only
+  // place with method + path + status together is the `page.on("response")`
+  // collector below. De-duped by `"<METHOD> <path>"`; surfaced through
+  // `buildResult` so the Rust failure message can name each unmocked route and
+  // `stub-unmocked-routes` can add stub mocks for them.
+  const unmockedRoutes = [];
+  const unmockedRouteKeys = new Set();
   // Origin of the captured page, used to classify failed requests: only a
   // failure on the page's OWN origin should fail the capture (see
   // `isCaptureFatalRequestFailure`). Derived from `config.url` exactly as
@@ -793,6 +854,30 @@ async function runScenarioCheck(
     pushIssue(issues, issue);
   });
 
+  page.on("response", (response) => {
+    // Collect same-origin 4xx responses that no scenario mock covers — the set
+    // a stub mock would fix. Mirrors the console-guard predicates exactly so the
+    // reported set matches the guard's tolerances: a scenario that provokes
+    // errors by design (`expectedConsoleErrors`) reports none, and a route the
+    // scenario already declares an error mock for is the mock's intended 4xx,
+    // not a missing mock.
+    if (expectedConsoleErrors) return;
+    const req = response.request();
+    const reqUrl = req.url();
+    // Same-origin only — mirror the console/requestfailed origin gate so a
+    // cross-origin sub-resource 4xx is never reported as an unmocked route.
+    if (!isCaptureFatalRequestFailure(reqUrl, appOrigin)) return;
+    // The status-threshold, declared-mock, and path-extraction decision is the
+    // pure `unmockedRouteFrom` helper; the listener keeps only the stateful
+    // same-origin gate above and the dedup below.
+    const route = unmockedRouteFrom(req.method(), reqUrl, response.status(), httpMocks);
+    if (!route) return;
+    const key = `${route.method} ${route.path}`;
+    if (unmockedRouteKeys.has(key)) return;
+    unmockedRouteKeys.add(key);
+    unmockedRoutes.push(route);
+  });
+
   page.on("requestfailed", (request) => {
     // Per-scenario allowance: the broken-image fallback scenario's `<img>` 404
     // is a SAME-origin request failure it exists to demonstrate, so
@@ -843,6 +928,21 @@ async function runScenarioCheck(
           status: response.status(),
         }),
       );
+    } else if (!response && config.navigation === "topLevel") {
+      // A real top-level document load always yields a response. A null one
+      // means the status could never be checked — and an unverified status is
+      // not a passing status: a 500 whose error body renders text would
+      // otherwise satisfy `hasContent` and pass as `ok`. Fail loudly instead.
+      // The iframe path stays tolerant: there the app response is matched by
+      // exact URL and is legitimately allowed to miss.
+      pushIssue(
+        issues,
+        createIssue(
+          "navigation",
+          "Navigation response unavailable — could not verify the HTTP status of the top-level document",
+          { url },
+        ),
+      );
     }
 
     pushRedirectMismatchIssue(issues, url, frame, response, config);
@@ -861,6 +961,15 @@ async function runScenarioCheck(
     const stableTimeoutMs =
       typeof config.stableTimeoutMs === "number" && config.stableTimeoutMs > 0
         ? config.stableTimeoutMs
+        : 10000;
+    // Hydration wait cap. Mirrors `stableTimeoutMs`: defaults to 10s, but a slow
+    // Turbopack cold-compile route can extend it via `config.hydrationTimeoutMs`
+    // without a code change. Bounded and near-zero on a healthy page (attaches in
+    // a poll or two); only a genuinely dead page pays the full cap.
+    const hydrationTimeoutMs =
+      typeof config.hydrationTimeoutMs === "number" &&
+      config.hydrationTimeoutMs > 0
+        ? config.hydrationTimeoutMs
         : 10000;
     const stableOutcome = await waitForStablePage(
       page,
@@ -988,11 +1097,28 @@ async function runScenarioCheck(
     // to run before the screenshot. Stack-gated and fail-safe — see
     // scenario-interactivity.js — so backend / static / unknown-framework
     // captures are an automatic pass.
-    const hydrationIssue = await probeInteractivity(frame, {
+    // `hydration.hydrated` is also consulted below to classify interactionEffect:
+    // the wait runs BEFORE any interaction, which is exactly the reading we want
+    // — "was this page alive when we found it," not "did our click revive it."
+    //
+    // WAIT for hydration (not just detect it): the one-shot probe read the
+    // attachment state before React had a chance to hydrate SSR markup, so the
+    // subsequent fill/click landed on inert controls and the submit handler
+    // never fired — yet the run reported success. Waiting here gates the
+    // screenshot AND every interaction branch below (steps / interaction /
+    // interactions[] all run after this line) on the client runtime actually
+    // attaching. Stack-gated and fail-safe: a timed-out wait yields
+    // `hydrated: false` (so a truly dead page still classifies `unhydrated`),
+    // and a non-interactive stack returns instantly.
+    const hydration = await waitForHydration(frame, {
       url: page.url() || url,
+      timeoutMs: hydrationTimeoutMs,
+      // `undefined` in production → waitForHydration reads .codeyam/stack.json;
+      // a test injects a stack to force the interactive path without a real file.
+      stack: config.stack,
     });
-    if (hydrationIssue) {
-      pushIssue(issues, hydrationIssue);
+    if (hydration.issue) {
+      pushIssue(issues, hydration.issue);
     }
 
     // Assert the injected seed actually landed in the capture browser, at rest
@@ -1020,6 +1146,9 @@ async function runScenarioCheck(
         iframeBackground: config.iframeBackground,
         preflight,
         harnessOrigin: resolvedHarnessOrigin,
+        warnings: interactionWarnings,
+        hydrationTimeoutMs,
+        settleMs: config.settleMs,
       });
     } else if (config.interaction) {
       // Record fingerprint before interaction
@@ -1030,7 +1159,9 @@ async function runScenarioCheck(
       // fill / press (expanded accordion, open modal) without editing app
       // source. A no-match target throws here and is caught below as a failed
       // capture with the candidate-labels hint — never a silent blank shot.
-      await performInteraction(frame, config.interaction);
+      await performInteraction(frame, config.interaction, {
+        warnings: interactionWarnings,
+      });
       await waitForStablePage(page, frame, 5000, loadingMarkers);
 
       // Record fingerprint after interaction
@@ -1040,12 +1171,18 @@ async function runScenarioCheck(
       if (beforeFingerprint === afterFingerprint && config.interaction.action === "click") {
         interactionRetried = true;
         await new Promise((resolve) => setTimeout(resolve, 500));
+        // The retry re-resolves the same target; suppress its ambiguity warning
+        // (already captured on the first attempt) to avoid a duplicate.
         await performInteraction(frame, config.interaction);
         await waitForStablePage(page, frame, 5000, loadingMarkers);
         afterFingerprint = await getDOMFingerprint(frame);
       }
 
-      interactionEffect = beforeFingerprint === afterFingerprint ? "none" : "changed";
+      interactionEffect = classifyInteractionEffect(
+        beforeFingerprint,
+        afterFingerprint,
+        hydration.hydrated,
+      );
     }
 
     // Replay the scenario's PERSISTED interaction sequence (if any) in order,
@@ -1058,6 +1195,7 @@ async function runScenarioCheck(
       await performInteractionSequence(page, frame, config.interactions, {
         settleMs: 5000,
         loadingMarkers,
+        warnings: interactionWarnings,
       });
     }
 
@@ -1085,11 +1223,20 @@ async function runScenarioCheck(
       issues,
       outputPath,
       url: frame.url() || url,
+      unmockedRoutes,
     });
 
     if (config.interaction) {
       result.interactionEffect = interactionEffect;
       result.interactionRetried = interactionRetried;
+    }
+
+    // Surface any non-fatal interaction/flow warnings (e.g. an ambiguous
+    // substring text match) so the CLI can print them and the agent can switch
+    // to a precise selector. Only attached when present — a clean run is
+    // byte-for-byte unchanged.
+    if (interactionWarnings.length > 0) {
+      result.warnings = interactionWarnings.slice();
     }
 
     // `capture-state` mode: attach the read-only page-state snapshot so the
@@ -1119,6 +1266,7 @@ async function runScenarioCheck(
       issues,
       outputPath,
       url,
+      unmockedRoutes,
     });
   } finally {
     await browser.close();
@@ -1146,6 +1294,7 @@ async function main() {
 
 module.exports = {
   runScenarioCheck,
+  classifyInteractionEffect,
   mergeVisibleTextLength,
   runFlowSteps,
   dumpPageState,

@@ -46,13 +46,13 @@
         {
           "label": "Get Involved",
           "children": [
-            { "label": "Volunteer Opportunities", "url": "/#get-involved" }
+            { "label": "Volunteer", "url": "/volunteer" }
           ]
         },
         {
           "label": "Support",
           "children": [
-            { "label": "Donate", "url": "/#giving" },
+            { "label": "Donate", "url": "/donate" },
             { "label": "Sponsorship Opportunities", "url": "/#support" }
           ]
         }

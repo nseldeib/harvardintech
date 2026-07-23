@@ -1,0 +1,16 @@
+{
+  "name": "Momentum Fund - Arriving From The Email",
+  "id": "cb8f4b46-1247-49c6-8bcc-75dc422ff6ff",
+  "url": "/donate?name=Ben",
+  "dimensions": [
+    "Desktop",
+    "Mobile"
+  ],
+  "mocks": {},
+  "seed": {
+    "testimonials": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "The same page reached from the email campaign's personalized link, where the merge tag supplied a first name — the headline reads 'Ben, let's go further together'."
+}

@@ -7,5 +7,6 @@
   ],
   "mocks": {},
   "componentName": "AdminGatePrompt-Empty",
-  "scenarioType": "component"
+  "scenarioType": "component",
+  "pageFilePath": "src/components/admin/AdminGatePrompt.astro"
 }

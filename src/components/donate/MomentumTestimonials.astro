@@ -1,0 +1,63 @@
+---
+// Member quotes on the campaign page.
+//
+// Production starts with NO testimonials, so this renders nothing at all — not
+// an empty heading — until real quotes are collected. That keeps the page
+// reading as finished rather than half-built while the team gathers them.
+import TestimonialCard from './TestimonialCard.astro';
+import { sortByOrder } from '../../lib/order';
+
+export interface TestimonialLike {
+  slug?: string;
+  quote: string;
+  name: string;
+  role?: string;
+  photo?: string;
+  order?: number;
+}
+
+interface Props {
+  title?: string;
+  testimonials?: TestimonialLike[];
+}
+const { title = 'From our community', testimonials = [] } = Astro.props as Props;
+const quotes = sortByOrder(testimonials);
+---
+
+{
+  quotes.length > 0 ? (
+    <section class="quotes">
+      <h2>{title}</h2>
+      <div class="grid">
+        {quotes.map((t) => (
+          <TestimonialCard quote={t.quote} name={t.name} role={t.role} photo={t.photo} />
+        ))}
+      </div>
+    </section>
+  ) : null
+}
+
+<style>
+  .quotes {
+    padding: 76px 24px;
+  }
+  h2 {
+    font-size: clamp(26px, 3.4vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin: 0 0 24px;
+    text-align: center;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 1180px;
+    margin: 40px auto 0;
+  }
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
