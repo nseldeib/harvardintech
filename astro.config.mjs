@@ -86,7 +86,7 @@ if (process.argv.includes('dev')) {
 // Hand-written internal links are prefixed with import.meta.env.BASE_URL via
 // src/lib/url.ts so they resolve under either base.
 const base = process.env.DEPLOY_BASE_PATH || '/';
-const site = process.env.PAGES_SITE || 'https://jaredcosulich.github.io';
+const site = process.env.PAGES_SITE || 'https://nseldeib.github.io';
 
 export default defineConfig({
   output: 'static',

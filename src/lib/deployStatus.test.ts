@@ -54,14 +54,14 @@ describe('parseBackendRepo', () => {
   const CONFIG = `
 backend:
   name: github
-  repo: jaredcosulich/harvardintech
+  repo: nseldeib/harvardintech
   branch: main
   auth_methods: [token]
 `;
   // The repo and branch are pulled straight out of the CMS config text.
   it('pulls repo and branch out of the CMS config', () => {
     expect(parseBackendRepo(CONFIG)).toEqual({
-      repo: 'jaredcosulich/harvardintech',
+      repo: 'nseldeib/harvardintech',
       branch: 'main',
     });
   });

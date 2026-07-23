@@ -38,11 +38,11 @@ stores it in their browser, and commits go straight to the repo. Because
 one button (no unwired "Sign in with GitHub").
 
 **Pre-flight:** a GitHub account with write access to
-`jaredcosulich/harvardintech`.
+`nseldeib/harvardintech`.
 
 1. On GitHub, go to **Settings → Developer settings → Fine-grained tokens →
    Generate new token**. Set **Repository access → Only select repositories →
-   jaredcosulich/harvardintech** and **Repository permissions → Contents → Read
+   nseldeib/harvardintech** and **Repository permissions → Contents → Read
    and write** (the single permission the CMS needs). Choose an expiry, generate,
    and copy the token.
 2. Open `/admin/editor/` on the live site (linked from the `/admin` dashboard),

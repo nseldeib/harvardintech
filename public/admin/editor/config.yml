@@ -82,6 +82,14 @@ collections:
             widget: text
             required: false
             hint: "Advanced: raw HTML injected right before </body> on EVERY page (chat widgets, etc.). It runs on every page — paste only trusted snippets."
+          - name: homeStats
+            label: "Homepage stats band"
+            widget: list
+            required: false
+            hint: "The figures in the strip under the homepage hero (e.g. 8,000+ Alumni technologists). Leave empty to fall back to the built-in defaults."
+            fields:
+              - { name: value, label: Figure, widget: string }
+              - { name: label, label: Label, widget: string }
           - name: socials
             label: "Social links"
             widget: list

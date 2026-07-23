@@ -34,6 +34,10 @@ export interface SiteSettings {
   contactEmail: string;
   footerText: string;
   socials: SocialLink[];
+  // Figures in the homepage stat strip under the hero (Stats.astro). Optional so
+  // existing/seeded settings without them fall back to the component's built-in
+  // defaults; present here so the team edits the numbers in the CMS, not code.
+  homeStats?: { value: string; label: string }[];
   // Integrations & discoverability. All optional so existing/seeded settings
   // without them still parse and default to "off".
   // GA4 Measurement ID (e.g. `G-XXXXXXXXXX`); empty/absent = analytics off.

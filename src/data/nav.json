@@ -3,9 +3,7 @@
     {
       "label": "Programs",
       "children": [
-        { "label": "All Events", "url": "/events" },
-        { "label": "Webinars", "url": "/events#webinars" },
-        { "label": "Podcasts", "url": "/events#podcasts" }
+        { "label": "All Events", "url": "/events" }
       ]
     },
     {
