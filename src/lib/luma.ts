@@ -13,5 +13,9 @@ export const LUMA_CALENDAR_URL = 'https://lu.ma/harvardintech';
 
 /** Optional inline-embed src. When set, the Events page renders the calendar as
  *  an <iframe> instead of the link-out card. Taken from Luma → calendar
- *  settings → Embed for calendar `cal-KK3JJjJ39Jwt9kI`. */
-export const LUMA_EMBED_URL = 'https://luma.com/embed/calendar/cal-KK3JJjJ39Jwt9kI/events';
+ *  settings → Embed for calendar `cal-KK3JJjJ39Jwt9kI`.
+ *
+ *  `lt=light` pins Luma's light theme. Without it the embed defaults to
+ *  `system`, which renders a dark calendar block on our light Events page. */
+export const LUMA_EMBED_URL =
+  'https://luma.com/embed/calendar/cal-KK3JJjJ39Jwt9kI/events?lt=light';

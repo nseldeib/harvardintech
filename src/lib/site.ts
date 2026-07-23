@@ -60,6 +60,8 @@ export interface SiteNav {
  *  in the CMS without a code change. */
 export interface VolunteerPageCopy {
   kicker?: string;
+  /** Full-bleed hero background photo. */
+  heroImage?: string;
   headline: string;
   intro: string;
   benefitsTitle?: string;

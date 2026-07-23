@@ -55,7 +55,7 @@ const embedFormStates = {
   },
   Embedded: {
     embedUrl: 'https://docs.google.com/forms/d/e/EXAMPLE_FORM_ID/viewform?embedded=true',
-    title: 'RSVP — Harvard in Tech Summit 2026',
+    title: 'RSVP: Harvard in Tech Summit 2026',
   },
   Unconfigured: {
     title: 'Subscribe',
@@ -73,14 +73,14 @@ const SAMPLE_EVENTS = [
     link: 'https://www.harvardintech.com/events/summit-2026',
   },
   {
-    title: 'Founders & Investors Mixer — San Francisco',
+    title: 'Founders & Investors Mixer, San Francisco',
     date: '2026-07-15',
     location: 'San Francisco, CA',
     description: 'An evening connecting Harvard alumni founders with active investors across the Bay Area.',
     link: 'https://www.harvardintech.com/events/sf-mixer',
   },
   {
-    title: 'Spring Founder Dinner — NYC',
+    title: 'Spring Founder Dinner, NYC',
     date: '2026-03-12',
     location: 'New York, NY',
     description: 'An intimate dinner with Harvard alumni founders and operators.',
@@ -142,7 +142,7 @@ const chapterHeroStates = {
 // passes no events to prove the guard renders NOTHING (no empty heading/block).
 const SAMPLE_CHAPTER_EVENTS = [
   {
-    title: 'Founders & Investors Mixer — San Francisco',
+    title: 'Founders & Investors Mixer, San Francisco',
     date: '2026-07-15',
     location: 'San Francisco, CA',
     description: 'An evening connecting Harvard alumni founders with active investors across the Bay Area.',
@@ -192,7 +192,7 @@ const deployStatusStates: Record<string, BannerView> = {
   Default: {
     state: 'deploying',
     title: 'Deploying…',
-    detail: 'Publishing your change — this usually takes about a minute.',
+    detail: 'Publishing your change. This usually takes about a minute.',
   },
   Building: {
     state: 'building',
@@ -280,7 +280,7 @@ const boardOfDirectorsStates = {
 // OurChapters (Atlas "Our chapters" band): Default renders the five-city row;
 // Empty proves the "coming soon" fallback (production starts with no chapters).
 const SAMPLE_CHAPTERS = [
-  { slug: 'boston-cambridge', city: 'Boston & Cambridge', blurb: 'Home of Harvard — our Cambridge and Boston community.', heroImage: '/images/bg/hero-bg.jpg', order: 1 },
+  { slug: 'boston-cambridge', city: 'Boston & Cambridge', blurb: 'Home of Harvard, our Cambridge and Boston community.', heroImage: '/images/bg/hero-bg.jpg', order: 1 },
   { slug: 'nyc', city: 'New York City', blurb: 'Our founding chapter and largest community.', heroImage: '/images/chapters/nyc.jpg', order: 2 },
   { slug: 'london', city: 'London', blurb: 'Our European hub across the London tech scene.', heroImage: '/images/gallery/event-05.jpg', order: 3 },
   { slug: 'dc-dmv', city: 'DC & DMV Area', blurb: 'The DC, Maryland & Virginia community.', heroImage: '/images/gallery/event-18.jpg', order: 4 },
@@ -310,7 +310,7 @@ const contentHubStates = {
 const VOLUNTEER_COPY = volunteerPage;
 const SAMPLE_PROJECTS = [
   {
-    title: 'Chapter launch team — Toronto',
+    title: 'Chapter launch team, Toronto',
     blurb: 'Help stand up our next city chapter: find a venue, rally the first 30 alumni, and run the launch mixer.',
     image: '/images/chapters/nyc.jpg',
     commitment: '~3 hrs / week',
@@ -343,7 +343,7 @@ const SAMPLE_PROJECTS = [
   },
   {
     title: 'Website & CRM',
-    blurb: 'Keep this site and the organizer tooling healthy — content, accessibility, and the occasional feature.',
+    blurb: 'Keep this site and the organizer tooling healthy: content, accessibility, and the occasional feature.',
     image: '/images/sections/board-logo.png',
     commitment: 'Flexible',
     applyUrl: 'https://hi.switchy.io/wEYK',
@@ -353,7 +353,7 @@ const SAMPLE_PROJECTS = [
 const SPARSE_PROJECTS = [
   // No `image` — proves the card keeps its geometry without a thumbnail.
   {
-    title: 'Alumni Founders Co-working Day — London monthly host and community organizer',
+    title: 'Alumni Founders Co-working Day, London monthly host and community organizer',
     blurb: 'Host the monthly London co-working day: book the space, greet arrivals, and keep the day running.',
     commitment: 'One day / month',
     applyUrl: 'https://hi.switchy.io/wEYK',

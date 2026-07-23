@@ -282,6 +282,7 @@ collections:
         file: "src/data/volunteerPage.json"
         fields:
           - { name: kicker, label: "Kicker", widget: string, required: false }
+          - { name: heroImage, label: "Hero background photo", widget: image, required: false, media_folder: "/public/images/bg", public_folder: "/images/bg" }
           - { name: headline, label: "Headline", widget: string }
           - { name: intro, label: "Intro", widget: text }
           - { name: benefitsTitle, label: "Benefits heading", widget: string, required: false }
