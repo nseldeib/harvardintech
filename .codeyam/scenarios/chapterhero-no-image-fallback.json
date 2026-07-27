@@ -7,5 +7,6 @@
   ],
   "mocks": {},
   "componentName": "ChapterHero-Fallback",
-  "scenarioType": "component"
+  "scenarioType": "component",
+  "pageFilePath": "src/components/ChapterHero.astro"
 }

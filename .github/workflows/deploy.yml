@@ -53,11 +53,6 @@ jobs:
         env:
           DEPLOY_BASE_PATH: /harvardintech
           PAGES_SITE: https://nseldeib.github.io
-          # Admin dashboard passcode (deterrent only — ends up in the built JS).
-          # Set the value as a repo secret: Settings → Secrets and variables →
-          # Actions → New repository secret named ADMIN_GATE_PASSCODE. If the
-          # secret is unset, AdminGate.astro falls back to its built-in default.
-          ADMIN_GATE_PASSCODE: ${{ secrets.ADMIN_GATE_PASSCODE }}
         # with:
         #   path: .            # root of the Astro project (default)
         #   node-version: 20

@@ -1,0 +1,111 @@
+{
+  "collections": [
+    {
+      "id": "chapters",
+      "label": "Chapters",
+      "singular": "Chapter",
+      "fields": [
+        { "name": "city", "label": "City", "type": "text" },
+        { "name": "region", "label": "Region", "type": "text", "optional": true },
+        {
+          "name": "blurb",
+          "label": "Blurb",
+          "type": "textarea",
+          "optional": true,
+          "hint": "Short summary shown on the Our Chapters cards."
+        },
+        {
+          "name": "heroImage",
+          "label": "Hero image",
+          "type": "image",
+          "optional": true,
+          "hint": "Full-bleed city header background. Blank falls back to the centered header."
+        },
+        {
+          "name": "tagline",
+          "label": "Tagline",
+          "type": "text",
+          "optional": true,
+          "hint": "Subtitle beneath the \"HARVARD IN TECH <CITY>\" title."
+        },
+        {
+          "name": "showGallery",
+          "label": "Show event gallery",
+          "type": "boolean",
+          "optional": true,
+          "hint": "Blank shows the gallery; switch off to hide it on this chapter."
+        },
+        {
+          "name": "contactEmail",
+          "label": "Contact email",
+          "type": "text",
+          "optional": true,
+          "hint": "Blank falls back to the global contact email in Settings."
+        },
+        { "name": "order", "label": "Order", "type": "number", "optional": true },
+        {
+          "name": "leads",
+          "label": "Chapter leads",
+          "type": "list",
+          "optional": true,
+          "fields": [
+            { "name": "name", "label": "Name", "type": "text" },
+            { "name": "role", "label": "Role", "type": "text", "optional": true }
+          ]
+        },
+        {
+          "name": "links",
+          "label": "Links",
+          "type": "list",
+          "optional": true,
+          "fields": [
+            { "name": "label", "label": "Label", "type": "text" },
+            { "name": "url", "label": "URL", "type": "text" }
+          ]
+        }
+      ]
+    }
+  ],
+  "builtins": {
+    "pages": [
+      { "name": "embedUrl", "label": "Embed URL", "type": "text", "optional": true },
+      { "name": "embedHtml", "label": "Embed HTML", "type": "textarea", "optional": true }
+    ],
+    "blog": [
+      { "name": "embedUrl", "label": "Embed URL", "type": "text", "optional": true },
+      { "name": "embedHtml", "label": "Embed HTML", "type": "textarea", "optional": true }
+    ],
+    "events": [
+      { "name": "chapter", "label": "Chapter", "type": "text", "optional": true }
+    ],
+    "team": [
+      { "name": "active", "label": "Active", "type": "boolean", "optional": true }
+    ]
+  },
+  "seo": [
+    {
+      "name": "metaTitle",
+      "label": "SEO title",
+      "type": "text",
+      "optional": true,
+      "group": "seo",
+      "hint": "The <title> and share-card title. Falls back to the entry title."
+    },
+    {
+      "name": "metaDescription",
+      "label": "Meta description",
+      "type": "textarea",
+      "optional": true,
+      "group": "seo",
+      "hint": "The search + social description. Falls back to the summary, then the site default."
+    },
+    {
+      "name": "ogImage",
+      "label": "Share image",
+      "type": "image",
+      "optional": true,
+      "group": "seo",
+      "hint": "The social share card image. Falls back to the site default."
+    }
+  ]
+}

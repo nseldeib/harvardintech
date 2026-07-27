@@ -7,5 +7,6 @@
   ],
   "mocks": {},
   "componentName": "ContactUs",
-  "scenarioType": "component"
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/ContactUs.astro"
 }

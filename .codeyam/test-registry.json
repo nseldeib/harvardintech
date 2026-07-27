@@ -1,33 +1,6 @@
 {
   "tests": [
     {
-      "description": "Every entry has a non-empty human label for its card.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "ADMIN_COLLECTIONS › gives every collection a non-empty label",
-      "line": 28,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The dashboard covers the five folder collections, in display order.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "ADMIN_COLLECTIONS › lists the five editable folder collections in order",
-      "line": 17,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The inline gate script and the helper must agree on the sessionStorage key.",
-      "file": "src/lib/adminGate.test.ts",
-      "format": "vitest",
-      "key": "ADMIN_GATE_STORAGE_KEY › is the stable admin-unlocked key",
-      "line": 6,
-      "registeredAt": "2026-06-15T11:32:43Z",
-      "runner": "tests"
-    },
-    {
       "description": "Clicking the button increments the hydrated counter, proving the island is genuinely interactive and not a static render.",
       "file": "src/components/Greeting.test.tsx",
       "format": "vitest",
@@ -97,6 +70,42 @@
       "key": "buildMailto › includes both subject and body when supplied",
       "line": 23,
       "registeredAt": "2026-06-13T15:32:37.162204395+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Consumer extras appended to a built-in are the same drift risk as a custom collection's fields — each must exist in that built-in's schema.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › declares only real schema keys for every built-in extra",
+      "line": 231,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The headline contract: every field the Chapters editor renders is a real key in the chapters Zod schema. This is the custom collection, so nothing but this test keeps collections.json and config.ts aligned.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › declares only real schema keys for the custom chapters collection",
+      "line": 210,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The chapters row shapes must match too: `leads` and `links` write arrays of objects, and a renamed row key silently drops data on save.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › declares the chapters list rows the schema expects",
+      "line": 221,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The consumer SEO group replaces the package defaults so the editor writes this site's existing keys. If it drifted back to seoTitle/socialImage the editor would write frontmatter no template reads and no schema allows.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses",
+      "line": 248,
+      "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
@@ -181,69 +190,6 @@
       "runner": "tests"
     },
     {
-      "description": "Zero entries shows the empty-state nudge, not a \"0 entries\" sentence.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardSummaryText › shows the empty-state nudge when there is no content",
-      "line": 74,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The populated summary reports total entries and collection count.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardSummaryText › summarizes a populated dashboard",
-      "line": 60,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "A negative total is treated as empty, guarding against bad input.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardSummaryText › treats a negative total as empty",
-      "line": 81,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "A single entry uses the singular \"entry\".",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardSummaryText › uses the singular entry for a count of one",
-      "line": 67,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Collections with a zero count still count toward collectionCount but add nothing.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardTotals › counts empty collections without adding to the total",
-      "line": 52,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "An empty card list totals zero across zero collections.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardTotals › returns zeros for an empty card list",
-      "line": 47,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Sums every card's count and reports how many collections there are.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardTotals › sums counts and reports the collection count",
-      "line": 37,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
       "description": "a production build (no override) reads the committed data dir",
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
@@ -259,6 +205,33 @@
       "key": "dataRoot › returns CODEYAM_DATA_ROOT when it is set",
       "line": 38,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A `list`'s sub-fields are row keys inside the array, NOT frontmatter keys, so they must not leak into the comparison against the schema.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "declaredFieldNames › excludes the sub-fields of a repeatable list",
+      "line": 129,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Empty input is legitimate — a built-in with no consumer extras declared.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "declaredFieldNames › returns an empty list for no fields",
+      "line": 144,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: every top-level field contributes its frontmatter key.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "declaredFieldNames › returns each top-level field name in declaration order",
+      "line": 119,
+      "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
@@ -586,60 +559,6 @@
       "runner": "tests"
     },
     {
-      "description": "The happy path: an exact match unlocks.",
-      "file": "src/lib/adminGate.test.ts",
-      "format": "vitest",
-      "key": "isPasscodeCorrect › accepts an exact match",
-      "line": 13,
-      "registeredAt": "2026-06-15T11:32:43Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The comparison is case-sensitive (a deterrent, but not a careless one).",
-      "file": "src/lib/adminGate.test.ts",
-      "format": "vitest",
-      "key": "isPasscodeCorrect › is case-sensitive",
-      "line": 40,
-      "registeredAt": "2026-06-15T11:32:43Z",
-      "runner": "tests"
-    },
-    {
-      "description": "An empty expected passcode never matches — a blank build value must not unlock the dashboard for everyone.",
-      "file": "src/lib/adminGate.test.ts",
-      "format": "vitest",
-      "key": "isPasscodeCorrect › never matches an empty expected passcode",
-      "line": 34,
-      "registeredAt": "2026-06-15T11:32:43Z",
-      "runner": "tests"
-    },
-    {
-      "description": "A wrong value is rejected.",
-      "file": "src/lib/adminGate.test.ts",
-      "format": "vitest",
-      "key": "isPasscodeCorrect › rejects a wrong value",
-      "line": 18,
-      "registeredAt": "2026-06-15T11:32:43Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Surrounding whitespace on the expected passcode is trimmed too.",
-      "file": "src/lib/adminGate.test.ts",
-      "format": "vitest",
-      "key": "isPasscodeCorrect › trims surrounding whitespace on the expected value",
-      "line": 28,
-      "registeredAt": "2026-06-15T11:32:43Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Surrounding whitespace on the input is trimmed before comparing.",
-      "file": "src/lib/adminGate.test.ts",
-      "format": "vitest",
-      "key": "isPasscodeCorrect › trims surrounding whitespace on the input",
-      "line": 23,
-      "registeredAt": "2026-06-15T11:32:43Z",
-      "runner": "tests"
-    },
-    {
       "description": "Guards the wrap-once contract: authored data stays base-agnostic and `withBase` is applied a single time at the render site, never re-fed.",
       "file": "src/components/landing/landing-images.test.ts",
       "format": "vitest",
@@ -961,6 +880,33 @@
       "key": "robots.txt GET › responds as text/plain",
       "line": 39,
       "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Parses the top-level keys and nothing else.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "schemaKeysFor › extracts the top-level schema keys of a collection",
+      "line": 183,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nested row keys sit at brace depth 2 and a commented-out key is stripped before parsing — neither may be mistaken for a frontmatter key.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "schemaKeysFor › ignores nested row keys and commented-out keys",
+      "line": 193,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An undeclared collection yields nothing rather than throwing, so a renamed collection fails as a visible empty-schema mismatch below.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "schemaKeysFor › returns an empty list for a collection that is not declared",
+      "line": 201,
+      "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
@@ -1294,6 +1240,42 @@
       "key": "toEventDate › returns a Date instance unchanged",
       "line": 6,
       "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The failure this guard exists to catch: a registry key with no schema counterpart, which builds fine until an editor actually fills it in.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "unknownFields › names a field that drifted out of the schema",
+      "line": 161,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The healthy state: everything the editor renders exists in the schema.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "unknownFields › reports nothing when every declared field exists in the schema",
+      "line": 151,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other degenerate edge: nothing declared can never drift.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "unknownFields › reports nothing when no fields are declared",
+      "line": 176,
+      "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Degenerate edge: an empty schema makes every declared field unknown.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "unknownFields › treats every field as unknown when the schema has no keys",
+      "line": 170,
+      "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {

@@ -1,0 +1,831 @@
+{
+  "timestamp": "2026-07-27T19:07:02Z",
+  "title": "Adopt CodeYam CMS and retire Sveltia",
+  "type": "feature",
+  "userRequest": "## Summary\n\nReplace this site's two-part editing stack — the hand-rolled `/admin` CRM\ndashboard plus the CDN-loaded Sveltia editor at `/admin/editor/` — with the\ninstallable `@codeyam/cms` package, which owns the whole `/admin` area as an\nAstro integration. Editors get one dashboard with entry editing, a media\nlibrary, site settings, a publish checklist, and a review-and-commit flow,\ninstead of a read-only summary page that hands off to a separate CDN app.\n\nThe integration has been prototyped end to end against this repo twice and works:\n`npx codeyam-cms integrate` patches `astro.config.mjs` cleanly, `/admin` renders\nall real content (7 entries across the four built-in collections, plus the 5\nchapters once declared), the media library adopts all 67 committed images across\ntheir eight subdirectories with no import step, and `npm run build` produces 87\npages including 30 admin routes — from a real (non-symlinked) package install, so\nthe static GitHub Pages deploy model is unaffected.\n\nThis plan is the consumer-side migration only. Every package capability it\ndepends on has already shipped.\n\n## Key Decisions\n\n- **Editors sign in with their own GitHub token; the passcode gate is retired.**\n  `AdminGate` is a shared-secret deterrent that is compiled into the built JS\n  (its own comments say so) and gates a page that was read-only anyway. The\n  package's model is a fine-grained PAT per editor, pasted once and held in that\n  browser — which is the same model this site's Sveltia setup already documents\n  in `CMS_SETUP.md`, so it is not a new burden for existing editors. It is also\n  strictly stronger: commits carry each editor's own identity, and access is\n  revoked per person from GitHub rather than by rotating a shared passcode\n  everyone must be re-told. Magic-link invites were considered and deferred —\n  they need the `cms-auth-worker` standing up on Cloudflare, and they attribute\n  every commit to the worker instead of the person.\n- **Depend on a published `@codeyam/cms`, not a local path.** This is the one\n  genuine prerequisite outside this repo. The deploy workflow builds via\n  `withastro/action@v3`, which installs from the lockfile in a checkout that has\n  no sibling `codeyam-cms` repo — so a `file:../codeyam-cms/packages/cms`\n  dependency resolves locally and then fails in CI. A git dependency is not a\n  workaround: npm cannot install from a subdirectory of a repo, and the package\n  lives at `packages/cms`. Publishing to npm is therefore the prerequisite; the\n  packing/install path is already proven, since this plan's verification built\n  the whole site from `npm pack` output installed as a real directory. Do not\n  start this plan until a real version is installable.\n- **Declare `chapters` in `collections.json`, don't make it a built-in.** The\n  package's four built-ins (pages/blog/events/team) match this site's schemas\n  closely enough that only extras are needed; `chapters` is site-specific and\n  belongs in the consumer registry. The exact registry that was proven working —\n  `chapters` with its 10 fields including the numeric `order` and the `leads` /\n  `links` repeatable lists, the per-built-in extras, and the SEO group — is\n  captured in this plan's Implementation section rather than being re-derived.\n- **Keep this site's frontmatter key names; adapt the CMS to them.** The content\n  uses `metaTitle` / `metaDescription` / `ogImage`, while the package defaults to\n  `seoTitle` / `seoDescription` / `socialImage`. Declaring a consumer `seo` group\n  in `collections.json` maps the editor onto the existing keys, so no content\n  file and no rendering template has to change. Renaming 7 entries' frontmatter\n  plus every template that reads it would be a larger, riskier diff for no gain.\n- **Retire the local admin subsystem wholesale rather than keeping parts.**\n  Every file under `src/components/admin/`, both admin libs, the admin layout,\n  and the `public/admin/` Sveltia scaffold exist only to serve the old dashboard.\n  Keeping any of them means maintaining a second admin vocabulary alongside the\n  package's. The four codeyam scenarios that capture those components go with\n  them.\n- **`src/pages/deploy-status.json.ts` stays.** It is a public JSON endpoint, not\n  part of the admin UI, and the package's own deploy status does not replace it.\n  Only the admin-facing `DeployStatus.astro` component is retired.\n\n## Implementation\n\n### 1. Install and wire the package\n\n**Files**: `package.json`, `astro.config.mjs`\n\nAdd `@codeyam/cms` at the published version and run\n`npx codeyam-cms integrate`. The CLI adds the import and puts `codeyamCms()`\nfirst in the `integrations: []` array, ahead of the existing `react()` and\n`sitemap()`. It has been run against this exact config twice with a clean,\ntwo-line diff — the surrounding content-sandbox logic is untouched.\n\n`@astrojs/react` is already a dependency, so the CLI's dependency step is a no-op\nbeyond adding the package itself.\n\n### 2. Configure the CMS for this repo\n\n**New files**: `src/data/cms.json`, `src/data/collections.json` (both created by\n`integrate`, then edited)\n\nIn `cms.json`, set the repo target to `nseldeib` / `harvardintech` / `main` —\nnote the owner is **nseldeib**, not `jaredcosulich` as `CMS_SETUP.md` currently\nstates. Leave `auth.token: true` and `auth.worker: false`, matching the\ntoken-only decision above.\n\nIn `collections.json`, declare:\n\n- **`chapters`** as a custom collection (`singular: \"Chapter\"`) with fields\n  matching `src/content/config.ts` exactly: `city` (text, required), `region`,\n  `blurb` (textarea), `heroImage` (image), `tagline`, `showGallery` (boolean),\n  `contactEmail`, `order` (**number**), plus two repeatable lists — `leads`\n  (`name` required, `role` optional) and `links` (`label`, `url`).\n- **`builtins` extras**: `embedUrl` (text) and `embedHtml` (textarea) on both\n  `pages` and `blog`; `chapter` (text) on `events`; `active` (boolean) on `team`.\n- **`seo`**: `metaTitle` (text), `metaDescription` (textarea), `ogImage` (image),\n  all optional, replacing the package defaults.\n\nEvery field above renders correctly today — verified in the running admin\nagainst the real entries, including the numeric `order` input and both lists.\n\n### 3. Retire the local admin subsystem\n\n**Delete**: `src/pages/admin/index.astro`, `src/layouts/AdminLayout.astro`, all\neight components under `src/components/admin/` (`AdminGate.astro`,\n`AdminGatePrompt.astro`, `AdminHeader.astro`, `CollectionCountCard.astro`,\n`CollectionCountGrid.astro`, `DashboardSummary.astro`, `DeployStatus.astro`,\n`SignInGuide.astro`), `src/lib/adminDashboard.ts`, `src/lib/adminGate.ts`, their\ntwo test files, and the whole `public/admin/` directory (the Sveltia\n`index.html`, `config.yml`, and `deploy-status.js`).\n\n`src/pages/admin/index.astro` in particular is not optional: a file-based route\nat `/admin` collides with the package's injected route, and the local one wins.\n\nCheck `src/pages/isolated-components/[name].astro` — it is the only remaining\nfile referencing the admin components, and its component registry must drop the\nretired entries or the route will fail to build.\n\n### 4. Remove the four orphaned scenarios\n\n**Delete**: `.codeyam/scenarios/admin-dashboard-empty.json`,\n`admin-dashboard-populated.json`, `admingateprompt-initial-empty.json`,\n`admingateprompt-masked-entry.json`, and their screenshots.\n\nThese capture components that no longer exist. The package ships its own admin\nscenarios, so nothing of value is lost. Confirm no other scenario references a\nretired component before deleting.\n\n### 5. Drop the passcode from the deploy workflow\n\n**File**: `.github/workflows/deploy.yml`\n\nRemove the `ADMIN_GATE_PASSCODE` env var and its explanatory comment block from\nthe build step. Note in the plan's completion that the corresponding repo secret\ncan be deleted from Settings → Secrets, and tell the site owner — leaving a live\nsecret for a retired gate is the kind of thing that gets rediscovered a year\nlater and misread as still active.\n\n### 6. Rewrite the setup documentation\n\n**File**: `CMS_SETUP.md`\n\nThe document describes Sveltia, its `config.yml`, the token flow through\nSveltia's own sign-in, and the \"keeping the schema honest\" duplication between\n`config.yml` and `src/content/config.ts`. All of it is obsolete — the package\nderives the editor from `collections.json`, so that duplication disappears\nentirely. Rewrite around: how to get a fine-grained PAT, where to paste it, what\nstaging/review/commit looks like, and how `collections.json` relates to\n`src/content/config.ts`. Fix the repo owner to `nseldeib` while there.\n\n## Reused existing code\n\n- `src/content/config.ts` — the collection schemas stay as the source of truth;\n  `collections.json` mirrors them for the editor. Migrating the loaders onto the\n  package's `collectionLoader` / `seoFields` helpers is deliberately NOT part of\n  this plan: the existing `contentRoot()` + `glob` setup already resolves to the\n  same sandbox and works unchanged, so changing it would add risk for no behavior\n  difference.\n- `src/lib/contentRoot.ts` — this site's content-root redirection, which the\n  package's own resolution already honors\n- `src/data/settings.json` / `src/data/nav.json` — edited in place by the\n  package's settings and nav editors. The three custom keys\n  (`googleAnalyticsId`, `customHeadHtml`, `customBodyHtml`) survive a save; this\n  was verified by running this repo's real `settings.json` through the shipped\n  serializer.\n- `public/images/**` — all 67 images are adopted into the media library by\n  directory scan, with no manifest to author and no re-upload\n- `src/pages/deploy-status.json.ts` — retained unchanged\n\n## Scenarios to Demonstrate\n\n- **Admin dashboard** — the package's `/admin` showing this site's real counts\n  across all five collections\n- **Chapter entry editor** — a real chapter open, showing the numeric `order`\n  input, the `leads` and `links` list rows, and the nested hero image thumbnail\n  resolving from `/images/bg/hero-bg.jpg`\n- **Media library, adopted** — the 67 existing images grouped by their eight\n  directories, on a site that has never uploaded through the CMS\n- **Site settings with custom keys** — the settings form, where the three\n  consumer-authored keys are absent from the form but preserved on save\n- **Token sign-in gate** — the signed-out state an editor first meets, replacing\n  the retired passcode prompt\n- **Review drawer before commit** — a staged entry edit plus a settings edit\n  batched into one commit\n\n## Prerequisites\n\n**All satisfied — this plan is ready to run.**\n\n`@codeyam/cms@0.1.0` was published to npm on 2026-07-26 (MIT, public) and\nverified installable from the registry into a clean project, so the CI\nresolution problem in Key Decisions is solved: depend on `^0.1.0`, not a local\npath. Every package capability this plan uses has also shipped — the numeric\nfield type, unknown-settings-key preservation, nested media paths, and media\nadoption.\n\nNote the package was renamed from `@codeyam-ai/cms` to `@codeyam/cms` before\npublishing (the npm scope is `@codeyam`; the GitHub org remains `codeyam-ai`).\nUse the `@codeyam/cms` name throughout — an older reference to the `-ai` scope\nwill not resolve.",
+  "description": "Replaced this site's two-part editing stack — the hand-rolled /admin dashboard plus the CDN-loaded Sveltia editor at /admin/editor/ — with the installable @codeyam/cms package, which owns the whole /admin area as an Astro integration (29 admin routes). Editors now get one dashboard with entry editing, a media library that adopted all 67 committed images by directory scan, site settings, and a review-and-commit flow that batches edits into a single GitHub commit, in place of a read-only summary page that handed off to a separate CDN app. Two committed files configure it: src/data/cms.json (repo target nseldeib/harvardintech, token-only auth) and src/data/collections.json, which declares the site-specific chapters collection with its numeric order and repeatable leads/links lists, per-built-in extras, and an SEO group remapped onto this site's existing metaTitle/metaDescription/ogImage keys so no content file or template had to change.\n\nRetired wholesale: src/pages/admin/index.astro, AdminLayout, all eight src/components/admin/ components, both admin libs and their tests, the public/admin/ Sveltia scaffold, and the shared-passcode AdminGate — editors now sign in with their own fine-grained GitHub PAT, so commits carry each person's identity and access is revoked per person rather than by rotating a shared secret. The ADMIN_GATE_PASSCODE env var was dropped from the deploy workflow; the corresponding repo secret still needs deleting from Settings.\n\nTwo things worth recording beyond the plan. First, 15 scenarios had to go, not the 4 the plan listed — CollectionCountCard, DashboardSummary, and DeployStatus were also registered against retired components, which the plan's own \"confirm no other scenario references a retired component\" check surfaced. Second, the package ships raw .ts/.tsx, so Vite treats it as source and never scans its transitive deps; the entry editor's markdown preview pulls micromark then debug (CJS) and failed hydration with \"does not provide an export named 'default'\". A vite.optimizeDeps.include naming that chain in astro.config.mjs fixes it — dev-only, since astro build bundles it correctly on its own.\n\nCoverage: a new src/data/collections.test.ts re-establishes the schema-drift guard that was lost with the Sveltia config.yml, asserting every field the CMS renders is a real key in the matching Zod schema and that the SEO group still maps onto this site's own frontmatter keys. Verified red by injecting both drifts before restoring. Also of note: src/lib/deployStatus.ts is now imported by nothing but its own test — src/pages/deploy-status.json.ts never imported it, contrary to the plan's assumption — so it is live dead code left in place for a separate decision.",
+  "modifiedFiles": [
+    {
+      "path": ".claude/hooks/editor-step-hook.py",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-audit/finalize-procedure.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-edit-plan/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-editor/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-onboard/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-plan/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-prototype/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-see-app/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-see-recent-change/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-slice/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/capture.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/editor.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/adopt-codeyam-cms-and-retire-sveltia.md\t.codeyam/plans/completed/adopt-codeyam-cms-and-retire-sveltia.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-handlers.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-interactivity.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-issues.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-metrics.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-mocks.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-playwright.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/admin-dashboard-empty.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/admin-dashboard-populated.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/admingateprompt-initial-empty.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/admingateprompt-masked-entry.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/collectioncountcard-empty.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/collectioncountcard-populated.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/dashboardsummary-empty.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/dashboardsummary-populated.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-building.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-deploying.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-failed.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-idle-up-to-date.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-live.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-local-preview.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-slow.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admingateprompt-initial-empty--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admingateprompt-masked-entry--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admingateprompt-masked-entry--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/board-of-directors-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-with-image--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-with-image--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-sparse-no-leads--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-sparse-no-leads--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chaptersignup-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chaptersignup-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/collectioncountcard-empty--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/collectioncountcard-populated--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/collectioncountcard-populated--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dashboardsummary-empty--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dashboardsummary-populated--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dashboardsummary-populated--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-building--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-deploying--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-deploying--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-failed--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-idle-up-to-date--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-live--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-local-preview--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-slow--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-configured-form--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-configured-form--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-embedded-iframe--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-embedded-iframe--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-unconfigured-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-unconfigured-fallback--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/event-gallery--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-no-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-no-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/focus-areas--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/focus-areas--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/get-involved--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giving-campaign--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giving-campaign--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/greeting-hydrated-counter-clicked--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/greeting-hydrated-counter-clicked--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero-carousel--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero-carousel--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/luma-calendar--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/luma-calendar--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stats-band--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stats-band--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/support-us--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/whatsapp-community--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".gitattributes",
+      "status": "modified"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "modified"
+    },
+    {
+      "path": ".gitignore",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "docker-compose.cloud.yml",
+      "status": "modified"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "public/admin/editor/config.yml",
+      "status": "deleted"
+    },
+    {
+      "path": "public/admin/editor/deploy-status.js",
+      "status": "deleted"
+    },
+    {
+      "path": "public/admin/editor/index.html",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/admin/AdminGate.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/admin/AdminGatePrompt.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/admin/AdminHeader.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/admin/CollectionCountCard.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/admin/CollectionCountGrid.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/admin/DashboardSummary.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/admin/DeployStatus.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/admin/SignInGuide.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/layouts/AdminLayout.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/adminDashboard.test.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/adminDashboard.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/adminGate.test.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/adminGate.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/deployStatus.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/admin/index.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-review-pr/SKILL.md",
+      "status": "added"
+    },
+    {
+      "path": ".claude/skills/codeyam-review-pr/review-procedure.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-chapter-editor-new-york-city.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-dashboard-empty.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-dashboard-populated.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-entry-editor-change-staged-for-review.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-entry-editor-new-chapter-form.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-media-library-adopted-images.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-site-settings.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-chapter-editor-new-york-city--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-chapter-editor-new-york-city--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-populated--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-populated--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/session-token",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/merge-drivers-version",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "added"
+    },
+    {
+      "path": "src/data/cms.json",
+      "status": "added"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "added"
+    },
+    {
+      "path": "src/data/collections.test.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "CMS Dashboard - Populated",
+      "screenshotPath": "cms-dashboard-populated--desktop.png"
+    },
+    {
+      "name": "CMS Dashboard - Empty",
+      "screenshotPath": "cms-dashboard-empty--desktop.png"
+    },
+    {
+      "name": "CMS Chapter Editor - New York City",
+      "screenshotPath": "cms-chapter-editor-new-york-city--desktop.png"
+    },
+    {
+      "name": "CMS Entry Editor - New Chapter Form",
+      "screenshotPath": "cms-entry-editor-new-chapter-form--desktop.png"
+    },
+    {
+      "name": "CMS Entry Editor - Change Staged For Review",
+      "screenshotPath": "cms-entry-editor-change-staged-for-review--desktop.png"
+    },
+    {
+      "name": "CMS Media Library - Adopted Images",
+      "screenshotPath": "cms-media-library-adopted-images--desktop.png"
+    },
+    {
+      "name": "CMS Site Settings",
+      "screenshotPath": "cms-site-settings--desktop.png"
+    },
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 150,
+    "passed": 150,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 150,
+        "passed": 150
+      }
+    ]
+  }
+}

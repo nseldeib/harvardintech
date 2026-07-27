@@ -61,7 +61,7 @@
       },
       "key-interaction": {
         "status": "n-a",
-        "reason": "The primary action (Open content editor / card links) navigates to the Sveltia editor at /admin/editor/; no in-page interactive state to capture."
+        "reason": "The dashboard itself is a launchpad: its actions navigate into a collection or entry route. The in-page interactive state now lives on the entry editor and is captured there by cms-entry-editor-change-staged-for-review."
       }
     },
     "ChapterRoute": {
@@ -95,6 +95,36 @@
       "key-interaction": {
         "status": "n-a",
         "reason": "Presentational page; the only actions are external chapter links (WhatsApp, Eventbrite)"
+      }
+    },
+    "CmsEntryEditor": {
+      "empty": {
+        "status": "added"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The editor renders exactly one entry by definition; there is no empty-to-many boundary on this view."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The repeatable leads and links lists stack rows at full width with no overflow, scroll, or truncation treatment, so more rows produce a taller form rather than a distinct layout."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "The entry is embedded in the island props at build time; the editor performs no async fetch, so no pending state exists."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "EntryEditor implements no field validation — its only gate is disabled={!dirty} on Stage change. Frontmatter is validated by the Zod schema at build time, so there is no in-page error surface to capture."
+      },
+      "key-interaction": {
+        "status": "added"
       }
     },
     "EventsRoute": {

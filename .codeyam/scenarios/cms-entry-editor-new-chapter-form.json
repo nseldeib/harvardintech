@@ -1,0 +1,19 @@
+{
+  "name": "CMS Entry Editor - New Chapter Form",
+  "id": "f6c75ba3-5bd3-43d6-b1ea-6b9af2a71f95",
+  "url": "/admin/new/chapters",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "blog": [],
+    "chapters": [],
+    "events": [],
+    "pages": [],
+    "team": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/new/[collection].astro",
+  "description": "The blank creation form an editor meets when adding a chapter — every input comes from the custom collection declared in collections.json, proving the registry drives creation and not just editing."
+}

@@ -3,8 +3,9 @@
 // URLs, the CMS-config repo parse, the Actions-run phase mapping, and the banner
 // state machine — as data-in/data-out functions so they can be unit-tested under
 // vitest without a DOM. Mirrors the `gallery.ts` / `events.ts` split: the pure
-// helpers here are the canonical spec; the `.astro` client island and the
-// `public/admin/editor/deploy-status.js` mirror are thin wiring on top.
+// helpers here are the canonical spec, and they back the public
+// `/deploy-status.json` endpoint (`src/pages/deploy-status.json.ts`). The admin
+// banner that once consumed them lives in @codeyam/cms now, which ships its own.
 //
 // The signal model is HYBRID. The build-time marker (`/deploy-status.json`,
 // which bakes the deployed commit SHA in at build time) is the authoritative

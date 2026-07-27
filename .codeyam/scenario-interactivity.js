@@ -1,3 +1,5 @@
+// codeyam-generated — DO NOT EDIT.
+// codeyam-editor: 0.1.7  source-sha256: f352931494dcc9dfda4ed69e8b04f62ce673e6b3bd8e3141d459d8aa261406f0
 const fs = require("fs");
 const path = require("path");
 const { createIssue } = require("./scenario-issues");
@@ -19,12 +21,35 @@ const { createIssue } = require("./scenario-issues");
 // reliable in-page attachment signal are ALSO a conservative pass: we never
 // flag a page we cannot prove is dead, so a healthy Svelte / Solid / vanilla
 // page is never a false negative. A new framework detector is a new entry in
-// `detectors` below plus a `KNOWN_FRAMEWORKS` mapping — not an edit here.
+// `detectors` below plus a `KNOWN_FRAMEWORKS` mapping — not an edit here; a
+// meta-framework that hydrates an already-detected runtime is a new row in
+// `META_FRAMEWORK_ALIASES`.
 
 // Frameworks we have an in-page attachment detector for. Inference only
 // resolves to one of these; an unrecognised framework yields `null`, which
 // the caller treats as "cannot determine" (conservative pass).
 const KNOWN_FRAMEWORKS = ["react", "vue"];
+
+// Meta-frameworks mapped to the underlying runtime whose hydration detector
+// applies. These do not carry their runtime's name in their stack identity: a
+// Next.js app is `id: "nextjs-prisma-sqlite"`, `name: "Next.js + Prisma +
+// SQLite"` — nothing contains the literal "react". Without this map the
+// substring scan below returns `null`, the capture skips the hydration gate,
+// and a genuinely un-hydrated page is reported as an inert control rather than
+// as hydration never having run.
+//
+// Saying "Next hydrates React" is a fact about the runtime, not a framework
+// assumption, so this stays consistent with the data-driven design above: a new
+// meta-framework is a new row here, not a new branch in the capture flow.
+//
+// Matched with word boundaries rather than bare substrings so an unrelated name
+// like "NextGen CLI" or "Remixer" cannot masquerade as a meta-framework.
+const META_FRAMEWORK_ALIASES = [
+  { pattern: /\bnext(\.js|js)?\b/, framework: "react" },
+  { pattern: /\bremix\b/, framework: "react" },
+  { pattern: /\bgatsby\b/, framework: "react" },
+  { pattern: /\bnuxt(\.js|js)?\b/, framework: "vue" },
+];
 
 // Read `.codeyam/stack.json` relative to the capture script's cwd (the project
 // dir — `scenario_check.rs` sets `.current_dir(project_dir)`). Never throws: a
@@ -51,6 +76,9 @@ function inferFramework(stack) {
     .filter((s) => typeof s === "string")
     .join(" ")
     .toLowerCase();
+  for (const { pattern, framework } of META_FRAMEWORK_ALIASES) {
+    if (pattern.test(haystack)) return framework;
+  }
   for (const fw of KNOWN_FRAMEWORKS) {
     if (haystack.includes(fw)) return fw;
   }
@@ -214,24 +242,136 @@ function interpretHydration({
 // project's stack.json unless the caller injects a `stack`), short-circuit when
 // no client runtime is expected, collect the in-page state, and interpret it.
 // Never throws — a probe failure must not break an otherwise-good capture.
-async function probeInteractivity(frame, { url, stack } = {}) {
+//
+// Returns `{ hydrated, issue }`:
+//   hydrated — `true` (runtime demonstrably attached), `false` (PROVEN dead:
+//     framework-owned controls rendered but nothing attached), or `null`
+//     ("cannot determine" — no client runtime expected, no control to probe, no
+//     detector for the framework, or the probe threw).
+//   issue — the `hydration` issue to surface, or `null` to pass.
+//
+// `hydrated` is deliberately three-valued rather than a bare boolean: the
+// capture flow branches a page to `interactionEffect: "unhydrated"` ONLY on a
+// proven `false`. A `null` must never be read as "dead" — that would turn every
+// unknown-framework page into a false hydration failure.
+async function probeHydrationState(frame, { url, stack } = {}) {
   const descriptor = stack !== undefined ? stack : readStackJson();
   const { expectInteractive, framework } =
     resolveInteractivityExpectation(descriptor);
-  if (!expectInteractive) return null;
+  if (!expectInteractive) return { hydrated: null, issue: null };
   let state;
   try {
     state = await collectHydrationState(frame, { framework });
   } catch (_) {
-    return null;
+    return { hydrated: null, issue: null };
   }
-  return interpretHydration({
+  const issue = interpretHydration({
     expectInteractive: true,
     controlCount: state.controlCount,
     frameworkAttached: state.frameworkAttached,
     framework,
     url,
   });
+  // `frameworkAttached` is already the three-valued signal `hydrated` needs —
+  // pass it through rather than re-deriving it from the presence of an issue,
+  // which would conflate "no issue" (a pass) with "hydrated" (a positive).
+  return { hydrated: state.frameworkAttached, issue };
+}
+
+// Sleep for `ms` — a promisified `setTimeout`, so the poll loop yields the
+// event loop between ticks instead of spinning.
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Bounded WAIT for hydration — the polling generalization of
+// `probeHydrationState`. Where the probe reads the attachment state once,
+// this re-polls `collectHydrationState` until the framework demonstrably
+// attaches, the state becomes unjudgeable, or a wall-clock cap elapses. It is
+// the seam the capture flow calls so that every screenshot and every driven
+// interaction happens AFTER the client runtime has attached, not on inert SSR
+// markup (the bug where a fill/click landed before React hydrated, the handler
+// never fired, yet the run reported success).
+//
+// Stack-agnostic by construction: it resolves the same expectation as the
+// probe, so a non-interactive stack (backend/static/CLI, or an explicit
+// `capture.interactivity === false`) returns immediately with `hydrated: null`
+// and never waits. An unknown framework (no detector) reads
+// `frameworkAttached === null` on the first poll and also passes instantly — we
+// never block on a page we cannot judge.
+//
+// Never fails closed: a timeout yields `hydrated: false` and lets the existing
+// `interpretHydration` path decide whether to surface the loud `hydration`
+// issue; a thrown probe (detached frame mid-nav) is caught and treated as a
+// pass. The wait can never hang a capture (hard cap) and never turns a page we
+// cannot prove dead into a failure.
+//
+// Honest limitation: the poll can only judge a page that has already rendered
+// framework-owned controls. `waitForStablePage` runs first (its `rootUnpainted`
+// guard waits for the SPA root to paint), so by the time this runs, content is
+// present for the SSR case this guards; a pure-CSR shell that renders zero
+// controls reads `null` and passes instantly, unchanged from today.
+//
+// Returns `{ hydrated, issue, timedOut, waitedMs }` where `hydrated` is the
+// same three-valued signal `probeHydrationState` returns.
+async function waitForHydration(
+  frame,
+  { url, stack, framework, timeoutMs = 10000, pollIntervalMs = 150 } = {},
+) {
+  let resolvedFramework;
+  let expectInteractive;
+  if (typeof framework === "string" && framework.length > 0) {
+    expectInteractive = true;
+    resolvedFramework = framework.toLowerCase();
+  } else {
+    const descriptor = stack !== undefined ? stack : readStackJson();
+    const resolution = resolveInteractivityExpectation(descriptor);
+    expectInteractive = resolution.expectInteractive;
+    resolvedFramework = resolution.framework;
+  }
+  if (!expectInteractive) {
+    return { hydrated: null, issue: null, timedOut: false, waitedMs: 0 };
+  }
+
+  const start = Date.now();
+  let state = { controlCount: 0, frameworkAttached: null };
+  let timedOut = false;
+  for (;;) {
+    try {
+      state = await collectHydrationState(frame, {
+        framework: resolvedFramework,
+      });
+    } catch (_) {
+      // Detached frame mid-navigation (or any probe throw): treat as "cannot
+      // determine" and pass — a probe failure must never fail a capture.
+      state = { controlCount: 0, frameworkAttached: null };
+      break;
+    }
+    // `true` (attached) and `null` (cannot judge) are both terminal — the
+    // conservative "can't prove dead" signal the probe already trusts. Only a
+    // proven `false` keeps us waiting.
+    if (state.frameworkAttached !== false) break;
+    // Stop before a sleep that would overrun the cap, so the wait stays bounded.
+    if (Date.now() - start + pollIntervalMs >= timeoutMs) {
+      timedOut = true;
+      break;
+    }
+    await sleep(pollIntervalMs);
+  }
+
+  const issue = interpretHydration({
+    expectInteractive: true,
+    controlCount: state.controlCount,
+    frameworkAttached: state.frameworkAttached,
+    framework: resolvedFramework,
+    url,
+  });
+  return {
+    hydrated: state.frameworkAttached,
+    issue,
+    timedOut,
+    waitedMs: Date.now() - start,
+  };
 }
 
 module.exports = {
@@ -241,5 +381,6 @@ module.exports = {
   resolveInteractivityExpectation,
   collectHydrationState,
   interpretHydration,
-  probeInteractivity,
+  probeHydrationState,
+  waitForHydration,
 };

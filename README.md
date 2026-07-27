@@ -8,10 +8,11 @@ hostable for free on GitHub Pages.
 Page content lives in typed
 [content collections](https://docs.astro.build/en/guides/content-collections/)
 (markdown under `src/content/`) and editable JSON singletons (`src/data/`), not a
-runtime database — so there is no server to run. A built-in **CRM** edits those
-same files: a dashboard at **`/admin`** (live content counts) fronting the
-[Sveltia CMS](https://github.com/sveltia/sveltia-cms) editor at
-**`/admin/editor/`**. See [`CMS_SETUP.md`](./CMS_SETUP.md) for the two sign-in
+runtime database — so there is no server to run.
+[**@codeyam/cms**](https://www.npmjs.com/package/@codeyam/cms) edits those same
+files: an Astro integration that owns **`/admin`** — content dashboard, entry
+editor, media library, site settings, and a publish flow that batches edits into
+one GitHub commit. See [`CMS_SETUP.md`](./CMS_SETUP.md) for the two sign-in
 paths: **Local** and **Token** (paste a fine-grained GitHub PAT).
 
 ## Setup
@@ -30,17 +31,14 @@ A fresh clone works with: `git clone` → `npm run setup` → `npm run dev`.
 ```
 src/
   pages/index.astro          # the landing page — composes the section components
-  pages/admin/index.astro     # the CRM dashboard (/admin) — content counts + editor link
   components/landing/         # one component per landing section (Hero, Board, …)
-  components/admin/           # CRM dashboard sections (count cards, summary, sign-in)
   layouts/BaseLayout.astro    # site shell: data-driven header/nav + footer + SEO
-  layouts/AdminLayout.astro   # CRM shell: header chrome + noindex + content column
   content/                    # typed content collections (events, team, chapters, pages, blog)
-  data/                       # editable settings.json + nav.json singletons
-  lib/                        # site.ts, mailto.ts, adminDashboard.ts (count helpers)
+  data/                       # settings.json + nav.json singletons, cms.json + collections.json (CMS config)
+  lib/                        # site.ts, mailto.ts, deployStatus.ts
   styles/tokens.css           # design tokens (brand blue, Roboto, spacing)
-public/admin/editor/          # Sveltia CMS app (index.html + config.yml) served at /admin/editor/
 public/images/                # hero/section backgrounds, board graphic, event gallery
+                              # (/admin is injected by @codeyam/cms — no admin code in this repo)
 ```
 
 ## Deploy to GitHub Pages
@@ -58,14 +56,14 @@ public/images/                # hero/section backgrounds, board graphic, event g
 This project is built with [codeyam-editor](https://codeyam.com) — code and runnable data scenarios are authored side by side against a live preview.
 
 ```bash
+# Clone the repo
+git clone https://github.com/nseldeib/harvardintech && cd harvardintech
+
+# Install codeyam-editor
+npm install -g @codeyam-editor/codeyam-editor@latest
+
 # Launch the editor (split-screen terminal + live preview)
 codeyam-editor editor
-
-# Run the app
-npm run dev
-
-# Run the tests
-npx vitest run
 ```
 <!-- codeyam:run-and-edit:end -->
 
@@ -74,35 +72,35 @@ npx vitest run
 
 States captured as runnable scenarios with codeyam-editor:
 
-### Admin Dashboard - Empty
-
-<img src=".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png" alt="Admin Dashboard - Empty" width="280">
-
-### Admin Dashboard - Populated
-
-<img src=".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png" alt="Admin Dashboard - Populated" width="280">
-
 ### Blog Post - Welcome
 
 <img src=".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png" alt="Blog Post - Welcome" width="280">
 
-### Chapter Route - New York City
+### CMS Chapter Editor - New York City
 
-<img src=".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png" alt="Chapter Route - New York City" width="280">
+<img src=".codeyam/scenarios/screenshots/cms-chapter-editor-new-york-city--desktop.png" alt="CMS Chapter Editor - New York City" width="280">
 
-### Events Route - Upcoming and Past
+### CMS Dashboard - Empty
 
-<img src=".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png" alt="Events Route - Upcoming and Past" width="280">
+<img src=".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png" alt="CMS Dashboard - Empty" width="280">
 
-### Harvard in Tech - Board of Directors
+### CMS Dashboard - Populated
 
-<img src=".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png" alt="Harvard in Tech - Board of Directors" width="280">
+<img src=".codeyam/scenarios/screenshots/cms-dashboard-populated--desktop.png" alt="CMS Dashboard - Populated" width="280">
 
-### Harvard in Tech - Landing Page
+### CMS Entry Editor - Change Staged For Review
 
-<img src=".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png" alt="Harvard in Tech - Landing Page" width="280">
+<img src=".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png" alt="CMS Entry Editor - Change Staged For Review" width="280">
 
-### Harvard in Tech - No Upcoming Events
+### CMS Entry Editor - New Chapter Form
 
-<img src=".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png" alt="Harvard in Tech - No Upcoming Events" width="280">
+<img src=".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png" alt="CMS Entry Editor - New Chapter Form" width="280">
+
+### CMS Media Library - Adopted Images
+
+<img src=".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png" alt="CMS Media Library - Adopted Images" width="280">
+
+### CMS Site Settings
+
+<img src=".codeyam/scenarios/screenshots/cms-site-settings--desktop.png" alt="CMS Site Settings" width="280">
 <!-- codeyam:scenario-gallery:end -->

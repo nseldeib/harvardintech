@@ -1,0 +1,19 @@
+{
+  "name": "CMS Dashboard - Empty",
+  "id": "094a5159-69cb-4dc4-9abe-c3d95b8dadc7",
+  "url": "/admin",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "blog": [],
+    "chapters": [],
+    "events": [],
+    "pages": [],
+    "team": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/index.astro",
+  "description": "The dashboard an editor meets on a site with no content at all — every collection card shows its add-the-first-one nudge instead of a count, which is the state that proves the empty affordances exist."
+}

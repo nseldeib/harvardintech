@@ -4,6 +4,7 @@ import * as path from 'node:path';
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import codeyamCms from '@codeyam/cms';
 
 // --- codeyam content sandbox ---------------------------------------------
 // The site's "database" is the committed markdown under `src/content/` and the
@@ -92,5 +93,17 @@ export default defineConfig({
   output: 'static',
   site,
   base,
-  integrations: [react(), sitemap()],
+  integrations: [codeyamCms(), react(), sitemap()],
+  vite: {
+    optimizeDeps: {
+      // @codeyam/cms ships raw `.ts`/`.tsx` (its package exports point at
+      // `src/**`), so Vite treats it as SOURCE rather than a pre-bundled dep.
+      // Its transitive deps are therefore never scanned, and the admin entry
+      // editor's markdown preview pulls `micromark` → `debug`, which is CJS:
+      // the browser then fails hydration with "does not provide an export named
+      // 'default'". Naming the chain here forces Vite to pre-bundle it to ESM.
+      // Dev-only concern — `astro build` bundles these correctly on its own.
+      include: ['micromark', 'micromark-extension-gfm', 'debug'],
+    },
+  },
 });

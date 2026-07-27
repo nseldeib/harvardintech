@@ -1,31 +1,5 @@
 [
   {
-    "description": "The /admin CRM dashboard page: loads entry counts for every content collection and composes the admin shell (summary, count grid, sign-in guide), linking into the Sveltia editor at /admin/editor/.",
-    "filePath": "src/pages/admin/index.astro",
-    "name": "AdminDashboard",
-    "scenarios": [
-      "admin-dashboard-populated",
-      "admin-dashboard-empty"
-    ]
-  },
-  {
-    "description": "Production-only client-side passcode gate mounted first in AdminLayout. Renders no visual output — emits a single is:inline script that, on the live site, checks a sessionStorage unlock flag, then shows a custom opaque full-viewport overlay with a masked <input type=password> (built via document.createElement) so the typed passcode renders as dots; reveals the page on a correct entry and redirects to the public home on cancel, Escape, or an incorrect entry. Inert in dev/preview. Its overlay look mirrors AdminGatePrompt.astro and its pure comparison logic is extracted and unit-tested as isPasscodeCorrect in src/lib/adminGate.ts.",
-    "filePath": "src/components/admin/AdminGate.astro",
-    "name": "AdminGate",
-    "untestabilityReason": {
-      "justification": "No rendered DOM surface; emits an inline browser script that builds a masked overlay via document.createElement and uses sessionStorage/location glue. Comparison logic tested via isPasscodeCorrect in adminGate.ts; overlay look covered by the AdminGatePrompt scenario.",
-      "kind": "platform-glue"
-    }
-  },
-  {
-    "description": "Server-rendered visual twin of the /admin passcode overlay: an on-brand card with a label, a masked <input type=password> (a pre-filled value renders as dots), and Cancel / Unlock actions. The real gate (AdminGate.astro) is production-only and builds its overlay imperatively, so this isolable component is the demonstrable spec of the prompt; the two are kept in sync by hand. Optional `value` prop pre-fills the field to show the masking.",
-    "filePath": "src/components/admin/AdminGatePrompt.astro",
-    "name": "AdminGatePrompt",
-    "scenarios": [
-      "admingateprompt-masked-entry"
-    ]
-  },
-  {
     "description": "A single Board of Directors member card: a circular B&W headshot, or an initials-avatar fallback when the member has no photo, plus name and role. Shared by the landing BoardOfDirectors section and isolated scenarios.",
     "filePath": "src/components/BoardMemberCard.astro",
     "name": "BoardMemberCard",
@@ -85,44 +59,12 @@
     ]
   },
   {
-    "description": "A single /admin dashboard card: a content collection entry count, its label, a No-entries-yet note when empty, and a link into the Sveltia editor for that collection.",
-    "filePath": "src/components/admin/CollectionCountCard.astro",
-    "name": "CollectionCountCard",
-    "scenarios": [
-      "collectioncountcard-populated",
-      "collectioncountcard-empty"
-    ]
-  },
-  {
     "description": "Content Hub section: the org publishing channels as linked cards plus an optional latest-from-the-blog list surfaced from the blog collection.",
     "filePath": "src/components/landing/ContentHub.astro",
     "name": "ContentHub",
     "scenarios": [
       "content-hub",
       "content-hub-empty"
-    ]
-  },
-  {
-    "description": "The /admin dashboard top row: the heading, a one-line content summary (populated counts or the empty-state nudge), and the primary Open content editor action.",
-    "filePath": "src/components/admin/DashboardSummary.astro",
-    "name": "DashboardSummary",
-    "scenarios": [
-      "dashboardsummary-populated",
-      "dashboardsummary-empty"
-    ]
-  },
-  {
-    "description": "The /admin deploy-status banner — server-renders an initial BannerView and a client island captures the live baseline commit, polls the build marker, and best-effort enriches with the GitHub Actions run phase; shows a Local preview note on localhost. Also the captured scenario surface for the deploy-status feature, one scenario per banner state.",
-    "filePath": "src/components/admin/DeployStatus.astro",
-    "name": "DeployStatus",
-    "scenarios": [
-      "deploystatus-deploying",
-      "deploystatus-building",
-      "deploystatus-live",
-      "deploystatus-failed",
-      "deploystatus-slow",
-      "deploystatus-idle-up-to-date",
-      "deploystatus-local-preview"
     ]
   },
   {
@@ -256,18 +198,6 @@
     "testFile": "src/lib/contentRoot.test.ts"
   },
   {
-    "description": "Builds the /admin dashboard summary sentence: an empty-state nudge at zero, otherwise the total entries and collection count with correct singular/plural grammar.",
-    "filePath": "src/lib/adminDashboard.ts",
-    "name": "dashboardSummaryText",
-    "testFile": "src/lib/adminDashboard.test.ts"
-  },
-  {
-    "description": "Sums entry counts across the dashboard collection cards and reports how many collections there are, for the /admin summary line.",
-    "filePath": "src/lib/adminDashboard.ts",
-    "name": "dashboardTotals",
-    "testFile": "src/lib/adminDashboard.test.ts"
-  },
-  {
     "description": "Returns the directory the JSON singletons (settings, nav) load from: the CODEYAM_DATA_ROOT sandbox during a codeyam session, else the committed src/data.",
     "filePath": "src/lib/contentRoot.ts",
     "name": "dataRoot",
@@ -350,12 +280,6 @@
     "testFile": "src/lib/team.test.ts"
   },
   {
-    "description": "Pure passcode comparison for the /admin dashboard deterrent gate: trims input and expected, treats an empty expected value as never-matching, and returns whether they are equal. The inline gate script in AdminGate.astro mirrors this logic.",
-    "filePath": "src/lib/adminGate.ts",
-    "name": "isPasscodeCorrect",
-    "testFile": "src/lib/adminGate.test.ts"
-  },
-  {
     "description": "Maps a GitHub Actions run's status/conclusion to a normalised phase (building, failed, succeeded, unknown); a cancelled completion maps to unknown so it never masquerades as a real failure.",
     "filePath": "src/lib/deployStatus.ts",
     "name": "mapRunPhase",
@@ -380,7 +304,7 @@
     "testFile": "src/lib/parallax.test.ts"
   },
   {
-    "description": "Pulls repo and branch out of the Sveltia/Decap config.yml text so the GitHub Actions API target is not hard-coded; defaults branch to main and returns null when no repo is present.",
+    "description": "Pulls repo and branch out of a Decap-style CMS config.yml text so the GitHub Actions API target is not hard-coded; defaults branch to main and returns null when no repo is present. Retained as a pure, tested helper after the Sveltia editor it originally parsed was retired in favour of @codeyam/cms.",
     "filePath": "src/lib/deployStatus.ts",
     "name": "parseBackendRepo",
     "testFile": "src/lib/deployStatus.test.ts"

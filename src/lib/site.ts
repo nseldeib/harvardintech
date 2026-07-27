@@ -1,7 +1,8 @@
 // Site-wide data loaded from editable JSON singletons under the data root.
 //
-// `settings.json` and `nav.json` are content, not code: the CMS edits them as
-// Sveltia "file" collections, and every layout reads them through this module.
+// `settings.json` and `nav.json` are content, not code: the CMS edits them
+// through its settings and nav editors, and every layout reads them through
+// this module.
 // Changing the contact email, a social link, or a menu item is therefore a
 // data edit (a commit the CMS makes), never a source change. codeyam's
 // `content-collection` seed adapter rewrites these same files per scenario, so
