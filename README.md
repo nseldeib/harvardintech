@@ -76,6 +76,14 @@ States captured as runnable scenarios with codeyam-editor:
 
 <img src=".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png" alt="Blog Post - Welcome" width="280">
 
+### CMS Blog List - Drafts And Published
+
+<img src=".codeyam/scenarios/screenshots/cms-blog-list-drafts-and-published--desktop.png" alt="CMS Blog List - Drafts And Published" width="280">
+
+### CMS Chapter Editor - Marked As Draft
+
+<img src=".codeyam/scenarios/screenshots/cms-chapter-editor-marked-as-draft--desktop.png" alt="CMS Chapter Editor - Marked As Draft" width="280">
+
 ### CMS Chapter Editor - New York City
 
 <img src=".codeyam/scenarios/screenshots/cms-chapter-editor-new-york-city--desktop.png" alt="CMS Chapter Editor - New York City" width="280">
@@ -95,12 +103,4 @@ States captured as runnable scenarios with codeyam-editor:
 ### CMS Entry Editor - New Chapter Form
 
 <img src=".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png" alt="CMS Entry Editor - New Chapter Form" width="280">
-
-### CMS Media Library - Adopted Images
-
-<img src=".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png" alt="CMS Media Library - Adopted Images" width="280">
-
-### CMS Site Settings
-
-<img src=".codeyam/scenarios/screenshots/cms-site-settings--desktop.png" alt="CMS Site Settings" width="280">
 <!-- codeyam:scenario-gallery:end -->

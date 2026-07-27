@@ -6,12 +6,18 @@ import SEO from '../../components/SEO.astro';
 import HeadExtras from '../../components/HeadExtras.astro';
 import Embed from '../../components/Embed.astro';
 import { settings } from '../../lib/site';
+import { publishedEntries } from '../../lib/drafts';
 
 // Static output needs every dynamic route enumerated at build time.
 // `getStaticPaths` turns each blog entry into a pre-rendered `/blog/<id>` page.
 // Content Layer entries key on `id` (the file stem) — the old `slug`.
+//
+// Drafts are filtered here too, not just in the listings: a draft left out of
+// the index but still reachable at its own URL is public either way, which is
+// worse than not supporting drafts at all. In dev the page is still generated
+// so an author can preview the post they are writing.
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = publishedEntries(await getCollection('blog'), !import.meta.env.PROD);
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },

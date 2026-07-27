@@ -13,8 +13,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import EventsPage from '../components/EventsPage.astro';
 import LumaCalendar from '../components/LumaCalendar.astro';
 import { LUMA_CALENDAR_URL, LUMA_EMBED_URL } from '../lib/luma';
+import { publishedEntries } from '../lib/drafts';
 
-const events = (await getCollection('events')).map((e) => ({
+// Drafts are shown while authoring under `astro dev`, never in the built site.
+const events = publishedEntries(await getCollection('events'), !import.meta.env.PROD).map((e) => ({
   slug: e.id,
   ...e.data,
 }));

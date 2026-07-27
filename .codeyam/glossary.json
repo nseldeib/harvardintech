@@ -316,6 +316,12 @@
     "testFile": "src/lib/deployStatus.test.ts"
   },
   {
+    "description": "Returns a new array of the content-collection entries fit to publish, keeping every entry whose draft flag is not explicitly true — so an absent flag, which is the state of every existing entry and what the CMS writes when the Draft toggle is off, means live, and a hand-written draft false is treated the same as absent. Pass includeDrafts to keep drafts in the list; callers derive it from import.meta.env.PROD so drafts stay visible under astro dev for author preview but are omitted from the built site. The flag is an explicit parameter rather than an internal env read so both halves of the rule are testable without faking the environment. Does not mutate the input.",
+    "filePath": "src/lib/drafts.ts",
+    "name": "publishedEntries",
+    "testFile": "src/lib/drafts.test.ts"
+  },
+  {
     "description": "Reads and JSON-parses a singleton data file (settings.json / nav.json) from the resolved dataRoot(), so the site settings/nav honor the codeyam sandbox redirect.",
     "filePath": "src/lib/site.ts",
     "name": "readSingleton",

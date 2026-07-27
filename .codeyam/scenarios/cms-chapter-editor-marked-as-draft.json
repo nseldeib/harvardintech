@@ -1,0 +1,90 @@
+{
+  "name": "CMS Chapter Editor - Marked As Draft",
+  "id": "e3abd110-359a-4226-8d3b-f9b4327fae77",
+  "url": "/admin/chapters/nyc",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "blog": [
+      {
+        "body": "We are a global community of Harvard alumni working in technology.",
+        "date": "2026-01-15",
+        "slug": "welcome",
+        "summary": "Why we built this community and where we are headed.",
+        "title": "Welcome to Harvard in Tech"
+      }
+    ],
+    "chapters": [
+      {
+        "blurb": "Our founding chapter and largest community.",
+        "body": "Regular founder dinners, panels, and community gatherings across the city.",
+        "city": "New York City",
+        "contactEmail": "info@harvardintech.com",
+        "heroImage": "/images/chapters/nyc.jpg",
+        "order": 1,
+        "region": "New York, NY",
+        "slug": "nyc",
+        "tagline": "We are the New York Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "A new chapter we are standing up for the Central Texas alumni base.",
+        "body": "Still recruiting chapter leads and confirming a venue partner before we announce this publicly.",
+        "city": "Austin",
+        "draft": true,
+        "order": 2,
+        "region": "Austin, TX",
+        "slug": "austin"
+      }
+    ],
+    "events": [
+      {
+        "body": "Keynotes and breakout sessions on AI, climate, and fintech.",
+        "chapter": "nyc",
+        "date": "2026-09-24",
+        "description": "Our flagship annual gathering of Harvard founders, operators, and investors.",
+        "link": "https://www.harvardintech.com/events/summit-2026",
+        "location": "New York, NY",
+        "slug": "harvard-in-tech-summit-2026",
+        "title": "Harvard in Tech Summit 2026"
+      }
+    ],
+    "pages": [
+      {
+        "body": "Harvard in Tech connects alumni building and investing in technology.",
+        "description": "About Harvard in Tech.",
+        "order": 1,
+        "slug": "about",
+        "title": "About"
+      }
+    ],
+    "team": [
+      {
+        "body": "",
+        "name": "Ben Wei",
+        "order": 1,
+        "photo": "/images/team/ben-wei.png",
+        "role": "Founder · Harvard C'08",
+        "slug": "ben-wei"
+      },
+      {
+        "body": "",
+        "name": "Krysia Lenzo",
+        "order": 2,
+        "photo": "/images/team/krysia-lenzo.png",
+        "role": "Executive Director · Harvard C'12",
+        "slug": "krysia-lenzo"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The NYC chapter mid-edit with the Draft toggle ticked, reading Hidden from the live site. This is the control that previously did nothing — no schema declared a draft field, so zod stripped the value and the entry kept publishing. The interaction drives the checkbox so the capture shows the ticked state rather than the resting form.",
+  "interactions": [
+    {
+      "action": "click",
+      "text": "Draft"
+    }
+  ]
+}

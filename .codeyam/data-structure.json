@@ -1,7 +1,7 @@
 [
   {
     "name": "Event",
-    "description": "An upcoming or past Harvard in Tech event. Stored as a markdown file in the `events` content collection; rendered in the landing page's Upcoming Events section.",
+    "description": "An upcoming or past Harvard in Tech event. Stored as a markdown file in the `events` content collection; rendered in the landing page's Upcoming Events section. `draft` withholds the entry from the published site — absent or false means published, and drafts stay visible in dev so an author can preview.",
     "category": "datastore",
     "order": 1,
     "fields": [
@@ -11,12 +11,13 @@
       { "name": "location", "type": "string", "required": false },
       { "name": "description", "type": "string", "required": false },
       { "name": "link", "type": "string", "required": false },
+      { "name": "draft", "type": "boolean", "required": false },
       { "name": "body", "type": "string", "required": false }
     ]
   },
   {
     "name": "TeamMember",
-    "description": "A Board of Directors / team member. Stored as a markdown file in the `team` content collection; rendered in the landing page's Board of Directors section.",
+    "description": "A Board of Directors / team member. Stored as a markdown file in the `team` content collection; rendered in the landing page's Board of Directors section. `draft` withholds the entry from the published site — absent or false means published, and drafts stay visible in dev so an author can preview.",
     "category": "datastore",
     "order": 2,
     "fields": [
@@ -25,12 +26,13 @@
       { "name": "role", "type": "string", "required": true },
       { "name": "photo", "type": "string", "required": false },
       { "name": "bio", "type": "string", "required": false },
-      { "name": "order", "type": "number", "required": false }
+      { "name": "order", "type": "number", "required": false },
+      { "name": "draft", "type": "boolean", "required": false }
     ]
   },
   {
     "name": "Page",
-    "description": "A free-form site page (About, chapter pages, etc.) in the `pages` content collection. Body markdown is the page content. Per-page SEO overrides (`metaTitle`, `metaDescription`, `ogImage`) and an optional embed (`embedUrl`/`embedHtml`) mirror the blog collection (CMS-ready for when a pages route renders these entries).",
+    "description": "A free-form site page (About, chapter pages, etc.) in the `pages` content collection. Body markdown is the page content. Per-page SEO overrides (`metaTitle`, `metaDescription`, `ogImage`) and an optional embed (`embedUrl`/`embedHtml`) mirror the blog collection (CMS-ready for when a pages route renders these entries). `draft` withholds the entry from the published site — absent or false means published, and drafts stay visible in dev so an author can preview.",
     "category": "datastore",
     "order": 3,
     "fields": [
@@ -43,12 +45,13 @@
       { "name": "ogImage", "type": "string", "required": false },
       { "name": "embedUrl", "type": "string", "required": false },
       { "name": "embedHtml", "type": "string", "required": false },
+      { "name": "draft", "type": "boolean", "required": false },
       { "name": "body", "type": "string", "required": false }
     ]
   },
   {
     "name": "BlogPost",
-    "description": "A news/blog post in the `blog` content collection. Per-page SEO overrides (`metaTitle`, `metaDescription`, `ogImage`) and an optional embed (`embedUrl`/`embedHtml`) are all optional.",
+    "description": "A news/blog post in the `blog` content collection. Per-page SEO overrides (`metaTitle`, `metaDescription`, `ogImage`) and an optional embed (`embedUrl`/`embedHtml`) are all optional. `draft` withholds the entry from the published site — absent or false means published, and drafts stay visible in dev so an author can preview.",
     "category": "datastore",
     "order": 4,
     "fields": [
@@ -62,6 +65,7 @@
       { "name": "ogImage", "type": "string", "required": false },
       { "name": "embedUrl", "type": "string", "required": false },
       { "name": "embedHtml", "type": "string", "required": false },
+      { "name": "draft", "type": "boolean", "required": false },
       { "name": "body", "type": "string", "required": false }
     ]
   },
@@ -92,7 +96,7 @@
   },
   {
     "name": "Chapter",
-    "description": "A regional Harvard in Tech chapter (NYC, SF, L.A., Japan). Stored as a markdown file in the `chapters` content collection; rendered on per-chapter routes at /chapters/<slug> and linked from the nav Chapters dropdown. Optional fields (`leads`, `links`) prove a chapter with no leads listed still renders.",
+    "description": "A regional Harvard in Tech chapter (NYC, SF, L.A., Japan). Stored as a markdown file in the `chapters` content collection; rendered on per-chapter routes at /chapters/<slug> and linked from the nav Chapters dropdown. Optional fields (`leads`, `links`) prove a chapter with no leads listed still renders. `draft` withholds the entry from the published site — absent or false means published, and drafts stay visible in dev so an author can preview.",
     "category": "datastore",
     "order": 7,
     "fields": [
@@ -103,6 +107,7 @@
       { "name": "leads", "type": "array", "required": false },
       { "name": "links", "type": "array", "required": false },
       { "name": "order", "type": "number", "required": false },
+      { "name": "draft", "type": "boolean", "required": false },
       { "name": "body", "type": "string", "required": false }
     ]
   }

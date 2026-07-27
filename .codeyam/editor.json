@@ -95,6 +95,7 @@
     }
   },
   "defaultScreenSize": "Desktop",
+  "deviceScaleFactor": 3,
   "apps": [
     {
       "name": "Harvard in Tech",

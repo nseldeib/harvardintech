@@ -802,6 +802,87 @@
       "runner": "tests"
     },
     {
+      "description": "returns a new array in both branches, so a caller chaining sort cannot mutate the collection",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › does not mutate the input array",
+      "line": 58,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "only an exact boolean true hides an entry, so a stray truthy string does not silently unpublish",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › hides an entry only when draft is exactly true",
+      "line": 68,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the same draft entry is kept when the caller asks for drafts, which is how dev previews work",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › keeps draft entries when includeDrafts is true",
+      "line": 23,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the reproduction case: an entry flagged draft is withheld from the published listing",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › omits draft entries from the blog listing in production",
+      "line": 14,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "relative order is preserved so a caller can sort before or after filtering",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › preserves the order of the surviving entries",
+      "line": 52,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "an empty collection is not an error condition",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › returns an empty array for an empty collection",
+      "line": 46,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a collection where every entry is drafted publishes nothing rather than falling back to all",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › returns an empty array when every entry is a draft",
+      "line": 40,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "no-regression guard: every existing entry has no draft key at all and must stay published",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › treats a missing draft key as published",
+      "line": 29,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a hand-edited file may spell out draft false even though the CMS only ever writes true",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › treats an explicit draft false as published",
+      "line": 35,
+      "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
       "description": "Past a day it rolls up to days.",
       "file": "src/lib/deployStatus.test.ts",
       "format": "vitest",

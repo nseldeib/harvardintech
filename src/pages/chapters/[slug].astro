@@ -6,9 +6,13 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterPage from '../../components/ChapterPage.astro';
 import { splitEvents, type EventLike } from '../../lib/events';
+import { publishedEntries } from '../../lib/drafts';
 
+// Drafts get no page of their own in the built site — a chapter dropped from
+// the nav but still live at /chapters/<slug> would be public anyway. In dev the
+// page is still generated so an author can preview an unannounced chapter.
 export async function getStaticPaths() {
-  const chapters = await getCollection('chapters');
+  const chapters = publishedEntries(await getCollection('chapters'), !import.meta.env.PROD);
   return chapters.map((chapter) => ({
     params: { slug: chapter.id },
     props: { chapter },
@@ -22,7 +26,7 @@ const { city, region, blurb, heroImage, tagline, showGallery, contactEmail, lead
 
 // Upcoming events explicitly tagged to this chapter (soonest first). Events with
 // no `chapter` (e.g. the Cambridge panel) belong to no chapter and are excluded.
-const events = await getCollection('events');
+const events = publishedEntries(await getCollection('events'), !import.meta.env.PROD);
 const chapterEvents: EventLike[] = events
   .filter((event) => event.data.chapter === chapter.id)
   .map((event) => ({

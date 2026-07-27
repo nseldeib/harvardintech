@@ -17,6 +17,14 @@ import { contentRoot } from '../lib/contentRoot';
 // pointed elsewhere — that is the bug this migration fixes.)
 const root = contentRoot();
 
+// Every collection carries an optional `draft` flag, because the CMS renders a
+// Draft toggle on all of them. Absent means published, so no existing entry
+// needs migrating and the toggle's "off" state is simply the missing key (the
+// CMS only ever writes `draft: true`). Declaring it here is what makes the flag
+// survive validation at all — a zod object silently strips keys it does not
+// know about, which is why ticking Draft used to do nothing. Routes, not this
+// schema, decide visibility: see `publishedEntries` in `src/lib/drafts.ts`.
+
 // Blog posts. `coverImage`/`summary` are optional so a minimal post renders.
 // `metaTitle`/`metaDescription`/`ogImage` are per-page SEO overrides (fall back
 // to the post's own fields, then site defaults); `embedUrl`/`embedHtml` drop a
@@ -34,6 +42,7 @@ const blog = defineCollection({
     ogImage: z.string().optional(),
     embedUrl: z.string().optional(),
     embedHtml: z.string().optional(),
+    draft: z.boolean().optional(),
   }),
 });
 
@@ -52,6 +61,7 @@ const pages = defineCollection({
     ogImage: z.string().optional(),
     embedUrl: z.string().optional(),
     embedHtml: z.string().optional(),
+    draft: z.boolean().optional(),
   }),
 });
 
@@ -68,6 +78,7 @@ const team = defineCollection({
     bio: z.string().optional(),
     order: z.number().optional(),
     active: z.boolean().optional(),
+    draft: z.boolean().optional(),
   }),
 });
 
@@ -85,6 +96,7 @@ const events = defineCollection({
     description: z.string().optional(),
     link: z.string().optional(),
     chapter: z.string().optional(),
+    draft: z.boolean().optional(),
   }),
 });
 
@@ -118,6 +130,7 @@ const chapters = defineCollection({
       .array(z.object({ label: z.string(), url: z.string() }))
       .optional(),
     order: z.number().optional(),
+    draft: z.boolean().optional(),
   }),
 });
 
