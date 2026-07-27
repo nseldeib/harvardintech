@@ -168,12 +168,38 @@ revert:
   warnings — deferred work, discharged by `session-finalize`'s reconcile, not
   something to fix by hand mid-session.
 
+> GOTCHA — **a git hook invoking a flag the binary doesn't have.** When a
+> commit or push dies on something like `error: unexpected argument '--check'
+> found`, or a hook calls a subcommand that no longer exists, the cause is a
+> **stale managed hook fragment written by an older binary**. Git hooks are not
+> tracked in the tree, so nothing refreshes them on a branch switch or pull.
+> Fix it with `codeyam-editor editor install-hooks`, which reconciles the
+> managed fragments — adding what's missing, rewriting a body that drifted from
+> the current binary's, and removing an orphaned fragment whose name has left
+> the managed set (including in hook files codeyam no longer manages). It
+> prints what it added / updated / removed, so an empty report genuinely means
+> "already current". `git commit --no-verify` is the stopgap only; it blunt-skips
+> *every* hook, not just the broken one, so never leave it as the resolution.
+
 > GOTCHA — **coverage-dir graph pollution.** Coverage output directories
 > (`coverage/`, `*/coverage/`, `coverage-seed/`, `*/lcov-report/`) can pollute
 > the dependency graph with nodes for files that aren't real source. A current
 > binary handles this; on an older one, `rm -rf` the coverage dirs before the
 > staleness sweep so they stop seeding phantom nodes — but prefer upgrading the
 > binary to repeating the `rm -rf` loop.
+
+> GOTCHA — **`rebuild-self` on a freshly reset/switched branch.** After a
+> `git reset --hard` / branch-switch under the session, do NOT trust a *mtime*
+> read of binary staleness: a reset rewrites every source file's mtime to
+> checkout-time, so an mtime heuristic can call a genuinely-old binary "current"
+> or a freshly-rebuilt one "stale". The **build stamp** is authoritative —
+> `rebuild-self --check` now compares the binary's embedded commit sha against
+> HEAD (a plain `rebuild-self` rebuilds when they differ, `--force` overrides).
+> Trust that verdict, not mtimes. And a post-swap "server did not become reachable
+> within the restart budget" message *after* a `build stamp verified` line means
+> the swap **SUCCEEDED** — the new binary is installed and was not rolled back;
+> just run `codeyam-editor start` (or raise `CODEYAM_RESTART_START_TIMEOUT_SECS`)
+> to bring the server up. It is not a rebuild failure.
 
 ---
 
@@ -209,6 +235,33 @@ present concrete options, and wait** — do not autonomously pay these down:
   testable pure logic or an untestable shim? Apply the project's glossary
   discipline; **ask when truly unsure** rather than guessing.
 - **Anything that deletes or rewrites content** — see step 6. Ask first.
+
+> GOTCHA — **`reconcile-glossary` proposals ARE merge-blocking. Size them
+> before you quote the user a number.**
+> `editor reconcile-glossary` can print a long `add` list (we've seen 100+).
+> That list is real, merge-required work — not polish. Two facts:
+> 1. The underlying invariant, `SOURCE_HAS_UNREGISTERED_ENTITY`, carries no
+>    `_ADVISORY` suffix, so `audit_failure_is_advisory` does not exempt it: it
+>    reaches the **strict** gate and blocks `session-finalize` /
+>    `verify-full-finalize`. Every `add` needs a `glossary-add` (or a
+>    `glossary-skip-add` for a genuine test-fixture / derive-generated
+>    artifact) before the branch is merge-ready.
+> 2. `reconcile-glossary` walks the **same source scope** the invariant
+>    consumes (`discover_source_rel_paths` → `collect_source_entities_for_files`,
+>    which excludes `ALWAYS_EXCLUDED_DIRS` like `.codeyam/`). It previously
+>    walked the broader dependency graph and proposed adds for
+>    `.codeyam/`-internal capture scripts/hooks the gate never touches — pure
+>    noise that inflated the wall. Post-fix, the list is not inflated: what it
+>    shows is what you owe.
+>
+> **Size the wall with `editor finalize-preview`** — it reports the true
+> comprehensive count that `verify-full-finalize` will block on. Do NOT size it
+> with the mid-session `editor audit-gate` / `audit --findings-only` count: that
+> one downgrades inherited debt and will **under-report** the obligation, which
+> is exactly how a run gets mis-priced and then re-scoped in front of the user.
+>
+> This makes the stop-and-ask above *more* important, not less: the user is
+> authorizing real, required spend. Quote them the `finalize-preview` number.
 
 This is the convergence contract in practice: each run fixes all the mechanical
 drift it can, then stops at the **first** genuine judgment call with a specific,
@@ -293,10 +346,27 @@ codeyam-editor editor session-finalize 2>&1 | tee /tmp/codeyam-audit-finalize.lo
 > finalize forcing the comprehensive pass; don't trust the green exit code
 > alone.
 
-> GOTCHA — **redirection + completion token.** Use `2>&1 | tee` to capture both
-> streams. The finalize prints its terminal status as a JSON line carrying
-> `CODEYAM_CMD_COMPLETE` on **both** success and failure — wait on that token,
-> read its `status`, and don't regex English success strings.
+> GOTCHA — **redirection + completion token.** Use `2>&1 | tee <file>` to capture
+> both streams to a file you can read back. The finalize prints its terminal status
+> as a JSON line carrying `CODEYAM_CMD_COMPLETE` on **both** success and failure.
+> When the harness backgrounds the finalize, **await its completion notification**
+> (the re-invocation when the task exits) — or block once with `codeyam-editor editor
+> wait-for <task-id>`, run BARE. Then read the `status` off that sentinel line in the
+> `tee`'d file. Do NOT hand-roll an `until grep … sleep` poll loop, and don't regex
+> English success strings. (Same wait-for-the-notification model as the editor
+> SKILL.md and the step hook's background-work block — one model, not two.)
+
+> GOTCHA — **the per-test-evidence union-clobber.** If the finalize's evidence
+> phase reports a large `per-test-evidence` "missing" / "out of sync" count
+> (thousands of rows) that appeared *right after* a `pre-commit-sync` pulled
+> sibling commits, suspect the union-clobber, not a real evidence gap: a
+> non-driver merge (a `git pull --rebase` autostash pop) dropped local rows.
+> `origin` retains the intact file, so recover in one line —
+> `git checkout origin/<branch> -- .codeyam/per-test-evidence.json` — instead of
+> paying a full flag-free `refresh-tests`. The normal `pre-commit-sync` now
+> integrates through the union-safe transient-commit rebase and re-asserts a
+> post-integration shrink guard, so a fresh clobber should no longer occur; this
+> recovery is for a file already damaged by an older sync.
 
 > GOTCHA — **infra crashes, not code bugs.** A finalize can die on a full disk
 > or an OOM. If it crashes non-deterministically, check `df -h` / free memory
@@ -309,6 +379,13 @@ authorized:
 ```bash
 codeyam-editor editor push                     # the wrapper runs the deferred-finalize gate
 ```
+
+`editor push` works **directly** here even though this branch never walked the
+guided workflow — the wrapper proceeds past its workflow-step precondition once
+`verify-full-finalize` is green (HEAD is full-finalize-covered), so there is no
+need to fall back to a plain `git push`. A mid-workflow branch that is *not*
+full-finalize-covered is still refused, with a message naming both routes
+(advance the workflow, or run a whole-repo `session-finalize`).
 
 If the pre-push gate complains of deferred commits, do **not** override with
 `--allow-deferred`; it means finalize didn't cover the range — go back to the
@@ -366,6 +443,29 @@ check that fails on two consecutive runs with the same signature is **by
 definition not a flake — it is a real bug. Fix it.** Build/compile errors and
 assertion mismatches are never flakes.
 
+**Documented flake family — the port/process TOCTOU.** A single test in the
+real-port / real-process family (`port_reclaim` first-free, broker restart /
+survival, reverse-proxy controller boot, a git-tree-oid `finalize_debt` check)
+that fails in the ~21k-test parallel finalize Phase 1 but is **green via
+`test-on-base` / in isolation**, with the *failing test rotating run-to-run*, is
+this environmental family — a sibling test stealing a just-freed ephemeral port
+in a bind→drop→reacquire window. Do NOT weaken the E2E assertion. Harden it
+through `free_local_port_retry(|port| …)` (the bindable-direction helper beside
+`unbound_local_port` in each crate's `test_net` / `test_support`), which retries
+on a fresh port when the drawn one was stolen; new offenders are caught at
+`verify-build` by the `test-port-races` static check. A *new* racy test the lint
+flags is a real bug to fix now, not a flake.
+
+**Clear `REGISTRY_HAS_FOREIGN_HOST_GATED_TEST` mechanically, never by hand.** A
+test that gains a `#[cfg(target_os = …)]` / `#[cfg(unix)]` (or whose enclosing
+module/file does) drifts its registry `platform_gate` from source and raises this
+finding. The remedy is `codeyam-editor editor reconcile-registry --auto-apply`,
+which now re-infers the source cfg for **existing** entries and rewrites a
+disagreeing (or missing) gate in place — or `backfill-platform-gates` for the
+fill-only bulk case (`None → Some`, never overwriting a concrete gate). Do NOT
+hand-edit with a per-test `register-test --platform-gate`; the finding's
+`fix_command` names the mechanical path.
+
 ---
 
 ## Cross-platform pitfalls
@@ -404,10 +504,31 @@ footguns behind each (all observed in real CI-fix rounds):
   assertion matching the exact text of an OS-specific error passes on the host
   that produces that text and fails elsewhere. Make errors name their phase
   explicitly rather than asserting on incidental wording.
+- **The skipped-platform-test-job trap** — a *false* green. A CI matrix runs
+  each platform's TEST job only after that platform's BUILD job succeeds. When
+  the build fails (e.g. an unguarded `std::os::unix::*` in a test breaks the
+  windows-gnu build with `E0433`), the dependent test job is **skipped** — so a
+  matrix where every *run* job is green can have skipped a whole platform, and
+  any pre-existing failures on that platform stay invisible. A green CI run is
+  not proof a platform was exercised; a *skipped* build's tests never ran.
 
-Run the cheap local repros before pushing when this surface is present:
-`codeyam-editor editor cross-check` and `codeyam-editor editor session-finalize
---linux`.
+**MANDATE — when this surface is present, run the local repros BEFORE the first
+push, not after CI tells you:**
+
+- `codeyam-editor editor cross-check` — compile/lint every cross-target locally,
+  in seconds. This is also now **enforced**: `session-finalize` runs the
+  cross-target checks as a gating phase (Phase 4b) whenever it detects
+  compile-affecting platform surface, and FAILS on a real cross-target
+  compile/clippy error (missing toolchains SKIP with an install hint, never
+  block). So the gate and this guidance reinforce each other — do not treat
+  `cross-check` as optional when the branch touches platform surface.
+- `codeyam-editor editor session-finalize --linux` — run the actual suite on
+  Linux before merge, so a Linux-only test failure gates locally instead of in
+  CI.
+
+When a cross-target build fails, expect the skipped-platform-test-job trap:
+finalize names it explicitly, and you must treat that platform's tests as
+UNVERIFIED until the build is fixed and its suite actually runs.
 
 ---
 

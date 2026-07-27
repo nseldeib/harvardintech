@@ -1,6 +1,6 @@
 # Template for the per-VM cloud compose file. Rendered by
 # scripts/gcp-project-bootstrap.sh into the (gitignored) docker-compose.cloud.yml
-# at provision time, substituting codeyam-editor-codeyam-editor-7 (the GCE instance name),
+# at provision time, substituting codeyam-editor-codeyam-editor-1 (the GCE instance name),
 # 4321 (the app dev-server port from editor.json), and
 # 12930m (the memory limit computed from the VM's total RAM).
 # EDIT THIS TEMPLATE, not
@@ -52,7 +52,7 @@ services:
     # same answer as $CODEYAM_MACHINE below. The env var is the
     # canonical source; this is belt-and-suspenders for code paths
     # that bypass it.
-    hostname: codeyam-editor-codeyam-editor-7
+    hostname: codeyam-editor-codeyam-editor-1
     # Inject tini as PID 1 so reparented zombies get reaped. Without
     # this flag the editor binary runs as PID 1 and any subprocess
     # whose parent exits before it (broker -> claude PTY child,
@@ -75,7 +75,7 @@ services:
       # VM joins a Google-LB fleet (FLEET_DOMAIN set) it becomes 0.0.0.0 so the
       # LB's GCE_VM_IP_PORT NEG can reach these ports on the VM's INTERNAL IP —
       # the load-bearing difference from loopback-only publishing. Exposure stays
-      # scoped to the LB ranges by the fleet-ingress-lb-allow firewall rule,
+      # scoped to the LB ranges by the fleet-ingress-allow-lb firewall rule,
       # never 0.0.0.0/0. Unset = legacy parity, byte-for-byte unchanged.
       - "0.0.0.0:14199:14199"
       # App dev-server port, resolved from editor.json at bootstrap time
@@ -105,11 +105,25 @@ services:
       - cargo-target:/codeyam-build-target
     environment:
       - CHOKIDAR_USEPOLLING=true
+      # Admin-mode toggle gating the Home-tab Setup door. Read at launch by the
+      # editor-server process (handlers.rs::admin_enabled, strict literal "1").
+      # gcp-project-bootstrap.sh sed-substitutes this at provision time from the
+      # value cloud:up forwards (CODEYAM_ADMIN=1 or --admin); the empty default
+      # renders `- CODEYAM_ADMIN=` = strict non-admin, so a normal launch — and a
+      # re-provision without the flag — hides Setup.
+      - CODEYAM_ADMIN=
+      # Bind on all interfaces so the tunnel/ingress can reach the editor. Because
+      # this is a non-loopback bind, the control API fails CLOSED by default: every
+      # /api/* and /ws/* request (bar read-only status endpoints) must carry the
+      # per-session token (origin_guard::OriginPolicy::require_token). The browser UI
+      # carries it automatically as the cy_session cookie; on-box operator scripts
+      # read it from the 0600 .codeyam/session-token file. To turn it off (you front
+      # the editor with your own authenticating proxy), set CODEYAM_INSECURE_BIND=1.
       - CODEYAM_BIND_HOST=0.0.0.0
       # Unique per-VM machine identity for branch-queue meta.machine,
       # plan-claim host_machine, audit attribution, and session logs.
       # Consumed by codeyam_types::machine::current_machine().
-      - CODEYAM_MACHINE=codeyam-editor-codeyam-editor-7
+      - CODEYAM_MACHINE=codeyam-editor-codeyam-editor-1
       # Git author identity for the in-container build agent. The entrypoint
       # runs `git config --global user.{name,email}` from these; without them
       # plan_claim_refs::create_claim's `git commit-tree` exits with "Author
@@ -119,7 +133,7 @@ services:
       # compose file is gitignored, so the identity stays per-VM and never
       # churns in tracked state.
       - CY_GIT_USER_NAME=Jared Cosulich
-      - CY_GIT_USER_EMAIL=jared.cosulich@gmail.com
+      - CY_GIT_USER_EMAIL=jared@codeyam.com
       # Redirect cargo's build-artifact cache to the persistent named volume
       # so incremental builds are warm across container restarts. Does not
       # affect the image's own /editor/target (set at Dockerfile build time,
