@@ -1,0 +1,187 @@
+{
+  "timestamp": "2026-07-28T21:11:27Z",
+  "title": "cms -- Editor Authoring Integrity Guards",
+  "type": "feature",
+  "userRequest": "## Summary\n\nTwo places where the CMS lets an editor save something the site then silently\nignores.\n\n**Events tagged to a chapter.** `src/pages/chapters/[slug].astro:31` links an\nevent to its chapter with an exact string match — `event.data.chapter ===\nchapter.id` — and `src/data/collections.json:88` declares `chapter` as a plain\n`text` input. So an editor types the chapter's *slug* by hand into a free-text\nbox, and any deviation (`New York City` instead of `nyc`, a trailing space, a\ncapital) drops the event off the chapter page with no error anywhere: the entry\nvalidates, the build succeeds, `/events` still lists it, and only the chapter\npage is quietly missing it. Compounding this, `src/content/events/` does not\nexist at all — the collection is fully wired into three routes and declared in\nthe CMS registry, but has never held a file, so the first event an editor\ncreates is also the first exercise of this path.\n\n**Fields the editor cannot see.** `src/data/collections.test.ts` guards one\ndirection of the schema/registry contract: a registry field with no key in\n`src/content/config.ts`. The other direction is unguarded — a key in\n`config.ts` with no input in `collections.json` renders on the site but is\ninvisible in `/admin`, so an editor has no way to set it and no way to know it\nexists. The two directions are currently in sync; nothing keeps them that way.\n\n## Key Decisions\n\n- **Guard the chapter tag in this repo; the real fix is a package feature.**\n  The correct answer is a select/reference field so the CMS renders a dropdown\n  of chapters instead of a text box, but `@codeyam/cms` has no such field type —\n  `FieldType` in `node_modules/@codeyam/cms/src/lib/entryEditor.ts:17` is\n  `text | textarea | date | number | boolean | image | list`, with no relation\n  member. That is raised separately as a package feature request. Until it\n  lands, catch the typo here.\n\n- **Warn, never fail the build.** `.github/workflows/deploy.yml:50` runs\n  `npm run build`, which is `astro check && astro build` — so a hard failure on\n  an unmatched chapter slug would stop the deploy of content an editor just\n  published through the CMS, turning a cosmetic mistake into a dead site update.\n  Emit a clear `console.warn` from the chapters route instead (visible in the\n  Actions build log and in `astro dev`), and put the assertion in vitest, which\n  the deploy workflow does not run.\n\n- **Create the events directory with a `.gitkeep`, not a placeholder event.**\n  Git cannot track an empty directory, and inventing a fake event on a real\n  organization's site is worse than an empty collection. A `.gitkeep` makes the\n  directory exist and be tracked; the `glob` loader's `**/*.md` pattern ignores\n  it. Whether the currently-missing directory produces an Astro warning today\n  is to be confirmed empirically at execution — the fix is the same either way.\n\n- **The reverse drift guard reuses the existing parser, not a new one.**\n  `schemaKeysFor` in `src/data/collections.test.ts:65-88` already extracts a\n  collection's top-level Zod keys by walking brace depth. The new check is the\n  set difference in the other direction over the same inputs, so both directions\n  can never disagree about what the schema says.\n\n- **The reverse guard needs an exemption list, and it must be explicit.** Some\n  schema keys legitimately have no editor input: `draft` is implicit on every\n  collection (`entryEditor.ts:43`), and the `chapters` collection is fully\n  declared in the registry while the four built-ins get their core fields from\n  the package's `CONTENT_FIELDS`, not from `collections.json`. So the check must\n  compare against *resolved* editor fields — package built-ins plus registry\n  `builtins` extras plus the registry `seo` group — with `draft` exempted by\n  name. A hand-waved \"every key must appear in collections.json\" would fail\n  immediately on `title`, which is exactly the kind of false alarm that gets a\n  guard deleted.\n\n## Implementation\n\n### 1. Give the events collection a home\n\n**New file**: `src/content/events/.gitkeep`\n\nEmpty file. Its only job is to make `src/content/events/` — the `base` the\n`events` loader globs at `src/content/config.ts:87` — exist in the repo, so the\ndirectory the CMS writes an event into is already there.\n\n### 2. The chapter-tag helper\n\n**File**: `src/lib/events.ts`\n\nAdd a pure helper alongside `splitEvents` / `formatEventDate`, in the same\ndata-in-data-out style:\n\n- `unmatchedChapterTags(events, chapterIds)` — the distinct, non-empty `chapter`\n  values that match no chapter id, in first-seen order. Events with no `chapter`\n  at all are correctly excluded: an untagged event belongs to no chapter on\n  purpose, which is the documented behavior at\n  `src/pages/chapters/[slug].astro:27-28`.\n\nWiden the local `EventLike` interface with an optional `chapter?: string`, or\naccept the minimal structural shape — whichever keeps the existing `EventLike`\nconsumers (`EventsPage.astro`, `ChapterEvents.astro`, `EventCard.astro`)\nunchanged.\n\n### 3. Surface the mismatch where it happens\n\n**File**: `src/pages/chapters/[slug].astro`\n\nIn `getStaticPaths` (the one place that already holds both the full events list\nand the full chapters list), call `unmatchedChapterTags` and `console.warn` once\nwith the offending values and a one-line explanation that these events will not\nappear on any chapter page. Advisory only — no throw, no filtering change, and\nthe existing per-chapter `filter` at line 31 is untouched.\n\n### 4. Both directions of the schema/registry contract\n\n**File**: `src/data/collections.test.ts`\n\nAdd the reverse check beside the existing `unknownFields` one:\n\n- `missingFields(schemaKeys, editorFieldNames, exempt)` — schema keys with no\n  editor input, minus the exemptions.\n- A `describe` block asserting it reports nothing for all five collections,\n  building each collection's editor field list the way the admin resolves it:\n  the package's `CONTENT_FIELDS` for a built-in, the registry `collections`\n  entry for `chapters`, plus the registry's `builtins` extras and `seo` group in\n  both cases. Import the package's field lists from\n  `@codeyam/cms/lib/entryEditor` rather than restating them, so a package\n  upgrade that adds a built-in field cannot leave this test asserting a stale\n  picture.\n- Unit cases for `missingFields` itself, in the style of the existing\n  `unknownFields` block: healthy state, a field that drifted out of the editor,\n  an exempted key, and the two degenerate empties.\n\n### 5. Note it in the setup doc\n\n**File**: `CMS_SETUP.md`\n\nThe \"When you add a content field, add it in both files\" paragraph currently\nstates the failure modes in prose. Add one line: both directions are now pinned\nby `src/data/collections.test.ts`, so a field added to only one file fails the\ntest suite rather than being discovered later. Also add a sentence to the\nEvents section noting that `chapter` must be the chapter's slug (the filename\nwithout `.md`), not its city name, until the CMS offers a chapter picker.\n\n## Reused existing code\n\n- `schemaKeysFor`, `declaredFieldNames`, `unknownFields` from\n  `src/data/collections.test.ts:31-88` — the reverse guard is the mirror of the\n  parser and comparison already there\n- `EventLike`, `splitEvents`, `toEventDate` from `src/lib/events.ts` (glossary\n  entries: `splitEvents`, `toEventDate`, `formatEventDate`) — the helper joins\n  this module rather than starting a new one\n- `publishedEntries` from `src/lib/drafts.ts` (glossary entry:\n  `publishedEntries`) — already applied at `src/pages/chapters/[slug].astro:29`\n  before the chapter filter, so the warning covers exactly the events that\n  would have rendered\n- `CONTENT_FIELDS` / `SEO_FIELDS` from\n  `node_modules/@codeyam/cms/src/lib/entryEditor.ts:94-137`, reachable via the\n  package's published `./lib/*` export — the built-in editor field lists the\n  reverse guard compares against\n\n**Existing-implementation survey.** No chapter-slug validation exists anywhere\ntoday: the only reads of `event.data.chapter` are the filter at\n`src/pages/chapters/[slug].astro:31`, and `src/lib/events.ts` has no\nchapter-aware helper. `src/content/events/` genuinely does not exist (verified\nby listing `src/content/`, which holds only `blog`, `chapters`, `pages`, `team`\nand `config.ts`). On the registry side, `src/data/collections.test.ts` contains\n`unknownFields` but no counterpart in the schema→editor direction.\n\n## Reproduction Test\n\nPins that a mistyped chapter tag disappears without a trace.\n\n**Target**: `src/lib/events.test.ts` — run with\n`codeyam-editor editor refresh-tests --test events`.\n\n```ts\n// An event tagged with a chapter's display name instead of its slug matches no\n// chapter and vanishes from every chapter page — today with no signal at all.\nit(\"names a chapter tag that matches no chapter\", () => {\n  const events = [\n    { title: \"NYC Panel\", date: \"2026-09-01\", chapter: \"New York City\" },\n    { title: \"London Meetup\", date: \"2026-09-02\", chapter: \"london\" },\n    { title: \"Open Call\", date: \"2026-09-03\" },\n  ];\n\n  expect(unmatchedChapterTags(events, [\"nyc\", \"london\"])).toEqual([\"New York City\"]);\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Expected failure: `src/lib/events.ts`\nexports no `unmatchedChapterTags`, so the named import is undefined and the call\nthrows `unmatchedChapterTags is not a function` before the `toEqual` runs.\n\n## Scenarios to Demonstrate\n\n- **A correctly tagged event** — appearing under \"Upcoming Events in London\" on\n  its chapter page, the working path\n- **The same event tagged `London` instead of `london`** — absent from the\n  chapter page, still listed on `/events`, with the build warning naming it\n- **An untagged event** — on `/events` and the landing page, on no chapter page,\n  and *not* reported as a mismatch\n- **An empty events collection** — today's state, with the directory now present\n  and every events surface rendering its empty state cleanly\n- **A schema field with no editor input** — the reverse drift guard naming a key\n  an editor could never fill in\n- **The current, in-sync registry** — both guards green, the no-regression state",
+  "description": "Closed two gaps where the CMS let an editor save something the site then silently ignored. First, events are linked to a chapter by an exact string match on the chapter's slug, but the CMS renders that field as a free-text box — so a city name, a capital letter, or a trailing space dropped the event off its chapter page while the entry still validated, the build still succeeded, and /events still listed it. A new pure helper, unmatchedChapterTags, names every tag matching no chapter, and the chapters route calls it from getStaticPaths (the one place holding both full lists) and emits a single console.warn visible in the Actions build log and under astro dev. It warns rather than fails deliberately: npm run build gates the deploy, so refusing to publish over a cosmetic typo would turn one missing event into a dead site update. Second, src/data/collections.test.ts guarded only one direction of the schema/registry contract — a registry field with no schema key. The reverse, a schema key with no editor input, renders on the site but is invisible in /admin, so an editor can neither set it nor learn it exists. A new missingFields check closes that direction across all seven collections, resolving each collection's editor field list through the package's own resolveCollections so a package upgrade cannot leave the test asserting a stale picture. Both guards were proven non-vacuous rather than assumed: the reproduction test failed with 'unmatchedChapterTags is not a function' before the fix, the build warning was confirmed firing by temporarily adding a mistagged event, and the drift guard was confirmed red by temporarily removing the chapter input from the registry. The plan's first step (creating src/content/events/) was already satisfied by landed work and was dropped at the confirm gate. CMS_SETUP.md now documents both directions of the contract and the rule that a chapter tag must be the chapter's slug, not its city name.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/cms--editor-authoring-integrity-guards.md\t.codeyam/plans/completed/cms--editor-authoring-integrity-guards.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/events.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/events.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/chapters/[slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-route-events-tagged-to-this-chapter.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "ChapterEvents - Rich List",
+      "screenshotPath": "chapterevents-rich-list--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "Content Hub",
+      "screenshotPath": "content-hub--desktop.png"
+    },
+    {
+      "name": "EventsPage - Upcoming and Past",
+      "screenshotPath": "eventspage-upcoming-and-past--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 38,
+    "passed": 38,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 38,
+        "passed": 38
+      }
+    ]
+  }
+}

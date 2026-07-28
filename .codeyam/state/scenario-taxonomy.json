@@ -66,8 +66,7 @@
     },
     "ChapterRoute": {
       "empty": {
-        "status": "n-a",
-        "reason": "Each route renders one existing chapter; there is no empty state for a single-chapter page"
+        "status": "covered"
       },
       "single": {
         "status": "n-a",

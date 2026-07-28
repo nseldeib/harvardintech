@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import {
+  resolveCollections,
+  type CollectionsRegistry,
+} from '@codeyam/cms/lib/collectionRegistry';
 
 // Schema-drift guard for the CMS registry.
 //
@@ -40,6 +44,20 @@ function declaredFieldNames(fields: RegistryField[]): string[] {
 function unknownFields(fields: RegistryField[], schemaKeys: string[]): string[] {
   const known = new Set(schemaKeys);
   return declaredFieldNames(fields).filter((name) => !known.has(name));
+}
+
+/** Schema keys the editor renders no input for — the quiet direction of the same
+ * drift. Nothing breaks: the key renders on the site and validates fine, but it
+ * is absent from /admin, so an editor has no way to set it and no way to learn
+ * it exists. `exempt` names the keys that legitimately have no input. */
+function missingFields(
+  schemaKeys: string[],
+  editorFieldNames: string[],
+  exempt: string[] = [],
+): string[] {
+  const rendered = new Set(editorFieldNames);
+  const skip = new Set(exempt);
+  return schemaKeys.filter((key) => !rendered.has(key) && !skip.has(key));
 }
 
 // Strip `//` line comments so prose colons inside them are never read as schema
@@ -91,13 +109,29 @@ const CONFIG_SOURCE = fs.readFileSync(
   path.join(REPO_ROOT, 'src/content/config.ts'),
   'utf-8',
 );
-const REGISTRY = JSON.parse(
-  fs.readFileSync(path.join(REPO_ROOT, 'src/data/collections.json'), 'utf-8'),
-) as {
+const REGISTRY_SOURCE = fs.readFileSync(
+  path.join(REPO_ROOT, 'src/data/collections.json'),
+  'utf-8',
+);
+const REGISTRY = JSON.parse(REGISTRY_SOURCE) as {
   collections: { id: string; fields: RegistryField[] }[];
   builtins?: Record<string, RegistryField[]>;
   seo?: RegistryField[];
 };
+// The same file read through the package's own type, so `resolveCollections`
+// below sees exactly what the admin sees. Kept separate from `REGISTRY` because
+// the local shape above is deliberately looser — it describes only the parts the
+// registry-vs-schema comparison needs, and predates this import.
+const PACKAGE_REGISTRY = JSON.parse(REGISTRY_SOURCE) as CollectionsRegistry;
+
+// Schema keys that legitimately have no editor input, per collection.
+//
+// Currently empty, and that is the interesting part: the implicit `draft` toggle
+// and the built-ins' core fields all come back from `resolveCollections` as real
+// editor inputs, so nothing needs excusing today. Keep it that way — every entry
+// added here is a field an editor cannot set from /admin, so an unexplained
+// addition is the guard being silenced rather than satisfied.
+const EXEMPT_SCHEMA_KEYS: Record<string, string[]> = {};
 
 // A miniature stand-in for the real content config, shaped exactly like it —
 // including a nested row object and a comment carrying a colon.
@@ -178,6 +212,34 @@ describe('unknownFields', () => {
   });
 });
 
+describe('missingFields', () => {
+  // The healthy state: every schema key has an input an editor can fill in.
+  it('reports nothing when the editor renders an input for every key', () => {
+    expect(missingFields(['city', 'order'], ['city', 'order', 'draft'])).toEqual([]);
+  });
+
+  // The failure this guard exists to catch: a key that renders on the site but
+  // is invisible in /admin, so no editor can ever set it.
+  it('names a key that drifted out of the editor', () => {
+    expect(missingFields(['city', 'tagline'], ['city'])).toEqual(['tagline']);
+  });
+
+  // An exempted key is absent from the editor on purpose and must stay quiet.
+  it('ignores an exempted key', () => {
+    expect(missingFields(['city', 'draft'], ['city'], ['draft'])).toEqual([]);
+  });
+
+  // Degenerate edge: no editor fields at all makes every key missing.
+  it('treats every key as missing when the editor renders nothing', () => {
+    expect(missingFields(['city'], [])).toEqual(['city']);
+  });
+
+  // The other degenerate edge: an empty schema can never be missing anything.
+  it('reports nothing when the schema has no keys', () => {
+    expect(missingFields([], ['city'])).toEqual([]);
+  });
+});
+
 describe('schemaKeysFor', () => {
   // Parses the top-level keys and nothing else.
   it('extracts the top-level schema keys of a collection', () => {
@@ -238,6 +300,33 @@ describe('committed CMS registry vs content schema', () => {
       expect({ collection, unknown: unknownFields(extras, schemaKeys) }).toEqual({
         collection,
         unknown: [],
+      });
+    }
+  });
+
+  // The other direction, and the one nothing guarded before: a key in the Zod
+  // schema that the editor renders no input for. It costs no build error — the
+  // key just never appears in /admin, so an editor cannot set it and cannot
+  // learn it exists. Resolving the field list through the package's own
+  // `resolveCollections` (rather than restating CONTENT_FIELDS here) means a
+  // package upgrade that adds or moves a built-in field cannot leave this test
+  // asserting a stale picture of the editor.
+  it('renders an editor input for every schema key of every collection', () => {
+    const resolved = resolveCollections(PACKAGE_REGISTRY);
+    expect(resolved.length).toBeGreaterThan(0);
+
+    for (const collection of resolved) {
+      const schemaKeys = schemaKeysFor(CONFIG_SOURCE, collection.id);
+      expect({ collection: collection.id, declared: schemaKeys.length > 0 }).toEqual({
+        collection: collection.id,
+        declared: true,
+      });
+
+      const editorFieldNames = collection.fields.map((f) => f.name);
+      const exempt = EXEMPT_SCHEMA_KEYS[collection.id] ?? [];
+      expect({ collection: collection.id, missing: missingFields(schemaKeys, editorFieldNames, exempt) }).toEqual({
+        collection: collection.id,
+        missing: [],
       });
     }
   });

@@ -149,7 +149,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for every built-in extra",
-      "line": 231,
+      "line": 293,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -158,7 +158,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for the custom chapters collection",
-      "line": 210,
+      "line": 272,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -167,7 +167,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares the chapters list rows the schema expects",
-      "line": 221,
+      "line": 283,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -176,8 +176,17 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses",
-      "line": 248,
+      "line": 337,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other direction, and the one nothing guarded before: a key in the Zod schema that the editor renders no input for. It costs no build error — the key just never appears in /admin, so an editor cannot set it and cannot learn it exists. Resolving the field list through the package's own `resolveCollections` (rather than restating CONTENT_FIELDS here) means a package upgrade that adds or moves a built-in field cannot leave this test asserting a stale picture of the editor.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › renders an editor input for every schema key of every collection",
+      "line": 314,
+      "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
     {
@@ -302,7 +311,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › excludes the sub-fields of a repeatable list",
-      "line": 129,
+      "line": 163,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -311,7 +320,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › returns an empty list for no fields",
-      "line": 144,
+      "line": 178,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -320,7 +329,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › returns each top-level field name in declaration order",
-      "line": 119,
+      "line": 153,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -853,6 +862,51 @@
       "key": "markerUrl / viewSiteUrl › builds subpath marker and view URLs",
       "line": 47,
       "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An exempted key is absent from the editor on purpose and must stay quiet.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "missingFields › ignores an exempted key",
+      "line": 228,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The failure this guard exists to catch: a key that renders on the site but is invisible in /admin, so no editor can ever set it.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "missingFields › names a key that drifted out of the editor",
+      "line": 223,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The healthy state: every schema key has an input an editor can fill in.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "missingFields › reports nothing when the editor renders an input for every key",
+      "line": 217,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other degenerate edge: an empty schema can never be missing anything.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "missingFields › reports nothing when the schema has no keys",
+      "line": 238,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Degenerate edge: no editor fields at all makes every key missing.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "missingFields › treats every key as missing when the editor renders nothing",
+      "line": 233,
+      "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
     {
@@ -1400,7 +1454,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › extracts the top-level schema keys of a collection",
-      "line": 183,
+      "line": 245,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -1409,7 +1463,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › ignores nested row keys and commented-out keys",
-      "line": 193,
+      "line": 255,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -1418,7 +1472,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › returns an empty list for a collection that is not declared",
-      "line": 201,
+      "line": 263,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -1805,7 +1859,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › names a field that drifted out of the schema",
-      "line": 161,
+      "line": 195,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -1814,7 +1868,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › reports nothing when every declared field exists in the schema",
-      "line": 151,
+      "line": 185,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -1823,7 +1877,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › reports nothing when no fields are declared",
-      "line": 176,
+      "line": 210,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -1832,8 +1886,71 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › treats every field as unknown when the schema has no keys",
-      "line": 170,
+      "line": 204,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A trailing space is invisible in the CMS text box but breaks the exact match.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "unmatchedChapterTags › catches a tag that differs only by whitespace",
+      "line": 109,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty input yields empty upcoming and past lists.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "unmatchedChapterTags › handles an empty event list",
+      "line": 58,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An event tagged with a chapter's display name instead of its slug matches no chapter and vanishes from every chapter page — previously with no signal at all.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "unmatchedChapterTags › names a chapter tag that matches no chapter",
+      "line": 88,
+      "registeredAt": "2026-07-28T20:50:40Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The same typo across several events is named once, in first-seen order.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "unmatchedChapterTags › reports each distinct tag once, in first-seen order",
+      "line": 116,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other degenerate edge, and the state this site launched in: with no chapters published, every tag is unmatched.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "unmatchedChapterTags › reports every tag when there are no chapters at all",
+      "line": 143,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The healthy state: every tag matches a chapter, so there is nothing to report.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "unmatchedChapterTags › reports nothing when every tag matches a chapter",
+      "line": 99,
+      "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A blank tag reads as untagged, not as a mistake worth naming.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "unmatchedChapterTags › treats a blank tag as untagged",
+      "line": 127,
+      "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
     {

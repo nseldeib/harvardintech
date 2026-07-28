@@ -74,13 +74,16 @@ exists. The two directions are currently in sync; nothing keeps them that way.
 
 ## Implementation
 
-### 1. Give the events collection a home
+### 1. Give the events collection a home — ALREADY SATISFIED, dropped at confirm
 
-**New file**: `src/content/events/.gitkeep`
-
-Empty file. Its only job is to make `src/content/events/` — the `base` the
-`events` loader globs at `src/content/config.ts:87` — exist in the repo, so the
-directory the CMS writes an event into is already there.
+Superseded before this plan was executed. `src/content/events/` now exists and
+is tracked with eight real event files (landed by `15c8e8a`, `0498eab`,
+`4393e2f`), four of them carrying `chapter` tags — `london` ×3 and
+`boston-cambridge` — all of which match real chapter ids. No `.gitkeep` is
+needed, and the Summary's claim that "the first event an editor creates is also
+the first exercise of this path" no longer holds: the path is live against real
+content and currently correct. That makes the guards below a no-regression pin
+on working behavior rather than a first exercise of an untried path.
 
 ### 2. The chapter-tag helper
 

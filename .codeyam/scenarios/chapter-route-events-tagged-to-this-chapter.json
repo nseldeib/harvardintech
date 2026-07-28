@@ -1,0 +1,12 @@
+{
+  "name": "Chapter Route - Events Tagged To This Chapter",
+  "id": "b7b8057d-f349-48b2-a088-935c6a3dfd66",
+  "url": "/chapters/london",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/chapters/[slug].astro",
+  "description": "A chapter route whose upcoming events actually reach it — which happens only when each event's chapter tag exactly matches the chapter's slug. The counterpart to the New York City scenario, where nothing is tagged and the events section is absent entirely. The frame shows the full-bleed hero because that is the whole viewport on this route; the events themselves sit below it and are shown by the ChapterEvents - Rich List component scenario. That invisibility is the point: because the tag is an exact match against a free-text CMS field, a city name or a stray trailing space renders a page indistinguishable from the empty one, which is why the build now names any tag matching no chapter."
+}

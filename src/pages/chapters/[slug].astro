@@ -5,7 +5,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterPage from '../../components/ChapterPage.astro';
-import { splitEvents, type EventLike } from '../../lib/events';
+import { splitEvents, unmatchedChapterTags, type EventLike } from '../../lib/events';
 import { publishedEntries } from '../../lib/drafts';
 
 // Drafts get no page of their own in the built site — a chapter dropped from
@@ -13,6 +13,27 @@ import { publishedEntries } from '../../lib/drafts';
 // page is still generated so an author can preview an unannounced chapter.
 export async function getStaticPaths() {
   const chapters = publishedEntries(await getCollection('chapters'), !import.meta.env.PROD);
+  const chapterIds = chapters.map((chapter) => chapter.id);
+
+  // The one place holding both full lists, so the one place that can notice an
+  // event tagged to a chapter that does not exist. The CMS renders `chapter` as
+  // a free-text box, so a city name or a stray space typed there passes schema
+  // validation and still drops the event off every chapter page. Advisory only:
+  // `npm run build` gates the deploy, and refusing to publish over a cosmetic
+  // typo would turn one missing event into a dead site update.
+  const taggedEvents = publishedEntries(await getCollection('events'), !import.meta.env.PROD);
+  const orphanTags = unmatchedChapterTags(
+    taggedEvents.map((event) => event.data),
+    chapterIds,
+  );
+  if (orphanTags.length > 0) {
+    console.warn(
+      `[chapters] ${orphanTags.length} event chapter tag(s) match no chapter and will ` +
+        `not appear on any chapter page: ${orphanTags.map((tag) => JSON.stringify(tag)).join(', ')}. ` +
+        `Use the chapter's slug (its filename without .md) — one of: ${chapterIds.join(', ')}.`,
+    );
+  }
+
   return chapters.map((chapter) => ({
     params: { slug: chapter.id },
     props: { chapter },

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { toEventDate, formatEventDate, splitEvents } from './events';
+import { toEventDate, formatEventDate, splitEvents, unmatchedChapterTags } from './events';
 
 describe('toEventDate', () => {
   // A Date instance passes through unchanged.
@@ -79,5 +79,70 @@ describe('splitEvents', () => {
     const input = [...events];
     splitEvents(input, '2026-06-13T00:00:00Z');
     expect(input.map((e) => e.title)).toEqual(['Summit', 'Mixer', 'Spring Dinner', 'Winter Panel']);
+  });
+});
+
+describe('unmatchedChapterTags', () => {
+  // An event tagged with a chapter's display name instead of its slug matches no
+  // chapter and vanishes from every chapter page — previously with no signal at all.
+  it('names a chapter tag that matches no chapter', () => {
+    const events = [
+      { title: 'NYC Panel', date: '2026-09-01', chapter: 'New York City' },
+      { title: 'London Meetup', date: '2026-09-02', chapter: 'london' },
+      { title: 'Open Call', date: '2026-09-03' },
+    ];
+
+    expect(unmatchedChapterTags(events, ['nyc', 'london'])).toEqual(['New York City']);
+  });
+
+  // The healthy state: every tag matches a chapter, so there is nothing to report.
+  it('reports nothing when every tag matches a chapter', () => {
+    const events = [
+      { title: 'London Meetup', date: '2026-09-02', chapter: 'london' },
+      { title: 'Boston Panel', date: '2026-09-03', chapter: 'boston-cambridge' },
+    ];
+
+    expect(unmatchedChapterTags(events, ['nyc', 'london', 'boston-cambridge'])).toEqual([]);
+  });
+
+  // A trailing space is invisible in the CMS text box but breaks the exact match.
+  it('catches a tag that differs only by whitespace', () => {
+    const events = [{ title: 'Mixer', date: '2026-09-04', chapter: 'london ' }];
+
+    expect(unmatchedChapterTags(events, ['london'])).toEqual(['london ']);
+  });
+
+  // The same typo across several events is named once, in first-seen order.
+  it('reports each distinct tag once, in first-seen order', () => {
+    const events = [
+      { title: 'Second', date: '2026-09-05', chapter: 'Seattle' },
+      { title: 'Third', date: '2026-09-06', chapter: 'DC' },
+      { title: 'Fourth', date: '2026-09-07', chapter: 'Seattle' },
+    ];
+
+    expect(unmatchedChapterTags(events, ['seattle', 'dc-dmv'])).toEqual(['Seattle', 'DC']);
+  });
+
+  // A blank tag reads as untagged, not as a mistake worth naming.
+  it('treats a blank tag as untagged', () => {
+    const events = [
+      { title: 'Blank', date: '2026-09-08', chapter: '' },
+      { title: 'Spaces', date: '2026-09-09', chapter: '   ' },
+    ];
+
+    expect(unmatchedChapterTags(events, ['london'])).toEqual([]);
+  });
+
+  // One degenerate edge: nothing to inspect can never report a mismatch.
+  it('handles an empty event list', () => {
+    expect(unmatchedChapterTags([], ['london'])).toEqual([]);
+  });
+
+  // The other degenerate edge, and the state this site launched in: with no
+  // chapters published, every tag is unmatched.
+  it('reports every tag when there are no chapters at all', () => {
+    const events = [{ title: 'Orphan', date: '2026-09-10', chapter: 'london' }];
+
+    expect(unmatchedChapterTags(events, [])).toEqual(['london']);
   });
 });

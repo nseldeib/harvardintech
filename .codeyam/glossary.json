@@ -43,7 +43,7 @@
     ]
   },
   {
-    "description": "Entry-point page for /chapters/<slug>. Enumerates the chapters content collection via getStaticPaths and renders each chapter through ChapterPage inside BaseLayout.",
+    "description": "Entry-point page for /chapters/<slug>. Enumerates the chapters content collection via getStaticPaths and renders each chapter through ChapterPage inside BaseLayout. getStaticPaths is also the one place holding both the full chapters list and the full events list, so it is where unmatchedChapterTags runs: any event whose chapter tag matches no chapter is named in a single console.warn visible in the Actions build log and under astro dev. The warning is advisory only, never a build failure, because npm run build gates the deploy and refusing to publish over a cosmetic tag typo would turn one missing event into a dead site update.",
     "filePath": "src/pages/chapters/[slug].astro",
     "name": "ChapterRoute",
     "scenarios": [
@@ -456,6 +456,12 @@
     "filePath": "src/lib/nav.ts",
     "name": "toPath",
     "testFile": "src/lib/nav.test.ts"
+  },
+  {
+    "description": "Returns the distinct chapter tags on a list of events that match no id in the given chapter list, in first-seen order. The chapters route links an event to its chapter by exact string match on the chapter id, and the CMS renders the chapter field as a free-text box, so a city name instead of a slug or a stray trailing space drops the event off every chapter page while the entry still validates, the build still succeeds, and the events page still lists it. Naming those tags is the only signal an editor gets until the CMS offers a chapter picker. Events with no tag, or a blank one, are excluded rather than reported: an untagged event belongs to no chapter on purpose.",
+    "filePath": "src/lib/events.ts",
+    "name": "unmatchedChapterTags",
+    "testFile": "src/lib/events.test.ts"
   },
   {
     "description": "Returns the nav urls with no page behind them, given the routes the site actually builds — the static pages plus what the slug routes generate from published content. Each url is reduced to the page it lands on first: any fragment is dropped so an anchor link resolves against its page and a bare hash resolves against the home page, and a trailing slash is ignored so an editor typing a slash gets no false alarm. This guards the links that stay hand-authored in nav.json now that the chapters are derived — most sharply Content Hub's Blog entry, which points at one specific post and breaks the moment that post is drafted, renamed, or deleted. Deliberately surfaced as a unit test rather than a build gate: the deploy workflow runs the build and never runs vitest, so a dead link informs developers without ever blocking an editor's publish.",

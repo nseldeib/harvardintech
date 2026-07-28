@@ -10,6 +10,8 @@ export interface EventLike {
   location?: string;
   description?: string;
   link?: string;
+  /** Chapter id this event is tagged to — the chapter's filename without `.md`. */
+  chapter?: string;
 }
 
 /** Coerce a string-or-Date into a Date (Dates pass through untouched). */
@@ -46,4 +48,34 @@ export function splitEvents<T extends EventLike>(
     .filter((e) => toEventDate(e.date).valueOf() < reference)
     .sort((a, b) => toEventDate(b.date).valueOf() - toEventDate(a.date).valueOf());
   return { upcoming, past };
+}
+
+/**
+ * The distinct `chapter` tags on `events` that match no id in `chapterIds`, in
+ * first-seen order.
+ *
+ * `/chapters/<slug>` links an event to its chapter by exact string match on the
+ * chapter's id (its filename without `.md`), and the CMS renders `chapter` as a
+ * free-text box — so `New York City` instead of `nyc`, or a stray trailing
+ * space, drops the event off the chapter page while the entry still validates,
+ * the build still succeeds, and `/events` still lists it. Naming those tags is
+ * the only signal an editor gets until the CMS can offer a chapter picker.
+ *
+ * Events with no tag, or a blank one, are excluded rather than reported: an
+ * untagged event belongs to no chapter on purpose.
+ */
+export function unmatchedChapterTags(
+  events: readonly { chapter?: string }[],
+  chapterIds: readonly string[],
+): string[] {
+  const known = new Set(chapterIds);
+  const reported = new Set<string>();
+  const unmatched: string[] = [];
+  for (const { chapter } of events) {
+    if (!chapter || chapter.trim() === '') continue;
+    if (known.has(chapter) || reported.has(chapter)) continue;
+    reported.add(chapter);
+    unmatched.push(chapter);
+  }
+  return unmatched;
 }

@@ -110,7 +110,22 @@ is site-specific:
 build accepts it, and `collections.json` so editors get an input for it. A field
 present only in `config.ts` still renders on the site but is invisible in the
 CMS; a field present only in `collections.json` will fail schema validation on
-build.
+build. Both directions are pinned by `src/data/collections.test.ts`, so a field
+added to only one file fails the test suite rather than being discovered later —
+by a build error at deploy time, or by an editor who never finds the field at
+all.
+
+**Tagging an event to a chapter.** The `chapter` field on an event is a plain
+text box today, and its value must be the chapter's **slug** — the chapter's
+filename without `.md` (`nyc`, `boston-cambridge`, `dc-dmv`, `london`,
+`seattle`) — not its city name. The match is exact, so `New York City`, `London`
+with a capital, or a stray trailing space all leave the event off its chapter
+page while the entry still saves, the build still succeeds, and `/events` still
+lists it. A tag that matches no chapter is named in a `[chapters]` warning in
+the build log (visible in the Actions run and in `npm run dev`); it is a warning,
+not an error, so a typo never blocks a deploy. Leave `chapter` blank for an
+event that belongs to no single chapter. A chapter picker will replace the text
+box once the CMS supports reference fields.
 
 ## Navigation
 

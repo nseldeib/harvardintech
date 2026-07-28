@@ -649,10 +649,25 @@
   },
   "committed CMS registry vs content schema › declares only real schema keys for every built-in extra": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -692,10 +707,25 @@
   },
   "committed CMS registry vs content schema › declares only real schema keys for the custom chapters collection": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -735,10 +765,25 @@
   },
   "committed CMS registry vs content schema › declares the chapters list rows the schema expects": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -778,10 +823,25 @@
   },
   "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -814,6 +874,24 @@
       },
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "committed CMS registry vs content schema › renders an editor input for every schema key of every collection": {
+    "file": "src/data/collections.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
         "kind": "changed",
         "status": "pass"
       }
@@ -1495,10 +1573,25 @@
   },
   "declaredFieldNames › excludes the sub-fields of a repeatable list": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -1538,10 +1631,25 @@
   },
   "declaredFieldNames › returns an empty list for no fields": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -1581,10 +1689,25 @@
   },
   "declaredFieldNames › returns each top-level field name in declaration order": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -2298,10 +2421,25 @@
   },
   "formatEventDate › does not zero-pad single-digit days": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -2335,31 +2473,31 @@
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "formatEventDate › formats a Date instance the same as its ISO string": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -2393,31 +2531,31 @@
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "formatEventDate › formats an ISO date as Month D, YYYY": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -2451,21 +2589,6 @@
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
@@ -4774,6 +4897,96 @@
       }
     ]
   },
+  "missingFields › ignores an exempted key": {
+    "file": "src/data/collections.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "missingFields › names a key that drifted out of the editor": {
+    "file": "src/data/collections.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "missingFields › reports nothing when the editor renders an input for every key": {
+    "file": "src/data/collections.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "missingFields › reports nothing when the schema has no keys": {
+    "file": "src/data/collections.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "missingFields › treats every key as missing when the editor renders nothing": {
+    "file": "src/data/collections.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "nameFromSearch › decodes percent-encoded values": {
     "file": "src/lib/personalize.test.ts",
     "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
@@ -7041,10 +7254,25 @@
   },
   "schemaKeysFor › extracts the top-level schema keys of a collection": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -7084,10 +7312,25 @@
   },
   "schemaKeysFor › ignores nested row keys and commented-out keys": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -7127,10 +7370,25 @@
   },
   "schemaKeysFor › returns an empty list for a collection that is not declared": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -8707,10 +8965,25 @@
   },
   "splitEvents › does not mutate the input array order": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -8744,31 +9017,31 @@
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "splitEvents › handles an empty event list": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -8802,31 +9075,36 @@
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "splitEvents › returns no past events when all are upcoming": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:43:22.270478679+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -8854,26 +9132,6 @@
       },
       {
         "at": "2026-07-27T19:46:01.933178735+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T19:02:38.779601935+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -8881,10 +9139,30 @@
   },
   "splitEvents › returns past events sorted most recent first": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:43:22.270478679+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -8912,26 +9190,6 @@
       },
       {
         "at": "2026-07-27T19:46:01.933178735+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T19:02:38.779601935+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -8939,10 +9197,30 @@
   },
   "splitEvents › returns upcoming events sorted soonest first": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:43:22.270478679+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -8970,26 +9248,6 @@
       },
       {
         "at": "2026-07-27T19:46:01.933178735+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T19:02:38.779601935+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
         "kind": "full",
         "status": "pass"
       }
@@ -8997,10 +9255,25 @@
   },
   "splitEvents › treats an event exactly at now as upcoming": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -9034,21 +9307,6 @@
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
@@ -9345,10 +9603,25 @@
   },
   "toEventDate › parses an ISO date string into a Date": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -9382,31 +9655,31 @@
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "toEventDate › returns a Date instance unchanged": {
     "file": "src/lib/events.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -9441,30 +9714,30 @@
         "at": "2026-07-27T19:02:38.779601935+00:00",
         "kind": "changed",
         "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:40.202744833+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:47:13.559174720+00:00",
-        "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-27T18:46:52.174956725+00:00",
-        "kind": "full",
-        "status": "pass"
       }
     ]
   },
   "unknownFields › names a field that drifted out of the schema": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -9504,10 +9777,25 @@
   },
   "unknownFields › reports nothing when every declared field exists in the schema": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -9547,10 +9835,25 @@
   },
   "unknownFields › reports nothing when no fields are declared": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -9590,10 +9893,25 @@
   },
   "unknownFields › treats every field as unknown when the schema has no keys": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-28T15:56:38.870222878+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-28T15:56:38.870222878+00:00",
         "kind": "full",
@@ -9626,6 +9944,137 @@
       },
       {
         "at": "2026-07-27T19:02:38.779601935+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "unmatchedChapterTags › catches a tag that differs only by whitespace": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "unmatchedChapterTags › handles an empty event list": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "unmatchedChapterTags › names a chapter tag that matches no chapter": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T20:55:08.505801750+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "unmatchedChapterTags › reports each distinct tag once, in first-seen order": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "unmatchedChapterTags › reports every tag when there are no chapters at all": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "unmatchedChapterTags › reports nothing when every tag matches a chapter": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "unmatchedChapterTags › treats a blank tag as untagged": {
+    "file": "src/lib/events.test.ts",
+    "lastRunAt": "2026-07-28T21:08:00.243726689+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-28T21:08:00.243726689+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-28T21:02:08.650734255+00:00",
         "kind": "changed",
         "status": "pass"
       }
