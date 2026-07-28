@@ -9,7 +9,7 @@
 # DEPLOY_SETUP.md.
 #
 # `base`/`site` come from the env vars below (read by astro.config.mjs), so the
-# site publishes under the project subpath jaredcosulich.github.io/harvardintech
+# site publishes under the project subpath nseldeib.github.io/harvardintech
 # while local dev / the codeyam preview stay at '/'. When a custom domain
 # (e.g. harvardintech.com) is configured, drop DEPLOY_BASE_PATH (so base → '/')
 # and point PAGES_SITE at the domain.

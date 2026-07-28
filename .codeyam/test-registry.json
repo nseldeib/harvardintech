@@ -1,6 +1,24 @@
 {
   "tests": [
     {
+      "description": "Every entry has a non-empty human label for its card.",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "ADMIN_COLLECTIONS › gives every collection a non-empty label",
+      "line": 30,
+      "registeredAt": "2026-06-14T10:43:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The dashboard covers every folder collection, in display order.",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "ADMIN_COLLECTIONS › lists the editable folder collections in order",
+      "line": 17,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "Clicking the button increments the hydrated counter, proving the island is genuinely interactive and not a static render.",
       "file": "src/components/Greeting.test.tsx",
       "format": "vitest",
@@ -70,6 +88,42 @@
       "key": "buildMailto › includes both subject and body when supplied",
       "line": 23,
       "registeredAt": "2026-06-13T15:32:37.162204395+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Negative order values still sort numerically, below the positives.",
+      "file": "src/lib/order.test.ts",
+      "format": "vitest",
+      "key": "byOrder › handles negative order values",
+      "line": 27,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The happy path: a jumbled list of ordered entries comes back ascending.",
+      "file": "src/lib/order.test.ts",
+      "format": "vitest",
+      "key": "byOrder › sorts ascending by order",
+      "line": 6,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An entry with no order sorts LAST, not first — the core guarantee.",
+      "file": "src/lib/order.test.ts",
+      "format": "vitest",
+      "key": "byOrder › sorts entries without an order last",
+      "line": 12,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Order 0 is a real position, not a stand-in for missing — it must rank ahead of an unordered entry, which a truthiness check would get wrong.",
+      "file": "src/lib/order.test.ts",
+      "format": "vitest",
+      "key": "byOrder › treats order 0 as ordered, not as missing",
+      "line": 21,
+      "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
     {
@@ -187,6 +241,69 @@
       "key": "contentRoot › returns CODEYAM_CONTENT_ROOT when it is set",
       "line": 18,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Zero entries shows the empty-state nudge, not a \"0 entries\" sentence.",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "dashboardSummaryText › shows the empty-state nudge when there is no content",
+      "line": 76,
+      "registeredAt": "2026-06-14T10:43:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The populated summary reports total entries and collection count.",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "dashboardSummaryText › summarizes a populated dashboard",
+      "line": 62,
+      "registeredAt": "2026-06-14T10:43:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A negative total is treated as empty, guarding against bad input.",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "dashboardSummaryText › treats a negative total as empty",
+      "line": 83,
+      "registeredAt": "2026-06-14T10:43:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A single entry uses the singular \"entry\".",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "dashboardSummaryText › uses the singular entry for a count of one",
+      "line": 69,
+      "registeredAt": "2026-06-14T10:43:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Collections with a zero count still count toward collectionCount but add nothing.",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "dashboardTotals › counts empty collections without adding to the total",
+      "line": 54,
+      "registeredAt": "2026-06-14T10:43:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty card list totals zero across zero collections.",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "dashboardTotals › returns zeros for an empty card list",
+      "line": 49,
+      "registeredAt": "2026-06-14T10:43:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Sums every card's count and reports how many collections there are.",
+      "file": "src/lib/adminDashboard.test.ts",
+      "format": "vitest",
+      "key": "dashboardTotals › sums counts and reports the collection count",
+      "line": 39,
+      "registeredAt": "2026-06-14T10:43:08Z",
       "runner": "tests"
     },
     {
@@ -430,6 +547,51 @@
       "key": "galleryStaggerDelay › wraps the delay per row of five columns",
       "line": 49,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A rejected (hostile) name also falls back to the generic greeting.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "heroGreeting › falls back to the generic greeting for a rejected name",
+      "line": 93,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "No name → the generic greeting, so the public link reads correctly.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "heroGreeting › falls back to the generic greeting with no name",
+      "line": 88,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A valid name fills the {name} slot in the named template.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "heroGreeting › fills the placeholder with a valid name",
+      "line": 83,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Whatever the input, a literal \"{name}\" must never reach the rendered page.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "heroGreeting › never leaks an unfilled placeholder",
+      "line": 98,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A template with no placeholder can't be personalized, so it uses generic.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "heroGreeting › uses the generic greeting when the named template has no placeholder",
+      "line": 105,
+      "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
     {
@@ -694,6 +856,123 @@
       "runner": "tests"
     },
     {
+      "description": "Percent-encoded values are decoded (a merge tag may URL-encode the name).",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "nameFromSearch › decodes percent-encoded values",
+      "line": 124,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Reads `name` out of a bare `?name=…` query string.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "nameFromSearch › reads the name from a bare query string",
+      "line": 112,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Reads `name` out of a full URL alongside other params.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "nameFromSearch › reads the name from a full URL",
+      "line": 117,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A missing `name` param, or no query at all, yields null.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "nameFromSearch › returns null when the parameter or query is absent",
+      "line": 129,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Selection is non-mutating, so the caller's collection is untouched.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › does not mutate the input array",
+      "line": 69,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The closed-filter and the ordering compose in one pass.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › filters and orders together",
+      "line": 43,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An explicit active: true is kept, same as the absent case.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › keeps a project explicitly marked active",
+      "line": 14,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Absent `active` means open (see filterActiveBoardMembers) — a project whose editor never touched the toggle must stay visible, not silently vanish.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › keeps a project whose active flag is absent",
+      "line": 7,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Open projects come back in the editor-chosen order.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › orders open projects by their order field",
+      "line": 24,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An un-numbered project sorts after the numbered ones, never ahead of #1.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › places unordered projects after ordered ones",
+      "line": 34,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "active: false is the one value that retires a project from the page.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › removes a project explicitly marked inactive",
+      "line": 19,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "No projects at all also yields [], the day-one production state.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › returns an empty array for no projects",
+      "line": 64,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "All-closed yields [] — the production default that drives /volunteer's empty state, which must be an empty array rather than a crash.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "openProjects › returns an empty array when every project is closed",
+      "line": 54,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "Both unfavorable → off.",
       "file": "src/lib/parallax.test.ts",
       "format": "vitest",
@@ -928,6 +1207,69 @@
       "runner": "tests"
     },
     {
+      "description": "Subject spaces are percent-encoded so the mail client parses the query.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveHref › encodes the subject so the mail client receives it intact",
+      "line": 49,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "With no platform yet, the button opens a campaign-named giving-inquiry email.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveHref › falls back to a giving-inquiry mailto when no URL is set",
+      "line": 15,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A field holding only spaces is effectively blank and must fall back too.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveHref › treats a whitespace-only donateUrl as unset",
+      "line": 30,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A cleared CMS field arrives as \"\" and must fall back, not produce href=\"\".",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveHref › treats an empty donateUrl as unset",
+      "line": 22,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A pasted URL with surrounding whitespace is trimmed, not treated as broken.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveHref › trims surrounding whitespace from a pasted URL",
+      "line": 35,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Without a campaign name the subject uses the org-wide generic wording.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveHref › uses a generic subject when no campaign is named",
+      "line": 43,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "When a real platform URL is configured, the button points straight at it.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveHref › uses the donation platform URL when one is configured",
+      "line": 8,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "Emits the standard allow-all directives.",
       "file": "src/lib/seoEndpoints.test.ts",
       "format": "vitest",
@@ -961,6 +1303,96 @@
       "key": "robots.txt GET › responds as text/plain",
       "line": 39,
       "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The common case: a plain first name passes through unchanged.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › accepts an ordinary first name",
+      "line": 11,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Real names carry accents, hyphens, and apostrophes — all accepted.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › accepts names with accents, hyphens, and apostrophes",
+      "line": 26,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Non-Latin scripts are names too and must not be rejected as \"not a name\".",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › accepts non-Latin scripts",
+      "line": 34,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A merge field often holds the full name; the greeting keeps just the first.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › keeps only the first token when a full name is supplied",
+      "line": 16,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Guards the ordering bug: length-check must precede first-token extraction, or a long payload with a harmless first word (\"Hi …\") sneaks through.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › rejects a long payload whose first word looks harmless",
+      "line": 58,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A name at the length cap is kept; one character over is rejected.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › rejects a name longer than the maximum",
+      "line": 65,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Digits and stray punctuation that no first name contains are rejected.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › rejects digits and stray punctuation that no first name has",
+      "line": 71,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The security boundary: /donate?name=<script>… must reject, not truncate to a plausible name and render attacker-chosen text under Harvard's brand.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › rejects markup rather than truncating it to a plausible name",
+      "line": 49,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Absent, empty, whitespace, or non-string input all resolve to null.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › returns null for absent or empty input",
+      "line": 39,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Padding and newlines from a merge field are collapsed away.",
+      "file": "src/lib/personalize.test.ts",
+      "format": "vitest",
+      "key": "sanitizeFirstName › trims and collapses whitespace from a merge field",
+      "line": 21,
+      "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
     {
@@ -1099,6 +1531,15 @@
       "runner": "tests"
     },
     {
+      "description": "The page-copy singletons come from the same data root, so a scenario (or the CMS) can drive the /volunteer and /donate prose without touching markup.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "site singletons › loads the volunteer and donate page copy from the data root",
+      "line": 87,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "a different data root yields different values — the loader is not pinned to a single committed file (the sandbox isolation guarantee at the read side)",
       "file": "src/lib/site.test.ts",
       "format": "vitest",
@@ -1204,6 +1645,42 @@
       "key": "sortBoardMembers › treats a missing order as zero",
       "line": 52,
       "registeredAt": "2026-06-14T15:43:56Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A tie on order preserves input order, so equal-ranked entries stay put.",
+      "file": "src/lib/order.test.ts",
+      "format": "vitest",
+      "key": "sortByOrder › preserves input order among entries sharing the same order",
+      "line": 50,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "With no orders at all, the sort is stable — the CMS's authored order wins.",
+      "file": "src/lib/order.test.ts",
+      "format": "vitest",
+      "key": "sortByOrder › preserves input order among entries that all lack an order",
+      "line": 44,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The wrapper sorts without mutating its input, so a caller's array is safe.",
+      "file": "src/lib/order.test.ts",
+      "format": "vitest",
+      "key": "sortByOrder › returns a new array and leaves the source untouched",
+      "line": 35,
+      "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The empty list is a valid input — the production default for both collections.",
+      "file": "src/lib/order.test.ts",
+      "format": "vitest",
+      "key": "sortByOrder › returns an empty array unchanged",
+      "line": 59,
+      "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
     {

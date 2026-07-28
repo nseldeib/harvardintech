@@ -1,0 +1,25 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerBenefit.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerBenefit — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/VolunteerBenefit.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerBenefit</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <div style="max-width: 520px; padding: 24px;">
+        <Component
+          title="Gain Valuable Experience"
+          body="Work on impactful projects showcasing leadership, creativity, and technical skills. Stand out to future employers by demonstrating your active involvement and leadership within the Harvard Alumni in Tech community."
+        />
+      </div>
+    </div>
+  </body>
+</html>

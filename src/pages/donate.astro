@@ -1,0 +1,31 @@
+---
+// /donate — the Momentum Fund campaign landing page.
+//
+// Replaces the old nav link to the homepage's `/#giving` band. The email
+// campaign links here with `?name=<first name>` for a personalized greeting;
+// the same URL without a name serves the public/non-subscriber audience, so
+// there is no duplicate landing page to keep in sync.
+//
+// Testimonials come from the `testimonials` collection, which starts EMPTY in
+// production — the band renders nothing until real quotes are collected.
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MomentumFundPage from '../components/MomentumFundPage.astro';
+import { donatePage, settings } from '../lib/site';
+import { publishedEntries } from '../lib/drafts';
+
+const testimonials = publishedEntries(
+  await getCollection('testimonials'),
+  !import.meta.env.PROD,
+).map((t) => ({
+  slug: t.id,
+  ...t.data,
+}));
+---
+
+<BaseLayout
+  title={donatePage.campaignName}
+  description="Support Harvard Alumni in Tech. Your monthly gift powers the events, mentorship, and city chapters that help alumni find one another and move further together."
+>
+  <MomentumFundPage copy={donatePage} testimonials={testimonials} email={settings.contactEmail} />
+</BaseLayout>

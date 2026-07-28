@@ -1,0 +1,843 @@
+{
+  "timestamp": "2026-07-22T21:59:10Z",
+  "title": "Volunteer page + Momentum Fund campaign page",
+  "type": "feature",
+  "userRequest": "Project context: We need to modernize the https://www.harvardintech.com/ website from the outside. The site was built with a no-code product so we need to faithfully reproduce it using modern technologies and host it as a GitHub pages website. It also needs a CRM that can be run locally or, ideally also in the cloud via GitHub pages as well (protected with a password and/or GitHub OAuth). Can we dig into this?",
+  "description": "Turned two nav links that jumped to homepage bands into real pages, and wired the events page to live data. /volunteer carries the volunteer-team pitch, four benefit blocks, and a CMS-editable open-projects grid (empty state is the production default). /donate is the Momentum Fund campaign page built to the Canva mockup: a full-bleed photo hero whose headline greets subscribers by first name via ?name= (the email merge tag supplies it; a hostile value falls back to the generic headline, sanitized so it can't inject markup), a stats band, the story/why-support narrative from Nicole's copy, three gift-pillar cards with inline SVG icon badges, testimonials, and a closing ask. The give button opens a giving-inquiry email until a donation platform exists, switchable via one CMS field. /events now embeds the live Luma calendar inline (cal-KK3JJjJ39Jwt9kI) with a subscribe strip, and shows the 8 real past events pulled from Luma's public API (no upcoming, matching current reality). Added two CMS collections (Volunteer Projects, Testimonials) plus editable page-copy singletons; both new pages appear on the /admin dashboard. Page bodies were extracted into 16 section components (zero raw HTML in page files) and 3 tested pure helpers (resolveGiveHref, openProjects, byOrder/sortByOrder) with 24 new tests. Hero photo uses the Harvard campus background as a placeholder pending the real event photo from Canva. Known follow-ups: the 8,000+ members figure now differs from the homepage's 1,000+; the mobile nav renders every dropdown expanded site-wide (pre-existing); and a brand-new empty content collection can't be scenario-seeded because Astro's glob loader skips zero-file collections at dev-server boot.",
+  "modifiedFiles": [
+    {
+      "path": ".claude/hooks/editor-step-hook.py",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-audit/finalize-procedure.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-edit-plan/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-onboard/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-plan/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-prototype/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-see-app/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-see-recent-change/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-slice/SKILL.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/capture.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-handlers.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-interactivity.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-issues.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-metrics.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-mocks.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-playwright.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/events-route-upcoming-and-past.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-empty--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admin-dashboard-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/admingateprompt-masked-entry--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-with-image--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-sparse-no-leads--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chaptersignup-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/collectioncountcard-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/dashboardsummary-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-deploying--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-configured-form--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-embedded-iframe--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-unconfigured-fallback--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-no-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/focus-areas--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giving-campaign--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giving-campaign--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/greeting-hydrated-counter-clicked--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero-carousel--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/luma-calendar--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/luma-calendar--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stats-band--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/support-us--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".gitattributes",
+      "status": "modified"
+    },
+    {
+      "path": ".gitignore",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "docker-compose.cloud.yml",
+      "status": "modified"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "public/admin/editor/config.yml",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/LumaCalendar.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/nav.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/adminDashboard.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/adminDashboard.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/luma.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".claude/skills/codeyam-review-pr/SKILL.md",
+      "status": "added"
+    },
+    {
+      "path": ".claude/skills/codeyam-review-pr/review-procedure.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/momentum-fund/README.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/giftpillarcard-with-inline-link.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/giftpillars-three-pillars.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/givebutton-both-variants.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/lumasubscribe-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-arriving-from-the-email.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-public-visitor.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumclose-closing-ask.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumhero-personalized.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumstats-campaign-figures.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumstory-full-narrative.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumtestimonials-three-quotes.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumwhy-two-blocks.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/pillaricon-all-three-variants.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giftpillarcard-with-inline-link--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giftpillars-three-pillars--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/givebutton-both-variants--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/lumasubscribe-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--mobile.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--mobile.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumclose-closing-ask--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumhero-personalized--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumstats-campaign-figures--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumstory-full-narrative--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumtestimonials-three-quotes--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumwhy-two-blocks--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pillaricon-all-three-variants--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/testimonialcard-with-role--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerbenefit-long-copy--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerbenefits-four-blocks--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerhero-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectcard-with-thumbnail--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojects-populated-grid--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectsempty-production-default--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/testimonialcard-with-role.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteer-page-no-open-projects.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerbenefit-long-copy.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerbenefits-four-blocks.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerhero-default.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectcard-with-thumbnail.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojects-populated-grid.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectsempty-production-default.json",
+      "status": "added"
+    },
+    {
+      "path": "src/components/LumaSubscribe.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/VolunteerPage.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/GiftPillarCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/GiftPillars.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/GiveButton.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumClose.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumHero.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumStats.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumStory.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumTestimonials.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumWhy.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/PillarIcon.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/TestimonialCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerBenefit.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerBenefits.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerHero.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjects.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectsEmpty.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/2024-10-10-harvard-in-tech.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/2025-05-22-harvard-in-tech.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/2026-04-24-harvard-alumni-in-tech-colorado-co-working-afternoon.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/2026-04-30-harvard-alumni-in-tech-leaders-in-engineering-panel.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/2026-05-15-alumni-founders-co-working-day.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/2026-06-05-harvard-alumni-in-tech-alumni-day-meetup-in-cambridge-ma.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/2026-06-12-alumni-founders-co-working-day-june.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/events/2026-07-10-alumni-founders-co-working-day-july.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/projects/.gitkeep",
+      "status": "added"
+    },
+    {
+      "path": "src/content/testimonials/.gitkeep",
+      "status": "added"
+    },
+    {
+      "path": "src/data/donatePage.json",
+      "status": "added"
+    },
+    {
+      "path": "src/data/volunteerPage.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/giving.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/giving.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/order.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/order.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/personalize.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/personalize.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/projects.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/projects.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/donate.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GiftPillarCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GiftPillars.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GiveButton.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/LumaSubscribe.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumClose.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumHero.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumStats.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumStory.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumTestimonials.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumWhy.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/PillarIcon.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/TestimonialCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerBenefit.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerBenefits.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerHero.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjects.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectsEmpty.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/volunteer.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Admin Dashboard - Empty",
+      "screenshotPath": "admin-dashboard-empty--desktop.png"
+    },
+    {
+      "name": "Admin Dashboard - Populated",
+      "screenshotPath": "admin-dashboard-populated--desktop.png"
+    },
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "CollectionCountCard - Populated",
+      "screenshotPath": "collectioncountcard-populated--desktop.png"
+    },
+    {
+      "name": "DashboardSummary - Populated",
+      "screenshotPath": "dashboardsummary-populated--desktop.png"
+    },
+    {
+      "name": "Luma Calendar",
+      "screenshotPath": "luma-calendar--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 62,
+    "passed": 62,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 62,
+        "passed": 62
+      }
+    ]
+  }
+}

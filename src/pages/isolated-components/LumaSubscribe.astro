@@ -1,0 +1,22 @@
+---
+import Component from "../../../src/components/LumaSubscribe.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for LumaSubscribe — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/LumaSubscribe.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: LumaSubscribe</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <div style="padding: 24px;">
+        <Component calendarUrl="https://lu.ma/harvardintech" />
+      </div>
+    </div>
+  </body>
+</html>

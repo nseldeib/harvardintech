@@ -1,0 +1,33 @@
+---
+// One "Why Volunteer" block: a crimson-ruled heading and its paragraph.
+interface Props {
+  title: string;
+  body: string;
+}
+const { title, body } = Astro.props as Props;
+---
+
+<div class="ben">
+  <h3>{title}</h3>
+  <p>{body}</p>
+</div>
+
+<style>
+  .ben {
+    border-left: 3px solid var(--crimson);
+    padding: 4px 0 4px 22px;
+  }
+  h3 {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 10px;
+  }
+  p {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0;
+  }
+</style>

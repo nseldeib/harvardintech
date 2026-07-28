@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerHero - Default",
+  "id": "ba7efca9-7318-4f46-8de9-657a98700cd9",
+  "url": "/isolated-components/VolunteerHero",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerHero",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerHero.astro",
+  "description": "The /volunteer hero: the 'Join the Volunteer Team' headline, the 100%-volunteer-run intro, and the sign-up CTA."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "LumaSubscribe - Default",
+  "id": "0b3b036c-e4b7-4d65-8221-2e3a71b6dd40",
+  "url": "/isolated-components/LumaSubscribe",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "LumaSubscribe",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/LumaSubscribe.astro",
+  "description": "The subscribe strip beneath the inline Luma embed on /events — the only subscribe affordance on the page, since the embed offers none."
+}

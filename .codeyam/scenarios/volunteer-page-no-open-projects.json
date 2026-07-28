@@ -1,0 +1,15 @@
+{
+  "name": "Volunteer Page - No Open Projects",
+  "id": "a510c870-dcb4-4c29-aa16-a6d8939eb5a1",
+  "url": "/volunteer",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "projects": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/volunteer.astro",
+  "description": "The /volunteer page exactly as visitors see it today: the full pitch and all four benefit blocks, with the projects grid showing its empty state because no projects are open yet. This is the production default, not an edge case."
+}

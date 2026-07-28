@@ -186,6 +186,12 @@
     "testFile": "src/lib/mailto.test.ts"
   },
   {
+    "description": "Comparator for CMS-authored lists: ascending `order`, with entries that have no `order` sorted last rather than hoisted to the front.",
+    "filePath": "src/lib/order.ts",
+    "name": "byOrder",
+    "testFile": "src/lib/order.test.ts"
+  },
+  {
     "description": "The deploy-status banner state machine: precedence is marker-changed (live) over Actions-failed (failed) over an active deploy (building/deploying, escalating to slow), otherwise idle. Returns the resolved BannerView the UI renders.",
     "filePath": "src/lib/deployStatus.ts",
     "name": "computeBanner",
@@ -253,6 +259,12 @@
     ]
   },
   {
+    "description": "Chooses the campaign hero headline — the {name} template filled with a sanitized first name, or the generic headline when no usable name is present. Never leaks an unfilled {name} placeholder.",
+    "filePath": "src/lib/personalize.ts",
+    "name": "heroGreeting",
+    "testFile": "src/lib/personalize.test.ts"
+  },
+  {
     "description": "Dev-only helper that (re)creates the .codeyam/tmp/content-sandbox copy of src/content and src/data, so the codeyam dev server reads/seeds the sandbox and never the committed production markdown.",
     "filePath": "astro.config.mjs",
     "name": "initContentSandbox",
@@ -290,6 +302,18 @@
     "filePath": "src/lib/deployStatus.ts",
     "name": "markerUrl",
     "testFile": "src/lib/deployStatus.test.ts"
+  },
+  {
+    "description": "Pulls the `name` parameter out of a full URL or a bare query string, returning null when absent or unparseable.",
+    "filePath": "src/lib/personalize.ts",
+    "name": "nameFromSearch",
+    "testFile": "src/lib/personalize.test.ts"
+  },
+  {
+    "description": "Selects the volunteer projects to render — those not explicitly closed (`active !== false`), ordered by `order`. Absent `active` means open, matching the board-member convention, so a project whose toggle was never touched still shows.",
+    "filePath": "src/lib/projects.ts",
+    "name": "openProjects",
+    "testFile": "src/lib/projects.test.ts"
   },
   {
     "description": "Pure gate deciding whether the scroll parallax runs: returns fineHover && !reducedMotion. Encodes the desktop-only / prefers-reduced-motion policy (parallax is janky or ignored on touch browsers) as testable logic, separate from the matchMedia DOM reads in initParallax.",
@@ -337,10 +361,22 @@
     "testFile": "src/lib/deployStatus.test.ts"
   },
   {
+    "description": "Resolves where a giving CTA points: the donation platform when `donateUrl` is configured, otherwise a mailto with a campaign-specific subject. Treats empty/whitespace-only as unset and trims pasted URLs, so a cleared CMS field cannot produce href=\"\".",
+    "filePath": "src/lib/giving.ts",
+    "name": "resolveGiveHref",
+    "testFile": "src/lib/giving.test.ts"
+  },
+  {
     "description": "Returns a GitHub Actions run start time in epoch ms (run_started_at, falling back to created_at), used to sort runs in pickLatestDeployRun. Exercised via the pickLatestDeployRun tests.",
     "filePath": "src/lib/deployStatus.ts",
     "name": "runStartedMs",
     "testFile": "src/lib/deployStatus.test.ts"
+  },
+  {
+    "description": "Normalizes a raw ?name= value into a display-safe first name, or null when it is absent, over-long, or does not look like a name. The security boundary for the /donate hero: the value is attacker-controlled via URL, so markup and digits are rejected and only the first token is kept.",
+    "filePath": "src/lib/personalize.ts",
+    "name": "sanitizeFirstName",
+    "testFile": "src/lib/personalize.test.ts"
   },
   {
     "description": "Loads the editable settings/nav singletons from the resolved data root (sandbox-aware) via readSingleton: fs read + JSON.parse.",
@@ -359,6 +395,12 @@
     "filePath": "src/lib/team.ts",
     "name": "sortBoardMembers",
     "testFile": "src/lib/team.test.ts"
+  },
+  {
+    "description": "Non-mutating sort by `order`, shared by the volunteer-projects and testimonials lists.",
+    "filePath": "src/lib/order.ts",
+    "name": "sortByOrder",
+    "testFile": "src/lib/order.test.ts"
   },
   {
     "description": "Splits a flat event list into upcoming (date >= now, soonest first) and past (date < now, most recent first) relative to a reference time; events at now count as upcoming.",

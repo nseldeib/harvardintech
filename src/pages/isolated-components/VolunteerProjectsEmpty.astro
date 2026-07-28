@@ -1,0 +1,27 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerProjectsEmpty.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerProjectsEmpty — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/VolunteerProjectsEmpty.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerProjectsEmpty</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      {/* The PRODUCTION DEFAULT state of /volunteer — no projects open yet. */}
+      <div style="padding: 24px;">
+        <Component
+          message="We're lining up the next round of volunteer projects. Tell us what you'd like to work on and we'll match you when the next one opens."
+          ctaLabel="Volunteer with us"
+          ctaUrl="https://hi.switchy.io/wEYK"
+        />
+      </div>
+    </div>
+  </body>
+</html>

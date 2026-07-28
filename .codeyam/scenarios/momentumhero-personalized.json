@@ -1,0 +1,13 @@
+{
+  "name": "MomentumHero - Personalized",
+  "id": "ed92a399-07e9-4512-9906-ca5f6b5bbebd",
+  "url": "/isolated-components/MomentumHero",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumHero",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumHero.astro",
+  "description": "The Momentum Fund hero as a subscriber sees it after clicking the email link — the headline greets them by first name over the full-bleed campus photo."
+}

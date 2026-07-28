@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerBenefit - Long Copy",
+  "id": "fa6d0123-568a-46a8-b4a2-1de6e23a523d",
+  "url": "/isolated-components/VolunteerBenefit",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerBenefit",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerBenefit.astro",
+  "description": "A single benefit block carrying the longest of the four bodies, proving the crimson rule and spacing hold at length."
+}

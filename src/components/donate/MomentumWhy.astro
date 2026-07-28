@@ -1,0 +1,68 @@
+---
+// "Why Support Harvard in Tech?" — the turning-point argument, rendered as
+// titled blocks of prose on the tinted band.
+interface Props {
+  title?: string;
+  blocks?: { title: string; paragraphs: string[] }[];
+}
+const { title, blocks = [] } = Astro.props as Props;
+---
+
+{
+  title || blocks.length > 0 ? (
+    <section class="why">
+      <div class="narrow">
+        {title ? <h2>{title}</h2> : null}
+        {blocks.map((block) => (
+          <div class="block">
+            <h3>{block.title}</h3>
+            {block.paragraphs.map((p) => (
+              <p>{p}</p>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  ) : null
+}
+
+<style>
+  .why {
+    background: var(--paper-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 76px 24px;
+  }
+  .narrow {
+    max-width: 68ch;
+    margin: 0 auto;
+  }
+  h2 {
+    font-size: clamp(28px, 3.6vw, 44px);
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    margin: 0 0 24px;
+  }
+  .block {
+    margin-bottom: 36px;
+  }
+  .block:last-child {
+    margin-bottom: 0;
+  }
+  .block h3 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+  }
+  .block p {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0 0 18px;
+  }
+  .block p:last-child {
+    margin-bottom: 0;
+  }
+</style>

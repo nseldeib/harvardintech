@@ -1,0 +1,13 @@
+{
+  "name": "TestimonialCard - With Role",
+  "id": "aa8e24ca-5e4d-481b-a534-d1dabd66f2e2",
+  "url": "/isolated-components/TestimonialCard",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "TestimonialCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/TestimonialCard.astro",
+  "description": "One member quote with name and class year. The quotation marks come from CSS so editors type the quote plainly."
+}

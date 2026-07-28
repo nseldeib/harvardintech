@@ -1,0 +1,48 @@
+---
+// "Why Volunteer with Harvard Alumni in Tech?" — the benefits grid.
+import VolunteerBenefit from './VolunteerBenefit.astro';
+
+interface Props {
+  title?: string;
+  benefits?: { title: string; body: string }[];
+}
+const { title, benefits = [] } = Astro.props as Props;
+---
+
+{
+  benefits.length > 0 ? (
+    <section class="sec benefits">
+      <div class="wrap">
+        {title ? <h2>{title}</h2> : null}
+        <div class="grid">
+          {benefits.map((b) => (
+            <VolunteerBenefit title={b.title} body={b.body} />
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : null
+}
+
+<style>
+  .benefits {
+    border-bottom: 1px solid var(--line);
+  }
+  h2 {
+    font-size: clamp(28px, 3.6vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 6px 0 0;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    margin-top: 36px;
+  }
+  @media (max-width: 720px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

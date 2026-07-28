@@ -1,0 +1,80 @@
+---
+// /volunteer hero: the "Join the Volunteer Team" pitch and the primary
+// sign-up CTA, over a full-bleed photo with a contrast scrim — matching the
+// homepage and /donate hero treatment.
+import { withBase } from '../../lib/url';
+
+interface Props {
+  kicker?: string;
+  headline: string;
+  intro: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  /** Full-bleed background photo. */
+  image?: string;
+}
+const { kicker, headline, intro, ctaLabel, ctaUrl, image } = Astro.props as Props;
+const heroImage = image ? withBase(image) : null;
+---
+
+<section class="hero" style={heroImage ? `--hero-img:url('${heroImage}')` : undefined}>
+  <div class="wrap">
+    {kicker ? <span class="kick">{kicker}</span> : null}
+    <h1>{headline}</h1>
+    <p class="lede">{intro}</p>
+    {
+      ctaLabel && ctaUrl ? (
+        <a class="btn btn-solid cta" href={withBase(ctaUrl)} rel="noopener">
+          {ctaLabel}
+        </a>
+      ) : null
+    }
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    background-color: var(--ink);
+    background-image: var(--hero-img);
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid var(--line);
+    padding: 104px 0 96px;
+  }
+  /* Scrim: the copy sits over a photo, so it needs a guaranteed contrast floor
+     regardless of which image is used. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(24, 20, 21, 0.72), rgba(24, 20, 21, 0.6));
+  }
+  .hero .wrap {
+    position: relative;
+  }
+  .kick {
+    color: #fff;
+  }
+  /* Matches the homepage hero type scale (HeroCarousel .intro h1). */
+  h1 {
+    font-size: clamp(40px, 6.4vw, 82px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #fff;
+    margin: 10px 0 16px;
+    max-width: 20ch;
+  }
+  .lede {
+    font-family: var(--font-serif);
+    font-size: 21px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 62ch;
+    margin: 0;
+  }
+  .cta {
+    margin-top: 28px;
+  }
+</style>

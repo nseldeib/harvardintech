@@ -1,0 +1,77 @@
+---
+// Full /donate page body: the Momentum Fund campaign landing page, built to the
+// campaign mockup (Canva export, 2026-07).
+//
+// Composition only — every section is its own component under
+// `components/donate/`. Section order follows the mockup: photo hero
+// (personalized headline) → stats band → "And Every Number Represents a Story"
+// → the story → "Why Support Harvard in Tech" → "What Your Gift Powers" cards
+// → testimonials → closing CTA.
+//
+// Takes plain props (copy + a flat testimonials array) rather than reading the
+// collection, so it renders from the /donate route and from isolated-component
+// scenarios (personalized / generic / with-quotes) — the same split
+// EventsPage.astro uses.
+import MomentumHero from './donate/MomentumHero.astro';
+import MomentumStats from './donate/MomentumStats.astro';
+import MomentumStory from './donate/MomentumStory.astro';
+import MomentumWhy from './donate/MomentumWhy.astro';
+import GiftPillars from './donate/GiftPillars.astro';
+import MomentumTestimonials from './donate/MomentumTestimonials.astro';
+import MomentumClose from './donate/MomentumClose.astro';
+import type { TestimonialLike } from './donate/MomentumTestimonials.astro';
+import type { DonatePageCopy } from '../lib/site';
+
+export type { TestimonialLike };
+
+interface Props {
+  copy: DonatePageCopy;
+  testimonials?: TestimonialLike[];
+  email?: string;
+  /** Scenario/testing hook: pre-fill the headline as if `?name=` were present.
+   *  The real page fills it client-side. */
+  previewName?: string;
+}
+const {
+  copy,
+  testimonials = [],
+  email = 'ben@harvardintech.com',
+  previewName,
+} = Astro.props as Props;
+---
+
+<MomentumHero
+  headlineNamed={copy.heroHeadlineNamed}
+  headlineGeneric={copy.heroHeadlineGeneric}
+  subhead={copy.heroSubhead}
+  image={copy.heroImage}
+  ctaLabel={copy.ctaLabel}
+  donateUrl={copy.donateUrl}
+  email={email}
+  campaignName={copy.campaignName}
+  previewName={previewName}
+/>
+
+<MomentumStats stats={copy.stats} />
+
+<MomentumStory
+  title={copy.storyTitle}
+  lede={copy.storyLede}
+  pullQuote={copy.storyPullQuote}
+  paragraphs={copy.storyBody}
+/>
+
+<MomentumWhy title={copy.whyTitle} blocks={copy.whyBody} />
+
+<GiftPillars title={copy.pillarsTitle} pillars={copy.pillars} />
+
+<MomentumTestimonials title={copy.testimonialsTitle} testimonials={testimonials} />
+
+<MomentumClose
+  title={copy.ctaTitle}
+  body={copy.ctaBody}
+  ctaLabel={copy.ctaLabel}
+  donateUrl={copy.donateUrl}
+  email={email}
+  campaignName={copy.campaignName}
+/>

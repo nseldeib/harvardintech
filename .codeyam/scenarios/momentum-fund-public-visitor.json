@@ -1,0 +1,16 @@
+{
+  "name": "Momentum Fund - Public Visitor",
+  "id": "49049541-e9ec-4e19-8a6f-e88c0ea92464",
+  "url": "/donate",
+  "dimensions": [
+    "Desktop",
+    "Mobile"
+  ],
+  "mocks": {},
+  "seed": {
+    "testimonials": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "The Momentum Fund campaign page for anyone arriving without a name in the link — the public link, a social share, or the site nav. Generic headline, no testimonials yet."
+}

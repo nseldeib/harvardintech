@@ -1,0 +1,31 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerBenefits.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerBenefits — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/VolunteerBenefits.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerBenefits</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component title="Why Volunteer with Harvard Alumni in Tech?" benefits={[
+  {
+    title: 'Gain Valuable Experience',
+    body: 'Work on impactful projects showcasing leadership, creativity, and technical skills. Stand out to future employers by demonstrating your active involvement and leadership within the Harvard Alumni in Tech community.',
+  },
+  { title: 'Expand Your Network', body: 'Connect with Harvard alumni and tech professionals for mentorship, collaboration, and career opportunities.' },
+  {
+    title: 'Make a Difference',
+    body: 'Be a part of something bigger and contribute your time and talent to initiatives that drive innovation, foster community engagement, and support the responsible growth of technology.',
+  },
+  { title: 'Other Benefits', body: 'Discounts on select Harvard University online courses.' },
+]} />
+    </div>
+  </body>
+</html>

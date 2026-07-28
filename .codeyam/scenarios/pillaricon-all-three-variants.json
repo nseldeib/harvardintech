@@ -1,0 +1,13 @@
+{
+  "name": "PillarIcon - All Three Variants",
+  "id": "84161820-3aa9-4e55-bf6b-a221bfc29748",
+  "url": "/isolated-components/PillarIcon",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "PillarIcon",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/PillarIcon.astro",
+  "description": "The people, book, and globe icon badges side by side — the full set the CMS dropdown can choose from."
+}

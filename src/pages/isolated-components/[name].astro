@@ -23,6 +23,9 @@ import SupportUs from '../../components/landing/SupportUs.astro';
 import EventGallery from '../../components/landing/EventGallery.astro';
 import UpcomingEvents from '../../components/landing/UpcomingEvents.astro';
 import BoardOfDirectors from '../../components/landing/BoardOfDirectors.astro';
+import VolunteerPage from '../../components/VolunteerPage.astro';
+import MomentumFundPage from '../../components/MomentumFundPage.astro';
+import { volunteerPage, donatePage } from '../../lib/site';
 import '../../styles/tokens.css';
 
 // Component-isolation harness. codeyam captures a single component in isolation
@@ -47,7 +50,7 @@ const embedFormStates = {
   },
   Embedded: {
     embedUrl: 'https://docs.google.com/forms/d/e/EXAMPLE_FORM_ID/viewform?embedded=true',
-    title: 'RSVP — Harvard in Tech Summit 2026',
+    title: 'RSVP: Harvard in Tech Summit 2026',
   },
   Unconfigured: {
     title: 'Subscribe',
@@ -65,14 +68,14 @@ const SAMPLE_EVENTS = [
     link: 'https://www.harvardintech.com/events/summit-2026',
   },
   {
-    title: 'Founders & Investors Mixer — San Francisco',
+    title: 'Founders & Investors Mixer, San Francisco',
     date: '2026-07-15',
     location: 'San Francisco, CA',
     description: 'An evening connecting Harvard alumni founders with active investors across the Bay Area.',
     link: 'https://www.harvardintech.com/events/sf-mixer',
   },
   {
-    title: 'Spring Founder Dinner — NYC',
+    title: 'Spring Founder Dinner, NYC',
     date: '2026-03-12',
     location: 'New York, NY',
     description: 'An intimate dinner with Harvard alumni founders and operators.',
@@ -134,7 +137,7 @@ const chapterHeroStates = {
 // passes no events to prove the guard renders NOTHING (no empty heading/block).
 const SAMPLE_CHAPTER_EVENTS = [
   {
-    title: 'Founders & Investors Mixer — San Francisco',
+    title: 'Founders & Investors Mixer, San Francisco',
     date: '2026-07-15',
     location: 'San Francisco, CA',
     description: 'An evening connecting Harvard alumni founders with active investors across the Bay Area.',
@@ -212,7 +215,7 @@ const boardOfDirectorsStates = {
 // OurChapters (Atlas "Our chapters" band): Default renders the five-city row;
 // Empty proves the "coming soon" fallback (production starts with no chapters).
 const SAMPLE_CHAPTERS = [
-  { slug: 'boston-cambridge', city: 'Boston & Cambridge', blurb: 'Home of Harvard — our Cambridge and Boston community.', heroImage: '/images/bg/hero-bg.jpg', order: 1 },
+  { slug: 'boston-cambridge', city: 'Boston & Cambridge', blurb: 'Home of Harvard, our Cambridge and Boston community.', heroImage: '/images/bg/hero-bg.jpg', order: 1 },
   { slug: 'nyc', city: 'New York City', blurb: 'Our founding chapter and largest community.', heroImage: '/images/chapters/nyc.jpg', order: 2 },
   { slug: 'london', city: 'London', blurb: 'Our European hub across the London tech scene.', heroImage: '/images/gallery/event-05.jpg', order: 3 },
   { slug: 'dc-dmv', city: 'DC & DMV Area', blurb: 'The DC, Maryland & Virginia community.', heroImage: '/images/gallery/event-18.jpg', order: 4 },
@@ -233,6 +236,112 @@ const SAMPLE_POSTS = [
 const contentHubStates = {
   Default: { posts: SAMPLE_POSTS },
   Empty: { posts: [] as typeof SAMPLE_POSTS },
+};
+
+// VolunteerPage states. Production starts with NO open projects, so `Empty` is
+// the state most visitors actually see — not an edge case. `Sparse` is the
+// real-world-messy one: a project with no thumbnail next to one with a very
+// long title, proving the grid stays aligned and the title wraps.
+const VOLUNTEER_COPY = volunteerPage;
+const SAMPLE_PROJECTS = [
+  {
+    title: 'Chapter launch team, Toronto',
+    blurb: 'Help stand up our next city chapter: find a venue, rally the first 30 alumni, and run the launch mixer.',
+    image: '/images/chapters/nyc.jpg',
+    commitment: '~3 hrs / week',
+    applyUrl: 'https://hi.switchy.io/wEYK',
+    order: 1,
+  },
+  {
+    title: 'Newsletter editor',
+    blurb: 'Curate the monthly roundup of member news, events, and opportunities that goes out to the full network.',
+    image: '/images/sections/board.png',
+    commitment: '~2 hrs / month',
+    applyUrl: 'https://hi.switchy.io/wEYK',
+    order: 2,
+  },
+  {
+    title: 'Speaker outreach',
+    blurb: 'Line up founders, operators, and investors for panels and roundtables across all five chapters.',
+    image: '/images/hero/hero.jpg',
+    commitment: '~2 hrs / week',
+    applyUrl: 'https://hi.switchy.io/wEYK',
+    order: 3,
+  },
+  {
+    title: 'Mentorship matching',
+    blurb: 'Pair students and early-career alumni with senior members who have been where they are going.',
+    image: '/images/sections/whatsapp-banner.jpg',
+    commitment: '~4 hrs / month',
+    applyUrl: 'https://hi.switchy.io/wEYK',
+    order: 4,
+  },
+  {
+    title: 'Website & CRM',
+    blurb: 'Keep this site and the organizer tooling healthy: content, accessibility, and the occasional feature.',
+    image: '/images/sections/board-logo.png',
+    commitment: 'Flexible',
+    applyUrl: 'https://hi.switchy.io/wEYK',
+    order: 5,
+  },
+];
+const SPARSE_PROJECTS = [
+  // No `image` — proves the card keeps its geometry without a thumbnail.
+  {
+    title: 'Alumni Founders Co-working Day, London monthly host and community organizer',
+    blurb: 'Host the monthly London co-working day: book the space, greet arrivals, and keep the day running.',
+    commitment: 'One day / month',
+    applyUrl: 'https://hi.switchy.io/wEYK',
+    order: 1,
+  },
+  {
+    title: 'Photographer',
+    image: '/images/gallery/event-01.jpg',
+    order: 2,
+  },
+];
+const volunteerPageStates = {
+  Default: { copy: VOLUNTEER_COPY, projects: SAMPLE_PROJECTS },
+  Sparse: { copy: VOLUNTEER_COPY, projects: SPARSE_PROJECTS },
+  Empty: { copy: VOLUNTEER_COPY, projects: [] as typeof SAMPLE_PROJECTS },
+};
+
+// MomentumFundPage states. `Default` is the production view: generic greeting,
+// no testimonials collected yet. `Personalized` pins the greeting server-side
+// (the live page fills it from `?name=` in the browser, which a static capture
+// can't exercise). `Quotes` is the complete campaign page.
+const MOMENTUM_COPY = donatePage;
+const SAMPLE_TESTIMONIALS = [
+  {
+    quote:
+      'I came to a founder dinner knowing nobody. I left with two intros that turned into my first enterprise customer.',
+    name: 'Priya Raman',
+    role: 'Founder · AB ’14',
+    order: 1,
+  },
+  {
+    quote:
+      'The London co-working days are the only reason I still feel connected to Harvard on this side of the Atlantic.',
+    name: 'Tom Whitfield',
+    role: 'Engineering lead · AB ’09',
+    order: 2,
+  },
+  {
+    quote:
+      'Someone in this network took an hour to talk me out of a bad acquisition. That hour was worth more than any conference.',
+    name: 'Dana Osei',
+    role: 'Operator · MBA ’18',
+    order: 3,
+  },
+];
+const momentumFundStates = {
+  Default: { copy: MOMENTUM_COPY, testimonials: [] as typeof SAMPLE_TESTIMONIALS },
+  Personalized: {
+    copy: MOMENTUM_COPY,
+    testimonials: [] as typeof SAMPLE_TESTIMONIALS,
+    previewName: 'Nicole',
+  },
+  Quotes: { copy: MOMENTUM_COPY, testimonials: SAMPLE_TESTIMONIALS },
 };
 
 export async function getStaticPaths() {
@@ -275,6 +384,12 @@ export async function getStaticPaths() {
     { params: { name: 'ContentHub-Empty' } },
     { params: { name: 'GivingCampaign' } },
     { params: { name: 'LumaCalendar' } },
+    { params: { name: 'VolunteerPage' } },
+    { params: { name: 'VolunteerPage-Sparse' } },
+    { params: { name: 'VolunteerPage-Empty' } },
+    { params: { name: 'MomentumFundPage' } },
+    { params: { name: 'MomentumFundPage-Personalized' } },
+    { params: { name: 'MomentumFundPage-Quotes' } },
   ];
 }
 
@@ -366,6 +481,18 @@ if (name && name.startsWith('ContentHub')) {
   const stateKey = (name === 'ContentHub' ? 'Default' : name.slice('ContentHub-'.length)) as keyof typeof contentHubStates;
   contentHubProps = contentHubStates[stateKey] ?? contentHubStates.Default;
 }
+
+let volunteerPageProps: (typeof volunteerPageStates)[keyof typeof volunteerPageStates] | null = null;
+if (name && name.startsWith('VolunteerPage')) {
+  const stateKey = (name === 'VolunteerPage' ? 'Default' : name.slice('VolunteerPage-'.length)) as keyof typeof volunteerPageStates;
+  volunteerPageProps = volunteerPageStates[stateKey] ?? volunteerPageStates.Default;
+}
+
+let momentumFundProps: (typeof momentumFundStates)[keyof typeof momentumFundStates] | null = null;
+if (name && name.startsWith('MomentumFundPage')) {
+  const stateKey = (name === 'MomentumFundPage' ? 'Default' : name.slice('MomentumFundPage-'.length)) as keyof typeof momentumFundStates;
+  momentumFundProps = momentumFundStates[stateKey] ?? momentumFundStates.Default;
+}
 ---
 
 <html lang="en">
@@ -381,6 +508,10 @@ if (name && name.startsWith('ContentHub')) {
           <Greeting {...islands.Greeting.props} client:load />
         ) : embedFormProps ? (
           <EmbedForm {...embedFormProps} />
+        ) : volunteerPageProps ? (
+          <VolunteerPage {...volunteerPageProps} />
+        ) : momentumFundProps ? (
+          <MomentumFundPage {...momentumFundProps} />
         ) : eventsPageProps ? (
           <EventsPage {...eventsPageProps} />
         ) : chapterPageProps ? (

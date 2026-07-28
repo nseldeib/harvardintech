@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerBenefits - Four Blocks",
+  "id": "ff8d88b9-fb1a-45bc-a7b3-52fbb8001cf6",
+  "url": "/isolated-components/VolunteerBenefits",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerBenefits",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerBenefits.astro",
+  "description": "'Why Volunteer with Harvard Alumni in Tech?' with all four benefit blocks, including the long-copy first block."
+}

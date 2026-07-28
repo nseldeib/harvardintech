@@ -3,9 +3,7 @@
     {
       "label": "Programs",
       "children": [
-        { "label": "All Events", "url": "/events" },
-        { "label": "Webinars", "url": "/events#webinars" },
-        { "label": "Podcasts", "url": "/events#podcasts" }
+        { "label": "All Events", "url": "/events" }
       ]
     },
     {
@@ -46,13 +44,13 @@
         {
           "label": "Get Involved",
           "children": [
-            { "label": "Volunteer Opportunities", "url": "/#get-involved" }
+            { "label": "Volunteer", "url": "/volunteer" }
           ]
         },
         {
           "label": "Support",
           "children": [
-            { "label": "Donate", "url": "/#giving" },
+            { "label": "Donate", "url": "/donate" },
             { "label": "Sponsorship Opportunities", "url": "/#support" }
           ]
         }

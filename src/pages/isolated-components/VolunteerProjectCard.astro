@@ -1,0 +1,28 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerProjectCard.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerProjectCard — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/VolunteerProjectCard.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerProjectCard</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <div style="max-width: 360px;">
+        <Component
+          title="Chapter launch team, Toronto"
+          blurb="Help stand up our next city chapter: find a venue, rally the first 30 alumni, and run the launch mixer."
+          image="/images/chapters/nyc.jpg"
+          commitment="~3 hrs / week"
+          applyUrl="https://hi.switchy.io/wEYK"
+        />
+      </div>
+    </div>
+  </body>
+</html>

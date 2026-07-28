@@ -5,8 +5,17 @@
       "label": "Chapters",
       "singular": "Chapter",
       "fields": [
-        { "name": "city", "label": "City", "type": "text" },
-        { "name": "region", "label": "Region", "type": "text", "optional": true },
+        {
+          "name": "city",
+          "label": "City",
+          "type": "text"
+        },
+        {
+          "name": "region",
+          "label": "Region",
+          "type": "text",
+          "optional": true
+        },
         {
           "name": "blurb",
           "label": "Blurb",
@@ -42,15 +51,29 @@
           "optional": true,
           "hint": "Blank falls back to the global contact email in Settings."
         },
-        { "name": "order", "label": "Order", "type": "number", "optional": true },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true
+        },
         {
           "name": "leads",
           "label": "Chapter leads",
           "type": "list",
           "optional": true,
           "fields": [
-            { "name": "name", "label": "Name", "type": "text" },
-            { "name": "role", "label": "Role", "type": "text", "optional": true }
+            {
+              "name": "name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "name": "role",
+              "label": "Role",
+              "type": "text",
+              "optional": true
+            }
           ]
         },
         {
@@ -59,27 +82,148 @@
           "type": "list",
           "optional": true,
           "fields": [
-            { "name": "label", "label": "Label", "type": "text" },
-            { "name": "url", "label": "URL", "type": "text" }
+            {
+              "name": "label",
+              "label": "Label",
+              "type": "text"
+            },
+            {
+              "name": "url",
+              "label": "URL",
+              "type": "text"
+            }
           ]
+        }
+      ]
+    },
+    {
+      "id": "projects",
+      "label": "Projects",
+      "singular": "Project",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "name": "blurb",
+          "label": "Blurb",
+          "type": "textarea",
+          "optional": true
+        },
+        {
+          "name": "image",
+          "label": "Image",
+          "type": "image",
+          "optional": true
+        },
+        {
+          "name": "applyUrl",
+          "label": "Apply link",
+          "type": "text",
+          "optional": true
+        },
+        {
+          "name": "commitment",
+          "label": "Time commitment",
+          "type": "text",
+          "optional": true
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true
+        },
+        {
+          "name": "active",
+          "label": "Open for applications",
+          "type": "boolean",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "label": "Testimonials",
+      "singular": "Testimonial",
+      "fields": [
+        {
+          "name": "quote",
+          "label": "Quote",
+          "type": "textarea"
+        },
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text"
+        },
+        {
+          "name": "role",
+          "label": "Role",
+          "type": "text",
+          "optional": true
+        },
+        {
+          "name": "photo",
+          "label": "Photo",
+          "type": "image",
+          "optional": true
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true
         }
       ]
     }
   ],
   "builtins": {
     "pages": [
-      { "name": "embedUrl", "label": "Embed URL", "type": "text", "optional": true },
-      { "name": "embedHtml", "label": "Embed HTML", "type": "textarea", "optional": true }
+      {
+        "name": "embedUrl",
+        "label": "Embed URL",
+        "type": "text",
+        "optional": true
+      },
+      {
+        "name": "embedHtml",
+        "label": "Embed HTML",
+        "type": "textarea",
+        "optional": true
+      }
     ],
     "blog": [
-      { "name": "embedUrl", "label": "Embed URL", "type": "text", "optional": true },
-      { "name": "embedHtml", "label": "Embed HTML", "type": "textarea", "optional": true }
+      {
+        "name": "embedUrl",
+        "label": "Embed URL",
+        "type": "text",
+        "optional": true
+      },
+      {
+        "name": "embedHtml",
+        "label": "Embed HTML",
+        "type": "textarea",
+        "optional": true
+      }
     ],
     "events": [
-      { "name": "chapter", "label": "Chapter", "type": "text", "optional": true }
+      {
+        "name": "chapter",
+        "label": "Chapter",
+        "type": "text",
+        "optional": true
+      }
     ],
     "team": [
-      { "name": "active", "label": "Active", "type": "boolean", "optional": true }
+      {
+        "name": "active",
+        "label": "Active",
+        "type": "boolean",
+        "optional": true
+      }
     ]
   },
   "seo": [

@@ -1,0 +1,13 @@
+{
+  "name": "GiveButton - Both Variants",
+  "id": "266e8577-cdfb-48c8-897b-403420b1fdaf",
+  "url": "/isolated-components/GiveButton",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiveButton",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/GiveButton.astro",
+  "description": "The pill giving CTA in both forms: crimson on light backgrounds, and inverted to white for the dark closing band."
+}

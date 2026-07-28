@@ -31,11 +31,19 @@ A fresh clone works with: `git clone` → `npm run setup` → `npm run dev`.
 ```
 src/
   pages/index.astro          # the landing page — composes the section components
+  pages/volunteer.astro       # /volunteer — the volunteer pitch + open-projects grid
+  pages/donate.astro          # /donate — the Momentum Fund campaign page
+  pages/events.astro          # /events — Luma calendar embed + upcoming/past listing
   components/landing/         # one component per landing section (Hero, Board, …)
+  components/volunteer/       # /volunteer sections (hero, benefits, project cards)
+  components/donate/          # /donate campaign sections (hero, stats, gift pillars, quotes)
   layouts/BaseLayout.astro    # site shell: data-driven header/nav + footer + SEO
-  content/                    # typed content collections (events, team, chapters, pages, blog)
-  data/                       # settings.json + nav.json singletons, cms.json + collections.json (CMS config)
-  lib/                        # site.ts, mailto.ts, deployStatus.ts
+  content/                    # typed content collections (events, team, chapters, pages,
+                              #   blog, projects, testimonials)
+  data/                       # settings.json + nav.json singletons, cms.json +
+                              #   collections.json (CMS config), volunteerPage, donatePage
+  lib/                        # site.ts, mailto.ts, drafts.ts (draft filtering),
+                              #   personalize.ts (?name= hero personalization), giving.ts
   styles/tokens.css           # design tokens (brand blue, Roboto, spacing)
 public/images/                # hero/section backgrounds, board graphic, event gallery
                               # (/admin is injected by @codeyam/cms — no admin code in this repo)

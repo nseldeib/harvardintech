@@ -1,0 +1,13 @@
+{
+  "name": "MomentumClose - Closing Ask",
+  "id": "5939a509-b387-49b3-b322-bc09fce74f71",
+  "url": "/isolated-components/MomentumClose",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumClose",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumClose.astro",
+  "description": "The dark closing band repeating the giving CTA for readers who reached the bottom of the campaign narrative."
+}

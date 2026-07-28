@@ -1,0 +1,13 @@
+{
+  "name": "GiftPillarCard - With Inline Link",
+  "id": "ec1018bf-b22b-4c2c-b239-c298af23c977",
+  "url": "/isolated-components/GiftPillarCard",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiftPillarCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/GiftPillarCard.astro",
+  "description": "A single gift pillar carrying an optional inline link, which reads as part of the sentence rather than as a separate call to action."
+}

@@ -134,4 +134,37 @@ const chapters = defineCollection({
   }),
 });
 
-export const collections = { blog, pages, team, events, chapters };
+// Open volunteer projects, rendered as the grid on /volunteer. Everything but
+// the title is optional so an organizer can post a project the moment it opens
+// and fill in the thumbnail/commitment later. `active: false` retires a project
+// without deleting its record (absent → shown, matching the `team` convention).
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: `${root}/projects` }),
+  schema: z.object({
+    title: z.string(),
+    blurb: z.string().optional(),
+    image: z.string().optional(),
+    applyUrl: z.string().optional(),
+    commitment: z.string().optional(),
+    order: z.number().optional(),
+    active: z.boolean().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// Member quotes for the Momentum Fund campaign page (/donate). Production
+// starts with none — the testimonials band renders nothing at all when the
+// collection is empty, so the page reads as finished before any quotes exist.
+const testimonials = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: `${root}/testimonials` }),
+  schema: z.object({
+    quote: z.string(),
+    name: z.string(),
+    role: z.string().optional(),
+    photo: z.string().optional(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+export const collections = { blog, pages, team, events, chapters, projects, testimonials };

@@ -1,0 +1,74 @@
+---
+// One member quote. Quotation marks are added by CSS so an editor can type the
+// quote plainly in the CMS without doubling them up.
+import { withBase } from '../../lib/url';
+
+interface Props {
+  quote: string;
+  name: string;
+  role?: string;
+  photo?: string;
+}
+const { quote, name, role, photo } = Astro.props as Props;
+---
+
+<figure class="q">
+  <blockquote>{quote}</blockquote>
+  <figcaption>
+    {photo ? <img class="photo" src={withBase(photo)} alt="" loading="lazy" /> : null}
+    <span class="who">
+      <strong>{name}</strong>
+      {role ? <span class="role">{role}</span> : null}
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .q {
+    margin: 0;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 30px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  blockquote {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink);
+    margin: 0;
+    flex: 1;
+  }
+  blockquote::before {
+    content: '“';
+    color: var(--crimson);
+  }
+  blockquote::after {
+    content: '”';
+    color: var(--crimson);
+  }
+  figcaption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .who {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+  }
+  .role {
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+</style>

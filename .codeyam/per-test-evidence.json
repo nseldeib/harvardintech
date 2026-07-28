@@ -1,4 +1,138 @@
 {
+  "ADMIN_COLLECTIONS › gives every collection a non-empty label": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "ADMIN_COLLECTIONS › lists the editable folder collections in order": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "ADMIN_GATE_STORAGE_KEY › is the stable admin-unlocked key": {
+    "file": "src/lib/adminGate.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:04:11.902556+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
   "Greeting › increments the counter on click": {
     "file": "src/components/Greeting.test.tsx",
     "lastRunAt": "2026-07-27T19:47:01.033233051+00:00",
@@ -458,6 +592,78 @@
       },
       {
         "at": "2026-07-27T18:44:40.185918982+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "byOrder › handles negative order values": {
+    "file": "src/lib/order.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "byOrder › sorts ascending by order": {
+    "file": "src/lib/order.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "byOrder › sorts entries without an order last": {
+    "file": "src/lib/order.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "byOrder › treats order 0 as ordered, not as missing": {
+    "file": "src/lib/order.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
         "kind": "changed",
         "status": "pass"
       }
@@ -1113,6 +1319,412 @@
       {
         "at": "2026-07-27T18:44:40.185918982+00:00",
         "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "dashboardSummaryText › shows the empty-state nudge when there is no content": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "dashboardSummaryText › summarizes a populated dashboard": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "dashboardSummaryText › treats a negative total as empty": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "dashboardSummaryText › uses the singular entry for a count of one": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "dashboardTotals › counts empty collections without adding to the total": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "dashboardTotals › returns zeros for an empty card list": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "dashboardTotals › sums counts and reports the collection count": {
+    "file": "src/lib/adminDashboard.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
         "status": "pass"
       }
     ]
@@ -2608,6 +3220,96 @@
       }
     ]
   },
+  "heroGreeting › falls back to the generic greeting for a rejected name": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "heroGreeting › falls back to the generic greeting with no name": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "heroGreeting › fills the placeholder with a valid name": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "heroGreeting › never leaks an unfilled placeholder": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "heroGreeting › uses the generic greeting when the named template has no placeholder": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "initGalleryReveal › is a no-op when there are no gallery tiles": {
     "file": "src/lib/gallery.test.ts",
     "lastRunAt": "2026-07-27T19:47:01.033233051+00:00",
@@ -3416,6 +4118,354 @@
       {
         "at": "2026-07-27T18:44:40.185918982+00:00",
         "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "isPasscodeCorrect › accepts an exact match": {
+    "file": "src/lib/adminGate.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:04:11.902556+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "isPasscodeCorrect › is case-sensitive": {
+    "file": "src/lib/adminGate.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:04:11.902556+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "isPasscodeCorrect › never matches an empty expected passcode": {
+    "file": "src/lib/adminGate.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:04:11.902556+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "isPasscodeCorrect › rejects a wrong value": {
+    "file": "src/lib/adminGate.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:04:11.902556+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "isPasscodeCorrect › trims surrounding whitespace on the expected value": {
+    "file": "src/lib/adminGate.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:04:11.902556+00:00",
+        "kind": "full",
+        "status": "pass"
+      }
+    ]
+  },
+  "isPasscodeCorrect › trims surrounding whitespace on the input": {
+    "file": "src/lib/adminGate.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:43:22.046314092+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T20:37:23.640294052+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T17:58:35.980830480+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:56:31.782308885+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-02T02:10:04.419591050+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-01T20:44:41.373606094+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:19:55.388774+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:06:58.772217+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-06-17T11:04:11.902556+00:00",
+        "kind": "full",
         "status": "pass"
       }
     ]
@@ -4285,6 +5335,240 @@
       },
       {
         "at": "2026-07-27T18:44:40.185918982+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "nameFromSearch › decodes percent-encoded values": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "nameFromSearch › reads the name from a bare query string": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "nameFromSearch › reads the name from a full URL": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "nameFromSearch › returns null when the parameter or query is absent": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › does not mutate the input array": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › filters and orders together": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › keeps a project explicitly marked active": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › keeps a project whose active flag is absent": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › orders open projects by their order field": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › places unordered projects after ordered ones": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › removes a project explicitly marked inactive": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › returns an empty array for no projects": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "openProjects › returns an empty array when every project is closed": {
+    "file": "src/lib/projects.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
         "kind": "changed",
         "status": "pass"
       }
@@ -5393,6 +6677,132 @@
       }
     ]
   },
+  "resolveGiveHref › encodes the subject so the mail client receives it intact": {
+    "file": "src/lib/giving.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveGiveHref › falls back to a giving-inquiry mailto when no URL is set": {
+    "file": "src/lib/giving.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveGiveHref › treats a whitespace-only donateUrl as unset": {
+    "file": "src/lib/giving.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveGiveHref › treats an empty donateUrl as unset": {
+    "file": "src/lib/giving.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveGiveHref › trims surrounding whitespace from a pasted URL": {
+    "file": "src/lib/giving.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveGiveHref › uses a generic subject when no campaign is named": {
+    "file": "src/lib/giving.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "resolveGiveHref › uses the donation platform URL when one is configured": {
+    "file": "src/lib/giving.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "robots.txt GET › allows all crawlers": {
     "file": "src/lib/seoEndpoints.test.ts",
     "lastRunAt": "2026-07-27T19:47:01.033233051+00:00",
@@ -5620,6 +7030,186 @@
       },
       {
         "at": "2026-07-27T18:44:40.185918982+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › accepts an ordinary first name": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › accepts names with accents, hyphens, and apostrophes": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › accepts non-Latin scripts": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › keeps only the first token when a full name is supplied": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › rejects a long payload whose first word looks harmless": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › rejects a name longer than the maximum": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › rejects digits and stray punctuation that no first name has": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › rejects markup rather than truncating it to a plausible name": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › returns null for absent or empty input": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sanitizeFirstName › trims and collapses whitespace from a merge field": {
+    "file": "src/lib/personalize.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
         "kind": "changed",
         "status": "pass"
       }
@@ -6420,6 +8010,29 @@
       }
     ]
   },
+  "site singletons › loads the volunteer and donate page copy from the data root": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-23T14:05:50.821062811+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "site singletons › reflects a second data root on re-import": {
     "file": "src/lib/site.test.ts",
     "lastRunAt": "2026-07-27T19:47:01.033233051+00:00",
@@ -7111,6 +8724,78 @@
       },
       {
         "at": "2026-07-27T18:44:40.185918982+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sortByOrder › preserves input order among entries sharing the same order": {
+    "file": "src/lib/order.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sortByOrder › preserves input order among entries that all lack an order": {
+    "file": "src/lib/order.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sortByOrder › returns a new array and leaves the source untouched": {
+    "file": "src/lib/order.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "sortByOrder › returns an empty array unchanged": {
+    "file": "src/lib/order.test.ts",
+    "lastRunAt": "2026-07-23T14:06:01.777582020+00:00",
+    "lastRunKind": "full",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-23T14:06:01.777582020+00:00",
+        "kind": "full",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-22T21:55:04.052315937+00:00",
         "kind": "changed",
         "status": "pass"
       }

@@ -1,0 +1,24 @@
+---
+import Component from "../../../src/components/donate/MomentumStats.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for MomentumStats — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/MomentumStats.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: MomentumStats</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component stats={[
+  { value: '100+', label: 'Events Hosted' },
+  { value: '8,000+', label: 'Members' },
+  { value: '5', label: 'Chapters & Growing' },
+]} />
+    </div>
+  </body>
+</html>

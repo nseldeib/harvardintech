@@ -1,0 +1,13 @@
+{
+  "name": "GiftPillars - Three Pillars",
+  "id": "13240a5d-8ff7-4318-99a6-b989a62492a8",
+  "url": "/isolated-components/GiftPillars",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiftPillars",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/GiftPillars.astro",
+  "description": "'What Your Gift Powers' — the full three-card grid with its icon badges, matching the campaign mockup."
+}

@@ -1,0 +1,47 @@
+---
+// The "subscribe to this calendar" strip shown beneath the inline Luma embed.
+//
+// Separate from LumaCalendar because it solves a distinct problem: the embed
+// renders the calendar but offers no subscribe affordance of its own, so
+// without this a visitor who wants the calendar in their own app has nowhere to
+// go. It is only used alongside the embed — the link-out card mode already
+// carries its own subscribe call to action.
+interface Props {
+  calendarUrl: string;
+}
+const { calendarUrl } = Astro.props as Props;
+---
+
+<div class="sub">
+  <p>
+    Want every new event, across all chapters, in your own calendar? Subscribe
+    on Luma and they'll appear automatically.
+  </p>
+  <a class="btn btn-out" href={calendarUrl} rel="noopener" target="_blank">
+    Subscribe on Luma →
+  </a>
+</div>
+
+<style>
+  .sub {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding: 20px 24px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--crimson);
+    border-radius: 6px;
+    background: var(--paper-2);
+  }
+  p {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 58ch;
+    margin: 0;
+  }
+</style>
