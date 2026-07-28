@@ -1,0 +1,31 @@
+---
+// The crimson strip above the header: a one-line "where we are", reading as
+// "A global community · Boston & Cambridge · New York City · …".
+//
+// The city list is DERIVED from the chapters collection by the layout (see
+// `lib/nav.ts`), not hand-maintained, so it can never fall behind the chapters
+// the site actually has. With no chapters it degrades to the lede alone rather
+// than leaving a dangling separator.
+interface Props {
+  cities: string[];
+}
+const { cities } = Astro.props as Props;
+
+const LEDE = 'A global community';
+const line = cities.length > 0 ? `${LEDE} · ${cities.join(' · ')}` : LEDE;
+---
+
+<div class="util">{line}</div>
+
+<style>
+  .util {
+    background: var(--crimson);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 6px 16px;
+  }
+</style>

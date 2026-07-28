@@ -1,0 +1,12 @@
+{
+  "name": "UtilityBar - No Chapters",
+  "id": "b1f316b6-7f13-42f0-b6f8-d611cbbf7418",
+  "url": "/isolated-components/UtilityBar-Empty",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "UtilityBar",
+  "scenarioType": "component",
+  "description": "With no chapters the strip degrades to the lede alone. Guards the trailing-separator bug: joining an empty list onto the prefix would ship a line ending in a bare middot."
+}

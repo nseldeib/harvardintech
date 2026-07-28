@@ -7,16 +7,6 @@
       ]
     },
     {
-      "label": "Chapters",
-      "children": [
-        { "label": "Boston & Cambridge", "url": "/chapters/boston-cambridge" },
-        { "label": "New York City", "url": "/chapters/nyc" },
-        { "label": "London", "url": "/chapters/london" },
-        { "label": "DC & DMV", "url": "/chapters/dc-dmv" },
-        { "label": "Seattle", "url": "/chapters/seattle" }
-      ]
-    },
-    {
       "label": "Communities",
       "children": [
         { "label": "WhatsApp", "url": "/#community" }

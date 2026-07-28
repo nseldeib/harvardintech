@@ -1,0 +1,32 @@
+{
+  "claimStartedAt": "2026-07-28T11:11:56Z",
+  "completedAt": "2026-07-28T15:54:46Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "currentStep": "ui-step21",
+    "machine": "codeyam-editor-codeyam-editor-1",
+    "originId": "057ec9fa-08a8-4791-b811-59ddf8ab552b",
+    "pid": 7,
+    "priority": 0,
+    "selectedPlan": "cms--chapters-nav-derived-from-content",
+    "sessionId": "2a066b67-ef75-4ded-9435-ba24d8052585",
+    "startedAt": "2026-07-28T11:11:56Z"
+  },
+  "createdAt": "2026-07-27T21:15:03Z",
+  "deliverables": [
+    "CMS_SETUP.md",
+    "src/components/nav/PrimaryNav.astro",
+    "src/components/nav/UtilityBar.astro",
+    "src/data/nav.json",
+    "src/layouts/BaseLayout.astro",
+    "src/lib/nav.test.ts",
+    "src/lib/nav.ts",
+    "src/pages/isolated-components/[name].astro"
+  ],
+  "journalTimestamp": "2026-07-28T15:54:46Z",
+  "mode": "ui",
+  "planFile": "completed/cms--chapters-nav-derived-from-content.md",
+  "slug": "cms--chapters-nav-derived-from-content",
+  "title": "cms -- Chapters Nav Derived From Content"
+}

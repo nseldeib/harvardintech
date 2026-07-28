@@ -172,11 +172,30 @@
     ]
   },
   {
+    "description": "The header's primary menu: a taxonomy mega-menu rendered to three levels — a top-level item with no children is a plain link, with children it becomes a dropdown, and if any of those children themselves have children the panel splits into titled columns. The panel opens with CSS alone via hover and focus-within, so it works before hydration and for keyboard users. It renders whatever tree it is handed and cannot tell the hand-authored groups from nav.json apart from the Chapters group the layout derives from the chapters collection, which is deliberate: derived and authored items must be indistinguishable to a visitor.",
+    "filePath": "src/components/nav/PrimaryNav.astro",
+    "name": "PrimaryNav",
+    "scenarios": [
+      "primarynav-derived-chapters",
+      "primarynav-sixth-chapter-published",
+      "primarynav-no-chapters-yet"
+    ]
+  },
+  {
     "description": "Stat strip under the hero: a hairline-ruled band of big crimson figures with mono uppercase labels; values are prop-driven.",
     "filePath": "src/components/landing/Stats.astro",
     "name": "Stats",
     "scenarios": [
       "stats-band"
+    ]
+  },
+  {
+    "description": "The crimson strip above the header: a one-line where-we-are reading as a global-community lede followed by the chapter cities. The city list is derived from the chapters collection by the layout rather than hand-maintained, so it cannot fall behind the chapters the site actually has — the failure it used to have when it read the labels back out of a nav group. With no chapters it degrades to the lede alone instead of leaving a dangling separator.",
+    "filePath": "src/components/nav/UtilityBar.astro",
+    "name": "UtilityBar",
+    "scenarios": [
+      "utilitybar-derived-cities",
+      "utilitybar-no-chapters"
     ]
   },
   {
@@ -190,6 +209,12 @@
     "filePath": "src/lib/order.ts",
     "name": "byOrder",
     "testFile": "src/lib/order.test.ts"
+  },
+  {
+    "description": "Maps published chapters to header menu items — label from the chapter's own city, url built from its slug as /chapters/<slug> — ordered exactly the way the Our Chapters section orders its cards: by the order field, with city breaking ties and sorting entries that carry no order. Sharing that convention is what keeps the menu and the homepage section from ever listing the same chapters in different sequences. Callers pass chapters already draft-filtered through publishedEntries, so draft visibility stays one rule applied at every call site. Paths are returned base-agnostic; the layout wraps them in withBase at render. Returns an empty list for no chapters, and does not mutate the input.",
+    "filePath": "src/lib/nav.ts",
+    "name": "chapterNavItems",
+    "testFile": "src/lib/nav.test.ts"
   },
   {
     "description": "The deploy-status banner state machine: precedence is marker-changed (live) over Actions-failed (failed) over an active deploy (building/deploying, escalating to slow), otherwise idle. Returns the resolved BannerView the UI renders.",
@@ -290,6 +315,12 @@
     "filePath": "src/lib/team.ts",
     "name": "initials",
     "testFile": "src/lib/team.test.ts"
+  },
+  {
+    "description": "Walks the menu tree to its full three levels and collects every site-internal url in declaration order — internal meaning rooted at a slash. External links out to Medium, LinkedIn, and the newsletter are skipped, since they point at another site and have no local page to resolve against. Feeds the nav integrity guard together with unresolvedNavUrls.",
+    "filePath": "src/lib/nav.ts",
+    "name": "internalNavUrls",
+    "testFile": "src/lib/nav.test.ts"
   },
   {
     "description": "Maps a GitHub Actions run's status/conclusion to a normalised phase (building, failed, succeeded, unknown); a cancelled completion maps to unknown so it never masquerades as a real failure.",
@@ -421,6 +452,18 @@
     "testFile": "src/lib/events.test.ts"
   },
   {
+    "description": "Reduces a nav url to the page it actually lands on, so the integrity guard compares like with like: any fragment is dropped so an anchor link resolves against its own page, a bare hash resolves against the home page, and a trailing slash is ignored. Module-private to nav.ts and exercised through unresolvedNavUrls, whose tests pin each of those three normalizations.",
+    "filePath": "src/lib/nav.ts",
+    "name": "toPath",
+    "testFile": "src/lib/nav.test.ts"
+  },
+  {
+    "description": "Returns the nav urls with no page behind them, given the routes the site actually builds — the static pages plus what the slug routes generate from published content. Each url is reduced to the page it lands on first: any fragment is dropped so an anchor link resolves against its page and a bare hash resolves against the home page, and a trailing slash is ignored so an editor typing a slash gets no false alarm. This guards the links that stay hand-authored in nav.json now that the chapters are derived — most sharply Content Hub's Blog entry, which points at one specific post and breaks the moment that post is drafted, renamed, or deleted. Deliberately surfaced as a unit test rather than a build gate: the deploy workflow runs the build and never runs vitest, so a dead link informs developers without ever blocking an editor's publish.",
+    "filePath": "src/lib/nav.ts",
+    "name": "unresolvedNavUrls",
+    "testFile": "src/lib/nav.test.ts"
+  },
+  {
     "description": "Builds the live-site URL for a given base path (used by the banner's View live site link).",
     "filePath": "src/lib/deployStatus.ts",
     "name": "viewSiteUrl",
@@ -431,5 +474,11 @@
     "filePath": "src/lib/url.ts",
     "name": "withBase",
     "testFile": "src/lib/url.test.ts"
+  },
+  {
+    "description": "Returns a new top-level menu with the derived Chapters dropdown inserted directly after the item labelled Programs, reproducing today's menu order, and appended when no such item exists so a rename or deletion in the CMS degrades sensibly instead of throwing or dropping the group. With no chapter items the group is omitted entirely rather than rendered as an empty dropdown — an empty dropdown is a caret opening onto nothing, and the CMS nav serializer collapses one back into a plain link pointing nowhere. Injecting the group here rather than marking it in nav.json is deliberate: the CMS rebuilds every nav item from label plus children/url and silently drops any other key, so a marker would not survive the first save from the settings editor. Does not mutate the caller's list.",
+    "filePath": "src/lib/nav.ts",
+    "name": "withChapterGroup",
+    "testFile": "src/lib/nav.test.ts"
   }
 ]

@@ -260,7 +260,7 @@
   },
   {
     "name": "Nav",
-    "description": "Editable navigation menu singleton (`src/data/nav.json`) with nested dropdowns (e.g. Chapters \u2192 NYC/SF/LA/Japan). Loaded by the base layout.",
+    "description": "Editable navigation menu singleton (`src/data/nav.json`) with nested dropdowns, edited from /admin \u2192 Settings. Loaded by the base layout, which injects a Chapters group derived from the chapters collection \u2014 so the Chapters menu is not stored here.",
     "category": "datastore",
     "order": 6,
     "fields": [
@@ -273,7 +273,7 @@
   },
   {
     "name": "Chapter",
-    "description": "A regional Harvard in Tech chapter (NYC, SF, L.A., Japan). Stored as a markdown file in the `chapters` content collection; rendered on per-chapter routes at /chapters/<slug> and linked from the nav Chapters dropdown. Optional fields (`leads`, `links`) prove a chapter with no leads listed still renders.",
+    "description": "A regional Harvard in Tech chapter (Boston & Cambridge, New York City, London, DC & DMV Area, Seattle). Stored as a markdown file in the `chapters` content collection; rendered on per-chapter routes at /chapters/<slug>, and the source the base layout derives the nav Chapters dropdown from. Optional fields (`leads`, `links`) prove a chapter with no leads listed still renders.",
     "category": "datastore",
     "order": 7,
     "fields": [

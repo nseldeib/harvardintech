@@ -25,6 +25,9 @@ import UpcomingEvents from '../../components/landing/UpcomingEvents.astro';
 import BoardOfDirectors from '../../components/landing/BoardOfDirectors.astro';
 import VolunteerPage from '../../components/VolunteerPage.astro';
 import MomentumFundPage from '../../components/MomentumFundPage.astro';
+import PrimaryNav from '../../components/nav/PrimaryNav.astro';
+import UtilityBar from '../../components/nav/UtilityBar.astro';
+import { chapterNavItems, withChapterGroup } from '../../lib/nav';
 import { volunteerPage, donatePage } from '../../lib/site';
 import '../../styles/tokens.css';
 
@@ -226,6 +229,46 @@ const ourChaptersStates = {
   Empty: { chapters: [] as typeof SAMPLE_CHAPTERS },
 };
 
+// PrimaryNav / UtilityBar. These states are built by running the REAL derivation
+// (`chapterNavItems` + `withChapterGroup`) over the chapter fixtures above, so
+// the isolated preview shows what the header actually does — not a hand-written
+// menu that could quietly disagree with the code.
+//
+// The hand-authored half is `nav.json` minus its old Chapters group, pinned as a
+// literal here so the states stay deterministic when someone edits the real nav.
+const AUTHORED_NAV_ITEMS = [
+  { label: 'Programs', children: [{ label: 'All Events', url: '/events' }] },
+  { label: 'Communities', children: [{ label: 'WhatsApp', url: '/#community' }] },
+  {
+    label: 'Content Hub',
+    children: [
+      { label: 'Blog', url: '/blog/welcome' },
+      { label: 'Medium', url: 'https://medium.com/harvard-in-tech' },
+    ],
+  },
+  {
+    label: 'Membership',
+    children: [
+      { label: 'About', children: [{ label: 'Mission', url: '/#about' }, { label: 'Board', url: '/#board' }] },
+      { label: 'Support', children: [{ label: 'Donate', url: '/donate' }] },
+    ],
+  },
+];
+// A sixth chapter that `nav.json` has never heard of — the drift this feature
+// removes. It appears purely because it exists in the collection.
+const SIXTH_CHAPTER = { slug: 'miami', city: 'Miami', order: 6 };
+const primaryNavStates = {
+  Default: { items: withChapterGroup(AUTHORED_NAV_ITEMS, chapterNavItems(SAMPLE_CHAPTERS)) },
+  SixChapters: {
+    items: withChapterGroup(AUTHORED_NAV_ITEMS, chapterNavItems([...SAMPLE_CHAPTERS, SIXTH_CHAPTER])),
+  },
+  NoChapters: { items: withChapterGroup(AUTHORED_NAV_ITEMS, chapterNavItems([])) },
+};
+const utilityBarStates = {
+  Default: { cities: chapterNavItems(SAMPLE_CHAPTERS).map((i) => i.label) },
+  Empty: { cities: [] as string[] },
+};
+
 // ContentHub (Atlas "Content hub" band): Default shows the four channels plus a
 // "latest from the blog" list; Empty omits posts (channels only).
 const SAMPLE_POSTS = [
@@ -379,6 +422,11 @@ export async function getStaticPaths() {
     { params: { name: 'Stats' } },
     { params: { name: 'OurChapters' } },
     { params: { name: 'OurChapters-Empty' } },
+    { params: { name: 'PrimaryNav' } },
+    { params: { name: 'PrimaryNav-SixChapters' } },
+    { params: { name: 'PrimaryNav-NoChapters' } },
+    { params: { name: 'UtilityBar' } },
+    { params: { name: 'UtilityBar-Empty' } },
     { params: { name: 'FocusAreas' } },
     { params: { name: 'ContentHub' } },
     { params: { name: 'ContentHub-Empty' } },
@@ -456,6 +504,18 @@ let contactUsProps: (typeof contactUsStates)[keyof typeof contactUsStates] | nul
 if (name && name.startsWith('ContactUs')) {
   const stateKey = (name === 'ContactUs' ? 'Default' : name.slice('ContactUs-'.length)) as keyof typeof contactUsStates;
   contactUsProps = contactUsStates[stateKey] ?? contactUsStates.Default;
+}
+
+let primaryNavProps: (typeof primaryNavStates)[keyof typeof primaryNavStates] | null = null;
+if (name && name.startsWith('PrimaryNav')) {
+  const stateKey = (name === 'PrimaryNav' ? 'Default' : name.slice('PrimaryNav-'.length)) as keyof typeof primaryNavStates;
+  primaryNavProps = primaryNavStates[stateKey] ?? primaryNavStates.Default;
+}
+
+let utilityBarProps: (typeof utilityBarStates)[keyof typeof utilityBarStates] | null = null;
+if (name && name.startsWith('UtilityBar')) {
+  const stateKey = (name === 'UtilityBar' ? 'Default' : name.slice('UtilityBar-'.length)) as keyof typeof utilityBarStates;
+  utilityBarProps = utilityBarStates[stateKey] ?? utilityBarStates.Default;
 }
 
 let upcomingEventsProps: (typeof upcomingEventsStates)[keyof typeof upcomingEventsStates] | null = null;
@@ -543,6 +603,12 @@ if (name && name.startsWith('MomentumFundPage')) {
           <HeroCarousel />
         ) : name === 'Stats' ? (
           <Stats />
+        ) : primaryNavProps ? (
+          <div class="nav-stage">
+            <PrimaryNav {...primaryNavProps} />
+          </div>
+        ) : utilityBarProps ? (
+          <UtilityBar {...utilityBarProps} />
         ) : ourChaptersProps ? (
           <OurChapters {...ourChaptersProps} />
         ) : name === 'FocusAreas' ? (
@@ -570,5 +636,19 @@ if (name && name.startsWith('MomentumFundPage')) {
         )
       }
     </div>
+
+    <!-- Capture staging for PrimaryNav: room for the absolutely positioned mega
+         panel, which would otherwise overflow a content-height page. Sizing
+         only — the panel itself is opened by the scenario's real hover
+         interaction, not by a CSS override, so the capture exercises the same
+         :hover path a visitor takes. `.nav-stage` exists solely on the
+         PrimaryNav routes, so these rules are inert everywhere else. -->
+    <style is:global>
+      .nav-stage {
+        background: #fff;
+        min-height: 340px;
+        padding-left: 120px;
+      }
+    </style>
   </body>
 </html>

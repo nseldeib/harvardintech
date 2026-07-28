@@ -1,0 +1,12 @@
+{
+  "name": "UtilityBar - Derived Cities",
+  "id": "0c5ea032-45a3-4e2c-beb7-a44c0393e3f0",
+  "url": "/isolated-components/UtilityBar",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "UtilityBar",
+  "scenarioType": "component",
+  "description": "The crimson strip above the header, reading the same derived chapter labels the menu does. This line used to be built by hunting nav.json for a group called Chapters, so it went stale invisibly whenever the chapter list moved on — DC and DMV Area is the label that was wrong before this change."
+}

@@ -1,0 +1,579 @@
+{
+  "timestamp": "2026-07-28T15:54:46Z",
+  "title": "Chapters menu derives from the chapters collection",
+  "type": "feature",
+  "userRequest": "## Summary\n\nPublishing a chapter through `/admin` does not put it in the site's navigation.\nThe header's Chapters dropdown is a hand-written list of five links in\n`src/data/nav.json`, duplicating what already lives in `src/content/chapters/`.\nAn editor who adds a sixth chapter gets a working `/chapters/<slug>` page and a\nnew card in the \"Our chapters\" section, but no menu entry — and no warning that\none is missing. The reverse is worse: draft, rename, or delete a chapter and the\nmenu keeps pointing at a URL that now 404s.\n\nThe drift also silently corrupts a second surface. `BaseLayout.astro:26-27`\nbuilds the crimson utility strip (\"A global community · Boston & Cambridge ·\nNew York City · …\") by reading the labels out of that same nav group, so a stale\nnav line means a stale city list at the top of every page on the site.\n\nThis plan makes the Chapters dropdown derive from the `chapters` collection at\nrender time, so publishing a chapter is the only step, and adds an integrity\nguard over the internal links that remain hand-authored in `nav.json` — starting\nwith `Content Hub → Blog`, which points at one specific post (`/blog/welcome`)\nand breaks the moment that post is drafted or renamed.\n\n## Key Decisions\n\n- **Derive at render time, don't lint a hand-maintained list.** A guard that\n  merely fails when `nav.json` disagrees with the collection would push a second\n  manual step onto a non-technical editor at exactly the wrong moment — and\n  because `npm run build` (which the deploy workflow runs) includes `astro\n  check`, a hard failure there would silently stop the deploy of a chapter they\n  just published. Derivation removes the step instead of policing it.\n\n- **Remove the Chapters group from `nav.json` entirely and inject it in the\n  layout — do not mark it with a `source` key.** The CMS round-trip forbids the\n  marker approach: `normalizeNavItem` in\n  `node_modules/@codeyam/cms/src/lib/siteConfig.ts:138-144` rebuilds every nav\n  item from `label` plus `children`/`url` and nothing else, so any extra key\n  (`source: \"chapters\"`) is silently dropped the first time anyone saves the nav\n  from `/admin/settings`. The same function collapses a dropdown with an empty\n  `children` array back to a plain link, so \"keep the group but empty it\" is not\n  a stable shape either. A group the layout injects is the only form the CMS\n  serializer cannot corrupt.\n\n- **Accept that the injected group is not reorderable from `/admin`.** This is\n  the real cost of the decision above: editors can rename or reorder every other\n  menu group but not Chapters. It is the right trade against a dropdown that\n  lies. The durable fix is a collection-backed nav-group field in `@codeyam/cms`\n  (raised separately as a package feature request); when that lands, this\n  injection becomes the fallback.\n\n- **Inject after the group labeled `Programs`, appending if it is absent.**\n  That reproduces today's menu order exactly and degrades to a sensible position\n  rather than throwing if someone renames or removes Programs.\n\n- **Reuse the ordering convention the chapters section already uses.**\n  `OurChapters.astro:20-22` sorts by `(a.order ?? 99) - (b.order ?? 99) ||\n  a.city.localeCompare(b.city)`. The chapters carry `order` 1–5 (Boston,\n  NYC, London, DC, Seattle), which is byte-for-byte today's nav order, so the\n  derived menu ships with no visible reordering.\n\n- **Labels come from `city`, which changes one label.** `nav.json` currently\n  reads `DC & DMV`; the chapter's `city` is `DC & DMV Area`. Deriving means the\n  menu shows the chapter's own name. That is the correct behavior — one source\n  of truth — and the label change is intentional, not a regression.\n\n- **Drafts are respected the same way every other route respects them.** Build\n  the derived items from `publishedEntries(await getCollection('chapters'),\n  !import.meta.env.PROD)` so a drafted chapter is previewable under `astro dev`\n  and absent from the built menu, matching `src/pages/index.astro:38` and the\n  rest of the site.\n\n- **Guard the links that stay hand-authored, as a unit test, not a build gate.**\n  `nav.json` still holds `/events`, `/blog/welcome`, and a set of `/#anchor`\n  links. A pure helper plus a vitest guard reports any internal nav URL with no\n  corresponding published page or real route. Deliberately not wired into\n  `astro build`: the deploy workflow (`.github/workflows/deploy.yml:50`) runs\n  `npm run build` and never runs vitest, so a test failure informs developers\n  without ever blocking an editor's publish.\n\n## Implementation\n\n### 1. The pure nav helpers\n\n**New file**: `src/lib/nav.ts`\n\nFramework-free, no `fs` and no Astro imports, so it unit-tests directly — the\nsame shape as `src/lib/drafts.ts` and `src/lib/events.ts`.\n\n- `chapterNavItems(chapters)` — map published chapters to `{ label: city, url:\n  '/chapters/<slug>' }`, sorted with the `OurChapters` convention above. Returns\n  `[]` for no chapters.\n- `withChapterGroup(items, chapterItems)` — return a new top-level item list\n  with a `Chapters` dropdown inserted directly after the item labeled\n  `Programs`, or appended when there is none. When `chapterItems` is empty the\n  group is omitted entirely rather than rendered as an empty dropdown.\n- `internalNavUrls(items)` — walk the (up to three-level) tree and collect every\n  `url` that is site-internal, i.e. starts with `/`. External `https://` links\n  are out of scope for the guard.\n- `unresolvedNavUrls(urls, knownPaths)` — the URLs with no match in\n  `knownPaths`. Strip any `#fragment` before comparing so `/events#webinars`\n  resolves against `/events`, and treat a bare `/#about` as the home page.\n\nReuse the `NavItem` / `SiteNav` types already exported from `src/lib/site.ts`\nrather than redeclaring them.\n\n### 2. Render the derived group\n\n**File**: `src/layouts/BaseLayout.astro`\n\nAdd a `getCollection('chapters')` read to the frontmatter (the layout does not\nimport from `astro:content` today), filter it with `publishedEntries`, and build\n`chapterItems` via `chapterNavItems`. Then:\n\n- Replace the `nav.items.map(...)` source at line 63 with\n  `withChapterGroup(nav.items, chapterItems)`.\n- Replace the `utilCities` derivation at lines 26-27 so the utility strip reads\n  the derived chapter labels directly instead of hunting for a nav group by\n  label. This is the line that currently goes stale invisibly.\n\nThe dropdown markup itself is unchanged — a derived group is an ordinary\none-level dropdown and hits the existing `mega-col` branch.\n\n### 3. Drop the duplicated links\n\n**File**: `src/data/nav.json`\n\nRemove the entire `Chapters` group (the five hand-listed chapter links). The\nother four groups stay exactly as they are and remain fully editable from\n`/admin/settings`.\n\n### 4. Tests\n\n**New file**: `src/lib/nav.test.ts`\n\nCover the behavior the drift made invisible:\n\n- A chapter present in the collection but absent from `nav.json` still appears\n  in the menu — the headline bug.\n- Ordering follows `order`, with the `city` tiebreak for equal/absent values.\n- A drafted chapter is absent from the production menu and present when\n  `includeDrafts` is passed, matching the rest of the site.\n- Zero chapters produces no Chapters group at all, not an empty dropdown.\n- `withChapterGroup` places the group after `Programs`, and appends when\n  `Programs` is missing.\n- `unresolvedNavUrls` resolves `/events#webinars` against `/events` and `/#about`\n  against `/`, and reports a genuinely dead link.\n\n**File**: `src/data/collections.test.ts` — no change here; the nav integrity\ncheck over the *committed* `nav.json` belongs with the other nav tests. Add it\nto `src/lib/nav.test.ts` as a final describe block that reads the real\n`src/data/nav.json` and the real content directories from disk (the pattern\n`src/data/collections.test.ts:88-96` already uses), asserting every internal nav\nURL resolves. `/blog/welcome` is the live example this pins.\n\n### 5. Document the new rule\n\n**File**: `CMS_SETUP.md`\n\nAdd a short **Navigation** section: menu groups are edited in `/admin →\nSettings`, except Chapters, which is generated from the chapters collection —\npublish a chapter and it appears; there is nothing to add by hand. Note the\none consequence: the Chapters group cannot be reordered or renamed from the\nadmin UI.\n\n## Reused existing code\n\n- `publishedEntries` from `src/lib/drafts.ts` (glossary entry:\n  `publishedEntries`) — the draft-visibility rule every route already applies\n- `withBase` from `src/lib/url.ts` (glossary entry: `withBase`) — already\n  applied at each nav render site in `BaseLayout.astro`; the derived items stay\n  base-agnostic and are wrapped once at render, matching the contract pinned by\n  `src/components/landing/landing-images.test.ts`\n- `nav` / `NavItem` / `SiteNav` from `src/lib/site.ts` (glossary entries: `site`,\n  `readSingleton`) — the singleton reader and the nav types\n- The sort convention in `src/components/landing/OurChapters.astro:20-22` —\n  reused verbatim so the menu and the chapters section can never order\n  differently\n- `src/data/collections.test.ts` — the committed-file-vs-disk test pattern the\n  final integrity block follows\n\n**Existing-implementation survey.** Nothing in this repo derives navigation from\ncontent today: the only reads of `nav` are `src/lib/site.ts:60` and\n`src/layouts/BaseLayout.astro:26,63`, and there is no existing nav helper module\n(`src/lib/` has no `nav.ts`). On the package side, `@codeyam/cms` offers no\ncollection-backed nav group — `navEditor.ts` and `siteConfig.ts` model only\nliteral `label`/`url`/`children` items, which is what forces the injection\napproach above.\n\n## Reproduction Test\n\nPins that a chapter published through the CMS never reaches the site menu.\n\n**Target**: `src/lib/nav.test.ts` (new) — run with\n`codeyam-editor editor refresh-tests --test nav`.\n\n```ts\n// A chapter that exists in the collection must appear in the menu even though\n// nav.json has never heard of it — the drift that leaves a published chapter\n// unreachable from the header.\nit(\"includes a chapter that nav.json does not list\", () => {\n  const navItems = [{ label: \"Programs\", children: [{ label: \"All Events\", url: \"/events\" }] }];\n  const chapters = [{ slug: \"tokyo\", data: { city: \"Tokyo\", order: 6 } }];\n\n  const merged = withChapterGroup(navItems, chapterNavItems(chapters));\n  const chapterGroup = merged.find((i) => i.label === \"Chapters\");\n\n  expect(chapterGroup?.children).toContainEqual({ label: \"Tokyo\", url: \"/chapters/tokyo\" });\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Expected failure: `src/lib/nav.ts`\ndoes not exist, so the import of `withChapterGroup` / `chapterNavItems` fails to\nresolve and the file errors before asserting. Once the helpers land the\nassertion is the real check.\n\n## Scenarios to Demonstrate\n\n- **Today's five chapters** — the header and utility strip identical to the\n  current site, proving the derivation is not a visual change\n- **A newly published sixth chapter** — appearing in the dropdown and in the\n  utility strip with no nav edit\n- **A drafted chapter** — absent from the production menu, visible in the dev\n  preview\n- **Zero chapters** — no Chapters group at all, the rest of the menu intact\n  (the production-starts-empty state `OurChapters` already handles)\n- **A chapter renamed from \"DC & DMV Area\"** — the label following the content\n  instead of stranding a stale hand-written one\n- **`nav.json` with a dead internal link** — the integrity guard naming\n  `/blog/welcome` after that post is drafted",
+  "description": "Publishing a chapter through /admin now puts it in the site's navigation, because the header's Chapters dropdown is generated from the chapters collection at render time instead of hand-listed in nav.json. The same derivation drives the crimson utility strip at the top of every page, which previously read its city list back out of the nav group and so went stale invisibly — it had been showing 'DC & DMV' while the chapter's own city was 'DC & DMV Area'. A new src/lib/nav.ts holds the pure helpers (chapterNavItems, withChapterGroup, internalNavUrls, unresolvedNavUrls), the header markup moved out of BaseLayout into PrimaryNav and UtilityBar components, and a vitest guard over the committed nav.json now reports any hand-authored internal link whose page no longer exists — pinning Content Hub's Blog entry, which points at the single post /blog/welcome. The group is injected by the layout rather than marked in nav.json because the CMS nav serializer rebuilds every item from label plus children/url and drops anything else; the cost of that choice is that Chapters alone cannot be renamed or reordered from /admin, which is documented in CMS_SETUP.md.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/capture.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/cms--chapters-nav-derived-from-content.md\t.codeyam/plans/completed/cms--chapters-nav-derived-from-content.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-handlers.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-interactivity.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenario-playwright.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-site-settings.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/board-of-directors-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-initials-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-per-chapter-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterevents-rich-list--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-no-image-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterhero-with-image--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-sparse-no-leads--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chaptersignup-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-populated--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/contactus-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/content-hub-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-configured-form--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-embedded-iframe--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-unconfigured-fallback--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/event-gallery--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-no-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/eventspage-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/focus-areas--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/focus-areas--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/get-involved--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giftpillarcard-with-inline-link--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giftpillars-three-pillars--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/givebutton-both-variants--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giving-campaign--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giving-campaign--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/greeting-hydrated-counter-clicked--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero-carousel--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero-carousel--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/luma-calendar--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/luma-calendar--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/lumasubscribe-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumclose-closing-ask--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumhero-personalized--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumstats-campaign-figures--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumstory-full-narrative--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumtestimonials-three-quotes--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumwhy-two-blocks--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pillaricon-all-three-variants--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stats-band--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stats-band--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/support-us--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/testimonialcard-with-role--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/upcoming-events-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerbenefit-long-copy--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerbenefits-four-blocks--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerhero-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectcard-with-thumbnail--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojects-populated-grid--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectsempty-production-default--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/whatsapp-community--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/nav.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-chapter-published-since-the-menu-was-written.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/primarynav-derived-chapters.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/primarynav-no-chapters-yet.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/primarynav-sixth-chapter-published.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/utilitybar-derived-cities--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/utilitybar-no-chapters--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/utilitybar-derived-cities.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/utilitybar-no-chapters.json",
+      "status": "added"
+    },
+    {
+      "path": "src/components/nav/PrimaryNav.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/nav/UtilityBar.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/nav.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/nav.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    },
+    {
+      "name": "UtilityBar - Derived Cities",
+      "screenshotPath": "utilitybar-derived-cities--desktop.png"
+    },
+    {
+      "name": "UtilityBar - No Chapters",
+      "screenshotPath": "utilitybar-no-chapters--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 17,
+    "passed": 17,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 17,
+        "passed": 17
+      }
+    ]
+  }
+}

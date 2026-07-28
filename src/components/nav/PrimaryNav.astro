@@ -1,0 +1,184 @@
+---
+// The header's primary menu: a taxonomy mega-menu (Programs / Chapters /
+// Communities / Content Hub / Membership) opened on hover or keyboard focus.
+//
+// Renders whatever tree it is handed, to three levels. A top-level item with no
+// children is a plain link; with children it becomes a dropdown, and if any of
+// those children themselves have children the panel splits into titled columns.
+//
+// The items come from two places: the hand-authored groups in `nav.json` (edited
+// via /admin → Settings) and the Chapters group the layout DERIVES from the
+// chapters collection. This component cannot tell them apart, which is the
+// point — derived and authored items render identically.
+//
+// The panel opens with CSS alone (`:hover` / `:focus-within`) — no JS, so it
+// works before hydration and for keyboard users.
+import { withBase } from '../../lib/url';
+import type { NavItem } from '../../lib/site';
+
+interface Props {
+  items: NavItem[];
+}
+const { items } = Astro.props as Props;
+---
+
+<nav class="links" aria-label="Primary">
+  {
+    items.map((item) =>
+      item.children && item.children.length > 0 ? (
+        <div class="nav-item">
+          <button class="nav-top" type="button">
+            {item.label} <span class="caret">▾</span>
+          </button>
+          <div class="mega">
+            <div class="mega-in">
+              {item.children.some((c) => c.children && c.children.length > 0) ? (
+                item.children.map((group) => (
+                  <div class="mega-col">
+                    {group.children && group.children.length > 0 ? (
+                      <Fragment>
+                        <span class="mega-h">{group.label}</span>
+                        {group.children.map((leaf) => (
+                          <a href={withBase(leaf.url ?? '/')}>{leaf.label}</a>
+                        ))}
+                      </Fragment>
+                    ) : (
+                      <a class="mega-h-link" href={withBase(group.url ?? '/')}>
+                        {group.label}
+                      </a>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div class="mega-col">
+                  {item.children.map((child) => (
+                    <a href={withBase(child.url ?? '/')}>{child.label}</a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <a class="nav-top" href={withBase(item.url ?? '/')}>
+          {item.label}
+        </a>
+      ),
+    )
+  }
+</nav>
+
+<style>
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .nav-item {
+    position: relative;
+  }
+  .nav-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 0;
+    padding: 6px 0;
+    margin: 0;
+    font: inherit;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .nav-top:hover {
+    color: var(--crimson);
+    text-decoration: none;
+  }
+  .caret {
+    font-size: 9px;
+    color: var(--ink-3);
+  }
+
+  /* Hover mega-menu panel. */
+  .mega {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%) translateY(6px);
+    z-index: 70;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.12s ease, transform 0.12s ease;
+    padding-top: 12px;
+  }
+  .nav-item:hover .mega,
+  .nav-item:focus-within .mega {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .mega-in {
+    display: flex;
+    gap: 28px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--crimson);
+    border-radius: 4px;
+    box-shadow: 0 18px 40px rgba(30, 26, 27, 0.14);
+    padding: 22px 26px;
+    white-space: nowrap;
+  }
+  .mega-col {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 140px;
+  }
+  .mega-h {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-bottom: 3px;
+  }
+  .mega-col a {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .mega-col a:hover {
+    color: var(--crimson);
+  }
+  .mega-h-link {
+    font-weight: 700 !important;
+  }
+
+  /* On narrow widths the menu wraps to its own row under the wordmark and the
+     panels sit inline rather than floating, so every group stays reachable
+     without hover. The `.site-nav` half of this breakpoint lives in the layout. */
+  @media (max-width: 1040px) {
+    .links {
+      order: 3;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .mega {
+      position: static;
+      transform: none;
+      padding-top: 8px;
+      opacity: 1;
+      visibility: visible;
+    }
+    .mega-in {
+      flex-wrap: wrap;
+      box-shadow: none;
+      white-space: normal;
+    }
+  }
+</style>

@@ -1,0 +1,70 @@
+{
+  "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+  "id": "4d71a372-11f0-41c7-a504-3a7dec91d567",
+  "url": "/",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "chapters": [
+      {
+        "blurb": "Home of Harvard, our Cambridge and Boston community.",
+        "body": "Founder dinners, campus meetups, and panels with Harvard faculty and alumni operators, steps from the Yard.",
+        "city": "Boston & Cambridge",
+        "heroImage": "/images/bg/hero-bg.jpg",
+        "order": 1,
+        "region": "Boston & Cambridge, MA",
+        "slug": "boston-cambridge"
+      },
+      {
+        "blurb": "Our founding chapter and largest community.",
+        "body": "Monthly mixers, founder dinners, and the annual Summit.",
+        "city": "New York City",
+        "heroImage": "/images/chapters/nyc.jpg",
+        "order": 2,
+        "region": "New York, NY",
+        "slug": "nyc"
+      },
+      {
+        "blurb": "Our European hub across the London tech scene.",
+        "body": "Evening socials and founder roundtables across the London tech scene.",
+        "city": "London",
+        "heroImage": "/images/gallery/event-05.jpg",
+        "order": 3,
+        "region": "London, UK",
+        "slug": "london"
+      },
+      {
+        "blurb": "The DC, Maryland & Virginia community.",
+        "body": "Policy-adjacent tech conversations across the District, Maryland, and Virginia.",
+        "city": "DC & DMV Area",
+        "heroImage": "/images/gallery/event-18.jpg",
+        "order": 4,
+        "region": "Washington, DC",
+        "slug": "dc-dmv"
+      },
+      {
+        "blurb": "The Pacific Northwest chapter.",
+        "body": "Meetups with alumni across the Pacific Northwest's cloud and devices companies.",
+        "city": "Seattle",
+        "heroImage": "/images/gallery/event-27.jpg",
+        "order": 5,
+        "region": "Seattle, WA",
+        "slug": "seattle"
+      },
+      {
+        "blurb": "Gateway to Latin America, and our newest chapter.",
+        "body": "Founder meetups across Brickell and Wynwood, connecting alumni building at the intersection of tech, finance, and the Americas.",
+        "city": "Miami",
+        "heroImage": "/images/gallery/event-03.jpg",
+        "order": 6,
+        "region": "Miami, FL",
+        "slug": "miami"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/index.astro",
+  "description": "The whole site as it looks once an editor publishes a chapter that the hand-written menu never knew about. Miami appears in the header dropdown, in the crimson strip along the top, and in the Our Chapters row — all from one markdown file, with nobody touching nav.json. Before this change the same publish produced a working chapter page and a new card here, but no menu entry and no warning that one was missing."
+}

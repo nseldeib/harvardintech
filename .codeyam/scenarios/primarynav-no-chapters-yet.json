@@ -1,0 +1,12 @@
+{
+  "name": "PrimaryNav - No Chapters Yet",
+  "id": "c6c258e8-b0fe-4e90-963a-8f837e7560de",
+  "url": "/isolated-components/PrimaryNav-NoChapters",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "PrimaryNav",
+  "scenarioType": "component",
+  "description": "An empty chapters collection, which is where production actually started. There is no Chapters button in the menu bar at all — the group is omitted rather than rendered as a caret that opens onto nothing, and rather than left as an empty dropdown, which the CMS nav serializer would collapse back into a plain link pointing nowhere."
+}

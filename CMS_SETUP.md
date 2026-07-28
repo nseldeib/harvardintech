@@ -112,6 +112,27 @@ present only in `config.ts` still renders on the site but is invisible in the
 CMS; a field present only in `collections.json` will fail schema validation on
 build.
 
+## Navigation
+
+The header menu is edited in **Settings** under `/admin` — every group there
+(Programs, Communities, Content Hub, Membership) is yours to rename, reorder,
+and relink.
+
+**Chapters is the exception: it is generated from the chapters collection.**
+Publish a chapter and it appears in the menu automatically; draft or delete one
+and it leaves. There is nothing to add by hand, and no second step to forget —
+which is the point, since a hand-listed copy could only drift from the real
+chapter list and leave the menu pointing at pages that no longer exist. The
+crimson strip at the very top of every page lists those same chapters, so it
+tracks the collection too.
+
+Menu order follows each chapter's `order` field, exactly as the "Our chapters"
+section on the homepage orders its cards, and each menu label is the chapter's
+own `city`.
+
+The one consequence: **the Chapters group cannot be renamed or reordered from
+the admin UI.** It is always inserted directly after Programs.
+
 ## Media
 
 `public/images/` is the media library. The existing images were adopted by

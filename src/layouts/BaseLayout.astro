@@ -7,10 +7,15 @@
 // / Communities / Content Hub / Membership) center, a Subscribe CTA right.
 // Menu items, socials, the contact email, and the footer text are all data
 // edits to `src/data/*.json` (via the CMS), never markup changes.
+import { getCollection } from 'astro:content';
 import '../styles/tokens.css';
 import SEO from '../components/SEO.astro';
 import HeadExtras from '../components/HeadExtras.astro';
+import UtilityBar from '../components/nav/UtilityBar.astro';
+import PrimaryNav from '../components/nav/PrimaryNav.astro';
 import { settings, nav } from '../lib/site';
+import { chapterNavItems, withChapterGroup } from '../lib/nav';
+import { publishedEntries } from '../lib/drafts';
 import { withBase } from '../lib/url';
 
 interface Props {
@@ -21,10 +26,21 @@ interface Props {
 
 const { title, description, image } = Astro.props;
 
-// The crimson utility strip reads as a one-line "where we are" — driven off the
-// Chapters menu group so it always tracks the live chapter list.
-const chapterGroup = nav.items.find((i) => i.label === 'Chapters');
-const utilCities = (chapterGroup?.children ?? []).map((c) => c.label).join(' · ');
+// The Chapters dropdown is derived from the collection, not hand-listed in
+// `nav.json` — publishing a chapter is the only step needed to put it in the
+// menu. Drafts stay visible while authoring and are absent from the built site,
+// the same rule `index.astro` and every other route applies.
+const chapters = publishedEntries(
+  await getCollection('chapters'),
+  !import.meta.env.PROD,
+).map((c) => ({ slug: c.id, ...c.data }));
+const chapterItems = chapterNavItems(chapters);
+const navItems = withChapterGroup(nav.items, chapterItems);
+
+// The crimson utility strip reads as a one-line "where we are". It reads the
+// derived chapter labels directly, so it can no longer go stale behind the
+// collection the way a hunt for a nav group by label could.
+const utilCities = chapterItems.map((c) => c.label);
 
 const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
 ---
@@ -43,8 +59,7 @@ const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
     <HeadExtras />
   </head>
   <body>
-    <!-- Crimson utility bar: the global-community one-liner. -->
-    <div class="util">A global community · {utilCities}</div>
+    <UtilityBar cities={utilCities} />
 
     <header class="site-nav">
       <a class="brand" href={withBase('/')}>
@@ -58,51 +73,7 @@ const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
         <span class="brand-word">Harvard Alumni in Tech</span>
       </a>
 
-      <nav class="links" aria-label="Primary">
-        {
-          nav.items.map((item) =>
-            item.children && item.children.length > 0 ? (
-              <div class="nav-item">
-                <button class="nav-top" type="button">
-                  {item.label} <span class="caret">▾</span>
-                </button>
-                <div class="mega">
-                  <div class="mega-in">
-                    {item.children.some((c) => c.children && c.children.length > 0) ? (
-                      item.children.map((group) => (
-                        <div class="mega-col">
-                          {group.children && group.children.length > 0 ? (
-                            <Fragment>
-                              <span class="mega-h">{group.label}</span>
-                              {group.children.map((leaf) => (
-                                <a href={withBase(leaf.url ?? '/')}>{leaf.label}</a>
-                              ))}
-                            </Fragment>
-                          ) : (
-                            <a class="mega-h-link" href={withBase(group.url ?? '/')}>
-                              {group.label}
-                            </a>
-                          )}
-                        </div>
-                      ))
-                    ) : (
-                      <div class="mega-col">
-                        {item.children.map((child) => (
-                          <a href={withBase(child.url ?? '/')}>{child.label}</a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <a class="nav-top" href={withBase(item.url ?? '/')}>
-                {item.label}
-              </a>
-            ),
-          )
-        }
-      </nav>
+      <PrimaryNav items={navItems} />
 
       <a class="btn btn-solid nav-cta" href={subscribeUrl} rel="noopener">Subscribe</a>
     </header>
@@ -131,17 +102,6 @@ const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
     </footer>
 
     <style>
-      .util {
-        background: var(--crimson);
-        color: #fff;
-        font-family: var(--font-mono);
-        font-size: 10.5px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        text-align: center;
-        padding: 6px 16px;
-      }
-
       .site-nav {
         position: relative;
         z-index: 50;
@@ -174,95 +134,6 @@ const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
         color: var(--ink);
         font-size: 16px;
         white-space: nowrap;
-      }
-
-      .links {
-        display: flex;
-        align-items: center;
-        gap: 26px;
-        font-size: 13px;
-        font-weight: 600;
-      }
-      .nav-item {
-        position: relative;
-      }
-      .nav-top {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        background: none;
-        border: 0;
-        padding: 6px 0;
-        margin: 0;
-        font: inherit;
-        font-weight: 600;
-        color: var(--ink);
-        cursor: pointer;
-        text-decoration: none;
-      }
-      .nav-top:hover {
-        color: var(--crimson);
-        text-decoration: none;
-      }
-      .caret {
-        font-size: 9px;
-        color: var(--ink-3);
-      }
-
-      /* Hover mega-menu panel. */
-      .mega {
-        position: absolute;
-        left: 50%;
-        top: 100%;
-        transform: translateX(-50%) translateY(6px);
-        z-index: 70;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.12s ease, transform 0.12s ease;
-        padding-top: 12px;
-      }
-      .nav-item:hover .mega,
-      .nav-item:focus-within .mega {
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(-50%) translateY(0);
-      }
-      .mega-in {
-        display: flex;
-        gap: 28px;
-        background: #fff;
-        border: 1px solid var(--line);
-        border-top: 2px solid var(--crimson);
-        border-radius: 4px;
-        box-shadow: 0 18px 40px rgba(30, 26, 27, 0.14);
-        padding: 22px 26px;
-        white-space: nowrap;
-      }
-      .mega-col {
-        display: flex;
-        flex-direction: column;
-        gap: 9px;
-        min-width: 140px;
-      }
-      .mega-h {
-        font-family: var(--font-mono);
-        font-size: 10px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--crimson);
-        margin-bottom: 3px;
-      }
-      .mega-col a {
-        color: var(--ink);
-        font-size: 13px;
-        font-weight: 500;
-        text-decoration: none;
-      }
-      .mega-col a:hover {
-        color: var(--crimson);
-      }
-      .mega-h-link {
-        font-weight: 700 !important;
       }
 
       .nav-cta {
@@ -308,28 +179,12 @@ const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
         color: var(--crimson);
       }
 
+      /* The menu half of this breakpoint (.links / .mega) lives in PrimaryNav,
+         since Astro scopes styles to the component that declares the markup. */
       @media (max-width: 1040px) {
         .site-nav {
           flex-wrap: wrap;
           padding: 16px 24px;
-        }
-        .links {
-          order: 3;
-          width: 100%;
-          flex-wrap: wrap;
-          gap: 18px;
-        }
-        .mega {
-          position: static;
-          transform: none;
-          padding-top: 8px;
-          opacity: 1;
-          visibility: visible;
-        }
-        .mega-in {
-          flex-wrap: wrap;
-          box-shadow: none;
-          white-space: normal;
         }
       }
       @media (max-width: 720px) {

@@ -1,24 +1,6 @@
 {
   "tests": [
     {
-      "description": "Every entry has a non-empty human label for its card.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "ADMIN_COLLECTIONS › gives every collection a non-empty label",
-      "line": 30,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The dashboard covers every folder collection, in display order.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "ADMIN_COLLECTIONS › lists the editable folder collections in order",
-      "line": 17,
-      "registeredAt": "2026-07-22T20:43:59Z",
-      "runner": "tests"
-    },
-    {
       "description": "Clicking the button increments the hydrated counter, proving the island is genuinely interactive and not a static render.",
       "file": "src/components/Greeting.test.tsx",
       "format": "vitest",
@@ -127,6 +109,42 @@
       "runner": "tests"
     },
     {
+      "description": "The label and the url come from different fields. Building the url from the city would 404 for every chapter whose display name is not its slug.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "chapterNavItems › builds the url from the slug, not the city",
+      "line": 67,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE REPRODUCTION TEST. A chapter that exists in the collection must appear in the menu even though nav.json has never heard of it — the drift that leaves a published chapter unreachable from the header.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "chapterNavItems › includes a chapter that nav.json does not list",
+      "line": 36,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Menu order must match the \"Our chapters\" cards exactly, or the two surfaces list the same chapters in different sequences on the same page.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "chapterNavItems › orders by the order field, falling back to city for ties and absent values",
+      "line": 47,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Production started with an empty chapters collection, so the no-chapters path is a real state, not a hypothetical.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "chapterNavItems › returns no items for no chapters",
+      "line": 75,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
       "description": "Consumer extras appended to a built-in are the same drift risk as a custom collection's fields — each must exist in that built-in's schema.",
       "file": "src/data/collections.test.ts",
       "format": "vitest",
@@ -160,6 +178,24 @@
       "key": "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses",
       "line": 248,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The duplication this feature removes: chapters are derived from the collection now, so a hand-listed copy in nav.json can only go stale.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "committed nav.json › no longer hand-lists the chapters",
+      "line": 255,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Runs against the shipped nav.json and the real content on disk, so it catches the live case: Content Hub points at the single post /blog/welcome.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "committed nav.json › points every internal link at a page that exists",
+      "line": 243,
+      "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
     {
@@ -241,69 +277,6 @@
       "key": "contentRoot › returns CODEYAM_CONTENT_ROOT when it is set",
       "line": 18,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
-      "runner": "tests"
-    },
-    {
-      "description": "Zero entries shows the empty-state nudge, not a \"0 entries\" sentence.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardSummaryText › shows the empty-state nudge when there is no content",
-      "line": 76,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The populated summary reports total entries and collection count.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardSummaryText › summarizes a populated dashboard",
-      "line": 62,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "A negative total is treated as empty, guarding against bad input.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardSummaryText › treats a negative total as empty",
-      "line": 83,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "A single entry uses the singular \"entry\".",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardSummaryText › uses the singular entry for a count of one",
-      "line": 69,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Collections with a zero count still count toward collectionCount but add nothing.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardTotals › counts empty collections without adding to the total",
-      "line": 54,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "An empty card list totals zero across zero collections.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardTotals › returns zeros for an empty card list",
-      "line": 49,
-      "registeredAt": "2026-06-14T10:43:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Sums every card's count and reports how many collections there are.",
-      "file": "src/lib/adminDashboard.test.ts",
-      "format": "vitest",
-      "key": "dashboardTotals › sums counts and reports the collection count",
-      "line": 39,
-      "registeredAt": "2026-06-14T10:43:08Z",
       "runner": "tests"
     },
     {
@@ -394,6 +367,24 @@
       "key": "deployBaseFromPath › returns the subpath base for the project-subpath editor path",
       "line": 27,
       "registeredAt": "2026-06-15T22:56:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A drafted chapter has no published page, so linking to it from the built site would be a menu entry pointing at a 404.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "draft visibility › omits a drafted chapter from the production menu",
+      "line": 95,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other half of the same rule: an editor previewing a draft needs to see it in the menu, or they cannot check their work before publishing.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "draft visibility › shows a drafted chapter while authoring",
+      "line": 101,
+      "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
     {
@@ -718,6 +709,15 @@
       "key": "initials › uses only the first two words for a three-word name",
       "line": 22,
       "registeredAt": "2026-06-14T15:43:56Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The guard is only as good as its reach: menu links live up to three levels deep, and an external link has no local page to resolve against.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "internalNavUrls › collects site-internal urls at every level and skips external ones",
+      "line": 150,
+      "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
     {
@@ -1526,7 +1526,7 @@
       "file": "src/lib/site.test.ts",
       "format": "vitest",
       "key": "site singletons › loads settings and nav from the data root as parsed JSON",
-      "line": 29,
+      "line": 70,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -1544,7 +1544,7 @@
       "file": "src/lib/site.test.ts",
       "format": "vitest",
       "key": "site singletons › reflects a second data root on re-import",
-      "line": 55,
+      "line": 105,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -1837,6 +1837,42 @@
       "runner": "tests"
     },
     {
+      "description": "An editor typing `/events/` in the CMS means the same page as `/events`; failing on the slash would be a false alarm they cannot act on.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "unresolvedNavUrls › ignores a trailing slash difference",
+      "line": 197,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole point of the guard: a link whose page was drafted, renamed, or deleted must be reported rather than silently shipped.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "unresolvedNavUrls › reports a url with no page behind it",
+      "line": 189,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Four of the real menu links are bare `/#anchor` jumps into the home page, so this is the most common shape the guard sees.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "unresolvedNavUrls › resolves a bare fragment against the home page",
+      "line": 183,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A fragment is a position on a page, not a separate route — treating it as one would report every anchor link in nav.json as dead.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "unresolvedNavUrls › resolves a fragment against its page",
+      "line": 177,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
       "description": "The bare root path stays '/' at the domain root.",
       "file": "src/lib/url.test.ts",
       "format": "vitest",
@@ -1906,6 +1942,42 @@
       "key": "withBase › preserves a hash fragment on an absolute path under a subpath",
       "line": 37,
       "registeredAt": "2026-06-13T19:06:53Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Programs is editable in the CMS, so it can be renamed or deleted. That must degrade to a sensible position rather than throwing or dropping Chapters.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withChapterGroup › appends the group when there is no Programs item",
+      "line": 119,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The layout passes the shared `nav.items` singleton straight in; mutating it would corrupt the menu for every later reader in the same process.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withChapterGroup › does not mutate the caller list",
+      "line": 139,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pins today's menu order. Deriving the group is only invisible to visitors if it lands in the same slot the hand-listed group occupied.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withChapterGroup › inserts the group directly after Programs",
+      "line": 111,
+      "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty dropdown renders as a caret that opens onto nothing, and the CMS serializer collapses it back to a plain link — so omit the group entirely.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withChapterGroup › omits the group entirely when there are no chapters",
+      "line": 130,
+      "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     }
   ],
