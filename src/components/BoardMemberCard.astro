@@ -5,6 +5,7 @@
 // component scenarios so every board card stays identical. Mirrors EventCard.
 import { withBase } from '../lib/url';
 import { initials, splitRole, type BoardMemberLike } from '../lib/team';
+import { altFor } from '../lib/media';
 
 interface Props {
   member: BoardMemberLike;
@@ -22,7 +23,7 @@ const roleLines = splitRole(member.role);
     member.photo ? (
       <img
         src={withBase(member.photo)}
-        alt={member.name}
+        alt={altFor(member.photo, member.name)}
         style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; filter: grayscale(1); margin: 0 auto var(--space-md);"
       />
     ) : (

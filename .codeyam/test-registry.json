@@ -28,6 +28,51 @@
       "runner": "tests"
     },
     {
+      "description": "A freshly uploaded image nobody has described yet must degrade to the render site's current behavior, never emit `alt=\"undefined\"`.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "altFor › falls back for a record that has no alt key yet",
+      "line": 68,
+      "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Production before the first upload, and any scenario that seeds no media, hit the empty manifest — it must resolve to the fallback, not throw.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "altFor › falls back on an empty manifest",
+      "line": 82,
+      "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An image the manifest has never heard of keeps whatever the component already emitted, so adopting altFor can never make alt worse than today.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "altFor › falls back when there is no record at all",
+      "line": 74,
+      "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The distinction the whole feature rests on: an explicit empty alt is a decision (\"decorative\"), not a gap, so it must beat the fallback. Written with `??` for exactly this reason — `||` would silently discard it and let a backdrop photo be announced by a screen reader.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "altFor › honors an explicit empty alt as a deliberate decorative marking",
+      "line": 62,
+      "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The core of the feature: alt authored in the media library must reach the render site, replacing the positional string the gallery invents.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "altFor › returns the authored alt for a known image",
+      "line": 52,
+      "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "A subject is appended as a query parameter.",
       "file": "src/lib/mailto.test.ts",
       "format": "vitest",
@@ -1627,6 +1672,60 @@
       "key": "splitRole › trims whitespace around the separator",
       "line": 116,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "`url` is derived from the identity, and the package looks assets up BY url (findAssetByUrl), so a hand-edited mismatch would silently orphan a record.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "the committed media manifest › derives each url from its filename",
+      "line": 128,
+      "registeredAt": "2026-07-29T16:29:21.923856429+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "sanity: a manifest that failed to parse, or an empty images tree, must not make the two loops below vacuously pass.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "the committed media manifest › describes a non-empty library",
+      "line": 90,
+      "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The matching sanity guard for the other direction — an empty or unreadable images tree must not let the disk-side loop pass vacuously.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "the committed media manifest › finds the committed images on disk",
+      "line": 96,
+      "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The nobody-wrote-alt direction, and the check that keeps the manifest current as images are added: committing an image without describing it fails CI rather than silently shipping an undescribed photo.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "the committed media manifest › has a record for every image on disk",
+      "line": 117,
+      "registeredAt": "2026-07-29T16:31:20.085592434+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The broken-reference direction: a record whose image was deleted or renamed would render as a broken thumbnail the editor cannot fix. Looped inside one test rather than `it.each` so the registry carries one described entry instead of one undescribed entry per image — the assertion message still names the offending file, so a failure is just as diagnosable.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "the committed media manifest › points every record at a file that exists",
+      "line": 105,
+      "registeredAt": "2026-07-29T16:31:20.085592434+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Absent alt means \"nobody decided yet\"; an empty string means \"decided: decorative\". Every committed asset must have been decided one way or the other, which is what makes the empty strings above meaningful rather than indistinguishable from an oversight.",
+      "file": "src/lib/media.test.ts",
+      "format": "vitest",
+      "key": "the committed media manifest › records an alt value for every asset, empty or otherwise",
+      "line": 140,
+      "registeredAt": "2026-07-29T16:26:47Z",
       "runner": "tests"
     },
     {

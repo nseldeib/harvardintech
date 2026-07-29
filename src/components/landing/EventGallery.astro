@@ -6,6 +6,7 @@
 // `images` override for scenarios.
 import { withBase } from '../../lib/url';
 import { galleryStaggerDelay } from '../../lib/gallery';
+import { altFor, readMediaManifest } from '../../lib/media';
 interface Props {
   images?: string[];
 }
@@ -14,6 +15,8 @@ const defaults = Array.from(
   (_, i) => `/images/gallery/event-${String(i + 1).padStart(2, '0')}.jpg`,
 );
 const { images = defaults } = Astro.props;
+// Read the library once for the whole grid rather than per photo.
+const media = readMediaManifest();
 ---
 
 <section class="sec" id="gallery">
@@ -30,7 +33,7 @@ const { images = defaults } = Astro.props;
           <figure class="gallery-item" style={`transition-delay: ${galleryStaggerDelay(i)}ms;`}>
             <img
               src={withBase(src)}
-              alt={`Harvard in Tech event photo ${i + 1}`}
+              alt={altFor(src, `Harvard in Tech event photo ${i + 1}`, media)}
               loading="lazy"
             />
           </figure>

@@ -6,6 +6,7 @@
 // starts empty).
 import { initials, type BoardMemberLike } from '../../lib/team';
 import { withBase } from '../../lib/url';
+import { altFor, readMediaManifest } from '../../lib/media';
 
 interface Props {
   members?: BoardMemberLike[];
@@ -13,6 +14,8 @@ interface Props {
 const { members = [] } = Astro.props;
 
 const count = String(members.length).padStart(2, '0');
+// Read the library once for the whole grid rather than per headshot.
+const media = readMediaManifest();
 ---
 
 <section class="sec" id="board">
@@ -36,7 +39,11 @@ const count = String(members.length).padStart(2, '0');
             <div class="bm">
               <div class="av">
                 {member.photo ? (
-                  <img class="pho" src={withBase(member.photo)} alt={member.name} />
+                  <img
+                    class="pho"
+                    src={withBase(member.photo)}
+                    alt={altFor(member.photo, member.name, media)}
+                  />
                 ) : (
                   <span class="initials">{initials(member.name)}</span>
                 )}

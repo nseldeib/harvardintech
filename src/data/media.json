@@ -1,0 +1,406 @@
+{
+  "assets": [
+    {
+      "filename": "bg/get-involved-bg.jpg",
+      "url": "/images/bg/get-involved-bg.jpg",
+      "alt": "",
+      "sizeBytes": 488543
+    },
+    {
+      "filename": "bg/hero-bg.jpg",
+      "url": "/images/bg/hero-bg.jpg",
+      "alt": "",
+      "sizeBytes": 604793
+    },
+    {
+      "filename": "chapters/japan.jpg",
+      "url": "/images/chapters/japan.jpg",
+      "alt": "Shibuya Crossing in Tokyo at dusk, crowds streaming across beneath illuminated billboards",
+      "sizeBytes": 750751
+    },
+    {
+      "filename": "chapters/la.jpg",
+      "url": "/images/chapters/la.jpg",
+      "alt": "The downtown Los Angeles skyline at sunset, seen through rows of tall palm trees",
+      "sizeBytes": 83200
+    },
+    {
+      "filename": "chapters/nyc.jpg",
+      "url": "/images/chapters/nyc.jpg",
+      "alt": "The Lower Manhattan skyline at dusk, One World Trade Center lit above the harbor",
+      "sizeBytes": 31143
+    },
+    {
+      "filename": "chapters/san-francisco.jpg",
+      "url": "/images/chapters/san-francisco.jpg",
+      "alt": "The Golden Gate Bridge at dusk with the San Francisco skyline across the bay",
+      "sizeBytes": 297523
+    },
+    {
+      "filename": "gallery/event-01.jpg",
+      "url": "/images/gallery/event-01.jpg",
+      "alt": "A speaker in a dark suit addressing a seated audience at an evening Harvard in Tech talk",
+      "sizeBytes": 21065
+    },
+    {
+      "filename": "gallery/event-02.jpg",
+      "url": "/images/gallery/event-02.jpg",
+      "alt": "A speaker in a navy blazer standing to address a seated audience in a conference room",
+      "sizeBytes": 23861
+    },
+    {
+      "filename": "gallery/event-03.jpg",
+      "url": "/images/gallery/event-03.jpg",
+      "alt": "Four panelists seated in yellow chairs listening during a Harvard in Tech panel",
+      "sizeBytes": 24231
+    },
+    {
+      "filename": "gallery/event-04.jpg",
+      "url": "/images/gallery/event-04.jpg",
+      "alt": "A packed room of attendees smiling toward the stage during a Harvard in Tech talk",
+      "sizeBytes": 24993
+    },
+    {
+      "filename": "gallery/event-05.jpg",
+      "url": "/images/gallery/event-05.jpg",
+      "alt": "Four panelists seated in yellow chairs listening during a Harvard in Tech panel",
+      "sizeBytes": 24231
+    },
+    {
+      "filename": "gallery/event-06.jpg",
+      "url": "/images/gallery/event-06.jpg",
+      "alt": "Four panelists seated in a semicircle, one gesturing as he speaks, during a panel discussion",
+      "sizeBytes": 19497
+    },
+    {
+      "filename": "gallery/event-07.jpg",
+      "url": "/images/gallery/event-07.jpg",
+      "alt": "Panelists seated on stage in front of a large illuminated #harvardtech sign",
+      "sizeBytes": 17787
+    },
+    {
+      "filename": "gallery/event-08.jpg",
+      "url": "/images/gallery/event-08.jpg",
+      "alt": "A panelist speaking on a red-lit stage in front of a patterned brick backdrop",
+      "sizeBytes": 17649
+    },
+    {
+      "filename": "gallery/event-09.jpg",
+      "url": "/images/gallery/event-09.jpg",
+      "alt": "Three panelists seated on stage beneath a lit #harvardtech sign",
+      "sizeBytes": 18056
+    },
+    {
+      "filename": "gallery/event-10.jpg",
+      "url": "/images/gallery/event-10.jpg",
+      "alt": "Three panelists seated on stage in front of an illuminated harvardtech sign",
+      "sizeBytes": 17666
+    },
+    {
+      "filename": "gallery/event-11.jpg",
+      "url": "/images/gallery/event-11.jpg",
+      "alt": "Panelists on stage beneath a large illuminated #harvardtech sign at an evening event",
+      "sizeBytes": 18694
+    },
+    {
+      "filename": "gallery/event-12.jpg",
+      "url": "/images/gallery/event-12.jpg",
+      "alt": "A bearded panelist seated alone on stage against a red and blue lit brick wall",
+      "sizeBytes": 18939
+    },
+    {
+      "filename": "gallery/event-13.jpg",
+      "url": "/images/gallery/event-13.jpg",
+      "alt": "A panel underway on a low stage in a large open office, with a full audience seated in rows",
+      "sizeBytes": 30457
+    },
+    {
+      "filename": "gallery/event-14.jpg",
+      "url": "/images/gallery/event-14.jpg",
+      "alt": "Three attendees wearing conference badges posing together and smiling at an event",
+      "sizeBytes": 20262
+    },
+    {
+      "filename": "gallery/event-15.jpg",
+      "url": "/images/gallery/event-15.jpg",
+      "alt": "Attendees talking and laughing during a networking reception",
+      "sizeBytes": 18752
+    },
+    {
+      "filename": "gallery/event-16.jpg",
+      "url": "/images/gallery/event-16.jpg",
+      "alt": "A group of attendees posing together in front of an AWS Loft mural",
+      "sizeBytes": 24635
+    },
+    {
+      "filename": "gallery/event-17.jpg",
+      "url": "/images/gallery/event-17.jpg",
+      "alt": "Three panelists seated in front of a cloud-patterned wall, one gesturing while speaking",
+      "sizeBytes": 18020
+    },
+    {
+      "filename": "gallery/event-18.jpg",
+      "url": "/images/gallery/event-18.jpg",
+      "alt": "A large audience seated in an open-plan office space watching a presentation",
+      "sizeBytes": 30544
+    },
+    {
+      "filename": "gallery/event-19.jpg",
+      "url": "/images/gallery/event-19.jpg",
+      "alt": "A packed room of attendees smiling toward the stage during a Harvard in Tech talk",
+      "sizeBytes": 24993
+    },
+    {
+      "filename": "gallery/event-20.jpg",
+      "url": "/images/gallery/event-20.jpg",
+      "alt": "Two attendees posing in front of a slide introducing the event's founder speakers",
+      "sizeBytes": 16139
+    },
+    {
+      "filename": "gallery/event-21.jpg",
+      "url": "/images/gallery/event-21.jpg",
+      "alt": "Attendees seated on sofas and chairs on green carpet, listening to a speaker",
+      "sizeBytes": 26032
+    },
+    {
+      "filename": "gallery/event-22.jpg",
+      "url": "/images/gallery/event-22.jpg",
+      "alt": "A speaker with a microphone addressing a seated audience beside a projection screen",
+      "sizeBytes": 26591
+    },
+    {
+      "filename": "gallery/event-23.jpg",
+      "url": "/images/gallery/event-23.jpg",
+      "alt": "Attendees standing and talking in small groups at an evening reception",
+      "sizeBytes": 21652
+    },
+    {
+      "filename": "gallery/event-24.jpg",
+      "url": "/images/gallery/event-24.jpg",
+      "alt": "Attendees seated in rows of chairs listening, one leaning back and smiling",
+      "sizeBytes": 20968
+    },
+    {
+      "filename": "gallery/event-25.jpg",
+      "url": "/images/gallery/event-25.jpg",
+      "alt": "Three panelists on stools taking questions from an audience seated on green carpet",
+      "sizeBytes": 17822
+    },
+    {
+      "filename": "gallery/event-26.jpg",
+      "url": "/images/gallery/event-26.jpg",
+      "alt": "Three speakers seated behind a draped table with microphones and name cards",
+      "sizeBytes": 36559
+    },
+    {
+      "filename": "gallery/event-27.jpg",
+      "url": "/images/gallery/event-27.jpg",
+      "alt": "A crowded reception hall with attendees standing and seated in conversation",
+      "sizeBytes": 45405
+    },
+    {
+      "filename": "gallery/event-28.jpg",
+      "url": "/images/gallery/event-28.jpg",
+      "alt": "Audience members applauding during a talk in a wood-panelled hall",
+      "sizeBytes": 32927
+    },
+    {
+      "filename": "gallery/event-29.jpg",
+      "url": "/images/gallery/event-29.jpg",
+      "alt": "A speaker on a stool addressing attendees seated in rows of folding chairs",
+      "sizeBytes": 44774
+    },
+    {
+      "filename": "gallery/event-30.jpg",
+      "url": "/images/gallery/event-30.jpg",
+      "alt": "Six attendees posing together and smiling at the end of an event",
+      "sizeBytes": 38636
+    },
+    {
+      "filename": "gallery/event-31.jpg",
+      "url": "/images/gallery/event-31.jpg",
+      "alt": "Attendees seated in a lecture hall, several raising their hands to ask questions",
+      "sizeBytes": 37507
+    },
+    {
+      "filename": "gallery/event-32.jpg",
+      "url": "/images/gallery/event-32.jpg",
+      "alt": "Attendees standing and talking around high tables at a casual evening mixer",
+      "sizeBytes": 46554
+    },
+    {
+      "filename": "gallery/event-33.jpg",
+      "url": "/images/gallery/event-33.jpg",
+      "alt": "Attendees talking in front of a projected Harvard crest at a reception",
+      "sizeBytes": 34237
+    },
+    {
+      "filename": "gallery/event-34.jpg",
+      "url": "/images/gallery/event-34.jpg",
+      "alt": "Two attendees smiling for the camera at a reception in a wood-panelled room",
+      "sizeBytes": 39661
+    },
+    {
+      "filename": "gallery/event-35.jpg",
+      "url": "/images/gallery/event-35.jpg",
+      "alt": "Attendees standing with drinks, listening to remarks given from a podium",
+      "sizeBytes": 45624
+    },
+    {
+      "filename": "gallery/event-36.jpg",
+      "url": "/images/gallery/event-36.jpg",
+      "alt": "Three attendees wearing name badges posing together at a reception",
+      "sizeBytes": 35829
+    },
+    {
+      "filename": "gallery/event-37.jpg",
+      "url": "/images/gallery/event-37.jpg",
+      "alt": "Four attendees in suits posing together at an evening event",
+      "sizeBytes": 36295
+    },
+    {
+      "filename": "gallery/event-38.jpg",
+      "url": "/images/gallery/event-38.jpg",
+      "alt": "A speaker giving remarks at a wooden podium while attendees stand and listen",
+      "sizeBytes": 36274
+    },
+    {
+      "filename": "gallery/event-39.jpg",
+      "url": "/images/gallery/event-39.jpg",
+      "alt": "Four attendees in winter coats posing together at an event",
+      "sizeBytes": 43356
+    },
+    {
+      "filename": "gallery/event-40.jpg",
+      "url": "/images/gallery/event-40.jpg",
+      "alt": "Two attendees wearing name badges smiling together at a reception",
+      "sizeBytes": 20988
+    },
+    {
+      "filename": "harvard-shield.png",
+      "url": "/images/harvard-shield.png",
+      "alt": "",
+      "sizeBytes": 4312
+    },
+    {
+      "filename": "hero/hero.jpg",
+      "url": "/images/hero/hero.jpg",
+      "alt": "Four panelists seated behind a draped table with microphones during a Harvard in Tech panel",
+      "sizeBytes": 116263
+    },
+    {
+      "filename": "sections/board-logo.png",
+      "url": "/images/sections/board-logo.png",
+      "alt": "Harvard in Tech",
+      "sizeBytes": 7754
+    },
+    {
+      "filename": "sections/board-wordmark.png",
+      "url": "/images/sections/board-wordmark.png",
+      "alt": "Board of Directors",
+      "sizeBytes": 11002
+    },
+    {
+      "filename": "sections/board.png",
+      "url": "/images/sections/board.png",
+      "alt": "Harvard in Tech Board of Directors: Ben Wei, Peter Boyce, Krysia Lenzo, Jessica Li and Nadia Eldeib, with each member's role and class year",
+      "sizeBytes": 45669
+    },
+    {
+      "filename": "sections/whatsapp-banner.jpg",
+      "url": "/images/sections/whatsapp-banner.jpg",
+      "alt": "Join our community on WhatsApp",
+      "sizeBytes": 30163
+    },
+    {
+      "filename": "sections/whatsapp.jpeg",
+      "url": "/images/sections/whatsapp.jpeg",
+      "alt": "Join our community on WhatsApp",
+      "sizeBytes": 30163
+    },
+    {
+      "filename": "social/email.jpg",
+      "url": "/images/social/email.jpg",
+      "alt": "",
+      "sizeBytes": 2510
+    },
+    {
+      "filename": "social/facebook.png",
+      "url": "/images/social/facebook.png",
+      "alt": "",
+      "sizeBytes": 1066
+    },
+    {
+      "filename": "social/linkedin.svg",
+      "url": "/images/social/linkedin.svg",
+      "alt": "",
+      "sizeBytes": 428
+    },
+    {
+      "filename": "social/twitter.png",
+      "url": "/images/social/twitter.png",
+      "alt": "",
+      "sizeBytes": 2331
+    },
+    {
+      "filename": "support/briefcase.png",
+      "url": "/images/support/briefcase.png",
+      "alt": "Briefcase icon",
+      "sizeBytes": 2892
+    },
+    {
+      "filename": "support/chat.png",
+      "url": "/images/support/chat.png",
+      "alt": "Speech bubble icon",
+      "sizeBytes": 3903
+    },
+    {
+      "filename": "support/quote.png",
+      "url": "/images/support/quote.png",
+      "alt": "Quotation mark icon",
+      "sizeBytes": 3784
+    },
+    {
+      "filename": "support/star.png",
+      "url": "/images/support/star.png",
+      "alt": "Star icon",
+      "sizeBytes": 3571
+    },
+    {
+      "filename": "support/trophy.png",
+      "url": "/images/support/trophy.png",
+      "alt": "Trophy icon",
+      "sizeBytes": 4550
+    },
+    {
+      "filename": "team/ben-wei.png",
+      "url": "/images/team/ben-wei.png",
+      "alt": "Ben Wei",
+      "sizeBytes": 8455
+    },
+    {
+      "filename": "team/jessica-li.png",
+      "url": "/images/team/jessica-li.png",
+      "alt": "Jessica Li",
+      "sizeBytes": 7597
+    },
+    {
+      "filename": "team/krysia-lenzo.png",
+      "url": "/images/team/krysia-lenzo.png",
+      "alt": "Krysia Lenzo",
+      "sizeBytes": 7011
+    },
+    {
+      "filename": "team/nadia-eldeib.png",
+      "url": "/images/team/nadia-eldeib.png",
+      "alt": "Nadia Eldeib",
+      "sizeBytes": 7352
+    },
+    {
+      "filename": "team/peter-boyce.png",
+      "url": "/images/team/peter-boyce.png",
+      "alt": "Peter Boyce",
+      "sizeBytes": 8558
+    }
+  ]
+}

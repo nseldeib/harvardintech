@@ -8,5 +8,6 @@
   "mocks": {},
   "componentName": "EventGallery",
   "scenarioType": "component",
-  "pageFilePath": "src/components/landing/EventGallery.astro"
+  "pageFilePath": "src/components/landing/EventGallery.astro",
+  "description": "The 40-photo event grid. Since the media-manifest change each photo's alt comes from src/data/media.json via altFor, falling back to the positional 'Harvard in Tech event photo N' only for an image the manifest has no record of. The frame looks identical either way — alt is not visible — so the alt behavior is pinned by src/lib/media.test.ts rather than by this capture. The manifest is deliberately NOT seeded here: the capture pipeline's seed builder requires array-of-rows tables and rejects the object-valued 'media' singleton."
 }

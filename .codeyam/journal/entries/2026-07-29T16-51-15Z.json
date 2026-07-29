@@ -1,0 +1,171 @@
+{
+  "timestamp": "2026-07-29T16:51:15Z",
+  "title": "cms: Media Manifest And Alt Text",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe CMS's media library expects a manifest singleton at `src/data/media.json`\n(`MEDIA_MANIFEST_PATH`, `node_modules/@codeyam/cms/src/lib/mediaLibrary.ts:24`,\npackage version 0.2.0). This repo has never\nhad one, so the library falls back to a bare directory scan: all 67 images under\n`public/images/` show up as selectable assets carrying nothing but a path and a\nbyte size. No alt text, no dimensions, no upload date, no captions.\n\nTwo things follow from that, and both are visible today. The Publish Checklist\nships a \"missing image alt text\" check that resolves alt through the manifest —\nwith no manifest, `findAssetByUrl` returns nothing and the check short-circuits\nto zero findings, so the one preflight step meant to catch an inaccessible image\npasses vacuously rather than meaningfully. And on the public site\nthe alt attributes are either empty or invented at render: the 40-photo event\ngallery emits `alt=\"Harvard in Tech event photo ${i + 1}\"`\n(`src/components/landing/EventGallery.astro:33`), and the chapter cards in\n`OurChapters.astro:45` render their city photos with `alt=\"\"` — decorative\nmarkup on images that carry real meaning.\n\nThis plan adopts the manifest, seeds it from the images already in the tree with\nalt text written once, and makes the site read that alt at render, so alt\nauthored in `/admin` actually reaches the page instead of stopping at the CMS.\n\n## Key Decisions\n\n- **Seed the manifest from the existing tree; never require a re-upload.** The\n  67 files are already committed and referenced. `mergeLibrary` in the package\n  treats disk as the authority on which assets exist and the manifest as the\n  authority on what is known about them\n  (`mediaLibrary.ts:75-136`), so a manifest that describes files already present\n  is exactly the shape it expects — no import step, no migration.\n\n  0.2.0 makes this stronger than when the plan was written: subdirectory asset\n  identities are now first-class (`sanitizeAssetPath`, `assetDirname`,\n  `libraryFolders`, and an upload `destination` argument), and the disk scan\n  recurses to `MAX_SCAN_DEPTH = 6` emitting posix-separated relative paths\n  (`mediaSource.ts:44,76-128`). Since 66 of the 67 images live in\n  subdirectories, the subpath-keyed records below are exactly the identity shape\n  the package now formalizes.\n\n- **Author alt only where alt is meaningful, and record the decorative ones\n  explicitly as `alt: \"\"`.** A background wash (`bg/hero-bg.jpg`,\n  `hero/hero.jpg`) and a social glyph next to a visible label are decorative;\n  giving them prose alt makes screen readers worse, not better. Writing the\n  empty string deliberately is different from having no record at all — it\n  documents the judgment in the manifest, and `altFor` honors it at the render\n  site (see the decision below), so a decorative image ships with `alt=\"\"`\n  rather than inheriting a fallback.\n\n  What the empty string does NOT do — corrected against `@codeyam/cms` 0.2.0 —\n  is silence the package's missing-alt publish check. That check tests\n  `asset.alt == null || asset.alt.trim() === ''`\n  (`publishChecklist.ts:416`), so an explicit `\"\"` reads as missing, exactly\n  like an absent one. `enrich` drops it before the admin UI ever sees it anyway\n  (`mediaLibrary.ts:150` gates on `record?.alt ?`, a truthy test). And the check\n  is scoped to staged *content entries* — markdown body images plus\n  `coverImage` / `ogImage` frontmatter — while every decorative image here is\n  referenced from `.astro` components or the `donatePage.json` /\n  `volunteerPage.json` singletons, which that check never walks. The empty\n  string is written for the site render and for the human reading the manifest;\n  it is not a suppression mechanism.\n\n- **The site reads alt from the manifest, with the render site's current value\n  as the fallback.** This is what turns the manifest from CMS-only bookkeeping\n  into something an editor can actually see the effect of. Fallback rather than\n  replacement means no image can end up with *worse* alt than it has today, and\n  a newly uploaded image with no alt yet degrades to current behavior instead of\n  emitting `alt=\"undefined\"`.\n\n- **Read it through the same singleton path as `settings` and `nav`.**\n  `src/lib/site.ts:21-24` reads singletons with `fs` from `dataRoot()` rather\n  than a static import, precisely so a codeyam session can redirect them to the\n  sandbox. `media.json` must go through the same reader or scenario seeding will\n  not reach it — and the seed adapter already writes any object-valued key to\n  `<dataRoot>/<key>.json`, so `media` seeds per scenario for free once it is\n  read this way.\n\n- **Do not make the gallery CMS-editable in this plan.** `EventGallery.astro`\n  generates its 40 paths from a loop over `event-01..40`; making the photo set\n  itself editable is a real improvement but a different change with its own\n  content model. Here the gallery keeps its generated list and gains real alt.\n  Flagged rather than silently folded in.\n\n- **Guard the manifest against the tree, both directions, as a unit test.**\n  A manifest record whose file is gone is a broken reference; a rendered image\n  with no record is an image nobody wrote alt for. `src/lib/team.photos.test.ts`\n  already establishes the read-content-off-disk guard pattern for exactly this\n  class of bug (the live-site headshot regression), and this follows it.\n\n## Implementation\n\n### 1. The manifest\n\n**New file**: `src/data/media.json`\n\nShape `{ \"assets\": [...] }`, one record per file under `public/images/`, each\nwith `filename` (path within `public/images`, the asset identity), `url`\n(`/images/<filename>`), and `alt`. Group the authoring by what the image is for:\n\n- **`gallery/event-01..40.jpg`** (40) — event photographs. Alt describing what\n  the photo shows, not \"event photo 7\". These are to be written from the actual\n  images at execution, not invented from filenames.\n- **`team/*.png`** (5) — board headshots. Alt is the member's name, matching\n  what `BoardMemberCard.astro:25` already renders.\n- **`chapters/*.jpg`** (4) and **`bg/*.jpg`**, **`hero/hero.jpg`** — city and\n  section imagery; descriptive alt for the city photos, explicit `alt: \"\"` for\n  the two background washes and the hero backdrop.\n- **`sections/*`** (5), **`support/*.png`** (5), **`social/*`** (4),\n  **`harvard-shield.png`** — logos, icons and glyphs. Decorative where a text\n  label sits beside them (the socials in `ContactUs.astro:40` and\n  `ChapterConnect.astro:45` already pass `alt=\"\"` for this reason); descriptive\n  where the image stands alone.\n\nNote while authoring: `chapters/japan.jpg`, `chapters/la.jpg` and\n`chapters/san-francisco.jpg` have no corresponding entry in\n`src/content/chapters/` (which holds boston-cambridge, dc-dmv, london, nyc,\nseattle). They are unreferenced. Keep them in the manifest — they are real files\nan editor can still pick — but do not invent a chapter for them.\n\n### 2. Read the manifest\n\n**New file**: `src/lib/media.ts`\n\n- Export the `MediaAsset` / `MediaManifest` types matching the package's shape.\n- Read `media.json` through the same `readSingleton` mechanism `src/lib/site.ts`\n  uses, tolerating an absent file by returning `{ assets: [] }` — production\n  before the first upload, and any scenario that seeds no media, must not crash\n  the render.\n- `altFor(url, fallback)` — the manifest's alt for a site-relative image URL,\n  falling back to the caller's current value when there is no record and to the\n  fallback when the record's alt is absent. An explicit `\"\"` in the manifest is\n  a real answer and must win over the fallback, not be treated as missing.\n\nKeep it pure apart from the one singleton read, and match the existing module\nstyle: no DOM, no Astro imports, so it unit-tests directly.\n\n### 3. Render the authored alt\n\n**Files**: `src/components/landing/EventGallery.astro`,\n`src/components/landing/OurChapters.astro`,\n`src/components/landing/BoardOfDirectors.astro`,\n`src/components/BoardMemberCard.astro`\n\nReplace each hardcoded or empty `alt` with `altFor(<url>, <current value>)`, so\nevery one of these render sites keeps its present behavior until the manifest\nsays otherwise:\n\n- `EventGallery.astro:33` — fallback stays the generated\n  `Harvard in Tech event photo ${i + 1}` string\n- `OurChapters.astro:45` — fallback stays `''`, and the manifest supplies the\n  city description\n- `BoardOfDirectors.astro:39` and `BoardMemberCard.astro:25` — fallback stays\n  `member.name`\n\nLeave the genuinely decorative render sites alone\n(`BaseLayout.astro:54` brand shield, `ChapterHero.astro:29`, `Hero.astro:23`,\n`HeroCarousel.astro:63`, the social glyphs) — their `alt=\"\"` is correct and the\nmanifest records agree with it.\n\n### 4. Tests\n\n**New file**: `src/lib/media.test.ts`\n\n- `altFor` returns the manifest alt, falls back when there is no record,\n  honors an explicit `\"\"`, and falls back for a record with no `alt` key.\n- Every `filename` in the committed `src/data/media.json` exists under\n  `public/images/` — the broken-reference direction.\n- Every file under `public/images/` has a manifest record — the\n  nobody-wrote-alt direction, and the check that keeps the manifest current as\n  images are added.\n- A non-empty sanity assertion on the manifest size, so an empty or\n  failed-to-parse manifest cannot make the two loops vacuously pass (the guard\n  `src/lib/team.photos.test.ts:27-29` uses).\n\n### 5. Document it\n\n**File**: `CMS_SETUP.md`\n\nThe **Media** section currently says the images \"were adopted by directory scan\n— there was no import step and no manifest to author\". Update it: there is now a\nmanifest, `src/data/media.json`, holding alt text and metadata; it is edited\nthrough the media library like any other content and commits in the same batch.\nAdd the rule that alt written there reaches the rendered page, and that an\nempty alt is a deliberate \"this image is decorative\".\n\n## Reused existing code\n\n- `readSingleton` / `dataRoot` from `src/lib/site.ts:21-24` and\n  `src/lib/contentRoot.ts` (glossary entries: `readSingleton`, `dataRoot`,\n  `contentRoot`) — the sandbox-aware singleton read the manifest must go through\n- The `MediaAsset` / `MediaManifest` shape and `MEDIA_DIR` / `MEDIA_URL_PREFIX`\n  conventions from `node_modules/@codeyam/cms/src/lib/mediaLibrary.ts:20-60` —\n  the manifest must match what the package reads and writes, not a parallel\n  shape\n- `src/lib/team.photos.test.ts` — the disk-vs-content guard pattern the manifest\n  tests follow, including its vacuous-pass sanity check\n- `withBase` from `src/lib/url.ts` (glossary entry: `withBase`) — unchanged at\n  every render site; alt is independent of the base path, and\n  `src/components/landing/landing-images.test.ts` keeps pinning the src side\n\n**Existing-implementation survey.** There is no media manifest and no media\nhelper in this repo today: `src/data/` holds `cms.json`, `collections.json`,\n`donatePage.json`, `nav.json`, `settings.json` and `volunteerPage.json` — no\n`media.json` — and `src/lib/` has no `media.ts`. No render site reads alt from data — every `alt=` in `src/` is either\na literal `\"\"`, a template string, or a direct field read (`member.name`). On\nthe package side the manifest reader, the alt-carrying `![alt](url)` insertion,\nand the missing-alt publish check are all already implemented and simply have no\ndata to work with.\n\n## Reproduction Test\n\nPins that authored alt text never reaches the rendered page.\n\n**Target**: `src/lib/media.test.ts` (new) — run with\n`codeyam-editor editor refresh-tests --test media`.\n\n```ts\n// Alt text written in the media library must reach the render site; today the\n// gallery invents \"Harvard in Tech event photo 7\" and the manifest is ignored.\nit(\"returns the authored alt for a known image\", () => {\n  const manifest = {\n    assets: [\n      { filename: \"gallery/event-07.jpg\", url: \"/images/gallery/event-07.jpg\",\n        alt: \"Panelists on stage at the NYC chapter launch\" },\n    ],\n  };\n\n  expect(altFor(manifest, \"/images/gallery/event-07.jpg\", \"Harvard in Tech event photo 7\"))\n    .toBe(\"Panelists on stage at the NYC chapter launch\");\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Expected failure: `src/lib/media.ts`\ndoes not exist, so the `altFor` import fails to resolve and the file errors\nbefore asserting. Note the signature above takes the manifest explicitly for\ntestability; if execution makes the module-level singleton the only entry point,\nretarget this at the pure inner function rather than stubbing `fs`.\n\n## Scenarios to Demonstrate\n\n- **The event gallery with authored alt** — the same 40 photos, each carrying a\n  real description instead of a serial number\n- **Chapter cards with described photos** — `OurChapters` where `alt=\"\"` sits\n  on meaningful city imagery today\n- **An image with no manifest record** — a freshly uploaded photo rendering with\n  the current fallback alt rather than breaking\n- **A deliberately decorative image** — an explicit `alt: \"\"` in the manifest\n  winning over a fallback, proving the empty string is a real answer\n- **The media library itself** — `/admin/media` showing the 67 images with\n  their alt text and metadata instead of bare filenames\n- **The Publish Checklist** — the \"missing image alt text\" check reaching a\n  meaningful verdict for the first time, on a staged entry whose cover image has\n  no alt",
+  "description": "Adopted the CMS media library's manifest singleton and made the site read it, so alt text stops at the CMS no longer. src/data/media.json now describes all 67 images under public/images — alt written by looking at each photograph rather than inferring from filenames, with 7 recorded as an explicit empty string for genuinely decorative assets (the two hero backdrops, the four social glyphs that sit beside a visible label, and the brand shield beside the 'Harvard Alumni in Tech' wordmark). src/lib/media.ts adds readMediaManifest (tolerating an absent or malformed file so production before the first upload still renders) and altFor(url, fallback), read through dataRoot() like settings and nav so a codeyam sandbox redirect reaches it. Four render sites now resolve alt through it — EventGallery, OurChapters, BoardOfDirectors and BoardMemberCard — each keeping its previous value as the fallback, so no image can end up with worse alt than before. The visible wins: the 40-photo gallery stops emitting 'Harvard in Tech event photo 7' and the chapter cards stop rendering alt=\"\" on meaningful city imagery.\n\nThe plan predated @codeyam/cms 0.2.0 and was amended at the confirm gate after checking its citations against the installed package. Two corrections. First, 0.2.0 STRENGTHENS the design: subdirectory asset identities became first-class (sanitizeAssetPath, assetDirname, libraryFolders, an upload destination argument) and the disk scan recurses to MAX_SCAN_DEPTH=6 emitting posix paths — and 66 of the 67 images live in subdirectories, so the subpath-keyed records are exactly the shape the package now formalizes. Second, one Key Decision's justification was factually wrong and was rewritten: an explicit empty alt does NOT silence the package's missing-alt publish check. publishChecklist.ts:416 tests `asset.alt == null || asset.alt.trim() === ''`, so '' reads as missing; enrich (mediaLibrary.ts:150) gates on a truthy `record?.alt` and strips it before the admin UI sees it; and that check only walks staged content entries' body images and cover/social frontmatter, never these component-referenced images. The empty string is written for the render site and for the human reading the manifest — altFor honors it via `??`, which is the load-bearing detail.\n\nCoverage: 143 new tests in src/lib/media.test.ts (suite 210 -> 221 after collapsing two it.each blocks into loops, see below). altFor is pinned for the authored-alt, explicit-empty, record-without-alt, no-record and empty-manifest cases; the manifest is guarded against the tree in both directions (a record whose file is gone, and an image nobody has written alt for) with non-empty sanity assertions so neither loop can pass vacuously. Red-on-revert was verified empirically rather than assumed: flipping altFor's `??` to `||` turns the explicit-empty test red, which is the whole point of the operator.\n\nFive findings recorded rather than silently worked around. (1) @codeyam/cms 0.2.0 has NO alt-authoring UI — stageUpload accepts meta.alt (mediaStaging.ts:116) but no admin component ever passes it, and MediaCard only consumes asset.alt as its own thumbnail alt (MediaCard.tsx:90). The read half is now built end to end; the write half needs a package change, so alt is authored today by editing media.json. (2) The plan's claim that 'media seeds per scenario for free' is true of .codeyam/seed-adapter.ts but NOT of the capture pipeline, whose canonical seed builder requires array-of-rows tables and rejects an object-valued singleton; seeding the manifest into four scenarios broke their captures and was backed out. Alt is invisible in a screenshot anyway — every recapture this session came back pixel-identical — so the behavior is pinned by unit tests, not by frames. (3) glossary-add rejects entries for EventGallery and BoardOfDirectors because the entity extractor emits no entity named for an .astro component (it sees Props, defaults, media), yet sibling components OurChapters and BoardMemberCard already carry entries of exactly that shape; BoardOfDirectors is consequently absent from the results panel. (4) BoardOfDirectors.astro inlines its own board-card markup instead of composing BoardMemberCard.astro, which is why altFor had to be wired into both — pre-existing duplication, flagged not fixed, since collapsing it changes rendered landing-page markup. (5) The demo step was structurally skipped with a recorded reason: this feature's deliverable is a render-time HTML attribute with no interactive surface, so there is no control to drive.\n\nDeliberately out of scope: making the event gallery's photo set itself CMS-editable (it still generates its 40 paths from a loop), and the decorative render sites the plan named — BaseLayout's brand shield, ChapterHero, Hero and HeroCarousel — whose alt=\"\" is correct and which the manifest records agree with. Also left alone: three pre-existing scenario flags on untouched surfaces (cms-site-settings stale; the momentum-fund pair as duplicate-candidates on /donate). Noted for whoever runs debt paydown: reconcile-registry labeled 134 registry removals 'inherited drift — pre-existing fleet debt', but those entries were created and removed by this session minutes apart; the heuristic appears to key on 'files this branch did not touch', which misfires on a brand-new untracked test file.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/cms--media-manifest-and-alt-text.md\t.codeyam/plans/completed/cms--media-manifest-and-alt-text.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/event-gallery.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/BoardMemberCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/BoardOfDirectors.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/EventGallery.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/OurChapters.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "added"
+    },
+    {
+      "path": "src/data/media.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/media.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/media.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "BoardMemberCard - With Photo",
+      "screenshotPath": "boardmembercard-with-photo--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "Our Chapters",
+      "screenshotPath": "our-chapters--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 221,
+    "passed": 221,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 221,
+        "passed": 221
+      }
+    ]
+  }
+}

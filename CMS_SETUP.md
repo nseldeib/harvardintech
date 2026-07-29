@@ -151,8 +151,37 @@ the admin UI.** It is always inserted directly after Programs.
 ## Media
 
 `public/images/` is the media library. The existing images were adopted by
-directory scan — there was no import step and no manifest to author, and new
-uploads land in the same tree.
+directory scan — there was no import step to run — and new uploads land in the
+same tree. Since 0.2.0 the uploader offers a destination folder, so an upload
+can go straight into `gallery/`, `team/` and so on rather than the images root.
+
+What the library KNOWS about each image lives in a manifest, `src/data/media.json`.
+Disk decides which images exist; the manifest decides what is recorded about
+them — alt text above all, plus dimensions, size and upload date. It is edited
+through the media library like any other content and commits in the same batch.
+An image with no record is still selectable; it just carries nothing but its
+path and size.
+
+**Alt text written there reaches the rendered page.** The event gallery, the
+chapter cards and the board headshots all read their alt from the manifest, so
+describing a photo in `/admin` changes what a screen reader announces on the
+public site. Each of those render sites keeps its previous value as a fallback,
+so an image with no record — or a newly uploaded one nobody has described yet —
+never ends up worse off than before.
+
+**An empty alt is a deliberate "this image is decorative".** It is not the same
+as leaving alt blank-because-nobody-got-to-it: an empty string in the manifest
+wins over the render site's fallback, which is how a backdrop photo or a social
+glyph sitting beside a visible label stays silent to a screen reader instead of
+being announced twice. Records with no `alt` key at all are the "not yet
+decided" case, and those do fall through to the fallback.
+
+One caveat worth knowing: the Publish Checklist's "missing image alt text" check
+treats an explicit `""` the same as no alt, so a deliberately decorative image
+can still show up there. That check reads body images and cover/social
+frontmatter on the entries you are publishing — it does not walk the whole
+library — so in practice it rarely fires on these. Empty alt is written for the
+rendered page and for the next person reading the manifest, not to silence it.
 
 ## Editing without the CMS
 

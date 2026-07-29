@@ -9,15 +9,17 @@ source: manual
 ## Summary
 
 The CMS's media library expects a manifest singleton at `src/data/media.json`
-(`node_modules/@codeyam/cms/src/lib/mediaLibrary.ts:23`). This repo has never
+(`MEDIA_MANIFEST_PATH`, `node_modules/@codeyam/cms/src/lib/mediaLibrary.ts:24`,
+package version 0.2.0). This repo has never
 had one, so the library falls back to a bare directory scan: all 67 images under
 `public/images/` show up as selectable assets carrying nothing but a path and a
 byte size. No alt text, no dimensions, no upload date, no captions.
 
 Two things follow from that, and both are visible today. The Publish Checklist
 ships a "missing image alt text" check that resolves alt through the manifest —
-with no manifest it has nothing to read, so the one preflight step meant to
-catch an inaccessible image can never pass meaningfully. And on the public site
+with no manifest, `findAssetByUrl` returns nothing and the check short-circuits
+to zero findings, so the one preflight step meant to catch an inaccessible image
+passes vacuously rather than meaningfully. And on the public site
 the alt attributes are either empty or invented at render: the 40-photo event
 gallery emits `alt="Harvard in Tech event photo ${i + 1}"`
 (`src/components/landing/EventGallery.astro:33`), and the chapter cards in
@@ -34,16 +36,38 @@ authored in `/admin` actually reaches the page instead of stopping at the CMS.
   67 files are already committed and referenced. `mergeLibrary` in the package
   treats disk as the authority on which assets exist and the manifest as the
   authority on what is known about them
-  (`mediaLibrary.ts:66-80`), so a manifest that describes files already present
+  (`mediaLibrary.ts:75-136`), so a manifest that describes files already present
   is exactly the shape it expects — no import step, no migration.
+
+  0.2.0 makes this stronger than when the plan was written: subdirectory asset
+  identities are now first-class (`sanitizeAssetPath`, `assetDirname`,
+  `libraryFolders`, and an upload `destination` argument), and the disk scan
+  recurses to `MAX_SCAN_DEPTH = 6` emitting posix-separated relative paths
+  (`mediaSource.ts:44,76-128`). Since 66 of the 67 images live in
+  subdirectories, the subpath-keyed records below are exactly the identity shape
+  the package now formalizes.
 
 - **Author alt only where alt is meaningful, and record the decorative ones
   explicitly as `alt: ""`.** A background wash (`bg/hero-bg.jpg`,
   `hero/hero.jpg`) and a social glyph next to a visible label are decorative;
   giving them prose alt makes screen readers worse, not better. Writing the
   empty string deliberately is different from having no record at all — it
-  documents the judgment and stops the missing-alt check from flagging them
-  forever.
+  documents the judgment in the manifest, and `altFor` honors it at the render
+  site (see the decision below), so a decorative image ships with `alt=""`
+  rather than inheriting a fallback.
+
+  What the empty string does NOT do — corrected against `@codeyam/cms` 0.2.0 —
+  is silence the package's missing-alt publish check. That check tests
+  `asset.alt == null || asset.alt.trim() === ''`
+  (`publishChecklist.ts:416`), so an explicit `""` reads as missing, exactly
+  like an absent one. `enrich` drops it before the admin UI ever sees it anyway
+  (`mediaLibrary.ts:150` gates on `record?.alt ?`, a truthy test). And the check
+  is scoped to staged *content entries* — markdown body images plus
+  `coverImage` / `ogImage` frontmatter — while every decorative image here is
+  referenced from `.astro` components or the `donatePage.json` /
+  `volunteerPage.json` singletons, which that check never walks. The empty
+  string is written for the site render and for the human reading the manifest;
+  it is not a suppression mechanism.
 
 - **The site reads alt from the manifest, with the render site's current value
   as the fallback.** This is what turns the manifest from CMS-only bookkeeping
@@ -184,9 +208,9 @@ empty alt is a deliberate "this image is decorative".
   `src/components/landing/landing-images.test.ts` keeps pinning the src side
 
 **Existing-implementation survey.** There is no media manifest and no media
-helper in this repo today: `src/data/` holds only `cms.json`,
-`collections.json`, `nav.json` and `settings.json`, and `src/lib/` has no
-`media.ts`. No render site reads alt from data — every `alt=` in `src/` is either
+helper in this repo today: `src/data/` holds `cms.json`, `collections.json`,
+`donatePage.json`, `nav.json`, `settings.json` and `volunteerPage.json` — no
+`media.json` — and `src/lib/` has no `media.ts`. No render site reads alt from data — every `alt=` in `src/` is either
 a literal `""`, a template string, or a direct field read (`member.name`). On
 the package side the manifest reader, the alt-carrying `![alt](url)` insertion,
 and the missing-alt publish check are all already implemented and simply have no

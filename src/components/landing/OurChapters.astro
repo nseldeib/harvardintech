@@ -5,6 +5,7 @@
 // prompt (production starts empty). Photos render as <img> for proxy-safe
 // loading, matching the other sections.
 import { withBase } from '../../lib/url';
+import { altFor, readMediaManifest } from '../../lib/media';
 
 interface ChapterLike {
   slug: string;
@@ -21,6 +22,8 @@ const sorted = [...chapters].sort(
   (a, b) => (a.order ?? 99) - (b.order ?? 99) || a.city.localeCompare(b.city),
 );
 const count = String(sorted.length).padStart(2, '0');
+// Read the library once for the whole row rather than per card.
+const media = readMediaManifest();
 ---
 
 <section class="sec" id="chapters">
@@ -42,7 +45,9 @@ const count = String(sorted.length).padStart(2, '0');
         <div class="chap">
           {sorted.map((c) => (
             <a class="c" href={withBase(`/chapters/${c.slug}`)}>
-              {c.heroImage && <img class="pho" src={withBase(c.heroImage)} alt="" />}
+              {c.heroImage && (
+                <img class="pho" src={withBase(c.heroImage)} alt={altFor(c.heroImage, '', media)} />
+              )}
               <div class="c-meta">
                 <span class="cn">{c.city}</span>
                 {c.blurb && <span class="cb">{c.blurb}</span>}

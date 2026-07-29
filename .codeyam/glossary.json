@@ -190,6 +190,12 @@
     ]
   },
   {
+    "description": "The alt text to render for a site-relative image URL, resolved from the media library manifest with the render site's current value as the fallback. Adopting it can never make an image's alt worse than it was: an image with no record, or a record nobody has written alt for, keeps what the component already emitted. An explicit empty string in the manifest is a real answer — 'this image is decorative' — and wins over the fallback via `??` rather than collapsing under a truthiness check, which is the distinction the whole media-manifest feature rests on.",
+    "filePath": "src/lib/media.ts",
+    "name": "altFor",
+    "testFile": "src/lib/media.test.ts"
+  },
+  {
     "description": "Builds a mailto: URL with optional pre-filled subject/body, normalizing space encoding to %20. Used by the Support Us, Contact Us, and footer links.",
     "filePath": "src/lib/mailto.ts",
     "name": "buildMailto",
@@ -330,6 +336,12 @@
     "filePath": "src/lib/drafts.ts",
     "name": "publishedEntries",
     "testFile": "src/lib/drafts.test.ts"
+  },
+  {
+    "description": "Reads the CMS media library manifest from `<dataRoot>/media.json` — the singleton the package writes from /admin — returning an empty library when the file is absent or malformed, so production before the first upload and any scenario that seeds no media still render rather than failing the build. Goes through `dataRoot()` like the settings and nav singletons so a codeyam session's sandbox redirect reaches it and the seed adapter can seed a `media` key per scenario.",
+    "filePath": "src/lib/media.ts",
+    "name": "readMediaManifest",
+    "testFile": "src/lib/media.test.ts"
   },
   {
     "description": "Reads and JSON-parses a singleton data file (settings.json / nav.json) from the resolved dataRoot(), so the site settings/nav honor the codeyam sandbox redirect.",
