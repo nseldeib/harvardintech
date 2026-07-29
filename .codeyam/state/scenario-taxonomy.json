@@ -120,7 +120,7 @@
       },
       "error": {
         "status": "n-a",
-        "reason": "EntryEditor implements no field validation — its only gate is disabled={!dirty} on Stage change. Frontmatter is validated by the Zod schema at build time, so there is no in-page error surface to capture."
+        "reason": "FOLLOW-UP, not absent: @codeyam/cms 0.2.0 added real in-page failure surfaces to this view — CommitErrorNotice for a failed commit and DriftNotice for a branch that moved under a staged change — so the previous justification that no error surface exists is out of date. Not captured in this repo because both components live in node_modules and are unreachable to editor isolate, and rendering either requires a failing or drifted GitHub commit with no .codeyam/mockable declarations in this project. Capturing it means standing up mock declarations for the CMS GitHub transport, which belongs with the package rather than this consumer."
       },
       "key-interaction": {
         "status": "added"

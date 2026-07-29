@@ -127,5 +127,6 @@
     ]
   },
   "scenarioType": "application",
-  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/media/index.astro"
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/media/index.astro",
+  "description": "The media library as an editor meets it once the site's images have been adopted into the repo — every card naming the folder its file lives in, with the upload controls sitting above the grid. Since the @codeyam/cms 0.2.0 upgrade those controls carry a destination picker, so an editor chooses which folder an upload lands in instead of everything defaulting to the images root, alongside the drag-and-drop zone. This is the one admin surface the upgrade visibly changed; the dashboard, entry editor, blog list and settings screens all recaptured pixel-identical."
 }

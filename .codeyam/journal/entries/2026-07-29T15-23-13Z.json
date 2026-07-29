@@ -1,0 +1,103 @@
+{
+  "timestamp": "2026-07-29T15:23:13Z",
+  "title": "Upgrade @codeyam/cms to 0.2.0 and retire the orphaned deploy-status library",
+  "type": "feature",
+  "userRequest": "## Summary\n\nUpgrade `@codeyam/cms` to 0.2.0 and delete the site's own deploy-status\nimplementation, which the CMS migration orphaned — including the\n`/deploy-status.json` marker endpoint, which 0.2.0 now injects itself.\n\n**Amended 2026-07-29, at the confirm gate.** This plan was written against\n`@codeyam/cms` 0.1.0 and kept the marker endpoint on the grounds that the\npackage lacked one. That is no longer true: 0.2.0 ships\n`src/pages/deploy-status.json.ts` and injects it at the public\n`/deploy-status.json`. The version bump is therefore part of this change, and\nthe endpoint is deleted rather than retained.\n\n`src/lib/deployStatus.ts` (268 lines, 9 glossary entries, 31 registered tests in\n`src/lib/deployStatus.test.ts`) exists to drive a deploy banner in the site's own\n`/admin` dashboard. That dashboard and its `src/components/admin/DeployStatus.astro`\nwere retired when `@codeyam/cms` took over `/admin`, so the module is now\nreferenced by nothing except its own test file. It is dead code that still runs\n31 tests on every suite and occupies 9 glossary entries, making the project's\nindex describe a subsystem the site no longer has.\n\n`src/pages/deploy-status.json.ts` goes too. It is a build-time marker —\n`GITHUB_SHA` baked into a prerendered JSON file — that proves **CDN\npropagation**, because a changed `commit` in the *served* file means the new\nbytes are genuinely being served, which a GitHub Pages \"build complete\" can\nprecede. That capability is not lost with the file: `@codeyam/cms` 0.2.0 ships\nthe same marker, injected by the integration at the same public URL, with the\nsame `{ commit, runId, builtAt }` payload — plus `Cache-Control: no-cache`\nheaders the site's copy lacks, and the payload logic extracted into a testable\n`buildDeployMarker`. Keeping the site's file would only mean the package's\nversion never runs, since Astro gives a file-based route precedence over an\ninjected one.\n\n## Key Decisions\n\n- **Upgrade to `@codeyam/cms@^0.2.0` first.** The existing `^0.1.0` range cannot\n  resolve 0.2.0 — a caret on a `0.x` version pins the minor — so `npm update`\n  alone will not move it and the range itself has to change. The upgrade is\n  additive: no files were removed between the two versions, and `exports`,\n  `bin`, and `peerDependencies` are byte-identical, so no re-run of the\n  `integrate` CLI is required and there is no `public/admin` copy in this repo\n  to re-sync.\n- **Delete `deployStatus.ts`, its test, and the endpoint.** All three are\n  site-side reimplementations of things the package now owns: its\n  `deployStateFromBuild` / `deploySteps` drive the same\n  Committed → Building → Live → Failed progression from the Pages API, and as of\n  0.2.0 its injected route serves the marker. None of the three is a capability\n  the package lacks.\n- **Do not port the library into the package as part of this plan.** The\n  companion `@codeyam/cms` change this plan anticipated has already shipped in\n  0.2.0, so the marker-consuming helpers — `markerUrl`, `deployBaseFromPath`,\n  and `computeBanner`'s marker handling — no longer have a downstream consumer\n  to seed. Deleting them loses nothing: they remain in git history at this\n  commit. Keeping dead code in the consumer as a copy-source for a different\n  repo would be the wrong way to preserve it.\n- **The endpoint's stale comment is resolved by deleting the file, not by\n  rewriting it.** It currently says \"The admin polls it and treats a change in\n  `commit` as proof the new content is genuinely live\" — an admin that no longer\n  exists, so the comment describes a deleted consumer. Under the original plan\n  that comment had to be corrected; now the file carrying it goes away, and the\n  package's own version documents the same contract accurately.\n- **Deregister rather than orphan the index entries.** Deleting the files\n  without removing their 9 glossary entries and 31 registered tests leaves the\n  registries describing files that do not exist, which the audit gate will flag\n  on the next session. Use `editor remove-test` / the glossary reconciliation\n  the workflow already runs, not hand-editing of `.codeyam/*.json`.\n- **No behavior change to the public site.** Nothing renders `deployStatus.ts`,\n  so no page changes. `/deploy-status.json` keeps prerendering to the same URL\n  with the same shape — served by the package's injected route instead of the\n  site's file — so any external consumer keeps working. `/admin` DOES change:\n  0.2.0 adds concurrent-edit drift warnings, a clearer commit-failure notice,\n  and an upload-destination picker in the media library. That is what makes this\n  a UI-mode change rather than a pure dependency bump.\n\n## Implementation\n\n### 0. Upgrade the package\n\n**Files**: `package.json`, `package-lock.json`\n\nChange the `@codeyam/cms` range from `^0.1.0` to `^0.2.0` and install. Confirm\n`npm ls @codeyam/cms` reports 0.2.0 and that `astro check` and the suite pass\nBEFORE deleting anything, so any later failure is unambiguously attributable to\nthe deletion rather than to the bump.\n\n### 1. Delete the orphaned library, its test, and the endpoint\n\n**Delete**: `src/lib/deployStatus.ts`, `src/lib/deployStatus.test.ts`, and\n`src/pages/deploy-status.json.ts`\n\nConfirm before deleting that the only remaining references are between these two\nfiles. At the time of writing, a repo-wide grep for `deployStatus` outside\n`src/lib/deployStatus*` returns nothing — no component, page, layout, or\nscenario imports it, and the isolated-components registry has no `DeployStatus`\nentry (its fixtures were removed with the retired admin components).\n\n### 2. Deregister its tests and glossary entries\n\n**Files**: `.codeyam/test-registry.json`, `.codeyam/glossary.json` (via the\neditor CLI, not by hand)\n\nThe 31 registered tests in `deployStatus.test.ts` and the 9 glossary entries\nwhose `filePath` is `src/lib/deployStatus.ts` — `computeBanner`,\n`deployBaseFromPath`, `mapRunPhase`, `markerUrl`, `parseBackendRepo`,\n`pickLatestDeployRun`, `relativeTime`, `runStartedMs`, `viewSiteUrl` — must go\nwith the source. Use `codeyam-editor editor remove-test --key <k>` for the tests\nand let the workflow's glossary reconciliation drop the entries, so the indexes\nstay consistent rather than being hand-edited into a state the next audit\ndisputes.\n\n### 3. Confirm the injected marker took over\n\n**No file** — this is a verification step, not an edit.\n\nWith the site's `src/pages/deploy-status.json.ts` deleted, `@codeyam/cms`'s\n`injectDeployMarkerRoute` is what mounts `/deploy-status.json`. Confirm the\nbuilt `dist/deploy-status.json` still carries `commit`, `runId`, and `builtAt`.\nThe one difference to expect is on a LOCAL build: the site's version emitted\n`runId: null` when `GITHUB_RUN_ID` was unset, the package's emits `\"local\"`. On\nCI both read the real run id, so the deployed marker is byte-comparable.\n\n### 4. Verify the suite shrinks cleanly\n\nAfter deletion the suite should drop by exactly the 31 tests in\n`deployStatus.test.ts` (203 → 172 at the time of writing) with no other test\naffected, and `npm run build` should still emit `/deploy-status.json` in `dist/`.\nBoth are the check that the deletion was surgical rather than load-bearing.\n\n## Reused existing code\n\n- `deploy-status.json.ts` + `buildDeployMarker` / `readBuildStampEnv` from\n  `@codeyam/cms` 0.2.0 (`src/pages/deploy-status.json.ts`, `src/lib/buildEnv.ts`)\n  — the injected marker route that replaces the site's copy, on the same\n  `commit` / `runId` / `builtAt` contract\n- `deployStateFromBuild` / `deploySteps` / `stageFromBuildStatus` from\n  `@codeyam/cms` (`node_modules/@codeyam/cms/src/lib/githubPages.ts`) — the\n  package-side deploy tracking that already replaces the deleted library's\n  banner logic, which is why deleting it loses no editor-facing capability\n- `DeployStatus` from `@codeyam/cms`\n  (`node_modules/@codeyam/cms/src/components/admin/DeployStatus.tsx`) — the\n  in-drawer stepper editors now see after committing\n- `codeyam-editor editor remove-test` — the supported way to drop registered\n  tests, already used elsewhere in this project's workflow\n\n**Existing-implementation survey:** grepped the repo for every `deployStatus` /\n`deploy-status` reference before writing this plan. Outside the two files being\ndeleted, the only hit is `src/pages/deploy-status.json.ts` itself (its own\ncomment). No component, page, doc, workflow, scenario, or screenshot references\nthe library; the deploy-status scenarios and screenshots were already removed\nwhen the retired admin components were deleted. At the time of writing the\n`@codeyam/cms` package contained no reference to `deploy-status.json` — the gap\nthe companion package plan addressed. **That gap is now closed in 0.2.0**, which\nis why the endpoint is deleted here rather than retained.\n\n## Scenarios to Demonstrate\n\n- **Admin deploy stepper after a commit** — the package's Committed → Building →\n  Live progression, showing the editor-facing capability that survives this\n  deletion\n- **The site with no deploy banner** — any public page, confirming nothing\n  visual depended on the deleted library\n- **`/deploy-status.json` still served** — the built marker file with its\n  `commit` / `runId` / `builtAt` shape intact after the cleanup, now produced by\n  the package's injected route rather than a site file",
+  "description": "Moved the site from @codeyam/cms 0.1.0 to 0.2.0 and deleted the deploy-status code the CMS migration had orphaned: src/lib/deployStatus.ts (268 lines, 9 glossary entries, 31 registered tests), its test file, and src/pages/deploy-status.json.ts. The package now injects /deploy-status.json itself, so the site no longer maintains its own copy — the build log confirms the marker is served by @codeyam/cms/src/pages/deploy-status.json.ts with the same commit/runId/builtAt payload, plus Cache-Control headers the site's version lacked.\n\nThe queued plan predated 0.2.0 and had decided to KEEP the endpoint on the grounds that the package lacked one; that companion package change had since shipped, so the plan was amended at the confirm gate and the endpoint deleted too. The caret range also had to change by hand: ^0.1.0 cannot resolve 0.2.0, so npm update alone would never have moved it.\n\nDeleting the endpoint made the site depend on the package providing the marker with nothing verifying it, so src/lib/deployMarker.test.ts (8 tests) was added as the tripwire — it pins the payload keys, the 'local' sentinel fallbacks, and that the injected route stays outside the admin base. Red-on-revert was verified empirically rather than assumed: every symbol it imports is absent in 0.1.0. Suite went 233 -> 202 (exactly the 31 orphaned tests) -> 210. Audit passed with 0 findings on the first run.\n\nOne visible change for editors: the media library gained an upload-destination picker and drag-and-drop zone, the only admin surface the upgrade altered — the dashboard, entry editor, blog list and settings screens all recaptured pixel-identical. Recorded as a follow-up: 0.2.0 also added CommitErrorNotice and DriftNotice to the entry editor, a real error/warning state no scenario covers because both components live in node_modules (unreachable to editor isolate) and rendering them needs a failing or drifted GitHub commit with no .codeyam/mockable declarations in this repo. The CmsEntryEditor taxonomy's error archetype was corrected — its old justification claimed no error surface exists, which 0.2.0 falsified.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/remove-orphaned-deploy-status-library.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/plans/remove-orphaned-deploy-status-library.md",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-media-library-adopted-images.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/deployStatus.test.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/deployStatus.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/pages/deploy-status.json.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/deployMarker.test.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "CMS Media Library - Adopted Images",
+      "screenshotPath": "cms-media-library-adopted-images--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 210,
+    "passed": 210,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 210,
+        "passed": 210
+      }
+    ]
+  }
+}
