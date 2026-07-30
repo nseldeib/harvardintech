@@ -6,6 +6,7 @@
 import { buildMailto } from '../../lib/mailto';
 import { socialIconSrc } from '../../lib/socialIcon';
 import type { SocialLink } from '../../lib/site';
+import { withBase } from '../../lib/url';
 
 interface Props {
   socials: readonly SocialLink[];
@@ -34,14 +35,17 @@ const links = [
     </p>
     <div class="contact-row">
       {
-        links.map((link) => (
-          <a class="contact-link" href={link.url} rel="noopener" aria-label={link.label}>
-            {socialIconSrc(link.icon) && (
-              <img class="contact-icon" src={socialIconSrc(link.icon)} alt="" width="22" height="22" loading="lazy" />
-            )}
-            <span class="contact-label">{link.label}</span>
-          </a>
-        ))
+        links.map((link) => {
+          const iconSrc = socialIconSrc(link.icon);
+          return (
+            <a class="contact-link" href={link.url} rel="noopener" aria-label={link.label}>
+              {iconSrc && (
+                <img class="contact-icon" src={withBase(iconSrc)} alt="" width="22" height="22" loading="lazy" />
+              )}
+              <span class="contact-label">{link.label}</span>
+            </a>
+          );
+        })
       }
     </div>
   </div>

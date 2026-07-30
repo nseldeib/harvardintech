@@ -9,6 +9,7 @@
 import { buildMailto } from '../lib/mailto';
 import { socialIconSrc } from '../lib/socialIcon';
 import { settings } from '../lib/site';
+import { withBase } from '../lib/url';
 
 interface Props {
   email?: string;
@@ -34,18 +35,19 @@ const links = [
     </p>
     <div style="display: flex; gap: var(--space-lg); justify-content: center; align-items: center;">
       {
-        links.map((link) =>
-          socialIconSrc(link.icon) ? (
+        links.map((link) => {
+          const iconSrc = socialIconSrc(link.icon);
+          return iconSrc ? (
             <a
               href={link.url}
               rel="noopener"
               class="connect-badge"
               aria-label={link.label}
             >
-              <img src={socialIconSrc(link.icon)} alt="" width="24" height="24" loading="lazy" />
+              <img src={withBase(iconSrc)} alt="" width="24" height="24" loading="lazy" />
             </a>
-          ) : null,
-        )
+          ) : null;
+        })
       }
     </div>
   </div>

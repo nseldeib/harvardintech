@@ -2,30 +2,55 @@
 
 The build agent will ask which setup applies to your project.
 
-## Two tracks
+## Today: one gated site
 
-`.github/workflows/deploy.yml` publishes two sites out of this one repo. Which
-one a push builds is decided by the branch:
+Until the Strikingly migration there is **one** site, and it is private:
+
+| Branch | Origin | Gate | Drafts | `/admin` | Sitemap |
+| --- | --- | --- | --- | --- | --- |
+| `main` | nseldeib.github.io/harvardintech | passphrase + `noindex` | **visible** | **served** | none |
+
+`harvardintech.com` is still Strikingly's and is untouched. The deploy sets
+`PREVIEW_GATE=1` and `INCLUDE_DRAFTS=1` on the `main` build, which is what keeps
+the preview password-protected while the team reviews it. **Dropping
+`PREVIEW_GATE` is the switch that takes the site public** — do not do it before
+the cutover.
+
+The CMS is deliberately not behind the passphrase; it has its own GitHub-token
+sign-in and is `noindex, nofollow`. See [docs/nicole-review.md](docs/nicole-review.md).
+
+## Later: two tracks
+
+The two-track machinery below is built and dormant. It activates when a
+`staging` branch exists, and is how the site gets a staging → production split
+at migration time — not before.
 
 | Branch | Origin | Gate | Drafts | `/admin` | Sitemap |
 | --- | --- | --- | --- | --- | --- |
 | `main` | harvardintech.com | open, indexable | hidden | absent | published |
 | `staging` | review.harvardintech.com | passphrase + `noindex` | **visible** | **served** | none |
 
+Two things must change together when that happens: the review origin needs the
+one-time setup below, and `main`'s `PREVIEW_GATE=1` comes off. Note that the
+`main` row above is the *public launch* configuration — with no `staging` branch
+standing up a private track, removing the gate would leave nothing protected.
+
 There is no per-track code — the difference is three environment variables read
 by `astro.config.mjs`, `src/lib/previewGate.ts`, and `src/lib/draftVisibility.ts`:
 
-| Variable | Public track | Review track |
-| --- | --- | --- |
-| `DEPLOY_BASE_PATH` | `/harvardintech` (drop at domain cutover) | unset — base stays `/` |
-| `PAGES_SITE` | `https://nseldeib.github.io` | `https://review.harvardintech.com` |
-| `PREVIEW_GATE` | unset | `1` |
-| `INCLUDE_DRAFTS` | unset | `1` |
+| Variable | Today (gated `main`) | Public track | Review track |
+| --- | --- | --- | --- |
+| `DEPLOY_BASE_PATH` | `/harvardintech` | `/harvardintech` (drop at domain cutover) | unset — base stays `/` |
+| `PAGES_SITE` | `https://nseldeib.github.io` | `https://nseldeib.github.io` | `https://review.harvardintech.com` |
+| `PREVIEW_GATE` | `1` | unset | `1` |
+| `INCLUDE_DRAFTS` | `1` | unset | `1` |
 
-The review track keeps `base` at `/` deliberately: `@codeyam/cms` hard-codes
-root-absolute `/admin` links and cannot run under a subpath, which is also why
-the review site needs its own origin rather than a `/preview/` folder on the
-live one.
+`@codeyam/cms` **0.2.1** added base-path support, so the dashboard runs correctly
+under a subpath — which is what makes the single gated site above possible.
+Before 0.2.1 the admin pages built to the right place but every link inside them
+pointed at the origin root, so the CMS was unreachable on a project site. If you
+ever see admin links 404 while the pages themselves load, that is the symptom of
+an older version; check the installed one before debugging anything else.
 
 Promotion is a merge `staging` → `main`, run from the Actions tab via the
 **Promote review → live** workflow (`.github/workflows/promote.yml`).
@@ -98,7 +123,8 @@ safe to leave undone for a while.
 One GitHub repo hosts exactly one Pages site, so a second origin genuinely
 requires a second repo. It holds only generated output; there is no source in it.
 
-1. **Create the review repo** — `nseldeib/harvardintech-review`. Private is fine;
+1. ~~**Create the review repo**~~ — **already done**: `nseldeib/harvardintech-review`
+   exists (private, empty). Kept for this phase rather than deleted. Private is fine;
    note that a private repo's Pages site is still public unless you are on
    GitHub Enterprise Cloud, which is why the passphrase gate and `noindex` carry
    the privacy here.

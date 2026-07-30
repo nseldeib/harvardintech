@@ -1,62 +1,110 @@
 # Harvard in Tech — Review Handoff (for Nicole)
 
-Internal reference for the external review. All three surfaces share one
-passphrase — it's a deterrent to keep the preview out of casual/public view, not
-hard security. Keep the links + password internal.
+Internal reference for the external review. Keep the links and the password
+internal.
+
+Nothing here is public. `harvardintech.com` is still served by Strikingly and is
+untouched by any of this — the preview below is a separate, password-protected
+site that only people with the link and passphrase can see. It stays that way
+until the Strikingly migration.
 
 ## Links + password
 
 | Surface | Link | Password |
 |---|---|---|
-| **Website** | https://review.harvardintech.com/ | `crimson2026` |
-| **CMS / admin dashboard** | https://review.harvardintech.com/admin | `crimson2026` |
-| **Todos / project status** | https://review.harvardintech.com/review | `crimson2026` |
+| **Website** | https://nseldeib.github.io/harvardintech/ | `crimson2026` |
+| **Todos / project status** | https://nseldeib.github.io/harvardintech/review | `crimson2026` |
+| **CMS / admin dashboard** | https://nseldeib.github.io/harvardintech/admin | *(GitHub token — see below)* |
 
-> These point at the **review site**, which is where in-flight work lives —
-> including draft entries that are not on the live site. Edits made here do not
-> change harvardintech.com until someone promotes them (Actions → *Promote review
-> → live*). See [DEPLOY_SETUP.md](../DEPLOY_SETUP.md) if the review site is not
-> reachable yet — it needs a one-time repo + DNS setup.
+The site and the todos page share one passphrase. It is a **deterrent, not
+authentication** — it ships in the client bundle — so it keeps the preview out of
+search results and away from casual visitors, and that is all. Every page also
+carries `noindex`.
 
-- **Reviewing only:** the passphrase is all that's needed — view the site, the
-  todos page, and the CMS dashboard.
-- **Editing content:** only editing requires a GitHub token. From `/admin`, open
-  the editor and choose "Sign in with Token." Share the token **privately** (a
-  password manager, not chat/email) — never paste it into this file.
+The **CMS is not behind the passphrase.** It is behind a GitHub token sign-in
+instead, and the dashboard is `noindex, nofollow`. Treat its URL as
+semi-private: the sign-in overlay hides the content visually, but the underlying
+HTML is fetchable by anyone who has the address.
 
 ## Ready-to-send note
 
-> Hi Nicole — here's the Harvard in Tech site preview to review. All three links
-> use the same password: **crimson2026**
+> Hi Nicole — here's the Harvard in Tech site preview to review. The site and
+> the todos page use the password **crimson2026**:
 >
-> • **Website:** https://review.harvardintech.com/
-> • **Content editor (CMS):** https://review.harvardintech.com/admin
-> • **What's done / what's open (todos):** https://review.harvardintech.com/review
+> • **Website:** https://nseldeib.github.io/harvardintech/
+> • **What's done / what's open (todos):** https://nseldeib.github.io/harvardintech/review
+> • **Content editor (CMS):** https://nseldeib.github.io/harvardintech/admin
 >
-> The "todos" page walks through what's built and the decisions we need from you.
-> Please keep the links + password internal for now. (I'll send you an editor
-> access token separately if you'd like to make edits directly.)
+> The todos page walks through what's built and the decisions we need from you.
+> Please keep the links and password internal for now. The editor needs a
+> separate access token, which I'll send you privately if you'd like to make
+> edits directly.
+>
+> (The real harvardintech.com is unchanged — this is a private preview.)
 
-## Editor access for Nicole (no GitHub account needed)
+## Editor access (no GitHub account needed)
 
-Sveltia commits through a GitHub token, but the **token is the credential** — no
-GitHub login of her own is required.
+The CMS commits through a GitHub token, and **the token is the credential** —
+Nicole does not need a GitHub login of her own.
 
-1. You (with repo write access) generate a **fine-grained token**: Repository
-   access → only `nseldeib/harvardintech`; Repository permissions → **Contents:
-   Read and write** (Metadata: Read is auto-added and required). Give it a short
-   expiry.
-2. Share that token with Nicole privately; she pastes it into "Sign in with
-   Token" at `/admin/editor/`.
-3. **Revoke** the token from GitHub after the review (Settings → Developer
-   settings → Fine-grained tokens). Use a separate token per person so you can
-   revoke one without affecting the other.
+### Generating the token
 
-Her edits will commit under the token owner's GitHub identity (not her name) —
-fine for a review.
+1. Go to GitHub → **Settings** → **Developer settings** → **Personal access
+   tokens** → **Fine-grained tokens** → **Generate new token**.
+2. **Repository access** → *Only select repositories* → `nseldeib/harvardintech`.
+3. **Repository permissions** → **Contents: Read and write**. That is the only
+   one to set; *Metadata: Read* is added automatically and is required.
+4. **Expiration** → short. The review does not need 90 days.
+5. Generate, copy the value, and share it **privately** — a password manager,
+   not chat or email. Never paste it into this file.
+
+Those permissions are exactly what the dashboard uses: it reads and writes
+repository contents via `api.github.com/repos/.../contents/...`, and calls
+`api.github.com/user` once to show who is signed in. Nothing else.
+
+### Using it
+
+She opens the CMS link, chooses **Sign in with Token**, and pastes the value.
+It is stored in her browser's local storage, so she signs in once per browser.
+
+### Reusing an older token
+
+Functionally yes — the permissions are identical to the ones the previous
+editor setup used, so a token that is still valid will work. Two caveats:
+
+- Check whether it still exists at **Settings → Developer settings →
+  Fine-grained tokens**. The earlier round of this doc said to revoke it after
+  the review and to keep the expiry short, so it has most likely lapsed.
+- Even a valid one must be **pasted in again**. This is a different editor from
+  the one used before, and it stores the token under its own key, so nothing
+  carries over from the old sign-in.
+
+Issuing a fresh token per person is the better habit anyway: it lets you revoke
+one person's access without disturbing anyone else's.
+
+### Afterwards
+
+**Revoke the token** at Settings → Developer settings → Fine-grained tokens.
+
+## What happens when she edits
+
+Her edits commit to the `main` branch of `nseldeib/harvardintech` (configured in
+`src/data/cms.json`). That triggers a rebuild, and the password-protected
+preview updates a minute or two later. There is no separate publish step right
+now, and no path by which an edit reaches the real harvardintech.com — that only
+happens at the Strikingly migration, deliberately.
+
+Her commits are attributed to the token owner's GitHub identity, not her name.
+That is expected for a review.
 
 ## Still open (team todos, not code)
 
 - Real **board bios** (the live site has none to reproduce).
 - A **donation-platform URL** (the Donate button currently opens an email).
 - **Chapter + event content** for the 5 cities.
+
+## Known rough edges
+
+- The **staging → production split is not set up yet.** There is one site today.
+  The machinery for two tracks exists in the repo but is dormant; see
+  [DEPLOY_SETUP.md](../DEPLOY_SETUP.md).

@@ -2,7 +2,7 @@
   "repo": {
     "owner": "nseldeib",
     "repo": "harvardintech",
-    "branch": "staging"
+    "branch": "main"
   },
   "authEndpoint": "/auth",
   "auth": {
