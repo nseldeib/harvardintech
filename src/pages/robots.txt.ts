@@ -7,22 +7,16 @@
 // `sitemap-index.xml`; this just points crawlers at it.
 import type { APIContext } from 'astro';
 import { PREVIEW_GATE_ENABLED } from '../lib/previewGate';
+import { robotsTxtBody } from '../lib/robots';
 
 export function GET(context: APIContext): Response {
+  // Resolve the origin, build the body, shape the response — the policy itself
+  // lives in `robotsTxtBody` so both tracks' output is unit-testable without
+  // faking the environment this module reads at load time.
   const site = context.site ?? new URL('/', context.url);
   const sitemapUrl = new URL('sitemap-index.xml', site).href;
 
-  // While the site is a gated pre-launch preview, tell crawlers to stay out.
-  // At launch (PREVIEW_GATE unset) this reverts to the normal allow-all policy.
-  const rule = PREVIEW_GATE_ENABLED ? 'Disallow: /' : 'Allow: /';
-
-  const body = `User-agent: *
-${rule}
-
-Sitemap: ${sitemapUrl}
-`;
-
-  return new Response(body, {
+  return new Response(robotsTxtBody(sitemapUrl, PREVIEW_GATE_ENABLED), {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
   });
 }

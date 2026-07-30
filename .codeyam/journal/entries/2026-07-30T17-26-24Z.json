@@ -1,0 +1,239 @@
+{
+  "timestamp": "2026-07-30T17:26:24Z",
+  "title": "Two-track publishing: live site and private review site",
+  "type": "feature",
+  "userRequest": "## Summary\n\nToday this repo has exactly one deploy target and a preview gate that is an\neither/or: `PREVIEW_GATE_ENABLED` in `src/lib/previewGate.ts` is\n`Boolean(process.env.DEPLOY_BASE_PATH)`, so the site is *either* a gated WIP\npreview at `nseldeib.github.io/harvardintech` *or* a public launch on a custom\ndomain — never both at once. Every `publishedEntries` call site derives\n`includeDrafts` from `!import.meta.env.PROD`, so any deployed build hides drafts\nexactly like production does, and there is nowhere for the HIT team to see\nin-flight work.\n\nBuild a two-track publishing model: a **public track** (`main` →\n`harvardintech.com`, drafts hidden, indexable) and a **review track**\n(`staging` → `review.harvardintech.com`, drafts visible, passphrase-gated and\n`noindex`, hosting `/admin`). Two axes phase a change: the `staging` branch\nphases *code*, and the CMS Draft toggle phases *content*. Promotion to live is\na single merge `staging` → `main`.\n\n## Key Decisions\n\n- **The review track gets its own origin, not a subpath of the live site.** The\n  obvious cheap option — emit the review build into `dist/preview/` on the same\n  Pages site — is not viable for two independently-verified reasons:\n  1. `@codeyam/cms` does not support a non-root `base`. It never reads\n     `import.meta.env.BASE_URL`, and hard-codes 21 root-absolute internal links\n     (`AdminLayout.astro:39-54`, `pages/admin/[collection]/[entry].astro:49`,\n     `components/admin/EntryListSection.tsx:49`,\n     `components/admin/SearchResultRow.tsx:34`). Under `base: '/preview/'` every\n     admin link would resolve to the *public* origin's `/admin`.\n  2. The admin pages embed raw entry markdown. `pages/admin/[collection]/index.astro`\n     builds `items` from `listEntrySources(collection)` — each carrying the\n     entry's `raw` source — and passes them into the `EntryListSearch` island,\n     where they serialize into the static HTML. The CMS sign-in gate\n     (`lib/authSession.ts`) is client-side only. So on whatever origin `/admin`\n     is deployed, **every draft's full markdown is publicly fetchable**. Putting\n     it on the public domain would defeat the point of phasing content.\n- **Second GitHub repo rather than a new vendor.** `review.harvardintech.com`\n  is served by a second repo's Pages site (`nseldeib/harvardintech-review`),\n  built from `staging` by this repo's workflow. One repo = one Pages site, so a\n  second origin genuinely requires a second repo. Cost: one repo, one deploy\n  credential, one DNS `CNAME`. This keeps everything on GitHub Pages as\n  requested.\n  - *Documented alternative, not chosen:* Cloudflare Pages + Cloudflare Access\n    (free for ≤50 users) would give the review track **real authentication** —\n    per-person email one-time-PIN, individually revocable — instead of a shared\n    client-side passphrase, and would make the raw-markdown exposure above a\n    non-issue. Choose it if deterrent-level privacy is not enough; the rest of\n    this plan is unchanged apart from the publish step.\n- **`/admin` ships only on the review track.** `codeyamCms()` becomes\n  conditional in `astro.config.mjs`. This is what makes finding (2) safe, and it\n  matches the workflow: editors work on the review site, and promotion publishes.\n- **The preview gate stops keying off `DEPLOY_BASE_PATH`.** It becomes an\n  explicit `PREVIEW_GATE` env var. The current coupling is precisely what makes\n  two simultaneous tracks impossible, and it also means the public track can stay\n  gated right up until the domain cutover (see the migration plan) rather than\n  un-gating itself the moment `base` becomes `/`.\n- **The CMS commits to `staging`.** One direction, one rule: everything lands on\n  staging first, and promoting publishes it. `src/data/cms.json` currently names\n  `branch: \"main\"`.\n- **Draft visibility becomes explicitly env-driven** rather than a\n  `!import.meta.env.PROD` inference, because the review track *is* a production\n  build that must show drafts. `publishedEntries` itself stays pure and\n  untouched — only how call sites compute the flag changes.\n\n## Implementation\n\n### 1. Decouple the preview gate from the deploy base path\n\n**File**: `src/lib/previewGate.ts`\n\nReplace `PREVIEW_GATE_ENABLED = Boolean(process.env.DEPLOY_BASE_PATH)` with a\nread of an explicit `PREVIEW_GATE` env var (`'1'` → on). Keep the module's\nserver-only contract and the `PREVIEW_GATE_PASSPHRASE` override as-is. Update\nthe header comment: the gate is no longer \"temporary until launch\", it is the\nreview track's standing gate, and `astro dev` still leaves it off so codeyam\nscenario captures are never overlaid.\n\n`src/components/PreviewGate.astro` and `src/pages/robots.txt.ts` both read\n`PREVIEW_GATE_ENABLED` and need **no change** — the review build gets the\n`noindex` meta, the blur overlay, and `Disallow: /` for free, and the public\nbuild reverts to `Allow: /`.\n\n### 2. Make draft visibility env-driven\n\n**New file**: `src/lib/draftVisibility.ts`\n\nMirror the shape of `previewGate.ts`: a small server-only config module\nexporting the resolved flag, plus a pure helper so both halves are unit-testable\nwithout faking the environment (the same rationale `drafts.ts` gives for\n`includeDrafts` being a parameter). Drafts show when the build is not a\nproduction build **or** when `INCLUDE_DRAFTS=1`.\n\n**Files**: `src/pages/index.astro`, `src/layouts/BaseLayout.astro`,\n`src/pages/events.astro`, `src/pages/donate.astro`, `src/pages/volunteer.astro`,\n`src/pages/blog/[slug].astro`, `src/pages/chapters/[slug].astro`,\n`src/pages/communities/[slug].astro`\n\nReplace the inline `!import.meta.env.PROD` argument at every `publishedEntries`\ncall site with the new shared flag. `index.astro` already names a local\n`showDrafts` const (line 31) — that is the pattern to generalize. Do not change\n`publishedEntries` itself: it is glossary-registered and covered by\n`src/lib/drafts.test.ts`.\n\n### 3. Make the CMS integration and sitemap conditional\n\n**File**: `astro.config.mjs`\n\n- Include `codeyamCms()` only when the build is the review track or `astro dev`\n  (so the codeyam Live Preview keeps its admin scenarios). Omit it from the\n  public build.\n- Include `sitemap()` only on the public track — a `noindex`, `Disallow: /`\n  origin should not publish a sitemap.\n- Add an env-driven `outDir` only if the chosen publish mechanism needs it;\n  building the two tracks from two checkouts (below) means the default `dist/`\n  is fine for both.\n- Leave the existing content-sandbox block, the `NODE_ENV` dev-runtime guard,\n  and the `optimizeDeps.include` micromark chain untouched — all three are\n  load-bearing and documented as such in that file.\n\n### 4. Publish both tracks from one workflow\n\n**File**: `.github/workflows/deploy.yml`\n\nTrigger on pushes to `main` **and** `staging`, plus `workflow_dispatch`. The job\ncurrently delegates to `withastro/action@v3`, which does checkout + install +\nbuild + artifact upload in one step; two tracks means replacing it with explicit\n`actions/setup-node` + `npm ci` + `npm run build` steps so each track gets its\nown env.\n\n- **Public track** — checkout `main`; build with `PAGES_SITE` /\n  `DEPLOY_BASE_PATH` as today (the migration plan flips these), no\n  `PREVIEW_GATE`, no `INCLUDE_DRAFTS`; publish with the existing\n  `actions/upload-pages-artifact` + `actions/deploy-pages` pair.\n- **Review track** — checkout `staging` into a separate directory; build with\n  `PREVIEW_GATE=1`, `INCLUDE_DRAFTS=1`, `PAGES_SITE=https://review.harvardintech.com`,\n  no `DEPLOY_BASE_PATH` (base stays `/`, which is what keeps the admin links\n  working); write a `CNAME` file containing `review.harvardintech.com` into the\n  output; push the built output to `nseldeib/harvardintech-review` using an SSH\n  deploy key stored as a repo secret (`REVIEW_DEPLOY_KEY`).\n\nKeep `concurrency: group: pages, cancel-in-progress: true` — but note it now\ncancels in-flight *review* deploys too; give the review publish its own\nconcurrency group if that proves disruptive.\n\nA deploy key is preferred over a PAT: it is scoped to exactly one repo and does\nnot carry a person's identity.\n\n### 5. Add a one-click promote workflow\n\n**New file**: `.github/workflows/promote.yml`\n\nA `workflow_dispatch` job that merges `staging` into `main` (fast-forward when\npossible, otherwise open a PR and stop). This is what turns \"promote to live\"\ninto a button rather than a git exercise, which matters because content editors\nwill be the ones doing it. Do not auto-promote on a schedule — publishing to a\nlive site should stay a deliberate act.\n\n### 6. Point the CMS at the staging branch\n\n**File**: `src/data/cms.json`\n\nChange `repo.branch` from `main` to `staging`. Every CMS commit then lands on\nthe review track first. The `auth.token` / `auth.worker` settings are unchanged.\n\n### 7. Create the review repo and the staging branch\n\nHuman setup steps, recorded here so the plan is executable end to end:\n\n- Create `nseldeib/harvardintech-review` (contents are entirely generated; it\n  needs no source).\n- Enable Pages on it (Source: GitHub Actions or the deploy branch, matching the\n  push mechanism chosen in step 4), custom domain `review.harvardintech.com`.\n- Add one DNS record at GoDaddy: `CNAME review → nseldeib.github.io`. This\n  touches nothing about the live Strikingly site and nothing about `MX`.\n- Generate the deploy key pair; public half on the review repo (write access),\n  private half as `REVIEW_DEPLOY_KEY` in this repo's secrets.\n- Branch `staging` off `main` and set it as the default target for CMS commits.\n\n### 8. Document the model\n\n**Files**: `CMS_SETUP.md`, `DEPLOY_SETUP.md`, `docs/scoping/README.md`,\n`docs/nicole-review.md`\n\n`CMS_SETUP.md` states commits land in `nseldeib/harvardintech`, branch `main` —\nupdate to `staging` and explain the promote step. `DEPLOY_SETUP.md` documents a\nsingle Pages target — add the review track. `docs/scoping/README.md` item 11\n(\"Publishing / shareable preview access — ✅ Live (gated GitHub Pages)\") and its\ndecision #4 are both resolved by this plan; update the status table.\n`docs/nicole-review.md` hands out `nseldeib.github.io/harvardintech` links —\nre-point them at `review.harvardintech.com`.\n\n## Reused existing code\n\n- `publishedEntries` from `src/lib/drafts.ts` (glossary entry:\n  `publishedEntries`; test: `src/lib/drafts.test.ts`) — the draft-phasing\n  primitive already exists and takes an `includeDrafts` parameter for exactly\n  this reason. Unchanged by this plan; only its arguments change.\n- `PREVIEW_GATE_ENABLED` / `PREVIEW_GATE_PASSPHRASE` from\n  `src/lib/previewGate.ts`, rendered by `src/components/PreviewGate.astro` via\n  `src/components/HeadExtras.astro` — the whole gate UI, `noindex` meta, and\n  session-storage unlock already exist and are reused as-is.\n- `GET` from `src/pages/robots.txt.ts` (glossary entry: `GET`; test:\n  `src/lib/seoEndpoints.test.ts`) — already emits `Disallow: /` vs `Allow: /`\n  off `PREVIEW_GATE_ENABLED`. Reused unchanged.\n- `withBase` from `src/lib/url.ts` (glossary entry: `withBase`; test:\n  `src/lib/url.test.ts`) — already base-aware for every hand-written internal\n  link, so both tracks' links resolve without change.\n- The env-driven `base` / `site` wiring in `astro.config.mjs` and the\n  `DEPLOY_BASE_PATH` / `PAGES_SITE` vars in `.github/workflows/deploy.yml`.\n\n**Existing-implementation survey.** Grepped for anything equivalent before\nproposing new fields:\n\n- **Second deploy target** — none. `.github/workflows/` contains exactly one\n  file, `deploy.yml`, with one `build` + one `deploy` job.\n- **Include-drafts override** — none. `publishedEntries` accepts `includeDrafts`,\n  but all nine call sites hard-code `!import.meta.env.PROD`; no env var, config\n  key, or CLI flag reaches it.\n- **`outDir` override** — none in `astro.config.mjs`; the default `dist/` is used.\n- **Preview-gate env** — `PREVIEW_GATE_PASSPHRASE` already exists as an override;\n  there is no on/off env var, which is the gap this plan fills.\n- **Branch-based publishing** — none. `deploy.yml` triggers only on\n  `push: branches: [main]`.\n\n**Mechanism feasibility.** The two new mechanisms are build-time env vars\n(`PREVIEW_GATE`, `INCLUDE_DRAFTS`) read in Astro frontmatter / server-only\nmodules during `astro build`, which is the same seam `previewGate.ts` already\nuses successfully. They are per-*build*, not per-scenario, so the dev-server\ncaveat about launch-time values does not apply — each track is a separate build\ninvocation with its own environment.\n\n## Scenarios to Demonstrate\n\n- **Public build, drafted blog post** — a post with `draft: true` is absent from\n  the blog index and has no route.\n- **Review build, same drafted post** — present in the index and reachable, so\n  the HIT team can review it before it goes live.\n- **Review build, locked** — first visit shows the passphrase overlay with the\n  content blurred behind it.\n- **Review build, unlocked** — after entering the passphrase the real site\n  renders, including drafts.\n- **Review build, `/admin`** — the dashboard is reachable and lists both draft\n  and published entries.\n- **Public build, `/admin`** — the route does not exist; the 404 page renders.\n- **`robots.txt` on each track** — `Allow: /` plus a sitemap reference on the\n  public track, `Disallow: /` on the review track.\n- **Empty state** — a collection with no entries at all, on both tracks, so the\n  draft filter is proven not to be what emptied it.",
+  "description": "Split publishing into two tracks built from this one repo. `main` publishes the open, indexable live site; `staging` publishes a permanent passphrase-gated review site at review.harvardintech.com that shows drafts and is the only track that ships /admin. Two axes phase a change: the staging branch phases code, the CMS Draft toggle phases content. Promotion is a one-click `workflow_dispatch` that fast-forwards staging into main, or opens a PR if main has diverged.\n\nThe blocker this removes: PREVIEW_GATE_ENABLED was `Boolean(process.env.DEPLOY_BASE_PATH)`, so the site was *either* a gated project-site preview *or* a public custom-domain launch, never both — and the domain cutover would have silently un-gated the preview as a side effect. The gate now reads its own PREVIEW_GATE var. Likewise every publishedEntries call site inlined `!import.meta.env.PROD`, which cannot express the review track because that track IS a production build that must show drafts; a shared INCLUDE_DRAFTS flag replaces it across all nine call sites. publishedEntries itself is unchanged — it already took includeDrafts as a parameter for exactly this reason.\n\nWhy the review track gets its own origin rather than a /preview/ subpath of the live site, both reasons verified against the package source: @codeyam/cms hard-codes root-absolute /admin links and never reads BASE_URL, so under a non-root base every admin link would resolve to the public origin; and the admin pages embed each entry's raw markdown in their static HTML while the sign-in gate is client-side only, so wherever /admin deploys, every draft's full source is publicly fetchable. That second point is why /admin is now excluded from the public build entirely. One GitHub repo hosts one Pages site, so a second origin needs a second repo — the review track builds here and pushes to nseldeib/harvardintech-review over an SSH deploy key.\n\nOne real bug was found and fixed by building the review site for real: robots.txt emitted its Sitemap line unconditionally, so once the sitemap integration was dropped from the review track, that track would have pointed crawlers at a sitemap-index.xml that 404s.\n\nFive functions extracted and tested: envFlagEnabled (the strict, fail-closed '1'-only rule shared by both deploy flags), resolveIncludeDrafts, robotsTxtBody, includeCmsIntegration, includeSitemapIntegration. The last two were lifted out of astro.config.mjs because that file can only be exercised by a real astro build — importing it under vitest pulls in Vite/esbuild and fails outright. 25 new tests across 4 new files; full suite 276/276; audit clean with zero findings. Each of the three core behaviors was confirmed red-if-reverted, and both tracks were built for real and their output inspected: /admin, sitemap, robots.txt policy, noindex, and a draft post's route+listing all differ correctly between them.\n\nNot yet live. The review track needs one-time manual setup that cannot be done from inside this repo: create nseldeib/harvardintech-review, generate the deploy key pair and store the private half as the REVIEW_DEPLOY_KEY secret, branch staging off main, enable Pages on the review repo from the gh-pages branch, and add the GoDaddy CNAME review -> nseldeib.github.io. Until that is done, pushes to staging fail at the publish step and the public track is completely unaffected. The checklist is in DEPLOY_SETUP.md.\n\nKnown limitation, documented rather than hidden: the passphrase is a deterrent, not authentication — it ships in the client bundle, and the admin pages' raw markdown stays fetchable. Cloudflare Pages behind Cloudflare Access is written up as the alternative if real per-person auth is wanted; only the publish step of the workflow would change.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/two-track-publishing-live-site-and-private-review-site.md\t.codeyam/plans/completed/two-track-publishing-live-site-and-private-review-site.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "DEPLOY_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/scoping/README.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/scoping/domain-transfer-runbook.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/PreviewGate.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/cms.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/drafts.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/previewGate.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/blog/[slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/chapters/[slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/communities/[slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/donate.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/events.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/robots.txt.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/sponsor.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/volunteer.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/session-narrative.json",
+      "status": "added"
+    },
+    {
+      "path": ".github/workflows/promote.yml",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/draftVisibility.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/draftVisibility.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/envFlag.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/envFlag.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/publishTrack.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/publishTrack.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/robots.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/robots.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 276,
+    "passed": 276,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 276,
+        "passed": 276
+      }
+    ]
+  }
+}

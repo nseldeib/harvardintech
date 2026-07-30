@@ -19,12 +19,12 @@ export interface DraftableEntry {
  * is treated the same as absent, since a hand-edited file may spell it out even
  * though the CMS never writes it.
  *
- * Pass `includeDrafts` to keep drafts in the list. Callers derive it from
- * `import.meta.env.PROD` so drafts stay visible while authoring (`astro dev`,
- * and therefore the codeyam preview) but are omitted from the built site. It is
- * an explicit parameter rather than a read of `import.meta.env` inside this
- * function so both halves of the rule are testable without faking the
- * environment.
+ * Pass `includeDrafts` to keep drafts in the list. Callers take it from
+ * `INCLUDE_DRAFTS` in `./draftVisibility`, so drafts stay visible while
+ * authoring (`astro dev`, and therefore the codeyam preview) and on the review
+ * track, but are omitted from the public build. It is an explicit parameter
+ * rather than an ambient environment read inside this function so both halves of
+ * the rule are testable without faking the environment.
  *
  * Returns a new array — the input is not mutated.
  */

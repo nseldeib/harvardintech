@@ -15,17 +15,26 @@ seed adapter.
 ## The admin app
 
 There is no hand-written admin code in this repo. The package injects every
-`/admin` route from `astro.config.mjs`:
+`/admin` route from `astro.config.mjs`, which adds the integration **only on the
+review track and in `astro dev`**:
 
 ```js
-integrations: [codeyamCms(), react(), sitemap()],
+const integrations = [react()];
+if (isDev || isReviewTrack) integrations.unshift(codeyamCms());
 ```
+
+`/admin` is deliberately absent from the public build. The admin pages embed each
+entry's raw markdown in their static HTML and the sign-in gate is client-side
+only, so wherever `/admin` is deployed, every draft's full source is publicly
+fetchable. Keeping it on the gated review origin is what makes draft-phasing
+mean anything.
 
 Two committed JSON files configure it:
 
 - **`src/data/cms.json`** — which repo commits land in (`nseldeib/harvardintech`,
-  branch `main`) and which sign-in methods are offered (`auth.token: true`,
-  `auth.worker: false` — token only, no service to deploy).
+  branch **`staging`** — see *Where edits land* below) and which sign-in methods
+  are offered (`auth.token: true`, `auth.worker: false` — token only, no service
+  to deploy).
 - **`src/data/collections.json`** — the editor's view of this site's content
   schema. See **How collections.json relates to src/content/config.ts** below.
 
@@ -49,7 +58,9 @@ identity**. Nothing to deploy, no shared secret.
    nseldeib/harvardintech** and **Repository permissions → Contents → Read and
    write** (the single permission the CMS needs). Choose an expiry, generate, and
    copy the token.
-2. Open `/admin` on the live site and paste the token into the sign-in prompt.
+2. Open `/admin` on the **review site** (`https://review.harvardintech.com/admin`
+   — enter the site passphrase first) and paste the token into the sign-in
+   prompt. `/admin` is not served on harvardintech.com by design.
 3. Edit content. The token lives in that browser only — each editor uses their
    own, and you revoke or rotate it from GitHub's token settings.
 
@@ -70,8 +81,8 @@ Always available, no auth, no server.
 
 1. Run `npm run dev` and open `/admin`.
 2. Edit content; writes go to the local working tree.
-3. Commit and push yourself — the change goes live on the next GitHub Pages
-   deploy.
+3. Commit and push to `staging` yourself — the change appears on the review site
+   on the next deploy, and goes live when you promote.
 
 ## Staging, review, and commit
 
@@ -82,8 +93,32 @@ batch as a **single GitHub commit**. That keeps history readable and makes a
 multi-part edit (say, a new chapter plus its hero image plus a nav entry) land
 atomically.
 
-Pushing to `main` triggers the Pages deploy workflow, so a published batch is
-live a minute or two later.
+## Where edits land: the review site, not the live site
+
+CMS commits go to the **`staging`** branch, which builds the **review site** at
+`review.harvardintech.com` — passphrase-gated, unindexed, and the only place
+`/admin` is served. Publishing from the CMS therefore does **not** change
+harvardintech.com. It puts the change somewhere the team can look at it.
+
+Two independent things phase a change, and it helps to keep them straight:
+
+| | What it phases | How you use it |
+| --- | --- | --- |
+| **Draft toggle** (per entry) | *content* | Leave Draft **on** while an entry is half-written. Drafts appear on the review site and never on the live site — so a draft is safe to publish. |
+| **`staging` branch** (whole site) | *code and content* | Everything the CMS commits lands here first. Nothing reaches the live site until someone promotes. |
+
+**Promoting to live.** When the review site looks right, go to the repo's
+**Actions** tab → **Promote review → live** → **Run workflow**. That merges
+`staging` into `main` and publishes harvardintech.com. It is a button, not a git
+exercise, and it is deliberately manual — going live should be a decision
+someone makes, not something that happens because an editor hit Publish.
+
+If the promote workflow reports it could not fast-forward, `main` has changes
+`staging` does not (someone edited the live branch directly). It opens a pull
+request instead of guessing; review and merge that PR to publish.
+
+A published batch is live on the review site a minute or two after Publish, and
+on the live site a minute or two after Promote.
 
 ## How `collections.json` relates to `src/content/config.ts`
 

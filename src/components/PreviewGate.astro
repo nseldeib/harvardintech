@@ -1,9 +1,11 @@
 ---
-// Pre-launch preview gate: when enabled (deploy build only), marks the page
-// noindex and overlays a full-screen passphrase prompt until the visitor unlocks
-// it. Included via HeadExtras so it applies to every public page (BaseLayout +
-// the standalone blog shell). Renders nothing in dev, so codeyam previews and
-// scenario captures are unaffected. Deterrent-level privacy — see previewGate.ts.
+// The review track's gate: when enabled (PREVIEW_GATE=1, i.e. the
+// review.harvardintech.com build), marks the page noindex and overlays a
+// full-screen passphrase prompt until the visitor unlocks it. Included via
+// HeadExtras so it applies to every page (BaseLayout + the standalone blog
+// shell). Renders nothing in dev or on the public build, so codeyam previews,
+// scenario captures, and harvardintech.com are all unaffected. Deterrent-level
+// privacy — see previewGate.ts.
 import { PREVIEW_GATE_ENABLED, PREVIEW_GATE_PASSPHRASE } from '../lib/previewGate';
 
 const pass = PREVIEW_GATE_PASSPHRASE;

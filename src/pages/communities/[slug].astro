@@ -9,14 +9,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterPage from '../../components/ChapterPage.astro';
 import { splitEvents, eventsTaggedTo } from '../../lib/events';
 import { publishedEntries } from '../../lib/drafts';
+import { INCLUDE_DRAFTS } from '../../lib/draftVisibility';
 
-// Drafts get no page in the built site — a community dropped from the nav but
-// still live at /communities/<slug> would be public anyway. In dev the page is
-// generated so an author can preview one before announcing it.
+// Drafts get no page on the public site — a community dropped from the nav but
+// still live at /communities/<slug> would be public anyway. In dev and on the
+// review track the page is generated so it can be read before it is announced.
 export async function getStaticPaths() {
   const communities = publishedEntries(
     await getCollection('communities'),
-    !import.meta.env.PROD,
+    INCLUDE_DRAFTS,
   );
 
   return communities.map((community) => ({
@@ -34,7 +35,7 @@ const { name, blurb, heroImage, tagline, showGallery, contactEmail, leads, links
 // Events join a community through the same `chapter` tag they use for chapters —
 // one "belongs to" field, not two an editor has to choose between. The chapters
 // route warns about tags matching neither list, so a typo here is still caught.
-const events = publishedEntries(await getCollection('events'), !import.meta.env.PROD);
+const events = publishedEntries(await getCollection('events'), INCLUDE_DRAFTS);
 const { upcoming } = splitEvents(eventsTaggedTo(events, community.id));
 ---
 

@@ -14,9 +14,10 @@ import EventsPage from '../components/EventsPage.astro';
 import LumaCalendar from '../components/LumaCalendar.astro';
 import { LUMA_CALENDAR_URL, LUMA_EMBED_URL } from '../lib/luma';
 import { publishedEntries } from '../lib/drafts';
+import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 
-// Drafts are shown while authoring under `astro dev`, never in the built site.
-const events = publishedEntries(await getCollection('events'), !import.meta.env.PROD).map((e) => ({
+// Drafts are shown while authoring and on the review track, never on the public site.
+const events = publishedEntries(await getCollection('events'), INCLUDE_DRAFTS).map((e) => ({
   slug: e.id,
   ...e.data,
 }));

@@ -8,9 +8,15 @@ hard security. Keep the links + password internal.
 
 | Surface | Link | Password |
 |---|---|---|
-| **Website** | https://nseldeib.github.io/harvardintech/ | `crimson2026` |
-| **CMS / admin dashboard** | https://nseldeib.github.io/harvardintech/admin | `crimson2026` |
-| **Todos / project status** | https://nseldeib.github.io/harvardintech/review | `crimson2026` |
+| **Website** | https://review.harvardintech.com/ | `crimson2026` |
+| **CMS / admin dashboard** | https://review.harvardintech.com/admin | `crimson2026` |
+| **Todos / project status** | https://review.harvardintech.com/review | `crimson2026` |
+
+> These point at the **review site**, which is where in-flight work lives —
+> including draft entries that are not on the live site. Edits made here do not
+> change harvardintech.com until someone promotes them (Actions → *Promote review
+> → live*). See [DEPLOY_SETUP.md](../DEPLOY_SETUP.md) if the review site is not
+> reachable yet — it needs a one-time repo + DNS setup.
 
 - **Reviewing only:** the passphrase is all that's needed — view the site, the
   todos page, and the CMS dashboard.
@@ -23,9 +29,9 @@ hard security. Keep the links + password internal.
 > Hi Nicole — here's the Harvard in Tech site preview to review. All three links
 > use the same password: **crimson2026**
 >
-> • **Website:** https://nseldeib.github.io/harvardintech/
-> • **Content editor (CMS):** https://nseldeib.github.io/harvardintech/admin
-> • **What's done / what's open (todos):** https://nseldeib.github.io/harvardintech/review
+> • **Website:** https://review.harvardintech.com/
+> • **Content editor (CMS):** https://review.harvardintech.com/admin
+> • **What's done / what's open (todos):** https://review.harvardintech.com/review
 >
 > The "todos" page walks through what's built and the decisions we need from you.
 > Please keep the links + password internal for now. (I'll send you an editor

@@ -13,10 +13,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MomentumFundPage from '../components/MomentumFundPage.astro';
 import { donatePage, settings } from '../lib/site';
 import { publishedEntries } from '../lib/drafts';
+import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 
 const testimonials = publishedEntries(
   await getCollection('testimonials'),
-  !import.meta.env.PROD,
+  INCLUDE_DRAFTS,
 ).map((t) => ({
   slug: t.id,
   ...t.data,

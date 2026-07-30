@@ -1,40 +1,71 @@
-# Build the Astro static site and publish it to GitHub Pages.
+# Build the Astro static site and publish it to BOTH tracks of the two-track
+# publishing model. One repo, two origins, chosen by the branch that was pushed:
 #
-# Setup: none in the common case. The build job's "Enable / configure GitHub
-# Pages" step (actions/configure-pages with enablement: true) turns Pages on
-# automatically — Source: "GitHub Actions" — on the first push to the default
-# branch, so there is no manual Settings → Pages toggle. If your org policy
+#   main    → harvardintech.com            (public track)
+#             open, indexable, drafts hidden, no /admin, sitemap published.
+#   staging → review.harvardintech.com     (review track)
+#             passphrase-gated + noindex, drafts VISIBLE, hosts /admin.
+#
+# Two axes phase a change: `staging` phases CODE, and the CMS Draft toggle
+# phases CONTENT. Promotion to live is a single merge staging → main, which the
+# promote.yml workflow does at the press of a button.
+#
+# The difference between the tracks is entirely environmental — see
+# astro.config.mjs (base/site, conditional CMS + sitemap),
+# src/lib/previewGate.ts (PREVIEW_GATE) and src/lib/draftVisibility.ts
+# (INCLUDE_DRAFTS). There is no per-track code.
+#
+# Public-track setup: none in the common case. The build job's "Enable /
+# configure GitHub Pages" step turns Pages on automatically. If your org policy
 # blocks token-based enablement and the first deploy 404s, run
 # `scripts/enable-pages.sh` once (or toggle the UI) and re-run — see
 # DEPLOY_SETUP.md.
 #
-# `base`/`site` come from the env vars below (read by astro.config.mjs), so the
-# site publishes under the project subpath nseldeib.github.io/harvardintech
-# while local dev / the codeyam preview stay at '/'. When a custom domain
-# (e.g. harvardintech.com) is configured, drop DEPLOY_BASE_PATH (so base → '/')
-# and point PAGES_SITE at the domain.
+# Review-track setup (one-time, see DEPLOY_SETUP.md): create the
+# nseldeib/harvardintech-review repo, enable Pages on it with Source =
+# branch `gh-pages`, set its custom domain to review.harvardintech.com, add the
+# GoDaddy CNAME `review → nseldeib.github.io`, and store the SSH deploy key's
+# private half here as the REVIEW_DEPLOY_KEY secret (public half on the review
+# repo, with write access). Until that exists the `review` job fails and the
+# public track is unaffected.
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
   workflow_dispatch:
+  # promote.yml calls this after fast-forwarding main, because a push made with
+  # GITHUB_TOKEN does not itself trigger a workflow. Under workflow_call the
+  # `github.ref_name` guards below see the CALLER's ref (main), so the public
+  # track runs and the review job is skipped — which is exactly what promotion
+  # means.
+  workflow_call:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow one concurrent deployment; cancel in-progress runs for the same ref.
+# Per-track concurrency. The two tracks must NOT cancel each other — a shared
+# `pages` group would mean a push to staging kills an in-flight production
+# deploy — so the ref is part of the group name.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
+  # ---- Public track: main → harvardintech.com -----------------------------
   build:
+    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     steps:
+      # Check out the branch TIP, not `github.sha`. Under workflow_call from
+      # promote.yml, `github.sha` is main as it stood when promote was
+      # dispatched — i.e. before the fast-forward — so a default checkout would
+      # publish the pre-promotion content.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
       # Enable Pages (build type "workflow") if it isn't already. Idempotent —
       # a no-op once Pages exists — so it's safe on every push. Runs before the
       # build so the Pages site exists by the time the deploy job publishes.
@@ -48,17 +79,34 @@ jobs:
           # enablement returns an HTML error on this repo. enablement:false just
           # reads the existing Pages config for the upload/deploy steps.
           enablement: false
-      - name: Build Astro site
-        uses: withastro/action@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        # The repo's postinstall downloads a Playwright Chromium for local
+        # scenario capture. A deploy build never drives a browser, so skip the
+        # ~150MB download on both tracks.
         env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm ci
+      - name: Build public site
+        env:
+          # The domain cutover flips these two: drop DEPLOY_BASE_PATH (base → '/')
+          # and point PAGES_SITE at https://harvardintech.com. Nothing else changes.
           DEPLOY_BASE_PATH: /harvardintech
           PAGES_SITE: https://nseldeib.github.io
-        # with:
-        #   path: .            # root of the Astro project (default)
-        #   node-version: 20
+          # PREVIEW_GATE and INCLUDE_DRAFTS are deliberately unset: the public
+          # site is open, indexable, and shows only published entries.
+        run: npm run build
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
 
   deploy:
     needs: build
+    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -67,3 +115,71 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # ---- Review track: staging → review.harvardintech.com -------------------
+  # A second GitHub Pages *site* requires a second repo (one repo = one Pages
+  # site), so this job builds here and pushes the built output to the review
+  # repo's gh-pages branch over SSH. It gets its own origin rather than a
+  # subpath of the live site for two reasons, both verified: @codeyam/cms
+  # hard-codes root-absolute /admin links and cannot run under a non-root base;
+  # and the admin pages embed raw entry markdown in static HTML behind a
+  # client-only sign-in, so /admin must never sit on the public domain.
+  review:
+    if: github.ref_name == 'staging'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+        run: npm ci
+      - name: Build review site
+        env:
+          # No DEPLOY_BASE_PATH: the review site is served from the root of its
+          # own domain, and a root base is what keeps the CMS's hard-coded
+          # /admin links working.
+          PAGES_SITE: https://review.harvardintech.com
+          PREVIEW_GATE: '1'
+          INCLUDE_DRAFTS: '1'
+        run: npm run build
+      - name: Add CNAME and .nojekyll
+        # CNAME binds the custom domain on the review repo's Pages site.
+        # .nojekyll is required for a BRANCH-sourced Pages site: without it
+        # Jekyll strips Astro's `_astro/` asset directory and the site loads
+        # unstyled with no JS. (The public track deploys via artifact, which
+        # never runs Jekyll, so it needs neither file.)
+        run: |
+          echo 'review.harvardintech.com' > dist/CNAME
+          touch dist/.nojekyll
+      - name: Publish to review repo
+        env:
+          REVIEW_DEPLOY_KEY: ${{ secrets.REVIEW_DEPLOY_KEY }}
+        # A deploy key rather than a PAT: it is scoped to exactly one repo and
+        # carries no person's identity. The push is force-with-lease-free by
+        # design — gh-pages here is a generated artifact branch with no history
+        # worth preserving, and each run replaces it wholesale.
+        run: |
+          set -euo pipefail
+          if [ -z "${REVIEW_DEPLOY_KEY:-}" ]; then
+            echo "::error::REVIEW_DEPLOY_KEY secret is not set — see DEPLOY_SETUP.md for the one-time review-track setup."
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          printf '%s\n' "$REVIEW_DEPLOY_KEY" > ~/.ssh/review_deploy_key
+          chmod 600 ~/.ssh/review_deploy_key
+          ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/review_deploy_key -o IdentitiesOnly=yes"
+          cd dist
+          git init -q
+          git checkout -q -B gh-pages
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -q -m "Review build from staging@${GITHUB_SHA}"
+          git push -q -f git@github.com:nseldeib/harvardintech-review.git gh-pages

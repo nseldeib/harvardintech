@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { settings } from '../lib/site';
 import { publishedEntries } from '../lib/drafts';
+import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { sortBoardMembers, filterActiveBoardMembers } from '../lib/team';
 import HeroCarousel from '../components/landing/HeroCarousel.astro';
 import Stats from '../components/landing/Stats.astro';
@@ -25,10 +26,10 @@ import SupportUs from '../components/landing/SupportUs.astro';
 import EventGallery from '../components/landing/EventGallery.astro';
 import ContactUs from '../components/landing/ContactUs.astro';
 
-// Drafts are dropped from every section below. `showDrafts` is true under
-// `astro dev` and false in the production build, so an author previewing their
-// work still sees drafts while the published site never does.
-const showDrafts = !import.meta.env.PROD;
+// Drafts are dropped from every section below. `INCLUDE_DRAFTS` is true under
+// `astro dev` and on the review track, false on the public build — so an author
+// or reviewer still sees drafts while the published site never does.
+const showDrafts = INCLUDE_DRAFTS;
 
 const events = publishedEntries(await getCollection('events'), showDrafts)
   .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())

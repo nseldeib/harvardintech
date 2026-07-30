@@ -34,7 +34,7 @@ multi-week / externally gated.
 | 8 | **Member login / Harvard Key SSO** | ❌ Not built | **XL** | **Yes — big** → [deep dive](./harvard-key-sso.md) |
 | 9 | **Domain transfer from Strikingly** | 🟡 Researched, ready | M | Registrar/DNS confirmed → [deep dive](./domain-transfer-runbook.md) |
 | 10 | Content population | 🟡 framework ready | M (ongoing) | Yes — client input |
-| 11 | Publishing / shareable preview access | ✅ Live (gated GitHub Pages) | — | Done for WIP |
+| 11 | Publishing / shareable preview access | ✅ Two-track (live + gated review site) | — | Resolved |
 | 12 | Outbound links / no old-site pointers | ✅ Audited & clean | — | No |
 
 **Headline:** the *website* is largely built. The remaining work clusters in
@@ -53,10 +53,13 @@ entry, mostly non-technical).
    current cleaner Luma-first layout (just add Webinars/Podcasts sections)?
 3. **Domain** — Who controls the `harvardintech.com` registrar/DNS today? When
    is the team comfortable cutting over? *(See deep dive.)*
-4. **Preview access** — Confirm the "unlisted GitHub Pages + noindex +
-   client-side password gate" approach for the shareable preview & status page
-   (deterrent-level privacy), or move the preview to a host with real password
-   protection (Cloudflare/Netlify).
+4. ~~**Preview access**~~ — **Resolved.** The preview is no longer a temporary
+   pre-launch state that disappears at cutover; it is a permanent **review
+   site** (`review.harvardintech.com`) running alongside the live site. It keeps
+   the deterrent-level gate (client-side passphrase + `noindex` + robots
+   `Disallow`). *Still open if the team wants it:* moving the review track to
+   Cloudflare Pages behind Cloudflare Access buys real per-person
+   authentication — see [DEPLOY_SETUP.md](../../DEPLOY_SETUP.md).
 5. **Content ownership** — Who supplies chapter committees, per-chapter events,
    board bios/photos, and podcast/blog entries?
 
@@ -96,11 +99,25 @@ The biggest *volume* of remaining work, but it's CMS data entry a non-technical
 editor can do: chapter committee members, per-chapter events, real board
 bios/photos, blog + podcast entries. Needs the client to provide the content.
 
-### 11. Publishing / shareable preview — ✅ live (gated)
-The site + this review page are deployed to `https://nseldeib.github.io/harvardintech/`
-(review at `/review/`), behind a client-side passphrase + `noindex` + robots
-`Disallow` (deterrent-level privacy). The gate auto-lifts at the custom-domain
-launch (it's keyed off `DEPLOY_BASE_PATH`).
+### 11. Publishing / shareable preview — ✅ two-track publishing
+Two sites are built from this one repo:
+
+- **Live** — `main` → harvardintech.com. Open, indexable, published content only.
+- **Review** — `staging` → `review.harvardintech.com`. Passphrase + `noindex` +
+  robots `Disallow` (deterrent-level privacy), **drafts visible**, and the only
+  place `/admin` is served.
+
+The review site is permanent, not a pre-launch stopgap — it stays after the
+domain cutover as the place the team sees in-flight work. Two axes phase a
+change: the `staging` branch phases *code*, the CMS Draft toggle phases
+*content*. Going live is one button: **Actions → Promote review → live**.
+
+The gate is now an explicit `PREVIEW_GATE` env var rather than being inferred
+from `DEPLOY_BASE_PATH`, so the domain cutover no longer un-gates anything as a
+side effect. See [DEPLOY_SETUP.md](../../DEPLOY_SETUP.md) for the one-time review
+repo / DNS / deploy-key setup, and [CMS_SETUP.md](../../CMS_SETUP.md) for what
+editors do. [nicole-review.md](../nicole-review.md) is the ready-to-send handoff
+for an external reviewer — links plus passphrase, kept internal.
 
 ### 12. Link & experience audit (2026-07-02) — ✅ clean
 - **No pointers to the old Strikingly site** anywhere in the shipped pages.

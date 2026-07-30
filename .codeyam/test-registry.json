@@ -478,6 +478,69 @@
       "runner": "tests"
     },
     {
+      "description": "Whitespace padding from a hand-edited YAML value is not silently trimmed.",
+      "file": "src/lib/envFlag.test.ts",
+      "format": "vitest",
+      "key": "envFlagEnabled › is false for 1 with surrounding whitespace",
+      "line": 37,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A typo'd value fails closed rather than being guessed at.",
+      "file": "src/lib/envFlag.test.ts",
+      "format": "vitest",
+      "key": "envFlagEnabled › is false for an arbitrary value",
+      "line": 42,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An env block that assigns an empty value must not count as on.",
+      "file": "src/lib/envFlag.test.ts",
+      "format": "vitest",
+      "key": "envFlagEnabled › is false for an empty string",
+      "line": 20,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The explicit off value.",
+      "file": "src/lib/envFlag.test.ts",
+      "format": "vitest",
+      "key": "envFlagEnabled › is false for the string 0",
+      "line": 25,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The important near-miss: 'true' reads as enabled to a human but is deliberately rejected, so only the documented value works and a plausible typo fails closed rather than publishing an ungated site.",
+      "file": "src/lib/envFlag.test.ts",
+      "format": "vitest",
+      "key": "envFlagEnabled › is false for the string true",
+      "line": 32,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The public track sets nothing at all, which must mean off.",
+      "file": "src/lib/envFlag.test.ts",
+      "format": "vitest",
+      "key": "envFlagEnabled › is false when the variable is unset",
+      "line": 15,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The one value that means on. This is what deploy.yml sets for the review track.",
+      "file": "src/lib/envFlag.test.ts",
+      "format": "vitest",
+      "key": "envFlagEnabled › is true for the exact string 1",
+      "line": 10,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
       "description": "Every optional field is carried through, because the event card renders them — dropping one here would blank a card with no error anywhere.",
       "file": "src/lib/events.test.ts",
       "format": "vitest",
@@ -817,6 +880,60 @@
       "key": "heroGreeting › uses the generic greeting when the named template has no placeholder",
       "line": 105,
       "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The public production build must NOT ship /admin. This is the case that keeps draft markdown off harvardintech.com.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCmsIntegration › excludes the CMS from the public build",
+      "line": 11,
+      "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The gated review origin is the one place /admin belongs.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCmsIntegration › includes the CMS on the review track",
+      "line": 16,
+      "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "astro dev keeps /admin so the codeyam Live Preview retains its admin scenarios — the capture suite would lose coverage otherwise.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCmsIntegration › includes the CMS under astro dev",
+      "line": 22,
+      "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Dev on the review track is not a real deploy shape, but it must not accidentally resolve to excluded.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCmsIntegration › includes the CMS when both dev and review track are set",
+      "line": 28,
+      "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A noindex origin serving Disallow has nothing to offer a sitemap. This must stay in agreement with robotsTxtBody, which omits its Sitemap line on the same track — disagreement means the review site advertises a URL that 404s.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeSitemapIntegration › omits the sitemap on the review track",
+      "line": 42,
+      "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The open, indexable site is the only one a sitemap helps.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeSitemapIntegration › publishes a sitemap on the public track",
+      "line": 35,
+      "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
     {
@@ -1378,6 +1495,60 @@
       "runner": "tests"
     },
     {
+      "description": "Fails closed: a plausible typo in the workflow env block leaves the public site hiding drafts rather than publishing them.",
+      "file": "src/lib/draftVisibility.test.ts",
+      "format": "vitest",
+      "key": "resolveIncludeDrafts › hides drafts on a production build when the opt-in is misspelled",
+      "line": 35,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The public track: a production build with no opt-in. Drafts must be hidden. This is the case that keeps unpublished work off the live site.",
+      "file": "src/lib/draftVisibility.test.ts",
+      "format": "vitest",
+      "key": "resolveIncludeDrafts › hides drafts on a production build with no opt-in",
+      "line": 12,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Turning the flag off in dev does NOT hide drafts — the non-production default wins. Hiding drafts while authoring would need a separate opt-out, and deliberately does not exist.",
+      "file": "src/lib/draftVisibility.test.ts",
+      "format": "vitest",
+      "key": "resolveIncludeDrafts › keeps drafts visible in dev even when the opt-in is off",
+      "line": 44,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`astro dev`, and therefore the codeyam preview and every scenario capture: an author sees the entry they are writing without setting anything.",
+      "file": "src/lib/draftVisibility.test.ts",
+      "format": "vitest",
+      "key": "resolveIncludeDrafts › shows drafts on a non-production build",
+      "line": 24,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The opt-in is redundant in dev but must not flip the answer.",
+      "file": "src/lib/draftVisibility.test.ts",
+      "format": "vitest",
+      "key": "resolveIncludeDrafts › shows drafts on a non-production build that also opts in",
+      "line": 29,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The review track: also a production build, but explicitly opted in. This is the case the old `!import.meta.env.PROD` inference could not express.",
+      "file": "src/lib/draftVisibility.test.ts",
+      "format": "vitest",
+      "key": "resolveIncludeDrafts › shows drafts on a production build that opts in",
+      "line": 18,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
       "description": "Emits the standard allow-all directives.",
       "file": "src/lib/seoEndpoints.test.ts",
       "format": "vitest",
@@ -1411,6 +1582,60 @@
       "key": "robots.txt GET › responds as text/plain",
       "line": 39,
       "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A trailing newline keeps the last directive well-formed for line-based parsers.",
+      "file": "src/lib/robots.test.ts",
+      "format": "vitest",
+      "key": "robotsTxtBody formatting › ends with a newline on both tracks",
+      "line": 57,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Crawlers parse this line-by-line, so the directive must be on its own line directly beneath the user-agent rather than concatenated onto it.",
+      "file": "src/lib/robots.test.ts",
+      "format": "vitest",
+      "key": "robotsTxtBody formatting › puts the directive on its own line under the user-agent",
+      "line": 47,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The open, indexable site invites every crawler.",
+      "file": "src/lib/robots.test.ts",
+      "format": "vitest",
+      "key": "robotsTxtBody public track › allows all crawlers when not disallowing",
+      "line": 10,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The Sitemap line carries the caller's resolved origin, not a placeholder — the regression the original static robots.txt shipped.",
+      "file": "src/lib/robots.test.ts",
+      "format": "vitest",
+      "key": "robotsTxtBody public track › points the Sitemap at the url it was given",
+      "line": 19,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The gated review origin must tell crawlers to stay out entirely.",
+      "file": "src/lib/robots.test.ts",
+      "format": "vitest",
+      "key": "robotsTxtBody review track › disallows all crawlers when gated",
+      "line": 27,
+      "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The bug this extraction exists to pin: astro.config.mjs omits the sitemap integration on the review track, so emitting a Sitemap line there would advertise a URL that 404s.",
+      "file": "src/lib/robots.test.ts",
+      "format": "vitest",
+      "key": "robotsTxtBody review track › omits the Sitemap line entirely when gated",
+      "line": 37,
+      "registeredAt": "2026-07-30T17:03:44Z",
       "runner": "tests"
     },
     {

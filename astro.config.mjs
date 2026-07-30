@@ -5,6 +5,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import codeyamCms from '@codeyam/cms';
+import { includeCmsIntegration, includeSitemapIntegration } from './src/lib/publishTrack';
 
 // --- codeyam content sandbox ---------------------------------------------
 // The site's "database" is the committed markdown under `src/content/` and the
@@ -89,11 +90,31 @@ if (process.argv.includes('dev')) {
 const base = process.env.DEPLOY_BASE_PATH || '/';
 const site = process.env.PAGES_SITE || 'https://nseldeib.github.io';
 
+// --- two-track publishing -------------------------------------------------
+// Two builds come out of this one repo (see .github/workflows/deploy.yml):
+//   - Public track  (`main`    → harvardintech.com):        open, indexable.
+//   - Review track  (`staging` → review.harvardintech.com): passphrase-gated,
+//     noindex, drafts visible, and the only track that ships /admin.
+// PREVIEW_GATE=1 is what marks a build as the review track; src/lib/previewGate.ts
+// reads the same var for the gate UI.
+const isReviewTrack = process.env.PREVIEW_GATE === '1';
+const isDev = process.argv.includes('dev');
+
+// Which integrations belong on which track is decided in src/lib/publishTrack.ts,
+// where the rationale lives alongside its tests — this file can only be
+// exercised by a real `astro build`, so the decision is kept somewhere unit
+// tests can reach. Short version: /admin ships only on the gated review origin
+// (its pages embed raw draft markdown behind a client-only sign-in), and the
+// sitemap ships only on the public track (see src/pages/robots.txt.ts).
+const integrations = [react()];
+if (includeCmsIntegration(isDev, isReviewTrack)) integrations.unshift(codeyamCms());
+if (includeSitemapIntegration(isReviewTrack)) integrations.push(sitemap());
+
 export default defineConfig({
   output: 'static',
   site,
   base,
-  integrations: [codeyamCms(), react(), sitemap()],
+  integrations,
   vite: {
     optimizeDeps: {
       // @codeyam/cms ships raw `.ts`/`.tsx` (its package exports point at

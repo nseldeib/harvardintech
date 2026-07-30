@@ -21,6 +21,7 @@ import {
   withCommunityItems,
 } from '../lib/nav';
 import { publishedEntries } from '../lib/drafts';
+import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { withBase } from '../lib/url';
 
 interface Props {
@@ -33,11 +34,11 @@ const { title, description, image } = Astro.props;
 
 // The Chapters dropdown is derived from the collection, not hand-listed in
 // `nav.json` — publishing a chapter is the only step needed to put it in the
-// menu. Drafts stay visible while authoring and are absent from the built site,
-// the same rule `index.astro` and every other route applies.
+// menu. Drafts stay visible while authoring and on the review track, and are
+// absent from the public site — the same rule every other route applies.
 const chapters = publishedEntries(
   await getCollection('chapters'),
-  !import.meta.env.PROD,
+  INCLUDE_DRAFTS,
 ).map((c) => ({ slug: c.id, ...c.data }));
 const chapterItems = chapterNavItems(chapters);
 
@@ -46,7 +47,7 @@ const chapterItems = chapterNavItems(chapters);
 // the hand-authored WhatsApp link stays first, the published communities follow.
 const communities = publishedEntries(
   await getCollection('communities'),
-  !import.meta.env.PROD,
+  INCLUDE_DRAFTS,
 ).map((c) => ({ slug: c.id, ...c.data }));
 const communityItems = communityNavItems(communities);
 

@@ -1,0 +1,84 @@
+# Promote the review track to live: merge `staging` into `main`.
+#
+# This is the "publish" button of the two-track publishing model. Content
+# editors work on review.harvardintech.com (built from `staging`, see
+# deploy.yml); when the team is happy with what they see there, someone runs
+# this workflow from the Actions tab and the same content becomes
+# harvardintech.com. No git knowledge required, which is the point — the people
+# doing the promoting are editors, not engineers.
+#
+# Deliberately `workflow_dispatch` only. Publishing to a live site should stay a
+# deliberate act, so there is no schedule and no push trigger.
+#
+# Fast-forward or nothing: if `main` has commits `staging` does not (a hotfix
+# landed directly on main, say), this does NOT attempt a merge commit
+# unattended. It opens a PR instead and stops, so the divergence gets a human
+# review.
+name: Promote review → live
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: promote
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    outputs:
+      promoted: ${{ steps.ff.outputs.promoted }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: merge-base needs the real ancestry, not a shallow tip.
+          fetch-depth: 0
+      - name: Fast-forward main to staging
+        id: ff
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch --quiet origin main staging
+
+          main_sha="$(git rev-parse origin/main)"
+          staging_sha="$(git rev-parse origin/staging)"
+
+          if [ "$main_sha" = "$staging_sha" ]; then
+            echo "promoted=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Nothing to promote — main and staging are already at ${main_sha}."
+            exit 0
+          fi
+
+          if ! git merge-base --is-ancestor "$main_sha" "$staging_sha"; then
+            echo "promoted=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::main has commits staging does not, so this cannot fast-forward. Opening a PR for review instead."
+            gh pr create \
+              --base main \
+              --head staging \
+              --title 'Promote staging → main' \
+              --body 'Automated promotion could not fast-forward: `main` has diverged from `staging`. Review and merge this PR to publish, then re-run the Promote workflow if needed.' \
+              || echo "::notice::A staging → main PR already exists; review it there."
+            exit 0
+          fi
+
+          echo "Fast-forwarding main ${main_sha} → ${staging_sha}"
+          git push origin "${staging_sha}:refs/heads/main"
+          echo "promoted=true" >> "$GITHUB_OUTPUT"
+          echo "::notice::Promoted staging → main. Publishing to harvardintech.com."
+
+  # A push made with GITHUB_TOKEN does not trigger workflows, so the deploy is
+  # invoked explicitly here rather than left to deploy.yml's push trigger.
+  # Skipped when nothing was promoted (already in sync, or a PR was opened).
+  publish:
+    needs: promote
+    if: needs.promote.outputs.promoted == 'true'
+    uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
