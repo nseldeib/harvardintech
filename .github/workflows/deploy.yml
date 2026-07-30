@@ -1,10 +1,24 @@
-# Build the Astro static site and publish it to BOTH tracks of the two-track
-# publishing model. One repo, two origins, chosen by the branch that was pushed:
+# Build the Astro static site and publish it. One repo, two possible tracks,
+# chosen by the branch that was pushed.
+#
+# TODAY — pre-launch. Only `main` builds, and it is NOT public:
+#
+#   main    → nseldeib.github.io/harvardintech
+#             passphrase-gated + noindex, drafts VISIBLE, serves /admin,
+#             no sitemap. harvardintech.com is still Strikingly's.
+#
+# The `staging` job below is built and DORMANT — no `staging` branch exists, so
+# it never runs. It activates at the Strikingly cutover, when the two tracks
+# become:
 #
 #   main    → harvardintech.com            (public track)
 #             open, indexable, drafts hidden, no /admin, sitemap published.
 #   staging → review.harvardintech.com     (review track)
 #             passphrase-gated + noindex, drafts VISIBLE, hosts /admin.
+#
+# Reaching that state means dropping PREVIEW_GATE/INCLUDE_DRAFTS from the main
+# build AND standing up the review origin — together, never one without the
+# other, or the preview is left unprotected. See DEPLOY_SETUP.md.
 #
 # Two axes phase a change: `staging` phases CODE, and the CMS Draft toggle
 # phases CONTENT. Promotion to live is a single merge staging → main, which the
@@ -90,14 +104,23 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
         run: npm ci
-      - name: Build public site
+      - name: Build site
         env:
           # The domain cutover flips these two: drop DEPLOY_BASE_PATH (base → '/')
           # and point PAGES_SITE at https://harvardintech.com. Nothing else changes.
           DEPLOY_BASE_PATH: /harvardintech
           PAGES_SITE: https://nseldeib.github.io
-          # PREVIEW_GATE and INCLUDE_DRAFTS are deliberately unset: the public
-          # site is open, indexable, and shows only published entries.
+          # PRE-LAUNCH: `main` is NOT the public site yet. harvardintech.com is
+          # still served by Strikingly, and this deploy is the private preview
+          # the team reviews — so it is passphrase-gated, noindex, and shows
+          # drafts, and it serves /admin so the CMS can edit it.
+          #
+          # REMOVING THESE TWO LINES IS WHAT TAKES THE SITE PUBLIC. Do it only
+          # at the Strikingly cutover, and only once something else is standing
+          # up a private track (the dormant `staging` job below) — otherwise
+          # there is nothing left protecting the preview. See DEPLOY_SETUP.md.
+          PREVIEW_GATE: '1'
+          INCLUDE_DRAFTS: '1'
         run: npm run build
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -142,8 +165,10 @@ jobs:
       - name: Build review site
         env:
           # No DEPLOY_BASE_PATH: the review site is served from the root of its
-          # own domain, and a root base is what keeps the CMS's hard-coded
-          # /admin links working.
+          # own domain, so the base stays '/'. This is no longer a CMS
+          # constraint — @codeyam/cms 0.2.1 added base-path support, so /admin
+          # works under a subpath too (which is what the gated `main` deploy
+          # above relies on). It is simply where this origin is rooted.
           PAGES_SITE: https://review.harvardintech.com
           PREVIEW_GATE: '1'
           INCLUDE_DRAFTS: '1'
