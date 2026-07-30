@@ -1094,10 +1094,15 @@
   },
   "committed CMS registry vs content schema › declares only real schema keys for every built-in extra": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T14:59:48.660364950+00:00",
+    "lastRunKind": "targeted",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T14:59:48.660364950+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -1141,21 +1146,21 @@
       {
         "at": "2026-07-29T14:45:41.428758478+00:00",
         "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T21:08:00.243726689+00:00",
-        "kind": "changed",
         "status": "pass"
       }
     ]
   },
   "committed CMS registry vs content schema › declares only real schema keys for the custom chapters collection": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T14:59:48.660364950+00:00",
+    "lastRunKind": "targeted",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T14:59:48.660364950+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -1199,21 +1204,21 @@
       {
         "at": "2026-07-29T14:45:41.428758478+00:00",
         "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T21:08:00.243726689+00:00",
-        "kind": "changed",
         "status": "pass"
       }
     ]
   },
   "committed CMS registry vs content schema › declares the chapters list rows the schema expects": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T14:59:48.660364950+00:00",
+    "lastRunKind": "targeted",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T14:59:48.660364950+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -1257,21 +1262,21 @@
       {
         "at": "2026-07-29T14:45:41.428758478+00:00",
         "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T21:08:00.243726689+00:00",
-        "kind": "changed",
         "status": "pass"
       }
     ]
   },
   "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T14:59:48.660364950+00:00",
+    "lastRunKind": "targeted",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T14:59:48.660364950+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -1315,21 +1320,21 @@
       {
         "at": "2026-07-29T14:45:41.428758478+00:00",
         "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T21:08:00.243726689+00:00",
-        "kind": "changed",
         "status": "pass"
       }
     ]
   },
   "committed CMS registry vs content schema › renders an editor input for every schema key of every collection": {
     "file": "src/data/collections.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T14:59:48.660364950+00:00",
+    "lastRunKind": "targeted",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T14:59:48.660364950+00:00",
+        "kind": "targeted",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -1373,11 +1378,6 @@
       {
         "at": "2026-07-29T14:45:41.428758478+00:00",
         "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T21:08:00.243726689+00:00",
-        "kind": "changed",
         "status": "pass"
       }
     ]
@@ -3532,6 +3532,136 @@
       }
     ]
   },
+  "groupSponsorsByLevel › collects a sponsor whose tier matches no level instead of dropping it": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "groupSponsorsByLevel › collects an untagged sponsor into the same trailing group": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "groupSponsorsByLevel › omits a level that has no sponsors": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "groupSponsorsByLevel › orders groups by the declared level order, not the sponsor order": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "groupSponsorsByLevel › puts every sponsor in the trailing group when no levels are declared": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "groupSponsorsByLevel › returns no groups for no sponsors": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "groupSponsorsByLevel › sorts within a level by the order pin, then by name": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "hasPlaceholderSponsors › reports false for no sponsors at all": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "hasPlaceholderSponsors › reports false when every entry is a real sponsor": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
+  "hasPlaceholderSponsors › reports true when only some entries are placeholders": {
+    "file": "src/lib/sponsors.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      }
+    ]
+  },
   "heroGreeting › falls back to the generic greeting for a rejected name": {
     "file": "src/lib/personalize.test.ts",
     "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
@@ -4868,10 +4998,25 @@
   },
   "llms.txt GET › includes the org name and description from settings": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -4905,31 +5050,31 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "llms.txt GET › lists key pages as absolute URLs": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -4963,31 +5108,31 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "llms.txt GET › surfaces contact email and socials": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -5021,21 +5166,6 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
@@ -7420,10 +7550,25 @@
   },
   "robots.txt GET › allows all crawlers": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -7457,31 +7602,31 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "robots.txt GET › falls back to the request origin when site is unset": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -7515,31 +7660,31 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "robots.txt GET › points the Sitemap at the configured site origin": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -7573,31 +7718,31 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "robots.txt GET › responds as text/plain": {
     "file": "src/lib/seoEndpoints.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -7631,21 +7776,6 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
@@ -9044,10 +9174,25 @@
   },
   "site singletons › loads settings and nav from the data root as parsed JSON": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "fail"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -9082,30 +9227,43 @@
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
         "status": "pass"
-      },
+      }
+    ]
+  },
+  "site singletons › loads the sponsor page copy, its levels, and the disclaimer": {
+    "file": "src/lib/site.test.ts",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
+    "lastStatus": "pass",
+    "recentStatuses": [
       {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
         "status": "pass"
       }
     ]
   },
   "site singletons › loads the volunteer and donate page copy from the data root": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "fail"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -9139,31 +9297,31 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]
   },
   "site singletons › reflects a second data root on re-import": {
     "file": "src/lib/site.test.ts",
-    "lastRunAt": "2026-07-30T14:26:28.412330993+00:00",
-    "lastRunKind": "full",
+    "lastRunAt": "2026-07-30T15:14:17.698092808+00:00",
+    "lastRunKind": "changed",
     "lastStatus": "pass",
     "recentStatuses": [
+      {
+        "at": "2026-07-30T15:14:17.698092808+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:59:23.931571240+00:00",
+        "kind": "changed",
+        "status": "pass"
+      },
+      {
+        "at": "2026-07-30T14:57:58.231258056+00:00",
+        "kind": "changed",
+        "status": "fail"
+      },
       {
         "at": "2026-07-30T14:26:28.412330993+00:00",
         "kind": "full",
@@ -9197,21 +9355,6 @@
       {
         "at": "2026-07-29T15:11:01.530036782+00:00",
         "kind": "changed",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:57:29.982692889+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-29T14:45:41.428758478+00:00",
-        "kind": "full",
-        "status": "pass"
-      },
-      {
-        "at": "2026-07-28T15:56:38.870222878+00:00",
-        "kind": "full",
         "status": "pass"
       }
     ]

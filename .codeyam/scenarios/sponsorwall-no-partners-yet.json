@@ -1,0 +1,13 @@
+{
+  "name": "SponsorWall - No Partners Yet",
+  "id": "34bd2e75-e40d-4128-86c0-b9ed9d5fbdd5",
+  "url": "/isolated-components/SponsorWall-Empty",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SponsorWall",
+  "scenarioType": "component",
+  "description": "The production default the moment the sample entries are deleted, and the state a visitor sees before any partnership is signed. No notice, no dashed boxes, no empty level headings \u2014 just the editable invitation to be the first organization listed. This is the state most visitors will actually meet, so it has to read as deliberate rather than unfinished.",
+  "pageFilePath": "src/components/sponsor/SponsorWall.astro"
+}

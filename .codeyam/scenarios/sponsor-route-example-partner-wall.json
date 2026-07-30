@@ -1,0 +1,40 @@
+{
+  "name": "Sponsor Route - Example Partner Wall",
+  "id": "1efde83f-9c02-4b05-afd8-023fb2f28d6c",
+  "url": "/sponsor",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "sponsors": [
+      {
+        "body": "Illustrative entry only.",
+        "name": "Example Presenting Partner",
+        "order": 1,
+        "placeholder": true,
+        "slug": "example-presenting-partner",
+        "tier": "presenting"
+      },
+      {
+        "body": "Illustrative entry only.",
+        "name": "Example Chapter Partner",
+        "order": 2,
+        "placeholder": true,
+        "slug": "example-chapter-partner",
+        "tier": "chapter"
+      },
+      {
+        "body": "Illustrative entry only.",
+        "name": "Example Event Partner",
+        "order": 3,
+        "placeholder": true,
+        "slug": "example-event-partner",
+        "tier": "event"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/sponsor.astro",
+  "description": "The sponsorship page as it ships today, at its real route: the pitch, the partnership levels, and a partner wall carrying clearly-labelled example entries. The examples exist so the team can see the finished shape of the page before the first partnership is signed — which is only honest because the wall says so in as many words and refuses to link them."
+}

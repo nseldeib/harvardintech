@@ -189,6 +189,52 @@
       ]
     },
     {
+      "id": "sponsors",
+      "label": "Sponsors",
+      "singular": "Sponsor",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text"
+        },
+        {
+          "name": "tier",
+          "label": "Partnership level",
+          "type": "text",
+          "optional": true,
+          "hint": "The level id from the Sponsorship page settings (presenting, chapter, event, community). Blank groups the sponsor under Other partners."
+        },
+        {
+          "name": "logo",
+          "label": "Logo",
+          "type": "image",
+          "optional": true,
+          "hint": "Blank shows the sponsor's name as text instead."
+        },
+        {
+          "name": "url",
+          "label": "Website",
+          "type": "text",
+          "optional": true
+        },
+        {
+          "name": "placeholder",
+          "label": "Example entry",
+          "type": "boolean",
+          "optional": true,
+          "hint": "Switch ON for an illustrative entry. The wall then shows an 'examples, not actual sponsors' notice. Leave OFF for a real sponsor."
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Optional pin. Blank sorts the sponsor alphabetically within its level."
+        }
+      ]
+    },
+    {
       "id": "projects",
       "label": "Projects",
       "singular": "Project",

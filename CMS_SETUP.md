@@ -103,6 +103,12 @@ is site-specific:
   a community (Founders, AI) is defined by an interest rather than a location, but
   everything else about the page is the same, so both render through the same
   components and an editor who has filled in one form already knows the other.
+  **`sponsors`** backs the wall on `/sponsor`: `tier` holds the id of a level
+  declared in the Sponsorship page settings, and the **Example entry** toggle
+  (`placeholder`) marks an illustrative row — the wall then renders an explicit
+  "examples, not actual sponsors" notice and refuses to link those entries, which
+  is what lets sample rows ship without claiming partnerships that do not exist.
+  Switch it off for a real sponsor.
 - **`builtins`** — extra fields appended to a built-in's editor: `embedUrl` /
   `embedHtml` on `pages` and `blog`, `chapter` on `events`, `active` on `team`.
 - **`seo`** — this site's SEO frontmatter keys. The package defaults to

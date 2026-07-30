@@ -1,0 +1,52 @@
+---
+// One entry in "What we've accomplished so far": a figure, what the figure
+// counts, and the sentence that gives it meaning.
+//
+// The pairing is the point — "600+" alone means nothing, and "grew a WhatsApp
+// community" without a number reads as a claim rather than a result. Split out
+// of MomentumAccomplishments the same way GiftPillarCard is split out of
+// GiftPillars, so the card can be captured and reviewed on its own.
+interface Props {
+  value: string;
+  label: string;
+  body?: string;
+}
+const { value, label, body } = Astro.props as Props;
+---
+
+<article class="acc">
+  <span class="acc-v">{value}</span>
+  <span class="acc-l">{label}</span>
+  {body ? <p class="acc-b">{body}</p> : null}
+</article>
+
+<style>
+  .acc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 24px 22px;
+    background: var(--paper-2);
+    border-top: 3px solid var(--crimson);
+  }
+  .acc-v {
+    font-family: var(--font-title);
+    font-size: 2.4rem;
+    line-height: 1.1;
+    color: var(--crimson);
+  }
+  .acc-l {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+  }
+  .acc-b {
+    margin: 14px 0 0;
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+</style>

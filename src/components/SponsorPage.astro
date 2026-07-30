@@ -1,0 +1,46 @@
+---
+// Full /sponsor page body. Composition only — every section is its own component
+// under `components/sponsor/`, the same split MomentumFundPage and VolunteerPage
+// use.
+//
+// Takes plain props (copy + a flat sponsors array) rather than reading the
+// collection, so it renders from the /sponsor route AND from isolated-component
+// scenarios (with the example wall, and with no sponsors at all).
+import SponsorHero from './sponsor/SponsorHero.astro';
+import SponsorLevels from './sponsor/SponsorLevels.astro';
+import SponsorWall from './sponsor/SponsorWall.astro';
+import SponsorInquiry from './sponsor/SponsorInquiry.astro';
+import type { SponsorLike } from '../lib/sponsors';
+import type { SponsorPageCopy } from '../lib/site';
+
+interface Props {
+  copy: SponsorPageCopy;
+  sponsors?: SponsorLike[];
+  email?: string;
+}
+const { copy, sponsors = [], email = 'ben@harvardintech.com' } = Astro.props as Props;
+---
+
+<SponsorHero
+  kicker={copy.kicker}
+  headline={copy.headline}
+  intro={copy.intro}
+  image={copy.heroImage}
+/>
+
+<SponsorLevels title={copy.levelsTitle} intro={copy.levelsIntro} levels={copy.levels} />
+
+<SponsorWall
+  title={copy.wallTitle}
+  emptyMessage={copy.wallEmptyMessage}
+  sponsors={sponsors}
+  levels={copy.levels ?? []}
+/>
+
+<SponsorInquiry
+  title={copy.inquiryTitle}
+  body={copy.inquiryBody}
+  formUrl={copy.inquiryFormUrl}
+  email={email}
+  disclaimer={copy.disclaimer}
+/>

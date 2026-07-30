@@ -1,0 +1,13 @@
+{
+  "name": "SponsorInquiry - Awaiting A Form",
+  "id": "a31999c6-691a-49cf-85a3-52c1bae43e3e",
+  "url": "/isolated-components/SponsorInquiry",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SponsorInquiry",
+  "scenarioType": "component",
+  "description": "The closing ask in its current state: the email CTA works today, and the form panel carries reader-facing copy saying the form is on the way. The generic embed fallback names the two props a developer would set, which is right for an unconfigured embed nobody has reached and wrong on a page a prospective sponsor lands on \u2014 hence the override. The Harvard disclaimer sits under the CTA, where a reader deciding to write will actually see it.",
+  "pageFilePath": "src/components/sponsor/SponsorInquiry.astro"
+}

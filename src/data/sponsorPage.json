@@ -1,0 +1,60 @@
+{
+  "kicker": "Partner with us",
+  "headline": "Reach the Harvard alumni building in tech.",
+  "intro": "Harvard Alumni in Tech is a volunteer-led community of founders, operators, investors, and technologists across six chapters. Sponsorship is what turns a volunteer calendar into consistent programming — and it puts your organization in the room with the people building what comes next.",
+  "heroImage": "/images/gallery/event-13.jpg",
+  "levelsTitle": "Ways to partner",
+  "levelsIntro": "Every partnership is scoped to what it underwrites, so we can size it to a single evening or a full year. Tell us what you have in mind and we will put real numbers against it.",
+  "levels": [
+    {
+      "id": "presenting",
+      "name": "Presenting Partner",
+      "summary": "Underwrite a year of programming across every chapter.",
+      "benefits": [
+        "Recognition on the site, in the newsletter, and from the stage at every event in the year",
+        "First option to host or co-host a flagship event, including the annual Summit",
+        "An introduction to the community through a post in our Content Hub",
+        "A standing seat in planning conversations about what the year should cover"
+      ]
+    },
+    {
+      "id": "chapter",
+      "name": "Chapter Partner",
+      "summary": "Back one city's calendar for the year — Boston, New York, London, SF, Seattle or DC.",
+      "benefits": [
+        "Recognition at every event that chapter runs, and on its chapter page",
+        "Introductions to that city's chapter leads and their alumni network",
+        "A speaking or panel slot at a chapter event during the year",
+        "First look at the chapter's calendar before it is announced"
+      ]
+    },
+    {
+      "id": "event",
+      "name": "Event Partner",
+      "summary": "Sponsor a single event — a panel, a founder dinner, a mixer.",
+      "benefits": [
+        "Recognition in the event listing, on the night, and in the follow-up",
+        "The chance to open or close the event with a short welcome",
+        "Attendee-facing presence on the night, from signage to a table",
+        "The single easiest way to start — most partnerships begin here"
+      ]
+    },
+    {
+      "id": "community",
+      "name": "Community Partner",
+      "summary": "Support us in kind: host us in your space, send a speaker, or share what you are hiring for.",
+      "benefits": [
+        "Host an event in your office and meet the community on your own ground",
+        "Put a leader from your team on a panel or in a fireside conversation",
+        "Share open roles with a network of alumni technologists",
+        "No budget required — this is how a lot of our best partnerships start"
+      ]
+    }
+  ],
+  "wallTitle": "Our partners",
+  "wallEmptyMessage": "We are lining up partners for the year ahead. If you would like your organization to be the first one listed here, we would love to talk.",
+  "inquiryTitle": "Start a conversation",
+  "inquiryBody": "Tell us a little about what you have in mind and we will come back to you with what it would take. There is no minimum, and no obligation to decide anything on the first call.",
+  "inquiryFormUrl": "",
+  "disclaimer": "Harvard Alumni in Tech is a Shared Interest Group of the Harvard Alumni Association. It is independently governed and financed. Contributions and sponsorships support Harvard Alumni in Tech and are not gifts to Harvard University."
+}

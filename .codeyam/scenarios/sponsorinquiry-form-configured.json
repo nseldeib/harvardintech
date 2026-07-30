@@ -1,0 +1,13 @@
+{
+  "name": "SponsorInquiry - Form Configured",
+  "id": "058b6e06-315d-4cf5-be2a-844736c47b83",
+  "url": "/isolated-components/SponsorInquiry-Configured",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SponsorInquiry",
+  "scenarioType": "component",
+  "description": "The same section once a real inquiry form URL is set in the CMS \u2014 the embed replaces the placeholder and the email CTA stays alongside it, because the two serve different readers: one ready to give specifics, one who would rather just write. This is the only part of the sponsorship page still waiting on the team.",
+  "pageFilePath": "src/components/sponsor/SponsorInquiry.astro"
+}

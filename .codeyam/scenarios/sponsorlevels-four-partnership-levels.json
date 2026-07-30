@@ -1,0 +1,13 @@
+{
+  "name": "SponsorLevels - Four Partnership Levels",
+  "id": "6f4498e2-d5cc-4406-a6f1-3945fc761e1e",
+  "url": "/isolated-components/SponsorLevels",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SponsorLevels",
+  "scenarioType": "component",
+  "description": "The partnership levels as a sponsor reads them: Presenting, Chapter, Event and Community, each scoped by what it underwrites and what the sponsor gets. No dollar amounts anywhere \u2014 a Harvard Shared Interest Group may only solicit sponsorship against real event or operating expenses, so each level is sized in a conversation instead of sold off a rate card.",
+  "pageFilePath": "src/components/sponsor/SponsorLevels.astro"
+}

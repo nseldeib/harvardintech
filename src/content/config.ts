@@ -183,6 +183,29 @@ const projects = defineCollection({
   }),
 });
 
+// Organizations supporting Harvard Alumni in Tech, shown on the /sponsor wall.
+//
+// `tier` groups the wall by partnership level and holds the `id` of a level in
+// `sponsorPage.json` — free text here rather than an enum, because the levels
+// are editable copy and a schema enum would make renaming a level a code change.
+//
+// `placeholder: true` marks an ILLUSTRATIVE entry. The wall then renders an
+// explicit "example, not actual sponsors" notice, so a page carrying sample
+// entries can never be mistaken for a live sponsor list — which is the whole
+// reason sample entries are allowed to ship at all. A real sponsor omits it.
+const sponsors = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: `${root}/sponsors` }),
+  schema: z.object({
+    name: z.string(),
+    tier: z.string().optional(),
+    logo: z.string().optional(),
+    url: z.string().optional(),
+    placeholder: z.boolean().optional(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
 // Member quotes for the Momentum Fund campaign page (/donate). Production
 // starts with none — the testimonials band renders nothing at all when the
 // collection is empty, so the page reads as finished before any quotes exist.
@@ -206,5 +229,6 @@ export const collections = {
   chapters,
   communities,
   projects,
+  sponsors,
   testimonials,
 };

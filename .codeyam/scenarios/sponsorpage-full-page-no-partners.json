@@ -1,0 +1,13 @@
+{
+  "name": "SponsorPage - Full Page No Partners",
+  "id": "e9baa1c8-ce33-4c4e-a9e2-94c71c03f878",
+  "url": "/isolated-components/SponsorPage-Empty",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SponsorPage",
+  "scenarioType": "component",
+  "description": "The whole page with the sponsors collection empty \u2014 the real production day-one view. The pitch and the levels carry it, and the wall degrades to its invitation rather than leaving a hole, which is the test of whether this page can ship before a single partnership exists.",
+  "pageFilePath": "src/components/SponsorPage.astro"
+}

@@ -1,0 +1,53 @@
+---
+// "What we've accomplished so far" — the campaign's track record, sitting
+// between the stats band and the story.
+//
+// Its job is evidence, not decoration: the campaign asks a reader to fund
+// momentum, so it has to show momentum that already exists before it asks.
+//
+// Composition only — each entry is an AccomplishmentCard, matching the
+// GiftPillars / GiftPillarCard split further down the same page. Renders nothing
+// when the list is empty, so a campaign that has not filled this in yet shows no
+// dangling heading.
+import AccomplishmentCard from './AccomplishmentCard.astro';
+
+interface Accomplishment {
+  value: string;
+  label: string;
+  body?: string;
+}
+interface Props {
+  title?: string;
+  items?: Accomplishment[];
+}
+const { title = "What we've accomplished so far", items = [] } = Astro.props as Props;
+---
+
+{
+  items.length > 0 ? (
+    <section class="sec" id="accomplishments">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <span class="kick">Momentum</span>
+            <h2>{title}</h2>
+          </div>
+        </div>
+        <div class="acc-grid">
+          {items.map((item) => (
+            <AccomplishmentCard value={item.value} label={item.label} body={item.body} />
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : null
+}
+
+<style>
+  .acc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    align-items: stretch;
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+// The "these are examples" band above the sponsor wall.
+//
+// Its own component because it carries the page's most consequential claim: with
+// it, sample entries are an honest illustration of a layout; without it, the same
+// entries assert partnerships that do not exist. Isolating it means it can be
+// captured as its own scenario, so its disappearance shows up as a visible
+// change rather than a silent one.
+---
+
+<p class="ph-notice">
+  <strong>Example placements — not actual sponsors.</strong> The entries below show how
+  partners will appear on this page. They will be replaced as real partnerships are
+  confirmed.
+</p>
+
+<style>
+  .ph-notice {
+    margin: 0 0 var(--space-lg);
+    padding: 14px 16px;
+    background: var(--paper-2);
+    border-left: 3px solid var(--crimson);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+  .ph-notice strong {
+    color: var(--ink);
+  }
+</style>

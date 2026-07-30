@@ -1,0 +1,94 @@
+---
+// "Our partners" — the sponsor wall, grouped by partnership level.
+//
+// Composition only: the notice and each entry are their own components, so this
+// file holds the wall's STRUCTURE (which groups exist, in what order) and nothing
+// about how a single sponsor renders.
+//
+// Two states matter here and they are NOT interchangeable:
+//   • No sponsors at all → the editable empty message. This is the production
+//     default and the state most visitors will actually see today.
+//   • Sponsors present, some marked `placeholder` → the wall renders WITH a loud
+//     notice saying these are examples. Showing sample logos silently would be a
+//     claim the organization has partners it does not have, so the notice is not
+//     decoration — it is the thing that makes shipping samples honest at all.
+import SponsorPlaceholderNotice from './SponsorPlaceholderNotice.astro';
+import SponsorWallItem from './SponsorWallItem.astro';
+import { groupSponsorsByLevel, hasPlaceholderSponsors, type SponsorLike } from '../../lib/sponsors';
+
+interface Level {
+  id: string;
+  name: string;
+}
+interface Props {
+  title?: string;
+  emptyMessage?: string;
+  sponsors?: SponsorLike[];
+  levels?: Level[];
+}
+const {
+  title = 'Our partners',
+  emptyMessage,
+  sponsors = [],
+  levels = [],
+} = Astro.props as Props;
+
+const groups = groupSponsorsByLevel(sponsors, levels);
+const showPlaceholderNotice = hasPlaceholderSponsors(sponsors);
+---
+
+<section class="sec" id="partners">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Thank you</span>
+        <h2>{title}</h2>
+      </div>
+    </div>
+
+    {showPlaceholderNotice ? <SponsorPlaceholderNotice /> : null}
+
+    {
+      groups.length === 0 ? (
+        <p class="wall-empty">
+          {emptyMessage ??
+            'We are lining up partners for the year ahead. If you would like your organization to be the first one listed here, we would love to talk.'}
+        </p>
+      ) : (
+        groups.map((group) => (
+          <div class="wall-group">
+            <span class="kick wall-group-h">{group.name}</span>
+            <div class="wall-row">
+              {group.sponsors.map((sponsor) => (
+                <SponsorWallItem sponsor={sponsor} />
+              ))}
+            </div>
+          </div>
+        ))
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .wall-empty {
+    max-width: var(--text-width);
+    margin: 0;
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  .wall-group + .wall-group {
+    margin-top: var(--space-lg);
+  }
+  .wall-group-h {
+    display: block;
+    margin-bottom: 12px;
+  }
+  .wall-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+</style>

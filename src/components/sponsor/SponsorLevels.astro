@@ -1,0 +1,72 @@
+---
+// "Ways to partner" — the partnership levels as a card grid. Renders whatever
+// levels the copy declares, so adding or retiring one is a CMS edit; with none
+// declared the whole section is omitted rather than left as a bare heading.
+import SponsorLevelCard from './SponsorLevelCard.astro';
+
+interface Level {
+  id: string;
+  name: string;
+  summary?: string;
+  benefits?: string[];
+}
+interface Props {
+  title?: string;
+  intro?: string;
+  levels?: Level[];
+}
+const { title = 'Ways to partner', intro, levels = [] } = Astro.props as Props;
+---
+
+{
+  levels.length > 0 ? (
+    <section class="sec" id="levels">
+      <div class="wrap">
+        <div class="sec-head">
+          <div>
+            <span class="kick">Partnership</span>
+            <h2>{title}</h2>
+          </div>
+        </div>
+        {intro ? <p class="lvl-intro">{intro}</p> : null}
+        <div class="lvl-grid" style={`--n:${Math.min(levels.length, 4)}`}>
+          {levels.map((level) => (
+            <SponsorLevelCard
+              name={level.name}
+              summary={level.summary}
+              benefits={level.benefits}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : null
+}
+
+<style>
+  .lvl-intro {
+    max-width: var(--text-width);
+    margin: 0 0 var(--space-lg);
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+  .lvl-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--n, 4), 1fr);
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 1080px) {
+    .lvl-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .lvl-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

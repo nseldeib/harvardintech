@@ -85,6 +85,36 @@ export interface VolunteerPageCopy {
 export type PillarIcon = 'people' | 'book' | 'globe';
 
 /** Editable copy for the /donate Momentum Fund campaign page. */
+/** Editable copy for /sponsor. Same model as VolunteerPageCopy: the pitch, the
+ *  partnership levels, and the legal line are all CMS edits, never code changes. */
+export interface SponsorPageCopy {
+  kicker?: string;
+  headline: string;
+  intro?: string;
+  /** Full-bleed hero background photo. */
+  heroImage?: string;
+  levelsTitle?: string;
+  levelsIntro?: string;
+  /** The partnership levels a sponsor chooses between. `id` is what a sponsor's
+   *  `tier` matches on, so renaming a level's `name` is safe but changing its
+   *  `id` re-homes every sponsor tagged to it. */
+  levels?: { id: string; name: string; summary?: string; benefits?: string[] }[];
+  wallTitle?: string;
+  /** Shown in place of the wall when no sponsors are published — the production
+   *  default, so it is the state most visitors will actually see. */
+  wallEmptyMessage?: string;
+  inquiryTitle?: string;
+  inquiryBody?: string;
+  /** Third-party form URL (Google Forms, Typeform). Empty renders EmbedForm's
+   *  unconfigured fallback, which reads as an obvious placeholder rather than a
+   *  broken form. */
+  inquiryFormUrl?: string;
+  /** The Harvard Alumni Association requires a Shared Interest Group to state
+   *  that contributions go to the group and not to Harvard University. Copy, not
+   *  markup, so the team can revise the wording without a deploy. */
+  disclaimer?: string;
+}
+
 export interface DonatePageCopy {
   campaignName: string;
   /** The hero headline itself carries the personalization — "{name}, let's go
@@ -99,6 +129,11 @@ export interface DonatePageCopy {
    *  Number Represents a Story") refers to these, so removing them leaves that
    *  heading dangling. */
   stats?: { value: string; label: string }[];
+  /** The campaign's track record — what the community has already done — shown
+   *  between the stats band and the story. The campaign asks a reader to fund
+   *  momentum that is already visible, so the evidence comes before the ask. */
+  accomplishmentsTitle?: string;
+  accomplishments?: { value: string; label: string; body?: string }[];
   storyTitle?: string;
   storyLede?: string;
   storyPullQuote?: string;
@@ -126,3 +161,4 @@ export const settings = readSingleton<SiteSettings>('settings.json');
 export const nav = readSingleton<SiteNav>('nav.json');
 export const volunteerPage = readSingleton<VolunteerPageCopy>('volunteerPage.json');
 export const donatePage = readSingleton<DonatePageCopy>('donatePage.json');
+export const sponsorPage = readSingleton<SponsorPageCopy>('sponsorPage.json');

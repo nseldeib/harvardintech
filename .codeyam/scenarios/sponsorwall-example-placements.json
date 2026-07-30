@@ -1,0 +1,13 @@
+{
+  "name": "SponsorWall - Example Placements",
+  "id": "3a23390c-232c-4dc7-97f6-ba48ec84bc32",
+  "url": "/isolated-components/SponsorWall",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SponsorWall",
+  "scenarioType": "component",
+  "description": "The wall as the page ships today: sample entries behind an explicit 'example placements, not actual sponsors' notice, each on a dashed border with its own Example tag, grouped under the partnership level it belongs to. Shipping sample logos silently would assert partnerships that do not exist, so the notice is not decoration \u2014 it is what makes shipping them honest. The examples are also deliberately not clickable, so nothing invites a reader to treat one as real.",
+  "pageFilePath": "src/components/sponsor/SponsorWall.astro"
+}

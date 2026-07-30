@@ -250,6 +250,37 @@
         "status": "n-a",
         "reason": "Presentational page; every action is an external-link or mailto navigation with no in-page interactive state"
       }
+    },
+    "src/pages/sponsor.astro": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The page composes fixed sections; its only list is the partner wall, where one sponsor is a data count rather than a distinct layout — the wall grid is the same at one entry or four"
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "A volunteer-led group carries a handful of partners at most; the wall grid wraps with no overflow or truncation treatment to demonstrate"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered Astro route built from content collections; nothing resolves asynchronously, so no pending state exists"
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Static prerendered route with no runtime data fetch; the inquiry form is a third-party embed that owns its own failure states"
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "The key action is emailing about sponsorship, a mailto navigation with no in-page state; the inquiry form is an external embed"
+      }
     }
   }
 }

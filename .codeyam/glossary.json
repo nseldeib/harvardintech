@@ -290,6 +290,18 @@
     ]
   },
   {
+    "description": "Sponsors grouped by partnership level for the /sponsor wall, in the order the levels are declared — so the wall reads top-down from the biggest commitment, matching how the levels are presented further up the page. Within a level the site-wide rule applies: the optional order pin first, then alphabetically by name. A level with no sponsors is omitted rather than rendered as a heading over nothing. A sponsor whose tier matches no declared level is NOT dropped: it collects into a trailing Other partners group, because tier is free text so the levels can be renamed in the CMS, which makes a typo possible — an editor must see their entry on the page rather than silently lose it. An untagged sponsor lands there too, the common case before anyone has picked a level.",
+    "filePath": "src/lib/sponsors.ts",
+    "name": "groupSponsorsByLevel",
+    "testFile": "src/lib/sponsors.test.ts"
+  },
+  {
+    "description": "Whether any sponsor on the wall is illustrative, which is what makes the wall render its 'example placements, not actual sponsors' notice. Deliberately ANY rather than ALL: one sample entry sitting beside three real partners is exactly the case where a reader would otherwise assume the whole row is real, so the notice has to fire on the mixed state too. Shipping sample logos silently would assert partnerships that do not exist, so this predicate is what makes shipping them honest at all.",
+    "filePath": "src/lib/sponsors.ts",
+    "name": "hasPlaceholderSponsors",
+    "testFile": "src/lib/sponsors.test.ts"
+  },
+  {
     "description": "Chooses the campaign hero headline — the {name} template filled with a sanitized first name, or the generic headline when no usable name is present. Never leaks an unfilled {name} placeholder.",
     "filePath": "src/lib/personalize.ts",
     "name": "heroGreeting",

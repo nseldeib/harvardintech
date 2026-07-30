@@ -1,0 +1,455 @@
+{
+  "timestamp": "2026-07-30T15:58:11Z",
+  "title": "Sponsorship page and Momentum Fund donate refresh",
+  "type": "feature",
+  "userRequest": "Project context: We need to modernize the https://www.harvardintech.com/ website from the outside. The site was built with a no-code product so we need to faithfully reproduce it using modern technologies and host it as a GitHub pages website. It also needs a CRM that can be run locally or, ideally also in the cloud via GitHub pages as well (protected with a password and/or GitHub OAuth). Can we dig into this?",
+  "description": "A new /sponsor page turns the menu's dead `/#support` anchor into a real pitch: four partnership levels (Presenting, Chapter, Event, Community) scoped by what each underwrites, a partner wall, an inquiry form beside a pre-filled email, and the Harvard disclaimer. Two research findings shaped it rather than taste. Harvard's Shared Interest Group guidelines cap what a group may solicit at the greater of an event's expenses or its annual operating expenses, and require acknowledgements to state the contribution goes to the group and not the University — so the levels carry no dollar amounts and the disclaimer is editable copy, not markup. The wider convention is 3-5 named tiers, hence four. The home page's 'Sponsor an event' and 'Host us in your space' cards now lead here rather than straight to an inbox, because someone weighing either wants to see what a partnership involves first; the remaining three cards are self-explanatory asks and still open email.\n\nThe partner wall's honesty is the load-bearing part. Sample entries ship so the team can see the finished page before the first partnership is signed, but a `placeholder` flag drives an explicit 'example placements, not actual sponsors' notice, dashed borders, a per-entry Example tag, AND a refusal to link them — a clickable example invites a reader to treat it as real, which the tag alone would not prevent. `hasPlaceholderSponsors` is ANY rather than ALL, because one sample beside three real partners is precisely when a reader assumes the whole row is real. `groupSponsorsByLevel` keeps a sponsor whose tier matches no declared level in a trailing group instead of dropping it: tier is free text so levels stay renameable in the CMS, which makes a typo possible, and an editor has to be able to see their own mistake.\n\nOn /donate, the campaign doc's missing 'What we've accomplished so far' section is now in — WhatsApp community, LinkedIn reach, events hosted, new chapters — placed between the stats band and the story so the campaign shows momentum before asking anyone to fund it. The stats band's chapter figure moved from 5 to 6. Deliberately deferred per the doc itself: the branded video ('maybe for the second campaign') and the SF testimonial ('ask Jessica'), which the existing empty-state band already handles.\n\nTwo fixes fell out of the work. EmbedForm's unconfigured fallback names the two props a developer would set — right for an embed nobody has reached, wrong on a public page a prospective sponsor lands on — so it now takes an optional reader-facing message. And a diagnosis worth keeping: the audit's distinct-capture gate caught two home-page scenarios rendering identical frames. The seed reaches the running app (a curl proves it) but `preview --scenarioSlug` does not reliably re-seed before capturing, even with a 9s settle; re-registering through `register`, whose seed-then-capture pipeline does work, fixed the frame and the scenario now shows its seeded sixth chapter. Reach for `register` over `preview` when a seeded capture looks stale.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-chapter-published-since-the-menu-was-written.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/embedform-configured-form--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-communities-derived--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/EmbedForm.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/SupportUs.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/donatePage.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/nav.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumaccomplishments-campaign-track-record.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumaccomplishments-campaign-track-record--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsorinquiry-awaiting-a-form--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsorinquiry-form-configured--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsorlevels-four-partnership-levels--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsorpage-full-page-no-partners--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsorpage-full-page-with-examples--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsorwall-example-placements--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsorwall-no-partners-yet--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsorwall-real-partners--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsor-route-example-partner-wall.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsorinquiry-awaiting-a-form.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsorinquiry-form-configured.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsorlevels-four-partnership-levels.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsorpage-full-page-no-partners.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsorpage-full-page-with-examples.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsorwall-example-placements.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsorwall-no-partners-yet.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sponsorwall-real-partners.json",
+      "status": "added"
+    },
+    {
+      "path": "src/components/SponsorPage.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/AccomplishmentCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumAccomplishments.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/sponsor/SponsorHero.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/sponsor/SponsorInquiry.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/sponsor/SponsorLevelCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/sponsor/SponsorLevels.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/sponsor/SponsorPlaceholderNotice.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/sponsor/SponsorWall.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/sponsor/SponsorWallItem.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/sponsors/example-chapter-partner.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/sponsors/example-event-partner.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/sponsors/example-presenting-partner.md",
+      "status": "added"
+    },
+    {
+      "path": "src/data/sponsorPage.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/sponsors.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/sponsors.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/sponsor.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "EmbedForm - Configured Form",
+      "screenshotPath": "embedform-configured-form--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Communities Derived",
+      "screenshotPath": "primarynav-communities-derived--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 21,
+    "passed": 21,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 21,
+        "passed": 21
+      }
+    ]
+  }
+}

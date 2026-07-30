@@ -1,9 +1,15 @@
 ---
-// "Support us" (Atlas): five ways to support, as crimson-edged cards that each
-// open a pre-filled mailto to the organizer (via the shared buildMailto helper).
-// Replaces the old circular-icon row with the editorial card grid used across
-// the redesigned site.
+// "Support us" (Atlas): five ways to support, as crimson-edged cards in the
+// editorial grid used across the redesigned site.
+//
+// Two of the five now lead to /sponsor rather than straight to an inbox. The
+// difference is how much the reader needs to know first: someone weighing
+// sponsoring or hosting wants to see the partnership levels and what each one
+// underwrites before they write, and /sponsor covers both of those as its Event
+// and Community levels. The remaining three are single, self-explanatory asks
+// with nothing to read up on, so they still open a pre-filled mailto.
 import { buildMailto } from '../../lib/mailto';
+import { withBase } from '../../lib/url';
 
 interface Props {
   email?: string;
@@ -11,12 +17,16 @@ interface Props {
 const { email = 'ben@harvardintech.com' } = Astro.props;
 
 const options = [
-  { label: 'Sponsor an event', subject: 'Sponsoring a Harvard Alumni in Tech event' },
-  { label: 'Host us in your space', subject: 'Hosting a Harvard Alumni in Tech event' },
+  { label: 'Sponsor an event', href: withBase('/sponsor') },
+  { label: 'Host us in your space', href: withBase('/sponsor#levels') },
   { label: 'Share job opportunities', subject: 'Sharing a job opportunity' },
   { label: 'Speak at an event', subject: 'Speaking at a Harvard Alumni in Tech event' },
   { label: 'Volunteer your time', subject: 'Volunteering with Harvard Alumni in Tech' },
-];
+].map((opt) => ({
+  label: opt.label,
+  href: opt.href ?? buildMailto({ to: email, subject: opt.subject! }),
+  cta: opt.href ? 'See partnership levels →' : 'Get in touch →',
+}));
 ---
 
 <section class="sec" id="support">
@@ -30,9 +40,9 @@ const options = [
     <div class="support-grid">
       {
         options.map((opt) => (
-          <a class="sup" href={buildMailto({ to: email, subject: opt.subject })}>
+          <a class="sup" href={opt.href}>
             <span class="sup-l">{opt.label}</span>
-            <span class="sup-go">Get in touch →</span>
+            <span class="sup-go">{opt.cta}</span>
           </a>
         ))
       }

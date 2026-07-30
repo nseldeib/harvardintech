@@ -3,22 +3,40 @@
     {
       "label": "Programs",
       "children": [
-        { "label": "All Events", "url": "/events" }
+        {
+          "label": "All Events",
+          "url": "/events"
+        }
       ]
     },
     {
       "label": "Communities",
       "children": [
-        { "label": "WhatsApp", "url": "/#community" }
+        {
+          "label": "WhatsApp",
+          "url": "/#community"
+        }
       ]
     },
     {
       "label": "Content Hub",
       "children": [
-        { "label": "Blog", "url": "/blog/welcome" },
-        { "label": "Medium", "url": "https://medium.com/harvard-in-tech" },
-        { "label": "LinkedIn", "url": "https://www.linkedin.com/company/harvardintech/" },
-        { "label": "Newsletter", "url": "https://www.linkedin.com/newsletters/harvard-in-tech-7056638759055880192/" }
+        {
+          "label": "Blog",
+          "url": "/blog/welcome"
+        },
+        {
+          "label": "Medium",
+          "url": "https://medium.com/harvard-in-tech"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/company/harvardintech/"
+        },
+        {
+          "label": "Newsletter",
+          "url": "https://www.linkedin.com/newsletters/harvard-in-tech-7056638759055880192/"
+        }
       ]
     },
     {
@@ -27,21 +45,36 @@
         {
           "label": "About",
           "children": [
-            { "label": "Mission", "url": "/#about" },
-            { "label": "Board", "url": "/#board" }
+            {
+              "label": "Mission",
+              "url": "/#about"
+            },
+            {
+              "label": "Board",
+              "url": "/#board"
+            }
           ]
         },
         {
           "label": "Get Involved",
           "children": [
-            { "label": "Volunteer", "url": "/volunteer" }
+            {
+              "label": "Volunteer",
+              "url": "/volunteer"
+            }
           ]
         },
         {
           "label": "Support",
           "children": [
-            { "label": "Donate", "url": "/donate" },
-            { "label": "Sponsorship Opportunities", "url": "/#support" }
+            {
+              "label": "Donate",
+              "url": "/donate"
+            },
+            {
+              "label": "Sponsorship Opportunities",
+              "url": "/sponsor"
+            }
           ]
         }
       ]

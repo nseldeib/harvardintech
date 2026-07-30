@@ -1,0 +1,13 @@
+{
+  "name": "SponsorPage - Full Page With Examples",
+  "id": "0f2af265-50ab-4122-b69d-d223270d2b08",
+  "url": "/isolated-components/SponsorPage",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SponsorPage",
+  "scenarioType": "component",
+  "description": "The whole sponsorship page in one frame as it ships today \u2014 hero, the four partnership levels, the example wall behind its notice, and the inquiry section with the disclaimer. Useful for judging whether the page reads as a coherent pitch top to bottom, which the section-by-section scenarios cannot show.",
+  "pageFilePath": "src/components/SponsorPage.astro"
+}

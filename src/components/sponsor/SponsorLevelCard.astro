@@ -1,0 +1,70 @@
+---
+// One partnership level: its name, what it underwrites, and the benefits that
+// come with it. Deliberately carries NO price — a Harvard Shared Interest Group
+// may only solicit sponsorship against actual event or operating expenses, so
+// every level is scoped in a conversation rather than sold off a rate card.
+interface Props {
+  name: string;
+  summary?: string;
+  benefits?: string[];
+}
+const { name, summary, benefits = [] } = Astro.props as Props;
+---
+
+<article class="lvl">
+  <h3 class="lvl-name">{name}</h3>
+  {summary ? <p class="lvl-sum">{summary}</p> : null}
+  {
+    benefits.length > 0 ? (
+      <ul class="lvl-benefits">
+        {benefits.map((benefit) => (
+          <li>{benefit}</li>
+        ))}
+      </ul>
+    ) : null
+  }
+</article>
+
+<style>
+  .lvl {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-2);
+    border-top: 3px solid var(--crimson);
+    padding: 26px 24px 28px;
+  }
+  .lvl-name {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.3;
+  }
+  .lvl-sum {
+    margin: 12px 0 0;
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .lvl-benefits {
+    margin: 20px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+  .lvl-benefits li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .lvl-benefits li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 7px;
+    height: 2px;
+    background: var(--crimson);
+  }
+</style>

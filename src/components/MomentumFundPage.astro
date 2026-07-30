@@ -4,9 +4,10 @@
 //
 // Composition only — every section is its own component under
 // `components/donate/`. Section order follows the mockup: photo hero
-// (personalized headline) → stats band → "And Every Number Represents a Story"
-// → the story → "Why Support Harvard in Tech" → "What Your Gift Powers" cards
-// → testimonials → closing CTA.
+// (personalized headline) → stats band → "What we've accomplished so far"
+// (the track record, so the evidence precedes the ask) → "And Every Number
+// Represents a Story" → the story → "Why Support Harvard in Tech" → "What Your
+// Gift Powers" cards → testimonials → closing CTA.
 //
 // Takes plain props (copy + a flat testimonials array) rather than reading the
 // collection, so it renders from the /donate route and from isolated-component
@@ -14,6 +15,7 @@
 // EventsPage.astro uses.
 import MomentumHero from './donate/MomentumHero.astro';
 import MomentumStats from './donate/MomentumStats.astro';
+import MomentumAccomplishments from './donate/MomentumAccomplishments.astro';
 import MomentumStory from './donate/MomentumStory.astro';
 import MomentumWhy from './donate/MomentumWhy.astro';
 import GiftPillars from './donate/GiftPillars.astro';
@@ -53,6 +55,8 @@ const {
 />
 
 <MomentumStats stats={copy.stats} />
+
+<MomentumAccomplishments title={copy.accomplishmentsTitle} items={copy.accomplishments} />
 
 <MomentumStory
   title={copy.storyTitle}

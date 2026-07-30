@@ -25,6 +25,11 @@ import UpcomingEvents from '../../components/landing/UpcomingEvents.astro';
 import BoardOfDirectors from '../../components/landing/BoardOfDirectors.astro';
 import VolunteerPage from '../../components/VolunteerPage.astro';
 import MomentumFundPage from '../../components/MomentumFundPage.astro';
+import SponsorPage from '../../components/SponsorPage.astro';
+import SponsorLevels from '../../components/sponsor/SponsorLevels.astro';
+import SponsorWall from '../../components/sponsor/SponsorWall.astro';
+import SponsorInquiry from '../../components/sponsor/SponsorInquiry.astro';
+import MomentumAccomplishments from '../../components/donate/MomentumAccomplishments.astro';
 import PrimaryNav from '../../components/nav/PrimaryNav.astro';
 import UtilityBar from '../../components/nav/UtilityBar.astro';
 import {
@@ -33,7 +38,7 @@ import {
   communityNavItems,
   withCommunityItems,
 } from '../../lib/nav';
-import { volunteerPage, donatePage } from '../../lib/site';
+import { volunteerPage, donatePage, sponsorPage } from '../../lib/site';
 import '../../styles/tokens.css';
 
 // Component-isolation harness. codeyam captures a single component in isolation
@@ -442,6 +447,97 @@ const momentumFundStates = {
   Quotes: { copy: MOMENTUM_COPY, testimonials: SAMPLE_TESTIMONIALS },
 };
 
+// MomentumAccomplishments: the campaign's track record. Reads the real copy, so
+// the capture shows the figures the page actually publishes rather than invented
+// ones — the whole point of the section is that the numbers are true.
+const accomplishmentsStates = {
+  Default: {
+    title: donatePage.accomplishmentsTitle,
+    items: donatePage.accomplishments ?? [],
+  },
+};
+
+// SponsorPage / SponsorWall states.
+//
+// The three wall states are NOT variations of one another — each says something
+// different about whether the organization has partners:
+//   • Examples  — the committed content today: sample entries behind the
+//     "not actual sponsors" notice.
+//   • Empty     — the production default the moment the examples are deleted,
+//     and the state a visitor sees before any partnership is signed.
+//   • Real      — the state the page is FOR: named partners, no notice, and the
+//     entries become real links.
+const SPONSOR_COPY = sponsorPage;
+const EXAMPLE_SPONSORS = [
+  { slug: 'example-presenting', name: 'Example Presenting Partner', tier: 'presenting', placeholder: true, order: 1 },
+  { slug: 'example-chapter', name: 'Example Chapter Partner', tier: 'chapter', placeholder: true, order: 2 },
+  { slug: 'example-event', name: 'Example Event Partner', tier: 'event', placeholder: true, order: 3 },
+];
+const REAL_SPONSORS = [
+  { slug: 'atlas-cloud', name: 'Atlas Cloud', tier: 'presenting', url: 'https://example.com/atlas' },
+  { slug: 'beacon-labs', name: 'Beacon Labs', tier: 'chapter', url: 'https://example.com/beacon' },
+  { slug: 'harbor-ventures', name: 'Harbor Ventures', tier: 'event', url: 'https://example.com/harbor' },
+  // Tier deliberately mistyped (`Community`, not the declared `community` id) —
+  // the exact slip a free-text tier field invites. It must still reach the page,
+  // under the trailing group, rather than vanishing from the wall.
+  { slug: 'quincy-works', name: 'Quincy Works', tier: 'Community' },
+];
+const sponsorPageStates = {
+  Default: { copy: SPONSOR_COPY, sponsors: EXAMPLE_SPONSORS },
+  Empty: { copy: SPONSOR_COPY, sponsors: [] as typeof EXAMPLE_SPONSORS },
+  Partners: { copy: SPONSOR_COPY, sponsors: REAL_SPONSORS },
+};
+const sponsorWallStates = {
+  Default: {
+    title: SPONSOR_COPY.wallTitle,
+    emptyMessage: SPONSOR_COPY.wallEmptyMessage,
+    sponsors: EXAMPLE_SPONSORS,
+    levels: SPONSOR_COPY.levels ?? [],
+  },
+  Empty: {
+    title: SPONSOR_COPY.wallTitle,
+    emptyMessage: SPONSOR_COPY.wallEmptyMessage,
+    sponsors: [] as typeof EXAMPLE_SPONSORS,
+    levels: SPONSOR_COPY.levels ?? [],
+  },
+  Partners: {
+    title: SPONSOR_COPY.wallTitle,
+    emptyMessage: SPONSOR_COPY.wallEmptyMessage,
+    sponsors: REAL_SPONSORS,
+    levels: SPONSOR_COPY.levels ?? [],
+  },
+};
+
+// SponsorLevels: the four partnership levels, read from the real copy.
+const sponsorLevelsStates = {
+  Default: {
+    title: SPONSOR_COPY.levelsTitle,
+    intro: SPONSOR_COPY.levelsIntro,
+    levels: SPONSOR_COPY.levels ?? [],
+  },
+};
+
+// SponsorInquiry: `Default` is today's page — no third-party form configured, so
+// the embed shows the reader-facing placeholder next to the email CTA.
+// `Configured` proves the same section once a real form URL is set, which is the
+// only part of this page still waiting on the team.
+const sponsorInquiryStates = {
+  Default: {
+    title: SPONSOR_COPY.inquiryTitle,
+    body: SPONSOR_COPY.inquiryBody,
+    formUrl: SPONSOR_COPY.inquiryFormUrl,
+    email: 'ben@harvardintech.com',
+    disclaimer: SPONSOR_COPY.disclaimer,
+  },
+  Configured: {
+    title: SPONSOR_COPY.inquiryTitle,
+    body: SPONSOR_COPY.inquiryBody,
+    formUrl: 'https://docs.google.com/forms/d/e/EXAMPLE_SPONSOR_FORM/viewform?embedded=true',
+    email: 'ben@harvardintech.com',
+    disclaimer: SPONSOR_COPY.disclaimer,
+  },
+};
+
 export async function getStaticPaths() {
   // getStaticPaths runs in an isolated scope and cannot reference the
   // module-level consts — enumerate route names inline.
@@ -489,6 +585,16 @@ export async function getStaticPaths() {
     { params: { name: 'ContentHub-Empty' } },
     { params: { name: 'GivingCampaign' } },
     { params: { name: 'LumaCalendar' } },
+    { params: { name: 'SponsorPage' } },
+    { params: { name: 'SponsorPage-Empty' } },
+    { params: { name: 'SponsorPage-Partners' } },
+    { params: { name: 'SponsorLevels' } },
+    { params: { name: 'SponsorWall' } },
+    { params: { name: 'SponsorWall-Empty' } },
+    { params: { name: 'SponsorWall-Partners' } },
+    { params: { name: 'SponsorInquiry' } },
+    { params: { name: 'SponsorInquiry-Configured' } },
+    { params: { name: 'MomentumAccomplishments' } },
     { params: { name: 'VolunteerPage' } },
     { params: { name: 'VolunteerPage-Sparse' } },
     { params: { name: 'VolunteerPage-Empty' } },
@@ -610,6 +716,36 @@ if (name && name.startsWith('MomentumFundPage')) {
   const stateKey = (name === 'MomentumFundPage' ? 'Default' : name.slice('MomentumFundPage-'.length)) as keyof typeof momentumFundStates;
   momentumFundProps = momentumFundStates[stateKey] ?? momentumFundStates.Default;
 }
+
+// SponsorPage must be tested BEFORE the narrower Sponsor* prefixes below would
+// swallow it — `startsWith('Sponsor')` alone would match every one of them.
+let sponsorPageProps: (typeof sponsorPageStates)[keyof typeof sponsorPageStates] | null = null;
+if (name && name.startsWith('SponsorPage')) {
+  const stateKey = (name === 'SponsorPage' ? 'Default' : name.slice('SponsorPage-'.length)) as keyof typeof sponsorPageStates;
+  sponsorPageProps = sponsorPageStates[stateKey] ?? sponsorPageStates.Default;
+}
+
+let sponsorLevelsProps: (typeof sponsorLevelsStates)[keyof typeof sponsorLevelsStates] | null = null;
+if (name && name.startsWith('SponsorLevels')) {
+  sponsorLevelsProps = sponsorLevelsStates.Default;
+}
+
+let sponsorWallProps: (typeof sponsorWallStates)[keyof typeof sponsorWallStates] | null = null;
+if (name && name.startsWith('SponsorWall')) {
+  const stateKey = (name === 'SponsorWall' ? 'Default' : name.slice('SponsorWall-'.length)) as keyof typeof sponsorWallStates;
+  sponsorWallProps = sponsorWallStates[stateKey] ?? sponsorWallStates.Default;
+}
+
+let sponsorInquiryProps: (typeof sponsorInquiryStates)[keyof typeof sponsorInquiryStates] | null = null;
+if (name && name.startsWith('SponsorInquiry')) {
+  const stateKey = (name === 'SponsorInquiry' ? 'Default' : name.slice('SponsorInquiry-'.length)) as keyof typeof sponsorInquiryStates;
+  sponsorInquiryProps = sponsorInquiryStates[stateKey] ?? sponsorInquiryStates.Default;
+}
+
+let accomplishmentsProps: (typeof accomplishmentsStates)[keyof typeof accomplishmentsStates] | null = null;
+if (name && name.startsWith('MomentumAccomplishments')) {
+  accomplishmentsProps = accomplishmentsStates.Default;
+}
 ---
 
 <html lang="en">
@@ -625,6 +761,16 @@ if (name && name.startsWith('MomentumFundPage')) {
           <Greeting {...islands.Greeting.props} client:load />
         ) : embedFormProps ? (
           <EmbedForm {...embedFormProps} />
+        ) : sponsorPageProps ? (
+          <SponsorPage {...sponsorPageProps} />
+        ) : sponsorLevelsProps ? (
+          <SponsorLevels {...sponsorLevelsProps} />
+        ) : sponsorWallProps ? (
+          <SponsorWall {...sponsorWallProps} />
+        ) : sponsorInquiryProps ? (
+          <SponsorInquiry {...sponsorInquiryProps} />
+        ) : accomplishmentsProps ? (
+          <MomentumAccomplishments {...accomplishmentsProps} />
         ) : volunteerPageProps ? (
           <VolunteerPage {...volunteerPageProps} />
         ) : momentumFundProps ? (

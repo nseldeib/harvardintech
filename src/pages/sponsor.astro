@@ -1,0 +1,31 @@
+---
+// /sponsor — partnership levels, the partner wall, and the inquiry path.
+//
+// Replaces the nav's old `/#support` anchor into the homepage band, and absorbs
+// the two sponsor-shaped cards from that band ("Sponsor an event", "Host us in
+// your space"), which are now the Event and Community partnership levels.
+//
+// Sponsors come from the `sponsors` collection, which starts EMPTY in production
+// — the wall's default view is its empty state. Entries flagged `placeholder`
+// render behind an explicit "examples, not actual sponsors" notice.
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SponsorPage from '../components/SponsorPage.astro';
+import { sponsorPage, settings } from '../lib/site';
+import { publishedEntries } from '../lib/drafts';
+
+const sponsors = publishedEntries(
+  await getCollection('sponsors'),
+  !import.meta.env.PROD,
+).map((s) => ({
+  slug: s.id,
+  ...s.data,
+}));
+---
+
+<BaseLayout
+  title="Sponsorship"
+  description="Partner with Harvard Alumni in Tech. Sponsor an event, back a city chapter, or host us in your space — and reach the Harvard alumni building in tech."
+>
+  <SponsorPage copy={sponsorPage} sponsors={sponsors} email={settings.contactEmail} />
+</BaseLayout>

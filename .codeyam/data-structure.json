@@ -260,7 +260,7 @@
   },
   {
     "name": "Nav",
-    "description": "Editable navigation menu singleton (`src/data/nav.json`) with nested dropdowns, edited from /admin → Settings. Loaded by the base layout, which injects a Chapters group derived from the chapters collection — so the Chapters menu is not stored here.",
+    "description": "Editable navigation menu singleton (`src/data/nav.json`) with nested dropdowns, edited from /admin \u2192 Settings. Loaded by the base layout, which injects a Chapters group derived from the chapters collection \u2014 so the Chapters menu is not stored here.",
     "category": "datastore",
     "order": 6,
     "fields": [
@@ -376,7 +376,7 @@
   },
   {
     "name": "Testimonial",
-    "description": "A member quote shown in the testimonials band on the /donate Momentum Fund campaign page. Stored in the `testimonials` content collection. Production starts with none — the band hides itself entirely when the collection is empty, so the page reads as finished before any quotes are collected.",
+    "description": "A member quote shown in the testimonials band on the /donate Momentum Fund campaign page. Stored in the `testimonials` content collection. Production starts with none \u2014 the band hides itself entirely when the collection is empty, so the page reads as finished before any quotes are collected.",
     "category": "datastore",
     "order": 9,
     "fields": [
@@ -473,7 +473,7 @@
   },
   {
     "name": "DonatePageCopy",
-    "description": "Editable copy singleton for the /donate Momentum Fund campaign page (`src/data/donatePage.json`): the hero (with the `{name}` personalization slot filled from ?name= at runtime), the story and 'why support' narrative, the three 'What Your Gift Powers' pillars, and the giving CTA. `donateUrl` is empty until a donation platform exists, in which case the CTA falls back to a giving-inquiry mailto.",
+    "description": "Editable copy for the /donate Momentum Fund campaign page, held in the `donatePage.json` singleton under the data root. `accomplishments` is the campaign's track record \u2014 the concrete things the community has already done (community size, reach, events, new chapters) \u2014 shown between the stats band and the story, because the campaign doc asks a reader to fund momentum that is already visible rather than a promise. `stats` are the headline figures the story title (\"And Every Number Represents a Story\") refers back to. `donateUrl` stays empty until a donation platform is chosen, at which point the CTA stops falling back to a giving-inquiry mailto.",
     "category": "datastore",
     "order": 11,
     "fields": [
@@ -483,12 +483,12 @@
         "required": true
       },
       {
-        "name": "heroGreetingNamed",
+        "name": "heroHeadlineNamed",
         "type": "string",
         "required": true
       },
       {
-        "name": "heroGreetingGeneric",
+        "name": "heroHeadlineGeneric",
         "type": "string",
         "required": true
       },
@@ -498,7 +498,37 @@
         "required": false
       },
       {
+        "name": "heroImage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "stats",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "accomplishmentsTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "accomplishments",
+        "type": "array",
+        "required": false
+      },
+      {
         "name": "storyTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "storyLede",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "storyPullQuote",
         "type": "string",
         "required": false
       },
@@ -533,6 +563,16 @@
         "required": false
       },
       {
+        "name": "ctaTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "ctaBody",
+        "type": "string",
+        "required": false
+      },
+      {
         "name": "ctaLabel",
         "type": "string",
         "required": false
@@ -546,7 +586,7 @@
   },
   {
     "name": "MediaAsset",
-    "description": "One image in the media library. Records live in the `{ assets: [] }` manifest singleton at `src/data/media.json` (the package's MEDIA_MANIFEST_PATH), which the CMS media library writes. Disk decides which assets exist — the `public/images` scan — while this record decides what is KNOWN about one, above all its alt text. `filename` is the identity: a path WITHIN `public/images`, so it may contain `/` for a nested asset (`gallery/event-05.jpg`). An explicit empty `alt` is a deliberate \"this image is decorative\", not a missing value.",
+    "description": "One image in the media library. Records live in the `{ assets: [] }` manifest singleton at `src/data/media.json` (the package's MEDIA_MANIFEST_PATH), which the CMS media library writes. Disk decides which assets exist \u2014 the `public/images` scan \u2014 while this record decides what is KNOWN about one, above all its alt text. `filename` is the identity: a path WITHIN `public/images`, so it may contain `/` for a nested asset (`gallery/event-05.jpg`). An explicit empty `alt` is a deliberate \"this image is decorative\", not a missing value.",
     "category": "datastore",
     "order": 12,
     "fields": [
@@ -595,7 +635,7 @@
   },
   {
     "name": "Community",
-    "description": "A non-geographic Harvard in Tech community (Founders, AI) — the interest-based counterpart to a Chapter. Stored as a markdown file in the `communities` content collection; rendered on per-community routes at /communities/<slug>, and the source the base layout derives the nav Communities entries from (alongside the hand-authored WhatsApp link in nav.json). Shares the Chapter shape so both render through the same page components; `name` replaces `city` because a community has no location. Events join a community through the same `chapter` tag they use for chapters, so editors learn no second field.",
+    "description": "A non-geographic Harvard in Tech community (Founders, AI) \u2014 the interest-based counterpart to a Chapter. Stored as a markdown file in the `communities` content collection; rendered on per-community routes at /communities/<slug>, and the source the base layout derives the nav Communities entries from (alongside the hand-authored WhatsApp link in nav.json). Shares the Chapter shape so both render through the same page components; `name` replaces `city` because a community has no location. Events join a community through the same `chapter` tag they use for chapters, so editors learn no second field.",
     "category": "datastore",
     "order": 13,
     "fields": [
@@ -657,6 +697,133 @@
       },
       {
         "name": "body",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "Sponsor",
+    "description": "One organization supporting Harvard Alumni in Tech, shown on the /sponsor wall. Stored as a markdown file in the `sponsors` content collection. `tier` groups the wall by partnership level and must match a level id in `sponsorPage.json` \u2014 an unmatched tier is reported rather than silently dropping the sponsor. `placeholder: true` marks an ILLUSTRATIVE entry: the wall then renders an explicit 'example, not actual sponsors' notice, so a page seeded with sample logos can never be mistaken for a live sponsor list. Real sponsors omit the flag. The collection starts empty in production, where the wall renders nothing at all.",
+    "category": "datastore",
+    "order": 14,
+    "fields": [
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "tier",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "logo",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "url",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "placeholder",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "draft",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "SponsorPageCopy",
+    "description": "Editable copy for /sponsor, held in the `sponsorPage.json` singleton under the data root \u2014 the same model as VolunteerPageCopy and DonatePageCopy, so the pitch, the partnership levels, and the legal line are all CMS edits rather than code changes. `levels` are the partnership tiers a sponsor chooses between; each carries the `id` a Sponsor's `tier` matches on. `disclaimer` carries the Harvard Alumni Association requirement that a shared-interest group state contributions go to the group and not to Harvard University, so it is copy the team can revise without a deploy.",
+    "category": "datastore",
+    "order": 15,
+    "fields": [
+      {
+        "name": "kicker",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "headline",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "intro",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "heroImage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "levelsTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "levelsIntro",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "levels",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "wallTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "wallEmptyMessage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "inquiryTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "inquiryBody",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "inquiryFormUrl",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "disclaimer",
         "type": "string",
         "required": false
       }

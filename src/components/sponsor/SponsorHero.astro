@@ -1,0 +1,99 @@
+---
+// The /sponsor hero: a full-bleed photo with the pitch over it, matching the
+// chapter and volunteer heroes so the page reads as part of the same site. Falls
+// back to a plain crimson band when no photo is set, the same way ChapterHero
+// degrades — a sponsorship page with no image should still look deliberate.
+import { withBase } from '../../lib/url';
+
+interface Props {
+  kicker?: string;
+  headline: string;
+  intro?: string;
+  image?: string;
+}
+const { kicker, headline, intro, image } = Astro.props as Props;
+---
+
+<section class="sponsor-hero" data-has-image={image ? 'true' : 'false'}>
+  {
+    image ? (
+      <div class="sponsor-hero-bg">
+        <img src={withBase(image)} alt="" />
+        <div class="sponsor-hero-scrim" />
+      </div>
+    ) : null
+  }
+  <div class="sponsor-hero-in">
+    {kicker ? <span class="kick">{kicker}</span> : null}
+    <h1>{headline}</h1>
+    {intro ? <p class="lede">{intro}</p> : null}
+  </div>
+</section>
+
+<style>
+  .sponsor-hero {
+    position: relative;
+    box-sizing: border-box;
+    padding: 96px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--crimson);
+    color: #fff;
+  }
+  .sponsor-hero-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .sponsor-hero-bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .sponsor-hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.52);
+  }
+  .sponsor-hero-in {
+    position: relative;
+    z-index: 2;
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .sponsor-hero-in .kick {
+    color: #fff;
+    opacity: 0.85;
+  }
+  .sponsor-hero-in h1 {
+    color: #fff;
+    margin: 12px 0 0;
+    font-size: 46px;
+    line-height: 1.15;
+  }
+  .sponsor-hero-in .lede {
+    color: #fff;
+    opacity: 0.92;
+    margin: 20px auto 0;
+    max-width: 640px;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    .sponsor-hero {
+      padding: 64px 24px;
+    }
+    .sponsor-hero-in {
+      text-align: left;
+    }
+    .sponsor-hero-in h1 {
+      font-size: 32px;
+    }
+  }
+</style>

@@ -1,0 +1,13 @@
+{
+  "name": "MomentumAccomplishments - Campaign Track Record",
+  "id": "b0a8a000-e06b-4437-9b94-4ab79320f3e5",
+  "url": "/isolated-components/MomentumAccomplishments",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumAccomplishments",
+  "scenarioType": "component",
+  "description": "'What we've accomplished so far' on the Momentum Fund page, rendered from the real published copy rather than invented figures. Each entry pairs a number with the sentence that gives it meaning, because the figure alone says nothing and the claim alone is unevidenced. It sits between the stats band and the story so the campaign shows momentum before it asks anyone to fund it.",
+  "pageFilePath": "src/components/donate/MomentumAccomplishments.astro"
+}

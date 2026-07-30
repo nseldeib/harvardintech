@@ -11,9 +11,21 @@ interface Props {
   embedUrl?: string;
   title?: string;
   buttonLabel?: string;
+  /** Shown in place of the form when neither `action` nor `embedUrl` is set.
+   *  The default is developer-facing on purpose — it names the two props to
+   *  set — which is right for an unconfigured embed nobody has reached yet, and
+   *  wrong on a public page a reader lands on. A caller rendering into a live
+   *  page (e.g. the sponsorship inquiry) passes copy written for that reader. */
+  fallbackMessage?: string;
 }
 
-const { action, embedUrl, title = 'Subscribe', buttonLabel = 'Sign up' } = Astro.props;
+const {
+  action,
+  embedUrl,
+  title = 'Subscribe',
+  buttonLabel = 'Sign up',
+  fallbackMessage,
+} = Astro.props;
 ---
 
 <section class="embed-form" style="border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-md);">
@@ -43,10 +55,14 @@ const { action, embedUrl, title = 'Subscribe', buttonLabel = 'Sign up' } = Astro
         </button>
       </form>
     ) : (
-      <p style="color: var(--color-muted);">
-        No form configured. Set an <code>action</code> (MailChimp) or{' '}
-        <code>embedUrl</code> (Google Form) prop.
-      </p>
+      fallbackMessage ? (
+        <p style="color: var(--color-muted);">{fallbackMessage}</p>
+      ) : (
+        <p style="color: var(--color-muted);">
+          No form configured. Set an <code>action</code> (MailChimp) or{' '}
+          <code>embedUrl</code> (Google Form) prop.
+        </p>
+      )
     )
   }
 </section>

@@ -1,0 +1,76 @@
+---
+// One entry on the sponsor wall.
+//
+// Two rules live here rather than in the wall's loop. First, a sponsor shows its
+// logo when it has one and its name when it does not, so a partner can be listed
+// the moment they say yes, before anyone has chased a logo file.
+//
+// Second, only a REAL sponsor with a url becomes a link. A placeholder never
+// does, however tempting: a clickable example invites a reader to treat it as a
+// real partner, which is exactly what the "Example" tag exists to prevent. The
+// dashed border and the tag mark it visually; refusing the link makes it true in
+// behavior too.
+import { withBase } from '../../lib/url';
+import type { SponsorLike } from '../../lib/sponsors';
+
+interface Props {
+  sponsor: SponsorLike;
+}
+const { sponsor } = Astro.props as Props;
+
+const isLink = Boolean(sponsor.url) && !sponsor.placeholder;
+const Tag = isLink ? 'a' : 'div';
+---
+
+<Tag
+  class="wall-item"
+  href={isLink ? sponsor.url : undefined}
+  rel={isLink ? 'noopener' : undefined}
+  data-placeholder={sponsor.placeholder ? 'true' : null}
+>
+  {
+    sponsor.logo ? (
+      <img class="wall-logo" src={withBase(sponsor.logo)} alt={sponsor.name} />
+    ) : (
+      <span class="wall-name">{sponsor.name}</span>
+    )
+  }
+  {sponsor.placeholder ? <span class="wall-tag">Example</span> : null}
+</Tag>
+
+<style>
+  .wall-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 96px;
+    padding: 18px;
+    background: var(--paper-2);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .wall-item[data-placeholder='true'] {
+    border-style: dashed;
+    color: var(--color-muted);
+  }
+  .wall-logo {
+    max-width: 100%;
+    max-height: 56px;
+    object-fit: contain;
+  }
+  .wall-name {
+    font-weight: 500;
+    text-align: center;
+  }
+  .wall-tag {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    border: 1px solid var(--crimson);
+    padding: 2px 6px;
+  }
+</style>

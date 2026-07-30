@@ -5,9 +5,41 @@
   "heroSubhead": "Help sustain the Harvard Alumni in Tech community and the connections, opportunities, and support that move us forward.",
   "heroImage": "/images/bg/hero-bg.jpg",
   "stats": [
-    { "value": "100+", "label": "Events Hosted" },
-    { "value": "8,000+", "label": "Members" },
-    { "value": "5", "label": "Chapters & Growing" }
+    {
+      "value": "100+",
+      "label": "Events Hosted"
+    },
+    {
+      "value": "8,000+",
+      "label": "Members"
+    },
+    {
+      "value": "6",
+      "label": "Chapters & Growing"
+    }
+  ],
+  "accomplishmentsTitle": "What we've accomplished so far",
+  "accomplishments": [
+    {
+      "value": "600+",
+      "label": "WhatsApp community members",
+      "body": "Built and grew a WhatsApp community where alumni ask, answer, and introduce each other every day."
+    },
+    {
+      "value": "8,000+",
+      "label": "LinkedIn followers",
+      "body": "Grew our LinkedIn following into the widest reach this community has ever had."
+    },
+    {
+      "value": "100+",
+      "label": "Events hosted and co-hosted",
+      "body": "Hosted and co-hosted high-impact events, from founder dinners to panels with alumni operators."
+    },
+    {
+      "value": "2",
+      "label": "New chapters launched",
+      "body": "Expanded our global reach with new chapters in London and San Francisco."
+    }
   ],
   "storyTitle": "And Every Number Represents a Story",
   "storyLede": "Behind every event, chapter, and member of our network is an opportunity for a conversation, introduction, or shared experience that has helped Harvard alumni in tech move forward.",

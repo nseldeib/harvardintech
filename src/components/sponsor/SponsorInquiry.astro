@@ -1,0 +1,93 @@
+---
+// The closing ask: an inquiry form AND a pre-filled email, because the two serve
+// different readers — someone ready to talk specifics fills the form, someone
+// who would rather just write gets the mailto. Both land in the same inbox.
+//
+// The form is delegated to a third-party provider (EmbedForm), since a static
+// build cannot process a submission. With no form URL configured, EmbedForm
+// renders its unconfigured fallback, which reads as an obvious placeholder
+// rather than a broken form — the honest state until a real form exists.
+import EmbedForm from '../EmbedForm.astro';
+import { buildMailto } from '../../lib/mailto';
+
+interface Props {
+  title?: string;
+  body?: string;
+  formUrl?: string;
+  email: string;
+  disclaimer?: string;
+}
+const {
+  title = 'Start a conversation',
+  body,
+  formUrl,
+  email,
+  disclaimer,
+} = Astro.props as Props;
+
+const mailto = buildMailto({
+  to: email,
+  subject: 'Sponsoring Harvard Alumni in Tech',
+});
+---
+
+<section class="sec" id="inquire">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="kick">Get in touch</span>
+        <h2>{title}</h2>
+      </div>
+    </div>
+
+    <div class="inq">
+      <div class="inq-copy">
+        {body ? <p class="inq-body">{body}</p> : null}
+        <a class="btn btn-solid" href={mailto}>Email us about sponsorship</a>
+        {
+          disclaimer ? (
+            <p class="inq-disclaimer">{disclaimer}</p>
+          ) : null
+        }
+      </div>
+      <div class="inq-form">
+        <EmbedForm
+          embedUrl={formUrl}
+          title="Sponsorship inquiry"
+          buttonLabel="Send"
+          fallbackMessage="Our sponsorship inquiry form is on the way. In the meantime, email us using the button on the left and we will pick it up from there."
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .inq {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .inq-body {
+    margin: 0 0 var(--space-md);
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+  .inq-disclaimer {
+    margin: var(--space-lg) 0 0;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-faint);
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 880px) {
+    .inq {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

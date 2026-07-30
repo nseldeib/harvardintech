@@ -685,6 +685,96 @@
       "runner": "tests"
     },
     {
+      "description": "The typo case. `tier` is free text so levels can be renamed in the CMS, which means a mistyped tier is possible — the sponsor must still reach the page.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "groupSponsorsByLevel › collects a sponsor whose tier matches no level instead of dropping it",
+      "line": 63,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The common case before anyone has picked a level for a new sponsor.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "groupSponsorsByLevel › collects an untagged sponsor into the same trailing group",
+      "line": 72,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A heading over nothing reads as a gap someone forgot to fill, so a level with no sponsors is omitted entirely rather than rendered empty.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "groupSponsorsByLevel › omits a level that has no sponsors",
+      "line": 55,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The wall reads top-down from the biggest commitment, so the groups follow the declared level order — NOT the order sponsors happen to sit in the collection.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "groupSponsorsByLevel › orders groups by the declared level order, not the sponsor order",
+      "line": 22,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Levels are editable copy and can be emptied; every sponsor should still show.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "groupSponsorsByLevel › puts every sponsor in the trailing group when no levels are declared",
+      "line": 87,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Production starts with an empty sponsors collection, so this is the day-one state rather than a hypothetical — the page shows its empty message instead.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "groupSponsorsByLevel › returns no groups for no sponsors",
+      "line": 82,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Within a level the site-wide rule applies: the optional pin first, then alphabetical, so an unpinned wall stays stable as sponsors are added.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "groupSponsorsByLevel › sorts within a level by the order pin, then by name",
+      "line": 38,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty wall shows its empty message, which is not a claim about anyone.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "hasPlaceholderSponsors › reports false for no sponsors at all",
+      "line": 119,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The state the page reaches once the examples are replaced by real partners — the notice must disappear, or it undermines the real ones.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "hasPlaceholderSponsors › reports false when every entry is a real sponsor",
+      "line": 109,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The notice fires on ANY placeholder, not only when every entry is one: a sample sitting beside real partners is exactly when a reader would otherwise assume the whole row is real.",
+      "file": "src/lib/sponsors.test.ts",
+      "format": "vitest",
+      "key": "hasPlaceholderSponsors › reports true when only some entries are placeholders",
+      "line": 98,
+      "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
       "description": "A rejected (hostile) name also falls back to the generic greeting.",
       "file": "src/lib/personalize.test.ts",
       "format": "vitest",
@@ -1544,8 +1634,17 @@
       "file": "src/lib/site.test.ts",
       "format": "vitest",
       "key": "site singletons › loads settings and nav from the data root as parsed JSON",
-      "line": 70,
+      "line": 79,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "/sponsor is driven the same way, and its partnership levels are the part that matters: a sponsor's `tier` matches a level `id`, so the levels must survive the round-trip intact or the wall cannot group anyone. The disclaimer rides here too, because the Harvard Alumni Association requires the page to state that contributions are not gifts to the University — copy the team can revise without a deploy.",
+      "file": "src/lib/site.test.ts",
+      "format": "vitest",
+      "key": "site singletons › loads the sponsor page copy, its levels, and the disclaimer",
+      "line": 122,
+      "registeredAt": "2026-07-30T15:01:54Z",
       "runner": "tests"
     },
     {
@@ -1553,7 +1652,7 @@
       "file": "src/lib/site.test.ts",
       "format": "vitest",
       "key": "site singletons › loads the volunteer and donate page copy from the data root",
-      "line": 87,
+      "line": 96,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -1562,7 +1661,7 @@
       "file": "src/lib/site.test.ts",
       "format": "vitest",
       "key": "site singletons › reflects a second data root on re-import",
-      "line": 105,
+      "line": 137,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },

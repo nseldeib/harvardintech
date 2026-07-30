@@ -47,6 +47,15 @@ function writeAllSingletons(
       campaignName: 'The Momentum Fund',
       heroHeadlineNamed: "{name}, let's go further together",
       heroHeadlineGeneric: "Let's go further together",
+      accomplishments: [{ value: '600+', label: 'WhatsApp community members' }],
+    }),
+  );
+  writeFileSync(
+    join(dir, 'sponsorPage.json'),
+    JSON.stringify({
+      headline: 'Reach the Harvard alumni building in tech.',
+      levels: [{ id: 'event', name: 'Event Partner' }],
+      disclaimer: 'Contributions support Harvard Alumni in Tech, not Harvard University.',
     }),
   );
 }
@@ -98,6 +107,29 @@ describe('site singletons', () => {
     // The `{name}` slot must survive the round-trip — it is what the browser
     // fills from `?name=` (see personalize.ts).
     expect(mod.donatePage.heroHeadlineNamed).toContain('{name}');
+    // The campaign's track record is copy, not markup, so it rides the same
+    // singleton — the donate page renders whatever the data root supplies.
+    expect(mod.donatePage.accomplishments).toHaveLength(1);
+    expect(mod.donatePage.accomplishments?.[0].label).toBe('WhatsApp community members');
+  });
+
+  // /sponsor is driven the same way, and its partnership levels are the part
+  // that matters: a sponsor's `tier` matches a level `id`, so the levels must
+  // survive the round-trip intact or the wall cannot group anyone. The
+  // disclaimer rides here too, because the Harvard Alumni Association requires
+  // the page to state that contributions are not gifts to the University —
+  // copy the team can revise without a deploy.
+  it('loads the sponsor page copy, its levels, and the disclaimer', async () => {
+    tmp = mkdtempSync(join(tmpdir(), 'site-test-'));
+    writeAllSingletons(tmp);
+
+    process.env.CODEYAM_DATA_ROOT = tmp;
+    vi.resetModules();
+    const mod = await import('./site');
+
+    expect(mod.sponsorPage.headline).toBe('Reach the Harvard alumni building in tech.');
+    expect(mod.sponsorPage.levels?.map((l) => l.id)).toEqual(['event']);
+    expect(mod.sponsorPage.disclaimer).toContain('not Harvard University');
   });
 
   // a different data root yields different values — the loader is not pinned to
