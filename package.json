@@ -16,7 +16,7 @@
   "dependencies": {
     "@astrojs/react": "^4.2.0",
     "@astrojs/sitemap": "^3.7.3",
-    "@codeyam/cms": "^0.2.0",
+    "@codeyam/cms": "file:vendor/codeyam-cms-0.2.1.tgz",
     "astro": "^5.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
