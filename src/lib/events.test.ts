@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { toEventDate, formatEventDate, splitEvents, unmatchedChapterTags } from './events';
+import {
+  toEventDate,
+  formatEventDate,
+  splitEvents,
+  unmatchedChapterTags,
+  eventsTaggedTo,
+} from './events';
 
 describe('toEventDate', () => {
   // A Date instance passes through unchanged.
@@ -144,5 +150,71 @@ describe('unmatchedChapterTags', () => {
     const events = [{ title: 'Orphan', date: '2026-09-10', chapter: 'london' }];
 
     expect(unmatchedChapterTags(events, [])).toEqual(['london']);
+  });
+});
+
+describe('eventsTaggedTo', () => {
+  const entry = (id: string, chapter?: string, extra: Record<string, unknown> = {}) => ({
+    id,
+    data: { title: `Event ${id}`, date: '2026-09-24', chapter, ...extra },
+  });
+
+  // The ordinary case: only the owner's events come back, and the collection id
+  // becomes the `slug` the event cards link with.
+  it('returns only the events tagged to the given owner', () => {
+    const events = [entry('summit', 'nyc'), entry('mixer', 'london'), entry('panel', 'nyc')];
+
+    expect(eventsTaggedTo(events, 'nyc').map((e) => e.slug)).toEqual(['summit', 'panel']);
+  });
+
+  // A community owns events through the SAME tag a chapter uses, which is the
+  // whole reason there is no second field for an editor to get wrong.
+  it('matches a community id through the same chapter tag', () => {
+    const events = [entry('dinner', 'founders'), entry('mixer', 'nyc')];
+
+    expect(eventsTaggedTo(events, 'founders').map((e) => e.slug)).toEqual(['dinner']);
+  });
+
+  // Every optional field is carried through, because the event card renders them
+  // — dropping one here would blank a card with no error anywhere.
+  it('carries the optional fields the event cards render', () => {
+    const events = [
+      entry('summit', 'nyc', {
+        location: 'New York, NY',
+        description: 'Our flagship gathering.',
+        link: 'https://example.com/summit',
+      }),
+    ];
+
+    expect(eventsTaggedTo(events, 'nyc')[0]).toEqual({
+      slug: 'summit',
+      title: 'Event summit',
+      date: '2026-09-24',
+      location: 'New York, NY',
+      description: 'Our flagship gathering.',
+      link: 'https://example.com/summit',
+    });
+  });
+
+  // The match is exact: a city name typed where a slug belongs reaches no page.
+  // This is the same near-miss `unmatchedChapterTags` exists to report.
+  it('does not match a tag that only looks like the owner id', () => {
+    const events = [entry('summit', 'New York City'), entry('panel', 'nyc ')];
+
+    expect(eventsTaggedTo(events, 'nyc')).toEqual([]);
+  });
+
+  // An untagged event belongs to no chapter or community on purpose — it still
+  // shows on /events, just not on anyone's page.
+  it('excludes events with no tag at all', () => {
+    const events = [entry('cambridge-panel'), entry('summit', 'nyc')];
+
+    expect(eventsTaggedTo(events, 'nyc').map((e) => e.slug)).toEqual(['summit']);
+  });
+
+  // The day-one state for every new chapter and community: nothing tagged yet.
+  it('returns nothing when no event is tagged to the owner', () => {
+    expect(eventsTaggedTo([entry('summit', 'nyc')], 'ai')).toEqual([]);
+    expect(eventsTaggedTo([], 'ai')).toEqual([]);
   });
 });

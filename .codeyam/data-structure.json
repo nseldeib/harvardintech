@@ -273,7 +273,7 @@
   },
   {
     "name": "Chapter",
-    "description": "A regional Harvard in Tech chapter (Boston & Cambridge, New York City, London, DC & DMV Area, Seattle). Stored as a markdown file in the `chapters` content collection; rendered on per-chapter routes at /chapters/<slug>, and the source the base layout derives the nav Chapters dropdown from. Optional fields (`leads`, `links`) prove a chapter with no leads listed still renders.",
+    "description": "A regional Harvard in Tech chapter (Boston & Cambridge, DC and DMV Area, London, New York City, Seattle / Pacific Northwest, SF & Bay Area). Stored as a markdown file in the `chapters` content collection; rendered on per-chapter routes at /chapters/<slug>, and the source the base layout derives the nav Chapters dropdown from. Optional fields (`leads`, `links`) prove a chapter with no leads listed still renders. `order` is an optional PIN, not a required rank: entries that carry no `order` sort alphabetically by city, which is how the roster orders itself so a new chapter needs no renumbering. See Community for the interest-based counterpart.",
     "category": "datastore",
     "order": 7,
     "fields": [
@@ -589,6 +589,75 @@
       {
         "name": "uploadedAt",
         "type": "date",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "Community",
+    "description": "A non-geographic Harvard in Tech community (Founders, AI) — the interest-based counterpart to a Chapter. Stored as a markdown file in the `communities` content collection; rendered on per-community routes at /communities/<slug>, and the source the base layout derives the nav Communities entries from (alongside the hand-authored WhatsApp link in nav.json). Shares the Chapter shape so both render through the same page components; `name` replaces `city` because a community has no location. Events join a community through the same `chapter` tag they use for chapters, so editors learn no second field.",
+    "category": "datastore",
+    "order": 13,
+    "fields": [
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "blurb",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "heroImage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "tagline",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "showGallery",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "contactEmail",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "leads",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "links",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "draft",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
         "required": false
       }
     ]

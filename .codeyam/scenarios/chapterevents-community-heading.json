@@ -1,0 +1,12 @@
+{
+  "name": "ChapterEvents - Community Heading",
+  "id": "39034218-4de2-4cb2-a4ba-dbd2cdf550b8",
+  "url": "/isolated-components/ChapterEvents-Community",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ChapterEvents",
+  "scenarioType": "component",
+  "description": "The same events section a chapter page renders, with the heading overridden for a community. The default phrasing is built from the page's subject — fine for a place ('Upcoming Events in San Francisco'), wrong for a group ('Upcoming Events in Founders'), so /communities passes 'Upcoming Founders Events' instead. The cards themselves are the shared EventCards, unchanged, which is the point: only the sentence above them differs."
+}

@@ -187,12 +187,36 @@ export function resetSandboxFromProduction(
   return { sandboxContent, sandboxData };
 }
 
-/** Serialize a scalar/array frontmatter value as YAML. */
-function yamlValue(value: unknown): string {
+/**
+ * Serialize a frontmatter value as YAML.
+ *
+ * Handles the three shapes a content-collection schema actually uses: scalars, a
+ * list of scalars, and a list of OBJECTS — the last one being how `leads` and
+ * `links` are declared on the chapters and communities collections. Without the
+ * object branch every row serialized through `String(v)` to the literal text
+ * `[object Object]`, which parses as a string and fails Zod validation with
+ * `Expected type "object", received "array"` — a seeded scenario that renders an
+ * Astro error page instead of the component.
+ *
+ * Nested objects are emitted as a block map under the `- ` bullet, indented to
+ * `indent`, so the row keys survive the round-trip.
+ */
+function yamlValue(value: unknown, indent = '  '): string {
   if (Array.isArray(value)) {
-    return `\n${value.map((v) => `  - ${yamlScalar(v)}`).join('\n')}`;
+    return `\n${value.map((v) => `${indent}- ${yamlItem(v, indent)}`).join('\n')}`;
   }
   return ` ${yamlScalar(value)}`;
+}
+
+/** One list item: a block map for an object row, a scalar otherwise. */
+function yamlItem(value: unknown, indent: string): string {
+  if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+    const rowIndent = `${indent}  `;
+    return Object.entries(value as Record<string, unknown>)
+      .map(([k, v], i) => `${i === 0 ? '' : rowIndent}${k}:${yamlValue(v, `${rowIndent}  `)}`)
+      .join('\n');
+  }
+  return yamlScalar(value);
 }
 
 function yamlScalar(value: unknown): string {

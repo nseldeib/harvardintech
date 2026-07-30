@@ -219,6 +219,37 @@
         "status": "n-a",
         "reason": "Presentational page; all actions are external-link and mailto navigations with no in-page interactive state"
       }
+    },
+    "src/pages/communities/[slug].astro": {
+      "empty": {
+        "status": "added"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "A community page shows one community; its only list is upcoming events, and a single event is a data count rather than a distinct layout — the events grid is the same auto-fit grid the chapter route already covers"
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "A community carries a handful of events at most; there is no overflow or truncation treatment on this page to demonstrate"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered Astro route built from content collections; nothing resolves asynchronously, so no pending state exists"
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Static prerendered route; an unknown community slug is a build-time 404 rather than an in-page error state"
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "Presentational page; every action is an external-link or mailto navigation with no in-page interactive state"
+      }
     }
   }
 }

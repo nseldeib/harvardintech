@@ -96,9 +96,13 @@ CMS which form controls to render. The package already knows the four built-in
 collections (`pages`, `blog`, `events`, `team`), so this file only declares what
 is site-specific:
 
-- **`collections`** — the custom **`chapters`** collection, whose ten fields
-  mirror the `chapters` schema in `config.ts`, including the numeric `order` and
-  the two repeatable lists (`leads`, `links`).
+- **`collections`** — the custom **`chapters`** and **`communities`**
+  collections, whose fields mirror the matching schemas in `config.ts`, including
+  the numeric `order` and the two repeatable lists (`leads`, `links`).
+  `communities` is deliberately the chapter shape with `name` in place of `city`:
+  a community (Founders, AI) is defined by an interest rather than a location, but
+  everything else about the page is the same, so both render through the same
+  components and an editor who has filled in one form already knows the other.
 - **`builtins`** — extra fields appended to a built-in's editor: `embedUrl` /
   `embedHtml` on `pages` and `blog`, `chapter` on `events`, `active` on `team`.
 - **`seo`** — this site's SEO frontmatter keys. The package defaults to
@@ -115,17 +119,19 @@ added to only one file fails the test suite rather than being discovered later �
 by a build error at deploy time, or by an editor who never finds the field at
 all.
 
-**Tagging an event to a chapter.** The `chapter` field on an event is a plain
-text box today, and its value must be the chapter's **slug** — the chapter's
-filename without `.md` (`nyc`, `boston-cambridge`, `dc-dmv`, `london`,
-`seattle`) — not its city name. The match is exact, so `New York City`, `London`
-with a capital, or a stray trailing space all leave the event off its chapter
-page while the entry still saves, the build still succeeds, and `/events` still
-lists it. A tag that matches no chapter is named in a `[chapters]` warning in
-the build log (visible in the Actions run and in `npm run dev`); it is a warning,
-not an error, so a typo never blocks a deploy. Leave `chapter` blank for an
-event that belongs to no single chapter. A chapter picker will replace the text
-box once the CMS supports reference fields.
+**Tagging an event to a chapter or community.** The `chapter` field on an event
+is a plain text box today, and its value must be a **slug** — the chapter's or
+community's filename without `.md` (`nyc`, `boston-cambridge`, `dc-dmv`,
+`london`, `seattle`, `sf-bay-area`, `founders`, `ai`) — not its display name.
+One field carries both on purpose: a community owns events exactly the way a
+chapter does, so there is no second box to choose between. The match is exact, so
+`New York City`, `London` with a capital, or a stray trailing space all leave the
+event off its page while the entry still saves, the build still succeeds, and
+`/events` still lists it. A tag matching neither list is named in a `[chapters]`
+warning in the build log (visible in the Actions run and in `npm run dev`); it is
+a warning, not an error, so a typo never blocks a deploy. Leave `chapter` blank
+for an event that belongs to no single chapter or community. A picker will
+replace the text box once the CMS supports reference fields.
 
 ## Navigation
 
@@ -133,20 +139,29 @@ The header menu is edited in **Settings** under `/admin` — every group there
 (Programs, Communities, Content Hub, Membership) is yours to rename, reorder,
 and relink.
 
-**Chapters is the exception: it is generated from the chapters collection.**
-Publish a chapter and it appears in the menu automatically; draft or delete one
-and it leaves. There is nothing to add by hand, and no second step to forget —
-which is the point, since a hand-listed copy could only drift from the real
-chapter list and leave the menu pointing at pages that no longer exist. The
-crimson strip at the very top of every page lists those same chapters, so it
-tracks the collection too.
+**Two parts of the menu are generated from content instead.** Publish a chapter
+or a community and it appears automatically; draft or delete one and it leaves.
+There is nothing to add by hand and no second step to forget — which is the
+point, since a hand-listed copy could only drift from the real list and leave the
+menu pointing at pages that no longer exist.
 
-Menu order follows each chapter's `order` field, exactly as the "Our chapters"
-section on the homepage orders its cards, and each menu label is the chapter's
-own `city`.
+- **Chapters** is a group the layout owns outright. It is always inserted
+  directly after Programs, and the crimson strip at the very top of every page
+  lists those same chapters, so it tracks the collection too. The one
+  consequence: **the Chapters group cannot be renamed or reordered from the
+  admin UI.**
+- **Communities** is a group *you* own that generated items join. The
+  hand-authored links you keep there (WhatsApp) stay exactly where you put them,
+  and each published community is appended after them. So this group behaves
+  normally in Settings — rename it, reorder its authored links — and still picks
+  up new communities on its own.
 
-The one consequence: **the Chapters group cannot be renamed or reordered from
-the admin UI.** It is always inserted directly after Programs.
+Menu order is **alphabetical**: by `city` for chapters, by `name` for
+communities, matching how the "Our chapters" section on the homepage orders its
+cards. Each label is the entry's own display name. The `order` field is an
+optional **pin** — leave it blank (the default, and what every entry ships with)
+and the entry sorts alphabetically, so adding a chapter never means renumbering
+the others; set it only to force one entry to the front.
 
 ## Media
 

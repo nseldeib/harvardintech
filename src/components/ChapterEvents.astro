@@ -11,16 +11,21 @@ import type { EventLike } from '../lib/events';
 
 interface Props {
   events?: EventLike[];
-  city: string;
+  /** The city (chapter) or community name the default heading is built from. */
+  name: string;
+  /** Overrides the default "Upcoming Events in <name>" phrasing. A community is
+   *  not a place, so /communities passes "Upcoming <name> Events" instead. */
+  heading?: string;
 }
-const { events = [], city } = Astro.props;
+const { events = [], name, heading } = Astro.props;
+const title = heading ?? `Upcoming Events in ${name}`;
 ---
 
 {
   events.length > 0 ? (
     <section class="s-section" id="chapter-events">
       <div class="s-inner" style="text-align: center;">
-        <h2 class="s-title s-title--plain">Upcoming Events in {city}</h2>
+        <h2 class="s-title s-title--plain">{title}</h2>
         <div style="display: grid; gap: var(--space-lg); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 920px; margin: 0 auto;">
           {events.map((event) => (
             <EventCard event={event} variant="upcoming" />

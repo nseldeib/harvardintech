@@ -134,6 +134,37 @@ const chapters = defineCollection({
   }),
 });
 
+// Interest-based communities (Founders, AI) — the non-geographic counterpart to
+// a chapter. One markdown file per community under `<contentRoot>/communities/`,
+// rendered at `/communities/<slug>` and derived into the nav Communities group
+// beside the hand-authored WhatsApp link.
+//
+// Deliberately the chapter schema with `name` in place of `city`: a community
+// has no location, but everything else about the page — hero, tagline, leads,
+// links, gallery toggle, per-community contact email — is the same, so both
+// render through the same components and an editor who has filled in one form
+// already knows the other. Events join a community through the same `chapter`
+// tag they use for chapters, so there is no second field to learn.
+const communities = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: `${root}/communities` }),
+  schema: z.object({
+    name: z.string(),
+    blurb: z.string().optional(),
+    heroImage: z.string().optional(),
+    tagline: z.string().optional(),
+    showGallery: z.boolean().optional(),
+    contactEmail: z.string().optional(),
+    leads: z
+      .array(z.object({ name: z.string(), role: z.string().optional() }))
+      .optional(),
+    links: z
+      .array(z.object({ label: z.string(), url: z.string() }))
+      .optional(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
 // Open volunteer projects, rendered as the grid on /volunteer. Everything but
 // the title is optional so an organizer can post a project the moment it opens
 // and fill in the thumbnail/commitment later. `active: false` retires a project
@@ -167,4 +198,13 @@ const testimonials = defineCollection({
   }),
 });
 
-export const collections = { blog, pages, team, events, chapters, projects, testimonials };
+export const collections = {
+  blog,
+  pages,
+  team,
+  events,
+  chapters,
+  communities,
+  projects,
+  testimonials,
+};

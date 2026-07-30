@@ -27,7 +27,12 @@ import VolunteerPage from '../../components/VolunteerPage.astro';
 import MomentumFundPage from '../../components/MomentumFundPage.astro';
 import PrimaryNav from '../../components/nav/PrimaryNav.astro';
 import UtilityBar from '../../components/nav/UtilityBar.astro';
-import { chapterNavItems, withChapterGroup } from '../../lib/nav';
+import {
+  chapterNavItems,
+  withChapterGroup,
+  communityNavItems,
+  withCommunityItems,
+} from '../../lib/nav';
 import { volunteerPage, donatePage } from '../../lib/site';
 import '../../styles/tokens.css';
 
@@ -98,7 +103,7 @@ const eventsPageStates = {
 // the missing-optional layout.
 const chapterPageStates = {
   Default: {
-    city: 'New York City',
+    name: 'New York City',
     region: 'New York, NY',
     blurb: 'Our founding chapter and largest community, hosting monthly mixers, founder dinners, and the annual Harvard in Tech Summit.',
     heroImage: '/images/chapters/nyc.jpg',
@@ -114,7 +119,7 @@ const chapterPageStates = {
     ],
   },
   Sparse: {
-    city: 'Japan',
+    name: 'Japan',
     region: 'Tokyo',
   },
 };
@@ -123,21 +128,23 @@ const chapterPageStates = {
 // vs the no-image Fallback that degrades to the centered ChapterHeader.
 const chapterHeroStates = {
   Default: {
-    city: 'New York City',
+    name: 'New York City',
     region: 'New York, NY',
     heroImage: '/images/chapters/nyc.jpg',
     tagline: 'We are the New York Chapter of Harvard in Tech.',
   },
   Fallback: {
-    city: 'Japan',
+    name: 'Japan',
     region: 'Tokyo',
     blurb: 'Our first international chapter.',
   },
 };
 
-// ChapterEvents states: the per-chapter "Upcoming Events in {city}" section.
+// ChapterEvents states: the per-chapter "Upcoming Events in {name}" section.
 // Default shows a rich, multi-card list (mirrors the SF chapter page); Empty
-// passes no events to prove the guard renders NOTHING (no empty heading/block).
+// passes no events to prove the guard renders NOTHING (no empty heading/block);
+// Community overrides the heading, because a community is not a place and the
+// default phrasing would read "Upcoming Events in Founders".
 const SAMPLE_CHAPTER_EVENTS = [
   {
     title: 'Founders & Investors Mixer, San Francisco',
@@ -154,9 +161,30 @@ const SAMPLE_CHAPTER_EVENTS = [
     link: 'https://www.harvardintech.com/events/sf-summer-social',
   },
 ];
+const SAMPLE_COMMUNITY_EVENTS = [
+  {
+    title: 'Founder Dinner: Going From Zero To One',
+    date: '2026-07-22',
+    location: 'New York, NY',
+    description: 'A small-table dinner for alumni founders in the first year of building.',
+    link: 'https://www.harvardintech.com/events/founder-dinner',
+  },
+  {
+    title: 'Fundraising AMA With Alumni Investors',
+    date: '2026-09-09',
+    location: 'Online',
+    description: 'Candid answers on pre-seed and seed rounds from investors across the alumni network.',
+    link: 'https://www.harvardintech.com/events/fundraising-ama',
+  },
+];
 const chapterEventsStates = {
-  Default: { events: SAMPLE_CHAPTER_EVENTS, city: 'San Francisco' },
-  Empty: { events: [] as typeof SAMPLE_CHAPTER_EVENTS, city: 'Los Angeles' },
+  Default: { events: SAMPLE_CHAPTER_EVENTS, name: 'San Francisco' },
+  Empty: { events: [] as typeof SAMPLE_CHAPTER_EVENTS, name: 'Los Angeles' },
+  Community: {
+    events: SAMPLE_COMMUNITY_EVENTS,
+    name: 'Founders',
+    heading: 'Upcoming Founders Events',
+  },
 };
 
 // ChapterConnect states: Default reads the global settings contact email;
@@ -215,14 +243,19 @@ const boardOfDirectorsStates = {
   Empty: { members: [] as typeof SAMPLE_BOARD },
 };
 
-// OurChapters (Atlas "Our chapters" band): Default renders the five-city row;
+// OurChapters (Atlas "Our chapters" band): Default renders the six-city row;
 // Empty proves the "coming soon" fallback (production starts with no chapters).
+//
+// Mirrors the committed chapters, INCLUDING the absence of an `order` on every
+// entry — that is what makes the roster sort alphabetically by city, so a
+// fixture that re-pinned them would show an order the real site never renders.
 const SAMPLE_CHAPTERS = [
-  { slug: 'boston-cambridge', city: 'Boston & Cambridge', blurb: 'Home of Harvard, our Cambridge and Boston community.', heroImage: '/images/bg/hero-bg.jpg', order: 1 },
-  { slug: 'nyc', city: 'New York City', blurb: 'Our founding chapter and largest community.', heroImage: '/images/chapters/nyc.jpg', order: 2 },
-  { slug: 'london', city: 'London', blurb: 'Our European hub across the London tech scene.', heroImage: '/images/gallery/event-05.jpg', order: 3 },
-  { slug: 'dc-dmv', city: 'DC & DMV Area', blurb: 'The DC, Maryland & Virginia community.', heroImage: '/images/gallery/event-18.jpg', order: 4 },
-  { slug: 'seattle', city: 'Seattle', blurb: 'The Pacific Northwest chapter.', heroImage: '/images/gallery/event-27.jpg', order: 5 },
+  { slug: 'boston-cambridge', city: 'Boston & Cambridge', blurb: 'Home of Harvard, our Cambridge and Boston community.', heroImage: '/images/bg/hero-bg.jpg' },
+  { slug: 'dc-dmv', city: 'DC and DMV Area', blurb: 'The DC, Maryland & Virginia community.', heroImage: '/images/gallery/event-18.jpg' },
+  { slug: 'london', city: 'London', blurb: 'Our European hub across the London tech scene.', heroImage: '/images/gallery/event-05.jpg' },
+  { slug: 'nyc', city: 'New York City', blurb: 'Our founding chapter and largest community.', heroImage: '/images/chapters/nyc.jpg' },
+  { slug: 'seattle', city: 'Seattle / Pacific Northwest', blurb: 'The Pacific Northwest chapter.', heroImage: '/images/gallery/event-27.jpg' },
+  { slug: 'sf-bay-area', city: 'SF & Bay Area', blurb: 'Our West Coast chapter across San Francisco and Silicon Valley.', heroImage: '/images/chapters/san-francisco.jpg' },
 ];
 const ourChaptersStates = {
   Default: { chapters: SAMPLE_CHAPTERS },
@@ -254,15 +287,37 @@ const AUTHORED_NAV_ITEMS = [
     ],
   },
 ];
-// A sixth chapter that `nav.json` has never heard of — the drift this feature
+// A chapter that `nav.json` has never heard of — the drift the derivation
 // removes. It appears purely because it exists in the collection.
 const SIXTH_CHAPTER = { slug: 'miami', city: 'Miami', order: 6 };
+
+// The committed communities. Like the chapters they carry no `order`, so the
+// menu sorts them alphabetically: AI before Founders.
+const SAMPLE_COMMUNITIES = [
+  { slug: 'founders', name: 'Founders' },
+  { slug: 'ai', name: 'AI' },
+];
+
+// Every state runs BOTH real derivations in the order the layout runs them, so
+// the isolated menu is the menu the site builds — Chapters injected as its own
+// group, communities merged into the authored Communities group behind WhatsApp.
+const derivedNav = (
+  chapters: { slug: string; city: string; order?: number }[],
+  communities: { slug: string; name: string; order?: number }[],
+) =>
+  withCommunityItems(
+    withChapterGroup(AUTHORED_NAV_ITEMS, chapterNavItems(chapters)),
+    communityNavItems(communities),
+  );
+
 const primaryNavStates = {
-  Default: { items: withChapterGroup(AUTHORED_NAV_ITEMS, chapterNavItems(SAMPLE_CHAPTERS)) },
+  Default: { items: derivedNav(SAMPLE_CHAPTERS, SAMPLE_COMMUNITIES) },
   SixChapters: {
-    items: withChapterGroup(AUTHORED_NAV_ITEMS, chapterNavItems([...SAMPLE_CHAPTERS, SIXTH_CHAPTER])),
+    items: derivedNav([...SAMPLE_CHAPTERS, SIXTH_CHAPTER], SAMPLE_COMMUNITIES),
   },
-  NoChapters: { items: withChapterGroup(AUTHORED_NAV_ITEMS, chapterNavItems([])) },
+  // The day-one menu: no chapters and no communities published, so both derived
+  // sets are empty and only the hand-authored items remain.
+  NoChapters: { items: derivedNav([], []) },
 };
 const utilityBarStates = {
   Default: { cities: chapterNavItems(SAMPLE_CHAPTERS).map((i) => i.label) },
@@ -403,6 +458,7 @@ export async function getStaticPaths() {
     { params: { name: 'ChapterHero-Fallback' } },
     { params: { name: 'ChapterEvents' } },
     { params: { name: 'ChapterEvents-Empty' } },
+    { params: { name: 'ChapterEvents-Community' } },
     { params: { name: 'ChapterSignUp' } },
     { params: { name: 'ChapterConnect' } },
     { params: { name: 'ChapterConnect-Email' } },
@@ -425,6 +481,7 @@ export async function getStaticPaths() {
     { params: { name: 'PrimaryNav' } },
     { params: { name: 'PrimaryNav-SixChapters' } },
     { params: { name: 'PrimaryNav-NoChapters' } },
+    { params: { name: 'PrimaryNav-CommunitiesOpen' } },
     { params: { name: 'UtilityBar' } },
     { params: { name: 'UtilityBar-Empty' } },
     { params: { name: 'FocusAreas' } },
@@ -604,7 +661,7 @@ if (name && name.startsWith('MomentumFundPage')) {
         ) : name === 'Stats' ? (
           <Stats />
         ) : primaryNavProps ? (
-          <div class="nav-stage">
+          <div class:list={['nav-stage', name === 'PrimaryNav-CommunitiesOpen' && 'nav-stage--communities-open']}>
             <PrimaryNav {...primaryNavProps} />
           </div>
         ) : utilityBarProps ? (
@@ -638,16 +695,29 @@ if (name && name.startsWith('MomentumFundPage')) {
     </div>
 
     <!-- Capture staging for PrimaryNav: room for the absolutely positioned mega
-         panel, which would otherwise overflow a content-height page. Sizing
-         only — the panel itself is opened by the scenario's real hover
-         interaction, not by a CSS override, so the capture exercises the same
-         :hover path a visitor takes. `.nav-stage` exists solely on the
-         PrimaryNav routes, so these rules are inert everywhere else. -->
+         panel, which would otherwise overflow a content-height page. `.nav-stage`
+         exists solely on the PrimaryNav routes, so these rules are inert
+         everywhere else.
+
+         The `--communities-open` variant pins ONE panel open for capture. The
+         panel is normally revealed by `:hover` / `:focus-within`, and a scenario
+         `interactions` hover or click does not survive the screenshot on this
+         route (it reports `interactionEffect: none` and captures the resting
+         menu) — so a scenario relying on the interaction shows a CLOSED menu and
+         demonstrates nothing. Pinning the state is what makes the derived
+         Communities items visible in the captured frame. It overrides only the
+         two properties the reveal animates, so what renders is what a visitor
+         sees mid-hover, not a bespoke layout. -->
     <style is:global>
       .nav-stage {
         background: #fff;
         min-height: 340px;
         padding-left: 120px;
+      }
+      .nav-stage--communities-open .links > .nav-item:nth-child(3) .mega {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
       }
     </style>
   </body>

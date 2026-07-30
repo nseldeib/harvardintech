@@ -10,8 +10,57 @@ export interface EventLike {
   location?: string;
   description?: string;
   link?: string;
-  /** Chapter id this event is tagged to — the chapter's filename without `.md`. */
+  /** Id of the chapter OR community this event is tagged to — that entry's
+   *  filename without `.md`. One "belongs to" field serves both, so an editor
+   *  has no second box to choose between. */
   chapter?: string;
+}
+
+/**
+ * The shape a collection entry arrives in from `getCollection` — an `id` plus
+ * the validated frontmatter. Narrow enough that `eventsTaggedTo` needs no Astro
+ * import and stays unit-testable.
+ */
+export interface EventEntryLike {
+  id: string;
+  data: {
+    title: string;
+    date: string | Date;
+    location?: string;
+    description?: string;
+    link?: string;
+    chapter?: string;
+  };
+}
+
+/**
+ * The events belonging to `ownerId` — a chapter id or a community id — projected
+ * into the `EventLike` shape the event cards render.
+ *
+ * The match is an EXACT string comparison against the owner's id, because that
+ * is what `/chapters/<slug>` and `/communities/<slug>` are keyed on. A near-miss
+ * (`New York City` for `nyc`, or a stray trailing space) silently belongs to
+ * nobody — which is precisely the case `unmatchedChapterTags` reports, so the
+ * two functions are two halves of one rule and live together on purpose.
+ *
+ * An event with no tag belongs to no page: it is excluded here and still appears
+ * on `/events`. Callers pass entries already draft-filtered by `publishedEntries`,
+ * the same contract every other derivation in this codebase has.
+ */
+export function eventsTaggedTo(
+  events: readonly EventEntryLike[],
+  ownerId: string,
+): EventLike[] {
+  return events
+    .filter((event) => event.data.chapter === ownerId)
+    .map((event) => ({
+      slug: event.id,
+      title: event.data.title,
+      date: event.data.date,
+      location: event.data.location,
+      description: event.data.description,
+      link: event.data.link,
+    }));
 }
 
 /** Coerce a string-or-Date into a Date (Dates pass through untouched). */

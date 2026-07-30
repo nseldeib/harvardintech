@@ -25,28 +25,43 @@ interface ChapterLink {
   url: string;
 }
 interface Props {
-  city: string;
+  /** Who the page is about: a chapter's city, or a community's name. Named
+   *  neutrally because this shell now renders both — `city={name}` at a
+   *  community call site would read as a mistake. */
+  name: string;
   region?: string;
   blurb?: string;
   heroImage?: string;
   tagline?: string;
   showGallery?: boolean;
   events?: EventLike[];
+  /** Heading over the events list. Defaults to "Upcoming Events in <name>",
+   *  which reads wrong for a community ("...in Founders") — /communities passes
+   *  its own phrasing. */
+  eventsHeading?: string;
   contactEmail?: string;
   leads?: Lead[];
   links?: ChapterLink[];
+  /** Where the "back" link at the top of the content block points, and what it
+   *  says. Defaults to the chapters row on the home page; a community page
+   *  points at the community section instead. */
+  backHref?: string;
+  backLabel?: string;
 }
 const {
-  city,
+  name,
   region,
   blurb,
   heroImage,
   tagline,
   showGallery = true,
   events = [],
+  eventsHeading,
   contactEmail,
   leads = [],
   links = [],
+  backHref = '/#events',
+  backLabel = '← All chapters',
 } = Astro.props;
 
 // The narrow content block (leads + markdown body + links) only renders when
@@ -55,9 +70,9 @@ const hasBody = Astro.slots.has('default');
 const hasContent = leads.length > 0 || links.length > 0 || hasBody;
 ---
 
-<ChapterHero city={city} region={region} blurb={blurb} heroImage={heroImage} tagline={tagline} />
+<ChapterHero name={name} region={region} blurb={blurb} heroImage={heroImage} tagline={tagline} />
 
-<ChapterEvents events={events} city={city} />
+<ChapterEvents events={events} name={name} heading={eventsHeading} />
 
 <ChapterSignUp />
 
@@ -65,8 +80,8 @@ const hasContent = leads.length > 0 || links.length > 0 || hasBody;
   hasContent ? (
     <section class="s-section">
       <div class="s-narrow">
-        <a href={withBase('/#events')} style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em;">
-          ← All chapters
+        <a href={withBase(backHref)} style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em;">
+          {backLabel}
         </a>
 
         <ChapterLeads leads={leads} />

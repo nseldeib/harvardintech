@@ -1,0 +1,73 @@
+{
+  "name": "Community Route - Founders With Leads And Events",
+  "id": "c2915203-442f-49ce-bcc1-0b4fa1833427",
+  "url": "/communities/founders",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "communities": [
+      {
+        "blurb": "For alumni building companies — from first idea to scale.",
+        "body": "A working community for Harvard alumni who are building. Founder dinners, candid fundraising conversations, and small peer groups where the questions that are too early or too raw for a public stage get answered by people a year or two ahead of you.\n\nOpen to anyone alumni-affiliated who is building something — pre-idea, pre-seed, or well past it. There is no application and no stage requirement.",
+        "contactEmail": "founders@harvardintech.com",
+        "heroImage": "/images/gallery/event-20.jpg",
+        "leads": [
+          {
+            "name": "Peter Boyce",
+            "role": "Community Lead"
+          },
+          {
+            "name": "Jessica Li",
+            "role": "Events"
+          }
+        ],
+        "links": [
+          {
+            "label": "Join the Founders WhatsApp",
+            "url": "https://chat.whatsapp.com/harvardintech-founders"
+          },
+          {
+            "label": "Founder office hours signup",
+            "url": "https://lu.ma/harvardintech-founder-office-hours"
+          }
+        ],
+        "name": "Founders",
+        "slug": "founders",
+        "tagline": "We are the Founders Community of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "For alumni working in and around artificial intelligence.",
+        "body": "A cross-chapter community for Harvard alumni working in AI.",
+        "heroImage": "/images/gallery/event-22.jpg",
+        "name": "AI",
+        "slug": "ai",
+        "tagline": "We are the AI Community of Harvard Alumni in Tech."
+      }
+    ],
+    "events": [
+      {
+        "chapter": "founders",
+        "date": "2026-09-22",
+        "description": "A small-table dinner for alumni founders in the first year of building.",
+        "link": "https://lu.ma/harvardintech-founder-dinner",
+        "location": "New York, NY",
+        "slug": "founder-dinner-zero-to-one",
+        "title": "Founder Dinner: Going From Zero To One"
+      },
+      {
+        "chapter": "founders",
+        "date": "2026-10-09",
+        "description": "Candid answers on pre-seed and seed rounds from investors across the alumni network.",
+        "link": "https://lu.ma/harvardintech-fundraising-ama",
+        "location": "Online",
+        "slug": "fundraising-ama",
+        "title": "Fundraising AMA With Alumni Investors"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/communities/[slug].astro",
+  "description": "A community once it has people and a calendar behind it — the state the team is working toward, not the one production starts in. Named leads, city-specific links, and events reach the page through the same tag chapters use, so nothing about the editing model is new. Production starts with none of this, which the AI scenario shows."
+}

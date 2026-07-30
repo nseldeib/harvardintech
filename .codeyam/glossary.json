@@ -214,6 +214,12 @@
     "testFile": "src/lib/nav.test.ts"
   },
   {
+    "description": "Menu items for the published communities, ordered by the optional order pin and then alphabetically by name — the same rule chapterNavItems applies, so the two derivations cannot disagree about what order means. The label is the community's own name and the url is built from the slug, matching the /communities/<slug> route; building the url from the name would 404 for any community whose display name is not its slug. Callers pass entries already draft-filtered by publishedEntries.",
+    "filePath": "src/lib/nav.ts",
+    "name": "communityNavItems",
+    "testFile": "src/lib/nav.test.ts"
+  },
+  {
     "description": "Returns the directory the content collections load from: the CODEYAM_CONTENT_ROOT sandbox during a codeyam session, else the committed src/content.",
     "filePath": "src/lib/contentRoot.ts",
     "name": "contentRoot",
@@ -224,6 +230,12 @@
     "filePath": "src/lib/contentRoot.ts",
     "name": "dataRoot",
     "testFile": "src/lib/contentRoot.test.ts"
+  },
+  {
+    "description": "The events belonging to one chapter or community, projected into the EventLike shape the event cards render. The match is an exact string comparison against the owner's collection id, because that is what /chapters/<slug> and /communities/<slug> are keyed on — a near-miss like 'New York City' for 'nyc', or a stray trailing space, belongs to nobody, which is exactly the case unmatchedChapterTags reports, so the two are two halves of one rule. An untagged event is excluded here and still appears on /events. Extracted from the two [slug].astro routes, which held this projection verbatim once communities started reusing the chapter tag.",
+    "filePath": "src/lib/events.ts",
+    "name": "eventsTaggedTo",
+    "testFile": "src/lib/events.test.ts"
   },
   {
     "description": "Returns a new array of board members visible on the public Board of Directors, keeping every member whose active field is not explicitly false — so existing entries with no active field (and members who never toggled the CMS checkbox) remain shown. Does not mutate the input.",
@@ -266,6 +278,15 @@
       "chapter-route-japan-with-gallery",
       "chapter-route-san-francisco",
       "chapter-route-los-angeles-fallback-email"
+    ]
+  },
+  {
+    "description": "Enumerates the communities collection into pre-rendered /communities/<id> routes, mapping each community entry to its slug param and props. Draft-filtered by publishedEntries, so a drafted community is previewable under astro dev and absent from the build rather than shipping a page the menu no longer links to. Exercised by the community-route scenarios, whose captured renders prove the params resolve.",
+    "filePath": "src/pages/communities/[slug].astro",
+    "name": "getStaticPaths",
+    "scenarios": [
+      "community-route-founders-with-leads-and-events",
+      "community-route-ai-on-day-one"
     ]
   },
   {
@@ -434,6 +455,12 @@
     "description": "Returns a new top-level menu with the derived Chapters dropdown inserted directly after the item labelled Programs, reproducing today's menu order, and appended when no such item exists so a rename or deletion in the CMS degrades sensibly instead of throwing or dropping the group. With no chapter items the group is omitted entirely rather than rendered as an empty dropdown — an empty dropdown is a caret opening onto nothing, and the CMS nav serializer collapses one back into a plain link pointing nowhere. Injecting the group here rather than marking it in nav.json is deliberate: the CMS rebuilds every nav item from label plus children/url and silently drops any other key, so a marker would not survive the first save from the settings editor. Does not mutate the caller's list.",
     "filePath": "src/lib/nav.ts",
     "name": "withChapterGroup",
+    "testFile": "src/lib/nav.test.ts"
+  },
+  {
+    "description": "The top-level menu with the derived community links merged into the existing Communities group, after whatever that group already lists by hand. This is the deliberate asymmetry with withChapterGroup: Chapters is a group this module owns and injects wholesale, while Communities is a group an editor already owns in nav.json (the WhatsApp link), so derived items are appended to its children rather than replacing them. With no communities the menu is returned unchanged — including not creating an absent group, since an empty dropdown is the same caret-onto-nothing the chapters rule avoids. Copies the group rather than mutating it, because the layout passes the shared nav.items singleton straight in.",
+    "filePath": "src/lib/nav.ts",
+    "name": "withCommunityItems",
     "testFile": "src/lib/nav.test.ts"
   }
 ]

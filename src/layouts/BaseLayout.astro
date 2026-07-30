@@ -14,7 +14,12 @@ import HeadExtras from '../components/HeadExtras.astro';
 import UtilityBar from '../components/nav/UtilityBar.astro';
 import PrimaryNav from '../components/nav/PrimaryNav.astro';
 import { settings, nav } from '../lib/site';
-import { chapterNavItems, withChapterGroup } from '../lib/nav';
+import {
+  chapterNavItems,
+  withChapterGroup,
+  communityNavItems,
+  withCommunityItems,
+} from '../lib/nav';
 import { publishedEntries } from '../lib/drafts';
 import { withBase } from '../lib/url';
 
@@ -35,7 +40,17 @@ const chapters = publishedEntries(
   !import.meta.env.PROD,
 ).map((c) => ({ slug: c.id, ...c.data }));
 const chapterItems = chapterNavItems(chapters);
-const navItems = withChapterGroup(nav.items, chapterItems);
+
+// Communities are derived the same way, but merged INTO the Communities group
+// an editor already keeps in `nav.json` rather than injected as a new group —
+// the hand-authored WhatsApp link stays first, the published communities follow.
+const communities = publishedEntries(
+  await getCollection('communities'),
+  !import.meta.env.PROD,
+).map((c) => ({ slug: c.id, ...c.data }));
+const communityItems = communityNavItems(communities);
+
+const navItems = withCommunityItems(withChapterGroup(nav.items, chapterItems), communityItems);
 
 // The crimson utility strip reads as a one-line "where we are". It reads the
 // derived chapter labels directly, so it can no longer go stale behind the

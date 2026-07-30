@@ -158,7 +158,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "chapterNavItems › builds the url from the slug, not the city",
-      "line": 67,
+      "line": 69,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -167,7 +167,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "chapterNavItems › includes a chapter that nav.json does not list",
-      "line": 36,
+      "line": 38,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -176,7 +176,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "chapterNavItems › orders by the order field, falling back to city for ties and absent values",
-      "line": 47,
+      "line": 49,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -185,7 +185,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "chapterNavItems › returns no items for no chapters",
-      "line": 75,
+      "line": 77,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -235,11 +235,47 @@
       "runner": "tests"
     },
     {
+      "description": "The roster the team asked for, in the order a visitor sees it.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "committed chapters › lists the six chapters alphabetically by city",
+      "line": 405,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An `order:` on any chapter sorts it ahead of every unpinned one, so a single re-added pin silently un-alphabetizes the whole menu.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "committed chapters › pins no chapter with an order, so the roster sorts alphabetically",
+      "line": 398,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every derived link must land on a page too — the derivation is exactly where a slug typo would produce a menu entry with no route behind it.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "committed nav.json › derives community links that all resolve to a page",
+      "line": 371,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Communities are derived too, so the same rule applies: the group keeps its hand-authored WhatsApp link and nothing else pointing at a community page.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "committed nav.json › does not hand-list the communities",
+      "line": 363,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
       "description": "The duplication this feature removes: chapters are derived from the collection now, so a hand-listed copy in nav.json can only go stale.",
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "committed nav.json › no longer hand-lists the chapters",
-      "line": 255,
+      "line": 357,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -248,8 +284,44 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "committed nav.json › points every internal link at a page that exists",
-      "line": 243,
+      "line": 345,
       "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Label and url come from different fields: building the url from the name would 404 for any community whose display name is not its slug.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "communityNavItems › builds the url from the slug, not the name",
+      "line": 177,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The pin still wins when an editor sets one, matching chapterNavItems, so the two derivations cannot disagree about what `order` means.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "communityNavItems › honours an order pin ahead of the unpinned entries",
+      "line": 166,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Communities have no `order` in practice, so alphabetical-by-name is the ordering the menu actually uses — the same rule the chapters roster relies on now that its numeric pins are gone.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "communityNavItems › orders alphabetically by name when nothing is pinned",
+      "line": 158,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Production starts with an empty communities collection, so this is the day-one state, not a hypothetical.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "communityNavItems › returns no items for no communities",
+      "line": 185,
+      "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
     {
@@ -392,7 +464,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "draft visibility › omits a drafted chapter from the production menu",
-      "line": 95,
+      "line": 97,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -401,8 +473,62 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "draft visibility › shows a drafted chapter while authoring",
-      "line": 101,
+      "line": 103,
       "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every optional field is carried through, because the event card renders them — dropping one here would blank a card with no error anywhere.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "eventsTaggedTo › carries the optional fields the event cards render",
+      "line": 180,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The match is exact: a city name typed where a slug belongs reaches no page. This is the same near-miss `unmatchedChapterTags` exists to report.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "eventsTaggedTo › does not match a tag that only looks like the owner id",
+      "line": 201,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An untagged event belongs to no chapter or community on purpose — it still shows on /events, just not on anyone's page.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "eventsTaggedTo › excludes events with no tag at all",
+      "line": 209,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A community owns events through the SAME tag a chapter uses, which is the whole reason there is no second field for an editor to get wrong.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "eventsTaggedTo › matches a community id through the same chapter tag",
+      "line": 172,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The day-one state for every new chapter and community: nothing tagged yet.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "eventsTaggedTo › returns nothing when no event is tagged to the owner",
+      "line": 216,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: only the owner's events come back, and the collection id becomes the `slug` the event cards link with.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "eventsTaggedTo › returns only the events tagged to the given owner",
+      "line": 164,
+      "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
     {
@@ -464,7 +590,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "formatEventDate › does not zero-pad single-digit days",
-      "line": 32,
+      "line": 38,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -473,7 +599,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "formatEventDate › formats a Date instance the same as its ISO string",
-      "line": 26,
+      "line": 32,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -482,7 +608,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "formatEventDate › formats an ISO date as Month D, YYYY",
-      "line": 21,
+      "line": 27,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -734,7 +860,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "internalNavUrls › collects site-internal urls at every level and skips external ones",
-      "line": 150,
+      "line": 246,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1580,7 +1706,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "splitEvents › does not mutate the input array order",
-      "line": 78,
+      "line": 84,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -1589,7 +1715,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "splitEvents › handles an empty event list",
-      "line": 58,
+      "line": 64,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -1598,7 +1724,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "splitEvents › returns no past events when all are upcoming",
-      "line": 71,
+      "line": 77,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -1607,7 +1733,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "splitEvents › returns past events sorted most recent first",
-      "line": 52,
+      "line": 58,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -1616,7 +1742,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "splitEvents › returns upcoming events sorted soonest first",
-      "line": 46,
+      "line": 52,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -1625,7 +1751,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "splitEvents › treats an event exactly at now as upcoming",
-      "line": 63,
+      "line": 69,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -1733,7 +1859,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "toEventDate › parses an ISO date string into a Date",
-      "line": 12,
+      "line": 18,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -1742,7 +1868,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "toEventDate › returns a Date instance unchanged",
-      "line": 6,
+      "line": 12,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -1787,7 +1913,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › catches a tag that differs only by whitespace",
-      "line": 109,
+      "line": 115,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -1796,7 +1922,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › handles an empty event list",
-      "line": 58,
+      "line": 64,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -1805,7 +1931,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › names a chapter tag that matches no chapter",
-      "line": 88,
+      "line": 94,
       "registeredAt": "2026-07-28T20:50:40Z",
       "runner": "tests"
     },
@@ -1814,7 +1940,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports each distinct tag once, in first-seen order",
-      "line": 116,
+      "line": 122,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -1823,7 +1949,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports every tag when there are no chapters at all",
-      "line": 143,
+      "line": 149,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -1832,7 +1958,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports nothing when every tag matches a chapter",
-      "line": 99,
+      "line": 105,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -1841,7 +1967,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › treats a blank tag as untagged",
-      "line": 127,
+      "line": 133,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -1850,7 +1976,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "unresolvedNavUrls › ignores a trailing slash difference",
-      "line": 197,
+      "line": 293,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1859,7 +1985,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "unresolvedNavUrls › reports a url with no page behind it",
-      "line": 189,
+      "line": 285,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1868,7 +1994,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "unresolvedNavUrls › resolves a bare fragment against the home page",
-      "line": 183,
+      "line": 279,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1877,7 +2003,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "unresolvedNavUrls › resolves a fragment against its page",
-      "line": 177,
+      "line": 273,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1958,7 +2084,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withChapterGroup › appends the group when there is no Programs item",
-      "line": 119,
+      "line": 121,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1967,7 +2093,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withChapterGroup › does not mutate the caller list",
-      "line": 139,
+      "line": 141,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1976,7 +2102,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withChapterGroup › inserts the group directly after Programs",
-      "line": 111,
+      "line": 113,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1985,8 +2111,53 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withChapterGroup › omits the group entirely when there are no chapters",
-      "line": 130,
+      "line": 132,
       "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The asymmetry with Chapters: Communities is an editor-owned group that already lists WhatsApp by hand, so derived items JOIN it rather than replace it. Losing the hand-authored link is the failure this pins.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withCommunityItems › appends derived items after the hand-authored ones",
+      "line": 196,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Communities is editable in the CMS, so it can be renamed or deleted. A published community must still reach the header rather than vanish.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withCommunityItems › creates the group when nav.json no longer has one",
+      "line": 215,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The layout passes the shared `nav.items` singleton straight in. Pushing onto the group's own `children` array would corrupt the menu for every later reader in the same process — the group must be copied, not mutated.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withCommunityItems › does not mutate the caller list or its groups",
+      "line": 235,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Merging must not disturb the rest of the menu — the group stays in its slot.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withCommunityItems › leaves the surrounding menu order untouched",
+      "line": 207,
+      "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "With no communities the authored group is left exactly as the editor wrote it — including the case where there is no group to create.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withCommunityItems › returns the menu unchanged when there are no communities",
+      "line": 227,
+      "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     }
   ],

@@ -1,0 +1,12 @@
+{
+  "name": "Chapter Route - SF & Bay Area",
+  "id": "26986574-2ac0-4ec0-b90f-328d551813f3",
+  "url": "/chapters/sf-bay-area",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/chapters/[slug].astro",
+  "description": "The West Coast chapter added to the roster, rendering through the same route as every other chapter. Its page needed no code — publishing the markdown entry produced the page, the menu link, and the card on the home page at once. The frame shows the full-bleed city hero, which is the whole viewport on this route; the leads, body copy and gallery sit below it."
+}

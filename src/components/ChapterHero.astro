@@ -10,14 +10,15 @@ import ChapterHeader from './ChapterHeader.astro';
 import { withBase } from '../lib/url';
 
 interface Props {
-  city: string;
+  /** The city (chapter) or community name the title is built from. */
+  name: string;
   region?: string;
   blurb?: string;
   heroImage?: string;
   tagline?: string;
 }
-const { city, region, blurb, heroImage, tagline } = Astro.props;
-const title = `Harvard in Tech ${city}`;
+const { name, region, blurb, heroImage, tagline } = Astro.props;
+const title = `Harvard in Tech ${name}`;
 ---
 
 {
@@ -37,7 +38,7 @@ const title = `Harvard in Tech ${city}`;
       </div>
     </section>
   ) : (
-    <ChapterHeader city={city} region={region} blurb={blurb} />
+    <ChapterHeader name={name} region={region} blurb={blurb} />
   )
 }
 

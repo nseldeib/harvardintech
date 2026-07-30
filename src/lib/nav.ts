@@ -24,8 +24,24 @@ export interface ChapterLike {
   order?: number;
 }
 
+/**
+ * The minimum shape needed to build a community link. `name` rather than `city`
+ * — a community is defined by an interest, not a location — but the ordering and
+ * draft rules are the chapter rules, so the two derivations stay symmetric.
+ */
+export interface CommunityLike {
+  slug: string;
+  name: string;
+  order?: number;
+}
+
 /** The label the injected dropdown carries in the header. */
 export const CHAPTERS_LABEL = 'Chapters';
+
+/** The group derived communities are merged INTO. Unlike Chapters — a group
+ *  this module injects wholesale — Communities already exists in `nav.json`
+ *  carrying hand-authored links (WhatsApp), so the derived items join it. */
+export const COMMUNITIES_LABEL = 'Communities';
 
 /** The group the derived Chapters dropdown is inserted after, reproducing
  *  today's menu order. Absent (renamed or removed), the group is appended. */
@@ -69,6 +85,53 @@ export function withChapterGroup(items: NavItem[], chapterItems: NavItem[]): Nav
   if (anchor === -1) return [...items, group];
 
   return [...items.slice(0, anchor + 1), group, ...items.slice(anchor + 1)];
+}
+
+/**
+ * Menu items for the given communities, ordered the way chapters are: by the
+ * optional `order` pin, then alphabetically by name. The label is the
+ * community's own `name`, the url is built from the `slug` to match the
+ * `/communities/<slug>` route.
+ *
+ * Callers pass communities already draft-filtered (via `publishedEntries`), the
+ * same contract `chapterNavItems` has.
+ */
+export function communityNavItems(communities: CommunityLike[]): NavItem[] {
+  return [...communities]
+    .sort((a, b) => (a.order ?? 99) - (b.order ?? 99) || a.name.localeCompare(b.name))
+    .map((community) => ({ label: community.name, url: `/communities/${community.slug}` }));
+}
+
+/**
+ * The top-level menu with the derived community links merged into the existing
+ * `Communities` group, after whatever that group already lists by hand.
+ *
+ * This is the asymmetry with `withChapterGroup`: Chapters is a group this module
+ * OWNS, so it injects the whole thing; Communities is a group an editor already
+ * owns in `nav.json` (the WhatsApp link), so the derived items are appended to
+ * its children rather than replacing them. An editor reordering or renaming the
+ * hand-authored links keeps working, and publishing a community still needs no
+ * nav edit at all.
+ *
+ * With no communities the menu is returned unchanged — including the case where
+ * `nav.json` has no Communities group, which is then NOT created: an empty
+ * dropdown is the same caret-onto-nothing the chapters rule avoids.
+ *
+ * Returns a new array; neither the input list nor its item objects are mutated.
+ */
+export function withCommunityItems(items: NavItem[], communityItems: NavItem[]): NavItem[] {
+  if (communityItems.length === 0) return [...items];
+
+  const anchor = items.findIndex((item) => item.label === COMMUNITIES_LABEL);
+  if (anchor === -1) return [...items, { label: COMMUNITIES_LABEL, children: communityItems }];
+
+  const existing = items[anchor];
+  const merged: NavItem = {
+    ...existing,
+    children: [...(existing.children ?? []), ...communityItems],
+  };
+
+  return [...items.slice(0, anchor), merged, ...items.slice(anchor + 1)];
 }
 
 /**

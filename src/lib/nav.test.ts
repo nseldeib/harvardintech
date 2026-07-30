@@ -4,6 +4,8 @@ import * as path from 'node:path';
 import {
   chapterNavItems,
   withChapterGroup,
+  communityNavItems,
+  withCommunityItems,
   internalNavUrls,
   unresolvedNavUrls,
 } from './nav';
@@ -144,6 +146,100 @@ describe('withChapterGroup', () => {
   });
 });
 
+/** A community as the layout passes it in: `{ slug, ...data }`. */
+function community(slug: string, name: string, order?: number) {
+  return { slug, name, order };
+}
+
+describe('communityNavItems', () => {
+  // Communities have no `order` in practice, so alphabetical-by-name is the
+  // ordering the menu actually uses — the same rule the chapters roster relies
+  // on now that its numeric pins are gone.
+  it('orders alphabetically by name when nothing is pinned', () => {
+    const items = communityNavItems([community('founders', 'Founders'), community('ai', 'AI')]);
+
+    expect(items.map((i) => i.label)).toEqual(['AI', 'Founders']);
+  });
+
+  // The pin still wins when an editor sets one, matching chapterNavItems, so the
+  // two derivations cannot disagree about what `order` means.
+  it('honours an order pin ahead of the unpinned entries', () => {
+    const items = communityNavItems([
+      community('ai', 'AI'),
+      community('founders', 'Founders', 1),
+    ]);
+
+    expect(items.map((i) => i.label)).toEqual(['Founders', 'AI']);
+  });
+
+  // Label and url come from different fields: building the url from the name
+  // would 404 for any community whose display name is not its slug.
+  it('builds the url from the slug, not the name', () => {
+    expect(communityNavItems([community('ai', 'AI')])).toEqual([
+      { label: 'AI', url: '/communities/ai' },
+    ]);
+  });
+
+  // Production starts with an empty communities collection, so this is the
+  // day-one state, not a hypothetical.
+  it('returns no items for no communities', () => {
+    expect(communityNavItems([])).toEqual([]);
+  });
+});
+
+describe('withCommunityItems', () => {
+  const communityItems = [{ label: 'Founders', url: '/communities/founders' }];
+
+  // The asymmetry with Chapters: Communities is an editor-owned group that
+  // already lists WhatsApp by hand, so derived items JOIN it rather than replace
+  // it. Losing the hand-authored link is the failure this pins.
+  it('appends derived items after the hand-authored ones', () => {
+    const items = withCommunityItems(HAND_AUTHORED, communityItems);
+    const group = items.find((i) => i.label === 'Communities');
+
+    expect(group?.children).toEqual([
+      { label: 'WhatsApp', url: '/#community' },
+      { label: 'Founders', url: '/communities/founders' },
+    ]);
+  });
+
+  // Merging must not disturb the rest of the menu — the group stays in its slot.
+  it('leaves the surrounding menu order untouched', () => {
+    const items = withCommunityItems(HAND_AUTHORED, communityItems);
+
+    expect(items.map((i) => i.label)).toEqual(['Programs', 'Communities']);
+  });
+
+  // Communities is editable in the CMS, so it can be renamed or deleted. A
+  // published community must still reach the header rather than vanish.
+  it('creates the group when nav.json no longer has one', () => {
+    const items = withCommunityItems(
+      [{ label: 'Programs', children: [{ label: 'All Events', url: '/events' }] }],
+      communityItems,
+    );
+
+    expect(items.map((i) => i.label)).toEqual(['Programs', 'Communities']);
+    expect(items[1].children).toEqual(communityItems);
+  });
+
+  // With no communities the authored group is left exactly as the editor wrote
+  // it — including the case where there is no group to create.
+  it('returns the menu unchanged when there are no communities', () => {
+    expect(withCommunityItems(HAND_AUTHORED, [])).toEqual(HAND_AUTHORED);
+    expect(withCommunityItems([], [])).toEqual([]);
+  });
+
+  // The layout passes the shared `nav.items` singleton straight in. Pushing onto
+  // the group's own `children` array would corrupt the menu for every later
+  // reader in the same process — the group must be copied, not mutated.
+  it('does not mutate the caller list or its groups', () => {
+    const original = JSON.parse(JSON.stringify(HAND_AUTHORED));
+    withCommunityItems(HAND_AUTHORED, communityItems);
+
+    expect(HAND_AUTHORED).toEqual(original);
+  });
+});
+
 describe('internalNavUrls', () => {
   // The guard is only as good as its reach: menu links live up to three levels
   // deep, and an external link has no local page to resolve against.
@@ -224,13 +320,19 @@ function staticRoutes(): string[] {
     .map((e) => (e.name === 'index.astro' ? '/' : `/${e.name.replace(/\.astro$/, '')}`));
 }
 
-/** Routes a `[slug]` page generates from a published collection. */
-function collectionRoutes(collection: string, prefix: string): string[] {
+/** The published slugs of a collection — the filenames a `[slug]` route turns
+ *  into pages, minus the drafts that get no page in the built site. */
+function collectionEntries(collection: string): string[] {
   const dir = path.join(REPO_ROOT, 'src/content', collection);
   return fs
     .readdirSync(dir)
     .filter((name) => name.endsWith('.md') && !isDraft(path.join(dir, name)))
-    .map((name) => `${prefix}/${name.replace(/\.md$/, '')}`);
+    .map((name) => name.replace(/\.md$/, ''));
+}
+
+/** Routes a `[slug]` page generates from a published collection. */
+function collectionRoutes(collection: string, prefix: string): string[] {
+  return collectionEntries(collection).map((slug) => `${prefix}/${slug}`);
 }
 
 describe('committed nav.json', () => {
@@ -254,5 +356,65 @@ describe('committed nav.json', () => {
   // collection now, so a hand-listed copy in nav.json can only go stale.
   it('no longer hand-lists the chapters', () => {
     expect(nav.items.find((i) => i.label === 'Chapters')).toBeUndefined();
+  });
+
+  // Communities are derived too, so the same rule applies: the group keeps its
+  // hand-authored WhatsApp link and nothing else pointing at a community page.
+  it('does not hand-list the communities', () => {
+    const group = nav.items.find((i) => i.label === 'Communities');
+
+    expect(group?.children?.some((c) => c.url?.startsWith('/communities/'))).toBe(false);
+  });
+
+  // Every derived link must land on a page too — the derivation is exactly where
+  // a slug typo would produce a menu entry with no route behind it.
+  it('derives community links that all resolve to a page', () => {
+    const communities = collectionEntries('communities').map((slug) => ({
+      slug,
+      name: slug,
+    }));
+    const urls = internalNavUrls(communityNavItems(communities));
+
+    expect(urls.length).toBeGreaterThan(0);
+    expect(unresolvedNavUrls(urls, collectionRoutes('communities', '/communities'))).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// The committed chapter roster. The menu order is DERIVED from the content, so
+// these assert the content, not a fixture: nothing else notices if someone
+// re-pins `order` on one chapter and quietly breaks the alphabetical roster.
+// ---------------------------------------------------------------------------
+describe('committed chapters', () => {
+  function frontmatter(collection: string, slug: string): string {
+    const file = path.join(REPO_ROOT, 'src/content', collection, `${slug}.md`);
+    return /^---\r?\n([\s\S]*?)\r?\n---/.exec(fs.readFileSync(file, 'utf-8'))?.[1] ?? '';
+  }
+
+  const slugs = collectionEntries('chapters');
+
+  // An `order:` on any chapter sorts it ahead of every unpinned one, so a single
+  // re-added pin silently un-alphabetizes the whole menu.
+  it('pins no chapter with an order, so the roster sorts alphabetically', () => {
+    const pinned = slugs.filter((slug) => /^order:/m.test(frontmatter('chapters', slug)));
+
+    expect(pinned).toEqual([]);
+  });
+
+  // The roster the team asked for, in the order a visitor sees it.
+  it('lists the six chapters alphabetically by city', () => {
+    const chapters = slugs.map((slug) => ({
+      slug,
+      city: /^city:\s*(.+)$/m.exec(frontmatter('chapters', slug))?.[1].trim() ?? '',
+    }));
+
+    expect(chapterNavItems(chapters).map((i) => i.label)).toEqual([
+      'Boston & Cambridge',
+      'DC and DMV Area',
+      'London',
+      'New York City',
+      'Seattle / Pacific Northwest',
+      'SF & Bay Area',
+    ]);
   });
 });

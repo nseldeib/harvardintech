@@ -55,11 +55,103 @@
           "name": "order",
           "label": "Order",
           "type": "number",
-          "optional": true
+          "optional": true,
+          "hint": "Optional pin. Blank sorts the chapter alphabetically by city."
         },
         {
           "name": "leads",
           "label": "Chapter leads",
+          "type": "list",
+          "optional": true,
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "type": "text"
+            },
+            {
+              "name": "role",
+              "label": "Role",
+              "type": "text",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "name": "links",
+          "label": "Links",
+          "type": "list",
+          "optional": true,
+          "fields": [
+            {
+              "name": "label",
+              "label": "Label",
+              "type": "text"
+            },
+            {
+              "name": "url",
+              "label": "URL",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "communities",
+      "label": "Communities",
+      "singular": "Community",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text"
+        },
+        {
+          "name": "blurb",
+          "label": "Blurb",
+          "type": "textarea",
+          "optional": true,
+          "hint": "Short summary of who this community is for."
+        },
+        {
+          "name": "heroImage",
+          "label": "Hero image",
+          "type": "image",
+          "optional": true,
+          "hint": "Full-bleed header background. Blank falls back to the centered header."
+        },
+        {
+          "name": "tagline",
+          "label": "Tagline",
+          "type": "text",
+          "optional": true,
+          "hint": "Subtitle beneath the \"HARVARD IN TECH <NAME>\" title."
+        },
+        {
+          "name": "showGallery",
+          "label": "Show event gallery",
+          "type": "boolean",
+          "optional": true,
+          "hint": "Blank shows the gallery; switch off to hide it on this community."
+        },
+        {
+          "name": "contactEmail",
+          "label": "Contact email",
+          "type": "text",
+          "optional": true,
+          "hint": "Blank falls back to the global contact email in Settings."
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Optional pin. Blank sorts the community alphabetically by name."
+        },
+        {
+          "name": "leads",
+          "label": "Community leads",
           "type": "list",
           "optional": true,
           "fields": [
@@ -212,9 +304,10 @@
     "events": [
       {
         "name": "chapter",
-        "label": "Chapter",
+        "label": "Chapter or community",
         "type": "text",
-        "optional": true
+        "optional": true,
+        "hint": "The slug of the chapter or community this event belongs to (the filename without .md). Blank means it belongs to neither and shows only on the events page."
       }
     ],
     "team": [

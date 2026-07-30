@@ -5,7 +5,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterPage from '../../components/ChapterPage.astro';
-import { splitEvents, unmatchedChapterTags, type EventLike } from '../../lib/events';
+import { splitEvents, unmatchedChapterTags, eventsTaggedTo } from '../../lib/events';
 import { publishedEntries } from '../../lib/drafts';
 
 // Drafts get no page of their own in the built site — a chapter dropped from
@@ -15,22 +15,28 @@ export async function getStaticPaths() {
   const chapters = publishedEntries(await getCollection('chapters'), !import.meta.env.PROD);
   const chapterIds = chapters.map((chapter) => chapter.id);
 
-  // The one place holding both full lists, so the one place that can notice an
-  // event tagged to a chapter that does not exist. The CMS renders `chapter` as
-  // a free-text box, so a city name or a stray space typed there passes schema
-  // validation and still drops the event off every chapter page. Advisory only:
-  // `npm run build` gates the deploy, and refusing to publish over a cosmetic
-  // typo would turn one missing event into a dead site update.
+  // The one place holding every list an event tag can legitimately match, so the
+  // one place that can notice a tag matching none of them. The CMS renders
+  // `chapter` as a free-text box, so a city name or a stray space typed there
+  // passes schema validation and still drops the event off every page. The same
+  // tag also carries communities (there is no separate `community` field), so
+  // those ids count as matches here or every community event would be reported.
+  // Advisory only: `npm run build` gates the deploy, and refusing to publish over
+  // a cosmetic typo would turn one missing event into a dead site update.
   const taggedEvents = publishedEntries(await getCollection('events'), !import.meta.env.PROD);
+  const communityIds = publishedEntries(
+    await getCollection('communities'),
+    !import.meta.env.PROD,
+  ).map((community) => community.id);
   const orphanTags = unmatchedChapterTags(
     taggedEvents.map((event) => event.data),
-    chapterIds,
+    [...chapterIds, ...communityIds],
   );
   if (orphanTags.length > 0) {
     console.warn(
-      `[chapters] ${orphanTags.length} event chapter tag(s) match no chapter and will ` +
-        `not appear on any chapter page: ${orphanTags.map((tag) => JSON.stringify(tag)).join(', ')}. ` +
-        `Use the chapter's slug (its filename without .md) — one of: ${chapterIds.join(', ')}.`,
+      `[chapters] ${orphanTags.length} event chapter tag(s) match no chapter or community ` +
+        `and will appear on no page: ${orphanTags.map((tag) => JSON.stringify(tag)).join(', ')}. ` +
+        `Use the slug (the filename without .md) — one of: ${[...chapterIds, ...communityIds].join(', ')}.`,
     );
   }
 
@@ -48,22 +54,12 @@ const { city, region, blurb, heroImage, tagline, showGallery, contactEmail, lead
 // Upcoming events explicitly tagged to this chapter (soonest first). Events with
 // no `chapter` (e.g. the Cambridge panel) belong to no chapter and are excluded.
 const events = publishedEntries(await getCollection('events'), !import.meta.env.PROD);
-const chapterEvents: EventLike[] = events
-  .filter((event) => event.data.chapter === chapter.id)
-  .map((event) => ({
-    slug: event.id,
-    title: event.data.title,
-    date: event.data.date,
-    location: event.data.location,
-    description: event.data.description,
-    link: event.data.link,
-  }));
-const { upcoming } = splitEvents(chapterEvents);
+const { upcoming } = splitEvents(eventsTaggedTo(events, chapter.id));
 ---
 
 <BaseLayout title={city} description={blurb ?? `Harvard in Tech ${city} chapter.`}>
   <ChapterPage
-    city={city}
+    name={city}
     region={region}
     blurb={blurb}
     heroImage={heroImage}

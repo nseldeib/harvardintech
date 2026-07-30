@@ -1,0 +1,61 @@
+---
+// /communities/<slug> — one page per interest-based community (Founders, AI),
+// the non-geographic counterpart to /chapters/<slug>. Same shape, same
+// components, same draft rule; the differences are all naming: a community has
+// a `name` where a chapter has a `city`, so the events heading and the back link
+// are passed explicitly rather than derived from a place.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChapterPage from '../../components/ChapterPage.astro';
+import { splitEvents, eventsTaggedTo } from '../../lib/events';
+import { publishedEntries } from '../../lib/drafts';
+
+// Drafts get no page in the built site — a community dropped from the nav but
+// still live at /communities/<slug> would be public anyway. In dev the page is
+// generated so an author can preview one before announcing it.
+export async function getStaticPaths() {
+  const communities = publishedEntries(
+    await getCollection('communities'),
+    !import.meta.env.PROD,
+  );
+
+  return communities.map((community) => ({
+    params: { slug: community.id },
+    props: { community },
+  }));
+}
+
+type Props = { community: CollectionEntry<'communities'> };
+const { community } = Astro.props as Props;
+const { Content } = await render(community);
+const { name, blurb, heroImage, tagline, showGallery, contactEmail, leads, links } =
+  community.data;
+
+// Events join a community through the same `chapter` tag they use for chapters —
+// one "belongs to" field, not two an editor has to choose between. The chapters
+// route warns about tags matching neither list, so a typo here is still caught.
+const events = publishedEntries(await getCollection('events'), !import.meta.env.PROD);
+const { upcoming } = splitEvents(eventsTaggedTo(events, community.id));
+---
+
+<BaseLayout
+  title={name}
+  description={blurb ?? `The Harvard in Tech ${name} community.`}
+>
+  <ChapterPage
+    name={name}
+    blurb={blurb}
+    heroImage={heroImage}
+    tagline={tagline}
+    showGallery={showGallery}
+    events={upcoming}
+    eventsHeading={`Upcoming ${name} Events`}
+    contactEmail={contactEmail}
+    leads={leads}
+    links={links}
+    backHref="/#community"
+    backLabel="← All communities"
+  >
+    <Content />
+  </ChapterPage>
+</BaseLayout>

@@ -38,8 +38,8 @@ src/
   components/volunteer/       # /volunteer sections (hero, benefits, project cards)
   components/donate/          # /donate campaign sections (hero, stats, gift pillars, quotes)
   layouts/BaseLayout.astro    # site shell: data-driven header/nav + footer + SEO
-  content/                    # typed content collections (events, team, chapters, pages,
-                              #   blog, projects, testimonials)
+  content/                    # typed content collections (events, team, chapters,
+                              #   communities, pages, blog, projects, testimonials)
   data/                       # settings.json + nav.json singletons, cms.json +
                               #   collections.json (CMS config), volunteerPage, donatePage
   lib/                        # site.ts, mailto.ts, drafts.ts (draft filtering),

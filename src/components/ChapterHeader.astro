@@ -3,15 +3,16 @@
 // optional uppercase region line, and an optional blurb. Split out of
 // ChapterPage so the page composes sub-components rather than raw markup.
 interface Props {
-  city: string;
+  /** The city (chapter) or community name shown as the title. */
+  name: string;
   region?: string;
   blurb?: string;
 }
-const { city, region, blurb } = Astro.props;
+const { name, region, blurb } = Astro.props;
 ---
 
 <header style="text-align: center; margin: var(--space-lg) 0 var(--space-xl);">
-  <h1 class="s-title" style="margin-bottom: var(--space-md);">{city}</h1>
+  <h1 class="s-title" style="margin-bottom: var(--space-md);">{name}</h1>
   {
     region ? (
       <p style="color: var(--color-faint); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85rem; margin: 0;">

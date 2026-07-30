@@ -1,0 +1,25 @@
+{
+  "name": "Community Route - AI On Day One",
+  "id": "dc7d9c63-83d8-4807-bdfc-bfa4a0f5a7d9",
+  "url": "/communities/ai",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "communities": [
+      {
+        "blurb": "For alumni working in and around artificial intelligence.",
+        "body": "A cross-chapter community for Harvard alumni working in AI — researchers, founders, product leaders, and the people deploying it inside larger companies.\n\nThis community is just getting started. Events, leads, and reading groups will appear here as they are scheduled.",
+        "heroImage": "/images/gallery/event-22.jpg",
+        "name": "AI",
+        "slug": "ai",
+        "tagline": "We are the AI Community of Harvard Alumni in Tech."
+      }
+    ],
+    "events": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/communities/[slug].astro",
+  "description": "The state every community actually launches in: announced, but with no leads named and nothing on the calendar yet. This is the realistic day-one page, and the point is that it still reads as finished — the hero, the blurb and the join band carry it, and the events section renders nothing at all rather than an empty heading. Compare with the Founders scenario for the same page once it fills in."
+}
