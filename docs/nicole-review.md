@@ -40,6 +40,9 @@ HTML is fetchable by anyone who has the address.
 > separate access token, which I'll send you privately if you'd like to make
 > edits directly.
 >
+> One thing if you do edit: after you save, the site takes a minute or two to
+> rebuild before your change shows up. The editor will tell you when it's live.
+>
 > (The real harvardintech.com is unchanged — this is a private preview.)
 
 ## Editor access (no GitHub account needed)
