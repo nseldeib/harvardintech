@@ -123,11 +123,13 @@ safe to leave undone for a while.
 One GitHub repo hosts exactly one Pages site, so a second origin genuinely
 requires a second repo. It holds only generated output; there is no source in it.
 
-1. ~~**Create the review repo**~~ — **already done**: `nseldeib/harvardintech-review`
-   exists (private, empty). Kept for this phase rather than deleted. Private is fine;
-   note that a private repo's Pages site is still public unless you are on
-   GitHub Enterprise Cloud, which is why the passphrase gate and `noindex` carry
-   the privacy here.
+1. **Create the review repo** — `nseldeib/harvardintech-review`. It was created
+   once and then deleted again, because an empty placeholder repo sitting around
+   for a phase that may be months away is easier to mistake for working
+   infrastructure than to remember the reason for. Recreate it when you actually
+   start this track. Private is fine; note that a private repo's Pages site is
+   still public unless you are on GitHub Enterprise Cloud, which is why the
+   passphrase gate and `noindex` carry the privacy here.
 
 2. **Generate a deploy key** and install both halves:
    ```bash
