@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-07-31T15:55:15Z",
+  "title": "Document the glob-loaded-content false positive in the presentability pass",
+  "type": "feature",
+  "userRequest": "## Summary\n\n`/codeyam-audit` step 6 (the presentability pass) surfaces \"stale docs\" as\ndeletion candidates using a *referenced-by* heuristic: a tracked file that no\nother tracked file imports or links to. That heuristic is structurally wrong for\n**glob-loaded content collections**, which are never imported by anything — the\nloader discovers them at build time from a directory pattern.\n\nSo every content entry in the project is reported as a deletion candidate,\nforever, on every run. On this repo that was 8 event entries backing 6 live\npages; following the scan's suggestion literally would delete real site content.\nObserved during the 2026-07-30 audit run, where the finding had to be dismissed\nby hand after reading `src/content/config.ts` to prove the entries were live.\n\nThere are two layers, and this plan does the one that is actionable here.\n\n## Key Decisions\n\n- **Fix the procedure doc in this repo; file the tool fix upstream.**\n  `.claude/skills/codeyam-audit/finalize-procedure.md` is tracked here, so the\n  GOTCHA lands immediately and protects the next run. The scan itself lives in\n  `codeyam-editor`, a different repo — the real exclusion belongs there, but it\n  cannot be written from this one. Do the reachable half now rather than\n  deferring both.\n- **A GOTCHA, not a new step.** Step 6 already says \"ask the user about anything\n  uncertain.\" What was missing is the specific knowledge that makes this class\n  *not* uncertain: glob-loaded content always looks unreferenced, so absence of\n  references is not evidence of deadness. That is a note attached to the existing\n  step, not new procedure.\n- **Name the verification, not just the caveat.** The GOTCHA should say how to\n  confirm in one command — check the content config for a\n  `glob({ pattern, base })` loader covering the flagged path — so the next run\n  resolves it in seconds instead of re-deriving it.\n- **Upstream: detect from config, not a path convention.** When the scan is\n  fixed, `src/content/` is the Astro default but the loader's `base` is\n  configurable (this repo computes it from a `root` variable). `stack.json`\n  already records `data.contentDir`; that plus the `glob()` call sites is the\n  honest source of truth. Hard-coding `src/content/**` would miss a project that\n  relocated its collections.\n\n## Risks / Notes\n\n- Over-excluding would hide genuinely dead content — an event entry for a\n  cancelled event is real debt. But content lifecycle is a CMS concern, not a\n  presentability one, so \"not a *doc* candidate\" is the right framing.\n- The scan is advisory and never deletes, so this is a false-positive cost, not a\n  data-loss risk. It earns a fix because a scan the operator learns to skim is a\n  scan that will miss the one real finding.\n\n## Verification\n\n- The GOTCHA appears under step 6 of `finalize-procedure.md` and names both the\n  symptom (content entries listed as stale docs) and the one-command check.\n- A fresh `/codeyam-audit` run on this repo dismisses the 8 event entries by\n  citing the GOTCHA, without re-reading the content config from scratch.\n- Upstream, once the scan is fixed: `presentability-scan` reports 0 stale-doc\n  candidates here rather than 8; a genuinely orphaned markdown file outside the\n  content dirs is still reported; and a project whose content lives outside\n  `src/content/` is also excluded, proving the detection is config-driven.",
+  "description": "Added a GOTCHA under section 6 of .claude/skills/codeyam-audit/finalize-procedure.md. The presentability scan finds stale docs by asking which tracked files no other tracked file references. Content collections are discovered by a directory glob and reached through getCollection, never by an import of the entry's path, so nothing references them the way the scan means and live content can be listed as deletion candidates. Acting on that list deletes real site content. The GOTCHA names the mechanism and prescribes a one-command check: grep the content config for a glob loader whose base covers the flagged path, pointing at stack.json data.contentDir rather than hardcoding src/content, since assuming that path is the same mistake the underlying bug makes.\n\nThe premise weakened during the build and the text was corrected to match. The plan and the first draft asserted this happens on every run, forever. It does not: across one day on this repo the same 8 unchanged event entries were reported as 1 candidate on six finalize runs, then 8 on two, and the live scan now reports none, with no change to the content, the content config, or the dependency graph. A full analyze-imports rebuild did not bring the finding back, no audit-baseline.json exists to have suppressed it, and it was not the new narrative file introducing a reference, which was tested by moving it aside. So the wording changed from always to can, and a warning was added that the count is untrustworthy in both directions: a clean scan is not evidence the class is gone. The instability is left as an open observation rather than explained, because it could not be reproduced.\n\nNo tests: the change is prose in a markdown file with no executable surface, so no test could be red if it were reverted. Verification was dogfooding the prescribed command, which prints the loader bases including the events base that proves the flagged entries are live.\n\nThe deeper fix belongs upstream in codeyam-editor, which owns presentability-scan and is not checked out here. Two related false positives were observed and deliberately not acted on: reconcile-glossary proposed removing 21 entries for live .astro components the static analyser cannot parse, and plan-staleness-check flagged the glob pattern src/content/** as a missing file path. Both are the same family as the bug documented here, a static heuristic concluding that something the build resolves dynamically is dead.",
+  "modifiedFiles": [
+    {
+      "path": ".claude/skills/codeyam-audit/finalize-procedure.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/presentability-scan-must-not-flag-glob-loaded-content-as-stale-docs.md\t.codeyam/plans/completed/presentability-scan-must-not-flag-glob-loaded-content-as-stale-docs.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ne--donor-recognition-wall.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/plans/ne--momentum-fund-page-analytics-layout-and-editable-sections.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/plans/ne--volunteer-project-detail-pages-and-the-missing-photo.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/session-narrative.json",
+      "status": "modified"
+    }
+  ],
+  "testResults": {
+    "total": 276,
+    "passed": 276,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 276,
+        "passed": 276
+      }
+    ]
+  }
+}

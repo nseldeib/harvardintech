@@ -17,7 +17,7 @@ So every content entry in the project is reported as a deletion candidate,
 forever, on every run. On this repo that was 8 event entries backing 6 live
 pages; following the scan's suggestion literally would delete real site content.
 Observed during the 2026-07-30 audit run, where the finding had to be dismissed
-by hand after reading `src/content.config.ts` to prove the entries were live.
+by hand after reading `src/content/config.ts` to prove the entries were live.
 
 There are two layers, and this plan does the one that is actionable here.
 
