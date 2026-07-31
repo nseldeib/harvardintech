@@ -401,6 +401,30 @@
       "url": "/images/team/peter-boyce.png",
       "alt": "Peter Boyce",
       "sizeBytes": 8558
+    },
+    {
+      "filename": "volunteers.webp",
+      "url": "/images/volunteers.webp",
+      "sizeBytes": 126240,
+      "originalSizeBytes": 2091397,
+      "width": 1200,
+      "height": 1200
+    },
+    {
+      "filename": "volunteers-2.webp",
+      "url": "/images/volunteers-2.webp",
+      "sizeBytes": 126240,
+      "originalSizeBytes": 2091397,
+      "width": 1200,
+      "height": 1200
+    },
+    {
+      "filename": "gallery/volunteers.webp",
+      "url": "/images/gallery/volunteers.webp",
+      "sizeBytes": 126240,
+      "originalSizeBytes": 2091397,
+      "width": 1200,
+      "height": 1200
     }
   ]
 }
