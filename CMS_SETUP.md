@@ -144,6 +144,13 @@ is site-specific:
   "examples, not actual sponsors" notice and refuses to link those entries, which
   is what lets sample rows ship without claiming partnerships that do not exist.
   Switch it off for a real sponsor.
+  **`momentumSections`** is the reorderable middle of the `/donate` campaign
+  page. Its `kind` and `layout` are `text` fields with hints rather than enums
+  because `CUSTOM_FIELD_TYPES` has no select control; `src/lib/momentumSections.ts`
+  validates at build instead, so an unknown `kind` drops that one section with a
+  `console.warn` and an unknown `layout` falls back to `text-only` — a typo costs
+  an editor one section, never the deploy. Editor-facing instructions for the
+  collection live in [docs/editing-the-site.md](docs/editing-the-site.md).
 - **`builtins`** — extra fields appended to a built-in's editor: `embedUrl` /
   `embedHtml` on `pages` and `blog`, `chapter` on `events`, `active` on `team`.
 - **`seo`** — this site's SEO frontmatter keys. The package defaults to

@@ -316,6 +316,47 @@
           "optional": true
         }
       ]
+    },
+    {
+      "id": "momentumSections",
+      "label": "Momentum Fund sections",
+      "singular": "Section",
+      "fields": [
+        {
+          "name": "kind",
+          "label": "Section type",
+          "type": "text",
+          "hint": "Which section this is: narrative, accomplishments, pillars, testimonials, or stats. Only \"narrative\" uses the title, layout, image, and body below — the others are bands whose content is edited elsewhere."
+        },
+        {
+          "name": "title",
+          "label": "Heading",
+          "type": "text",
+          "optional": true,
+          "hint": "Narrative sections only. The heading shown above the text."
+        },
+        {
+          "name": "layout",
+          "label": "Layout",
+          "type": "text",
+          "optional": true,
+          "hint": "Narrative sections only: image-left, image-right, or text-only. Blank or unrecognized shows the text full width."
+        },
+        {
+          "name": "image",
+          "label": "Image",
+          "type": "image",
+          "optional": true,
+          "hint": "Shown beside the text on image-left / image-right sections. Blank shows the text full width."
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Lower numbers appear higher on the page. Change this to move a section up or down. Blank puts the section last."
+        }
+      ]
     }
   ],
   "builtins": {

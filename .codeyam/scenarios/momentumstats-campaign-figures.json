@@ -1,6 +1,6 @@
 {
   "name": "MomentumStats - Campaign Figures",
-  "id": "7dde650a-8fc1-4c49-98d9-24ec6d1e09ae",
+  "id": "e619d1cb-5f5a-4327-86fc-2cd217b57492",
   "url": "/isolated-components/MomentumStats",
   "dimensions": [
     "Desktop"
@@ -9,5 +9,5 @@
   "componentName": "MomentumStats",
   "scenarioType": "component",
   "pageFilePath": "src/components/donate/MomentumStats.astro",
-  "description": "The figures under the campaign hero: 100+ events, 8,000+ members, 5 chapters. The story heading that follows refers directly to these."
+  "description": "The figures band: 100+ events, 8,000+ members, chapters and growing. No longer seeded onto the campaign page — the July review removed it from under the hero — but the renderer and its copy stay, so an editor can bring it back by adding a section of type stats and giving it Order 1. This is what that band would look like."
 }

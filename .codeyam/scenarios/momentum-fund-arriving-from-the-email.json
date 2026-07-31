@@ -8,9 +8,31 @@
   ],
   "mocks": {},
   "seed": {
-    "testimonials": []
+    "testimonials": [
+      {
+        "name": "Priya Raman",
+        "order": 1,
+        "quote": "I came to a founder dinner knowing nobody. I left with two intros that turned into my first enterprise customer.",
+        "role": "Founder · AB '14",
+        "slug": "priya-raman"
+      },
+      {
+        "name": "Tom Whitfield",
+        "order": 2,
+        "quote": "The London co-working days are the only reason I still feel connected to Harvard on this side of the Atlantic.",
+        "role": "Engineering lead · AB '09",
+        "slug": "tom-whitfield"
+      },
+      {
+        "name": "Dana Osei",
+        "order": 3,
+        "quote": "Someone in this network took an hour to talk me out of a bad acquisition. That hour was worth more than any conference.",
+        "role": "Operator · MBA '18",
+        "slug": "dana-osei"
+      }
+    ]
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/donate.astro",
-  "description": "The same page reached from the email campaign's personalized link, where the merge tag supplied a first name — the headline reads 'Ben, let's go further together'."
+  "description": "The page a subscriber reaches from the campaign email, once member quotes have been collected: the merge tag supplies a first name so the headline reads 'Ben, let's go further together', and the testimonials section renders its populated state in real page context. Paired with 'Public Visitor', which holds the production-today state — generic headline, no quotes yet — so the two differ by both personalization and the testimonials band rather than being the same page twice."
 }

@@ -1,0 +1,16 @@
+{
+  "name": "Momentum Fund - Every Section Hidden",
+  "id": "464896ef-6c46-46dd-b19c-203a5e9c9c95",
+  "url": "/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [],
+    "testimonials": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "What an editor sees if they hide every section in the middle of the page. The hero and the closing ask still frame a coherent page that reads as finished rather than broken — which is exactly why those two are a fixed frame and not reorderable content. The floor of what this page can degrade to."
+}

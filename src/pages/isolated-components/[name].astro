@@ -30,8 +30,10 @@ import SponsorLevels from '../../components/sponsor/SponsorLevels.astro';
 import SponsorWall from '../../components/sponsor/SponsorWall.astro';
 import SponsorInquiry from '../../components/sponsor/SponsorInquiry.astro';
 import MomentumAccomplishments from '../../components/donate/MomentumAccomplishments.astro';
+import MomentumNarrative from '../../components/donate/MomentumNarrative.astro';
 import PrimaryNav from '../../components/nav/PrimaryNav.astro';
 import UtilityBar from '../../components/nav/UtilityBar.astro';
+import { loadMomentumSections } from '../../lib/momentumSectionsContent';
 import {
   chapterNavItems,
   withChapterGroup,
@@ -437,14 +439,64 @@ const SAMPLE_TESTIMONIALS = [
     order: 3,
   },
 ];
+// The real published sections, loaded through the same pipeline the /donate
+// route uses — so these captures show the page an editor would actually get,
+// not a fixture that could quietly disagree with the collection.
+const { sections: MOMENTUM_SECTIONS } = await loadMomentumSections();
+
+// "An editor moved a section": the same sections with the story pulled above the
+// accomplishments band, which is what changing one Order field in the CMS does.
+// It is the whole point of making the page a collection, so it gets its own
+// capture rather than being described in prose nobody can see.
+const REORDERED_SECTIONS = [
+  ...MOMENTUM_SECTIONS.filter((s) => s.kind === 'narrative'),
+  ...MOMENTUM_SECTIONS.filter((s) => s.kind !== 'narrative'),
+];
+
 const momentumFundStates = {
-  Default: { copy: MOMENTUM_COPY, testimonials: [] as typeof SAMPLE_TESTIMONIALS },
+  Default: {
+    copy: MOMENTUM_COPY,
+    sections: MOMENTUM_SECTIONS,
+    testimonials: [] as typeof SAMPLE_TESTIMONIALS,
+  },
   Personalized: {
     copy: MOMENTUM_COPY,
+    sections: MOMENTUM_SECTIONS,
     testimonials: [] as typeof SAMPLE_TESTIMONIALS,
     previewName: 'Nicole',
   },
-  Quotes: { copy: MOMENTUM_COPY, testimonials: SAMPLE_TESTIMONIALS },
+  Quotes: {
+    copy: MOMENTUM_COPY,
+    sections: MOMENTUM_SECTIONS,
+    testimonials: SAMPLE_TESTIMONIALS,
+  },
+  Reordered: {
+    copy: MOMENTUM_COPY,
+    sections: REORDERED_SECTIONS,
+    testimonials: [] as typeof SAMPLE_TESTIMONIALS,
+  },
+};
+
+// MomentumNarrative states — the four layouts, so each is verifiable on its own
+// rather than only as part of the whole page. `NoImage` is the guard that
+// matters: an image layout with no photo must fall back to full-width prose
+// instead of rendering a blank column, which is the state a section is in the
+// moment an editor picks a layout before choosing a picture.
+const NARRATIVE_TITLE = 'And Every Number Represents a Story';
+const narrativeStates = {
+  Default: {
+    title: NARRATIVE_TITLE,
+    layout: 'image-left',
+    image: '/images/gallery/event-15.jpg',
+    tinted: true,
+  },
+  ImageRight: {
+    title: 'Why Support Harvard in Tech?',
+    layout: 'image-right',
+    image: '/images/gallery/event-04.jpg',
+  },
+  TextOnly: { title: NARRATIVE_TITLE, layout: 'text-only' },
+  NoImage: { title: NARRATIVE_TITLE, layout: 'image-left' },
 };
 
 // MomentumAccomplishments: the campaign's track record. Reads the real copy, so
@@ -601,6 +653,11 @@ export async function getStaticPaths() {
     { params: { name: 'MomentumFundPage' } },
     { params: { name: 'MomentumFundPage-Personalized' } },
     { params: { name: 'MomentumFundPage-Quotes' } },
+    { params: { name: 'MomentumFundPage-Reordered' } },
+    { params: { name: 'MomentumNarrative' } },
+    { params: { name: 'MomentumNarrative-ImageRight' } },
+    { params: { name: 'MomentumNarrative-TextOnly' } },
+    { params: { name: 'MomentumNarrative-NoImage' } },
   ];
 }
 
@@ -717,6 +774,12 @@ if (name && name.startsWith('MomentumFundPage')) {
   momentumFundProps = momentumFundStates[stateKey] ?? momentumFundStates.Default;
 }
 
+let narrativeProps: (typeof narrativeStates)[keyof typeof narrativeStates] | null = null;
+if (name && name.startsWith('MomentumNarrative')) {
+  const stateKey = (name === 'MomentumNarrative' ? 'Default' : name.slice('MomentumNarrative-'.length)) as keyof typeof narrativeStates;
+  narrativeProps = narrativeStates[stateKey] ?? narrativeStates.Default;
+}
+
 // SponsorPage must be tested BEFORE the narrower Sponsor* prefixes below would
 // swallow it — `startsWith('Sponsor')` alone would match every one of them.
 let sponsorPageProps: (typeof sponsorPageStates)[keyof typeof sponsorPageStates] | null = null;
@@ -771,6 +834,30 @@ if (name && name.startsWith('MomentumAccomplishments')) {
           <SponsorInquiry {...sponsorInquiryProps} />
         ) : accomplishmentsProps ? (
           <MomentumAccomplishments {...accomplishmentsProps} />
+        ) : narrativeProps ? (
+          <MomentumNarrative {...narrativeProps}>
+            <p>
+              Behind every event, chapter, and member of our network is an
+              opportunity for a conversation, introduction, or shared experience
+              that has helped Harvard alumni in tech move forward.
+            </p>
+            <blockquote>
+              <p>
+                Sometimes, the most meaningful opportunities begin with a single
+                conversation.
+              </p>
+            </blockquote>
+            <p>
+              An introduction to someone who has been where you are going. A
+              roundtable where a new idea becomes sharper. A community gathering
+              that turns a shared interest into a lasting collaboration.
+            </p>
+            <p>
+              Harvard Alumni in Tech exists to create more of these moments, the
+              kind that help alumni find one another, support one another, and
+              move further together.
+            </p>
+          </MomentumNarrative>
         ) : volunteerPageProps ? (
           <VolunteerPage {...volunteerPageProps} />
         ) : momentumFundProps ? (

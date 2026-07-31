@@ -6,6 +6,12 @@
 // the same URL without a name serves the public/non-subscriber audience, so
 // there is no duplicate landing page to keep in sync.
 //
+// The middle of the page comes from the `momentumSections` collection rather
+// than from hardcoded composition, so an editor reorders the page with the Order
+// field and hides a section with the Draft toggle. Narrative sections carry
+// their own copy as markdown; the rest are slots positioned here but still
+// edited as `donatePage.json` copy.
+//
 // Testimonials come from the `testimonials` collection, which starts EMPTY in
 // production — the band renders nothing until real quotes are collected.
 import { getCollection } from 'astro:content';
@@ -14,6 +20,7 @@ import MomentumFundPage from '../components/MomentumFundPage.astro';
 import { donatePage, settings } from '../lib/site';
 import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
+import { loadMomentumSections } from '../lib/momentumSectionsContent';
 
 const testimonials = publishedEntries(
   await getCollection('testimonials'),
@@ -22,11 +29,32 @@ const testimonials = publishedEntries(
   slug: t.id,
   ...t.data,
 }));
+
+// Loaded here rather than inside the page component so the component stays
+// props-only and the isolated-component scenarios can hand it their own list.
+const { sections, unknownKinds } = await loadMomentumSections();
+
+// Advisory, never build-failing — `kind` is free text because the CMS has no
+// select control, so a typo is an ordinary editing mistake. It costs that editor
+// one missing section and this log line, not the deploy. Same treatment
+// `chapters/[slug].astro` gives an orphan event tag.
+if (unknownKinds.length > 0) {
+  console.warn(
+    `[donate] ${unknownKinds.length} Momentum Fund section(s) have an unrecognized type and ` +
+      `will not appear on the page: ${unknownKinds.map((k) => JSON.stringify(k)).join(', ')}. ` +
+      `Use one of: narrative, accomplishments, pillars, testimonials, stats.`,
+  );
+}
 ---
 
 <BaseLayout
   title={donatePage.campaignName}
   description="Support Harvard Alumni in Tech. Your monthly gift powers the events, mentorship, and city chapters that help alumni find one another and move further together."
 >
-  <MomentumFundPage copy={donatePage} testimonials={testimonials} email={settings.contactEmail} />
+  <MomentumFundPage
+    copy={donatePage}
+    sections={sections}
+    testimonials={testimonials}
+    email={settings.contactEmail}
+  />
 </BaseLayout>

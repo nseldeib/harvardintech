@@ -1,0 +1,38 @@
+{
+  "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+  "id": "9c9ebb24-6e8b-4e89-b60a-8289d3d23f67",
+  "url": "/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals who are building, mentoring, launching, and opening doors for one another.\n\nTogether, we can create an impact that lasts beyond any one event, message, or moment.",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 1,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "body": "This entry's Section type is misspelled, so no renderer matches it. It is skipped with a build warning instead of crashing the page.",
+        "kind": "narrrative",
+        "order": 2,
+        "slug": "gallery",
+        "title": "A Section Whose Type Was Typed Wrong"
+      },
+      {
+        "body": "Positioned here; its figures are edited as page copy.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      }
+    ],
+    "testimonials": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "Two ordinary editing mistakes on one page, because Section type and Layout are free-text fields the CMS cannot constrain to a list. The section whose type is misspelled is dropped entirely rather than crashing the build, and the narrative whose Layout says image-right but has no photo chosen falls back to full-width prose instead of leaving a blank column. Both degrade to something readable, which is the contract that lets those fields stay free text."
+}

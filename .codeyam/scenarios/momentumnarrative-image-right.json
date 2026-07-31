@@ -1,0 +1,13 @@
+{
+  "name": "MomentumNarrative - Image Right",
+  "id": "28d80091-7a89-4168-978a-b37e69d48cfb",
+  "url": "/isolated-components/MomentumNarrative-ImageRight",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNarrative",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNarrative.astro",
+  "description": "The mirrored layout used by 'Why Support Harvard in Tech?' — text left, photo right. Choosing between this and image-left is a Layout field an editor types, which is the control the campaign review asked for on both sections."
+}

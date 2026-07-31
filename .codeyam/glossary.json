@@ -359,6 +359,15 @@
     "testFile": "src/lib/nav.test.ts"
   },
   {
+    "description": "Reads the momentumSections collection and returns the published sections in editor order plus any unrecognized kinds for the caller to warn about, rendering each narrative entry's markdown body. The thin astro:content edge kept out of the pure rules module, and shared by the /donate route and the isolated-component harness so the pipeline exists once.",
+    "filePath": "src/lib/momentumSectionsContent.ts",
+    "name": "loadMomentumSections",
+    "scenarios": [
+      "momentum-fund-public-visitor",
+      "momentum-fund-arriving-from-the-email"
+    ]
+  },
+  {
     "description": "Pulls the `name` parameter out of a full URL or a bare query string, returning null when absent or unparseable.",
     "filePath": "src/lib/personalize.ts",
     "name": "nameFromSearch",
@@ -369,6 +378,12 @@
     "filePath": "src/lib/projects.ts",
     "name": "openProjects",
     "testFile": "src/lib/projects.test.ts"
+  },
+  {
+    "description": "The Momentum Fund page sections in the order an editor arranged them: sorted by the optional Order pin via the site-wide sortByOrder, with any section whose kind matches no renderer dropped rather than rendered blank. Callers pass entries already draft-filtered by publishedEntries.",
+    "filePath": "src/lib/momentumSections.ts",
+    "name": "orderedSections",
+    "testFile": "src/lib/momentumSections.test.ts"
   },
   {
     "description": "Pure gate deciding whether the scroll parallax runs: returns fineHover && !reducedMotion. Encodes the desktop-only / prefers-reduced-motion policy (parallax is janky or ignored on touch browsers) as testable logic, separate from the matchMedia DOM reads in initParallax.",
@@ -414,6 +429,12 @@
     "filePath": "src/lib/draftVisibility.ts",
     "name": "resolveIncludeDrafts",
     "testFile": "src/lib/draftVisibility.test.ts"
+  },
+  {
+    "description": "Normalizes a narrative section's free-text layout field to image-left, image-right, or text-only, trimming and lowercasing first. Anything unrecognized becomes text-only, the one layout that reads correctly with or without a photo, so a mistyped value degrades to readable prose instead of an empty column.",
+    "filePath": "src/lib/momentumSections.ts",
+    "name": "resolveLayout",
+    "testFile": "src/lib/momentumSections.test.ts"
   },
   {
     "description": "Builds a robots.txt body for either publishing track, taking the resolved sitemap URL and a disallowAll flag. The public track gets allow-all directives plus the Sitemap reference; the gated review track gets Disallow for everything and, deliberately, no Sitemap line at all, because astro.config.mjs omits the sitemap integration on that track so advertising sitemap-index.xml there would point crawlers at a 404. Extracted out of the robots.txt endpoint and given the gate as a parameter so both tracks' output is unit-testable — the endpoint resolves the gate from process.env at module load, so a test importing it could only ever reach one branch. The endpoint keeps origin resolution and response shaping.",
@@ -464,6 +485,12 @@
     "testFile": "src/lib/team.test.ts"
   },
   {
+    "description": "One boolean per section saying whether it renders on the tinted band. Narrative sections alternate tinted and untinted so consecutive prose stays separated; the counter advances only on narratives, so a bespoke band between two of them does not flip the rhythm. Pure, replacing a counter that was mutated inside the page's render map.",
+    "filePath": "src/lib/momentumSections.ts",
+    "name": "tintedFlags",
+    "testFile": "src/lib/momentumSections.test.ts"
+  },
+  {
     "description": "Coerces a string-or-Date event date into a Date, passing existing Date instances through untouched.",
     "filePath": "src/lib/events.ts",
     "name": "toEventDate",
@@ -474,6 +501,12 @@
     "filePath": "src/lib/nav.ts",
     "name": "toPath",
     "testFile": "src/lib/nav.test.ts"
+  },
+  {
+    "description": "The unrecognized kind values in a section list, de-duplicated and in first-seen order, so the /donate route can warn about sections it skipped. Advisory and never build-failing: kind is free text because the CMS has no select control, so a typo must cost one section and a log line, not the deploy.",
+    "filePath": "src/lib/momentumSections.ts",
+    "name": "unknownSectionKinds",
+    "testFile": "src/lib/momentumSections.test.ts"
   },
   {
     "description": "Returns the distinct chapter tags on a list of events that match no id in the given chapter list, in first-seen order. The chapters route links an event to its chapter by exact string match on the chapter id, and the CMS renders the chapter field as a free-text box, so a city name instead of a slug or a stray trailing space drops the event off every chapter page while the entry still validates, the build still succeeds, and the events page still lists it. Naming those tags is the only signal an editor gets until the CMS offers a chapter picker. Events with no tag, or a blank one, are excluded rather than reported: an untagged event belongs to no chapter on purpose.",

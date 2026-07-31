@@ -1,0 +1,176 @@
+---
+// One prose section of the Momentum Fund page, laid out beside its photo.
+//
+// Replaces the old `MomentumStory` and `MomentumWhy`, which differed only in the
+// styling of the same thing — a heading over prose. Collapsing them into one
+// component with a `layout` prop is what makes "put the image on the left" an
+// editing decision instead of a code change, which is exactly the control the
+// campaign review asked for on both sections.
+//
+// The body is rendered markdown passed through as a slot (the route calls
+// `render()` on the entry), so a `>` blockquote in the markdown becomes the
+// crimson-ruled pull quote and `###` becomes a block subhead — the typography
+// `MomentumStory` and `MomentumWhy` had, now reachable from the CMS editor.
+import { altFor } from '../../lib/media';
+import { resolveLayout } from '../../lib/momentumSections';
+
+interface Props {
+  title?: string;
+  /** `image-left` | `image-right` | `text-only`; anything else degrades to
+   *  text-only rather than rendering an empty column. */
+  layout?: string;
+  image?: string;
+  /** Tints the band and rules it top and bottom, the way the old "Why Support"
+   *  section broke up the page. Alternated by the page, not by the editor. */
+  tinted?: boolean;
+}
+const { title, layout, image, tinted = false } = Astro.props as Props;
+
+// A two-column layout with no photo would render a blank column, so an absent
+// image falls back to full-width prose regardless of what the editor chose.
+const resolved = resolveLayout(layout);
+const mode = image ? resolved : 'text-only';
+const alt = image ? altFor(image, title ?? 'Harvard in Tech') : '';
+---
+
+<section class:list={['narrative', { tinted }]}>
+  <div class:list={['inner', mode]}>
+    {
+      mode !== 'text-only' && image ? (
+        <div class="figure">
+          <img src={image} alt={alt} loading="lazy" />
+        </div>
+      ) : null
+    }
+    <div class="prose">
+      {title ? <h2>{title}</h2> : null}
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .narrative {
+    padding: 76px 24px;
+  }
+  .tinted {
+    background: var(--paper-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    gap: 56px;
+    /* Stretch, not center. These sections run long — "Why Support Harvard in
+       Tech?" is two titled blocks of prose — and a content-height photo centered
+       against that column leaves a large dead gap above and below it. Filling
+       the row height keeps the two columns reading as one band however much an
+       editor writes. */
+    align-items: stretch;
+  }
+  .inner.text-only {
+    max-width: 68ch;
+    grid-template-columns: 1fr;
+  }
+  .inner.image-left,
+  .inner.image-right {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+  /* Source order is figure-then-prose, so image-left needs no reordering and
+     image-right swaps the two columns on wide screens only. */
+  .inner.image-right .figure {
+    order: 2;
+  }
+  /* The figure is a stretched grid item, so the image can take its height from
+     the text column. `cover` crops rather than distorts, which is why an editor
+     can pick any photo from the library without matching an aspect ratio. */
+  .figure {
+    min-height: 0;
+  }
+  .figure img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  h2 {
+    font-size: clamp(28px, 3.6vw, 44px);
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    /* Set explicitly, unlike the full-width bands that inherit the body value:
+       in a half-width column these headings wrap, and body line-height at 44px
+       leaves a gap wide enough to read as two separate headings. */
+    line-height: 1.1;
+    margin: 0 0 24px;
+  }
+
+  /* The markdown body arrives through the slot, so its elements are styled by
+     descendant selectors rather than by class. `is:global` is required — scoped
+     styles do not reach slotted content. */
+  .prose :global(p) {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0 0 18px;
+  }
+  /* A section that OPENS with prose sets that paragraph larger as a lede, the
+     way the story section did. Deliberately `:first-child` and not
+     `:first-of-type`: a section that opens with a `###` subhead is a list of
+     titled blocks, where enlarging the first block's first paragraph would read
+     as a mistake rather than as a lede. */
+  .prose :global(p:first-child) {
+    font-size: 21px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+  .prose :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .prose :global(h3) {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 36px 0 14px;
+  }
+  .prose :global(h3:first-child) {
+    margin-top: 0;
+  }
+  .prose :global(blockquote) {
+    font-family: var(--font-serif);
+    font-size: clamp(21px, 2.4vw, 28px);
+    line-height: 1.4;
+    color: var(--ink);
+    border-left: 3px solid var(--crimson);
+    padding-left: 24px;
+    margin: 0 0 28px;
+  }
+  .prose :global(blockquote p) {
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+  }
+
+  /* One column below 900px, photo first — the reading order both layouts imply
+     on a phone, where "left" and "right" have no meaning. */
+  @media (max-width: 900px) {
+    .narrative {
+      padding: 56px 24px;
+    }
+    .inner.image-left,
+    .inner.image-right {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .inner.image-right .figure {
+      order: 0;
+    }
+    .figure img {
+      max-height: 320px;
+    }
+  }
+</style>

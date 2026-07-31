@@ -1,0 +1,13 @@
+{
+  "name": "Momentum Fund - Sections Reordered By An Editor",
+  "id": "45956e6e-ebfd-49c4-b805-142d4461efc1",
+  "url": "/isolated-components/MomentumFundPage-Reordered",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumFundPage",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/MomentumFundPage.astro",
+  "description": "The campaign page after someone changed an Order field in the CMS: the same sections in a different sequence, with the hero and the closing ask still framing them. This is the whole point of making the page a collection — reordering is an edit, not a code change — and it is the state that answers 'can I move sections up or down?'."
+}

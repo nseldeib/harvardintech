@@ -1,0 +1,13 @@
+{
+  "name": "MomentumNarrative - Image Layout Without An Image",
+  "id": "d0c32cd4-0181-4677-80a0-e1f76f6a2ccc",
+  "url": "/isolated-components/MomentumNarrative-NoImage",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNarrative",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNarrative.astro",
+  "description": "The guard that matters: an editor picked image-left but has not chosen a photo yet. The section degrades to full-width prose rather than rendering a blank column beside the text, so a half-finished edit never looks broken on the live page."
+}

@@ -125,21 +125,21 @@ export interface DonatePageCopy {
   heroSubhead?: string;
   /** Full-bleed background photo behind the hero. */
   heroImage?: string;
-  /** Figures in the band under the hero. The story section's title ("And Every
-   *  Number Represents a Story") refers to these, so removing them leaves that
-   *  heading dangling. */
+  /** Figures for the stats band. Not seeded as a section today — the campaign
+   *  review removed the band from under the hero — but the renderer and this
+   *  copy stay, so re-adding a `stats` section in the CMS brings it back with no
+   *  code change. */
   stats?: { value: string; label: string }[];
-  /** The campaign's track record — what the community has already done — shown
-   *  between the stats band and the story. The campaign asks a reader to fund
-   *  momentum that is already visible, so the evidence comes before the ask. */
+  /** The campaign's track record — what the community has already done. The
+   *  campaign asks a reader to fund momentum that is already visible, so the
+   *  evidence comes before the ask. */
   accomplishmentsTitle?: string;
   accomplishments?: { value: string; label: string; body?: string }[];
-  storyTitle?: string;
-  storyLede?: string;
-  storyPullQuote?: string;
-  storyBody?: string[];
-  whyTitle?: string;
-  whyBody?: { title: string; paragraphs: string[] }[];
+  // The narrative sections ("And Every Number Represents a Story", "Why Support
+  // Harvard in Tech?") are NOT here — their heading, photo, layout, and prose
+  // live in the `momentumSections` collection so an editor can rewrite and
+  // reorder them from the CMS. What remains below is the card data for the
+  // bespoke bands, which those sections merely position.
   pillarsTitle?: string;
   pillars?: {
     icon?: PillarIcon;

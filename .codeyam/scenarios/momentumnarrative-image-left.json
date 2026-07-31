@@ -1,0 +1,13 @@
+{
+  "name": "MomentumNarrative - Image Left",
+  "id": "c0b0259b-49cf-4085-b6c4-af60b3e29f98",
+  "url": "/isolated-components/MomentumNarrative",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNarrative",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNarrative.astro",
+  "description": "The narrative band as 'And Every Number Represents a Story' renders it: photo left, prose right, on the tinted band. The markdown body supplies the larger opening lede and the crimson-ruled pull quote, so the typography the old MomentumStory hardcoded is now reachable from the CMS."
+}

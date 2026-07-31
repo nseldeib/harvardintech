@@ -3,31 +3,51 @@
 // campaign mockup (Canva export, 2026-07).
 //
 // Composition only — every section is its own component under
-// `components/donate/`. Section order follows the mockup: photo hero
-// (personalized headline) → stats band → "What we've accomplished so far"
-// (the track record, so the evidence precedes the ask) → "And Every Number
-// Represents a Story" → the story → "Why Support Harvard in Tech" → "What Your
-// Gift Powers" cards → testimonials → closing CTA.
+// `components/donate/`. The hero and the closing CTA are a FIXED frame; the
+// middle is whatever the `momentumSections` collection says it is, in whatever
+// order an editor arranged it. That is what makes "move this section up" an
+// Order field rather than a code change, and "remove this section" the Draft
+// toggle the editor already knows. The hero and CTA stay out of it on purpose: a
+// page whose hero could be dragged to the bottom is a page an editor can break.
 //
-// Takes plain props (copy + a flat testimonials array) rather than reading the
-// collection, so it renders from the /donate route and from isolated-component
-// scenarios (personalized / generic / with-quotes) — the same split
-// EventsPage.astro uses.
+// `kind` picks the renderer. `narrative` sections carry their own heading, photo,
+// and rendered markdown body; the rest are slots whose card data still comes from
+// `donatePage.json`, so the bespoke bands keep their tailored design and are
+// merely POSITIONED by data.
+//
+// Takes plain props (copy + already-ordered sections + a flat testimonials
+// array) rather than reading the collections, so it renders from the /donate
+// route and from isolated-component scenarios — the same split EventsPage.astro
+// uses.
 import MomentumHero from './donate/MomentumHero.astro';
 import MomentumStats from './donate/MomentumStats.astro';
 import MomentumAccomplishments from './donate/MomentumAccomplishments.astro';
-import MomentumStory from './donate/MomentumStory.astro';
-import MomentumWhy from './donate/MomentumWhy.astro';
+import MomentumNarrative from './donate/MomentumNarrative.astro';
 import GiftPillars from './donate/GiftPillars.astro';
 import MomentumTestimonials from './donate/MomentumTestimonials.astro';
 import MomentumClose from './donate/MomentumClose.astro';
 import type { TestimonialLike } from './donate/MomentumTestimonials.astro';
+import { tintedFlags, type SectionLike } from '../lib/momentumSections';
 import type { DonatePageCopy } from '../lib/site';
 
 export type { TestimonialLike };
 
+/**
+ * One section to render. `Content` is the component `render()` returns for a
+ * narrative entry's markdown body; the slot bands have no body to render, so it
+ * is optional.
+ */
+export interface RenderableSection extends SectionLike {
+  slug: string;
+  Content?: unknown;
+}
+
 interface Props {
   copy: DonatePageCopy;
+  /** Already draft-filtered and ordered by `orderedSections` — this component
+   *  renders the list as given rather than re-sorting it, so a scenario can pin
+   *  an arbitrary order to demonstrate reordering. */
+  sections?: RenderableSection[];
   testimonials?: TestimonialLike[];
   email?: string;
   /** Scenario/testing hook: pre-fill the headline as if `?name=` were present.
@@ -36,10 +56,16 @@ interface Props {
 }
 const {
   copy,
+  sections = [],
   testimonials = [],
   email = 'ben@harvardintech.com',
   previewName,
 } = Astro.props as Props;
+
+// Which sections sit on the tinted band — computed up front from the whole
+// list rather than counted during the render below, so the rule is pure,
+// unit-tested, and independent of how the map happens to run.
+const tinted = tintedFlags(sections);
 ---
 
 <MomentumHero
@@ -54,22 +80,47 @@ const {
   previewName={previewName}
 />
 
-<MomentumStats stats={copy.stats} />
-
-<MomentumAccomplishments title={copy.accomplishmentsTitle} items={copy.accomplishments} />
-
-<MomentumStory
-  title={copy.storyTitle}
-  lede={copy.storyLede}
-  pullQuote={copy.storyPullQuote}
-  paragraphs={copy.storyBody}
-/>
-
-<MomentumWhy title={copy.whyTitle} blocks={copy.whyBody} />
-
-<GiftPillars title={copy.pillarsTitle} pillars={copy.pillars} />
-
-<MomentumTestimonials title={copy.testimonialsTitle} testimonials={testimonials} />
+{
+  sections.map((section, index) => {
+    const Body = section.Content as any;
+    switch (section.kind) {
+      case 'narrative':
+        return (
+          <MomentumNarrative
+            title={section.title}
+            layout={section.layout}
+            image={section.image}
+            tinted={tinted[index]}
+          >
+            {Body ? <Body /> : null}
+          </MomentumNarrative>
+        );
+      case 'accomplishments':
+        return (
+          <MomentumAccomplishments
+            title={copy.accomplishmentsTitle}
+            items={copy.accomplishments}
+          />
+        );
+      case 'pillars':
+        return <GiftPillars title={copy.pillarsTitle} pillars={copy.pillars} />;
+      case 'testimonials':
+        return (
+          <MomentumTestimonials
+            title={copy.testimonialsTitle}
+            testimonials={testimonials}
+          />
+        );
+      case 'stats':
+        return <MomentumStats stats={copy.stats} />;
+      // Unreachable in practice — `orderedSections` drops unknown kinds before
+      // they reach here. Rendering nothing rather than throwing keeps a typo in
+      // one section from taking the whole page down.
+      default:
+        return null;
+    }
+  })
+}
 
 <MomentumClose
   title={copy.ctaTitle}

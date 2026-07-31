@@ -1,0 +1,419 @@
+{
+  "timestamp": "2026-07-31T20:26:05Z",
+  "title": "Momentum Fund page: analytics, layout, and editable sections",
+  "type": "feature",
+  "userRequest": "## Summary\n\nNicole's review raised four things about the Momentum Fund page (`/donate`) plus one\nsite-wide item: turn Google Analytics on with her GA4 id, drop the first stats band,\nre-lay the \"Every Number Represents a Story\" section as image-left / text-right, re-lay\n\"Why Support Harvard in Tech\" as text-left / image-right AND move it directly under the\nhero — and answer her two questions, \"How do I edit this page?\" and \"Do I have the option\nto move sections up or down?\". Today the honest answer to both is *no*: the page's copy\nlives in `src/data/donatePage.json`, which the CMS does not expose (it edits only\n`settings.json`, `nav.json`, the collections registry, and the media library — verified in\n`@codeyam/cms@0.2.2`, whose `CmsConfig` has no singleton extension point), and section\norder is hardcoded in `MomentumFundPage.astro`. This plan makes the layout changes AND\nconverts the page's middle into a CMS-editable, reorderable `momentumSections` collection,\nso \"move a section up\" becomes an Order field an editor can change, and \"remove a section\"\nbecomes the Draft toggle she already knows.\n\n## Key Decisions\n\n- **Sections become content, not markup.** A new `momentumSections` content collection\n  gives each middle-of-page section its own markdown entry with `order`, `draft`, `layout`,\n  and `image`. That is the only mechanism the CMS can already edit (custom collections are\n  registered in `src/data/collections.json`; JSON singletons other than settings/nav are not\n  editable at all), so it answers \"how do I edit this page\" and \"can I move sections up or\n  down\" with no upstream package work.\n- **Hero and closing CTA stay a fixed frame.** Only what sits between them is reorderable.\n  A page whose hero could be dragged to the bottom is a page an editor can break; the\n  campaign's ask-at-the-end structure is a design decision, not an editorial one.\n- **Bespoke bands stay code, positioned by data.** `accomplishments`, `pillars`,\n  `testimonials`, and `stats` keep their tailored components and keep reading their data from\n  `donatePage.json`; their entry is a *slot* carrying `kind` + `order` only. Modelling their\n  card data as markdown would trade a good design for editability nobody asked for.\n- **One narrative component replaces two.** `MomentumStory` and `MomentumWhy` differ only in\n  styling of the same thing (heading + prose). They collapse into `MomentumNarrative.astro`\n  with a `layout` prop (`image-left` | `image-right` | `text-only`), which is exactly the\n  control Nicole asked for on both sections.\n- **`kind` and `layout` are free text with hints, not enums.** The CMS field types are\n  `text | number | textarea | date | image | boolean | list` (`CUSTOM_FIELD_TYPES` in\n  `collectionRegistry.ts`) — there is no select. So the build validates instead: an unknown\n  `kind` warns and renders nothing (never a crash), an unknown `layout` falls back to\n  `text-only`.\n- **GA is a repo edit, not a CMS edit.** `Analytics.astro` and `settings.googleAnalyticsId`\n  already exist and are already wired through `HeadExtras`; the CMS's settings editor does\n  not model that key (the package's `SiteSettings` stops at socials), so setting it is a\n  one-line data change here. The docs must say so rather than sending Nicole to /admin.\n\n## Implementation\n\n### 1. Turn on Google Analytics\n\n**File**: `src/data/settings.json`\n\nSet `\"googleAnalyticsId\": \"G-GCBX577FFD\"`. Nothing else is needed —\n`src/components/Analytics.astro` renders the gtag pair only when the id is non-empty and is\nalready included site-wide via `HeadExtras`. Verify the rendered `<head>` on a built page\ncontains the two scripts, and that the isolated-component/scenario captures still render.\n\n### 2. Declare the `momentumSections` collection\n\n**File**: `src/content/config.ts`\n\nAdd a `momentumSections` collection alongside the existing eight, loaded with the same\n`glob({ base: `${root}/momentumSections` })` pattern so the codeyam content sandbox and the\nseed adapter keep working:\n\n- `kind`: `z.string()` — `narrative | accomplishments | pillars | testimonials | stats`\n- `title`: optional (narrative heading; the bespoke bands keep their titles in `donatePage.json`)\n- `layout`: optional — `image-left | image-right | text-only`\n- `image`: optional site-relative path (media-library URL, e.g. `/images/gallery/event-01.jpg`)\n- `order`: optional number\n- `draft`: optional boolean (the site-wide convention — absent means published)\n\nThe markdown body is the narrative prose.\n\n### 3. Register it in the CMS\n\n**File**: `src/data/collections.json`\n\nAdd a `momentumSections` collection to the `collections` array — `label: \"Momentum Fund\nsections\"`, `singular: \"Section\"` — with fields mirroring the schema. Hints do the work the\nmissing select type can't:\n\n- `kind` — \"Which section this is: narrative, accomplishments, pillars, testimonials, or stats.\"\n- `layout` — \"narrative only: image-left, image-right, or text-only.\"\n- `order` — \"Lower numbers appear higher on the page. Change this to move a section up or down.\"\n- `image` — \"Shown beside the text on image-left / image-right sections.\"\n\n### 4. Seed the sections from today's page\n\n**New files**: `src/content/momentumSections/why.md`, `accomplishments.md`, `story.md`,\n`pillars.md`, `testimonials.md`\n\nThe migration is what delivers Nicole's requested order — hero → **Why** → accomplishments →\n**Story** → pillars → testimonials → close, with the first stats band simply not seeded:\n\n- `why.md` — `kind: narrative`, `order: 1`, `layout: image-right`, `title: \"Why Support\n  Harvard in Tech?\"`, `image` from the media library. Body = the two `whyBody` blocks with\n  their titles as `###` subheads. (Text left, image right, directly under the hero.)\n- `accomplishments.md` — `kind: accomplishments`, `order: 2`.\n- `story.md` — `kind: narrative`, `order: 3`, `layout: image-left`, `title: \"And Every Number\n  Represents a Story\"`, `image` from the media library. Body = `storyLede` as the opening\n  paragraph, `storyPullQuote` as a `>` blockquote, then `storyBody`.\n- `pillars.md` — `kind: pillars`, `order: 4`.\n- `testimonials.md` — `kind: testimonials`, `order: 5`.\n- **No `stats.md`** — this is Nicole's \"remove first set of stats\". The `stats` kind stays\n  supported so she can re-add the band from the CMS without a code change.\n\n### 5. Ordering/validation helper\n\n**New file**: `src/lib/momentumSections.ts`\n\nPure and framework-free, the shape of `src/lib/sponsors.ts` and `src/lib/events.ts` so it\nunit-tests without rendering:\n\n- `SECTION_KINDS` — the supported kinds.\n- `orderedSections(entries)` — draft-filtered input (callers apply `publishedEntries`),\n  sorted by `order` via the existing `sortByOrder`, unknown kinds dropped.\n- `unknownSectionKinds(entries)` — the advisory list, so the route can `console.warn` the way\n  `chapters/[slug].astro` warns about orphan event tags. Advisory, never build-failing: a\n  typo in one section must not take the deploy down.\n- `resolveLayout(value)` — normalizes to `image-left | image-right | text-only`, unknown →\n  `text-only`.\n\n**New file**: `src/lib/momentumSections.test.ts` — order pinning, absent-order fallback,\nunknown-kind drop + advisory, layout normalization.\n\n### 6. The narrative section component\n\n**New file**: `src/components/donate/MomentumNarrative.astro`\n\nHeading + rendered markdown body in a two-column band: image left / text right, image right /\ntext left, or full-width prose when there is no image or `layout: text-only`. Keeps the\nexisting typography of `MomentumStory` (serif lede, crimson-ruled pull quote via a styled\n`blockquote`) so nothing about the page's voice changes. Collapses to a single column under\n900px, image first — the mobile order both layouts already imply. Alt text via `altFor` from\n`src/lib/media.ts` so a photo's library alt reaches the page.\n\n**Delete**: `src/components/donate/MomentumStory.astro`, `src/components/donate/MomentumWhy.astro`\nand their `storyTitle`/`storyLede`/`storyPullQuote`/`storyBody`/`whyTitle`/`whyBody` keys in\n`DonatePageCopy` (`src/lib/site.ts`) and `src/data/donatePage.json`, now that the copy lives in\nthe two markdown entries. `MomentumStats.astro` is kept — it is the renderer for `kind: stats`.\n\n### 7. Compose the page from the collection\n\n**File**: `src/components/MomentumFundPage.astro`\n\nTakes a new `sections` prop (already ordered and draft-filtered) instead of hardcoding the\nmiddle of the page: render `MomentumHero`, then map the sections to their renderer by `kind`\n(`narrative` → `MomentumNarrative` with the entry's rendered body, `accomplishments` →\n`MomentumAccomplishments`, `pillars` → `GiftPillars`, `testimonials` →\n`MomentumTestimonials`, `stats` → `MomentumStats`), then `MomentumClose`. Props-only, so the\nisolated-component scenarios keep working.\n\n**File**: `src/pages/donate.astro`\n\nLoad `momentumSections` with `getCollection` + `publishedEntries(…, INCLUDE_DRAFTS)` +\n`orderedSections`, `render()` each narrative body (the `chapters/[slug].astro` pattern), and\npass them down. `console.warn` any unknown kinds.\n\n### 8. Scenarios\n\n**File**: `src/pages/isolated-components/[name].astro`\n\nRetire the `MomentumStory` / `MomentumWhy` states, add `MomentumNarrative` states\n(image-left, image-right, text-only, no-image fallback), and update the `MomentumFundPage`\nstates to pass a seeded `sections` array — including a \"sections reordered by an editor\"\nstate, which is the whole point of the change and the thing Nicole will want to see.\nExisting scenario files to refresh: `momentumstory-full-narrative`, `momentumwhy-two-blocks`,\n`momentumstats-campaign-figures`, `momentum-fund-public-visitor`,\n`momentum-fund-arriving-from-the-email`.\n\n### 9. Answer the two questions in writing\n\n**New file**: `docs/editing-the-site.md`\n\nPlain-language, written for Nicole, no repo knowledge assumed: which parts of `/donate` are\neditable and where (Momentum Fund sections → the new collection in /admin), how to move a\nsection up or down (the Order field, lower = higher on the page), how to hide one without\ndeleting it (Draft), which parts are still code-only (hero, the closing CTA, the pillar/stat\ncard data, the GA id) and who to ask for those. Link it from `docs/nicole-review.md` and\nreference it from `CMS_SETUP.md`.\n\n## Reused existing code\n\n- `sortByOrder` from `src/lib/order.ts` (glossary entry: `sortByOrder`) — the site-wide\n  order-then-fallback rule, reused verbatim for section order.\n- `publishedEntries` from `src/lib/drafts.ts` and `INCLUDE_DRAFTS` from\n  `src/lib/draftVisibility.ts` (glossary entries: `publishedEntries`, `INCLUDE_DRAFTS`) — the\n  Draft toggle becomes \"hide this section\" for free.\n- `altFor` / `readMediaManifest` from `src/lib/media.ts` (glossary entries: `altFor`,\n  `readMediaManifest`) — library alt text on the new section images.\n- `withBase` from `src/lib/url.ts` (glossary entry: `withBase`) — the deploy currently serves\n  under the `/harvardintech` base path, so every image src must go through it.\n- `render()` + `getStaticPaths` collection pattern from `src/pages/chapters/[slug].astro`\n  (glossary entry: `ChapterRoute`), including its advisory `console.warn` precedent.\n- `Analytics.astro` + `settings.googleAnalyticsId` (glossary entry: `site`) — already built;\n  this plan only supplies the id.\n- `groupSponsorsByLevel` in `src/lib/sponsors.ts` (glossary entry: `groupSponsorsByLevel`) —\n  the model for a pure, unknown-value-tolerant reshaping helper.\n\n**Existing-implementation survey.** Grepped for an existing section-order or page-copy\nediting mechanism before proposing one: there is **none**. No `*Page.json` singleton carries a\n`sections`/`sectionOrder` key; `MomentumFundPage.astro`, `VolunteerPage.astro`, and\n`SponsorPage.astro` all hardcode composition order. `@codeyam/cms@0.2.2` exposes exactly two\neditable singletons (`SETTINGS_PATH`, `NAV_PATH` in `src/lib/siteConfig.ts`) plus the custom-\ncollection registry (`COLLECTIONS_PATH` in `collectionRegistry.ts`); `CmsConfig`\n(`cmsConfig.ts`) has no field for registering another singleton, so a collection is the only\nin-repo path to CMS editability. GA is the opposite case: `Analytics.astro`,\n`settings.googleAnalyticsId`, and the `HeadExtras` include already exist — nothing to build.\n\n## Scenarios to Demonstrate\n\n- Momentum Fund page in the new default order: hero → Why (text left, image right) →\n  accomplishments → Story (image left, text right) → pillars → testimonials → close.\n- The same page with an editor's reorder applied (Story moved above Why) — proving Order works.\n- A section hidden with the Draft toggle (testimonials off), page still reads as finished.\n- The stats band re-added as a `kind: stats` entry, back in first position.\n- A narrative section with no image → full-width prose fallback.\n- A section with an unrecognized `kind` typed in the CMS → skipped, page renders, warning logged.\n- Mobile (< 900px): both narrative layouts stack image-first.\n- A built page's `<head>` carrying the GA4 gtag scripts for `G-GCBX577FFD`.",
+  "description": "Nicole's review of the Momentum Fund page (/donate) asked for four changes and two questions. The changes: turn on Google Analytics with her GA4 id, drop the stats band under the hero, re-lay 'And Every Number Represents a Story' as image-left/text-right, and re-lay 'Why Support Harvard in Tech?' as text-left/image-right and move it directly beneath the hero. The questions — 'how do I edit this page?' and 'can I move sections up or down?' — both had the honest answer 'no': the copy lived in donatePage.json, which the CMS does not expose, and the section order was hardcoded.\n\nSo the middle of the page became content. A new momentumSections collection gives each section between the hero and the closing ask its own entry with kind, order, draft, layout, and image. 'Move a section up' is now an Order field; 'remove a section' is the Draft toggle an editor already knows. Narrative sections carry their own heading, photo, layout, and markdown prose; accomplishments, pillars, testimonials, and stats stay bespoke components that the collection merely positions, so a good design was not traded for editability nobody asked for. MomentumStory and MomentumWhy — which differed only in the styling of the same heading-over-prose shape — collapsed into one MomentumNarrative component driven by a layout prop, which is exactly the control the review asked for on both sections. The stats band is simply not seeded; its renderer stays, so it can be re-added from the CMS with no code change.\n\nBecause the CMS field types stop at text/number/textarea/date/image/boolean/list, kind and layout are free text with hints rather than enums, and the code validates instead: an unknown kind is dropped with a build warning, an unknown or blank layout falls back to text-only, and a layout chosen before a photo exists renders full-width prose rather than a blank column. Those rules live in src/lib/momentumSections.ts — pure, framework-free, and covered by 19 tests including the tint alternation, which was extracted out of a counter that had been mutated inside the page's render map. docs/editing-the-site.md answers both of Nicole's questions in plain language and names what is still code-only: the hero, the closing CTA, the card figures, and the GA id.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ne--momentum-fund-page-analytics-layout-and-editable-sections.md\t.codeyam/plans/completed/ne--momentum-fund-page-analytics-layout-and-editable-sections.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-arriving-from-the-email.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumaccomplishments-campaign-track-record.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumstats-campaign-figures.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumstory-full-narrative.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumwhy-two-blocks.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumaccomplishments-campaign-track-record--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumstats-campaign-figures--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumstory-full-narrative--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumwhy-two-blocks--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-communities-derived--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/session-narrative.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/MomentumStory.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/donate/MomentumWhy.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/donatePage.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/settings.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/donate.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumStory.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumWhy.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-a-mistyped-section-type-and-a-missing-photo.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-every-section-hidden.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-sections-reordered-by-an-editor.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumnarrative-image-layout-without-an-image.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumnarrative-image-left.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumnarrative-image-right.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumnarrative-text-only.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-sections-reordered-by-an-editor--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumnarrative-image-layout-without-an-image--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumnarrative-image-left--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumnarrative-image-right--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumnarrative-text-only--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": "docs/editing-the-site.md",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumNarrative.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/momentumSections/accomplishments.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/momentumSections/pillars.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/momentumSections/story.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/momentumSections/testimonials.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/momentumSections/why.md",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/momentumSections.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/momentumSections.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/momentumSectionsContent.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Sections Reordered By An Editor",
+      "screenshotPath": "momentum-fund-sections-reordered-by-an-editor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "MomentumNarrative - Image Left",
+      "screenshotPath": "momentumnarrative-image-left--desktop.png"
+    },
+    {
+      "name": "MomentumNarrative - Image Right",
+      "screenshotPath": "momentumnarrative-image-right--desktop.png"
+    },
+    {
+      "name": "MomentumNarrative - Text Only",
+      "screenshotPath": "momentumnarrative-text-only--desktop.png"
+    },
+    {
+      "name": "MomentumNarrative - Image Layout Without An Image",
+      "screenshotPath": "momentumnarrative-image-layout-without-an-image--desktop.png"
+    },
+    {
+      "name": "MomentumStats - Campaign Figures",
+      "screenshotPath": "momentumstats-campaign-figures--desktop.png"
+    },
+    {
+      "name": "MomentumAccomplishments - Campaign Track Record",
+      "screenshotPath": "momentumaccomplishments-campaign-track-record--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 30,
+    "passed": 30,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 30,
+        "passed": 30
+      }
+    ]
+  }
+}

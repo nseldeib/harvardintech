@@ -190,6 +190,36 @@
         "reason": "Presentational page; the only actions are external links (Subscribe, WhatsApp, Volunteer, mailto)"
       }
     },
+    "MomentumFundPage": {
+      "empty": {
+        "status": "added"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The middle of the page is a plain vertical stack of full-width bands, so one section renders identically to the first band of the typical page — same width, same tint, same spacing. There is no empty-to-many boundary behaviour here the way a grid or a separated list would have, so a one-section capture would be a crop of the typical one rather than a distinct state."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "Sections are hand-curated by an editor, not fed from an unbounded feed, and the stack neither truncates nor scrolls internally — more sections simply make a longer page with no overflow treatment to demonstrate. The tint alternation that does vary with count is unit-tested in tintedFlags."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered at build time with no client-side fetching, so the page has no pending state to render — it arrives complete or not at all."
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "The only action on this page is the giving CTA, which hands off to an external mail client (donateUrl is still empty) rather than changing any in-app state, so there is no post-interaction frame to capture. Reordering, the feature's real interaction, happens in the CMS at /admin, not on this page."
+      }
+    },
     "src/pages/chapters/[slug].astro": {
       "empty": {
         "status": "covered"

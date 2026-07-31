@@ -1288,6 +1288,60 @@
       "runner": "tests"
     },
     {
+      "description": "`kind` is free text because the CMS has no select control, so a typo is a normal editing mistake. It costs that one section, never the page.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "orderedSections › drops sections whose kind matches no renderer",
+      "line": 43,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every declared kind is renderable — this fails if SECTION_KINDS and the filter ever drift apart.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "orderedSections › keeps every kind it declares support for",
+      "line": 54,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Non-mutating, like `sortByOrder` beneath it.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "orderedSections › returns a new array and leaves the source untouched",
+      "line": 60,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The empty collection renders an empty middle, not a crash — the state the page is in before any section has been seeded.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "orderedSections › returns an empty array unchanged",
+      "line": 72,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A section an editor never numbered sorts LAST rather than jumping above the numbered ones — adding a section must not silently reshuffle the page.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "orderedSections › sorts a section with no order after every ordered section",
+      "line": 28,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The headline guarantee: the Order field is what moves a section up or down, which is the whole answer to \"can I reorder this page?\".",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "orderedSections › sorts sections by their order field",
+      "line": 13,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
       "description": "Both unfavorable → off.",
       "file": "src/lib/parallax.test.ts",
       "format": "vitest",
@@ -1546,6 +1600,42 @@
       "key": "resolveIncludeDrafts › shows drafts on a production build that opts in",
       "line": 18,
       "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A blank or absent field is the CMS's normal \"not filled in\" state.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "resolveLayout › falls back to text-only for an absent or blank value",
+      "line": 162,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A typo degrades to readable full-width prose, never an empty column.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "resolveLayout › falls back to text-only for an unrecognized value",
+      "line": 169,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Editors type into a free-text box, so casing and stray spaces are expected.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "resolveLayout › normalizes casing and surrounding whitespace",
+      "line": 174,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two layouts Nicole asked for, passed through unchanged.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "resolveLayout › passes through the image layouts",
+      "line": 155,
+      "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
     {
@@ -2179,6 +2269,60 @@
       "runner": "tests"
     },
     {
+      "description": "Consecutive prose sections need separating, so narratives alternate tinted / untinted down the page.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "tintedFlags › alternates the tint across narrative sections",
+      "line": 100,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The counter advances only on narratives. A band sitting between two of them must not flip the rhythm — otherwise an editor inserting the stats band would invert the tint on every section below it.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "tintedFlags › does not let an interleaved band shift the narrative alternation",
+      "line": 123,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The bespoke bands carry their own background, so they are never tinted by this rule.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "tintedFlags › never tints a non-narrative section",
+      "line": 111,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The empty collection renders an empty middle, not a crash — the state the page is in before any section has been seeded.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "tintedFlags › returns an empty array unchanged",
+      "line": 72,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "One flag per section, so a caller can index straight into the result.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "tintedFlags › returns one flag per section",
+      "line": 142,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Order-independent and non-mutating: calling twice gives the same answer, which the previous counter-mutating closure could not promise.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "tintedFlags › returns the same flags when called repeatedly on the same input",
+      "line": 136,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
       "description": "An ISO date string is parsed into a Date.",
       "file": "src/lib/events.test.ts",
       "format": "vitest",
@@ -2230,6 +2374,33 @@
       "key": "unknownFields › treats every field as unknown when the schema has no keys",
       "line": 204,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "One warning per typo, however many entries repeat it.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "unknownSectionKinds › de-duplicates a repeated unknown kind",
+      "line": 86,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The advisory the route warns with, so a dropped section is visible in the build log rather than silently missing from the page.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "unknownSectionKinds › reports kinds that match no renderer",
+      "line": 80,
+      "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A correct page warns about nothing — no noise in the normal build.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "unknownSectionKinds › reports nothing when every kind is known",
+      "line": 92,
+      "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
     {

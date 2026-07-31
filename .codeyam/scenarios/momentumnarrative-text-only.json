@@ -1,0 +1,13 @@
+{
+  "name": "MomentumNarrative - Text Only",
+  "id": "0c247312-982e-443e-89af-8e1511c77a1e",
+  "url": "/isolated-components/MomentumNarrative-TextOnly",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNarrative",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNarrative.astro",
+  "description": "The full-width prose layout an editor gets by typing text-only, and the fallback any unrecognized Layout value resolves to. Narrower measure than the two-column layouts, because prose running the full 1120px would be hard to read."
+}

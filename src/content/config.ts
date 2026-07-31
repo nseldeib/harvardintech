@@ -221,6 +221,35 @@ const testimonials = defineCollection({
   }),
 });
 
+// The reorderable middle of the Momentum Fund campaign page (/donate). Each
+// entry is one section; `order` is how an editor moves a section up or down and
+// `draft` is how they hide one without deleting it. The hero and the closing CTA
+// are deliberately NOT sections — a page whose hero could be dragged to the
+// bottom is a page an editor can break, and the campaign's ask-at-the-end shape
+// is a design decision rather than an editorial one.
+//
+// `kind` selects the renderer. `narrative` sections carry their own title, body,
+// and photo; `accomplishments`, `pillars`, `testimonials`, and `stats` are SLOTS
+// whose card data still lives in `donatePage.json` — modelling those as markdown
+// would trade a tailored design for editability nobody asked for.
+//
+// `kind` and `layout` are free text, not enums, because the CMS field types stop
+// at `text | number | textarea | date | image | boolean | list` — there is no
+// select control to back an enum, and a schema enum would turn a typo into a
+// build failure. `src/lib/momentumSections.ts` validates instead: an unknown
+// `kind` is dropped with a warning, an unknown `layout` falls back to text-only.
+const momentumSections = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: `${root}/momentumSections` }),
+  schema: z.object({
+    kind: z.string(),
+    title: z.string().optional(),
+    layout: z.string().optional(),
+    image: z.string().optional(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
 export const collections = {
   blog,
   pages,
@@ -231,4 +260,5 @@ export const collections = {
   projects,
   sponsors,
   testimonials,
+  momentumSections,
 };

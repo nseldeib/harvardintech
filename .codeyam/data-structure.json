@@ -828,5 +828,54 @@
         "required": false
       }
     ]
+  },
+  {
+    "name": "MomentumSection",
+    "description": "One reorderable section in the middle of the /donate Momentum Fund campaign page, stored as a markdown file in the `momentumSections` content collection and editable from the CMS. `kind` selects the renderer: `narrative` uses the entry's own title/body/image, while `accomplishments`, `pillars`, `testimonials`, and `stats` are slots whose card data still comes from `donatePage.json`. `order` is how an editor moves a section up or down (lower appears higher); `draft` hides one without deleting it. The hero and closing CTA are a fixed frame and are not sections.",
+    "category": "datastore",
+    "order": 16,
+    "fields": [
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "kind",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "layout",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "image",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "draft",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "body",
+        "type": "string",
+        "required": false
+      }
+    ]
   }
 ]

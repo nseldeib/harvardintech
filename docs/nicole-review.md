@@ -89,6 +89,16 @@ one person's access without disturbing anyone else's.
 
 **Revoke the token** at Settings → Developer settings → Fine-grained tokens.
 
+## What she can edit herself
+
+[editing-the-site.md](./editing-the-site.md) is written for her, not for us — send
+it alongside the links. It answers the two questions from her review directly:
+how to edit the Momentum Fund page (its middle is now a **Momentum Fund sections**
+collection in the CMS) and how to move sections up or down (the **Order** field;
+lower appears higher). It also names what is still code-only — the hero, the
+closing CTA, the card figures, and the GA id — so those come to us rather than
+sending her hunting through /admin for a screen that does not exist.
+
 ## What happens when she edits
 
 Her edits commit to the `main` branch of `nseldeib/harvardintech` (configured in
