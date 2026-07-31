@@ -408,23 +408,8 @@
       "sizeBytes": 126240,
       "originalSizeBytes": 2091397,
       "width": 1200,
-      "height": 1200
-    },
-    {
-      "filename": "volunteers-2.webp",
-      "url": "/images/volunteers-2.webp",
-      "sizeBytes": 126240,
-      "originalSizeBytes": 2091397,
-      "width": 1200,
-      "height": 1200
-    },
-    {
-      "filename": "gallery/volunteers.webp",
-      "url": "/images/gallery/volunteers.webp",
-      "sizeBytes": 126240,
-      "originalSizeBytes": 2091397,
-      "width": 1200,
-      "height": 1200
+      "height": 1200,
+      "alt": "Four smiling volunteers in red VOLUNTEER sweatshirts standing arm in arm outdoors, two holding rubbish bags after a community clean-up"
     }
   ]
 }
