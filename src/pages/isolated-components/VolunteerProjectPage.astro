@@ -1,0 +1,55 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerProjectPage.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerProjectPage — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/VolunteerProjectPage.
+//
+// The rich state: a project with everything filled in, including the markdown
+// body that no page rendered before this feature existed. Full-bleed width
+// because the page is a route body, not a bounded card — it sits directly inside
+// BaseLayout's <main> at /volunteer/projects/<slug>.
+//
+// Nicole's real state (no photo, no apply link → page-level CTA fallback) is the
+// application scenario on the route itself; the fallback branch in isolation is
+// covered by VolunteerProjectCta.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerProjectPage</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="codeyam-capture">
+      <Component
+        title="Chapter launch team — Toronto"
+        blurb="Help stand up our next city chapter: find a venue, rally the first 30 alumni, and run the launch mixer."
+        image="/images/volunteers.webp"
+        commitment="~3 hrs / week"
+        applyUrl="https://hi.switchy.io/wEYK"
+        ctaLabel="Volunteer with us"
+        ctaUrl="https://hi.switchy.io/wEYK"
+      >
+        <p>
+          Toronto has more than 400 Harvard alumni working in technology and no chapter to
+          bring them together. This project takes the city from a mailing list to a first
+          real event.
+        </p>
+        <h2>What you'll do</h2>
+        <ul>
+          <li>Scout and book a venue for a 30–50 person evening mixer.</li>
+          <li>Draft the invitation and reach Toronto-area alumni through the newsletter.</li>
+          <li>Recruit two or three co-organizers to keep the chapter running after launch.</li>
+          <li>Run the launch mixer, including a short welcome and a round of introductions.</li>
+        </ul>
+        <h2>What we're looking for</h2>
+        <p>
+          You don't need event-management experience — you need to be organized, comfortable
+          emailing strangers, and based in or near Toronto.
+        </p>
+      </Component>
+    </div>
+  </body>
+</html>

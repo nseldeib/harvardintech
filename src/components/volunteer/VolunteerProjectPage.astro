@@ -1,0 +1,66 @@
+---
+// One volunteer project's own page: the photo at full size, the framing details
+// an organizer filled in, the long description that until now lived only in the
+// markdown file and was rendered nowhere, and the way to sign up.
+//
+// Composition only — every section is its own component, matching the split
+// ChapterPage.astro uses.
+//
+// Props-only (the body arrives in the default slot) so it renders both from the
+// /volunteer/projects/<slug> route and from isolated-component scenarios.
+import VolunteerProjectPhoto from './VolunteerProjectPhoto.astro';
+import VolunteerProjectHeader from './VolunteerProjectHeader.astro';
+import VolunteerProjectBody from './VolunteerProjectBody.astro';
+import VolunteerProjectCta from './VolunteerProjectCta.astro';
+
+interface Props {
+  title: string;
+  blurb?: string;
+  image?: string;
+  commitment?: string;
+  applyUrl?: string;
+  /** Page-level volunteer CTA, used when the project has no `applyUrl` of its
+   *  own — see `projectCta` in `src/lib/projects.ts` for the rule. */
+  ctaLabel?: string;
+  ctaUrl?: string;
+  backHref?: string;
+  backLabel?: string;
+}
+const {
+  title,
+  blurb,
+  image,
+  commitment,
+  applyUrl,
+  ctaLabel,
+  ctaUrl,
+  backHref,
+  backLabel,
+} = Astro.props as Props;
+---
+
+<article class="proj-page">
+  <VolunteerProjectPhoto image={image} />
+
+  <div class="s-narrow">
+    <VolunteerProjectHeader
+      title={title}
+      blurb={blurb}
+      commitment={commitment}
+      backHref={backHref}
+      backLabel={backLabel}
+    />
+
+    <VolunteerProjectBody>
+      <slot />
+    </VolunteerProjectBody>
+
+    <VolunteerProjectCta applyUrl={applyUrl} ctaLabel={ctaLabel} ctaUrl={ctaUrl} />
+  </div>
+</article>
+
+<style>
+  .proj-page {
+    padding: 0 0 72px;
+  }
+</style>

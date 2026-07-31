@@ -1,0 +1,53 @@
+---
+// The links at the foot of a project card: through to the full description, and
+// out to the project's own sign-up form.
+//
+// Stacked rather than side by side — two uppercase mono links on one row wrap
+// raggedly at the narrow end of the grid. Renders an empty flex container when
+// a card has neither link, and `gap` means that costs no space.
+import { withBase } from '../../lib/url';
+
+interface Props {
+  /** The card's detail-page link, already base-prefixed. Absent → not shown. */
+  href?: string;
+  applyUrl?: string;
+}
+const { href, applyUrl } = Astro.props as Props;
+---
+
+<div class="foot">
+  {
+    href ? (
+      <a class="go" href={href}>
+        Read the full description →
+      </a>
+    ) : null
+  }
+  {
+    applyUrl ? (
+      <a class="go" href={withBase(applyUrl)} rel="noopener">
+        Get involved →
+      </a>
+    ) : null
+  }
+</div>
+
+<style>
+  .foot {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .go {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    text-decoration: none;
+  }
+  .go:hover {
+    text-decoration: underline;
+  }
+</style>

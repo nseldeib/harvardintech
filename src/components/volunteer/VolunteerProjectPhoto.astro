@@ -1,0 +1,47 @@
+---
+// The photo at the top of a volunteer project's detail page.
+//
+// Shown UNCROPPED, which is the whole reason the detail page exists: the grid
+// thumbnail crops to a fixed height so a mixed grid stays aligned, so this is
+// the only place the image an editor actually picked is seen in full. Height is
+// bounded rather than cropped — a square 1200x1200 upload (the real case) would
+// otherwise push the description off the first screen.
+//
+// Renders nothing without an image, so a project with no photo gets no empty
+// band. Alt text comes from the media library via `altFor`, falling back to ''
+// (decorative) when nobody has described the image yet.
+import { withBase } from '../../lib/url';
+import { altFor } from '../../lib/media';
+
+interface Props {
+  image?: string;
+}
+const { image } = Astro.props as Props;
+---
+
+{
+  image ? (
+    <div class="photo">
+      <img src={withBase(image)} alt={altFor(image, '')} />
+    </div>
+  ) : null
+}
+
+<style>
+  .photo {
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--line);
+  }
+  .photo img {
+    display: block;
+    width: 100%;
+    max-height: 520px;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+  @media (max-width: 720px) {
+    .photo img {
+      max-height: 360px;
+    }
+  }
+</style>

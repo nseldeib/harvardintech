@@ -1,0 +1,115 @@
+diff --git a/node_modules/@codeyam/cms/src/lib/githubCommit.ts b/node_modules/@codeyam/cms/src/lib/githubCommit.ts
+index d1349bd..1d8b2e9 100644
+--- a/node_modules/@codeyam/cms/src/lib/githubCommit.ts
++++ b/node_modules/@codeyam/cms/src/lib/githubCommit.ts
+@@ -15,6 +15,7 @@
+ 
+ import { isBinary, isDeletion, type ChangeEncoding, type PendingChange } from './pendingChanges';
+ import { contentsEndpoint, decodeContentPayload } from './githubHistory';
++import { unbackedManifestRecords } from './mediaLibrary';
+ import { detectDrift, type DriftedChange, type RemoteContents } from './staleCheck';
+ 
+ export interface RepoTarget {
+@@ -178,6 +179,30 @@ export async function fetchCurrentContents(
+  * longer matches the branch. Typed so the review UI can render the per-entry
+  * detail and offer the safe outs, rather than showing a raw message.
+  */
++/**
++ * Thrown when the staging set would publish a media-manifest record with no image
++ * bytes behind it. Carries the offending filenames so the UI can name them and
++ * the editor knows which upload to redo, rather than showing a generic failure.
++ */
++export class UnbackedMediaError extends Error {
++  readonly filenames: string[];
++  constructor(filenames: string[]) {
++    super(
++      `${filenames.length} uploaded image${filenames.length === 1 ? '' : 's'} ` +
++        `lost ${filenames.length === 1 ? 'its' : 'their'} file data before publishing: ` +
++        `${filenames.join(', ')}. Re-upload ${filenames.length === 1 ? 'it' : 'them'} ` +
++        `and publish again \u2014 committing now would put a broken image on the site.`,
++    );
++    this.name = 'UnbackedMediaError';
++    this.filenames = filenames;
++  }
++}
++
++/** Narrow an unknown thrown value to {@link UnbackedMediaError}. */
++export function isUnbackedMediaError(e: unknown): e is UnbackedMediaError {
++  return e instanceof UnbackedMediaError;
++}
++
+ export class StaleBaselineError extends Error {
+   readonly drifted: DriftedChange[];
+ 
+@@ -249,6 +274,17 @@ export async function commitAll(
+     if (drifted.length > 0) throw new StaleBaselineError(drifted);
+   }
+ 
++  // 0b. Refuse to publish a manifest record whose image bytes are not in this
++  //     commit. An upload stages the blob and the manifest edit as two separate
++  //     changes; if the blob is lost, the manifest edit alone would land a record
++  //     pointing at a file that does not exist and the site would render a broken
++  //     image the editor cannot fix from the UI. Fails BEFORE any blob is created,
++  //     so a refusal mutates nothing — same policy as the drift check above.
++  if (options.changes && options.changes.length > 0) {
++    const unbacked = unbackedManifestRecords(options.changes);
++    if (unbacked.length > 0) throw new UnbackedMediaError(unbacked);
++  }
++
+   // 1. Where the branch currently points.
+   const ref = await gh(fetchFn, token, target, 'GET', `git/ref/heads/${target.branch}`);
+   const baseCommitSha: string = ref.object.sha;
+diff --git a/node_modules/@codeyam/cms/src/lib/mediaLibrary.ts b/node_modules/@codeyam/cms/src/lib/mediaLibrary.ts
+index c2d7fc6..7b50b95 100644
+--- a/node_modules/@codeyam/cms/src/lib/mediaLibrary.ts
++++ b/node_modules/@codeyam/cms/src/lib/mediaLibrary.ts
+@@ -507,3 +507,49 @@ export function buildUploadedAsset(
+     ...(meta.uploadedAt ? { uploadedAt: meta.uploadedAt } : {}),
+   };
+ }
++
++/**
++ * The manifest records a commit would ADD without carrying their image bytes.
++ *
++ * An upload stages two independent changes — the blob (`public/images/<name>`)
++ * and the manifest edit (`src/data/media.json`) — and nothing has ever bound
++ * them together. If the blob change is lost between staging and publishing, the
++ * manifest edit sails through on its own and the commit lands a record naming a
++ * file that does not exist, which the site then renders as a broken `<img>`.
++ * That is exactly what happened in `dd73c8c`: three records, one blob.
++ *
++ * The staged manifest change carries its own baseline — `original` is the
++ * committed `media.json` — so the set of ADDED records is derivable from the
++ * staging set alone, with no network call and no disk access. A record that was
++ * already committed is somebody else's problem (it has a file, or it is a
++ * pre-existing ghost); only records this commit introduces must prove they
++ * brought bytes.
++ *
++ * Pure and transport-free so it unit-tests directly, and returns the offending
++ * filenames rather than a boolean so the error can name them.
++ */
++export function unbackedManifestRecords(changes: readonly PendingChange[]): string[] {
++  const manifestChange = changes.find((c) => c.path === MEDIA_MANIFEST_PATH);
++  if (!manifestChange) return [];
++
++  const parseAssets = (raw: string): MediaAsset[] => {
++    try {
++      const parsed = JSON.parse(raw);
++      return Array.isArray(parsed?.assets) ? (parsed.assets as MediaAsset[]) : [];
++    } catch {
++      // An unparseable side can't be compared. Staging writes both sides via
++      // `serializeManifest`, so this is a corrupt-storage case, not a normal one.
++      return [];
++    }
++  };
++
++  const before = new Set(parseAssets(manifestChange.original).map((a) => a.filename));
++  const stagedBytes = new Set(
++    changes.filter((c) => c.encoding === 'base64').map((c) => c.path),
++  );
++
++  return parseAssets(manifestChange.updated)
++    .map((a) => a.filename)
++    .filter((filename) => !before.has(filename))
++    .filter((filename) => !stagedBytes.has(assetRepoPath(filename)));
++}

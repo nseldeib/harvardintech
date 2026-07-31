@@ -1,0 +1,53 @@
+---
+// A project card's thumbnail: the photo, a link-wrapped photo, or the gradient
+// placeholder that stands in when a project has none.
+//
+// Fixed height and cropped on purpose — a grid mixing cards with and without
+// photos has to stay aligned, so all three branches occupy the same space. The
+// uncropped photo lives on the detail page (VolunteerProjectPhoto).
+//
+// When the card links through, the thumbnail is wrapped but marked
+// `aria-hidden` + `tabindex="-1"`: the title beside it already links to the same
+// page, and a second identical link would give keyboard and screen-reader users
+// a duplicate stop for no gain.
+import { withBase } from '../../lib/url';
+import { altFor } from '../../lib/media';
+
+interface Props {
+  image?: string;
+  /** Where the card links, already base-prefixed. Absent → no link. */
+  href?: string;
+}
+const { image, href } = Astro.props as Props;
+---
+
+{
+  image ? (
+    href ? (
+      <a class="thumb" href={href} tabindex="-1" aria-hidden="true">
+        <img class="img" src={withBase(image)} alt={altFor(image, '')} loading="lazy" />
+      </a>
+    ) : (
+      <img class="img" src={withBase(image)} alt={altFor(image, '')} loading="lazy" />
+    )
+  ) : (
+    <div class="img img--none" aria-hidden="true" />
+  )
+}
+
+<style>
+  .img {
+    width: 100%;
+    height: 168px;
+    object-fit: cover;
+    display: block;
+    background: var(--paper-2);
+  }
+  .img--none {
+    background: linear-gradient(135deg, var(--ink) 0%, var(--crimson-deep) 100%);
+    opacity: 0.15;
+  }
+  .thumb {
+    display: block;
+  }
+</style>

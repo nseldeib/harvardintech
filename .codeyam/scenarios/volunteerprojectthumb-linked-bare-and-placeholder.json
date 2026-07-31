@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjectThumb - Linked Bare And Placeholder",
+  "id": "961e8f16-ee46-4c52-93da-aee397d379c4",
+  "url": "/isolated-components/VolunteerProjectThumb",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectThumb",
+  "scenarioType": "component",
+  "description": "All three thumbnail branches at real card width: a photo linked to its detail page, a photo with no link, and the gradient placeholder for a project with no photo yet. Shown side by side because the property that matters is that all three are the SAME HEIGHT \u2014 that is what keeps a grid mixing photo and no-photo projects aligned, and it is invisible in any single-branch shot.",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectThumb.astro"
+}

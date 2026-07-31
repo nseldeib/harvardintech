@@ -1,0 +1,351 @@
+{
+  "timestamp": "2026-07-31T23:33:41Z",
+  "title": "Volunteer project detail pages, and an upload that can no longer lose its photo",
+  "type": "feature",
+  "userRequest": "## Summary\n\nNicole reported two things about the volunteer project she created in the CMS: \"uploaded\nphoto not visible\" and \"thumbnail appears but does not link to full description\". Both\nreproduce against the entry she actually committed. Her entry\n(`src/content/projects/social-media-marketing-specialist-events.md` on `main`) carries a long\nmarkdown body — the full description — and **nothing in this repo renders a project's body\nanywhere**: `VolunteerProjectCard.astro` shows title, commitment, blurb, and an optional\napply link, and there is no `/volunteer/projects/<slug>` route to link to. Separately her\nentry has **no `image` frontmatter at all**, so the card draws its gradient placeholder, and\nthe media manifest is out of sync with the repo: `src/data/media.json` on `main` records\nthree uploads (`volunteers.webp`, `volunteers-2.webp`, `gallery/volunteers.webp`) but only\n`public/images/volunteers.webp` was ever committed — picking either ghost record in the CMS\nyields a live `<img>` pointing at a file that does not exist. This plan adds a real project\ndetail page, links the card to it, repairs the manifest, and adds a check so a manifest\nrecord without a file can never silently become a broken image again.\n\n## Key Decisions\n\n- **A detail page, not an in-place expander.** `/volunteer/projects/<slug>` is a static route\n  on a static site, is linkable and shareable (an organizer can send one project to one\n  person), and needs no client JS — where an accordion/modal would add hydration to a page\n  that currently ships none.\n- **Draft projects get a page only where drafts are visible.** `getStaticPaths` filters with\n  `publishedEntries(…, INCLUDE_DRAFTS)`, exactly as `chapters/[slug].astro` does. Nicole's\n  project is `draft: true` today, so it must appear on the review/preview build and be absent\n  from the public one — otherwise a project hidden from the grid is still fetchable at its URL.\n- **The manifest is repaired in data, and guarded in code.** Deleting the two ghost records is\n  the immediate fix; a pure `missingMediaFiles` helper plus a `npm run check:media` script is\n  what stops the next one. The underlying cause is upstream — `@codeyam/cms` published the\n  manifest edit without the image blobs — so this repo defends itself rather than pretending\n  to fix the package.\n- **The card keeps its geometry.** Thumbnails stay 168px and cropped so a mixed grid stays\n  aligned; the detail page is where the photo is shown at full size, uncropped. Nicole's\n  \"photo not visible\" is answered by *there being a place the photo is actually visible*, not\n  by making cards ragged.\n- **Whole card is not one big link.** The title and thumbnail link to the detail page and the\n  apply link stays its own control — nesting an `<a>` inside a card-wide `<a>` is invalid and\n  breaks keyboard users.\n\n## Implementation\n\n### 1. Project detail route\n\n**New file**: `src/pages/volunteer/projects/[slug].astro`\n\nMirrors `src/pages/chapters/[slug].astro`: `getStaticPaths` over the `projects` collection\nfiltered by `publishedEntries(…, INCLUDE_DRAFTS)`, `render(entry)` for the body, and\n`BaseLayout` with a per-project `title`/`description` (the blurb, falling back to the site\ndefault). Renders through a new composition component so it is capturable in isolation.\n\n### 2. Detail page body\n\n**New file**: `src/components/volunteer/VolunteerProjectPage.astro`\n\nProps-only (`title`, `blurb`, `image`, `commitment`, `applyUrl`, plus the body in a slot) —\nthe same split `VolunteerPage.astro` and `ChapterPage.astro` use, so scenarios can render it\nwithout the collection. Layout: full-width photo (uncropped, `max-height` bounded so a square\n1200×1200 upload like `volunteers.webp` doesn't push the copy off-screen), title, commitment\nbadge, blurb as the lede, then the markdown body in a `.narrow` prose column, then the apply\nCTA — falling back to the page-level volunteer CTA (`volunteerPage.ctaLabel` / `ctaUrl`) when\nthe project has no `applyUrl`, so a project posted before its form exists still has a way in.\nA \"← All volunteer projects\" link back to `/volunteer#projects`. Image alt via `altFor`.\n\n### 3. Link the card to it\n\n**File**: `src/components/volunteer/VolunteerProjectCard.astro`\n\nAccept `slug`; wrap the thumbnail and the `<h3>` title in a link to `projectPath(slug)` (via\n`withBase`), and add a \"Read the full description →\" link in the card footer beside the\nexisting \"Get involved →\". When no `slug` is supplied (isolated-component states that pass\nnone) the card renders exactly as it does today — no link, no layout change. Also pass the\nimage's library alt through `altFor` instead of the current hardcoded `alt=\"\"`.\n\n**File**: `src/components/volunteer/VolunteerProjects.astro`\n\nPass `slug={p.slug}` down — the route already puts it on each project object.\n\n### 4. Path helper\n\n**File**: `src/lib/projects.ts`\n\nAdd `projectPath(slug)` → `/volunteer/projects/<slug>`, pure and callers wrap it in\n`withBase`. One place owns the URL shape, so the route and the card cannot drift.\n\n**File**: `src/lib/projects.test.ts` — a test for the path shape, and one asserting\n`openProjects` still orders/filters unchanged.\n\n### 5. Media-manifest integrity\n\n**File**: `src/lib/media.ts`\n\nAdd `missingMediaFiles(manifest, exists)` — the manifest records whose file is absent, with\nthe existence check injected so it is pure and unit-testable. (See the reproduction test.)\n\n**New file**: `scripts/check-media-manifest.mjs` + a `check:media` script in `package.json`.\nScans `src/data/media.json` against `public/images`, reports ghost records (manifest entry,\nno file) and unrecorded files (file, no manifest entry), exits non-zero only on ghosts.\n\n**File**: `src/data/media.json` — remove the two ghost records `volunteers-2.webp` and\n`gallery/volunteers.webp`. Note: this branch is 2 commits behind `origin/main` (the two\n\"via CodeYam CMS\" commits that added Nicole's project and these records) — merge `main`\nfirst, or the edit has nothing to remove.\n\n### 6. Restore Nicole's photo\n\n**File**: `src/content/projects/social-media-marketing-specialist-events.md` (arrives with the\n`main` merge)\n\nSet `image: /images/volunteers.webp` — the one upload whose file actually exists — so her\nproject shows the photo she picked on both the card and the new detail page. Confirm the file\nis a real 1200×1200 image before trusting the record.\n\n### 7. Tell the editor what happened\n\n**File**: `docs/nicole-review.md`\n\nA short note: the full description now has its own page, the photo needed to be re-picked\n(and why), and that an upload must be published from the media library *before* it appears on\nthe site. Also file the ghost-record behaviour upstream against `@codeyam/cms` — code change\nhere, bug report there.\n\n## Reused existing code\n\n- `publishedEntries` (`src/lib/drafts.ts`) + `INCLUDE_DRAFTS` (`src/lib/draftVisibility.ts`)\n  (glossary entries: `publishedEntries`, `INCLUDE_DRAFTS`) — draft projects get a page only\n  where drafts are visible.\n- `openProjects` from `src/lib/projects.ts` (glossary entry: `openProjects`) — unchanged grid\n  selection; the new `projectPath` joins it in the same module.\n- `withBase` from `src/lib/url.ts` (glossary entry: `withBase`) — mandatory, the preview\n  deploys under the `/harvardintech` base path.\n- `altFor` / `readMediaManifest` from `src/lib/media.ts` (glossary entries: `altFor`,\n  `readMediaManifest`) — already the site's way to get library alt onto a page.\n- `getStaticPaths` + `render()` route pattern from `src/pages/chapters/[slug].astro`\n  (glossary entry: `ChapterRoute`) and the props-only composition split from\n  `src/components/VolunteerPage.astro` (glossary entry: `VolunteerPage`).\n- `src/lib/media.test.ts` (test registry: 5 registered tests) is the home for the new\n  `missingMediaFiles` test; `src/lib/projects.test.ts` (5 registered tests) for `projectPath`.\n\n**Existing-implementation survey.** No project detail route exists (`src/pages/` has no\n`volunteer/` directory), nothing calls `render()` on a `projects` entry, and no helper\ncompares `media.json` against the files on disk — `readMediaManifest` deliberately tolerates a\nmalformed/absent manifest but never validates its contents. So both additions are new, not\nduplicates.\n\n## Reproduction Test\n\nPins the ghost-record half of the bug: `src/data/media.json` can name an image whose file was\nnever committed, and nothing in the repo notices — which is how an \"uploaded\" photo becomes a\nbroken `<img>` on the site.\n\n**Target**: `src/lib/media.test.ts` — run with\n`codeyam-editor editor refresh-tests --test \"reports manifest records whose image file is missing\"`.\n\n```ts\n// A manifest record whose file was never committed is reported as missing, so a\n// published-manifest-without-bytes upload cannot silently become a broken image.\nit('reports manifest records whose image file is missing', () => {\n  const manifest = {\n    assets: [\n      { filename: 'volunteers.webp', url: '/images/volunteers.webp' },\n      { filename: 'volunteers-2.webp', url: '/images/volunteers-2.webp' },\n      { filename: 'gallery/volunteers.webp', url: '/images/gallery/volunteers.webp' },\n    ],\n  };\n  const onDisk = new Set(['volunteers.webp']);\n\n  expect(missingMediaFiles(manifest, (f) => onDisk.has(f))).toEqual([\n    'volunteers-2.webp',\n    'gallery/volunteers.webp',\n  ]);\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Expected failure: `src/lib/media.ts` exports no\n`missingMediaFiles`, so the import fails and the suite errors before the assertion runs. The\nfixture mirrors the three records actually committed on `main`, so it is real data rather\nthan an invented shape.\n\nThe other half — \"thumbnail does not link to the full description\" — has no unit-level repro:\nit is a missing route plus missing markup, provable only by rendering. Demonstrate it with the\n\"project card links to its detail page\" and \"project detail page\" scenarios below.\n\n## Scenarios to Demonstrate\n\n- `/volunteer` grid where a card links through to its detail page (Nicole's real entry).\n- The detail page for \"Social Media Marketing Specialist- Events\" — full photo, commitment,\n  blurb, and the complete bulleted description that is invisible today.\n- A project with a photo but no apply link → falls back to the page-level volunteer CTA.\n- A project with no photo → detail page and card both render without a hole.\n- A draft project: present on the preview/review build, absent from the public build.\n- Empty state unchanged — production still starts with no open projects.\n- Mobile detail page: photo, prose column, sticky-free CTA at natural width.\n- Media check run against a manifest carrying a ghost record → non-zero exit, named files.",
+  "description": "An editor reported two things about the volunteer project she created in the CMS: her uploaded photo was not visible, and the project's thumbnail did not link to the full description. Both reproduced, and both were our bugs.\n\nThe description had nowhere to go. A project's markdown body was rendered nowhere on the site — the grid card showed only title, commitment, and blurb — so the long description she wrote was committed to the repo and invisible to visitors. This adds /volunteer/projects/<slug>, a static route mirroring the chapters route, with the card's thumbnail, title, and a new 'Read the full description' footer link all leading there. The thumbnail link is aria-hidden with tabindex -1 because the title beside it already goes to the same page; the card is deliberately not one card-wide anchor, which would nest an <a> inside an <a> and collapse the card into a single unusable target for keyboard users. Drafts get a page only where drafts are visible, so a project held back from the grid is readable on the review track and absent from the public build rather than staying fetchable at its own URL. A project with no sign-up form of its own falls back to the site-wide volunteer CTA — that rule lives in projectCta in src/lib/projects.ts so it is unit-tested rather than only provable by rendering, and extracting it fixed a latent bug where a cleared applyUrl produced href=\"\" pointing at the current page.\n\nThe photo was a deeper problem. The CMS stages an upload as two independent changes — the image bytes and the media.json record — with nothing binding them together. Commit dd73c8c is the evidence: one commit, 'Update 2 content entries', carrying three new manifest records and exactly one image file. Two records named files that were never committed, which the site renders as broken images an editor cannot fix from /admin. Rather than guess which path dropped the bytes, this enforces the invariant at the commit boundary: a staging set that adds a manifest record with neither staged bytes nor an existing file on the branch now blocks the publish and names the offending files. That holds regardless of how the bytes went missing. It ships as patches/@codeyam+cms+0.2.2.patch applied by patch-package on postinstall, with @codeyam/cms pinned exactly so a floating range cannot install a version the version-stamped patch fails to apply to. src/lib/mediaCommitGuard.test.ts covers it and was confirmed red against the unpatched package, so a future release that drops the guard fails CI. The fix belongs upstream; the patch should be dropped once it lands there.\n\nHer project is deliberately left with no photo set — the ask was that she be able to upload and swap one herself, not that we pick for her. docs/nicole-review.md explains what happened and walks her through it.\n\nOne piece of scenario infrastructure came out of this: captures of /volunteer/projects/<slug> raced the seed adapter, which clears and rewrites the collection directory while Astro's content watcher regenerates routes asynchronously, so a capture could 404 a page that was about to be valid. .codeyam/seed-await-routes.sh polls the route to readiness after seeding instead of racing it.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ne--volunteer-project-detail-pages-and-the-missing-photo.md\t.codeyam/plans/completed/ne--volunteer-project-detail-pages-and-the-missing-photo.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectcard-with-thumbnail--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojects-populated-grid--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectcard-with-thumbnail.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojects-populated-grid.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjects.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/projects.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/projects.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjects.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectbody-rendered-markdown--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectcardlinks-both-detail-only-and-apply-only--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectcta-own-link-and-fallback--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectheader-long-title-and-blurb--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectpage-full-project--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectpage-full-project--mobile.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectphoto-square-upload--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectthumb-linked-bare-and-placeholder--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteer-page-open-projects.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteer-project-detail-full-description-no-photo.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteer-project-detail-photo-and-own-sign-up-link.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectbody-rendered-markdown.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectcardlinks-both-detail-only-and-apply-only.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectcta-own-link-and-fallback.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectheader-long-title-and-blurb.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectpage-full-project.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectphoto-square-upload.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectthumb-linked-bare-and-placeholder.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/seed-await-routes.sh",
+      "status": "added"
+    },
+    {
+      "path": "patches/@codeyam+cms+0.2.2.patch",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectBody.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectCardLinks.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectCta.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectHeader.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectPage.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectPhoto.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectThumb.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/mediaCommitGuard.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectBody.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectCardLinks.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectCta.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectHeader.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectPage.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectPhoto.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectThumb.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/volunteer/projects/[slug].astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "VolunteerProjectPage - Full Project",
+      "screenshotPath": "volunteerprojectpage-full-project--desktop.png"
+    },
+    {
+      "name": "VolunteerProjectPage - Full Project (Mobile)",
+      "screenshotPath": "volunteerprojectpage-full-project--mobile.png"
+    },
+    {
+      "name": "VolunteerProjectPhoto - Square Upload",
+      "screenshotPath": "volunteerprojectphoto-square-upload--desktop.png"
+    },
+    {
+      "name": "VolunteerProjectHeader - Long Title And Blurb",
+      "screenshotPath": "volunteerprojectheader-long-title-and-blurb--desktop.png"
+    },
+    {
+      "name": "VolunteerProjectBody - Rendered Markdown",
+      "screenshotPath": "volunteerprojectbody-rendered-markdown--desktop.png"
+    },
+    {
+      "name": "VolunteerProjectCta - Own Link And Fallback",
+      "screenshotPath": "volunteerprojectcta-own-link-and-fallback--desktop.png"
+    },
+    {
+      "name": "VolunteerProjectThumb - Linked Bare And Placeholder",
+      "screenshotPath": "volunteerprojectthumb-linked-bare-and-placeholder--desktop.png"
+    },
+    {
+      "name": "VolunteerProjectCardLinks - Both Detail Only And Apply Only",
+      "screenshotPath": "volunteerprojectcardlinks-both-detail-only-and-apply-only--desktop.png"
+    },
+    {
+      "name": "VolunteerProjectCard - Linked Through To Its Detail Page",
+      "screenshotPath": "volunteerprojectcard-with-thumbnail--desktop.png"
+    },
+    {
+      "name": "VolunteerProjects - Populated Grid",
+      "screenshotPath": "volunteerprojects-populated-grid--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 309,
+    "passed": 309,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 309,
+        "passed": 309
+      }
+    ]
+  }
+}

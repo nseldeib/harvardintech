@@ -1,0 +1,44 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerProjectBody.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerProjectBody — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/VolunteerProjectBody.
+//
+// Slotted markup mirrors what Astro's `render()` emits for a project's markdown:
+// headings, paragraphs, and the long bulleted list Nicole actually wrote. This is
+// the capture that proves the `:global` prose rules reach slotted content — the
+// one thing scoped styles cannot do on their own.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerProjectBody</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="codeyam-capture">
+      <div class="s-narrow">
+        <Component>
+          <p>
+            For this specific New York event, the volunteer will support the full social
+            media promotion cycle, including:
+          </p>
+          <ul>
+            <li>Develop a social media content plan and posting schedule for before, during, and after the event.</li>
+            <li>Write engaging LinkedIn posts that align with HIT's brand, audience, and event goals.</li>
+            <li>Create promotional posts announcing the event, speakers, panelists, partners, and key discussion topics.</li>
+            <li>Coordinate with featured individuals to confirm their correct LinkedIn profiles and company pages.</li>
+            <li>Monitor engagement and respond to or flag relevant comments and questions.</li>
+          </ul>
+          <h2>After the event</h2>
+          <p>
+            Repurpose event photos, videos, audio, quotes, and key takeaways into at least
+            six additional pieces of content that can be shared throughout the year.
+          </p>
+        </Component>
+      </div>
+    </div>
+  </body>
+</html>

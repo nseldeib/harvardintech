@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjectCardLinks - Both Detail Only And Apply Only",
+  "id": "1266fe36-3a21-4a69-b1d2-23c7c8a2ba35",
+  "url": "/isolated-components/VolunteerProjectCardLinks",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectCardLinks",
+  "scenarioType": "component",
+  "description": "The three link combinations a real grid produces: both links, detail-page link only for a project with no sign-up form yet, and apply-only for a card rendered without a slug \u2014 which is exactly how every card looked before detail pages existed. Stacked rather than inline because two uppercase mono links on one row wrap raggedly at the narrow end of the grid.",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectCardLinks.astro"
+}

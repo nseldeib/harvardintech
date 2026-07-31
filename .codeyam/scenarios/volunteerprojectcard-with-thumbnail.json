@@ -1,5 +1,5 @@
 {
-  "name": "VolunteerProjectCard - With Thumbnail",
+  "name": "VolunteerProjectCard - Linked Through To Its Detail Page",
   "id": "17ded937-c595-4218-a594-7b0c27762bbc",
   "url": "/isolated-components/VolunteerProjectCard",
   "dimensions": [
@@ -9,5 +9,5 @@
   "componentName": "VolunteerProjectCard",
   "scenarioType": "component",
   "pageFilePath": "src/components/volunteer/VolunteerProjectCard.astro",
-  "description": "One project card with every optional field filled: thumbnail, time commitment, blurb, and sign-up link."
+  "description": "One project card with every optional field filled: thumbnail, time commitment, blurb, and sign-up link. The thumbnail and title now link to the project's detail page and a 'Read the full description' link sits beside 'Get involved' in the footer \u2014 answering the report that a card's thumbnail looked clickable but led nowhere. The apply link stays its own control rather than being swallowed by a card-wide anchor, which would be invalid nested markup and unusable by keyboard."
 }

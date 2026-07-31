@@ -296,6 +296,15 @@
     ]
   },
   {
+    "description": "Enumerates the projects collection into pre-rendered /volunteer/projects/<slug> routes, mapping each project entry to its slug param and props. Draft-filtered by publishedEntries, so a project held back from the grid is readable on the review track and absent from the public build rather than staying fetchable at its own URL after being hidden. Exercised by the volunteer project detail scenarios, whose captured renders prove the params resolve.",
+    "filePath": "src/pages/volunteer/projects/[slug].astro",
+    "name": "getStaticPaths",
+    "scenarios": [
+      "volunteer-project-detail-full-description-no-photo",
+      "volunteer-project-detail-photo-and-own-sign-up-link"
+    ]
+  },
+  {
     "description": "Sponsors grouped by partnership level for the /sponsor wall, in the order the levels are declared — so the wall reads top-down from the biggest commitment, matching how the levels are presented further up the page. Within a level the site-wide rule applies: the optional order pin first, then alphabetically by name. A level with no sponsors is omitted rather than rendered as a heading over nothing. A sponsor whose tier matches no declared level is NOT dropped: it collects into a trailing Other partners group, because tier is free text so the levels can be renamed in the CMS, which makes a typo possible — an editor must see their entry on the page rather than silently lose it. An untagged sponsor lands there too, the common case before anyone has picked a level.",
     "filePath": "src/lib/sponsors.ts",
     "name": "groupSponsorsByLevel",
@@ -396,6 +405,18 @@
     "filePath": "src/lib/parallax.ts",
     "name": "parallaxOffset",
     "testFile": "src/lib/parallax.test.ts"
+  },
+  {
+    "description": "Which sign-up call-to-action a project's detail page offers, or null for none. The project's own `applyUrl` wins; with none it falls back to the site-wide volunteer CTA, because a project posted before its sign-up form exists still needs a way in and a page that simply ends after the description leaves a willing reader nowhere to go. Only when neither link exists does the page render no ask, rather than a dead button. Empty strings count as absent, not as links, so an editor who cleared the field cannot produce an href pointing at the current page.",
+    "filePath": "src/lib/projects.ts",
+    "name": "projectCta",
+    "testFile": "src/lib/projects.test.ts"
+  },
+  {
+    "description": "The URL of one volunteer project's detail page, `/volunteer/projects/<slug>`. The route file and every card that links to it derive their URL from this one place, so the two cannot drift apart — a card pointing at a path the route does not generate is exactly the 404 this helper exists to prevent. Site-root-relative on purpose: callers wrap it in `withBase` so it resolves under both deploy bases, and applying the base here would double the prefix.",
+    "filePath": "src/lib/projects.ts",
+    "name": "projectPath",
+    "testFile": "src/lib/projects.test.ts"
   },
   {
     "description": "Returns a new array of the content-collection entries fit to publish, keeping every entry whose draft flag is not explicitly true — so an absent flag, which is the state of every existing entry and what the CMS writes when the Draft toggle is off, means live, and a hand-written draft false is treated the same as absent. Pass includeDrafts to keep drafts in the list; every call site takes it from the shared INCLUDE_DRAFTS constant in draftVisibility.ts, so drafts stay visible under astro dev for author preview and on the review track, and are omitted from the public build. The flag is an explicit parameter rather than an internal env read so both halves of the rule are testable without faking the environment. Does not mutate the input.",

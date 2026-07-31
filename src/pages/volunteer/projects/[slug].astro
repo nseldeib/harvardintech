@@ -1,0 +1,46 @@
+---
+// /volunteer/projects/<slug> — one page per volunteer project. Static output
+// enumerates a route per `projects` collection entry via getStaticPaths;
+// VolunteerProjectPage renders the frontmatter and the markdown body in its slot.
+//
+// Until this route existed nothing rendered a project's body at all: the grid
+// card showed title, commitment, and blurb, so the full description an organizer
+// wrote in the CMS was invisible on the site.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import VolunteerProjectPage from '../../../components/volunteer/VolunteerProjectPage.astro';
+import { volunteerPage } from '../../../lib/site';
+import { publishedEntries } from '../../../lib/drafts';
+import { INCLUDE_DRAFTS } from '../../../lib/draftVisibility';
+
+// Drafts get no page of their own on the public site — a project held back from
+// the grid but still live at its own URL would be public anyway. In dev and on
+// the review track the page IS generated, so an unannounced project can be read
+// and approved before it goes live. Same rule as /chapters/<slug>.
+export async function getStaticPaths() {
+  const projects = publishedEntries(await getCollection('projects'), INCLUDE_DRAFTS);
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+type Props = { project: CollectionEntry<'projects'> };
+const { project } = Astro.props as Props;
+const { Content } = await render(project);
+const { title, blurb, image, commitment, applyUrl } = project.data;
+---
+
+<BaseLayout title={title} description={blurb ?? volunteerPage.intro}>
+  <VolunteerProjectPage
+    title={title}
+    blurb={blurb}
+    image={image}
+    commitment={commitment}
+    applyUrl={applyUrl}
+    ctaLabel={volunteerPage.ctaLabel}
+    ctaUrl={volunteerPage.ctaUrl}
+  >
+    <Content />
+  </VolunteerProjectPage>
+</BaseLayout>

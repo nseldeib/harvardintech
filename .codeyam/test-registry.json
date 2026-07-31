@@ -190,6 +190,15 @@
       "runner": "tests"
     },
     {
+      "description": "The guard must fire BEFORE any network call, so a refused publish mutates nothing on the branch — the same fail-closed policy as the drift check.",
+      "file": "src/lib/mediaCommitGuard.test.ts",
+      "format": "vitest",
+      "key": "commitAll media guard › refuses to publish a record with no bytes, before touching GitHub",
+      "line": 113,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
       "description": "Consumer extras appended to a built-in are the same drift risk as a custom collection's fields — each must exist in that built-in's schema.",
       "file": "src/data/collections.test.ts",
       "format": "vitest",
@@ -1405,6 +1414,87 @@
       "runner": "tests"
     },
     {
+      "description": "The fallback that matters: Nicole's project has no applyUrl, so without this her page would end after the description with no way to sign up.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCta › falls back to the page-level volunteer CTA when the project has no apply link",
+      "line": 107,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An unset label on the fallback still renders a sensible button rather than an empty one — `volunteerPage.ctaLabel` is editable copy and can be blank.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCta › names the fallback button when the page-level label is missing",
+      "line": 129,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Both cleared → nothing, same as both absent.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCta › returns null when both links are empty strings",
+      "line": 146,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "No link anywhere means NO button — a dead CTA is worse than none.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCta › returns null when neither the project nor the page has a link",
+      "line": 115,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Empty strings are absent, not links: an editor who cleared the field must not produce href=\"\" pointing at the current page.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCta › treats an empty apply link as absent",
+      "line": 138,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The project link wins even when the page-level CTA is absent.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCta › uses the project apply link even with no page-level fallback configured",
+      "line": 120,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A project with its own sign-up link uses it, and says so plainly.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCta › uses the project own apply link when it has one",
+      "line": 98,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The route file is `src/pages/volunteer/projects/[slug].astro`, so this shape is the contract between it and every card that links to it. If they drift, the card points at a 404 — the failure this helper exists to prevent.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectPath › builds the detail path for a slug",
+      "line": 83,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Site-root-relative, NOT base-prefixed: callers wrap it in `withBase`, which would double the prefix if this helper applied it too.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectPath › returns a site-root-relative path for the caller to base-prefix",
+      "line": 91,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
       "description": "returns a new array in both branches, so a caller chaining sort cannot mutate the collection",
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
@@ -2338,6 +2428,42 @@
       "key": "toEventDate › returns a Date instance unchanged",
       "line": 12,
       "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Alt-text edits, reorders, and removals rewrite the manifest without adding records. Only ADDED records have to prove they brought bytes — a guard that fired on metadata edits would block the most common media change there is.",
+      "file": "src/lib/mediaCommitGuard.test.ts",
+      "format": "vitest",
+      "key": "unbackedManifestRecords › ignores a manifest edit that adds no records",
+      "line": 85,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A staging set with no manifest change at all (an ordinary content edit) is none of this guard's business.",
+      "file": "src/lib/mediaCommitGuard.test.ts",
+      "format": "vitest",
+      "key": "unbackedManifestRecords › ignores a staging set that does not touch the manifest",
+      "line": 95,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The healthy upload must not trip the guard, or every publish would be blocked.",
+      "file": "src/lib/mediaCommitGuard.test.ts",
+      "format": "vitest",
+      "key": "unbackedManifestRecords › passes an upload whose bytes are staged alongside its record",
+      "line": 70,
+      "registeredAt": "2026-07-31T23:04:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The exact shape of dd73c8c: three records added, one blob staged. The two records whose bytes went missing are the ones that became broken images.",
+      "file": "src/lib/mediaCommitGuard.test.ts",
+      "format": "vitest",
+      "key": "unbackedManifestRecords › reports records the commit adds without their image bytes",
+      "line": 63,
+      "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
     {

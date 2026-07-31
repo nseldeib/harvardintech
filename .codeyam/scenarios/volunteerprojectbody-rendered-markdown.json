@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjectBody - Rendered Markdown",
+  "id": "36d49c03-69bd-4691-83b4-cfbd08fc2a8f",
+  "url": "/isolated-components/VolunteerProjectBody",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectBody",
+  "scenarioType": "component",
+  "description": "The prose column holding a project's rendered markdown: paragraphs, a heading, and the long bulleted list an organizer actually wrote. Proves the :global prose rules reach slotted content, which scoped styles alone cannot do because the markdown tags never appear in the component's own template.",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectBody.astro"
+}

@@ -1,11 +1,19 @@
 ---
-// One open volunteer project.
+// One open volunteer project, as it appears in the /volunteer grid.
 //
 // Everything but the title is optional, because an organizer should be able to
 // post a project the moment it opens and fill in the thumbnail, commitment, and
 // sign-up link later. A card with no thumbnail keeps the same geometry as one
 // with a photo so a mixed grid stays aligned.
+//
+// The thumbnail and the title link to the project's detail page; the apply link
+// stays its own control. Deliberately NOT one card-wide <a>: an <a> nested
+// inside another is invalid markup and collapses the card into a single
+// unusable target for keyboard users.
 import { withBase } from '../../lib/url';
+import { projectPath } from '../../lib/projects';
+import VolunteerProjectThumb from './VolunteerProjectThumb.astro';
+import VolunteerProjectCardLinks from './VolunteerProjectCardLinks.astro';
 
 interface Props {
   title: string;
@@ -13,29 +21,23 @@ interface Props {
   image?: string;
   applyUrl?: string;
   commitment?: string;
+  /** The project's slug, which is what makes the card clickable. Absent (an
+   *  isolated-component state that passes none) → the card renders exactly as it
+   *  did before detail pages existed: no links, same layout. */
+  slug?: string;
 }
-const { title, blurb, image, applyUrl, commitment } = Astro.props as Props;
+const { title, blurb, image, applyUrl, commitment, slug } = Astro.props as Props;
+
+const href = slug ? withBase(projectPath(slug)) : undefined;
 ---
 
 <article class="proj">
-  {
-    image ? (
-      <img class="img" src={withBase(image)} alt="" loading="lazy" />
-    ) : (
-      <div class="img img--none" aria-hidden="true" />
-    )
-  }
+  <VolunteerProjectThumb image={image} href={href} />
   <div class="body">
-    <h3>{title}</h3>
+    <h3>{href ? <a class="title-link" href={href}>{title}</a> : title}</h3>
     {commitment ? <span class="commit">{commitment}</span> : null}
     {blurb ? <p>{blurb}</p> : null}
-    {
-      applyUrl ? (
-        <a class="go" href={withBase(applyUrl)} rel="noopener">
-          Get involved →
-        </a>
-      ) : null
-    }
+    <VolunteerProjectCardLinks href={href} applyUrl={applyUrl} />
   </div>
 </article>
 
@@ -47,17 +49,6 @@ const { title, blurb, image, applyUrl, commitment } = Astro.props as Props;
     border: 1px solid var(--line);
     border-radius: 6px;
     overflow: hidden;
-  }
-  .img {
-    width: 100%;
-    height: 168px;
-    object-fit: cover;
-    display: block;
-    background: var(--paper-2);
-  }
-  .img--none {
-    background: linear-gradient(135deg, var(--ink) 0%, var(--crimson-deep) 100%);
-    opacity: 0.15;
   }
   .body {
     display: flex;
@@ -74,6 +65,13 @@ const { title, blurb, image, applyUrl, commitment } = Astro.props as Props;
     /* Long titles wrap instead of overflowing the card. */
     overflow-wrap: anywhere;
   }
+  .title-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .title-link:hover {
+    color: var(--crimson);
+  }
   .commit {
     font-family: var(--font-mono);
     font-size: 10px;
@@ -88,17 +86,5 @@ const { title, blurb, image, applyUrl, commitment } = Astro.props as Props;
     color: var(--ink-2);
     margin: 0;
     flex: 1;
-  }
-  .go {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--crimson);
-    text-decoration: none;
-    margin-top: 4px;
-  }
-  .go:hover {
-    text-decoration: underline;
   }
 </style>

@@ -311,6 +311,68 @@
         "status": "n-a",
         "reason": "The key action is emailing about sponsorship, a mailto navigation with no in-page state; the inquiry form is an external embed"
       }
+    },
+    "src/pages/volunteer.astro": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The projects grid is an auto-fit grid whose one-card layout is the same cell as its three-card layout; a single open project is a data count rather than a distinct visual state"
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "A volunteer-led group posts a handful of open projects at a time; the grid wraps with no pagination, overflow, or truncation treatment to demonstrate"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered Astro route built from content collections; nothing resolves asynchronously, so no pending state exists"
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Static prerendered route with no runtime data fetch; a malformed project entry fails the build rather than producing an in-page error state"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
+    "src/pages/volunteer/projects/[slug].astro": {
+      "empty": {
+        "status": "n-a",
+        "reason": "A project page is built from one entry that must exist for the route to be generated at all; there is no zero-state. The nearest thing, a project with every optional field blank, is the edge archetype rather than an empty one"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The page renders exactly one project by construction; there is no list whose one-versus-many boundary could differ"
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "No list on this page grows unbounded; the markdown body is prose in a fixed-measure column with no overflow or truncation treatment to demonstrate"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered Astro route built from content collections; nothing resolves asynchronously, so no pending state exists"
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Static prerendered route; an unknown project slug is a build-time 404 rather than an in-page error state"
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "The key action is following the sign-up link or the back link, both plain navigations with no in-page interactive state; the arrival on this page from a card click is captured as the demo flow"
+      }
     }
   }
 }

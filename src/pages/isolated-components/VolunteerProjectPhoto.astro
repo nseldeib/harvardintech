@@ -1,0 +1,27 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerProjectPhoto.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerProjectPhoto — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/VolunteerProjectPhoto.
+//
+// Uses `volunteers.webp` on purpose: it is the real 1200x1200 square an editor
+// actually uploaded, and the square case is the one the `max-height` bound
+// exists for. Full-bleed because the photo is full-bleed on the real page.
+//
+// The no-image branch renders nothing at all, so it has no capture of its own —
+// its absence is visible in the VolunteerProjectCta and application scenarios.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerProjectPhoto</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="codeyam-capture">
+      <Component image="/images/volunteers.webp" />
+    </div>
+  </body>
+</html>

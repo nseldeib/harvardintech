@@ -1,0 +1,76 @@
+---
+// The head of a volunteer project's detail page: the way back to the grid, the
+// project title, its time commitment, and the blurb as a lede.
+//
+// Everything but the title is optional, matching the card and the collection
+// schema — an organizer can post a project the moment it opens and fill in the
+// commitment and blurb later, and the header must not leave holes when they do.
+import { withBase } from '../../lib/url';
+
+interface Props {
+  title: string;
+  blurb?: string;
+  commitment?: string;
+  backHref?: string;
+  backLabel?: string;
+}
+const {
+  title,
+  blurb,
+  commitment,
+  backHref = '/volunteer#projects',
+  backLabel = '← All volunteer projects',
+} = Astro.props as Props;
+---
+
+<a class="back" href={withBase(backHref)}>{backLabel}</a>
+
+<h1>{title}</h1>
+{commitment ? <span class="commit">{commitment}</span> : null}
+{blurb ? <p class="lede">{blurb}</p> : null}
+
+<style>
+  .back {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    text-decoration: none;
+    margin: 40px 0 24px;
+  }
+  .back:hover {
+    text-decoration: underline;
+  }
+  h1 {
+    font-size: clamp(28px, 3.6vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0;
+    /* Long CMS-written titles wrap instead of overflowing the column. */
+    overflow-wrap: anywhere;
+  }
+  .commit {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    margin-top: 12px;
+  }
+  .lede {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: 60ch;
+    margin: 18px 0 0;
+  }
+  @media (max-width: 720px) {
+    .back {
+      margin-top: 28px;
+    }
+  }
+</style>

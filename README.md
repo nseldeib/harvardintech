@@ -26,12 +26,28 @@ npm run test       # component unit tests (vitest + jsdom)
 
 A fresh clone works with: `git clone` → `npm run setup` → `npm run dev`.
 
+### Patched dependency
+
+`@codeyam/cms` is pinned to an exact version and carries a local patch in
+`patches/`, applied automatically by `patch-package` on `postinstall`. The patch
+makes the publish flow refuse to commit a media-library record whose image bytes
+went missing during staging — without it an upload can land a `media.json` entry
+pointing at a file that was never committed, which the site then renders as a
+broken image an editor cannot fix from `/admin`. The version is pinned exactly
+because the patch is version-stamped: a floating range would install a version
+the patch cannot apply to and break `npm install` for everyone. It is covered by
+`src/lib/mediaCommitGuard.test.ts`, so if a future release drops or reworks the
+guard, CI says so. The fix belongs upstream; drop the patch once it lands there.
+
 ## Project shape
 
 ```
 src/
   pages/index.astro          # the landing page — composes the section components
   pages/volunteer.astro       # /volunteer — the volunteer pitch + open-projects grid
+  pages/volunteer/projects/[slug].astro
+                              # /volunteer/projects/<slug> — one page per project,
+                              #   where a project's full markdown description renders
   pages/donate.astro          # /donate — the Momentum Fund campaign page
   pages/events.astro          # /events — Luma calendar embed + upcoming/past listing
   components/landing/         # one component per landing section (Hero, Board, …)

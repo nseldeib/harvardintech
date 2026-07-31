@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjectHeader - Long Title And Blurb",
+  "id": "c19ce151-316b-41c0-99cc-f6aecadc5ead",
+  "url": "/isolated-components/VolunteerProjectHeader",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectHeader",
+  "scenarioType": "component",
+  "description": "The detail page header carrying a real CMS-written title and a long blurb \u2014 the awkward case rather than a tidy one. Shows the back link to the grid, the wrapping title, the commitment badge, and the blurb as a lede constrained to a readable measure.",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectHeader.astro"
+}

@@ -1,0 +1,31 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerProjectHeader.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerProjectHeader — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/VolunteerProjectHeader.
+//
+// Nicole's real title and blurb, because they are the awkward ones: the title
+// carries her "Specialist- Events" spacing and the blurb runs long, so this
+// capture is where the wrap behaviour is actually visible. Wrapped in `.s-narrow`
+// to match the column the header sits in on the real page.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerProjectHeader</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="codeyam-capture">
+      <div class="s-narrow">
+        <Component
+          title="Social Media Marketing Specialist- Events"
+          blurb="Help promote HIT events from start to finish by creating and scheduling engaging social media content before, during, and after each event. This project is ideal for a volunteer who enjoys event marketing, storytelling, and turning event recordings into reusable content."
+          commitment="25 hours"
+        />
+      </div>
+    </div>
+  </body>
+</html>

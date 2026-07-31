@@ -1,0 +1,14 @@
+{
+  "name": "VolunteerProjectPage - Full Project",
+  "id": "68fbc408-b436-461a-a61d-6cd80e7f8ccf",
+  "url": "/isolated-components/VolunteerProjectPage",
+  "dimensions": [
+    "Desktop",
+    "Mobile"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectPage",
+  "scenarioType": "component",
+  "description": "A volunteer project's detail page with every field an organizer can fill: the uncropped photo, the time commitment, the blurb as a lede, the full markdown description, and the project's own sign-up button. The markdown body is the part that mattered \u2014 before this page existed nothing on the site rendered a project's body at all, so a description written in the CMS was invisible to visitors.",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectPage.astro"
+}

@@ -1,0 +1,37 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerProjectThumb.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerProjectThumb — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/VolunteerProjectThumb.
+//
+// All three branches at the real card width (a third of the 3-column grid), side
+// by side, because the property that matters is that they are the SAME HEIGHT —
+// that is what keeps a grid mixing photo and no-photo projects aligned, and it is
+// invisible in any single-branch capture.
+//
+// Left: linked photo (the clickable thumbnail Nicole expected).
+// Middle: photo with no link (a card rendered without a slug).
+// Right: the gradient placeholder for a project with no photo yet.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerProjectThumb</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); display: flex; gap: 24px; align-items: flex-start;">
+      <div style="width: 320px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+        <Component image="/images/volunteers.webp" href="/volunteer/projects/chapter-launch-team-toronto" />
+      </div>
+      <div style="width: 320px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+        <Component image="/images/chapters/nyc.jpg" />
+      </div>
+      <div style="width: 320px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+        <Component />
+      </div>
+    </div>
+  </body>
+</html>

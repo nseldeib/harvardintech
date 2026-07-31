@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjectPhoto - Square Upload",
+  "id": "f2e9da4a-f3fc-4f34-b605-08f45350ac12",
+  "url": "/isolated-components/VolunteerProjectPhoto",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectPhoto",
+  "scenarioType": "component",
+  "description": "The detail page's photo band, shown with the real 1200x1200 square an editor uploaded. Uncropped and height-bounded rather than cover-cropped: the grid thumbnail crops so a mixed grid stays aligned, which makes this the only place the whole picture is visible. The bound is what stops a square upload pushing the description off the first screen.",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectPhoto.astro"
+}

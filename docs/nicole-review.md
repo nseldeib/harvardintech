@@ -110,6 +110,58 @@ happens at the Strikingly migration, deliberately.
 Her commits are attributed to the token owner's GitHub identity, not her name.
 That is expected for a review.
 
+## Answering her two reports (volunteer project)
+
+Both of the things she flagged on the volunteer project she created — "uploaded
+photo not visible" and "thumbnail appears but does not link to full description"
+— reproduced, and both were our bugs, not mistakes she made.
+
+### "Thumbnail does not link to the full description"
+
+Correct, and there was nowhere for it to link *to*. The long description she
+wrote lives in the markdown body of her entry, and **nothing in the site rendered
+a project's body anywhere** — the grid card only ever showed title, commitment,
+and blurb. Her description was on the site but invisible.
+
+Each project now has its own page at `/volunteer/projects/<slug>`. The card's
+thumbnail and title link to it, and there is a "Read the full description →"
+link in the card footer. Projects still marked **Draft** get a page on this
+preview but not on the public site, so she can read hers before it goes live.
+
+If a project has no sign-up link of its own, its page falls back to the general
+"Volunteer with us" CTA — a project posted before its form exists still gives a
+reader somewhere to go.
+
+### "Uploaded photo not visible"
+
+Her photo genuinely did not make it. The CMS records an upload in two places —
+the image file itself, and a library entry in `src/data/media.json` — and it
+published the library entries **without the image files**. Her publish recorded
+three uploads and committed one file, so two of them pointed at files that were
+never there. Her project ended up with no photo set at all.
+
+Two things changed:
+
+- The orphaned library entries were removed, so the media picker no longer
+  offers photos that do not exist.
+- **The CMS now refuses to publish** an upload whose image data went missing,
+  and names the files instead of committing a broken image. She will see an
+  error asking her to re-upload rather than a silently broken photo.
+
+**Her project still has no photo — she should pick one herself.** In /admin →
+**Projects** → her entry → the **Image** field, either choose an existing library
+image or upload a new one. Uploading is now safe to retry: if the upload does not
+survive, publishing will tell her instead of failing quietly.
+
+One thing worth knowing: an upload has to be **published from the media library**
+before it appears on the site. Selecting a file stages it; it is not live until
+the publish commits.
+
+The underlying upload bug is in the `@codeyam/cms` package, not this site. The
+guard ships here as `patches/@codeyam+cms+0.2.2.patch` (applied automatically on
+`npm install`) and should be filed upstream so the patch can eventually be
+dropped.
+
 ## Still open (team todos, not code)
 
 - Real **board bios** (the live site has none to reproduce).
