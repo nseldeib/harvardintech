@@ -78,10 +78,17 @@ entry, mostly non-technical).
 - **Effort:** M. Add an event `type` field + section rendering. If matching
   hbswa's layout exactly, add design time.
 
-### 7. GA / SEO / AEO / Custom HTML / iFrame — ✅ done
-Shipped this session. GA activates by pasting a GA4 ID in the CMS (blank = off).
-Custom head/body HTML boxes cover verification tags, pixels, chat widgets.
-robots.txt + llms.txt + JSON-LD are automatic. Per-page SEO overrides on posts.
+### 7. GA / SEO / AEO / Custom HTML / iFrame — 🟡 built, not all editable
+Shipped. GA activates from a GA4 ID in `settings.json` (blank = off); custom
+head/body HTML covers verification tags, pixels, chat widgets. robots.txt +
+llms.txt + JSON-LD are automatic, and per-page SEO overrides work on posts.
+
+**Correction (2026-08-03):** these three keys are *data* but have no input in
+/admin — the CMS renders five scalar settings fields (title, public URL,
+description, contact email, footer text) and round-trips every other key
+untouched. Setting the GA id is still a developer edit. The homepage figures had
+the same problem and were moved to a `stats` collection; GA and the custom HTML
+boxes are the remaining cases.
 
 ### 8. Member login / Harvard Key SSO — ❌ the hard one
 See [harvard-key-sso.md](./harvard-key-sso.md). Short version: Harvard Key is
@@ -147,14 +154,27 @@ for an external reviewer — links plus passphrase, kept internal.
 - **`/admin`** is a password-gated organizer CRM, not in the public nav — it is
   NOT the member portal (see item 8).
 
-### 13. Content "fill or remove" list (2026-07-02)
-Placeholders/stubs flagged on the review page ("Content to fill or remove"):
-- **Podcasts** — none exists; nav item → remove or create.
-- **Webinars** — no section; nav jumps to /events → build or remove.
-- **Events calendar** — Luma embed URL blank; shows a "subscribe on Luma"
-  fallback → provide the embed URL.
-- **Events list** — no events entered → add, or rely on Luma.
-- **Stats** — 1,000+ / 5 / 40+ / Est. 2013 are placeholder defaults → verify.
-- **Board** — 3 of 5 members missing a photo or bio → complete + confirm roster.
-- **Blog** — only a placeholder "Welcome" post → add posts or hide.
-- **Donate** — no platform → set one up or keep the email fallback.
+### 13. Content "fill or remove" list — re-checked 2026-08-03
+The 2026-07-02 list is largely closed. Current state:
+
+- ~~**Podcasts** / **Webinars**~~ — **Resolved.** `nav.json`'s Programs group
+  holds one item, "All Events". Nothing points at a section that does not exist.
+- ~~**Events list**~~ — **Resolved.** 8 events entered.
+- ~~**Blog**~~ — **Resolved.** 11 posts.
+- ~~**Stats**~~ — **Resolved.** The figures are real (8,000+ / 6 / 100+ /
+  Est. 2013), not the 1,000+ / 5 / 40+ placeholders this list recorded. They are
+  now the `stats` collection, so an editor can correct them.
+- **Events calendar** — Luma embed URL still blank; shows the "subscribe on Luma"
+  fallback → provide the embed URL, or set the events band to *coming soon*.
+- **Board** — all 5 members have photos; **none has a bio**. Still the largest
+  content gap and the most visible one.
+- **Testimonials / Donors** — both collections are empty. The donor wall renders
+  its invitation state by design; the testimonials band renders nothing.
+- **Sponsors** — all 3 entries are marked *Example entry*, so the wall carries its
+  "examples, not actual sponsors" notice. Fine to ship, but worth a decision.
+- **Donate** — no platform. The URL is now editable in /admin (Page settings →
+  Momentum Fund page), so choosing one is no longer a code change.
+
+Anything on this list that is not ready at cutover no longer has to be either
+shipped broken or removed: set the band to **coming soon** or **Draft** from
+/admin and turn it on later. See [editing-the-site.md](../editing-the-site.md).

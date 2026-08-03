@@ -6,6 +6,48 @@ assumed. Everything below happens in the CMS at **/admin** — see
 
 Two questions come up constantly, so they are answered first.
 
+## "How do I hide a section that isn't ready yet?"
+
+Every band of the **homepage** is an entry in **Homepage sections**, and every
+band in the middle of the **Momentum Fund page** is one in **Momentum Fund
+sections**. Open the entry for the band you mean; it has two switches, and
+between them they give three outcomes:
+
+| Both switches off | The section shows normally. This is how every section ships. |
+| --- | --- |
+| **Show as coming soon** on | The section is replaced by a short "Coming soon" placeholder carrying its heading. The section stays in the menu, so a visitor who clicks the link lands on the placeholder rather than on nothing. |
+| **Draft** on | The section goes away entirely — **and its menu link goes with it**, so nothing in the navigation points at a band that is not on the page. |
+
+Use **coming soon** for something the site should admit is on the way (a photo
+gallery with no photos yet, a section awaiting copy). Use **Draft** for something
+that should not be alluded to at all yet. Neither deletes anything: the entry
+keeps its settings and you switch it back whenever you like.
+
+If both are on, Draft wins — a hidden section never advertises itself.
+
+**One thing that surprises people:** on the preview and review sites, a Draft
+section is still visible. That is deliberate and applies to everything on this
+site, not just sections — the gated sites show drafts so you can look at
+something before the world does. Draft means "not on the public site". To see
+what the public will actually get, look at the live site after a promote.
+
+## "Can I change the homepage headline, the numbers, or where Donate goes?"
+
+Yes — all of these used to need a developer and no longer do:
+
+| What | Where in /admin |
+| --- | --- |
+| The rotating headline, kicker, photo and buttons at the top | **Homepage hero slides** — one entry per slide, ordered by the **Order** field |
+| The big figures under it (8,000+, 6, 100+, Est. 2013) | **Homepage stats** — one entry per figure |
+| The "What we've accomplished so far" cards | **Momentum Fund accomplishments** |
+| The "What Your Gift Powers" cards | **Momentum Fund gift pillars** |
+| Where every **Give** / **Make a Gift** button points | **Page settings → Momentum Fund page → Donation platform URL** |
+
+The donation URL is the one worth knowing about in advance: leave it blank and
+every giving button opens a giving-inquiry email, which is what they do today.
+Paste a real platform URL in that single box and **every** button on the site
+switches over at once.
+
 ## "How do I edit the Momentum Fund page?"
 
 The Momentum Fund page (`/donate`) is made of **sections**. Open **Momentum Fund
@@ -87,11 +129,15 @@ These are not in the CMS. Ask the team to change them:
 - The **photo header** at the top of the Momentum Fund page and the **"Help power
   what comes next"** band at the bottom. These are deliberately fixed — they are
   the frame the reorderable sections sit inside.
-- The **card content** for "What we've accomplished so far", "What Your Gift
-  Powers", and the numbers band. You can move and hide those bands from the CMS,
-  but their figures and card text are edited in the page's copy file.
-- The **Google Analytics ID**.
+- The **Google Analytics ID**, and the custom `<head>` / `<body>` HTML boxes
+  (verification tags, pixels). These live in the site's settings file but the
+  editor renders no input for them yet.
+- The **sponsorship** and **volunteer** page copy.
 - Anything about the site's colors, fonts, or layout.
+
+The accomplishment cards, the gift-pillar cards, the homepage hero and the
+homepage figures used to be on this list. They are now collections in /admin —
+see the table above.
 
 ## A note on timing
 

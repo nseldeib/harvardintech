@@ -1,0 +1,23 @@
+---
+import Component from "../../../src/components/ComingSoon.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for ComingSoon — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/ComingSoon.
+//
+// Full-bleed band, so no width wrapper and no centering: it renders edge to edge
+// on the real page and must be captured the same way.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: ComingSoon</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="codeyam-capture">
+      <Component title="Event gallery" id="gallery" />
+    </div>
+  </body>
+</html>

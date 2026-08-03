@@ -22,6 +22,25 @@ export const SECTION_KINDS = [
 
 export type SectionKind = (typeof SECTION_KINDS)[number];
 
+/**
+ * What each band is called when a "coming soon" placeholder has to name it.
+ *
+ * The slot bands carry only `kind` — their headings live in `donatePage.json` —
+ * so without this a held-back band would have nothing to announce. `narrative` is
+ * absent on purpose: those sections always carry their own `title`.
+ *
+ * The `HOME_SECTION_LABELS` counterpart for this page. Both live beside their
+ * kinds rather than in the component that renders them, so the placeholder rule
+ * is one testable fact per page instead of markup.
+ */
+export const SECTION_LABELS: Partial<Record<SectionKind, string>> = {
+  accomplishments: 'What we have accomplished so far',
+  pillars: 'What your gift powers',
+  testimonials: 'From our community',
+  donors: 'The people behind the fund',
+  stats: 'By the numbers',
+};
+
 /** The layouts a `narrative` section can use. `text-only` is the fallback. */
 export const SECTION_LAYOUTS = ['image-left', 'image-right', 'text-only'] as const;
 
@@ -34,6 +53,11 @@ export interface SectionLike {
   layout?: string;
   image?: string;
   order?: number;
+  /** Renders the "coming soon" placeholder in place of this band. Classified by
+   *  `resolveVisibility` in `./homeSections.ts`, shared with the homepage so both
+   *  pages phase a section by the same rule. `draft` remains the hide switch. */
+  comingSoon?: boolean;
+  draft?: boolean;
 }
 
 /**

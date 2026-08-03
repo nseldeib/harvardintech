@@ -1,0 +1,48 @@
+---
+import Component from "../../../src/components/landing/HomeSections.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for HomeSections — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/HomeSections.
+//
+// The band stack the homepage is now built from, seeded to show all three
+// visibility states side by side — which is the only place they can be compared
+// directly, since a real page shows one arrangement at a time:
+//
+//   stats    → shown, rendering its figures
+//   gallery  → coming-soon, replaced by the placeholder
+//   support  → hidden, absent from the output entirely
+//
+// The hidden band is in the list on purpose. `HomeSections` renders what it is
+// given, so a `draft: true` entry reaching it proves the page-level filter is
+// what removes it — on the public build `publishedEntries` drops it before this
+// component ever sees it.
+//
+// Full-bleed bands, so no width wrapper and no centering: they render edge to
+// edge on the real page and must be captured the same way.
+const sections = [
+  { kind: 'stats', order: 1 },
+  { kind: 'gallery', title: 'Event gallery', order: 2, comingSoon: true },
+  { kind: 'support', title: 'Support us', order: 3, draft: true },
+];
+
+const stats = [
+  { value: '8,000+', label: 'Alumni technologists' },
+  { value: '6', label: 'Global chapters' },
+  { value: '100+', label: 'Events hosted' },
+  { value: 'Est. 2013', label: 'Harvard Alumni in Tech' },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: HomeSections</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="codeyam-capture">
+      <Component sections={sections} stats={stats} email="ben@harvardintech.com" />
+    </div>
+  </body>
+</html>

@@ -1,30 +1,23 @@
 ---
-// Harvard Alumni in Tech homepage — Atlas direction. Composed from per-section
-// components in the order the board approved: a sliding hero, a stat strip,
-// then the editorial section stack (events, chapters, focus areas, content hub,
-// board), the "bring it to your city" CTA, the giving campaign, and the
-// community / support / gallery / contact bands. Content comes from the
-// editable settings singleton and the `events` / `team` / `chapters` / `blog`
-// content collections; production starts empty and fills in via the CMS.
+// Harvard Alumni in Tech homepage — Atlas direction.
+//
+// The page is a band STACK whose order and visibility live in the `homeSections`
+// content collection, not in this file. An editor moves a band with its Order
+// field, replaces one with a "coming soon" placeholder, or takes it off the
+// public site with Draft — and the menu link goes with it (see `BaseLayout`).
+// That is the whole reason the thirteen components are no longer hardcoded here.
+//
+// Content comes from the editable settings singleton and the `events` / `team` /
+// `chapters` / `blog` / `heroSlides` / `stats` collections; composition lives in
+// `HomeSections`, so this route is data loading plus one element.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { settings } from '../lib/site';
 import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { sortBoardMembers, filterActiveBoardMembers } from '../lib/team';
-import HeroCarousel from '../components/landing/HeroCarousel.astro';
-import Stats from '../components/landing/Stats.astro';
-import UpcomingEvents from '../components/landing/UpcomingEvents.astro';
-import OurChapters from '../components/landing/OurChapters.astro';
-import FocusAreas from '../components/landing/FocusAreas.astro';
-import ContentHub from '../components/landing/ContentHub.astro';
-import BoardOfDirectors from '../components/landing/BoardOfDirectors.astro';
-import GetInvolved from '../components/landing/GetInvolved.astro';
-import GivingCampaign from '../components/landing/GivingCampaign.astro';
-import WhatsappCommunity from '../components/landing/WhatsappCommunity.astro';
-import SupportUs from '../components/landing/SupportUs.astro';
-import EventGallery from '../components/landing/EventGallery.astro';
-import ContactUs from '../components/landing/ContactUs.astro';
+import { loadHomeSections, loadHeroSlides, loadHomeStats } from '../lib/homeSectionsContent';
+import HomeSections from '../components/landing/HomeSections.astro';
 
 // Drafts are dropped from every section below. `INCLUDE_DRAFTS` is true under
 // `astro dev` and on the review track, false on the public build — so an author
@@ -58,20 +51,33 @@ const board = sortBoardMembers(
     })),
   ),
 );
+
+const { sections, unknownKinds } = await loadHomeSections();
+const slides = await loadHeroSlides();
+const stats = await loadHomeStats();
+
+// Advisory, never build-failing — `kind` is free text because the CMS has no
+// select control, so a typo is an ordinary editing mistake. It costs that editor
+// one missing band and this log line, not the deploy. Same treatment /donate
+// gives an unrecognized Momentum Fund section type.
+if (unknownKinds.length > 0) {
+  console.warn(
+    `[homeSections] ${unknownKinds.length} homepage section(s) have an unrecognized type and ` +
+      `will not appear: ${unknownKinds.map((k) => JSON.stringify(k)).join(', ')}.`,
+  );
+}
 ---
 
 <BaseLayout title={undefined} description={settings.description}>
-  <HeroCarousel />
-  <Stats stats={settings.homeStats} />
-  <UpcomingEvents events={events} />
-  <OurChapters chapters={chapters} />
-  <FocusAreas />
-  <ContentHub posts={posts} />
-  <BoardOfDirectors members={board} />
-  <GetInvolved />
-  <GivingCampaign email={settings.contactEmail} />
-  <WhatsappCommunity />
-  <SupportUs email={settings.contactEmail} />
-  <EventGallery />
-  <ContactUs socials={settings.socials} email={settings.contactEmail} />
+  <HomeSections
+    sections={sections}
+    slides={slides}
+    stats={stats}
+    events={events}
+    chapters={chapters}
+    posts={posts}
+    board={board}
+    socials={settings.socials}
+    email={settings.contactEmail}
+  />
 </BaseLayout>

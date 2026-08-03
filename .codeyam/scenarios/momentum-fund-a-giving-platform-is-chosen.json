@@ -1,0 +1,41 @@
+{
+  "name": "Momentum Fund - A Giving Platform Is Chosen",
+  "id": "2122737c-74be-49cd-9b41-c65635b78468",
+  "url": "/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network.",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 1,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "kind": "accomplishments",
+        "order": 2,
+        "slug": "accomplishments"
+      },
+      {
+        "kind": "pillars",
+        "order": 3,
+        "slug": "pillars"
+      }
+    ],
+    "pageCopy": [
+      {
+        "donateUrl": "https://givebutter.com/harvard-in-tech-momentum-fund",
+        "slug": "donate",
+        "title": "Momentum Fund page"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "The campaign page once a giving platform is configured. Every Give button on the page — hero, donor wall, and closing ask — resolves to the platform URL instead of the giving-inquiry email, which is a change to where the links POINT rather than to what the page looks like, so read this scenario as pinning that state rather than picturing it. It matters because production ships with the field blank and every button on the email fallback; the switch is one box in the CMS, and making it reachable from there was a precondition for moving the domain."
+}

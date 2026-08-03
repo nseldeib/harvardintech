@@ -1,0 +1,13 @@
+{
+  "name": "Coming Soon Band",
+  "id": "9c5db531-ae62-4e0b-85e3-8d2811cd496d",
+  "url": "/isolated-components/ComingSoon",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "ComingSoon",
+  "scenarioType": "component",
+  "description": "The placeholder a section renders when an editor switches Show as coming soon on. Deliberately a designed band rather than a gap or an apology: the state exists so a section can be honest about what is on the way instead of vanishing, so it has to read as intentional to a visitor who does not know a section is missing. The counterpart state is Draft, which removes the band and its menu link together.",
+  "pageFilePath": "src/components/ComingSoon.astro"
+}

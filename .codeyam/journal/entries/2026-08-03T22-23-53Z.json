@@ -1,0 +1,599 @@
+{
+  "timestamp": "2026-08-03T22:23:53Z",
+  "title": "Launch-Ready Editing",
+  "type": "feature",
+  "userRequest": "## Summary\n\nClose the gap between \"the site is built\" and \"Nicole maintains it herself\" — the\ncondition the HIT team needs met before they will approve moving\n`harvardintech.com` off Strikingly.\n\nThree things ship together:\n\n1. **Every section on the homepage and the campaign pages gets a\n   Show / Coming soon / Hidden control** Nicole operates from `/admin`. This is\n   the mechanism the phased launch runs on: content that is not ready on cutover\n   day goes out as \"coming soon\" or disappears, and she turns it on later without\n   a developer.\n2. **The copy that is currently unreachable from `/admin` becomes editable** —\n   the homepage hero slides and stat strip, the Momentum Fund accomplishment and\n   gift-pillar cards, and the Donate destination.\n3. **Her edits stop being one keystroke from the public.** `src/data/cms.json`\n   repoints to `staging`, so a save lands on the gated review site and reaches\n   the world only through the existing **Promote review → live** button.\n\nThe domain cutover itself is NOT in this plan. It stays as\n`migrate-harvardintech-com-off-strikingly`, which runs after this one — its DNS\nsequence is unchanged and its `MX`/SPF-preservation rule still governs.\n\n## Key Decisions\n\n- **Everything editable becomes a content collection, not a package fork.**\n  The CMS models exactly two singletons (`settings.json`, `nav.json`) and\n  renders five scalar settings fields; `donatePage.json`, `sponsorPage.json` and\n  `volunteerPage.json` are invisible to it, and so are `homeStats`,\n  `googleAnalyticsId` and the custom head/body HTML on `settings.json`. Rather\n  than extend `@codeyam/cms` to model arbitrary singletons — a fork of a\n  dependency this repo only patches for bug fixes — each editable thing becomes a\n  collection, which is the surface the package already renders well and which\n  `testimonials`, `donors` and `sponsors` already use. It also gives every card\n  Draft, Order and per-scenario seeding for free.\n\n- **`homeSections` is `momentumSections` for the homepage.** The reorderable\n  Momentum Fund page already proves the pattern: one markdown entry per band,\n  `kind` selecting the renderer, `order` moving it, `draft` hiding it, and\n  `src/lib/momentumSections.ts` validating `kind` so a typo costs one section\n  rather than the deploy. The homepage gets the same model over its thirteen\n  bands. Reusing the pattern means the editor-facing explanation in\n  `docs/editing-the-site.md` already applies.\n\n- **\"Coming soon\" is a toggle, not a typed value.** The CMS has no select\n  control — `CUSTOM_FIELD_TYPES` stops at\n  text/number/textarea/date/image/boolean/list — so a three-state field would\n  have to be free text validated in a lib, the way `kind` and `layout` are.\n  That is right for a developer-ish value and wrong for an editor who would have\n  to type `coming-soon` exactly. Instead the third state is a **`comingSoon`\n  boolean beside the existing Draft toggle**: Draft off + coming-soon off =\n  shown, coming-soon on = placeholder band, Draft on = gone. Two switches an\n  editor can reason about, both backed by controls the package actually ships.\n\n- **Hiding a section hides its menu item.** `src/lib/nav.ts` already derives the\n  Chapters and Communities groups from content precisely so a menu entry can\n  never outlive what it points at. Section visibility joins that rule, so\n  \"Hidden\" cannot leave a nav link aimed at a band that is not on the page.\n\n- **Production keeps its committed content.** This is an established site, not a\n  greenfield one: `src/content/` holds 11 posts, 8 events, 6 chapters and 5 board\n  members that are meant to ship. The new collections are seeded from the values\n  already in `settings.json` / `donatePage.json` / the component defaults, so the\n  migration is invisible on the rendered page — the diff is where the values\n  live, not what they say.\n\n- **Google Analytics, the custom head/body HTML, and the sponsor/volunteer page\n  copy are deliberately out of scope.** They have the same \"data but no input\"\n  shape and would be the natural follow-up, but none of them blocks the\n  migration and each widens this change materially.\n\n## Implementation\n\n### 1. Section visibility — the phased-launch mechanism\n\n**New file**: `src/content/homeSections/*.md` — one entry per homepage band\n(`hero`, `stats`, `events`, `chapters`, `focus`, `content-hub`, `board`,\n`get-involved`, `giving`, `whatsapp`, `support`, `gallery`, `contact`), each\ncarrying `kind`, `order`, optional `draft`, optional `comingSoon`.\n\n**File**: `src/content/config.ts` — declare the `homeSections` collection, and\nadd `comingSoon: z.boolean().optional()` to the collections whose entries are\nindividually phaseable (`momentumSections`, `homeSections`). Absent means shown,\nmatching how `draft` already works, so nothing needs migrating.\n\n**File**: `src/data/collections.json` — the editor's view of both: `homeSections`\nas a collection with a `Coming soon` toggle, and the same toggle appended to\n`momentumSections`. `src/data/collections.test.ts` already pins the two files\nagainst each other, so a field added to one and not the other fails the suite\nrather than being discovered by an editor who cannot find the input.\n\n**New file**: `src/lib/homeSections.ts` — the `momentumSections.ts` counterpart:\norder the entries, drop an unknown `kind` with a `console.warn`, and resolve each\nentry to one of three states. Pure and framework-free, with\n`src/lib/homeSections.test.ts` covering shown / coming-soon / hidden, an unknown\nkind, and a blank `order`.\n\n**New file**: `src/components/ComingSoon.astro` — the placeholder band: the\nsection's heading plus one editable line, styled to read as deliberate rather\nthan broken.\n\n**File**: `src/pages/index.astro` — compose the bands from `homeSections`\ninstead of the fixed list of thirteen components it hardcodes today.\n\n**File**: `src/lib/nav.ts` — drop nav items whose target is a hidden section,\nextending the existing derive-don't-hand-list rule. `src/lib/nav.test.ts` covers\nit.\n\n### 2. The copy that is not reachable from `/admin`\n\n**New collections**, each declared in `config.ts` + `collections.json` and seeded\nfrom where the value lives today:\n\n- `heroSlides` — from the hardcoded defaults in\n  `src/components/landing/HeroCarousel.astro:33-52`. Fields: image, kicker,\n  title, lede, a `ctas` list, order, draft. `index.astro` renders\n  `<HeroCarousel />` with no props today, so the defaults are the live content.\n- `stats` — from `settings.json`'s `homeStats`. Fields: value, label, order,\n  draft.\n- `accomplishments` and `pillars` — from `donatePage.json`. `pillars` keeps its\n  `icon` as free text validated against the three drawn glyphs, matching how\n  `kind` and `layout` are handled.\n\n**File**: `src/data/donatePage.json` — `donateUrl` moves to a `pageCopy` entry so\nNicole can point the Donate button at a real platform herself.\n`src/lib/giving.ts` is already built for exactly this switch and needs no change.\n\n**Files**: `src/components/landing/HeroCarousel.astro`,\n`src/components/landing/Stats.astro`,\n`src/components/donate/MomentumAccomplishments.astro`,\n`src/components/donate/GiftPillars.astro` — all four are already prop-driven with\ndefaults, so each takes its data from the new collection and keeps its default as\nthe empty-collection fallback. No markup changes.\n\n**File**: `src/lib/site.ts` — drop the `homeStats` / card-array members from the\nsingleton types as they move out.\n\n### 3. Edits land on review, not on the world\n\n**File**: `src/data/cms.json` — `repo.branch` → `staging`.\n\nAs configured today this is a live hazard, not a nicety: at the cutover `main`\nbecomes `harvardintech.com`, so a CMS save would publish straight to the public\nsite with no review step.\n\n**Files**: `CMS_SETUP.md`, `docs/nicole-review.md`, `DEPLOY_SETUP.md` — bring\nthem into line with reality. `CMS_SETUP.md` currently contradicts itself on the\ncommit branch (`staging` in one paragraph, `main` in another), claims GA is\nsettable in the CMS when no such input exists, and `DEPLOY_SETUP.md` still shows\nthe staging-track setup steps 3 and 4 as unchecked although both tracks deployed\ngreen on 2026-08-03.\n\n## Reused existing code\n\n- `momentumSections` end to end — the collection, `src/lib/momentumSections.ts`\n  (glossary; test: `src/lib/momentumSections.test.ts`), and its\n  free-text-validated-in-a-lib convention. `homeSections` is the same shape\n  applied to the homepage.\n- `publishedEntries` from `src/lib/drafts.ts` (test: `src/lib/drafts.test.ts`) and\n  `resolveIncludeDrafts` from `src/lib/draftVisibility.ts` (test:\n  `src/lib/draftVisibility.test.ts`) — the draft rule and the per-track\n  visibility switch. `comingSoon` layers on top; neither changes.\n- The derive-the-menu-from-content rule in `src/lib/nav.ts` (test:\n  `src/lib/nav.test.ts`) — visibility joins the rule that already keeps Chapters\n  and Communities honest.\n- `resolveGiveHref` from `src/lib/giving.ts` (test: `src/lib/giving.test.ts`) —\n  written for the donation-platform switch and reused unchanged.\n- `src/data/collections.test.ts` — the two-file contract between `config.ts` and\n  `collections.json`; every new field is pinned by it automatically.\n- The `content-collection` seed adapter — the new collections are seedable per\n  scenario the moment they exist, which is what makes the coming-soon and hidden\n  states demonstrable.\n- Existing scenarios **Stats Band**, **Hero Carousel**, **CMS Site Settings**,\n  **MomentumStats - Campaign Figures** as the before-state for the captures.\n\n**Existing-implementation survey.** Grepped before proposing new files:\n\n- **`comingSoon` / section visibility** — nothing anywhere in `src/`. `draft` is\n  the only phasing flag, and it is two-state.\n- **`homeSections` / `src/lib/homeSections.ts`** — do not exist.\n  `src/pages/index.astro` hardcodes its thirteen bands in source order.\n- **`heroSlides`, `stats`, `accomplishments`, `pillars` collections** — do not\n  exist. The data lives in `HeroCarousel.astro`'s prop defaults,\n  `settings.json:homeStats`, and `donatePage.json` respectively.\n- **A settings input for `homeStats` / `googleAnalyticsId`** — none.\n  `SETTINGS_FIELDS` in `@codeyam/cms` declares five scalars; unknown keys are\n  round-tripped by `extractSettingsExtras` but never rendered.\n- **Webinars / Podcasts nav gap** — already closed. `nav.json`'s Programs group\n  holds one item, \"All Events\". `docs/scoping/README.md` items 4 and 13 are stale\n  on this point.\n\n## Scenarios to Demonstrate\n\n- **Homepage, launch-ready** — every band shown, the state the world sees at\n  cutover.\n- **A band set to Coming soon** — the placeholder reading as deliberate, beside\n  finished sections.\n- **A band Hidden** — the section gone AND its menu item gone with it, which is\n  the pair that has to hold.\n- **Homepage with corrected stats** — the stat strip driven by the collection\n  rather than by `settings.json`, proving the figures are now hers.\n- **Hero with one slide vs. three** — the carousel driven by content, including\n  the single-slide case where there is nothing to rotate.\n- **Momentum Fund cards edited** — accomplishment and pillar text changed from\n  the CMS.\n- **Donate with the email fallback vs. a real platform URL** — the switch\n  `resolveGiveHref` was written for, finally reachable from `/admin`.\n- **Empty state** — no testimonials, no donors, only example sponsors. The\n  launch-day default, and what a visitor most likely sees on day one.",
+  "description": "Closes the gap between the site being built and an organizer maintaining it themselves — the condition the team needs met before harvardintech.com moves off Strikingly. Every homepage band and every Momentum Fund section now carries a Show / Coming soon / Hidden control in the CMS, and hiding a section removes its menu link with it, so a launch can happen before every future section is ready. The copy that had no input in /admin moved into content collections: the hero slides (which were HeroCarousel prop defaults, and therefore the live content), the stat figures (which sat on settings.json where the package renders no input for them), the Momentum Fund accomplishment and gift-pillar cards, and the donation-platform URL that resolveGiveHref was already written to switch on. cms.json now commits to staging rather than main, which was a live hazard: at the cutover main becomes the public site, so a CMS pointed at it would publish every save straight to the world with no review. Nothing on the site is set to coming soon or hidden — the controls exist unused, and the rendered pages are byte-identical to before.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/launch-ready-editing.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero-carousel--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-communities-derived--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/session-narrative.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "DEPLOY_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/editing-the-site.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/scoping/README.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/HeroCarousel.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/cms.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/settings.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSections.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/nav.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/nav.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/donate.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coming-soon-band.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-homepage-phased-for-launch.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/home-sections-all-three-visibility-states.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-a-giving-platform-is-chosen.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/coming-soon-band--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/home-sections-all-three-visibility-states--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": "src/components/ComingSoon.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/HomeSections.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/accomplishments/events-hosted-and-co-hosted.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/accomplishments/linkedin-followers.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/accomplishments/new-chapters-launched.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/accomplishments/whatsapp-community-members.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/heroSlides/a-global-community-with-a-home-in-your-city.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/heroSlides/where-harvard-alumni-build-the-future.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/board.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/chapters.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/contact.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/content-hub.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/events.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/focus.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/gallery.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/get-involved.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/giving.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/hero.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/stats.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/support.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/homeSections/whatsapp.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/pageCopy/donate.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/pillars/create-meaningful-connections.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/pillars/expand-access-to-knowledge.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/pillars/strengthen-the-network.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/stats/alumni-technologists.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/stats/events-hosted.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/stats/global-chapters.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/stats/harvard-alumni-in-tech.md",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/donatePageContent.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/homeSections.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/homeSections.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/homeSectionsContent.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/pillars.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/pillars.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/ComingSoon.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/HomeSections.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Homepage Phased For Launch",
+      "screenshotPath": "harvard-in-tech-homepage-phased-for-launch--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Giving Platform Is Chosen",
+      "screenshotPath": "momentum-fund-a-giving-platform-is-chosen--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Filtering The Donor Wall",
+      "screenshotPath": "momentum-fund-filtering-the-donor-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Donor Wall Moved To The Top",
+      "screenshotPath": "momentum-fund-the-donor-wall-moved-to-the-top--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The First Donor On The Wall",
+      "screenshotPath": "momentum-fund-the-first-donor-on-the-wall--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "Hero Carousel",
+      "screenshotPath": "hero-carousel--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Communities Derived",
+      "screenshotPath": "primarynav-communities-derived--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    },
+    {
+      "name": "Coming Soon Band",
+      "screenshotPath": "coming-soon-band--desktop.png"
+    },
+    {
+      "name": "Home Sections - All Three Visibility States",
+      "screenshotPath": "home-sections-all-three-visibility-states--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 92,
+    "passed": 92,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 92,
+        "passed": 92
+      }
+    ]
+  }
+}

@@ -25,6 +25,7 @@ import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { loadMomentumSections } from '../lib/momentumSectionsContent';
 import { loadDonors } from '../lib/donorsContent';
+import { loadAccomplishments, loadPillars, loadDonateUrl } from '../lib/donatePageContent';
 
 const testimonials = publishedEntries(
   await getCollection('testimonials'),
@@ -51,6 +52,18 @@ if (unknownKinds.length > 0) {
       `Use one of: narrative, accomplishments, pillars, testimonials, stats.`,
   );
 }
+
+// The two bespoke card bands, and the giving destination, now come from content
+// rather than from `donatePage.json` — the file the CMS does not model, which is
+// what made all three developer-only edits. They are grafted back onto the copy
+// singleton so `MomentumFundPage` and its children keep the exact props they
+// always took, leaving the migration invisible below this line.
+const copy = {
+  ...donatePage,
+  accomplishments: await loadAccomplishments(),
+  pillars: await loadPillars(),
+  donateUrl: await loadDonateUrl(donatePage.donateUrl),
+};
 ---
 
 <BaseLayout
@@ -58,7 +71,7 @@ if (unknownKinds.length > 0) {
   description="Support Harvard Alumni in Tech. Your monthly gift powers the events, mentorship, and city chapters that help alumni find one another and move further together."
 >
   <MomentumFundPage
-    copy={donatePage}
+    copy={copy}
     sections={sections}
     testimonials={testimonials}
     donors={donors}

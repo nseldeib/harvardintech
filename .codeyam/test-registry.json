@@ -28,6 +28,15 @@
       "runner": "tests"
     },
     {
+      "description": "The placeholder always has a heading to show, whichever band was held back.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "HOME_SECTION_LABELS › names every band a placeholder can stand in for",
+      "line": 118,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
       "description": "A freshly uploaded image nobody has described yet must degrade to the render site's current behavior, never emit `alt=\"undefined\"`.",
       "file": "src/lib/media.test.ts",
       "format": "vitest",
@@ -158,7 +167,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "chapterNavItems › builds the url from the slug, not the city",
-      "line": 69,
+      "line": 70,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -167,7 +176,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "chapterNavItems › includes a chapter that nav.json does not list",
-      "line": 38,
+      "line": 39,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -176,7 +185,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "chapterNavItems › orders by the order field, falling back to city for ties and absent values",
-      "line": 49,
+      "line": 50,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -185,7 +194,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "chapterNavItems › returns no items for no chapters",
-      "line": 77,
+      "line": 78,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -257,7 +266,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "committed chapters › lists the six chapters alphabetically by city",
-      "line": 405,
+      "line": 464,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -266,7 +275,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "committed chapters › pins no chapter with an order, so the roster sorts alphabetically",
-      "line": 398,
+      "line": 457,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -275,7 +284,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "committed nav.json › derives community links that all resolve to a page",
-      "line": 371,
+      "line": 430,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -284,7 +293,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "committed nav.json › does not hand-list the communities",
-      "line": 363,
+      "line": 422,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -293,7 +302,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "committed nav.json › no longer hand-lists the chapters",
-      "line": 357,
+      "line": 416,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -302,7 +311,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "committed nav.json › points every internal link at a page that exists",
-      "line": 345,
+      "line": 404,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -311,7 +320,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "communityNavItems › builds the url from the slug, not the name",
-      "line": 177,
+      "line": 178,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -320,7 +329,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "communityNavItems › honours an order pin ahead of the unpinned entries",
-      "line": 166,
+      "line": 167,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -329,7 +338,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "communityNavItems › orders alphabetically by name when nothing is pinned",
-      "line": 158,
+      "line": 159,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -338,7 +347,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "communityNavItems › returns no items for no communities",
-      "line": 185,
+      "line": 186,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -671,7 +680,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "draft visibility › omits a drafted chapter from the production menu",
-      "line": 97,
+      "line": 98,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -680,7 +689,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "draft visibility › shows a drafted chapter while authoring",
-      "line": 103,
+      "line": 104,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1261,6 +1270,51 @@
       "runner": "tests"
     },
     {
+      "description": "The whole difference between the two states: a coming-soon band is still on the page, so its link still lands somewhere — on the placeholder.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "hiddenSectionAnchors › keeps the anchor of a coming-soon band",
+      "line": 164,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Only bands the menu actually links to can go stale, so the result is exactly the anchor table's size and carries no undefined holes.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "hiddenSectionAnchors › never reports an anchor for a band the menu cannot link to",
+      "line": 183,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The healthy state: nothing hidden means no menu item is pruned.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "hiddenSectionAnchors › reports nothing when every band is shown",
+      "line": 170,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The pair that has to hold: hiding a band takes its menu item with it, so a visitor can never follow a link to a section that is not on the page.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "hiddenSectionAnchors › reports the anchor of a hidden band",
+      "line": 157,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A band nobody has an entry for is the same broken link as a hidden one. On the public build a drafted band arrives here already filtered out by `publishedEntries`, which is exactly this case.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "hiddenSectionAnchors › treats a band with no entry at all as gone",
+      "line": 177,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
       "description": "The public production build must NOT ship /admin. This is the case that keeps draft markdown off harvardintech.com.",
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
@@ -1490,7 +1544,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "internalNavUrls › collects site-internal urls at every level and skips external ones",
-      "line": 246,
+      "line": 247,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -1744,6 +1798,51 @@
       "key": "openProjects › returns an empty array when every project is closed",
       "line": 54,
       "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ordering hands back a new array; the caller's list is collection data other call sites read.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "orderedHomeSections › does not mutate the input array",
+      "line": 90,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`kind` is free text because the CMS has no select control, so a typo is a normal editing mistake. It costs that one band, never the deploy.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "orderedHomeSections › drops a band whose kind matches no component",
+      "line": 68,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Classification is the caller's job — a coming-soon or hidden band still has a position on the page, so ordering must not quietly filter either out.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "orderedHomeSections › keeps coming-soon and hidden bands in the ordered list",
+      "line": 75,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A band an editor never numbered sorts LAST rather than jumping to the top of the page — adding one must not silently reshuffle the homepage.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "orderedHomeSections › sorts a band with no order after every ordered band",
+      "line": 61,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The headline guarantee, same as the Momentum Fund page: the Order field is what moves a band up or down.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "orderedHomeSections › sorts bands by their order field",
+      "line": 50,
+      "registeredAt": "2026-08-03T21:22:17Z",
       "runner": "tests"
     },
     {
@@ -2269,6 +2368,87 @@
       "runner": "tests"
     },
     {
+      "description": "A free-text field collects human typing; trailing spaces and capitals are normal input, not mistakes worth punishing.",
+      "file": "src/lib/pillars.test.ts",
+      "format": "vitest",
+      "key": "resolvePillarIcon › accepts a value an editor typed with stray case or spacing",
+      "line": 14,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A card with no icon chosen still gets a badge rather than an empty circle.",
+      "file": "src/lib/pillars.test.ts",
+      "format": "vitest",
+      "key": "resolvePillarIcon › falls back to people for a blank or absent icon",
+      "line": 25,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason this is free text at all: the CMS has no select control, so a typo is a normal editing mistake. It costs the icon, never the build.",
+      "file": "src/lib/pillars.test.ts",
+      "format": "vitest",
+      "key": "resolvePillarIcon › falls back to people for a mistyped icon",
+      "line": 20,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The three supported icons round-trip unchanged — the whole point of the field.",
+      "file": "src/lib/pillars.test.ts",
+      "format": "vitest",
+      "key": "resolvePillarIcon › keeps every glyph the component draws",
+      "line": 6,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Draft keeps its site-wide meaning here — off the public build — so an editor learns one rule, not two.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "resolveVisibility › hides a band whose Draft toggle is switched on",
+      "line": 36,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The one combination that must not be read the other way round: a band an editor hid cannot also advertise itself on the public site.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "resolveVisibility › lets Draft win over coming-soon when both are switched on",
+      "line": 42,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A hand-edited file may spell the flags out rather than omitting them; both spellings of \"off\" must mean the same thing.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "resolveVisibility › reads an explicit false on both toggles as shown",
+      "line": 24,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The middle state: the band is replaced, not removed, so its menu link still lands somewhere.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "resolveVisibility › renders the placeholder when coming-soon is switched on",
+      "line": 30,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The default, and the state every band ships in: neither toggle switched on. An editor who never opens these fields gets a normal, visible homepage.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "resolveVisibility › shows a band with neither toggle set",
+      "line": 17,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
       "description": "Emits the standard allow-all directives.",
       "file": "src/lib/seoEndpoints.test.ts",
       "format": "vitest",
@@ -2473,6 +2653,42 @@
       "key": "schemaKeysFor › returns an empty list for a collection that is not declared",
       "line": 263,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The anti-drift guarantee: the id is DERIVED from the anchor, so the two can never disagree the way two hand-maintained tables would.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "sectionAnchorId › agrees with the anchor table for every linked band",
+      "line": 136,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The id a placeholder renders has to match the fragment the menu links to, or the link scrolls nowhere.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "sectionAnchorId › returns the fragment of the band anchor",
+      "line": 128,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An `id` attribute that should not be rendered wants undefined, not ''.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "sectionAnchorId › returns undefined for a band the menu cannot link to",
+      "line": 143,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A typo'd kind must not produce a bare `#` id on an element nobody links to.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "sectionAnchorId › returns undefined for a kind that is not a band at all",
+      "line": 149,
+      "registeredAt": "2026-08-03T21:22:17Z",
       "runner": "tests"
     },
     {
@@ -3070,6 +3286,24 @@
       "runner": "tests"
     },
     {
+      "description": "De-duplicated and stable so the build warning names each typo once, in the order an editor would find them.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "unknownHomeSectionKinds › names each unrecognized kind once, in first-seen order",
+      "line": 100,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The healthy state: a fully-valid set of bands produces no warning at all.",
+      "file": "src/lib/homeSections.test.ts",
+      "format": "vitest",
+      "key": "unknownHomeSectionKinds › reports nothing when every kind is known",
+      "line": 111,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
       "description": "One warning per typo, however many entries repeat it.",
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
@@ -3164,7 +3398,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "unresolvedNavUrls › ignores a trailing slash difference",
-      "line": 293,
+      "line": 352,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -3173,7 +3407,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "unresolvedNavUrls › reports a url with no page behind it",
-      "line": 285,
+      "line": 344,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -3182,7 +3416,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "unresolvedNavUrls › resolves a bare fragment against the home page",
-      "line": 279,
+      "line": 338,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -3191,7 +3425,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "unresolvedNavUrls › resolves a fragment against its page",
-      "line": 273,
+      "line": 332,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -3272,7 +3506,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withChapterGroup › appends the group when there is no Programs item",
-      "line": 121,
+      "line": 122,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -3281,7 +3515,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withChapterGroup › does not mutate the caller list",
-      "line": 141,
+      "line": 142,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -3290,7 +3524,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withChapterGroup › inserts the group directly after Programs",
-      "line": 113,
+      "line": 114,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -3299,7 +3533,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withChapterGroup › omits the group entirely when there are no chapters",
-      "line": 132,
+      "line": 133,
       "registeredAt": "2026-07-28T15:22:30Z",
       "runner": "tests"
     },
@@ -3308,7 +3542,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withCommunityItems › appends derived items after the hand-authored ones",
-      "line": 196,
+      "line": 197,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -3317,7 +3551,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withCommunityItems › creates the group when nav.json no longer has one",
-      "line": 215,
+      "line": 216,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -3326,7 +3560,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withCommunityItems › does not mutate the caller list or its groups",
-      "line": 235,
+      "line": 236,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -3335,7 +3569,7 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withCommunityItems › leaves the surrounding menu order untouched",
-      "line": 207,
+      "line": 208,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -3344,8 +3578,62 @@
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
       "key": "withCommunityItems › returns the menu unchanged when there are no communities",
-      "line": 227,
+      "line": 228,
       "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The menu is built from nav.json data other call sites read; pruning must copy.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withoutHiddenSections › does not mutate the input tree",
+      "line": 313,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A group emptied by the removal would render as a caret opening onto nothing — the same thing `withChapterGroup` avoids for an empty chapter list.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withoutHiddenSections › drops a dropdown left empty by the removal",
+      "line": 302,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The headline guarantee: hiding a band takes its menu link with it, so a visitor can never follow a link to a section that is not on the page.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withoutHiddenSections › drops a link to a hidden band",
+      "line": 288,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A group that never had children is a plain link the CMS serializer already collapsed; emptiness pruning must not swallow it.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withoutHiddenSections › keeps an item that has no children to begin with",
+      "line": 321,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Section visibility governs homepage anchors only — a link to /events is a different page and must survive untouched.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withoutHiddenSections › leaves links to real pages alone",
+      "line": 295,
+      "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The overwhelmingly common case: no hidden bands, so the menu passes through.",
+      "file": "src/lib/nav.test.ts",
+      "format": "vitest",
+      "key": "withoutHiddenSections › returns the menu unchanged when nothing is hidden",
+      "line": 308,
+      "registeredAt": "2026-08-03T21:22:17Z",
       "runner": "tests"
     }
   ],

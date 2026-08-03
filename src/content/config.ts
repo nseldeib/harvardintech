@@ -318,7 +318,128 @@ const momentumSections = defineCollection({
     layout: z.string().optional(),
     image: z.string().optional(),
     order: z.number().optional(),
+    comingSoon: z.boolean().optional(),
     draft: z.boolean().optional(),
+  }),
+});
+
+// The homepage's reorderable bands — `momentumSections` applied to the landing
+// page. One entry per band, `kind` selecting the component, `order` moving it up
+// or down. See `src/lib/homeSections.ts` for the kinds and the visibility rule.
+//
+// `comingSoon` is the third state between shown and hidden, and it is a second
+// BOOLEAN rather than a three-valued field on purpose: the CMS's field types stop
+// at text/number/textarea/date/image/boolean/list, so a tri-state would have to be
+// free text an editor types exactly right. Two toggles give the same three
+// outcomes through controls the editor actually renders, and `draft` keeps meaning
+// what it means on every other collection. Absent means shown, so a band nobody
+// has touched needs no migration.
+const homeSections = defineCollection({
+  loader: collectionGlob('homeSections'),
+  schema: z.object({
+    kind: z.string(),
+    // Overrides the heading the coming-soon placeholder announces. Blank falls
+    // back to a label derived from `kind`, so a band held back before anyone
+    // named it still reads as deliberate rather than blank.
+    title: z.string().optional(),
+    order: z.number().optional(),
+    comingSoon: z.boolean().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// Slides of the homepage hero carousel. Migrated out of `HeroCarousel.astro`'s
+// prop defaults, which were the live content because `index.astro` rendered the
+// carousel with no props — so the most prominent copy on the site was the one
+// thing no editor could reach. An empty collection falls back to those same
+// defaults, so the hero is never blank.
+const heroSlides = defineCollection({
+  loader: collectionGlob('heroSlides'),
+  schema: z.object({
+    title: z.string(),
+    kicker: z.string().optional(),
+    lede: z.string().optional(),
+    image: z.string().optional(),
+    // Up to two buttons. `variant: 'out'` is the outlined style; anything else
+    // renders solid, so a blank or mistyped variant degrades to a button that
+    // still works.
+    ctas: z
+      .array(z.object({ label: z.string(), url: z.string(), variant: z.string().optional() }))
+      .optional(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// Figures in the homepage stat strip under the hero. Migrated off `homeStats` in
+// `settings.json`, which held the real numbers but had no input in the CMS: the
+// package renders five scalar settings fields and round-trips every other key
+// untouched, so the figures were editable data nobody could edit.
+const stats = defineCollection({
+  loader: collectionGlob('stats'),
+  schema: z.object({
+    value: z.string(),
+    label: z.string(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// Cards in the Momentum Fund's "What we've accomplished so far" band. Migrated
+// out of `donatePage.json`, which the CMS does not model at all. The
+// `momentumSections` entry of kind `accomplishments` still positions the band;
+// these entries are now its content.
+// The card copy is `description` rather than `body` because `body` is a RESERVED
+// field id in the CMS registry (`RESERVED_FIELD_IDS` in the package's
+// `collectionRegistry`) — it belongs to the markdown-body machinery, and a custom
+// field claiming it is dropped from the editor without comment. The same applies
+// to `pillars` below.
+const accomplishments = defineCollection({
+  loader: collectionGlob('accomplishments'),
+  schema: z.object({
+    value: z.string(),
+    label: z.string(),
+    description: z.string().optional(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// Cards in the Momentum Fund's "What Your Gift Powers" band, also migrated out of
+// `donatePage.json`. `icon` names one of the three inline SVG glyphs as free text
+// validated in `src/lib/pillars.ts` — the same treatment `kind` and `layout` get —
+// so an unrecognized value falls back to a drawn icon instead of failing the
+// build. A card with no `linkLabel`/`linkUrl` renders as plain copy.
+const pillars = defineCollection({
+  loader: collectionGlob('pillars'),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    icon: z.string().optional(),
+    linkLabel: z.string().optional(),
+    linkUrl: z.string().optional(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// Per-page settings that are neither prose nor a repeating card: the handful of
+// scalars an editor has to be able to change on a specific page. One entry per
+// page, `id` naming the page (`donate`).
+//
+// This exists because the CMS models exactly two JSON singletons — `settings.json`
+// and `nav.json` — and renders five scalar settings fields. `donatePage.json` is
+// invisible to it, which left `donateUrl` reachable only by editing JSON in the
+// repo. That is the one field that must be changeable the DAY a giving platform
+// is chosen, and `resolveGiveHref` was already written to switch every giving
+// button on it, so the only thing missing was somewhere an editor could type it.
+const pageCopy = defineCollection({
+  loader: collectionGlob('pageCopy'),
+  schema: z.object({
+    title: z.string(),
+    // Real donation-platform URL for the /donate page. Blank keeps every giving
+    // button on the mailto fallback — see `resolveGiveHref` in `src/lib/giving.ts`.
+    donateUrl: z.string().optional(),
   }),
 });
 
@@ -334,4 +455,10 @@ export const collections = {
   testimonials,
   donors,
   momentumSections,
+  homeSections,
+  heroSlides,
+  stats,
+  accomplishments,
+  pillars,
+  pageCopy,
 };

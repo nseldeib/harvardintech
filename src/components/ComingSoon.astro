@@ -1,0 +1,65 @@
+---
+// The placeholder a band renders when an editor sets it to "coming soon".
+//
+// It is deliberately a real, designed band rather than an apology or a blank
+// gap: the state exists so a section can be honest about what is on the way
+// instead of vanishing, so it has to read as intentional to a visitor who does
+// not know a section is missing. Hairline-ruled to match the stat strip, muted
+// so it never competes with the finished sections around it.
+//
+// The counterpart state is `draft`, which removes the band and its menu item
+// together. See `src/lib/homeSections.ts` for the two-toggle rule.
+interface Props {
+  /** The band's own heading, so the placeholder names what is coming. */
+  title: string;
+  /** One line of detail. The default suits any band. */
+  note?: string;
+  /** Anchor id, so a menu link to this band still lands on it. */
+  id?: string;
+}
+const { title, note = 'This section is on its way.', id } = Astro.props as Props;
+---
+
+<section class="soon" id={id}>
+  <div class="in">
+    <span class="tag">Coming soon</span>
+    <h2>{title}</h2>
+    <p>{note}</p>
+  </div>
+</section>
+
+<style>
+  .soon {
+    border-bottom: 1px solid var(--line);
+    padding: 72px 24px;
+    background: #fbfafa;
+  }
+  .in {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .tag {
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crimson);
+    border: 1px solid rgba(164, 16, 52, 0.35);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+  h2 {
+    font-size: clamp(24px, 3vw, 34px);
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    margin: 18px 0 10px;
+  }
+  p {
+    margin: 0;
+    color: #5c5c5c;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+</style>

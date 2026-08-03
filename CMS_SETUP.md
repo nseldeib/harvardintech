@@ -101,18 +101,20 @@ atomically.
 still served by Strikingly and is untouched by this repo, so every site here is a
 private preview.
 
-CMS commits go to the branch named in `src/data/cms.json` — currently **`main`**,
-which builds the **reviewed site** at `nseldeib.github.io/harvardintech`. That is
-the link the team has. Publishing from the CMS updates it a minute or two later.
+CMS commits go to the branch named in `src/data/cms.json` — **`staging`**, which
+builds the **staging site** at `nseldeib.github.io/harvardintech-staging`. An edit
+appears there a minute or two after you publish, and reaches the **reviewed site**
+at `nseldeib.github.io/harvardintech` when someone runs **Promote review → live**.
 
-There is also a **staging site** at `nseldeib.github.io/harvardintech-staging`,
-built from the `staging` branch, where code changes land first so the reviewed
-link holds still while work is in progress.
+That extra step is deliberate, and it matters most *after* the migration: at the
+cutover `main` becomes harvardintech.com, so a CMS that committed to `main` would
+publish every save straight to the public site with no review. Pointing it at
+`staging` means the promote button is the only thing that reaches the world —
+before the cutover and after it.
 
-> **Editors: use the reviewed site's `/admin`.** The staging site serves an admin
-> too, but the CMS commits to whatever `cms.json` names — `main` — so an edit made
-> there lands on the reviewed site anyway, skipping staging. Nothing breaks; it
-> just bypasses the staging step for content.
+> **Both sites serve `/admin`, and it does not matter which one you use.** The CMS
+> commits to whatever `cms.json` names, so an edit made from either admin lands on
+> `staging` either way.
 
 Two independent things phase a change, and it helps to keep them straight:
 
@@ -126,9 +128,10 @@ review → live** → **Run workflow**. That merges `staging` into `main`. It is
 button, not a git exercise, and it is deliberately manual.
 
 If the promote workflow reports it could not fast-forward, `main` has changes
-`staging` does not — which is exactly what a CMS content edit creates, since those
-commit to `main`. It opens a pull request instead of guessing; review and merge
-that PR, or rebase `staging` on `main` and re-run.
+`staging` does not. Content edits no longer cause this — they commit to `staging`
+now — so it means someone committed to `main` directly. It opens a pull request
+instead of guessing; review and merge that PR, or rebase `staging` on `main` and
+re-run.
 
 **After the Strikingly migration** the roles change: `main` becomes the public
 harvardintech.com, `staging` becomes the gated review origin, and promoting then

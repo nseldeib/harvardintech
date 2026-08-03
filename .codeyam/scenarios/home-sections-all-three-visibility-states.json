@@ -1,0 +1,13 @@
+{
+  "name": "Home Sections - All Three Visibility States",
+  "id": "d9cd1df4-777b-4ddc-9a02-0d8272ce8f22",
+  "url": "/isolated-components/HomeSections",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "HomeSections",
+  "scenarioType": "component",
+  "description": "The homepage band stack with one band in each visibility state, which is the only place the three can be compared directly since a real page shows one arrangement at a time. Stats renders normally, the event gallery is replaced by its coming-soon placeholder, and a drafted Support us band is absent entirely. The drafted band is passed in on purpose: the component renders nothing for it, so the three states are total here rather than depending on the page filtering first.",
+  "pageFilePath": "src/components/landing/HomeSections.astro"
+}

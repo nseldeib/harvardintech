@@ -309,6 +309,36 @@
         "status": "added"
       }
     },
+    "src/pages/index.astro": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The homepage is a fixed stack of bands, not a list. Each band that does hold a list (events, chapters, posts, board) renders its own one-versus-many boundary as an auto-fit grid whose single-item layout is the same cell as its many-item layout, and those boundaries are demonstrated at the component level rather than by rebuilding the whole page around one row."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "No band on the homepage paginates or truncates: each list wraps in an auto-fit grid and the page simply gets longer. Growth is answered by the chapter and community pages the bands link into, so a higher count is a data quantity rather than a distinct visual state."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered Astro route built from content collections; the page ships as HTML with no client fetch, so nothing is ever pending."
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Static prerendered route with no runtime data fetch. The one authoring mistake that could reach it, a mistyped section kind, is dropped with a build-log warning rather than rendering an in-page error, so the failure surfaces in the build and never to a visitor."
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
     "src/pages/sponsor.astro": {
       "empty": {
         "status": "covered"

@@ -8,6 +8,7 @@ import {
   withCommunityItems,
   internalNavUrls,
   unresolvedNavUrls,
+  withoutHiddenSections,
 } from './nav';
 import { publishedEntries } from './drafts';
 import type { NavItem } from './site';
@@ -262,6 +263,64 @@ describe('internalNavUrls', () => {
     ];
 
     expect(internalNavUrls(items)).toEqual(['/events', '/blog/welcome', '/#about']);
+  });
+});
+
+describe('withoutHiddenSections', () => {
+  const menu = (): NavItem[] => [
+    { label: 'Programs', children: [{ label: 'All Events', url: '/events' }] },
+    {
+      label: 'Membership',
+      children: [
+        {
+          label: 'About',
+          children: [
+            { label: 'Mission', url: '/#about' },
+            { label: 'Board', url: '/#board' },
+          ],
+        },
+      ],
+    },
+  ];
+
+  // The headline guarantee: hiding a band takes its menu link with it, so a
+  // visitor can never follow a link to a section that is not on the page.
+  it('drops a link to a hidden band', () => {
+    const [, membership] = withoutHiddenSections(menu(), ['/#board']);
+    expect(membership.children![0].children).toEqual([{ label: 'Mission', url: '/#about' }]);
+  });
+
+  // Section visibility governs homepage anchors only — a link to /events is a
+  // different page and must survive untouched.
+  it('leaves links to real pages alone', () => {
+    const [programs] = withoutHiddenSections(menu(), ['/#board']);
+    expect(programs.children).toEqual([{ label: 'All Events', url: '/events' }]);
+  });
+
+  // A group emptied by the removal would render as a caret opening onto nothing
+  // — the same thing `withChapterGroup` avoids for an empty chapter list.
+  it('drops a dropdown left empty by the removal', () => {
+    const pruned = withoutHiddenSections(menu(), ['/#about', '/#board']);
+    expect(pruned.map((i) => i.label)).toEqual(['Programs']);
+  });
+
+  // The overwhelmingly common case: no hidden bands, so the menu passes through.
+  it('returns the menu unchanged when nothing is hidden', () => {
+    expect(withoutHiddenSections(menu(), [])).toEqual(menu());
+  });
+
+  // The menu is built from nav.json data other call sites read; pruning must copy.
+  it('does not mutate the input tree', () => {
+    const items = menu();
+    withoutHiddenSections(items, ['/#board']);
+    expect(items).toEqual(menu());
+  });
+
+  // A group that never had children is a plain link the CMS serializer already
+  // collapsed; emptiness pruning must not swallow it.
+  it('keeps an item that has no children to begin with', () => {
+    const items: NavItem[] = [{ label: 'Donate', url: '/donate' }];
+    expect(withoutHiddenSections(items, ['/#board'])).toEqual(items);
   });
 });
 

@@ -1,0 +1,103 @@
+{
+  "name": "Harvard in Tech - Homepage Phased For Launch",
+  "id": "a3325e4a-e960-4e0f-af5c-752d38c7ee86",
+  "url": "/",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "homeSections": [
+      {
+        "kind": "hero",
+        "order": 1,
+        "slug": "hero",
+        "title": "Hero"
+      },
+      {
+        "kind": "stats",
+        "order": 2,
+        "slug": "stats",
+        "title": "Stats"
+      },
+      {
+        "comingSoon": true,
+        "kind": "gallery",
+        "order": 3,
+        "slug": "gallery",
+        "title": "Event gallery"
+      },
+      {
+        "kind": "events",
+        "order": 4,
+        "slug": "events",
+        "title": "Upcoming events"
+      },
+      {
+        "kind": "chapters",
+        "order": 5,
+        "slug": "chapters",
+        "title": "Our chapters"
+      },
+      {
+        "kind": "focus",
+        "order": 6,
+        "slug": "focus",
+        "title": "Focus areas"
+      },
+      {
+        "kind": "content-hub",
+        "order": 7,
+        "slug": "content-hub",
+        "title": "Content hub"
+      },
+      {
+        "kind": "board",
+        "order": 8,
+        "slug": "board",
+        "title": "Board of Directors"
+      },
+      {
+        "kind": "get-involved",
+        "order": 9,
+        "slug": "get-involved",
+        "title": "Get involved"
+      },
+      {
+        "kind": "giving",
+        "order": 10,
+        "slug": "giving",
+        "title": "Giving campaign"
+      },
+      {
+        "draft": true,
+        "kind": "whatsapp",
+        "order": 11,
+        "slug": "whatsapp",
+        "title": "WhatsApp community"
+      },
+      {
+        "kind": "support",
+        "order": 12,
+        "slug": "support",
+        "title": "Support us"
+      },
+      {
+        "kind": "contact",
+        "order": 13,
+        "slug": "contact",
+        "title": "Contact us"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/index.astro",
+  "description": "The visibility controls exercised on a real homepage, to show what a phased cutover looks like. One band is set to 'coming soon' and another is hidden — the WhatsApp band, whose menu link goes with it, which is the pair that has to hold since a hidden section must never leave the navigation pointing at nothing. The bands here are chosen to demonstrate the switches, NOT because they are unfinished: every homepage section has real content today, and nothing on the live site is set to either state. This exists so a launch can happen before every future section is ready, with both switches on the section's own entry in the CMS.",
+  "interactions": [
+    {
+      "action": "press",
+      "selector": "body",
+      "value": "PageDown"
+    }
+  ]
+}

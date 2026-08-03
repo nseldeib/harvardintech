@@ -28,7 +28,9 @@ import MomentumTestimonials from './donate/MomentumTestimonials.astro';
 import DonorWall from './donate/DonorWall.astro';
 import MomentumClose from './donate/MomentumClose.astro';
 import type { TestimonialLike } from './donate/MomentumTestimonials.astro';
-import { tintedFlags, type SectionLike } from '../lib/momentumSections';
+import ComingSoon from './ComingSoon.astro';
+import { SECTION_LABELS, tintedFlags, type SectionKind, type SectionLike } from '../lib/momentumSections';
+import { resolveVisibility } from '../lib/homeSections';
 import type { DonorLike } from '../lib/donors';
 import type { DonatePageCopy } from '../lib/site';
 
@@ -90,6 +92,20 @@ const tinted = tintedFlags(sections);
 {
   sections.map((section, index) => {
     const Body = section.Content as any;
+    // Visibility is decided ahead of the kind switch, and the three states are
+    // total here rather than relying on the caller: `hidden` renders nothing and
+    // `coming-soon` is replaced wholesale, whatever the band would otherwise
+    // have drawn. In practice `publishedEntries` drops a drafted section before
+    // it arrives — but a component that rendered a section its own rule calls
+    // hidden would be a trap for the next caller.
+    if (resolveVisibility(section) === 'hidden') return null;
+    if (resolveVisibility(section) === 'coming-soon') {
+      return (
+        <ComingSoon
+          title={section.title ?? SECTION_LABELS[section.kind as SectionKind] ?? 'More to come'}
+        />
+      );
+    }
     switch (section.kind) {
       case 'narrative':
         return (

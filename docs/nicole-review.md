@@ -101,11 +101,15 @@ sending her hunting through /admin for a screen that does not exist.
 
 ## What happens when she edits
 
-Her edits commit to the `main` branch of `nseldeib/harvardintech` (configured in
-`src/data/cms.json`). That triggers a rebuild, and the password-protected
-preview updates a minute or two later. There is no separate publish step right
-now, and no path by which an edit reaches the real harvardintech.com — that only
-happens at the Strikingly migration, deliberately.
+Her edits commit to the `staging` branch of `nseldeib/harvardintech` (configured
+in `src/data/cms.json`). That triggers a rebuild, and the **staging** site
+updates a minute or two later. Her change reaches the **reviewed** link when
+someone runs **Actions → Promote review → live**.
+
+There is no path by which an edit reaches the real harvardintech.com — that only
+happens at the Strikingly migration, deliberately. The promote step exists now
+rather than later on purpose: at the cutover `main` becomes the public site, so a
+CMS pointed at `main` would publish every save straight to the world.
 
 Her commits are attributed to the token owner's GitHub identity, not her name.
 That is expected for a review.
@@ -183,10 +187,10 @@ When a change is ready for her, go to **Actions → Promote review → live → 
 workflow**. That merges `staging` into `main` and her link catches up a minute or
 two later.
 
-Her CMS edits commit to `main` directly, which means the next promote will find
-commits on `main` that `staging` lacks and will open a PR rather than
-fast-forwarding. That is the workflow behaving correctly, not a fault — rebase
-`staging` on `main` and re-run.
+Her CMS edits commit to `staging`, so they ride the same promote as our code
+changes rather than landing on the reviewed link behind it. Promotes should
+fast-forward cleanly; if one opens a PR instead, someone committed to `main`
+directly — review and merge that PR, or rebase `staging` on `main` and re-run.
 
 ## Known rough edges
 

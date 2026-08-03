@@ -11,17 +11,22 @@
 // the CMS can edit copy later; the defaults reproduce the approved Atlas board.
 import { withBase } from '../../lib/url';
 
+// Everything but the headline is optional, matching the `heroSlides` collection
+// the homepage now feeds this from: a slide an editor has only half filled in
+// still renders, with the crimson stage showing through where the photo would be
+// and the buttons simply absent. A required field here would mean a half-written
+// slide could break the top of the site.
 interface Cta {
   label: string;
   url: string;
-  variant?: 'solid' | 'out';
+  variant?: string;
 }
 interface Slide {
-  image: string;
-  kicker: string;
   title: string;
-  lede: string;
-  ctas: Cta[];
+  image?: string;
+  kicker?: string;
+  lede?: string;
+  ctas?: Cta[];
 }
 interface Props {
   slides?: Slide[];
@@ -60,14 +65,14 @@ const {
     {
       slides.map((slide) => (
         <div class="slide">
-          <img class="pho" src={withBase(slide.image)} alt="" />
+          {slide.image ? <img class="pho" src={withBase(slide.image)} alt="" /> : null}
           <div class="scrim" />
           <div class="intro-in">
-            <span class="kick" style="color:#fff">{slide.kicker}</span>
+            {slide.kicker ? <span class="kick" style="color:#fff">{slide.kicker}</span> : null}
             <h1>{slide.title}</h1>
-            <p class="lede">{slide.lede}</p>
+            {slide.lede ? <p class="lede">{slide.lede}</p> : null}
             <div class="actions">
-              {slide.ctas.map((cta) => (
+              {(slide.ctas ?? []).map((cta) => (
                 <a
                   class={`btn ${cta.variant === 'out' ? 'btn-out on-dark' : 'btn-solid'}`}
                   href={cta.url.startsWith('http') ? cta.url : withBase(cta.url)}

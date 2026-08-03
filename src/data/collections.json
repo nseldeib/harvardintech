@@ -417,6 +417,237 @@
           "type": "number",
           "optional": true,
           "hint": "Lower numbers appear higher on the page. Change this to move a section up or down. Blank puts the section last."
+        },
+        {
+          "name": "comingSoon",
+          "label": "Show as coming soon",
+          "type": "boolean",
+          "optional": true,
+          "hint": "Switch ON to replace this section with a short \"coming soon\" placeholder. Switch the Draft toggle on instead to remove the section and its menu link entirely. Both off means the section shows normally."
+        }
+      ]
+    },
+    {
+      "id": "homeSections",
+      "label": "Homepage sections",
+      "singular": "Section",
+      "fields": [
+        {
+          "name": "kind",
+          "label": "Section type",
+          "type": "text",
+          "hint": "Which band this is: hero, stats, events, chapters, focus, content-hub, board, get-involved, giving, whatsapp, support, gallery, or contact. A value matching none of those drops that one band and is named in the build log."
+        },
+        {
+          "name": "title",
+          "label": "Heading",
+          "type": "text",
+          "optional": true,
+          "hint": "Only used by the \"coming soon\" placeholder, as the heading it announces. Blank falls back to the section's usual name."
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Lower numbers appear higher on the page. Change this to move a section up or down. Blank puts it last."
+        },
+        {
+          "name": "comingSoon",
+          "label": "Show as coming soon",
+          "type": "boolean",
+          "optional": true,
+          "hint": "Switch ON to replace this section with a short \"coming soon\" placeholder. Switch the Draft toggle on instead to remove the section and its menu link entirely. Both off means the section shows normally."
+        }
+      ]
+    },
+    {
+      "id": "heroSlides",
+      "label": "Homepage hero slides",
+      "singular": "Slide",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Headline",
+          "type": "text",
+          "hint": "The large headline on the slide."
+        },
+        {
+          "name": "kicker",
+          "label": "Kicker",
+          "type": "text",
+          "optional": true,
+          "hint": "The small line above the headline."
+        },
+        {
+          "name": "lede",
+          "label": "Lede",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The paragraph beneath the headline."
+        },
+        {
+          "name": "image",
+          "label": "Background image",
+          "type": "image",
+          "optional": true,
+          "hint": "The full-bleed photo behind the slide. Blank leaves the crimson backdrop."
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Lower numbers come first in the rotation. Blank puts the slide last."
+        },
+        {
+          "name": "ctas",
+          "label": "Buttons",
+          "type": "list",
+          "optional": true,
+          "hint": "Up to two buttons. Variant \"solid\" is the filled button, \"out\" is the outlined one; anything else renders solid.",
+          "fields": [
+            {
+              "name": "label",
+              "label": "Label",
+              "type": "text"
+            },
+            {
+              "name": "url",
+              "label": "Link",
+              "type": "text"
+            },
+            {
+              "name": "variant",
+              "label": "Style",
+              "type": "text",
+              "optional": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stats",
+      "label": "Homepage stats",
+      "singular": "Stat",
+      "fields": [
+        {
+          "name": "value",
+          "label": "Figure",
+          "type": "text",
+          "hint": "The big number, e.g. 8,000+ or Est. 2013."
+        },
+        {
+          "name": "label",
+          "label": "Label",
+          "type": "text",
+          "hint": "The small caption under the figure."
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Lower numbers appear further left. Blank puts the figure last."
+        }
+      ]
+    },
+    {
+      "id": "accomplishments",
+      "label": "Momentum Fund accomplishments",
+      "singular": "Accomplishment",
+      "fields": [
+        {
+          "name": "value",
+          "label": "Figure",
+          "type": "text",
+          "hint": "The big number on the card, e.g. 600+."
+        },
+        {
+          "name": "label",
+          "label": "Label",
+          "type": "text",
+          "hint": "What the figure counts."
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "optional": true,
+          "hint": "One or two sentences beneath the figure."
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Lower numbers appear first. Blank puts the card last."
+        }
+      ]
+    },
+    {
+      "id": "pillars",
+      "label": "Momentum Fund gift pillars",
+      "singular": "Pillar",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "hint": "What this gift powers."
+        },
+        {
+          "name": "icon",
+          "label": "Icon",
+          "type": "text",
+          "optional": true,
+          "hint": "One of people, book, or globe. Anything else falls back to people."
+        },
+        {
+          "name": "linkLabel",
+          "label": "Link label",
+          "type": "text",
+          "optional": true,
+          "hint": "Optional link at the bottom of the card. Leave both link fields blank for a plain card."
+        },
+        {
+          "name": "linkUrl",
+          "label": "Link URL",
+          "type": "text",
+          "optional": true
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Lower numbers appear first. Blank puts the card last."
+        }
+      ]
+    },
+    {
+      "id": "pageCopy",
+      "label": "Page settings",
+      "singular": "Page",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Page",
+          "type": "text",
+          "hint": "Which page these settings belong to."
+        },
+        {
+          "name": "donateUrl",
+          "label": "Donation platform URL",
+          "type": "text",
+          "optional": true,
+          "hint": "Where every Give button points. Blank keeps them on the giving-inquiry email, which is what they do today. Paste a real platform URL here to switch them all over at once."
         }
       ]
     }

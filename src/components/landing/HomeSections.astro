@@ -1,0 +1,108 @@
+---
+// The homepage's band stack: every section, in the order an editor arranged
+// them, each either rendered or replaced by its "coming soon" placeholder.
+//
+// This is the homepage's counterpart to `MomentumFundPage` — the composition
+// lives in a component rather than in `index.astro` so the route file is imports
+// plus one element, and so the whole stack can be driven from props by a scenario
+// without going through the collections.
+//
+// `kind` picks the component. An unknown kind never reaches here: `loadHomeSections`
+// drops it (with a build-log warning) so a typo costs one band, not the deploy.
+import ComingSoon from '../ComingSoon.astro';
+import HeroCarousel from './HeroCarousel.astro';
+import Stats from './Stats.astro';
+import UpcomingEvents from './UpcomingEvents.astro';
+import OurChapters from './OurChapters.astro';
+import FocusAreas from './FocusAreas.astro';
+import ContentHub from './ContentHub.astro';
+import BoardOfDirectors from './BoardOfDirectors.astro';
+import GetInvolved from './GetInvolved.astro';
+import GivingCampaign from './GivingCampaign.astro';
+import WhatsappCommunity from './WhatsappCommunity.astro';
+import SupportUs from './SupportUs.astro';
+import EventGallery from './EventGallery.astro';
+import ContactUs from './ContactUs.astro';
+import {
+  HOME_SECTION_LABELS,
+  resolveVisibility,
+  sectionAnchorId,
+  type HomeSectionKind,
+  type HomeSectionLike,
+} from '../../lib/homeSections';
+import type { HeroSlideLike, StatLike } from '../../lib/homeSectionsContent';
+import type { SocialLink } from '../../lib/site';
+
+interface Props {
+  /** Already draft-filtered and ordered by `orderedHomeSections` — this component
+   *  renders the list as given rather than re-sorting it, so a scenario can pin an
+   *  arbitrary order to demonstrate reordering. */
+  sections?: HomeSectionLike[];
+  slides?: HeroSlideLike[];
+  stats?: StatLike[];
+  events?: any[];
+  chapters?: any[];
+  posts?: any[];
+  board?: any[];
+  socials?: SocialLink[];
+  /** Required, not optional: `ContactUs` builds a mailto from it and has no
+   *  sensible fallback, so an absent address would render a dead contact link. */
+  email: string;
+}
+
+const {
+  sections = [],
+  slides = [],
+  stats = [],
+  events = [],
+  chapters = [],
+  posts = [],
+  board = [],
+  socials = [],
+  email,
+} = Astro.props as Props;
+---
+
+{
+  sections.map((section) =>
+    // `hidden` renders nothing, so the three states are total HERE rather than
+    // relying on the caller. On the real page `publishedEntries` drops a drafted
+    // band before it ever arrives, so this is belt-and-braces — but a component
+    // that silently rendered a band its own rule calls hidden would be a trap for
+    // the next caller, and it is what makes the hidden state demonstrable in
+    // isolation at all.
+    resolveVisibility(section) === 'hidden' ? null : resolveVisibility(section) ===
+      'coming-soon' ? (
+      <ComingSoon
+        title={section.title ?? HOME_SECTION_LABELS[section.kind as HomeSectionKind]}
+        id={sectionAnchorId(section.kind)}
+      />
+    ) : section.kind === 'hero' ? (
+      <HeroCarousel slides={slides.length > 0 ? slides : undefined} />
+    ) : section.kind === 'stats' ? (
+      <Stats stats={stats.length > 0 ? stats : undefined} />
+    ) : section.kind === 'events' ? (
+      <UpcomingEvents events={events} />
+    ) : section.kind === 'chapters' ? (
+      <OurChapters chapters={chapters} />
+    ) : section.kind === 'focus' ? (
+      <FocusAreas />
+    ) : section.kind === 'content-hub' ? (
+      <ContentHub posts={posts} />
+    ) : section.kind === 'board' ? (
+      <BoardOfDirectors members={board} />
+    ) : section.kind === 'get-involved' ? (
+      <GetInvolved />
+    ) : section.kind === 'giving' ? (
+      <GivingCampaign email={email} />
+    ) : section.kind === 'whatsapp' ? (
+      <WhatsappCommunity />
+    ) : section.kind === 'support' ? (
+      <SupportUs email={email} />
+    ) : section.kind === 'gallery' ? (
+      <EventGallery />
+    ) : (
+      <ContactUs socials={socials} email={email} />
+    ),
+  )
+}

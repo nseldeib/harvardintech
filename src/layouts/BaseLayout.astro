@@ -19,7 +19,10 @@ import {
   withChapterGroup,
   communityNavItems,
   withCommunityItems,
+  withoutHiddenSections,
 } from '../lib/nav';
+import { hiddenSectionAnchors } from '../lib/homeSections';
+import { loadHomeSections } from '../lib/homeSectionsContent';
 import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { withBase } from '../lib/url';
@@ -51,7 +54,17 @@ const communities = publishedEntries(
 ).map((c) => ({ slug: c.id, ...c.data }));
 const communityItems = communityNavItems(communities);
 
-const navItems = withCommunityItems(withChapterGroup(nav.items, chapterItems), communityItems);
+// Homepage bands an editor hid take their menu links with them. Done in the
+// LAYOUT rather than on the homepage because the header renders on every page:
+// a link to a hidden band is just as broken in the /events header as in the
+// homepage's own. Read through the same loader the homepage uses, so the menu
+// and the page can never disagree about which bands exist.
+const { sections: homeSections } = await loadHomeSections();
+
+const navItems = withoutHiddenSections(
+  withCommunityItems(withChapterGroup(nav.items, chapterItems), communityItems),
+  hiddenSectionAnchors(homeSections),
+);
 
 // The crimson utility strip reads as a one-line "where we are". It reads the
 // derived chapter labels directly, so it can no longer go stale behind the

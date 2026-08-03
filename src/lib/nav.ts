@@ -182,3 +182,47 @@ export function unresolvedNavUrls(urls: string[], knownPaths: string[]): string[
   const known = new Set(knownPaths.map(toPath));
   return urls.filter((url) => !known.has(toPath(url)));
 }
+
+/**
+ * The menu with every link to a hidden homepage band removed, and any dropdown
+ * left empty by that removal removed with it.
+ *
+ * This is the second half of "Hidden": an editor who takes a band off the page
+ * must not be left with a menu item that scrolls to nothing. It is the same rule
+ * that already governs Chapters and Communities — a menu entry may not outlive
+ * what it points at — applied to the hand-authored anchors in `nav.json`.
+ *
+ * Matching is on the fragment-bearing url exactly as `hiddenSectionAnchors`
+ * emits it (`/#board`), so a link to a real page (`/events`, `/donate`) is never
+ * touched, and neither is a `coming-soon` band's link: that band is still on the
+ * page, so following the link lands on the placeholder.
+ *
+ * An emptied dropdown is dropped rather than rendered as a caret onto nothing —
+ * the rule `withChapterGroup` already applies to an empty chapter list.
+ *
+ * Returns a new tree; neither the input list nor its item objects are mutated.
+ */
+export function withoutHiddenSections(items: NavItem[], hiddenAnchors: string[]): NavItem[] {
+  if (hiddenAnchors.length === 0) return [...items];
+  const hidden = new Set(hiddenAnchors);
+
+  const prune = (nodes: NavItem[]): NavItem[] => {
+    const out: NavItem[] = [];
+    for (const node of nodes) {
+      if (node.url && hidden.has(node.url)) continue;
+      if (!node.children) {
+        out.push(node);
+        continue;
+      }
+      const children = prune(node.children);
+      // A group that had children and lost them all goes too. A group that never
+      // had any is a plain link the CMS serializer already collapsed, so it is
+      // left exactly as found.
+      if (children.length === 0 && node.children.length > 0) continue;
+      out.push({ ...node, children });
+    }
+    return out;
+  };
+
+  return prune(items);
+}

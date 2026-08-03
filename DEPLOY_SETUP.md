@@ -26,10 +26,10 @@ The staging site is hosted on the staging repo's own Pages URL rather than
 record to `harvardintech.com`, and that domain stays untouched until the
 migration is approved. See "At the cutover" below for the three-line diff.
 
-**One boundary this does not enforce:** the CMS commits to the branch named in
-`src/data/cms.json`, which is `main`. An edit made through the *staging* site's
-`/admin` therefore lands on the reviewed site, skipping staging. Do content edits
-on the reviewed site's `/admin`; the staging site is for code.
+**Content edits land on `staging` too.** The CMS commits to the branch named in
+`src/data/cms.json`, which is `staging`, so an edit from either site's `/admin`
+goes through the same promote as a code change. This is what keeps the cutover
+safe: `main` becomes the public site, and nothing reaches it except a promote.
 
 The CMS is deliberately not behind the passphrase; it has its own GitHub-token
 sign-in and is `noindex, nofollow`. See [docs/nicole-review.md](docs/nicole-review.md).
@@ -169,14 +169,14 @@ requires a second repo. It holds only generated output; there is no source in it
    A deploy key rather than a personal access token: it is scoped to exactly one
    repo and carries no person's identity, so it survives staff changes.
 
-3. ⬜ **Create the `staging` branch** off `main` and push it. The first push builds
-   the staging site and creates `gh-pages` on the staging repo.
+3. ✅ **Create the `staging` branch** off `main` and push it. **Done** — the branch
+   exists on origin and its builds are green.
    ```bash
    git checkout -b staging main && git push -u origin staging
    ```
 
-4. ⬜ **Enable Pages on the staging repo** — **Settings → Pages → Source: Deploy
-   from a branch**, branch **`gh-pages`**, folder `/ (root)`, or:
+4. ✅ **Enable Pages on the staging repo** — **Done.** **Settings → Pages →
+   Source: Deploy from a branch**, branch **`gh-pages`**, folder `/ (root)`, or:
    ```bash
    gh api -X POST repos/nseldeib/harvardintech-staging/pages \
      -f 'source[branch]=gh-pages' -f 'source[path]=/'
