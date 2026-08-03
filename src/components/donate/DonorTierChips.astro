@@ -1,0 +1,62 @@
+---
+// The row of giving-level filter chips above the donor bands.
+//
+// Inert markup on its own — `lib/donorFilter.ts` wires the clicks. That split is
+// the point: the chips ship as ordinary buttons with `aria-pressed`, so before
+// the module loads (or with JavaScript off entirely) they are visibly present
+// and simply do nothing, while every donor stays on the page under a real
+// heading. The wall never depends on them to render.
+//
+// One chip per band that actually has donors, plus All — a chip for a level
+// nobody has given at would filter to an empty wall.
+import { ALL_TIERS } from '../../lib/donorFilter';
+import type { DonorGroup } from '../../lib/donors';
+
+interface Props {
+  groups: DonorGroup[];
+  allLabel?: string;
+}
+const { groups, allLabel = 'All donors' } = Astro.props as Props;
+---
+
+<div class="chips" role="group" aria-label="Filter donors by giving level">
+  <button type="button" class="chip" data-donor-chip={ALL_TIERS} aria-pressed="true">
+    {allLabel}
+  </button>
+  {
+    groups.map((group) => (
+      <button type="button" class="chip" data-donor-chip={group.id} aria-pressed="false">
+        {group.name}
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 32px 0 8px;
+  }
+  .chip {
+    background: #fff;
+    border: 1px solid var(--color-rule, rgba(0, 0, 0, 0.12));
+    border-radius: 999px;
+    padding: 8px 18px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--color-fg);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .chip:hover {
+    border-color: rgba(165, 28, 48, 0.4);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--crimson);
+    border-color: var(--crimson);
+    color: #fff;
+  }
+</style>

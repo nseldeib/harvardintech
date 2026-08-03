@@ -25,9 +25,11 @@ import MomentumAccomplishments from './donate/MomentumAccomplishments.astro';
 import MomentumNarrative from './donate/MomentumNarrative.astro';
 import GiftPillars from './donate/GiftPillars.astro';
 import MomentumTestimonials from './donate/MomentumTestimonials.astro';
+import DonorWall from './donate/DonorWall.astro';
 import MomentumClose from './donate/MomentumClose.astro';
 import type { TestimonialLike } from './donate/MomentumTestimonials.astro';
 import { tintedFlags, type SectionLike } from '../lib/momentumSections';
+import type { DonorLike } from '../lib/donors';
 import type { DonatePageCopy } from '../lib/site';
 
 export type { TestimonialLike };
@@ -49,6 +51,10 @@ interface Props {
    *  an arbitrary order to demonstrate reordering. */
   sections?: RenderableSection[];
   testimonials?: TestimonialLike[];
+  /** Published donors for the recognition wall, already draft-filtered. Empty in
+   *  production today — the wall renders its invitation state, which is the
+   *  view most visitors currently get. */
+  donors?: DonorLike[];
   email?: string;
   /** Scenario/testing hook: pre-fill the headline as if `?name=` were present.
    *  The real page fills it client-side. */
@@ -58,6 +64,7 @@ const {
   copy,
   sections = [],
   testimonials = [],
+  donors = [],
   email = 'ben@harvardintech.com',
   previewName,
 } = Astro.props as Props;
@@ -109,6 +116,20 @@ const tinted = tintedFlags(sections);
           <MomentumTestimonials
             title={copy.testimonialsTitle}
             testimonials={testimonials}
+          />
+        );
+      case 'donors':
+        return (
+          <DonorWall
+            title={copy.donorsTitle}
+            intro={copy.donorsIntro}
+            emptyMessage={copy.donorsEmptyMessage}
+            donors={donors}
+            tiers={copy.donorTiers ?? []}
+            ctaLabel={copy.ctaLabel}
+            donateUrl={copy.donateUrl}
+            email={email}
+            campaignName={copy.campaignName}
           />
         );
       case 'stats':

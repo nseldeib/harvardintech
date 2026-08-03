@@ -8,13 +8,15 @@ import { sortByOrder } from './order';
 /**
  * The section kinds `MomentumFundPage` knows how to render. `narrative` uses the
  * entry's own title/body/image; the rest are slots whose card data still comes
- * from `donatePage.json`, so their entry carries only `kind` + `order`.
+ * from `donatePage.json` (and, for `testimonials` and `donors`, from their own
+ * collections), so their entry carries only `kind` + `order`.
  */
 export const SECTION_KINDS = [
   'narrative',
   'accomplishments',
   'pillars',
   'testimonials',
+  'donors',
   'stats',
 ] as const;
 

@@ -1,0 +1,13 @@
+{
+  "name": "Donor Wall Intro - Heading And Founding Line",
+  "id": "a444fe74-37a9-451b-aaab-2465064b4cce",
+  "url": "/isolated-components/DonorWallIntro",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWallIntro",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWallIntro.astro",
+  "description": "The heading block of a populated wall: title, editable intro, and the line saying what a Founding Donor is. That line exists so a first-time reader learns the convention once, at the top, instead of hovering a badge to find out."
+}

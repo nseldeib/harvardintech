@@ -1,0 +1,13 @@
+{
+  "name": "Donor Card - Anonymous",
+  "id": "afd6558f-0fb5-4d49-977f-35bd83aefa52",
+  "url": "/isolated-components/DonorCard-Anonymous",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorCard.astro",
+  "description": "The card an anonymous gift produces. The entry behind it has a real name and a real profile URL; neither reaches the page, and the avatar shows a neutral dash rather than initials, because two letters beside 'Anonymous donor' name them to anyone who knows them. The Founding badge stays, because the flag is about when they gave, not who they are."
+}

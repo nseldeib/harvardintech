@@ -1,0 +1,13 @@
+{
+  "name": "Donor Card - Named Donor",
+  "id": "e753f224-7b41-459c-a125-8d9ae74a1b18",
+  "url": "/isolated-components/DonorCard",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorCard.astro",
+  "description": "The plain card: initials, a name that links out, and nothing else. The baseline the other three states are read against."
+}

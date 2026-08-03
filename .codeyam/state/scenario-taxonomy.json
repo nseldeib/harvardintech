@@ -281,6 +281,34 @@
         "reason": "Presentational page; every action is an external-link or mailto navigation with no in-page interactive state"
       }
     },
+    "src/pages/donate.astro": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "added"
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The wall has no pagination, overflow, or truncation treatment: bands wrap in an auto-fit grid and the page simply gets longer. Its answer to growth is the tier grouping and the filter chips, both demonstrated in the typical and key-interaction scenarios, so a higher donor count is a data quantity rather than a distinct visual state."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered Astro route built from content collections; the page ships as HTML with no client fetch, so nothing is ever pending."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "covered"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
     "src/pages/sponsor.astro": {
       "empty": {
         "status": "covered"

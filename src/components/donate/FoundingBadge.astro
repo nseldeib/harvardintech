@@ -1,0 +1,45 @@
+---
+// The Founding Donor mark.
+//
+// Its own component because "founding" is recognition the team hands out and may
+// want to reword once, everywhere — and because the badge has to carry its
+// meaning in TEXT, not in colour. A crimson pill that only says "Founding" to
+// someone who already knows the convention is decoration; the label and the
+// title below are what make it recognition a first-time reader can read.
+interface Props {
+  /** The standing explanation, overridable if the team rewords what founding means. */
+  title?: string;
+}
+const {
+  title = 'A Founding Donor — gave to the Momentum Fund in its first year, before there was a track record to point to.',
+} = Astro.props as Props;
+---
+
+<span class="badge" title={title}>
+  <span class="dot" aria-hidden="true"></span>
+  Founding Donor
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(165, 28, 48, 0.08);
+    color: var(--crimson);
+    border: 1px solid rgba(165, 28, 48, 0.25);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--crimson);
+  }
+</style>

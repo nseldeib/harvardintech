@@ -1,0 +1,53 @@
+---
+// The heading block above the donor bands: the section title, the editable
+// intro, and the line explaining what a Founding Donor is.
+//
+// The founding line is here rather than on the badge because a pill reading
+// "FOUNDING DONOR" tells a first-time reader nothing — they learn what it means
+// once, at the top, instead of hovering a badge to find out. `hasDonors` exists
+// because the intro talks about the names below it ("every name here…"): with
+// none, it would describe donors the reader cannot see, so the empty state's own
+// message becomes the intro instead.
+import { foundingDonorsSummary } from '../../lib/donors';
+
+interface Props {
+  title: string;
+  intro?: string;
+  foundingCount?: number;
+  hasDonors?: boolean;
+}
+const { title, intro, foundingCount = 0, hasDonors = true } = Astro.props as Props;
+
+const foundingLine = foundingDonorsSummary(foundingCount);
+---
+
+<h2>{title}</h2>
+{intro && hasDonors ? <p class="intro">{intro}</p> : null}
+{foundingLine ? <p class="founding-count">{foundingLine}</p> : null}
+
+<style>
+  h2 {
+    font-size: clamp(28px, 3.6vw, 44px);
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    margin: 0 0 16px;
+    text-align: center;
+  }
+  .intro {
+    max-width: var(--text-width, 620px);
+    margin: 0 auto;
+    text-align: center;
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  .founding-count {
+    margin: 10px auto 0;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--crimson);
+  }
+</style>

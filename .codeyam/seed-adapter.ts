@@ -149,6 +149,27 @@ export function resolveDataDir(projectRoot: string): string {
  * never in the committed `src/content`/`src/data`. Relative to the project root. */
 const SANDBOX_REL = path.join('.codeyam', 'tmp', 'content-sandbox');
 
+/**
+ * Where the seeded sandbox is snapshotted so it survives a dev-server restart.
+ * Shared convention with `astro.config.mjs`, which restores from here instead of
+ * from bare production when it exists.
+ *
+ * This is not a cache — it is what makes seeding work at all for a collection
+ * that is EMPTY in production. Astro's glob loader returns early, before it
+ * registers its file watcher, when a collection's directory has no matching
+ * files at boot:
+ *
+ *     if (exists && files.length === 0) { logger.warn('No files found…'); return }
+ *       — node_modules/astro/dist/content/loaders/glob.js
+ *
+ * So `donors` and `testimonials`, which ship empty and are populated only by a
+ * scenario, had no watcher for the life of the dev server: seeding them
+ * afterwards could never reach the page, and a restart re-copied production over
+ * the seed. Snapshotting means the seeded files are already on disk when the
+ * loader scans, so the watcher registers and the collection renders.
+ */
+const SNAPSHOT_REL = path.join('.codeyam', 'tmp', 'content-sandbox-active');
+
 /** Absolute sandbox content/data roots for a project. */
 export function resolveSandboxDirs(projectRoot: string): {
   sandboxContent: string;
@@ -158,6 +179,38 @@ export function resolveSandboxDirs(projectRoot: string): {
     sandboxContent: path.join(projectRoot, SANDBOX_REL, 'content'),
     sandboxData: path.join(projectRoot, SANDBOX_REL, 'data'),
   };
+}
+
+/** Absolute snapshot content/data roots — the mirror of `resolveSandboxDirs`. */
+export function resolveSnapshotDirs(projectRoot: string): {
+  snapshotContent: string;
+  snapshotData: string;
+} {
+  return {
+    snapshotContent: path.join(projectRoot, SNAPSHOT_REL, 'content'),
+    snapshotData: path.join(projectRoot, SNAPSHOT_REL, 'data'),
+  };
+}
+
+/**
+ * Copy the just-seeded sandbox to the snapshot location, replacing any previous
+ * one. Called after every successful seed, so the snapshot always holds exactly
+ * the CURRENT scenario's state — a new seed overwrites it, and per-scenario
+ * isolation is preserved across restarts rather than broken by them.
+ */
+export function snapshotSandbox(
+  projectRoot: string,
+  sandboxContent: string,
+  sandboxData: string,
+): void {
+  const { snapshotContent, snapshotData } = resolveSnapshotDirs(projectRoot);
+  for (const [src, dest] of [
+    [sandboxContent, snapshotContent],
+    [sandboxData, snapshotData],
+  ]) {
+    fs.rmSync(dest, { recursive: true, force: true });
+    if (fs.existsSync(src)) fs.cpSync(src, dest, { recursive: true });
+  }
 }
 
 /**
@@ -306,7 +359,72 @@ export function writeSeed(
   return counts;
 }
 
-export function main() {
+/**
+ * The app port the running dev server is reachable on, from `.codeyam/editor.json`
+ * (with the gitignored `editor.local.json` override deep-merged on top, matching
+ * how the editor itself resolves config). Defaults to Astro's 4321.
+ */
+export function resolveAppPort(projectRoot: string): number {
+  for (const name of ['editor.local.json', 'editor.json']) {
+    try {
+      const cfg = JSON.parse(fs.readFileSync(path.join(projectRoot, '.codeyam', name), 'utf-8'));
+      if (typeof cfg?.port === 'number') return cfg.port;
+    } catch {
+      // Missing or unreadable — fall through to the next candidate.
+    }
+  }
+  return 4321;
+}
+
+/**
+ * Tell a running dev server to re-run its content loaders.
+ *
+ * Writing the markdown is not enough on its own: a collection whose directory
+ * was EMPTY when the server booted has no file watcher (Astro's glob loader
+ * returns early before registering one), so seeding `donors` or `testimonials`
+ * for the first time in a session would otherwise change nothing on the page.
+ * The `/__codeyam_refresh_content` endpoint — registered by the dev-only
+ * integration in `astro.config.mjs` — re-runs every loader, which both ingests
+ * the new files and registers the watcher that was skipped.
+ *
+ * Tries the configured app port first — that is the editor's reverse proxy,
+ * which forwards to the dev server — then the ports the dev server itself binds.
+ * The editor injects `app port + 1`, but a busy port makes Astro walk upward, so
+ * the real listener drifts (`dev-server status` reports this as a realignment).
+ * Whichever answers first wins; the endpoint is idempotent, so a stray extra hit
+ * would be harmless anyway.
+ *
+ * Best-effort by design: seeding must still succeed with no dev server running
+ * (a cold capture, CI), so an unreachable endpoint is a debug note, not a
+ * failure. Awaited so the refresh has completed before the editor captures.
+ */
+export async function refreshDevContent(projectRoot: string): Promise<boolean> {
+  const appPort = resolveAppPort(projectRoot);
+  const candidates = [appPort, appPort + 1, appPort + 2, appPort + 3];
+
+  for (const port of candidates) {
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/__codeyam_refresh_content`, {
+        method: 'POST',
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (res.ok) {
+        console.error(`[codeyam-seed] content refreshed via :${port}`);
+        return true;
+      }
+    } catch {
+      // Nothing listening there, or it is not the dev server — try the next.
+    }
+  }
+
+  console.error(
+    `[codeyam-seed] no dev server answered /__codeyam_refresh_content on ` +
+      `${candidates.join(', ')} — seeded files are on disk and will be picked up at next boot`,
+  );
+  return false;
+}
+
+export async function main() {
   loadDotEnvFiles();
   const seedDataPath = process.argv[2];
   if (!seedDataPath) {
@@ -349,6 +467,15 @@ export function main() {
 
   const counts = writeSeed(contentRoot, seed, dataRoot);
 
+  // Snapshot AFTER writing, so a dev-server restart restores this scenario's
+  // state rather than bare production — which is what lets a collection that
+  // ships empty (donors, testimonials) be seeded at all. See `snapshotSandbox`.
+  snapshotSandbox(projectRoot, contentRoot, dataRoot);
+
+  // And make the RUNNING server see it, for the collections whose watcher was
+  // never registered because they booted empty. Best-effort: see the function.
+  await refreshDevContent(projectRoot);
+
   console.log(JSON.stringify({ contentCollection: counts }, null, 2));
 
   let actualRows = 0;
@@ -382,6 +509,12 @@ if (invokedDirectly) {
     console.error('The source of truth is the markdown on disk.');
     process.exit(1);
   } else {
-    main();
+    // `main` is async (it awaits the dev-server content refresh), so a rejection
+    // must be turned into a non-zero exit — an unhandled rejection would let the
+    // adapter report success on a seed that did not complete.
+    main().catch((err) => {
+      console.error(`[codeyam-seed] FATAL: ${String(err)}`);
+      process.exit(1);
+    });
   }
 }

@@ -1,0 +1,187 @@
+{
+  "name": "Momentum Fund - Filtering The Donor Wall",
+  "id": "feb3e1f6-4c62-4ceb-bf54-b3cdcde82d32",
+  "url": "/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "donors": [
+      {
+        "body": "Margaret has hosted the Boston founder dinners out of her own office since 2019.",
+        "founding": true,
+        "name": "Margaret Chen-Alvarez",
+        "note": "Gave the week the fund opened, before there was anything to show for it.",
+        "order": 1,
+        "slug": "margaret-chen-alvarez",
+        "tier": "leadership",
+        "url": "https://www.linkedin.com/in/example-margaret"
+      },
+      {
+        "anonymous": true,
+        "founding": true,
+        "name": "Robert K. Whitmore",
+        "note": "Asked that the gift be listed without a name.",
+        "order": 2,
+        "slug": "robert-whitmore",
+        "tier": "leadership",
+        "url": "https://www.linkedin.com/in/example-robert"
+      },
+      {
+        "name": "David Osei-Bonsu",
+        "order": 3,
+        "slug": "david-osei-bonsu",
+        "tier": "leadership",
+        "url": "https://www.linkedin.com/in/example-david"
+      },
+      {
+        "founding": true,
+        "name": "Priya Raman",
+        "note": "Two intros from a founder dinner turned into my first enterprise customer.",
+        "order": 1,
+        "photo": "/images/team/jessica-li.png",
+        "slug": "priya-raman",
+        "tier": "sustaining"
+      },
+      {
+        "name": "Jonathan Feld",
+        "order": 2,
+        "slug": "jonathan-feld",
+        "tier": "sustaining"
+      },
+      {
+        "name": "Aisha Rahman",
+        "note": "For the London chapter, which is the only reason I still feel connected.",
+        "order": 3,
+        "slug": "aisha-rahman",
+        "tier": "sustaining"
+      },
+      {
+        "name": "Tomás Vidal",
+        "order": 4,
+        "slug": "tomas-vidal",
+        "tier": "sustaining",
+        "url": "https://www.linkedin.com/in/example-tomas"
+      },
+      {
+        "name": "Hannah Brightwell",
+        "order": 5,
+        "photo": "/images/team/krysia-lenzo.png",
+        "slug": "hannah-brightwell",
+        "tier": "sustaining"
+      },
+      {
+        "name": "Kwame Boateng",
+        "note": "Small gift, every year, for as long as this keeps going.",
+        "order": 1,
+        "slug": "kwame-boateng",
+        "tier": "supporting"
+      },
+      {
+        "name": "Elena Marchetti",
+        "order": 2,
+        "slug": "elena-marchetti",
+        "tier": "supporting"
+      },
+      {
+        "name": "Samuel Oyelaran",
+        "order": 3,
+        "slug": "samuel-oyelaran",
+        "tier": "supporting"
+      },
+      {
+        "founding": true,
+        "name": "Grace Lindqvist",
+        "order": 4,
+        "slug": "grace-lindqvist",
+        "tier": "supporting"
+      },
+      {
+        "anonymous": true,
+        "name": "Nina Petrova",
+        "order": 5,
+        "slug": "nina-petrova",
+        "tier": "supporting"
+      },
+      {
+        "name": "Michael Okonkwo",
+        "order": 6,
+        "slug": "michael-okonkwo",
+        "tier": "supporting",
+        "url": "https://www.linkedin.com/in/example-michael"
+      },
+      {
+        "name": "Rebecca Stern",
+        "order": 7,
+        "photo": "/images/team/nadia-eldeib.png",
+        "slug": "rebecca-stern",
+        "tier": "supporting"
+      },
+      {
+        "name": "Yusuf Al-Amin",
+        "order": 8,
+        "slug": "yusuf-al-amin",
+        "tier": "supporting"
+      },
+      {
+        "name": "The Lindgren Family",
+        "note": "Tagged with a giving level that no longer exists on the page.",
+        "order": 1,
+        "slug": "the-lindgren-family",
+        "tier": "legacy-circle"
+      },
+      {
+        "name": "Clara Ndiaye",
+        "order": 2,
+        "slug": "clara-ndiaye"
+      },
+      {
+        "draft": true,
+        "name": "Andrew Pemberton",
+        "note": "Pledged at the reception; the gift has not cleared yet.",
+        "order": 9,
+        "slug": "unpaid-pledge-holder",
+        "tier": "sustaining"
+      }
+    ],
+    "momentumSections": [
+      {
+        "body": "The donor recognition wall, promoted to the top of the page by an Order edit.",
+        "kind": "donors",
+        "order": 1,
+        "slug": "donors"
+      },
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\n",
+        "image": "/images/gallery/event-04.jpg",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 2,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "body": "The track-record band.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      },
+      {
+        "body": "The 'What Your Gift Powers' cards.",
+        "kind": "pillars",
+        "order": 4,
+        "slug": "pillars"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "The wall's one interactive affordance, driven on the real page: a giving level is selected, its band stays, and the others hide with their donors rather than leaving headings over empty rows. Nothing is removed from the page to achieve it — every donor is still in the HTML under a real heading, which is why the wall stays complete for search engines, screen readers, and visitors with JavaScript off.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "[data-donor-chip=\"sustaining\"]"
+    }
+  ]
+}

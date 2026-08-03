@@ -214,6 +214,30 @@
     "testFile": "src/lib/nav.test.ts"
   },
   {
+    "description": "Whether a given chip should read as pressed: exactly the selected one. Kept pure so the aria-pressed bookkeeping is testable without a DOM, and so a screen-reader user is told which filter is active rather than having to infer it from what disappeared.",
+    "filePath": "src/lib/donorFilter.ts",
+    "name": "chipPressed",
+    "testFile": "src/lib/donorFilter.test.ts"
+  },
+  {
+    "description": "Dev-only Astro integration exposing a content-layer refresh endpoint the seed adapter calls after writing a scenario's markdown. Astro normally notices a seed via its file watcher, but a collection whose directory had no matching files at boot never got a watcher at all — so seeding donors or testimonials for the first time in a session changed nothing on the page. Refreshing re-runs every loader, which both ingests the new files and registers the skipped watcher. It also invalidates the data-store module and pushes a reload before answering, because Astro only invalidates rendered pages when it sees the store change on disk, and that write lands after the refresh resolves — which would leave the very next request, the capture, serving the pre-seed render.",
+    "filePath": "astro.config.mjs",
+    "name": "codeyamContentRefresh",
+    "untestabilityReason": {
+      "justification": "An Astro integration hook registering Vite middleware — it exists only inside a running dev server and has no return value to assert. Its effect is what makes the seeded application scenarios render at all, so any seeded scenario capturing its data is the standing proof it works.",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "The loader every content collection uses: Astro's glob, wrapped to clear the collection's stored entries when its directory has no markdown left. Astro's own loader returns early on an empty directory, before the line that deletes the entries it did not just re-read — harmless for an always-populated collection, but every scenario re-initialises the sandbox from production before writing its seed, so a collection one scenario filled is empty for the next and the stale entries would leak across. Clearing first makes 'no files' mean 'no entries', which is what an empty directory has always meant everywhere else. The clear is scoped to the one collection being loaded.",
+    "filePath": "src/content/config.ts",
+    "name": "collectionGlob",
+    "untestabilityReason": {
+      "justification": "A loader wrapper around astro/loaders glob, exercised only inside a running Astro content-layer sync. Its effect is asserted end-to-end by the scenario-isolation behaviour of momentum-fund-a-wall-of-donors and momentum-fund-arriving-from-the-email, which render different seeds on the same route without leaking into one another.",
+      "kind": "platform-glue"
+    }
+  },
+  {
     "description": "Menu items for the published communities, ordered by the optional order pin and then alphabetically by name — the same rule chapterNavItems applies, so the two derivations cannot disagree about what order means. The label is the community's own name and the url is built from the slug, matching the /communities/<slug> route; building the url from the name would 404 for any community whose display name is not its slug. Callers pass entries already draft-filtered by publishedEntries.",
     "filePath": "src/lib/nav.ts",
     "name": "communityNavItems",
@@ -230,6 +254,36 @@
     "filePath": "src/lib/contentRoot.ts",
     "name": "dataRoot",
     "testFile": "src/lib/contentRoot.test.ts"
+  },
+  {
+    "description": "Whether a donor card stays visible under the chosen chip. Reads the tier the SERVER already resolved onto the card's data-tier, rather than re-deriving grouping in the browser, so the filtered view and the rendered view cannot disagree. The all-donors chip shows everything, which is also the state the server ships — so the page never visibly reshuffles when the script arrives.",
+    "filePath": "src/lib/donorFilter.ts",
+    "name": "donorCardVisible",
+    "testFile": "src/lib/donorFilter.test.ts"
+  },
+  {
+    "description": "The name to print on the wall: the standing 'Anonymous donor' label when the donor asked not to be named, otherwise their name. Every reader-facing surface goes through here rather than reading .name directly, because one component that forgets publishes a name against someone's explicit request — the single failure of a donor wall that no later edit can undo.",
+    "filePath": "src/lib/donors.ts",
+    "name": "donorDisplayName",
+    "testFile": "src/lib/donors.test.ts"
+  },
+  {
+    "description": "The outbound link a donor card renders, or none. An anonymous donor's url is suppressed even when set: a profile link beside an unnamed card identifies them exactly as surely as the name would, so anonymity that stopped at the name would be anonymity in appearance only. A blank or whitespace-only url counts as absent, since an href of a single space renders as a live link to the current page.",
+    "filePath": "src/lib/donors.ts",
+    "name": "donorLinkHref",
+    "testFile": "src/lib/donors.test.ts"
+  },
+  {
+    "description": "What a photo-less donor card draws in the avatar: the donor's initials, or a neutral dash when they are anonymous. Initials would leak the withheld name — two letters beside 'Anonymous donor' names them to anyone who knows them — so the anonymous case gets a mark that identifies nobody. Decorative either way; the card renders it aria-hidden because the name is already beside it.",
+    "filePath": "src/lib/donors.ts",
+    "name": "donorMonogram",
+    "testFile": "src/lib/donors.test.ts"
+  },
+  {
+    "description": "The headshot a donor card renders, or none. The third arm of the anonymity contract alongside donorDisplayName and donorLinkHref — a face identifies someone as surely as a name or a profile link, so an anonymous donor's photo is withheld even when the field is set. It lives beside the other two so a reader asking what anonymity actually hides finds the whole answer in one module instead of a ternary buried in a component.",
+    "filePath": "src/lib/donors.ts",
+    "name": "donorPhoto",
+    "testFile": "src/lib/donors.test.ts"
   },
   {
     "description": "Returns true only for the exact string '1', so every other value — unset, empty, '0', 'false', and notably 'true' — reads as off. The shared on/off rule for the two build-time deploy flags that separate the publishing tracks: PREVIEW_GATE, read by previewGate.ts, and INCLUDE_DRAFTS, read by draftVisibility.ts, both set per track by .github/workflows/deploy.yml. Deliberately strict rather than permissive because these flags decide whether unpublished drafts reach the public site and whether the review site is gated at all, so a typo in a workflow env block must fail closed rather than have its intent guessed at. Pure and parameterised rather than reading process.env itself, so the rule is testable without faking the environment.",
@@ -254,6 +308,18 @@
     "filePath": "src/lib/events.ts",
     "name": "formatEventDate",
     "testFile": "src/lib/events.test.ts"
+  },
+  {
+    "description": "The donors carrying the Founding Donor badge, in input order. Founding is recognition for giving early rather than for giving more, so it is a flag cutting across every giving level instead of a level of its own — which is what lets a founding donor keep the level that describes their actual gift.",
+    "filePath": "src/lib/donors.ts",
+    "name": "foundingDonors",
+    "testFile": "src/lib/donors.test.ts"
+  },
+  {
+    "description": "The sentence the wall prints above its bands about founding donors, or nothing when there are none. It says what the badge MEANS in words, so a first-time reader learns it once at the top rather than hovering a pill to find out. Returns nothing rather than an empty string for the zero case, which is the wall's early days when a line about a badge nobody holds would be noise.",
+    "filePath": "src/lib/donors.ts",
+    "name": "foundingDonorsSummary",
+    "testFile": "src/lib/donors.test.ts"
   },
   {
     "description": "Pure decision for the Event Gallery fade-in: returns true when every tile should be shown immediately instead of animated — when the user prefers reduced motion, or the browser lacks IntersectionObserver (old browsers / SSR) so tiles never get stuck invisible.",
@@ -305,10 +371,22 @@
     ]
   },
   {
+    "description": "Donors grouped into the recognition wall's bands, in the order the giving levels are declared, so the wall reads top-down from the largest commitment. Within a band the site-wide rule applies: the optional order pin first, then alphabetically by the DISPLAYED name — sorting by a withheld real name would break the alphabetical run at every anonymous card and hint at its first letter. A level with no donors is omitted rather than headed over nothing; a donor whose tier matches no declared level is not dropped but collects in a trailing 'Other supporters' group, so a renamed level or a typo costs an editor a visible mistake rather than a silently missing gift.",
+    "filePath": "src/lib/donors.ts",
+    "name": "groupDonorsByTier",
+    "testFile": "src/lib/donors.test.ts"
+  },
+  {
     "description": "Sponsors grouped by partnership level for the /sponsor wall, in the order the levels are declared — so the wall reads top-down from the biggest commitment, matching how the levels are presented further up the page. Within a level the site-wide rule applies: the optional order pin first, then alphabetically by name. A level with no sponsors is omitted rather than rendered as a heading over nothing. A sponsor whose tier matches no declared level is NOT dropped: it collects into a trailing Other partners group, because tier is free text so the levels can be renamed in the CMS, which makes a typo possible — an editor must see their entry on the page rather than silently lose it. An untagged sponsor lands there too, the common case before anyone has picked a level.",
     "filePath": "src/lib/sponsors.ts",
     "name": "groupSponsorsByLevel",
     "testFile": "src/lib/sponsors.test.ts"
+  },
+  {
+    "description": "Whether a giving-level band still has anything to show under the current filter. A band whose every card is hidden is hidden with them — otherwise the wall leaves a heading and a tier description floating over an empty row, which reads as a rendering bug rather than a filter.",
+    "filePath": "src/lib/donorFilter.ts",
+    "name": "groupVisible",
+    "testFile": "src/lib/donorFilter.test.ts"
   },
   {
     "description": "Whether any sponsor on the wall is illustrative, which is what makes the wall render its 'example placements, not actual sponsors' notice. Deliberately ANY rather than ALL: one sample entry sitting beside three real partners is exactly the case where a reader would otherwise assume the whole row is real, so the notice has to fire on the mixed state too. Shipping sample logos silently would assert partnerships that do not exist, so this predicate is what makes shipping them honest at all.",
@@ -344,6 +422,12 @@
     }
   },
   {
+    "description": "Idempotent DOM wiring for the wall's tier chips, in the initGalleryReveal mould: no-ops under SSR, when the wall is absent, and when it renders no chips. Every donor's name is already in the static HTML under a real heading, so this script only HIDES — with JavaScript off the wall is the same complete list it always was. Cards are hidden with the hidden attribute rather than a class so a filtered-out donor leaves the accessibility tree too.",
+    "filePath": "src/lib/donorFilter.ts",
+    "name": "initDonorFilter",
+    "testFile": "src/lib/donorFilter.test.ts"
+  },
+  {
     "description": "Idempotent, SSR-safe DOM wiring for the Event Gallery fade-in: reveals every tile immediately when galleryRevealImmediately says to, otherwise observes each tile via IntersectionObserver and adds the in-view class as it scrolls into the viewport, unobserving once revealed.",
     "filePath": "src/lib/gallery.ts",
     "name": "initGalleryReveal",
@@ -368,6 +452,14 @@
     "testFile": "src/lib/nav.test.ts"
   },
   {
+    "description": "Reads the donors collection and reshapes it into the plain records every rule in lib/donors.ts takes. The thin untestable edge split off from the pure module, exactly as momentumSectionsContent.ts is split from momentumSections.ts, and a module rather than page frontmatter because the isolated-component harness needs the identical pipeline. Drafts follow the site-wide rule so an entry stays hidden until the gift clears; production returns nothing today, where the wall renders its invitation state.",
+    "filePath": "src/lib/donorsContent.ts",
+    "name": "loadDonors",
+    "scenarios": [
+      "momentum-fund-a-wall-of-donors"
+    ]
+  },
+  {
     "description": "Reads the momentumSections collection and returns the published sections in editor order plus any unrecognized kinds for the caller to warn about, rendering each narrative entry's markdown body. The thin astro:content edge kept out of the pure rules module, and shared by the /donate route and the isolated-component harness so the pipeline exists once.",
     "filePath": "src/lib/momentumSectionsContent.ts",
     "name": "loadMomentumSections",
@@ -375,6 +467,12 @@
       "momentum-fund-public-visitor",
       "momentum-fund-arriving-from-the-email"
     ]
+  },
+  {
+    "description": "Whether a donor belongs under a given giving-level id — the predicate behind the filter chips, shared by the server render and the client script on purpose. Two copies of 'which tier is this donor in?' is two answers that can disagree, and the one a visitor sees would be the client's. The trailing-group id matches exactly the donors groupDonorsByTier files there: untagged, or tagged with a level the page does not declare.",
+    "filePath": "src/lib/donors.ts",
+    "name": "matchesTier",
+    "testFile": "src/lib/donors.test.ts"
   },
   {
     "description": "Pulls the `name` parameter out of a full URL or a bare query string, returning null when absent or unparseable.",
@@ -468,6 +566,12 @@
     "filePath": "src/lib/personalize.ts",
     "name": "sanitizeFirstName",
     "testFile": "src/lib/personalize.test.ts"
+  },
+  {
+    "description": "Whether the wall is worth putting filter chips on. One band means the chips would read 'All donors / Leadership Circle' over a list already on screen — a control that filters nothing, which is worse than no control. Chips earn their place only once there is somewhere else to go.",
+    "filePath": "src/lib/donors.ts",
+    "name": "shouldShowTierChips",
+    "testFile": "src/lib/donors.test.ts"
   },
   {
     "description": "Loads the editable settings/nav singletons from the resolved data root (sandbox-aware) via readSingleton: fs read + JSON.parse.",

@@ -235,6 +235,68 @@
       ]
     },
     {
+      "id": "donors",
+      "label": "Donors",
+      "singular": "Donor",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "hint": "How the donor should be credited. Still required for an anonymous gift — the site hides it, our records keep it."
+        },
+        {
+          "name": "tier",
+          "label": "Giving level",
+          "type": "text",
+          "optional": true,
+          "hint": "The level id from the Momentum Fund page settings (leadership, sustaining, supporting). Blank or unrecognized groups the donor under Other supporters rather than hiding them."
+        },
+        {
+          "name": "founding",
+          "label": "Founding donor",
+          "type": "boolean",
+          "optional": true,
+          "hint": "Switch ON to show the Founding Donor badge. It is a badge, not a level — a founding donor keeps whatever giving level they gave at."
+        },
+        {
+          "name": "anonymous",
+          "label": "List anonymously",
+          "type": "boolean",
+          "optional": true,
+          "hint": "Switch ON when the donor asked not to be named. The wall shows 'Anonymous donor' and drops their website link; this entry still keeps the name for our records."
+        },
+        {
+          "name": "note",
+          "label": "Note",
+          "type": "textarea",
+          "optional": true,
+          "hint": "One short line shown on the donor's card. Their words, or ours about them."
+        },
+        {
+          "name": "url",
+          "label": "Website",
+          "type": "text",
+          "optional": true,
+          "hint": "LinkedIn or a personal site. Ignored when the gift is listed anonymously."
+        },
+        {
+          "name": "photo",
+          "label": "Photo",
+          "type": "image",
+          "optional": true,
+          "hint": "Blank shows the donor's initials instead."
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Optional pin. Blank sorts the donor alphabetically within their giving level."
+        }
+      ]
+    },
+    {
       "id": "projects",
       "label": "Projects",
       "singular": "Project",

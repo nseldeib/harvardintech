@@ -1,0 +1,13 @@
+{
+  "name": "Donor Tier Band - Other Supporters",
+  "id": "fe7f5999-a400-42c7-b639-46ec8303e114",
+  "url": "/isolated-components/DonorTierBand-Unmatched",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorTierBand",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorTierBand.astro",
+  "description": "The trailing band, which has no description because it is not a level anyone chose. It exists so a donor tagged with a renamed or mistyped tier — and a donor with no tier at all — still reaches the page under a visible heading, rather than disappearing from the wall over an editing slip."
+}

@@ -149,6 +149,16 @@ export interface DonatePageCopy {
     linkUrl?: string;
   }[];
   testimonialsTitle?: string;
+  /** Donor recognition wall. `donorTiers` are the giving levels the wall groups
+   *  by; each carries the `id` a donor's `tier` matches on, mirroring `levels`
+   *  in `sponsorPage.json` — so renaming a level is a copy edit while the `id`
+   *  stays the stable key donors are filed under. `donorsEmptyMessage` is what
+   *  production shows today: the wall starts with no names, so its empty state
+   *  is the default view rather than an edge case. */
+  donorsTitle?: string;
+  donorsIntro?: string;
+  donorsEmptyMessage?: string;
+  donorTiers?: { id: string; name: string; description?: string }[];
   ctaTitle?: string;
   ctaBody?: string;
   ctaLabel?: string;

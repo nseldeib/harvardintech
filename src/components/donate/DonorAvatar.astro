@@ -1,0 +1,61 @@
+---
+// The circular mark at the left of a donor card: their photo, or their initials
+// when there is none.
+//
+// Its own component because the anonymity rules land here as much as on the
+// name — `donorPhoto` withholds an anonymous donor's headshot and
+// `donorMonogram` gives them a neutral dash instead of initials, because "RKW"
+// beside "Anonymous donor" names them to anyone who knows them. Neither decision
+// is made in this file; both are read from `lib/donors.ts`, so the card cannot
+// get one right and the other wrong.
+import { withBase } from '../../lib/url';
+import { altFor } from '../../lib/media';
+import { donorDisplayName, donorMonogram, donorPhoto, type DonorLike } from '../../lib/donors';
+
+interface Props {
+  donor: DonorLike;
+}
+const { donor } = Astro.props as Props;
+
+const photo = donorPhoto(donor);
+---
+
+<div class="avatar">
+  {
+    photo ? (
+      <img src={withBase(photo)} alt={altFor(photo, donorDisplayName(donor))} />
+    ) : (
+      /* Decorative — the name is right beside it, so a screen reader spelling
+         out "M C" would only add noise. */
+      <span class="mono" aria-hidden="true">
+        {donorMonogram(donor)}
+      </span>
+    )
+  }
+</div>
+
+<style>
+  .avatar {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--color-bg-soft, #f2f0ee);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+  .mono {
+    font-family: var(--font-title);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--color-fg);
+  }
+</style>

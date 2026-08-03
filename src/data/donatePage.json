@@ -62,6 +62,26 @@
     }
   ],
   "testimonialsTitle": "From our community",
+  "donorsTitle": "The people behind the fund",
+  "donorsIntro": "Every name here chose to put something behind this community. Founding donors gave before there was anything to point to.",
+  "donorsEmptyMessage": "The Momentum Fund is just beginning, and this wall is waiting for its first names. Give today and yours will be among them.",
+  "donorTiers": [
+    {
+      "id": "leadership",
+      "name": "Leadership Circle",
+      "description": "The gifts that let us plan a year ahead instead of an event at a time."
+    },
+    {
+      "id": "sustaining",
+      "name": "Sustaining Donors",
+      "description": "Monthly support that keeps the chapters, dinners, and mentorship running."
+    },
+    {
+      "id": "supporting",
+      "name": "Supporting Donors",
+      "description": "Every gift at every size, from alumni who wanted to be part of it."
+    }
+  ],
   "ctaTitle": "Help power what comes next.",
   "ctaBody": "Join the alumni choosing to move from informal support to intentional investment, every month.",
   "ctaLabel": "Make a Gift",

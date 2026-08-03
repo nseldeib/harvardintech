@@ -1,0 +1,13 @@
+{
+  "name": "Donor Card - With A Photo",
+  "id": "d049848a-a903-452b-9215-da96a1aa1b98",
+  "url": "/isolated-components/DonorCard-Photo",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorCard.astro",
+  "description": "The card with a headshot instead of a monogram, greyscaled to match the board cards. Paired with the initials states so the two avatar paths are visible side by side rather than assumed equivalent."
+}

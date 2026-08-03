@@ -1,0 +1,591 @@
+{
+  "timestamp": "2026-08-03T13:22:00Z",
+  "title": "Donor Recognition Wall",
+  "type": "feature",
+  "userRequest": "## Summary\n\nNicole asked for donor recognition: \"in addition to awarding founding donor badges, we would\nalso like to list donors on our website in a creative and interactive way.\" Nothing like this\nexists — the repo has no donor concept at all (the only \"donor\" hit anywhere is a Donorbox\nmention in the review to-dos), and `/donate` ends at the closing CTA. This plan adds a\n`donors` content collection an editor manages in the CMS, a `Donor Recognition` wall on the\nMomentum Fund page grouped by giving tier with a distinct Founding Donor badge, and light\ninteractivity — tier filter chips and a card that reveals the donor's note — that degrades to\na plain readable list with JavaScript off. Because production starts with zero donors, the\nempty state is the default view and is designed as such, the same way the sponsor wall and the\nvolunteer grid already are.\n\n## Key Decisions\n\n- **Donors are a collection, not a JSON list.** One markdown entry per donor means Nicole adds\n  a donor in /admin with the workflow she already uses for chapters and sponsors, and the\n  Draft toggle holds an entry back until the gift clears.\n- **Tiers reuse the sponsor-wall model exactly.** A donor's `tier` matches the `id` of a tier\n  declared in `donatePage.json`, an unmatched or untagged donor collects in a trailing group\n  rather than vanishing, and within a tier the order is the site-wide `order`-then-name rule.\n  `groupSponsorsByLevel` already encodes all of that — the donor grouping is its sibling, not\n  a new invention.\n- **Founding Donor is a badge, not a tier.** Nicole treats them separately (\"in addition to\n  awarding founding donor badges\"). A boolean `founding` flag renders the badge on whichever\n  tier the donor sits in, so a founding donor is not forced into a giving level that\n  misstates their gift.\n- **Anonymity is first-class.** An `anonymous` flag renders \"Anonymous donor\" while keeping\n  the real name in the entry for the team's records. Publishing a name someone asked to\n  withhold is the one failure mode of a donor wall that cannot be undone by an edit, so it is\n  built in rather than handled by convention.\n- **Interactive means CSS-first.** Filter chips and note reveal are a ~30-line vanilla module\n  in the `src/lib/gallery.ts` / `src/lib/parallax.ts` mould (pure predicate + tiny init), not\n  a hydrated island. Every donor's name is in the static HTML, so the wall is complete for\n  search engines, screen readers, and no-JS visitors.\n- **It lands as a Momentum Fund section.** The wall is a `kind: donors` entry in the\n  `momentumSections` collection this plan's prerequisite introduces — so Nicole can move it up\n  or down the page or hide it herself, which is exactly the control she asked about in the same\n  round of feedback. Hence the dependency on the Momentum Fund page plan.\n\n## Implementation\n\n### 1. The `donors` collection\n\n**File**: `src/content/config.ts`\n\nA `donors` collection loaded with the same `glob({ base: `${root}/donors` })` pattern:\n\n- `name` (required), `tier` (optional, matches a tier `id`), `founding` (optional boolean),\n  `anonymous` (optional boolean), `note` (optional short line shown on reveal), `url`\n  (optional, e.g. LinkedIn), `photo` (optional), `order` (optional), `draft` (optional).\n  The markdown body is an optional longer thank-you the card can expand into.\n\n**File**: `src/data/collections.json`\n\nRegister it for the CMS — `label: \"Donors\"`, `singular: \"Donor\"` — with hints that carry the\nrules the free-text field types cannot: `tier` (\"Matches a giving tier id on the Momentum Fund\npage\"), `anonymous` (\"Hides the name on the site; the entry keeps it for our records\"),\n`founding` (\"Shows the Founding Donor badge\").\n\n### 2. Tier + copy declarations\n\n**File**: `src/data/donatePage.json` and `DonatePageCopy` in `src/lib/site.ts`\n\nAdd `donorsTitle`, `donorsIntro`, `donorsEmptyMessage`, and `donorTiers` — `{ id, name,\ndescription? }`, mirroring `sponsorPage.json`'s `levels`. Seed with a starting ladder\n(e.g. Founding Circle / Sustaining / Supporting) that the team can rename without a code\nchange, since the ids are what donors match on.\n\n### 3. Grouping + display rules\n\n**New file**: `src/lib/donors.ts`\n\nPure and framework-free, modelled directly on `src/lib/sponsors.ts`:\n\n- `groupDonorsByTier(donors, tiers)` — declared tiers in declaration order, unmatched/untagged\n  donors in a trailing group, `order`-then-name within a group, empty groups omitted.\n- `donorDisplayName(donor)` — `\"Anonymous donor\"` when `anonymous`, otherwise the name.\n- `foundingDonors(donors)` — the badge-holders, for the count in the section intro.\n- `matchesTier(donor, tierId)` — the predicate the filter chips use, shared by the server\n  render and the client script so the two cannot disagree.\n\n**New file**: `src/lib/donors.test.ts` — grouping order, unmatched-tier fallback, anonymity\n(including that `anonymous` wins over a `url` link — an anonymous donor must not be\nidentifiable through their link), founding filter, empty input.\n\n### 4. The wall\n\n**New files**: `src/components/donate/DonorWall.astro`, `DonorCard.astro`,\n`DonorWallEmpty.astro`, `FoundingBadge.astro`\n\n- `DonorWall` — heading, intro, filter chips (All + one per tier that has donors), then the\n  grouped bands. Renders `DonorWallEmpty` when there are no published donors.\n- `DonorCard` — name (or \"Anonymous donor\"), tier label, optional photo/monogram initial\n  reusing the `initials` helper, the Founding badge when flagged, and the note revealed on\n  hover/focus/tap. A donor with a `url` links out (never when anonymous).\n- `DonorWallEmpty` — the production default: `donorsEmptyMessage` plus the existing\n  `GiveButton`, so the band reads as an invitation rather than a gap.\n- `FoundingBadge` — small crimson badge, `title`/`aria-label` explaining what it means; not\n  colour-alone.\n\n**New file**: `src/lib/donorFilter.ts` + `src/lib/donorFilter.test.ts` — `initDonorFilter()`\nin the shape of `initGalleryReveal`: no-ops when the section is absent, toggles `hidden` on\ncards by tier, keeps chips `aria-pressed`, and leaves everything visible if it never runs.\n\n### 5. Put it on the page\n\n**New file**: `src/content/momentumSections/donors.md` — `kind: donors`, ordered after\n`testimonials`, before the closing CTA.\n\n**File**: `src/components/MomentumFundPage.astro` — add `donors` to the `kind` → renderer map\nand accept the donor list as a prop.\n\n**File**: `src/pages/donate.astro` — load the `donors` collection with `publishedEntries(…,\nINCLUDE_DRAFTS)` and group it with `groupDonorsByTier`.\n\n### 6. Scenario states\n\n**File**: `src/pages/isolated-components/[name].astro` — register `DonorWall`, `DonorCard`,\n`DonorWallEmpty`, and `FoundingBadge` states so each renders in isolation, including the\nempty default and a long realistic wall.\n\n## Reused existing code\n\n- `groupSponsorsByLevel` and `hasPlaceholderSponsors` in `src/lib/sponsors.ts` (glossary\n  entries: `groupSponsorsByLevel`, `hasPlaceholderSponsors`) — the tier-grouping rules,\n  unmatched-tier tolerance, and the empty-band convention are lifted from here.\n- `sortByOrder` / `byOrder` from `src/lib/order.ts` (glossary entries: `sortByOrder`, `byOrder`).\n- `publishedEntries` + `INCLUDE_DRAFTS` (glossary entries: `publishedEntries`, `INCLUDE_DRAFTS`).\n- `initials` from `src/lib/team.ts` (glossary entry: `initials`) — the photo-less monogram,\n  already used by `BoardMemberCard`.\n- `initGalleryReveal` / `galleryStaggerDelay` in `src/lib/gallery.ts` (glossary entries:\n  `initGalleryReveal`, `galleryStaggerDelay`) — the progressive-enhancement pattern the filter\n  script follows.\n- `GiveButton` (`src/components/donate/GiveButton.astro`) and `resolveGiveHref`\n  (`src/lib/giving.ts`, glossary entry: `resolveGiveHref`) — the empty state's CTA, still\n  correct while there is no donation platform.\n- `SponsorWall` (`src/components/sponsor/…`) and its scenarios\n  (`sponsorwall-no-partners-yet`, `sponsorwall-real-partners`) as the visual and\n  empty-state-first precedent.\n- `altFor` from `src/lib/media.ts` (glossary entry: `altFor`) for donor photos.\n\n**Existing-implementation survey.** Grepped the repo for any donor/recognition/badge\nimplementation before proposing one: none exists — no `donors` collection, no donor component,\nno badge component, and no `founding` field anywhere. The only nearby thing is the sponsor\nwall, which is a *different* audience (organizations, logos, partnership levels) and stays\nseparate; this plan reuses its rules rather than overloading it.\n\n## Scenarios to Demonstrate\n\n- Donor wall empty — the production default, reading as an invitation with the Give CTA.\n- A first Founding Donor only: one badge, one tier, no filter chips worth showing.\n- A rich wall: three tiers, ~20 donors, several Founding badges, mixed photos and monograms.\n- An anonymous donor beside named ones — name withheld, tier and badge still shown, no link.\n- A donor whose `tier` matches no declared tier → visible in the trailing group, not dropped.\n- Filter chips in use: one tier selected, others hidden, `aria-pressed` correct.\n- Note reveal on hover/focus, and the same card with JS off — note present, nothing broken.\n- The Momentum Fund page end-to-end with the wall between testimonials and the closing CTA,\n  and the same page with the wall moved above testimonials by an Order edit.",
+  "description": "Nicole asked to list donors on the site \"in a creative and interactive way\" alongside the founding-donor badges. The Momentum Fund page now carries a recognition wall: a CMS-managed donors collection grouped by giving level, a Founding Donor badge that cuts across every level rather than being one of them, and tier filter chips that hide cards in place. It ships as a momentumSections entry, so an editor moves it up the page with the Order field or hides it with the Draft toggle.\n\nThree decisions carried the design. Founding is a badge, not a tier, so a founding donor keeps the level that describes their actual gift. Anonymity is total and lives in one module: an anonymous donor loses their name, their outbound link, their photo, and their initials, and sorts under the label a reader sees so the alphabetical run never hints at the withheld name. And the interactivity is CSS-first — every donor is in the static HTML under a real heading, so the chips only hide, and with JavaScript off the wall is the same complete list it always was. Production starts with no donors, so the empty state is the default view and is designed as an invitation with the Give button rather than as a gap.\n\nBuilding it surfaced a bug that was already silently breaking existing coverage: Astro's glob loader returns early, before registering a file watcher, when a collection's directory has no matching files at boot — so a collection that ships empty could never be seeded, and a dev-server restart re-copied production over the seed. Three committed scenarios had been capturing unseeded pages and passing: both /donate testimonial scenarios and the volunteer open-projects grid, which showed one project instead of its seeded four. Fixed with a dev-only content-refresh endpoint the seed adapter calls, a sandbox snapshot that survives restarts, and a loader wrapper that clears stale entries so one scenario's data cannot leak into the next.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ne--donor-recognition-wall.md\t.codeyam/plans/completed/ne--donor-recognition-wall.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-communities-derived--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/seed-adapter.ts",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/donatePage.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSections.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/donate.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-avatar-anonymous.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-avatar-initials-fallback.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-avatar-photo.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-card-anonymous.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-card-founding-donor-with-a-note.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-card-named-donor.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-card-with-a-photo.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-tier-band-a-declared-giving-level.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-tier-band-other-supporters.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-tier-chips-every-band.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-anonymity-beside-named-donors.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-empty-the-invitation.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-filtered-to-one-giving-level.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-intro-heading-and-founding-line.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-intro-no-founding-donors.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-intro-nothing-to-introduce.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-no-donors-yet.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-the-first-founding-donor.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/donor-wall-three-levels-and-twenty-names.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/founding-badge-the-mark.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-filtering-the-donor-wall.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-the-donor-wall-moved-to-the-top.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-the-first-donor-on-the-wall.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-avatar-anonymous--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-avatar-initials-fallback--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-avatar-photo--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-card-anonymous--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-card-founding-donor-with-a-note--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-card-named-donor--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-card-with-a-photo--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-tier-band-a-declared-giving-level--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-tier-band-other-supporters--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-tier-chips-every-band--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-anonymity-beside-named-donors--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-empty-the-invitation--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-filtered-to-one-giving-level--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-intro-heading-and-founding-line--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-intro-no-founding-donors--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-intro-nothing-to-introduce--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-no-donors-yet--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-the-first-founding-donor--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/donor-wall-three-levels-and-twenty-names--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/founding-badge-the-mark--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/DonorAvatar.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/DonorCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/DonorTierBand.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/DonorTierChips.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/DonorWall.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/DonorWallEmpty.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/DonorWallIntro.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/FoundingBadge.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/donors/.gitkeep",
+      "status": "added"
+    },
+    {
+      "path": "src/content/momentumSections/donors.md",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/donorFilter.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/donorFilter.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/donors.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/donors.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/donorsContent.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Filtering The Donor Wall",
+      "screenshotPath": "momentum-fund-filtering-the-donor-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Donor Wall Moved To The Top",
+      "screenshotPath": "momentum-fund-the-donor-wall-moved-to-the-top--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The First Donor On The Wall",
+      "screenshotPath": "momentum-fund-the-first-donor-on-the-wall--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Communities Derived",
+      "screenshotPath": "primarynav-communities-derived--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 358,
+    "passed": 358,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 358,
+        "passed": 358
+      }
+    ]
+  }
+}

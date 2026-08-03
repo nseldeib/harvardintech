@@ -1,0 +1,13 @@
+{
+  "name": "Donor Avatar - Photo",
+  "id": "8aebf81a-2b82-41f1-a7d1-c3f6b6f9b955",
+  "url": "/isolated-components/DonorAvatar-Photo",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorAvatar",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorAvatar.astro",
+  "description": "The avatar with a real headshot, greyscaled and circle-cropped. Its alt text comes from the media manifest, falling back to the donor's DISPLAYED name — so an anonymous donor could never be named by an alt attribute even if this branch were somehow reached."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Founding Badge - The Mark",
+  "id": "2ba92a5a-2285-4345-8d61-8faa4568504b",
+  "url": "/isolated-components/FoundingBadge",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "FoundingBadge",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/FoundingBadge.astro",
+  "description": "The Founding Donor badge alone. It says what it means in words rather than in colour, and carries a title explaining the distinction, so a reader who has never seen the convention is not left inferring it from a crimson pill."
+}

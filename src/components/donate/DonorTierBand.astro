@@ -1,0 +1,56 @@
+---
+// One giving level on the wall: its heading, the sentence explaining what that
+// level funds, and the grid of donors under it.
+//
+// The band carries `data-donor-group` and its tier id so the filter can hide the
+// whole thing at once — a heading and a description left floating over an empty
+// row is worse than the band being gone. The tier id is resolved on the SERVER
+// (including `other` for the trailing group), so the client script never
+// re-derives which donors belong where and cannot disagree with the render.
+import DonorCard from './DonorCard.astro';
+import type { DonorGroup } from '../../lib/donors';
+
+interface Props {
+  group: DonorGroup;
+}
+const { group } = Astro.props as Props;
+---
+
+<div class="group" data-donor-group data-tier={group.id}>
+  <h3 class="group-h">{group.name}</h3>
+  {group.description ? <p class="group-desc">{group.description}</p> : null}
+  <div class="row">
+    {group.donors.map((donor) => <DonorCard donor={donor} tierId={group.id} />)}
+  </div>
+</div>
+
+<style>
+  .group {
+    margin-top: 36px;
+  }
+  .group-h {
+    margin: 0 0 4px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+  }
+  .group-desc {
+    margin: 0 0 16px;
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

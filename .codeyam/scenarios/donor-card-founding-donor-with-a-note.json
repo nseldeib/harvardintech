@@ -1,0 +1,13 @@
+{
+  "name": "Donor Card - Founding Donor With A Note",
+  "id": "80f4d90d-46f8-4476-92b3-f98ba9cde22e",
+  "url": "/isolated-components/DonorCard-Founding",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorCard.astro",
+  "description": "A card carrying both optional pieces at once — the Founding Donor badge and the revealed note. The note is in the static HTML at all times and opened by CSS on hover or keyboard focus, so it reads to a screen reader and with JavaScript off; on a touch device, where there is no hover, it renders open."
+}

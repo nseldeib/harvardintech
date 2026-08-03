@@ -21,6 +21,25 @@ import { includeCmsIntegration, includeSitemapIntegration } from './src/lib/publ
 // same sandbox from production before each seed, so per-scenario state never
 // leaks and production is never touched.
 const SANDBOX_REL = '.codeyam/tmp/content-sandbox';
+// Where `.codeyam/seed-adapter.ts` snapshots the sandbox after each seed. When
+// it exists it is the restore source, so the ACTIVE scenario survives a dev
+// server restart instead of being wiped back to production.
+//
+// That is not a convenience — it is what makes a collection that ships EMPTY
+// seedable at all. Astro's glob loader returns early, before it registers its
+// file watcher, when a collection's directory has no matching files at boot:
+//
+//     if (exists && files.length === 0) { logger.warn('No files found…'); return }
+//       — node_modules/astro/dist/content/loaders/glob.js
+//
+// So `donors` and `testimonials` — both empty in production, both populated only
+// by a scenario — had no watcher for the whole life of the dev server: a seed
+// applied afterwards could never reach the page, and restarting to pick it up
+// re-copied production over the seed. Restoring the snapshot puts the seeded
+// files on disk BEFORE the loader scans, so the watcher registers and the
+// collection renders. Scenario isolation is unaffected: each seed rewrites the
+// snapshot, so it always holds exactly the current scenario.
+const SNAPSHOT_REL = '.codeyam/tmp/content-sandbox-active';
 
 /** @param {string} projectRoot @returns {{ sandboxContent: string, sandboxData: string }} */
 function initContentSandbox(projectRoot) {
@@ -28,14 +47,18 @@ function initContentSandbox(projectRoot) {
   const prodData = path.join(projectRoot, 'src/data');
   const sandboxContent = path.join(projectRoot, SANDBOX_REL, 'content');
   const sandboxData = path.join(projectRoot, SANDBOX_REL, 'data');
+  const snapshotContent = path.join(projectRoot, SNAPSHOT_REL, 'content');
+  const snapshotData = path.join(projectRoot, SNAPSHOT_REL, 'data');
 
-  // Fresh copy of production → sandbox so the default (un-seeded) view renders
-  // the committed content. `force` keeps the markdown config (`config.ts` lives
-  // in src/content, but the loaders read `<root>/<collection>/`, so copying it
-  // along is harmless).
+  // Fresh copy of the active scenario's snapshot (or production when there is
+  // none) → sandbox, so the default view renders the committed content and a
+  // seeded view survives the restart. `force` keeps the markdown config
+  // (`config.ts` lives in src/content, but the loaders read
+  // `<root>/<collection>/`, so copying it along is harmless).
+  const hasSnapshot = fs.existsSync(snapshotContent);
   for (const [src, dest] of [
-    [prodContent, sandboxContent],
-    [prodData, sandboxData],
+    [hasSnapshot ? snapshotContent : prodContent, sandboxContent],
+    [hasSnapshot && fs.existsSync(snapshotData) ? snapshotData : prodData, sandboxData],
   ]) {
     fs.rmSync(dest, { recursive: true, force: true });
     if (fs.existsSync(src)) fs.cpSync(src, dest, { recursive: true });
@@ -43,6 +66,65 @@ function initContentSandbox(projectRoot) {
   }
 
   return { sandboxContent, sandboxData };
+}
+
+/**
+ * Dev-only integration exposing a content-layer refresh endpoint.
+ *
+ * The seed adapter rewrites markdown inside the sandbox while the dev server is
+ * already up. Astro normally notices via its file watcher — but a collection
+ * whose directory had NO matching files when the server booted never got a
+ * watcher at all (Astro's glob loader returns early in that case, see
+ * SNAPSHOT_REL above). Seeding `donors` or `testimonials` for the first time in
+ * a session therefore changed nothing on the page.
+ *
+ * `refreshContent()` re-runs every loader from scratch, which both picks up the
+ * new files and registers the watcher that was skipped at boot — so one POST
+ * after a seed makes the seeded state real without restarting the server.
+ *
+ * Refreshing the STORE is only half of it. Astro invalidates the rendered page
+ * modules when it sees `.astro/data-store.json` change on disk, and that write
+ * lands after `refreshContent()` resolves — so the very next request would still
+ * be served from the pre-seed render, which for a capture taken immediately
+ * after seeding is precisely the request that matters. The handler therefore
+ * also invalidates the data-store virtual module and pushes a full reload before
+ * answering, so a 200 means "the next render will see the seed".
+ *
+ * Dev only: the endpoint exists solely so `.codeyam/seed-adapter.ts` can hit it,
+ * and nothing registers it in a production build.
+ *
+ * @returns {import('astro').AstroIntegration}
+ */
+function codeyamContentRefresh() {
+  // Astro's resolved id for the content-layer data store virtual module. Kept as
+  // a literal rather than imported from `astro/dist/...` so this config never
+  // depends on Astro's internal module layout; if the id ever changes, the
+  // lookup simply misses and the handler falls back to the on-disk-write path.
+  const DATA_STORE_MODULE_ID = '\0astro:data-layer-content';
+
+  return {
+    name: 'codeyam-content-refresh',
+    hooks: {
+      'astro:server:setup': ({ server, refreshContent }) => {
+        server.middlewares.use('/__codeyam_refresh_content', (_req, res) => {
+          Promise.resolve(refreshContent?.({ context: { reason: 'codeyam-seed' } }))
+            .then(() => {
+              const mod = server.moduleGraph.getModuleById(DATA_STORE_MODULE_ID);
+              if (mod) server.moduleGraph.invalidateModule(mod);
+              server.ws.send({ type: 'full-reload', path: '*' });
+              res.statusCode = 200;
+              res.end('ok');
+            })
+            .catch((err) => {
+              // Never take the dev server down over a refresh — the caller
+              // treats a non-200 as "fall back to the watcher".
+              res.statusCode = 500;
+              res.end(String(err));
+            });
+        });
+      },
+    },
+  };
 }
 
 // Only redirect when actually running the dev server — `astro build`/`check`
@@ -107,6 +189,7 @@ const isDev = process.argv.includes('dev');
 // (its pages embed raw draft markdown behind a client-only sign-in), and the
 // sitemap ships only on the public track (see src/pages/robots.txt.ts).
 const integrations = [react()];
+if (isDev) integrations.push(codeyamContentRefresh());
 if (includeCmsIntegration(isDev, isReviewTrack)) integrations.unshift(codeyamCms());
 if (includeSitemapIntegration(isReviewTrack)) integrations.push(sitemap());
 

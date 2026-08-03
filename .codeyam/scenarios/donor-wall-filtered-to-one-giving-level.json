@@ -1,0 +1,19 @@
+{
+  "name": "Donor Wall - Filtered To One Giving Level",
+  "id": "ab619a3c-0277-44d1-9385-a8ce7c872158",
+  "url": "/isolated-components/DonorWall-Full",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWall",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWall.astro",
+  "description": "The chips actually in use, which a resting capture cannot show. One giving level is selected: its band stays, the others hide with their donors rather than leaving headings over empty rows, and the chosen chip reads as pressed so a screen-reader user is told which filter is active instead of inferring it from what disappeared. Nothing was removed from the page to achieve this — every donor is still in the HTML, which is why the wall is complete with JavaScript off.",
+  "interactions": [
+    {
+      "action": "click",
+      "text": "Sustaining Donors"
+    }
+  ]
+}

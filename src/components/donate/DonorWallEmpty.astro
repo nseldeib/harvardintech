@@ -1,0 +1,46 @@
+---
+// The donor wall with no names on it yet — which is not an edge case but the
+// PRODUCTION DEFAULT, and will be until the first gift is recorded.
+//
+// So it is designed as a state in its own right rather than as a fallback: the
+// message reads as an invitation, and the giving CTA is right there, because the
+// one visitor most likely to be looking at an empty donor wall is someone
+// deciding whether to be the first name on it. The sponsor wall's empty state
+// makes the same argument for organizations.
+import GiveButton from './GiveButton.astro';
+
+interface Props {
+  message?: string;
+  ctaLabel?: string;
+  donateUrl?: string;
+  email: string;
+  campaignName?: string;
+}
+const {
+  message = 'The Momentum Fund is just beginning, and this wall is waiting for its first names. Give today and yours will be among them.',
+  ctaLabel,
+  donateUrl,
+  email,
+  campaignName,
+} = Astro.props as Props;
+---
+
+<div class="empty">
+  <p>{message}</p>
+  <GiveButton label={ctaLabel} donateUrl={donateUrl} email={email} campaignName={campaignName} />
+</div>
+
+<style>
+  .empty {
+    max-width: var(--text-width, 620px);
+    margin: 0 auto;
+    text-align: center;
+  }
+  .empty p {
+    margin: 0 0 24px;
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.75;
+  }
+</style>

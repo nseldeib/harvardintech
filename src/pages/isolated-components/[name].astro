@@ -31,6 +31,15 @@ import SponsorWall from '../../components/sponsor/SponsorWall.astro';
 import SponsorInquiry from '../../components/sponsor/SponsorInquiry.astro';
 import MomentumAccomplishments from '../../components/donate/MomentumAccomplishments.astro';
 import MomentumNarrative from '../../components/donate/MomentumNarrative.astro';
+import DonorWall from '../../components/donate/DonorWall.astro';
+import DonorCard from '../../components/donate/DonorCard.astro';
+import DonorWallEmpty from '../../components/donate/DonorWallEmpty.astro';
+import FoundingBadge from '../../components/donate/FoundingBadge.astro';
+import DonorAvatar from '../../components/donate/DonorAvatar.astro';
+import DonorWallIntro from '../../components/donate/DonorWallIntro.astro';
+import DonorTierChips from '../../components/donate/DonorTierChips.astro';
+import DonorTierBand from '../../components/donate/DonorTierBand.astro';
+import { groupDonorsByTier } from '../../lib/donors';
 import PrimaryNav from '../../components/nav/PrimaryNav.astro';
 import UtilityBar from '../../components/nav/UtilityBar.astro';
 import { loadMomentumSections } from '../../lib/momentumSectionsContent';
@@ -590,6 +599,146 @@ const sponsorInquiryStates = {
   },
 };
 
+// DonorWall states.
+//
+// The four wall states are NOT variations of one another — each answers a
+// different question about the recognition wall:
+//   • Empty     — the PRODUCTION DEFAULT. No gifts recorded yet, so the wall is
+//     an invitation with the giving CTA. This is what visitors see today.
+//   • First     — the day after the first gift: one founding donor, one band, and
+//     no filter chips (there is nothing to filter between).
+//   • Full      — the wall the campaign is working toward: three levels, ~20
+//     donors, several founding badges, mixed photos and monograms.
+//   • Anonymity — the guarantee, made visible: an anonymous donor beside named
+//     ones. The name, the photo, and the link are all withheld while the giving
+//     level and the founding badge still show. The last entry's tier
+//     (`legacy-circle`) matches no declared level and must still reach the page,
+//     under the trailing group, rather than vanishing from the wall.
+const DONOR_COPY = donatePage;
+const DONOR_TIERS = donatePage.donorTiers ?? [];
+const FULL_DONORS = [
+  { slug: 'margaret-chen-alvarez', name: 'Margaret Chen-Alvarez', tier: 'leadership', founding: true, order: 1, url: 'https://example.com/margaret', note: 'Gave the week the fund opened, before there was anything to show for it.' },
+  { slug: 'robert-whitmore', name: 'Robert K. Whitmore', tier: 'leadership', founding: true, anonymous: true, order: 2, url: 'https://example.com/robert' },
+  { slug: 'david-osei-bonsu', name: 'David Osei-Bonsu', tier: 'leadership', order: 3, url: 'https://example.com/david' },
+  { slug: 'priya-raman', name: 'Priya Raman', tier: 'sustaining', founding: true, order: 1, photo: '/images/team/jessica-li.png', note: 'Two intros from a founder dinner turned into my first enterprise customer.' },
+  { slug: 'jonathan-feld', name: 'Jonathan Feld', tier: 'sustaining', order: 2 },
+  { slug: 'aisha-rahman', name: 'Aisha Rahman', tier: 'sustaining', order: 3, note: 'For the London chapter, which is the only reason I still feel connected.' },
+  { slug: 'tomas-vidal', name: 'Tomás Vidal', tier: 'sustaining', order: 4, url: 'https://example.com/tomas' },
+  { slug: 'hannah-brightwell', name: 'Hannah Brightwell', tier: 'sustaining', order: 5, photo: '/images/team/krysia-lenzo.png' },
+  { slug: 'kwame-boateng', name: 'Kwame Boateng', tier: 'supporting', order: 1, note: 'Small gift, every year, for as long as this keeps going.' },
+  { slug: 'elena-marchetti', name: 'Elena Marchetti', tier: 'supporting', order: 2 },
+  { slug: 'samuel-oyelaran', name: 'Samuel Oyelaran', tier: 'supporting', order: 3 },
+  { slug: 'grace-lindqvist', name: 'Grace Lindqvist', tier: 'supporting', founding: true, order: 4 },
+  { slug: 'nina-petrova', name: 'Nina Petrova', tier: 'supporting', anonymous: true, order: 5 },
+  { slug: 'michael-okonkwo', name: 'Michael Okonkwo', tier: 'supporting', order: 6, url: 'https://example.com/michael' },
+  { slug: 'rebecca-stern', name: 'Rebecca Stern', tier: 'supporting', order: 7, photo: '/images/team/nadia-eldeib.png' },
+  { slug: 'yusuf-al-amin', name: 'Yusuf Al-Amin', tier: 'supporting', order: 8 },
+  { slug: 'the-lindgren-family', name: 'The Lindgren Family', tier: 'legacy-circle', order: 1, note: 'Tagged with a giving level that no longer exists on the page.' },
+  { slug: 'clara-ndiaye', name: 'Clara Ndiaye', order: 2 },
+];
+const FIRST_DONORS = [FULL_DONORS[0]];
+const ANONYMITY_DONORS = [
+  FULL_DONORS[0],
+  FULL_DONORS[1],
+  FULL_DONORS[2],
+  FULL_DONORS[16],
+];
+const donorWallBase = {
+  title: DONOR_COPY.donorsTitle,
+  intro: DONOR_COPY.donorsIntro,
+  emptyMessage: DONOR_COPY.donorsEmptyMessage,
+  tiers: DONOR_TIERS,
+  ctaLabel: DONOR_COPY.ctaLabel,
+  donateUrl: DONOR_COPY.donateUrl,
+  email: 'ben@harvardintech.com',
+  campaignName: DONOR_COPY.campaignName,
+};
+const donorWallStates = {
+  Default: { ...donorWallBase, donors: [] as typeof FULL_DONORS },
+  First: { ...donorWallBase, donors: FIRST_DONORS },
+  Full: { ...donorWallBase, donors: FULL_DONORS },
+  Anonymity: { ...donorWallBase, donors: ANONYMITY_DONORS },
+};
+
+// DonorCard states — the four card shapes, each proving one rule the wall
+// depends on: the plain named card, a founding donor with a note, an anonymous
+// entry (name, photo, and link all withheld), and the photo-less monogram.
+const donorCardStates = {
+  Default: { donor: FULL_DONORS[2], tierName: 'Leadership Circle', tierId: 'leadership' },
+  Founding: { donor: FULL_DONORS[0], tierName: 'Leadership Circle', tierId: 'leadership' },
+  Anonymous: { donor: FULL_DONORS[1], tierName: 'Leadership Circle', tierId: 'leadership' },
+  Photo: { donor: FULL_DONORS[3], tierName: 'Sustaining Donors', tierId: 'sustaining' },
+};
+
+const donorWallEmptyStates = {
+  Default: {
+    message: DONOR_COPY.donorsEmptyMessage,
+    ctaLabel: DONOR_COPY.ctaLabel,
+    donateUrl: DONOR_COPY.donateUrl,
+    email: 'ben@harvardintech.com',
+    campaignName: DONOR_COPY.campaignName,
+  },
+};
+
+// DonorAvatar states — the three marks a card can carry, which between them are
+// the whole photo/anonymity rule: a real headshot, the initials fallback, and
+// the neutral dash an anonymous donor gets INSTEAD of initials, because two
+// letters beside "Anonymous donor" name them to anyone who knows them.
+const donorAvatarStates = {
+  Default: { donor: FULL_DONORS[2] },
+  Photo: { donor: FULL_DONORS[3] },
+  Anonymous: { donor: FULL_DONORS[1] },
+};
+
+// DonorWallIntro states — the heading block, whose only real decisions are
+// whether the founding line appears and whether the intro does:
+//   • Default   — both present, the wall the campaign is working toward.
+//   • NoFounding — donors, but nobody carrying the badge, so the line explaining
+//     what founding means is omitted rather than rendered about nobody.
+//   • Empty     — no donors at all, so the intro ("every name here…") is
+//     suppressed; it would otherwise describe donors the reader cannot see.
+const donorWallIntroStates = {
+  Default: {
+    title: DONOR_COPY.donorsTitle ?? 'The people behind the fund',
+    intro: DONOR_COPY.donorsIntro,
+    foundingCount: 4,
+    hasDonors: true,
+  },
+  NoFounding: {
+    title: DONOR_COPY.donorsTitle ?? 'The people behind the fund',
+    intro: DONOR_COPY.donorsIntro,
+    foundingCount: 0,
+    hasDonors: true,
+  },
+  Empty: {
+    title: DONOR_COPY.donorsTitle ?? 'The people behind the fund',
+    intro: DONOR_COPY.donorsIntro,
+    foundingCount: 0,
+    hasDonors: false,
+  },
+};
+
+// DonorTierChips — the filter row as the full wall renders it: All plus one chip
+// per band that actually has donors, including the trailing group. Inert markup
+// on its own; `initDonorFilter` is what makes it do anything, which is why the
+// resting state is worth capturing on its own.
+const donorTierChipsStates = {
+  Default: { groups: groupDonorsByTier(FULL_DONORS, DONOR_TIERS) },
+};
+
+// DonorTierBand states — one band, twice, because the two cases differ in what
+// the band is ALLOWED to say about itself:
+//   • Default   — a declared giving level, so it carries the tier description
+//     explaining what that level funds.
+//   • Unmatched — the trailing group, which has no declared description because
+//     it is not a level anyone chose. It exists so a donor tagged with a renamed
+//     or mistyped tier still reaches the page instead of vanishing.
+const DONOR_BAND_GROUPS = groupDonorsByTier(FULL_DONORS, DONOR_TIERS);
+const donorTierBandStates = {
+  Default: { group: DONOR_BAND_GROUPS[0] },
+  Unmatched: { group: DONOR_BAND_GROUPS[DONOR_BAND_GROUPS.length - 1] },
+};
+
 export async function getStaticPaths() {
   // getStaticPaths runs in an isolated scope and cannot reference the
   // module-level consts — enumerate route names inline.
@@ -658,6 +807,25 @@ export async function getStaticPaths() {
     { params: { name: 'MomentumNarrative-ImageRight' } },
     { params: { name: 'MomentumNarrative-TextOnly' } },
     { params: { name: 'MomentumNarrative-NoImage' } },
+    { params: { name: 'DonorWall' } },
+    { params: { name: 'DonorWall-First' } },
+    { params: { name: 'DonorWall-Full' } },
+    { params: { name: 'DonorWall-Anonymity' } },
+    { params: { name: 'DonorCard' } },
+    { params: { name: 'DonorCard-Founding' } },
+    { params: { name: 'DonorCard-Anonymous' } },
+    { params: { name: 'DonorCard-Photo' } },
+    { params: { name: 'DonorWallEmpty' } },
+    { params: { name: 'FoundingBadge' } },
+    { params: { name: 'DonorAvatar' } },
+    { params: { name: 'DonorAvatar-Photo' } },
+    { params: { name: 'DonorAvatar-Anonymous' } },
+    { params: { name: 'DonorWallIntro' } },
+    { params: { name: 'DonorWallIntro-NoFounding' } },
+    { params: { name: 'DonorWallIntro-Empty' } },
+    { params: { name: 'DonorTierChips' } },
+    { params: { name: 'DonorTierBand' } },
+    { params: { name: 'DonorTierBand-Unmatched' } },
   ];
 }
 
@@ -809,6 +977,49 @@ let accomplishmentsProps: (typeof accomplishmentsStates)[keyof typeof accomplish
 if (name && name.startsWith('MomentumAccomplishments')) {
   accomplishmentsProps = accomplishmentsStates.Default;
 }
+
+// `DonorWallEmpty` and `DonorWallIntro` must both be tested BEFORE `DonorWall`,
+// which would otherwise swallow them by prefix — the same ordering trap
+// `SponsorPage` has above.
+let donorWallEmptyProps: (typeof donorWallEmptyStates)[keyof typeof donorWallEmptyStates] | null = null;
+if (name && name.startsWith('DonorWallEmpty')) {
+  donorWallEmptyProps = donorWallEmptyStates.Default;
+}
+
+let donorWallProps: (typeof donorWallStates)[keyof typeof donorWallStates] | null = null;
+if (name && !donorWallEmptyProps && !name.startsWith('DonorWallIntro') && name.startsWith('DonorWall')) {
+  const stateKey = (name === 'DonorWall' ? 'Default' : name.slice('DonorWall-'.length)) as keyof typeof donorWallStates;
+  donorWallProps = donorWallStates[stateKey] ?? donorWallStates.Default;
+}
+
+let donorCardProps: (typeof donorCardStates)[keyof typeof donorCardStates] | null = null;
+if (name && name.startsWith('DonorCard')) {
+  const stateKey = (name === 'DonorCard' ? 'Default' : name.slice('DonorCard-'.length)) as keyof typeof donorCardStates;
+  donorCardProps = donorCardStates[stateKey] ?? donorCardStates.Default;
+}
+
+let donorAvatarProps: (typeof donorAvatarStates)[keyof typeof donorAvatarStates] | null = null;
+if (name && name.startsWith('DonorAvatar')) {
+  const stateKey = (name === 'DonorAvatar' ? 'Default' : name.slice('DonorAvatar-'.length)) as keyof typeof donorAvatarStates;
+  donorAvatarProps = donorAvatarStates[stateKey] ?? donorAvatarStates.Default;
+}
+
+let donorWallIntroProps: (typeof donorWallIntroStates)[keyof typeof donorWallIntroStates] | null = null;
+if (name && name.startsWith('DonorWallIntro')) {
+  const stateKey = (name === 'DonorWallIntro' ? 'Default' : name.slice('DonorWallIntro-'.length)) as keyof typeof donorWallIntroStates;
+  donorWallIntroProps = donorWallIntroStates[stateKey] ?? donorWallIntroStates.Default;
+}
+
+let donorTierChipsProps: (typeof donorTierChipsStates)[keyof typeof donorTierChipsStates] | null = null;
+if (name && name.startsWith('DonorTierChips')) {
+  donorTierChipsProps = donorTierChipsStates.Default;
+}
+
+let donorTierBandProps: (typeof donorTierBandStates)[keyof typeof donorTierBandStates] | null = null;
+if (name && name.startsWith('DonorTierBand')) {
+  const stateKey = (name === 'DonorTierBand' ? 'Default' : name.slice('DonorTierBand-'.length)) as keyof typeof donorTierBandStates;
+  donorTierBandProps = donorTierBandStates[stateKey] ?? donorTierBandStates.Default;
+}
 ---
 
 <html lang="en">
@@ -834,6 +1045,30 @@ if (name && name.startsWith('MomentumAccomplishments')) {
           <SponsorInquiry {...sponsorInquiryProps} />
         ) : accomplishmentsProps ? (
           <MomentumAccomplishments {...accomplishmentsProps} />
+        ) : donorWallEmptyProps ? (
+          <DonorWallEmpty {...donorWallEmptyProps} />
+        ) : donorWallIntroProps ? (
+          <div style="width: 1180px; max-width: 100%;">
+            <DonorWallIntro {...donorWallIntroProps} />
+          </div>
+        ) : donorWallProps ? (
+          <DonorWall {...donorWallProps} />
+        ) : donorCardProps ? (
+          <div style="width: 340px;">
+            <DonorCard {...donorCardProps} />
+          </div>
+        ) : donorAvatarProps ? (
+          <DonorAvatar {...donorAvatarProps} />
+        ) : donorTierChipsProps ? (
+          <div style="width: 1180px; max-width: 100%;">
+            <DonorTierChips {...donorTierChipsProps} />
+          </div>
+        ) : donorTierBandProps ? (
+          <div style="width: 1180px; max-width: 100%;">
+            <DonorTierBand {...donorTierBandProps} />
+          </div>
+        ) : name === 'FoundingBadge' ? (
+          <FoundingBadge />
         ) : narrativeProps ? (
           <MomentumNarrative {...narrativeProps}>
             <p>

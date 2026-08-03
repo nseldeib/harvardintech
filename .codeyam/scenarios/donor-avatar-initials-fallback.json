@@ -1,0 +1,13 @@
+{
+  "name": "Donor Avatar - Initials Fallback",
+  "id": "f59f7084-3d17-46b0-ad5d-cef4ae0f2fa2",
+  "url": "/isolated-components/DonorAvatar",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorAvatar",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorAvatar.astro",
+  "description": "The avatar a donor with no photo gets: their initials, from the same helper the board cards use. Rendered aria-hidden, since the name is already beside it and a screen reader spelling out 'D O' would only add noise."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Donor Tier Chips - Every Band",
+  "id": "e02279b8-8ae4-4494-b2ce-8578f42ec232",
+  "url": "/isolated-components/DonorTierChips",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorTierChips",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorTierChips.astro",
+  "description": "The filter row at rest: All plus one chip per band that actually has donors, including the trailing group. A chip for a level nobody has given at would filter to an empty wall, so declared-but-empty levels get none. Inert markup on its own — with JavaScript off these are ordinary buttons that do nothing, while every donor stays on the page."
+}

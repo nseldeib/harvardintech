@@ -1,0 +1,105 @@
+---
+// "The people behind the fund" — the donor recognition wall, grouped by giving
+// level, with a Founding Donor badge that cuts across every level.
+//
+// Composition only: the heading block, the chips, each band, and the empty state
+// are their own components, so this file holds the wall's STRUCTURE — which
+// parts exist and in what order — and nothing about how any one of them renders.
+//
+// Two states matter and they are NOT variations of one another:
+//   • No published donors → the invitation, with the giving CTA. This is the
+//     production default and the state most visitors see today.
+//   • Donors present → the grouped bands, with filter chips once there is more
+//     than one band worth filtering between.
+//
+// The chips are a convenience, not a dependency: every donor's name is in the
+// static HTML under a real heading, so with JavaScript off the wall is the same
+// complete list it always was and the chips simply do nothing.
+import DonorWallIntro from './DonorWallIntro.astro';
+import DonorTierChips from './DonorTierChips.astro';
+import DonorTierBand from './DonorTierBand.astro';
+import DonorWallEmpty from './DonorWallEmpty.astro';
+import {
+  groupDonorsByTier,
+  foundingDonors,
+  shouldShowTierChips,
+  type DonorLike,
+  type DonorTierLike,
+} from '../../lib/donors';
+
+interface Props {
+  title?: string;
+  intro?: string;
+  emptyMessage?: string;
+  donors?: DonorLike[];
+  tiers?: DonorTierLike[];
+  /** For the empty state's CTA, which is the whole point of that state. */
+  ctaLabel?: string;
+  donateUrl?: string;
+  email?: string;
+  campaignName?: string;
+}
+const {
+  title = 'The people behind the fund',
+  intro,
+  emptyMessage,
+  donors = [],
+  tiers = [],
+  ctaLabel,
+  donateUrl,
+  email = 'ben@harvardintech.com',
+  campaignName,
+} = Astro.props as Props;
+
+const groups = groupDonorsByTier(donors, tiers);
+const foundingCount = foundingDonors(donors).length;
+---
+
+<section class="donors" id="donors" data-donor-wall>
+  <div class="wrap">
+    <DonorWallIntro
+      title={title}
+      intro={intro}
+      foundingCount={foundingCount}
+      hasDonors={groups.length > 0}
+    />
+
+    {
+      groups.length === 0 ? (
+        <DonorWallEmpty
+          message={emptyMessage}
+          ctaLabel={ctaLabel}
+          donateUrl={donateUrl}
+          email={email}
+          campaignName={campaignName}
+        />
+      ) : (
+        <>
+          {shouldShowTierChips(groups) ? <DonorTierChips groups={groups} /> : null}
+          {groups.map((group) => (
+            <DonorTierBand group={group} />
+          ))}
+        </>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  // Tier chips filter the wall in place. The predicate and the `aria-pressed`
+  // bookkeeping live in the unit-tested helper; this is only the wiring, and it
+  // no-ops when the wall is absent or renders no chips.
+  import { initDonorFilter } from '../../lib/donorFilter';
+  initDonorFilter();
+</script>
+
+<style>
+  .donors {
+    padding: 76px 24px;
+    background: var(--color-bg-soft, #f7f5f3);
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+</style>

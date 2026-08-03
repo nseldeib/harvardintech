@@ -1,0 +1,13 @@
+{
+  "name": "Donor Avatar - Anonymous",
+  "id": "46a4fa9d-6655-49c1-bfd7-4f073268d071",
+  "url": "/isolated-components/DonorAvatar-Anonymous",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorAvatar",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorAvatar.astro",
+  "description": "What an anonymous donor's avatar has to be. The entry carries both a name and a photo; this state proves neither reaches the page, and that the fallback is a neutral dash rather than initials — the quiet leak that would otherwise identify them."
+}

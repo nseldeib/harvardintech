@@ -1,0 +1,13 @@
+{
+  "name": "Donor Wall Intro - No Founding Donors",
+  "id": "d151a9de-f8c5-4ed4-a773-3fe195885c92",
+  "url": "/isolated-components/DonorWallIntro-NoFounding",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWallIntro",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWallIntro.astro",
+  "description": "Donors exist, but nobody carries the badge — so the founding line is omitted rather than rendered about nobody. The state a wall would sit in if the team stopped awarding the badge, and the reason the summary returns nothing rather than an empty string."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Donor Wall - Anonymity Beside Named Donors",
+  "id": "e781a027-be35-45aa-896d-a609a3e7d89b",
+  "url": "/isolated-components/DonorWall-Anonymity",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWall",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWall.astro",
+  "description": "The guarantee made visible. An anonymous donor sits between named ones with their name, photo, and outbound link all withheld, while their giving level and Founding badge still show — anonymity hides who they are, not that they gave. They also sort under A, where a reader sees them, so the alphabetical run never hints at the withheld name's first letter. The last entry carries a tier the page no longer declares and still reaches the wall, under Other supporters."
+}

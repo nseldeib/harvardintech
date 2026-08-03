@@ -1,0 +1,13 @@
+{
+  "name": "Donor Wall - Three Levels And Twenty Names",
+  "id": "38ffb4dc-613e-42c2-b86d-8d8873e77afd",
+  "url": "/isolated-components/DonorWall-Full",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWall",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWall.astro",
+  "description": "The wall the campaign is working toward: three declared giving levels plus the trailing group, Founding Donor badges cutting across all of them rather than clustering at the top, mixed photos and initials, and notes that open on hover. The filter chips appear here because there is finally somewhere to move between."
+}

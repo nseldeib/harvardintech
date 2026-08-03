@@ -1,0 +1,13 @@
+{
+  "name": "Donor Wall Empty - The Invitation",
+  "id": "4180b867-a630-42fc-b819-3e55d233a67e",
+  "url": "/isolated-components/DonorWallEmpty",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWallEmpty",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWallEmpty.astro",
+  "description": "The empty state on its own: the editable message plus the same Give button the hero and closing band use, so the band reads as an invitation rather than a section someone forgot to fill. This is what /donate ships with today."
+}

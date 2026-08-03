@@ -1,0 +1,13 @@
+{
+  "name": "Donor Wall - No Donors Yet",
+  "id": "aede2f64-bd4f-420d-ab6c-8eae3393ee1e",
+  "url": "/isolated-components/DonorWall",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWall",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWall.astro",
+  "description": "The production default, and the state most visitors see today: no gift has been recorded, so the wall is an invitation with the Give button rather than a gap. Designed as a state in its own right because the visitor most likely to be looking at an empty donor wall is deciding whether to be the first name on it. The intro that talks about 'every name here' is suppressed — it would describe donors the reader cannot see."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Donor Wall Intro - Nothing To Introduce",
+  "id": "dc5c8368-d2f3-4a2d-a318-52f1d1408994",
+  "url": "/isolated-components/DonorWallIntro-Empty",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWallIntro",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWallIntro.astro",
+  "description": "The heading block above an empty wall. The intro is suppressed even though it is set, because it talks about 'every name here' and there are none — otherwise the empty state stacks two intros, the first describing donors the reader cannot see."
+}

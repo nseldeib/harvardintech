@@ -1,0 +1,54 @@
+{
+  "name": "Momentum Fund - The First Donor On The Wall",
+  "id": "c87125bb-2ef3-43e3-a40b-c0ed4689ef65",
+  "url": "/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "donors": [
+      {
+        "founding": true,
+        "name": "Margaret Chen-Alvarez",
+        "note": "Gave the week the fund opened, before there was anything to show for it.",
+        "order": 1,
+        "slug": "margaret-chen-alvarez",
+        "tier": "leadership",
+        "url": "https://www.linkedin.com/in/example-margaret"
+      }
+    ],
+    "momentumSections": [
+      {
+        "body": "The donor recognition wall, promoted to the top of the page by an Order edit.",
+        "kind": "donors",
+        "order": 1,
+        "slug": "donors"
+      },
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\n",
+        "image": "/images/gallery/event-04.jpg",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 2,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "body": "The track-record band.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      },
+      {
+        "body": "The 'What Your Gift Powers' cards.",
+        "kind": "pillars",
+        "order": 4,
+        "slug": "pillars"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "The day the first gift clears, on the real page. One band, one badge, and no filter chips — a lone All / Leadership Circle pair would filter nothing and only add furniture. The founding line reads in the singular, which is the one day the wall says it. The step between the invitation state production ships today and the populated wall the campaign is working toward."
+}

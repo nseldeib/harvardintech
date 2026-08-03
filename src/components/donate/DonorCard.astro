@@ -1,0 +1,144 @@
+---
+// One donor on the recognition wall.
+//
+// The reader-facing name comes from `donorDisplayName` and the link from
+// `donorLinkHref` — never from `donor.name` / `donor.url` directly. Together with
+// the photo and monogram rules `DonorAvatar` reads, that is the whole anonymity
+// contract: a donor who asked not to be named loses their name, their outbound
+// link, their headshot, and their initials, because any one of those identifies
+// them as surely as the others.
+//
+// The note is present in the markup at all times and revealed on hover/focus by
+// CSS, so it is readable to a screen reader, to search engines, and with
+// JavaScript off. Nothing here is hidden behind a script.
+import { donorDisplayName, donorLinkHref, type DonorLike } from '../../lib/donors';
+import DonorAvatar from './DonorAvatar.astro';
+import FoundingBadge from './FoundingBadge.astro';
+
+interface Props {
+  donor: DonorLike;
+  /** The giving level's display name, printed under the donor so a card shown
+   *  OUTSIDE the wall still says what level it belongs to. The wall itself does
+   *  NOT pass it: every card there already sits under a band heading naming the
+   *  level, and printing it twice on each card is noise, not clarity. */
+  tierName?: string;
+  /** The tier id the wall filed this donor under — `other` for the trailing
+   *  group. The filter script reads it; it is resolved on the server so the
+   *  client never has to re-derive grouping. */
+  tierId?: string;
+}
+const { donor, tierName, tierId } = Astro.props as Props;
+
+const displayName = donorDisplayName(donor);
+const href = donorLinkHref(donor);
+---
+
+<article class="card" data-donor-card data-tier={tierId ?? ''}>
+  <DonorAvatar donor={donor} />
+
+  <div class="body">
+    <h3 class="name">
+      {
+        href ? (
+          <a href={href} rel="noopener" target="_blank">
+            {displayName}
+          </a>
+        ) : (
+          displayName
+        )
+      }
+    </h3>
+    {tierName ? <p class="tier">{tierName}</p> : null}
+    {donor.founding ? <FoundingBadge /> : null}
+    {
+      donor.note ? (
+        <div class="note">
+          <p>{donor.note}</p>
+        </div>
+      ) : null
+    }
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--color-rule, rgba(0, 0, 0, 0.1));
+    border-radius: 10px;
+    padding: 16px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .card:hover,
+  .card:focus-within {
+    border-color: rgba(165, 28, 48, 0.35);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  }
+  .body {
+    min-width: 0;
+  }
+  .name {
+    margin: 0 0 2px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .name a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .name a:hover {
+    text-decoration: underline;
+  }
+  .tier {
+    margin: 0 0 8px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  /* The note is always in the DOM. It collapses to zero height at rest and opens
+     on hover or keyboard focus — so the wall stays scannable while every note
+     remains readable without JavaScript. `grid-template-rows` animates where
+     `height: auto` cannot. */
+  .note {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.2s ease, opacity 0.2s ease, margin-top 0.2s ease;
+  }
+  .note > p {
+    overflow: hidden;
+    min-height: 0;
+    margin: 0;
+    color: var(--color-muted);
+    font-family: var(--font-serif);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .card:hover .note,
+  .card:focus-within .note {
+    grid-template-rows: 1fr;
+    margin-top: 8px;
+    opacity: 1;
+  }
+  /* Reduced motion and no-JS/no-hover contexts (touch, print, older browsers)
+     get the note open rather than animated shut. */
+  @media (prefers-reduced-motion: reduce), (hover: none) {
+    .note {
+      grid-template-rows: 1fr;
+      margin-top: 8px;
+      opacity: 1;
+      transition: none;
+    }
+  }
+  @media print {
+    .note {
+      grid-template-rows: 1fr;
+      margin-top: 8px;
+      opacity: 1;
+    }
+  }
+</style>

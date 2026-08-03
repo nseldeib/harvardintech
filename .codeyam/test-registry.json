@@ -190,6 +190,15 @@
       "runner": "tests"
     },
     {
+      "description": "Exactly one chip reads as pressed, so a screen-reader user is told which filter is active rather than inferring it from what disappeared.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "chipPressed › marks only the selected chip as pressed",
+      "line": 31,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "The guard must fire BEFORE any network call, so a refused publish mutates nothing on the branch — the same fail-closed policy as the drift check.",
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
@@ -469,6 +478,159 @@
       "runner": "tests"
     },
     {
+      "description": "The default state, and the state the wall renders on the server: everything shown. A filter that started with something hidden would mean the no-JS wall and the JS wall disagreed about what the page contains.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "donorCardVisible › shows every card under the all-donors chip",
+      "line": 8,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary filter.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "donorCardVisible › shows only the cards in the selected tier",
+      "line": 15,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The trailing group's chip selects the cards the SERVER filed there, read off `data-tier` — the client never re-derives which donors were unmatched.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "donorCardVisible › shows the trailing group under its own chip",
+      "line": 22,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorDisplayName › returns the name for a donor who did not ask for anonymity",
+      "line": 142,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`anonymous: false` is an editor who explicitly toggled it OFF, which means publish the name — it must not be read as \"flag present, so hide\".",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorDisplayName › returns the name when anonymity is explicitly off",
+      "line": 155,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole point of the flag: the name never reaches the page.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorDisplayName › returns the standing label for an anonymous donor",
+      "line": 147,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: a donor's link reaches the page.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorLinkHref › returns the url for a named donor",
+      "line": 162,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nothing to link to.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorLinkHref › returns undefined when there is no url",
+      "line": 178,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The rule anonymity would be meaningless without: a LinkedIn profile beside \"Anonymous donor\" identifies them exactly as surely as the name would, so the link is suppressed even though the field is set.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorLinkHref › suppresses the url of an anonymous donor",
+      "line": 171,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A CMS text field that was opened and cleared leaves whitespace, not absence. An `href=\" \"` renders as a live link to the current page.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorLinkHref › treats a blank url as no url",
+      "line": 184,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A household or organization name still yields something to draw.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorMonogram › handles a multi-word name that is not a person",
+      "line": 231,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Initials would leak the withheld name — \"RKW\" names Robert K. Whitmore to anyone who knows him — so an anonymous entry gets a neutral mark instead.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorMonogram › returns a neutral mark for an anonymous donor rather than their initials",
+      "line": 223,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The photo-less fallback, shared with the board cards.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorMonogram › returns the initials of a named donor",
+      "line": 217,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: a donor's headshot reaches the card.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPhoto › returns the photo for a named donor",
+      "line": 191,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nothing to show — the card falls back to the monogram.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPhoto › returns undefined when there is no photo",
+      "line": 204,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The third arm of the anonymity contract: a face identifies someone as surely as a name or a link, so it is withheld even though the field is set.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPhoto › suppresses the photo of an anonymous donor",
+      "line": 197,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A CMS image field that was opened and cleared leaves whitespace, and an `<img src=\" \">` renders as a broken image rather than falling back.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPhoto › treats a blank photo as no photo",
+      "line": 210,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "A drafted chapter has no published page, so linking to it from the built site would be a menu entry pointing at a 404.",
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
@@ -685,6 +847,60 @@
       "runner": "tests"
     },
     {
+      "description": "The state the wall is in on day one.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "foundingDonors › returns nothing when no donor is flagged",
+      "line": 301,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Founding is recognition for giving early, not for giving more — so the badge holders come from every tier, not from one.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "foundingDonors › returns the flagged donors across every tier",
+      "line": 290,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The plural case, which is what the wall shows nearly always.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "foundingDonorsSummary › names the count in the plural",
+      "line": 238,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The day the first founding gift lands. \"1 Founding Donors\" would be the wall's first impression, so the singular is not a nicety.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "foundingDonorsSummary › reads correctly for exactly one donor",
+      "line": 246,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Defensive: a negative count is nonsense, and must not render as a sentence.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "foundingDonorsSummary › returns nothing for a negative count",
+      "line": 258,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The wall's early days: no badge holders, so no line about them.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "foundingDonorsSummary › returns nothing when no donor carries the badge",
+      "line": 253,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "Capable browser, no reduced-motion preference: animate the tiles in.",
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
@@ -757,6 +973,87 @@
       "runner": "tests"
     },
     {
+      "description": "The tier's description travels with the band so the wall can explain what each level means without the component re-reading the copy.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › carries the declared tier description onto its group",
+      "line": 129,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The failure this tolerance exists to prevent: a donor tagged with a level that was renamed or mistyped disappearing from the wall. The gift was real and the editor must be able to SEE the mistake, so the entry lands in a trailing group instead of being dropped.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › collects a donor whose tier matches no declared level into a trailing group",
+      "line": 94,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A heading over nothing reads as a gap someone forgot to fill, so a tier with no donors is omitted entirely rather than rendered empty.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › omits a tier that has no donors",
+      "line": 84,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The wall reads top-down from the largest commitment, so the bands follow the declared tier order — NOT the order donors happen to sit in the collection.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › orders groups by the declared tier order, not the donor order",
+      "line": 32,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The common case before anyone has assigned levels: no tier at all. It lands in the same trailing group rather than being treated as an error.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › puts an untagged donor in the trailing group",
+      "line": 107,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "With no tiers declared the wall still has to show everyone — every donor is unmatched, so they all collect in the trailing group.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › puts every donor in the trailing group when no tiers are declared",
+      "line": 121,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Production today: the collection is empty, and the wall renders its invitation state off the back of an empty group list.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › returns no groups for no donors",
+      "line": 115,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Sorting uses the DISPLAYED name. Sorting by the withheld real name would break the alphabetical run at every anonymous card and hint at the hidden name's first letter — anonymity leaking through the sort order.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › sorts an anonymous donor by the label shown, not their withheld name",
+      "line": 66,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Within a tier the site-wide rule applies: the optional pin first, then alphabetical, so an unpinned wall stays stable as donors are added.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "groupDonorsByTier › sorts within a tier by the order pin, then by name",
+      "line": 48,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "The typo case. `tier` is free text so levels can be renamed in the CMS, which means a mistyped tier is possible — the sponsor must still reach the page.",
       "file": "src/lib/sponsors.test.ts",
       "format": "vitest",
@@ -817,6 +1114,42 @@
       "key": "groupSponsorsByLevel › sorts within a level by the order pin, then by name",
       "line": 38,
       "registeredAt": "2026-07-30T15:01:54Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Degenerate edge: a band with no cards has nothing to show, so it stays hidden rather than defaulting to visible.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "groupVisible › hides a band with no cards at all",
+      "line": 58,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A band whose every card is filtered out is hidden with them — otherwise the wall leaves a heading and a tier description floating over an empty row.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "groupVisible › hides a band with no matching cards",
+      "line": 41,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: the band the visitor filtered TO must survive the filter.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "groupVisible › shows a band that still has a matching card",
+      "line": 46,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The unfiltered wall, which is the state the server renders — no band may be hidden before the visitor has chosen anything.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "groupVisible › shows every band under the all-donors chip",
+      "line": 52,
+      "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
     {
@@ -943,6 +1276,51 @@
       "key": "includeSitemapIntegration › publishes a sitemap on the public track",
       "line": 35,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The wiring must be safe to call from any page that imports the module — the wall is one section of /donate, not the whole page. A throw here would take the entire campaign page down.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "initDonorFilter › does nothing when the wall is not on the page",
+      "line": 97,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A single-band wall renders no chips, so there is nothing to wire.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "initDonorFilter › does nothing when the wall renders no chips",
+      "line": 103,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The server renders everything visible; init must not change that, or the page would visibly reshuffle the moment the script arrives.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "initDonorFilter › leaves every donor visible on init",
+      "line": 117,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Filtering must be reversible — a visitor who narrows down has to be able to get the whole wall back, which is the one path that leaves donors hidden if it breaks.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "initDonorFilter › restores every donor when the all-donors chip is chosen again",
+      "line": 140,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The feature itself, end to end through a real click.",
+      "file": "src/lib/donorFilter.test.ts",
+      "format": "vitest",
+      "key": "initDonorFilter › shows only the chosen tier, and hides the bands left empty",
+      "line": 126,
+      "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
     {
@@ -1132,6 +1510,42 @@
       "key": "llms.txt GET › surfaces contact email and socials",
       "line": 62,
       "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A donor in a real tier must NOT be swept into the trailing group.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "matchesTier › does not match a declared-tier donor against the trailing group",
+      "line": 330,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The chips' predicate for a declared level.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "matchesTier › matches a donor against their own declared tier",
+      "line": 308,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The trailing chip has to select exactly the donors the trailing GROUP holds, or filtering to it would show a band the server never built.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "matchesTier › matches an unmatched-tier donor against the trailing group",
+      "line": 317,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An untagged donor sits in the trailing group too, so the chip must find them.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "matchesTier › matches an untagged donor against the trailing group",
+      "line": 325,
+      "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
     {
@@ -2032,6 +2446,33 @@
       "key": "seeded team headshots › peter-boyce.md › points at an image that exists under public/",
       "line": 43,
       "registeredAt": "2026-06-15T12:22:55Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Production today: no donors, no bands, and the empty state renders instead.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "shouldShowTierChips › hides chips when there are no bands at all",
+      "line": 282,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "One band means the chips would filter nothing — a control worse than none.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "shouldShowTierChips › hides chips when there is only one band",
+      "line": 275,
+      "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The wall the chips exist for.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "shouldShowTierChips › shows chips once there is more than one band",
+      "line": 265,
+      "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
     {

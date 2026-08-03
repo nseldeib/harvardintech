@@ -1,0 +1,13 @@
+{
+  "name": "Donor Tier Band - A Declared Giving Level",
+  "id": "18a190e3-fe31-4d54-a53e-7901b7652ced",
+  "url": "/isolated-components/DonorTierBand",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorTierBand",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorTierBand.astro",
+  "description": "One band of the wall: the level's heading, the sentence saying what that level funds, and its donor grid. The band carries the tier id the filter hides it by, resolved on the server so the client never re-derives which donors belong where."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Donor Wall - The First Founding Donor",
+  "id": "d54b601f-ea80-40e7-b934-074233c16f69",
+  "url": "/isolated-components/DonorWall-First",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DonorWall",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/DonorWall.astro",
+  "description": "The day after the first gift clears. One band, one badge, and deliberately no filter chips: a lone 'All donors / Leadership Circle' pair would filter nothing and add furniture to a wall that already fits on the screen. The founding line reads in the singular, which matters because this is the one day the wall says it."
+}
