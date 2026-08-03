@@ -493,6 +493,12 @@
     "testFile": "src/lib/momentumSections.test.ts"
   },
   {
+    "description": "The Astro base a GitHub Pages project site must be built with: the repo name rooted with a leading slash, because such a site is served from <user>.github.io/<repo>/. Exists so the deploy workflow's DEPLOY_BASE_PATH can be checked against the repo it actually publishes to rather than being two hand-matched strings sitting far apart in the YAML. Throws on an empty repo name instead of returning a bare slash: a bare slash is the base of a user site or a custom domain, so returning it would turn a missing value into a plausible-looking one that builds every asset URL wrong.",
+    "filePath": "src/lib/deployTracks.ts",
+    "name": "pagesBasePathFor",
+    "testFile": "src/lib/deployTracks.test.ts"
+  },
+  {
     "description": "Pure gate deciding whether the scroll parallax runs: returns fineHover && !reducedMotion. Encodes the desktop-only / prefers-reduced-motion policy (parallax is janky or ignored on touch browsers) as testable logic, separate from the matchMedia DOM reads in initParallax.",
     "filePath": "src/lib/parallax.ts",
     "name": "parallaxEnabled",
@@ -521,6 +527,12 @@
     "filePath": "src/lib/drafts.ts",
     "name": "publishedEntries",
     "testFile": "src/lib/drafts.test.ts"
+  },
+  {
+    "description": "The repository name parsed out of a git remote URL, accepting the SSH form the deploy job uses and the HTTPS form, with or without the .git suffix. Takes a whole command line rather than a bare URL so the deploy-workflow contract test can hand it a run block directly, keeping the parsing rule next to its own tests instead of inside a test file. Returns undefined rather than throwing when there is no remote, because a step that pushes nowhere is a real state: the reviewed track publishes by artifact upload and has no remote at all.",
+    "filePath": "src/lib/deployTracks.ts",
+    "name": "pushTargetRepo",
+    "testFile": "src/lib/deployTracks.test.ts"
   },
   {
     "description": "Reads the CMS media library manifest from `<dataRoot>/media.json` — the singleton the package writes from /admin — returning an empty library when the file is absent or malformed, so production before the first upload and any scenario that seeds no media still render rather than failing the build. Goes through `dataRoot()` like the settings and nav singletons so a codeyam session's sandbox redirect reaches it and the seed adapter can seed a `media` key per scenario.",

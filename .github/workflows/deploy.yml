@@ -1,28 +1,40 @@
-# Build the Astro static site and publish it. One repo, two possible tracks,
-# chosen by the branch that was pushed.
+# Build the Astro static site and publish it. One repo, two tracks, chosen by
+# the branch that was pushed.
 #
-# TODAY — pre-launch. Only `main` builds, and it is NOT public:
+# TODAY — pre-launch. NEITHER track is public; harvardintech.com is still
+# Strikingly's, and both sites below are passphrase-gated:
 #
-#   main    → nseldeib.github.io/harvardintech
-#             passphrase-gated + noindex, drafts VISIBLE, serves /admin,
-#             no sitemap. harvardintech.com is still Strikingly's.
+#   main    → nseldeib.github.io/harvardintech          (the REVIEWED site)
+#             The link the team has. It moves only when someone promotes, so a
+#             reviewer never opens it mid-change and finds half-finished work.
+#   staging → nseldeib.github.io/harvardintech-staging  (the WORKING site)
+#             Where day-to-day commits land and get looked at first.
 #
-# The `staging` job below is built and DORMANT — no `staging` branch exists, so
-# it never runs. It activates at the Strikingly cutover, when the two tracks
-# become:
+# Both are passphrase-gated + noindex, show drafts, and serve /admin. The only
+# difference today is cadence: `staging` moves constantly, `main` moves on
+# purpose. Promotion is a single merge staging → main, which promote.yml does at
+# the press of a button.
 #
-#   main    → harvardintech.com            (public track)
-#             open, indexable, drafts hidden, no /admin, sitemap published.
-#   staging → review.harvardintech.com     (review track)
-#             passphrase-gated + noindex, drafts VISIBLE, hosts /admin.
+# WHY GITHUB.IO AND NOT review.harvardintech.com: standing up the review
+# subdomain means adding a DNS record to harvardintech.com, and we do not have
+# the go-ahead to touch that domain yet. Hosting the working site on the staging
+# repo's own Pages URL needs no DNS at all, so the domain stays untouched until
+# the migration is approved. See "AT THE STRIKINGLY CUTOVER" below for the
+# two-line diff that moves it.
+#
+# AT THE STRIKINGLY CUTOVER the roles change — `main` becomes the public site
+# and `staging` becomes the gated review origin:
+#
+#   main    → harvardintech.com            open, indexable, drafts hidden,
+#                                          no /admin, sitemap published.
+#   staging → review.harvardintech.com     passphrase-gated + noindex.
 #
 # Reaching that state means dropping PREVIEW_GATE/INCLUDE_DRAFTS from the main
-# build AND standing up the review origin — together, never one without the
-# other, or the preview is left unprotected. See DEPLOY_SETUP.md.
+# build AND keeping a gated track standing — together, never one without the
+# other, or nothing is protected. See DEPLOY_SETUP.md.
 #
 # Two axes phase a change: `staging` phases CODE, and the CMS Draft toggle
-# phases CONTENT. Promotion to live is a single merge staging → main, which the
-# promote.yml workflow does at the press of a button.
+# phases CONTENT.
 #
 # The difference between the tracks is entirely environmental — see
 # astro.config.mjs (base/site, conditional CMS + sitemap),
@@ -35,13 +47,11 @@
 # `scripts/enable-pages.sh` once (or toggle the UI) and re-run — see
 # DEPLOY_SETUP.md.
 #
-# Review-track setup (one-time, see DEPLOY_SETUP.md): create the
-# nseldeib/harvardintech-review repo, enable Pages on it with Source =
-# branch `gh-pages`, set its custom domain to review.harvardintech.com, add the
-# GoDaddy CNAME `review → nseldeib.github.io`, and store the SSH deploy key's
-# private half here as the REVIEW_DEPLOY_KEY secret (public half on the review
-# repo, with write access). Until that exists the `review` job fails and the
-# public track is unaffected.
+# Staging-track setup (one-time, see DEPLOY_SETUP.md): create the
+# nseldeib/harvardintech-staging repo, enable Pages on it with Source =
+# branch `gh-pages`, and store the SSH deploy key's private half here as the
+# REVIEW_DEPLOY_KEY secret (public half on the staging repo, with write access).
+# No DNS. Until that exists the `staging` job fails and `main` is unaffected.
 name: Deploy to GitHub Pages
 
 on:
@@ -139,14 +149,24 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  # ---- Review track: staging → review.harvardintech.com -------------------
+  # ---- Staging track: staging → nseldeib.github.io/harvardintech-staging --
   # A second GitHub Pages *site* requires a second repo (one repo = one Pages
-  # site), so this job builds here and pushes the built output to the review
-  # repo's gh-pages branch over SSH. It gets its own origin rather than a
-  # subpath of the live site for two reasons, both verified: @codeyam/cms
-  # hard-codes root-absolute /admin links and cannot run under a non-root base;
-  # and the admin pages embed raw entry markdown in static HTML behind a
-  # client-only sign-in, so /admin must never sit on the public domain.
+  # site), so this job builds here and pushes the built output to the staging
+  # repo's gh-pages branch over SSH.
+  #
+  # It gets its own repo rather than a subdirectory of the reviewed site because
+  # the two must deploy independently — the whole point is that `main` holds
+  # still while this one moves. It does NOT get a custom domain: that would mean
+  # a DNS record on harvardintech.com, which is off-limits until the migration is
+  # approved. The staging repo's default Pages URL needs no DNS at all.
+  #
+  # /admin ships here as well as on `main`. Note that the CMS commits to the
+  # branch named in src/data/cms.json — `main` — so an edit made through THIS
+  # site's admin lands on the reviewed site, skipping staging entirely. That is
+  # the one thing here that does not respect the track boundary. It is left as-is
+  # deliberately: content editors work on `main`'s admin, this site is for us,
+  # and making the CMS branch per-build is a larger change than the boundary is
+  # worth today. Do content edits on the reviewed site's /admin.
   review:
     if: github.ref_name == 'staging'
     runs-on: ubuntu-latest
@@ -162,27 +182,34 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
         run: npm ci
-      - name: Build review site
+      - name: Build staging site
         env:
-          # No DEPLOY_BASE_PATH: the review site is served from the root of its
-          # own domain, so the base stays '/'. This is no longer a CMS
-          # constraint — @codeyam/cms 0.2.1 added base-path support, so /admin
-          # works under a subpath too (which is what the gated `main` deploy
-          # above relies on). It is simply where this origin is rooted.
-          PAGES_SITE: https://review.harvardintech.com
+          # Served from a subpath of the staging repo's Pages site, so the base
+          # must match the repo name — same shape as the `main` build above.
+          # @codeyam/cms 0.2.2 supports a non-root base, and the gated `main`
+          # deploy is the standing proof that /admin works under one.
+          #
+          # AT THE CUTOVER, when review.harvardintech.com is approved: drop
+          # DEPLOY_BASE_PATH (the custom domain is rooted at '/'), point
+          # PAGES_SITE at https://review.harvardintech.com, and restore the CNAME
+          # write in the step below. Three lines; nothing else here changes.
+          DEPLOY_BASE_PATH: /harvardintech-staging
+          PAGES_SITE: https://nseldeib.github.io
           PREVIEW_GATE: '1'
           INCLUDE_DRAFTS: '1'
         run: npm run build
-      - name: Add CNAME and .nojekyll
-        # CNAME binds the custom domain on the review repo's Pages site.
-        # .nojekyll is required for a BRANCH-sourced Pages site: without it
-        # Jekyll strips Astro's `_astro/` asset directory and the site loads
-        # unstyled with no JS. (The public track deploys via artifact, which
-        # never runs Jekyll, so it needs neither file.)
+      - name: Add .nojekyll
+        # Required for a BRANCH-sourced Pages site: without it Jekyll strips
+        # Astro's `_astro/` asset directory and the site loads unstyled with no
+        # JS. (The `main` track deploys via artifact, which never runs Jekyll,
+        # so it needs neither this nor a CNAME.)
+        #
+        # No CNAME file: this site has no custom domain. Writing one would bind
+        # a domain whose DNS does not point here, and Pages would serve a
+        # misconfigured-domain error instead of the site.
         run: |
-          echo 'review.harvardintech.com' > dist/CNAME
           touch dist/.nojekyll
-      - name: Publish to review repo
+      - name: Publish to staging repo
         env:
           REVIEW_DEPLOY_KEY: ${{ secrets.REVIEW_DEPLOY_KEY }}
         # A deploy key rather than a PAT: it is scoped to exactly one repo and
@@ -192,7 +219,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${REVIEW_DEPLOY_KEY:-}" ]; then
-            echo "::error::REVIEW_DEPLOY_KEY secret is not set — see DEPLOY_SETUP.md for the one-time review-track setup."
+            echo "::error::REVIEW_DEPLOY_KEY secret is not set — see DEPLOY_SETUP.md for the one-time staging-track setup."
             exit 1
           fi
           mkdir -p ~/.ssh
@@ -206,5 +233,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add -A
-          git commit -q -m "Review build from staging@${GITHUB_SHA}"
-          git push -q -f git@github.com:nseldeib/harvardintech-review.git gh-pages
+          git commit -q -m "Staging build from staging@${GITHUB_SHA}"
+          git push -q -f git@github.com:nseldeib/harvardintech-staging.git gh-pages

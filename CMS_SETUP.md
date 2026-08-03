@@ -58,9 +58,11 @@ identity**. Nothing to deploy, no shared secret.
    nseldeib/harvardintech** and **Repository permissions → Contents → Read and
    write** (the single permission the CMS needs). Choose an expiry, generate, and
    copy the token.
-2. Open `/admin` on the **review site** (`https://review.harvardintech.com/admin`
-   — enter the site passphrase first) and paste the token into the sign-in
-   prompt. `/admin` is not served on harvardintech.com by design.
+2. Open `/admin` on the **reviewed site**
+   (`https://nseldeib.github.io/harvardintech/admin` — enter the site passphrase
+   first) and paste the token into the sign-in prompt. `/admin` is never served on
+   a public build by design, so after the migration this address moves to the
+   gated review origin rather than to harvardintech.com.
 3. Edit content. The token lives in that browser only — each editor uses their
    own, and you revoke or rotate it from GitHub's token settings.
 
@@ -93,32 +95,44 @@ batch as a **single GitHub commit**. That keeps history readable and makes a
 multi-part edit (say, a new chapter plus its hero image plus a nav entry) land
 atomically.
 
-## Where edits land: the review site, not the live site
+## Where edits land
 
-CMS commits go to the **`staging`** branch, which builds the **review site** at
-`review.harvardintech.com` — passphrase-gated, unindexed, and the only place
-`/admin` is served. Publishing from the CMS therefore does **not** change
-harvardintech.com. It puts the change somewhere the team can look at it.
+**Today, nothing an editor does can reach the public.** `harvardintech.com` is
+still served by Strikingly and is untouched by this repo, so every site here is a
+private preview.
+
+CMS commits go to the branch named in `src/data/cms.json` — currently **`main`**,
+which builds the **reviewed site** at `nseldeib.github.io/harvardintech`. That is
+the link the team has. Publishing from the CMS updates it a minute or two later.
+
+There is also a **staging site** at `nseldeib.github.io/harvardintech-staging`,
+built from the `staging` branch, where code changes land first so the reviewed
+link holds still while work is in progress.
+
+> **Editors: use the reviewed site's `/admin`.** The staging site serves an admin
+> too, but the CMS commits to whatever `cms.json` names — `main` — so an edit made
+> there lands on the reviewed site anyway, skipping staging. Nothing breaks; it
+> just bypasses the staging step for content.
 
 Two independent things phase a change, and it helps to keep them straight:
 
 | | What it phases | How you use it |
 | --- | --- | --- |
-| **Draft toggle** (per entry) | *content* | Leave Draft **on** while an entry is half-written. Drafts appear on the review site and never on the live site — so a draft is safe to publish. |
-| **`staging` branch** (whole site) | *code and content* | Everything the CMS commits lands here first. Nothing reaches the live site until someone promotes. |
+| **Draft toggle** (per entry) | *content* | Leave Draft **on** while an entry is half-written. Drafts appear on the gated sites and never on a public build — so a draft is safe to publish. |
+| **`staging` branch** (whole site) | *code* | Code changes land here first. The reviewed link does not move until someone promotes. |
 
-**Promoting to live.** When the review site looks right, go to the repo's
-**Actions** tab → **Promote review → live** → **Run workflow**. That merges
-`staging` into `main` and publishes harvardintech.com. It is a button, not a git
-exercise, and it is deliberately manual — going live should be a decision
-someone makes, not something that happens because an editor hit Publish.
+**Promoting staging → reviewed.** Go to the repo's **Actions** tab → **Promote
+review → live** → **Run workflow**. That merges `staging` into `main`. It is a
+button, not a git exercise, and it is deliberately manual.
 
 If the promote workflow reports it could not fast-forward, `main` has changes
-`staging` does not (someone edited the live branch directly). It opens a pull
-request instead of guessing; review and merge that PR to publish.
+`staging` does not — which is exactly what a CMS content edit creates, since those
+commit to `main`. It opens a pull request instead of guessing; review and merge
+that PR, or rebase `staging` on `main` and re-run.
 
-A published batch is live on the review site a minute or two after Publish, and
-on the live site a minute or two after Promote.
+**After the Strikingly migration** the roles change: `main` becomes the public
+harvardintech.com, `staging` becomes the gated review origin, and promoting then
+means publishing to the world. See [DEPLOY_SETUP.md](./DEPLOY_SETUP.md).
 
 ## How `collections.json` relates to `src/content/config.ts`
 

@@ -54,10 +54,12 @@ entry, mostly non-technical).
 3. **Domain** — Who controls the `harvardintech.com` registrar/DNS today? When
    is the team comfortable cutting over? *(See deep dive.)*
 4. ~~**Preview access**~~ — **Resolved.** The preview is no longer a temporary
-   pre-launch state that disappears at cutover; it is a permanent **review
-   site** (`review.harvardintech.com`) running alongside the live site. It keeps
-   the deterrent-level gate (client-side passphrase + `noindex` + robots
-   `Disallow`). *Still open if the team wants it:* moving the review track to
+   pre-launch state that disappears at cutover; a gated site runs permanently
+   alongside the live one. Today that is `nseldeib.github.io/harvardintech`
+   (reviewed) plus `nseldeib.github.io/harvardintech-staging` (working); after the
+   cutover the gated track becomes `review.harvardintech.com`. It keeps the
+   deterrent-level gate (client-side passphrase + `noindex` + robots
+   `Disallow`). *Still open if the team wants it:* moving the gated track to
    Cloudflare Pages behind Cloudflare Access buys real per-person
    authentication — see [DEPLOY_SETUP.md](../../DEPLOY_SETUP.md).
 5. **Content ownership** — Who supplies chapter committees, per-chapter events,
@@ -100,17 +102,25 @@ editor can do: chapter committee members, per-chapter events, real board
 bios/photos, blog + podcast entries. Needs the client to provide the content.
 
 ### 11. Publishing / shareable preview — ✅ two-track publishing
-Two sites are built from this one repo:
+Two sites are built from this one repo. **Today neither is public** —
+harvardintech.com is still Strikingly's — so the split is between a link that
+holds still and a link that moves:
 
-- **Live** — `main` → harvardintech.com. Open, indexable, published content only.
-- **Review** — `staging` → `review.harvardintech.com`. Passphrase + `noindex` +
-  robots `Disallow` (deterrent-level privacy), **drafts visible**, and the only
-  place `/admin` is served.
+- **Reviewed** — `main` → `nseldeib.github.io/harvardintech`. The link the team
+  has. Moves only when someone promotes.
+- **Staging** — `staging` → `nseldeib.github.io/harvardintech-staging`. Takes
+  every commit, so work in progress never disturbs the reviewed link.
 
-The review site is permanent, not a pre-launch stopgap — it stays after the
-domain cutover as the place the team sees in-flight work. Two axes phase a
-change: the `staging` branch phases *code*, the CMS Draft toggle phases
-*content*. Going live is one button: **Actions → Promote review → live**.
+Both are passphrase + `noindex` + robots `Disallow` (deterrent-level privacy),
+show **drafts**, and serve `/admin`.
+
+**After the domain cutover** the roles split into live and review: `main` →
+harvardintech.com (open, indexable, published content only) and `staging` →
+`review.harvardintech.com` (gated, drafts visible, the only place `/admin` is
+served). The gated track is permanent, not a pre-launch stopgap.
+
+Two axes phase a change: the `staging` branch phases *code*, the CMS Draft toggle
+phases *content*. Promotion is one button: **Actions → Promote review → live**.
 
 The gate is now an explicit `PREVIEW_GATE` env var rather than being inferred
 from `DEPLOY_BASE_PATH`, so the domain cutover no longer un-gates anything as a

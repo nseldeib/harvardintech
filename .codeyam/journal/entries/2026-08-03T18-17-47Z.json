@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-08-03T18:17:47Z",
+  "title": "Staging Track On GitHub Pages",
+  "type": "feature",
+  "userRequest": "w/clear",
+  "description": "The team reviews the gated preview at nseldeib.github.io/harvardintech, and until now that site moved every time we committed — so a reviewer could open it mid-change and find half-finished work. It is now the reviewed site, advancing only when someone runs the Promote workflow, while a second gated site at nseldeib.github.io/harvardintech-staging takes every commit. Neither is public; harvardintech.com is still Strikingly's.\n\nThe deploy workflow already carried a dormant staging job, but it targeted review.harvardintech.com — which would mean adding a DNS record to a domain we do not yet have permission to touch. Hosting the working site on the staging repo's own Pages URL needs no DNS at all, so the domain stays untouched until the migration is approved. The three-line diff that moves it onto the real subdomain at cutover is recorded inline in the workflow, so the deferral is a note in the file rather than folklore.\n\nThe one genuinely new bug class this introduces is a base path that disagrees with where the site is served: a Pages project site lives at <user>.github.io/<repo>/, so its Astro base must be /<repo>, and that correspondence previously existed only as two hand-matched strings sitting far apart in the YAML. Get them out of sync and the deploy still succeeds while every asset and link 404s under a site that returns HTTP 200 — the same failure landing-images.test.ts was written after, one level up. pagesBasePathFor and pushTargetRepo state the rule and read the repo back out of the push line, and a cross-file test holds deploy.yml to them, also asserting that the staging job writes no CNAME and that both tracks still set PREVIEW_GATE. Reverting the change turns exactly those assertions red, which was verified rather than assumed.\n\nAlso corrected five documents that described review.harvardintech.com as though it were live. CMS_SETUP.md was actively wrong: it said CMS commits go to the staging branch when cms.json names main. Two boundaries are recorded rather than enforced, both deliberate: the staging site serves an /admin that commits to main like any other, so content editing belongs on the reviewed site; and Nicole's CMS edits land on main directly, which will make the next promote open a PR instead of fast-forwarding.\n\nGitHub setup done this session: the placeholder repo was renamed to harvardintech-staging, a write deploy key installed with its private half stored as REVIEW_DEPLOY_KEY, and the repo made public — Pages refuses private repos on a free plan, and the repo holds only output built from an already-public source. Creating the staging branch and enabling Pages must follow this commit, since gh-pages is created by the first staging build.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "DEPLOY_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/scoping/README.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/scoping/domain-transfer-runbook.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/session-narrative.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/deployTracks.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/deployTracks.ts",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 14,
+        "passed": 14
+      }
+    ]
+  }
+}

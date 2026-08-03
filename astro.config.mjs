@@ -173,12 +173,21 @@ const base = process.env.DEPLOY_BASE_PATH || '/';
 const site = process.env.PAGES_SITE || 'https://nseldeib.github.io';
 
 // --- two-track publishing -------------------------------------------------
-// Two builds come out of this one repo (see .github/workflows/deploy.yml):
+// Two builds come out of this one repo (see .github/workflows/deploy.yml).
+//
+// TODAY both are gated, because harvardintech.com is still Strikingly's:
+//   - `main`    → nseldeib.github.io/harvardintech         (reviewed — holds still)
+//   - `staging` → nseldeib.github.io/harvardintech-staging (working — moves constantly)
+//
+// AFTER THE MIGRATION the roles split:
 //   - Public track  (`main`    → harvardintech.com):        open, indexable.
 //   - Review track  (`staging` → review.harvardintech.com): passphrase-gated,
 //     noindex, drafts visible, and the only track that ships /admin.
-// PREVIEW_GATE=1 is what marks a build as the review track; src/lib/previewGate.ts
-// reads the same var for the gate UI.
+//
+// `isReviewTrack` is a property of the BUILD, not of the branch: PREVIEW_GATE=1
+// marks it, and src/lib/previewGate.ts reads the same var for the gate UI. Both
+// of today's builds set it, so both are review-track builds and both ship /admin
+// — which is why /admin is reachable on the gated preview right now.
 const isReviewTrack = process.env.PREVIEW_GATE === '1';
 const isDev = process.argv.includes('dev');
 

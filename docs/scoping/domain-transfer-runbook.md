@@ -83,9 +83,11 @@ confirmed stable for a few days.
 ## Publishing the WIP preview (needed before Phase 1, and for sharing now)
 
 > **✅ Resolved by two-track publishing.** Both questions below are settled. The
-> workflow now deploys **two** tracks: `main` → the live site (today
+> workflow now deploys **two** tracks: `main` → the reviewed site (today
 > `nseldeib.github.io/harvardintech`, harvardintech.com after cutover) and
-> `staging` → the gated review site at `review.harvardintech.com`. The review
+> `staging` → the working site (today `nseldeib.github.io/harvardintech-staging`,
+> moving to `review.harvardintech.com` when the domain is approved — it is
+> deliberately on a github.io URL until then, so no DNS is needed). The gated
 > track is permanent, so there is no longer a "WIP preview" that has to go away
 > at launch — and the preview gate is an explicit `PREVIEW_GATE` var rather than
 > a side effect of `DEPLOY_BASE_PATH`, so the cutover in Phase 1 no longer

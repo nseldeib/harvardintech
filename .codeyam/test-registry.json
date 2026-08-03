@@ -478,6 +478,42 @@
       "runner": "tests"
     },
     {
+      "description": "The reviewed track is served from a subpath of this repo's own Pages site, so the same rule applies even though it publishes by artifact upload.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "deploy.yml track coherence › builds the reviewed track with a base matching this repo",
+      "line": 112,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The headline contract, and the bug class this file exists for: the staging job's base path must name the same repo it publishes to. They sit far apart in the workflow with nothing connecting them, and a mismatch deploys a site that returns 200 while every asset and link 404s.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "deploy.yml track coherence › builds the staging track with a base matching the repo it publishes to",
+      "line": 102,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Dropping PREVIEW_GATE is precisely what takes a site public, and harvardintech.com is still Strikingly's — so until the cutover BOTH tracks must set it. This is the one assertion here guarding exposure rather than correctness, which is why it covers both jobs rather than just the new one.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "deploy.yml track coherence › gates both tracks while neither is meant to be public",
+      "line": 130,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The staging site has no custom domain. A CNAME file would bind a domain whose DNS does not point at it, and Pages then serves a misconfigured-domain error instead of the site. Restoring this write is a deliberate step of the future migration, not something to leave lying around.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "deploy.yml track coherence › writes no CNAME on the staging track",
+      "line": 122,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
       "description": "The default state, and the state the wall renders on the server: everything shown. A filter that started with something hidden would mean the no-JS wall and the JS wall disagreed about what the page contains.",
       "file": "src/lib/donorFilter.test.ts",
       "format": "vitest",
@@ -1765,6 +1801,51 @@
       "runner": "tests"
     },
     {
+      "description": "The other track's repo, so both real values in the workflow are covered.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pagesBasePathFor › handles the reviewed track repo too",
+      "line": 39,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The rule itself: a project site at <user>.github.io/<repo>/ builds with base /<repo>.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pagesBasePathFor › returns the repo name as a rooted path",
+      "line": 34,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The dangerous case: '/' is the base of a USER site or a custom domain, so returning it for an empty repo would build every asset URL wrong while looking entirely plausible. Fail loudly instead.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pagesBasePathFor › throws on an empty repo name rather than returning a bare slash",
+      "line": 56,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Someone writing the repo the way it appears in a URL should not get '//repo'.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pagesBasePathFor › tolerates surrounding slashes rather than doubling them",
+      "line": 44,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A config value copied with whitespace still resolves to the same base.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pagesBasePathFor › trims surrounding whitespace",
+      "line": 49,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
       "description": "Both unfavorable → off.",
       "file": "src/lib/parallax.test.ts",
       "format": "vitest",
@@ -1987,6 +2068,51 @@
       "key": "publishedEntries › treats an explicit draft false as published",
       "line": 35,
       "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "HTTPS remotes are the other form someone might switch to.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pushTargetRepo › reads the repo out of an HTTPS remote",
+      "line": 78,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The exact form the staging job uses.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pushTargetRepo › reads the repo out of an SSH push command",
+      "line": 64,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The same URL without the .git suffix must resolve identically.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pushTargetRepo › reads the repo when the .git suffix is absent",
+      "line": 71,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A hyphenated owner must not be mistaken for the repo.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pushTargetRepo › returns the repo, not the owner",
+      "line": 85,
+      "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "\"This step pushes nowhere\" is a real state — the reviewed track publishes via an artifact upload and has no remote — so it is reported, not thrown on.",
+      "file": "src/lib/deployTracks.test.ts",
+      "format": "vitest",
+      "key": "pushTargetRepo › returns undefined when the command contains no remote",
+      "line": 91,
+      "registeredAt": "2026-08-03T18:10:23Z",
       "runner": "tests"
     },
     {

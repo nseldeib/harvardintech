@@ -2,51 +2,72 @@
 
 The build agent will ask which setup applies to your project.
 
-## Today: one gated site
+## Today: two gated sites, neither public
 
-Until the Strikingly migration there is **one** site, and it is private:
+Until the Strikingly migration `harvardintech.com` is still Strikingly's and is
+untouched. Both sites below are private:
 
-| Branch | Origin | Gate | Drafts | `/admin` | Sitemap |
-| --- | --- | --- | --- | --- | --- |
-| `main` | nseldeib.github.io/harvardintech | passphrase + `noindex` | **visible** | **served** | none |
+| Branch | Origin | Role | Gate | Drafts | `/admin` | Sitemap |
+| --- | --- | --- | --- | --- | --- | --- |
+| `main` | nseldeib.github.io/harvardintech | **reviewed** | passphrase + `noindex` | **visible** | **served** | none |
+| `staging` | nseldeib.github.io/harvardintech-staging | **working** | passphrase + `noindex` | **visible** | **served** | none |
 
-`harvardintech.com` is still Strikingly's and is untouched. The deploy sets
-`PREVIEW_GATE=1` and `INCLUDE_DRAFTS=1` on the `main` build, which is what keeps
-the preview password-protected while the team reviews it. **Dropping
-`PREVIEW_GATE` is the switch that takes the site public** — do not do it before
-the cutover.
+They differ only in **cadence**, not configuration. `staging` takes every commit;
+`main` moves only when someone promotes. That is the whole point — the link the
+team reviews holds still, so nobody opens it mid-change and finds half-finished
+work.
+
+Both builds set `PREVIEW_GATE=1` and `INCLUDE_DRAFTS=1`. **Dropping
+`PREVIEW_GATE` is the switch that takes a site public** — do not do it before the
+cutover.
+
+The staging site is hosted on the staging repo's own Pages URL rather than
+`review.harvardintech.com` on purpose: a custom domain would mean adding a DNS
+record to `harvardintech.com`, and that domain stays untouched until the
+migration is approved. See "At the cutover" below for the three-line diff.
+
+**One boundary this does not enforce:** the CMS commits to the branch named in
+`src/data/cms.json`, which is `main`. An edit made through the *staging* site's
+`/admin` therefore lands on the reviewed site, skipping staging. Do content edits
+on the reviewed site's `/admin`; the staging site is for code.
 
 The CMS is deliberately not behind the passphrase; it has its own GitHub-token
 sign-in and is `noindex, nofollow`. See [docs/nicole-review.md](docs/nicole-review.md).
 
-## Later: two tracks
+## At the cutover: the roles swap
 
-The two-track machinery below is built and dormant. It activates when a
-`staging` branch exists, and is how the site gets a staging → production split
-at migration time — not before.
+When the Strikingly migration is approved, `main` becomes the public site and
+`staging` becomes the gated review origin:
 
 | Branch | Origin | Gate | Drafts | `/admin` | Sitemap |
 | --- | --- | --- | --- | --- | --- |
 | `main` | harvardintech.com | open, indexable | hidden | absent | published |
 | `staging` | review.harvardintech.com | passphrase + `noindex` | **visible** | **served** | none |
 
-Two things must change together when that happens: the review origin needs the
-one-time setup below, and `main`'s `PREVIEW_GATE=1` comes off. Note that the
-`main` row above is the *public launch* configuration — with no `staging` branch
-standing up a private track, removing the gate would leave nothing protected.
+Two things must change together: `main`'s `PREVIEW_GATE=1` comes off, and a gated
+track must still be standing. Removing the gate while nothing else is private
+would leave the whole site unprotected.
+
+Moving staging onto `review.harvardintech.com` is three lines in the `staging`
+job of `deploy.yml` — drop `DEPLOY_BASE_PATH`, point `PAGES_SITE` at the
+subdomain, restore the `CNAME` write — plus one additive GoDaddy record
+(`CNAME review → nseldeib.github.io`) and the custom domain set on the staging
+repo. That record creates a new subdomain and touches nothing that exists: the
+apex `A`, the `www` `CNAME`, the `MX` records, and the SPF `TXT` are all
+unaffected, so it cannot disturb the live site or `@harvardintech.com` email.
 
 There is no per-track code — the difference is three environment variables read
 by `astro.config.mjs`, `src/lib/previewGate.ts`, and `src/lib/draftVisibility.ts`:
 
-| Variable | Today (gated `main`) | Public track | Review track |
-| --- | --- | --- | --- |
-| `DEPLOY_BASE_PATH` | `/harvardintech` | `/harvardintech` (drop at domain cutover) | unset — base stays `/` |
-| `PAGES_SITE` | `https://nseldeib.github.io` | `https://nseldeib.github.io` | `https://review.harvardintech.com` |
-| `PREVIEW_GATE` | `1` | unset | `1` |
-| `INCLUDE_DRAFTS` | `1` | unset | `1` |
+| Variable | `main` today | `staging` today | `main` public | `staging` on its subdomain |
+| --- | --- | --- | --- | --- |
+| `DEPLOY_BASE_PATH` | `/harvardintech` | `/harvardintech-staging` | drop at domain cutover | unset — base stays `/` |
+| `PAGES_SITE` | `https://nseldeib.github.io` | `https://nseldeib.github.io` | `https://harvardintech.com` | `https://review.harvardintech.com` |
+| `PREVIEW_GATE` | `1` | `1` | unset | `1` |
+| `INCLUDE_DRAFTS` | `1` | `1` | unset | `1` |
 
 `@codeyam/cms` **0.2.1** added base-path support, so the dashboard runs correctly
-under a subpath — which is what makes the single gated site above possible.
+under a subpath — which is what makes both gated sites above possible.
 Before 0.2.1 the admin pages built to the right place but every link inside them
 pointed at the origin root, so the CMS was unreachable on a project site. If you
 ever see admin links 404 while the pages themselves load, that is the symptom of
@@ -113,62 +134,66 @@ gh workflow run "Deploy to GitHub Pages" --ref <default-branch>
 
 ---
 
-## Review-track setup (one-time, manual)
+## Staging-track setup (one-time, manual)
 
-The public track works as-is. The review track needs five things that cannot be
+The `main` track works as-is. The staging track needs four things that cannot be
 done from inside this repo. Until they exist, pushes to `staging` fail at the
-"Publish to review repo" step and **the public track is unaffected** — so this is
-safe to leave undone for a while.
+"Publish to staging repo" step and **`main` is unaffected** — so this is safe to
+leave half-done.
+
+**No DNS step.** The staging site is served from the staging repo's own Pages URL,
+so `harvardintech.com` is never touched. Moving it onto
+`review.harvardintech.com` is a later, separate change — see "At the cutover".
 
 One GitHub repo hosts exactly one Pages site, so a second origin genuinely
 requires a second repo. It holds only generated output; there is no source in it.
 
-1. **Create the review repo** — `nseldeib/harvardintech-review`. It was created
-   once and then deleted again, because an empty placeholder repo sitting around
-   for a phase that may be months away is easier to mistake for working
-   infrastructure than to remember the reason for. Recreate it when you actually
-   start this track. Private is fine; note that a private repo's Pages site is
-   still public unless you are on GitHub Enterprise Cloud, which is why the
-   passphrase gate and `noindex` carry the privacy here.
+1. ✅ **Create the staging repo** — `nseldeib/harvardintech-staging`. **Done, and
+   it is PUBLIC.** It has to be: Pages on a private repo requires a paid plan, and
+   this account is on the free tier — the API rejects it with *"Your current plan
+   does not support GitHub Pages for this repository."* Public costs no privacy
+   here, because the repo holds only **generated output** built from
+   `nseldeib/harvardintech`, which is itself already public. The privacy is
+   carried by the passphrase gate and `noindex`, not by repo visibility (see the
+   note below).
 
-2. **Generate a deploy key** and install both halves:
+2. ✅ **Generate a deploy key** and install both halves. **Done** — a write-access
+   deploy key titled *github-actions staging deploy* on the staging repo, with the
+   private half stored here as the **`REVIEW_DEPLOY_KEY`** secret. To rotate it:
    ```bash
-   ssh-keygen -t ed25519 -C 'harvardintech-review deploy' -f review_deploy_key -N ''
+   ssh-keygen -t ed25519 -C 'harvardintech-staging deploy' -f review_deploy_key -N ''
+   gh repo deploy-key add review_deploy_key.pub -R nseldeib/harvardintech-staging -w
+   gh secret set REVIEW_DEPLOY_KEY -R nseldeib/harvardintech < review_deploy_key
+   rm -f review_deploy_key review_deploy_key.pub
    ```
-   - Public half (`review_deploy_key.pub`) → review repo → **Settings → Deploy
-     keys → Add deploy key**, **Allow write access** checked.
-   - Private half (`review_deploy_key`) → *this* repo → **Settings → Secrets and
-     variables → Actions → New repository secret**, named **`REVIEW_DEPLOY_KEY`**.
-   - Delete both local files afterwards.
-
    A deploy key rather than a personal access token: it is scoped to exactly one
    repo and carries no person's identity, so it survives staff changes.
 
-3. **Create the `staging` branch** off `main` and push it. The first push builds
-   the review site.
+3. ⬜ **Create the `staging` branch** off `main` and push it. The first push builds
+   the staging site and creates `gh-pages` on the staging repo.
    ```bash
    git checkout -b staging main && git push -u origin staging
    ```
 
-4. **Enable Pages on the review repo** — **Settings → Pages → Source: Deploy from
-   a branch**, branch **`gh-pages`**, folder `/ (root)`. The branch appears after
-   the first successful `staging` build, so do this step after step 3.
+4. ⬜ **Enable Pages on the staging repo** — **Settings → Pages → Source: Deploy
+   from a branch**, branch **`gh-pages`**, folder `/ (root)`, or:
+   ```bash
+   gh api -X POST repos/nseldeib/harvardintech-staging/pages \
+     -f 'source[branch]=gh-pages' -f 'source[path]=/'
+   ```
+   **This must come after step 3** — the API refuses with *"The gh-pages branch
+   must exist before GitHub Pages can be built"* until the first build has pushed
+   it.
 
-5. **Add the DNS record** at GoDaddy: `CNAME` — host `review`, value
-   `nseldeib.github.io`. Then set **Custom domain** on the review repo's Pages
-   settings to `review.harvardintech.com`. This touches nothing about the live
-   site and nothing about `MX` records.
-
-Then visit `https://review.harvardintech.com` — the passphrase overlay should
-appear. The passphrase is `crimson2026` unless overridden by a
+Then visit `https://nseldeib.github.io/harvardintech-staging/` — the passphrase
+overlay should appear. The passphrase is `crimson2026` unless overridden by a
 `PREVIEW_GATE_PASSPHRASE` env var in the workflow.
 
 > **How private is this, really?** The passphrase is a **deterrent, not
 > authentication** — it ships in the client bundle, and the admin pages embed
-> draft markdown in fetchable HTML. It keeps the review site out of search
-> results and away from casual visitors. If the review content is genuinely
-> sensitive, host the review track on **Cloudflare Pages behind Cloudflare
-> Access** instead (free for up to 50 users): per-person email one-time-PIN,
-> individually revocable, and the raw-markdown exposure stops mattering. Only
-> step 4 of the deploy workflow changes; everything else in this repo is
-> identical.
+> draft markdown in fetchable HTML. It keeps both gated sites out of search
+> results and away from casual visitors. If the content is genuinely sensitive,
+> host the gated track on **Cloudflare Pages behind Cloudflare Access** instead
+> (free for up to 50 users): per-person email one-time-PIN, individually
+> revocable, and the raw-markdown exposure stops mattering. Only the publish step
+> of the deploy workflow changes; everything else in this repo is identical.

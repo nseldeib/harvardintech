@@ -168,8 +168,28 @@ dropped.
 - A **donation-platform URL** (the Donate button currently opens an email).
 - **Chapter + event content** for the 5 cities.
 
+## Two sites, and which one to send
+
+There are now two gated sites. **Only the first is for Nicole:**
+
+| | URL | What it is |
+|---|---|---|
+| **Reviewed** | `nseldeib.github.io/harvardintech` | The link above. Moves only when someone promotes, so it never changes under her mid-review. |
+| **Staging** | `nseldeib.github.io/harvardintech-staging` | Ours. Takes every commit. Not for sharing. |
+
+Neither is public — `harvardintech.com` is still Strikingly's.
+
+When a change is ready for her, go to **Actions → Promote review → live → Run
+workflow**. That merges `staging` into `main` and her link catches up a minute or
+two later.
+
+Her CMS edits commit to `main` directly, which means the next promote will find
+commits on `main` that `staging` lacks and will open a PR rather than
+fast-forwarding. That is the workflow behaving correctly, not a fault — rebase
+`staging` on `main` and re-run.
+
 ## Known rough edges
 
-- The **staging → production split is not set up yet.** There is one site today.
-  The machinery for two tracks exists in the repo but is dormant; see
+- The **production split is not set up yet** — both sites are gated and neither
+  is public. That is the domain cutover, not this; see
   [DEPLOY_SETUP.md](../DEPLOY_SETUP.md).
