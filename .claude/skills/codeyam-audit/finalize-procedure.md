@@ -312,34 +312,6 @@ yours, and deletion is a judgment call (step 4b): when in doubt, ask. The
 step-7 finalize re-runs the suite, so a debug line a test asserted on will fail
 there — revert that one removal and re-run.
 
-> GOTCHA — **glob-loaded content can be reported as a stale doc.** The scan
-> finds "stale docs" by asking which tracked files no other tracked file
-> references. Content collections are discovered at build time by a directory
-> glob and reached through `getCollection('<name>')` — never by an import of the
-> entry's path — so nothing in the tree "references" them the way the scan
-> means. When that happens the entries are listed as deletion candidates, and
-> following the list literally deletes live site content.
->
-> **Verify before deleting; don't trust the count either way.** Observed on this
-> repo across one day: the same 8 unchanged event entries were reported as
-> 1 candidate, then 8, then none, with no change to the content, the content
-> config, or the dependency graph — a full `analyze-imports` rebuild did not
-> bring the finding back. So a clean scan is NOT evidence the class is gone, and
-> a flagged entry is NOT evidence it is dead. Treat any flagged content path as
-> unproven until checked.
->
-> The check is one command — open the content config and look for a loader whose
-> `base` covers the flagged path:
->
-> ```bash
-> grep -nE "glob\(|base:" src/content/config.ts   # or wherever stack.json's data.contentDir points
-> ```
->
-> A `glob({ pattern: '**/*.md', base: … })` covering the flagged directory means
-> the entries are live — leave them. Only entries *outside* every glob base are
-> genuine candidates. On the observed run, all 8 flagged files sat under a
-> `${root}/events` base and backed rendered pages.
-
 > `session-finalize` also emits a self-contained presentability advisory naming
 > these same two commands, so a client with no copy of this procedure is still
 > covered.

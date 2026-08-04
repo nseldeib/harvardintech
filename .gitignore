@@ -93,7 +93,6 @@ blob-report/
 .codeyam/editor-step.json
 .codeyam/editor-step.json.bak
 .codeyam/editor-step.json.preserve
-.codeyam/pending-build-launch
 .codeyam/editor-task-tracking.json
 .codeyam/editor-pending-plan.json
 .codeyam/feature-finalized.json
