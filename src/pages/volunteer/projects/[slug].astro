@@ -10,6 +10,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import VolunteerProjectPage from '../../../components/volunteer/VolunteerProjectPage.astro';
 import { volunteerPage } from '../../../lib/site';
+import { loadVolunteerCopy } from '../../../lib/volunteerPageContent';
 import { publishedEntries } from '../../../lib/drafts';
 import { INCLUDE_DRAFTS } from '../../../lib/draftVisibility';
 
@@ -29,17 +30,22 @@ type Props = { project: CollectionEntry<'projects'> };
 const { project } = Astro.props as Props;
 const { Content } = await render(project);
 const { title, blurb, image, commitment, applyUrl } = project.data;
+
+// The sign-up CTA and the fallback description come from the same editable copy
+// the /volunteer page uses, so an editor who changes the button there changes it
+// on every project page too rather than in one place out of two.
+const copy = await loadVolunteerCopy(volunteerPage);
 ---
 
-<BaseLayout title={title} description={blurb ?? volunteerPage.intro}>
+<BaseLayout title={title} description={blurb ?? copy.intro}>
   <VolunteerProjectPage
     title={title}
     blurb={blurb}
     image={image}
     commitment={commitment}
     applyUrl={applyUrl}
-    ctaLabel={volunteerPage.ctaLabel}
-    ctaUrl={volunteerPage.ctaUrl}
+    ctaLabel={copy.ctaLabel}
+    ctaUrl={copy.ctaUrl}
   >
     <Content />
   </VolunteerProjectPage>

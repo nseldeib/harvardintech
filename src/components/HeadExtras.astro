@@ -12,8 +12,9 @@ import Analytics from './Analytics.astro';
 import StructuredData from './StructuredData.astro';
 import PreviewGate from './PreviewGate.astro';
 import { settings } from '../lib/site';
+import { loadIntegrations } from '../lib/integrationsContent';
 
-const customHeadHtml = settings.customHeadHtml?.trim();
+const { customHeadHtml } = await loadIntegrations(settings);
 ---
 
 <PreviewGate />

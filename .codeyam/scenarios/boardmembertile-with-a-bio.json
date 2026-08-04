@@ -1,0 +1,13 @@
+{
+  "name": "BoardMemberTile - With A Bio",
+  "id": "3a606d3f-958b-4e3f-b842-2e33d7e5330d",
+  "url": "/isolated-components/BoardMemberTile",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BoardMemberTile",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/BoardMemberTile.astro",
+  "description": "One director's tile carrying the bio this feature made visible. The Bio box has been on every team entry in /admin all along; nothing on the site read it, so all five directors sat there with an empty field and the board showed only names and roles. Captured at 228px, the tile's real width in the five-column grid, because a bio wrapping at any other width says nothing about how it wraps on the page. The prose is illustrative rather than Ben Wei's real bio, which nobody has written yet."
+}

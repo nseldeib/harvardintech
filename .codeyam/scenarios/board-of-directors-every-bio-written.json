@@ -1,0 +1,13 @@
+{
+  "name": "Board of Directors - Every Bio Written",
+  "id": "1621f2bb-4643-4855-9f5f-6f8853628692",
+  "url": "/isolated-components/BoardOfDirectors-Bios",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BoardOfDirectors",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/BoardOfDirectors.astro",
+  "description": "The whole board with prose under every director, including one deliberately several times longer than the rest. The tiles do not stretch to match each other, so this is what proves the row survives an uneven set rather than only a tidy one — the realistic outcome when five people write their own bios with no length brief."
+}

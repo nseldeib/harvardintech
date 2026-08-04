@@ -1,0 +1,36 @@
+---
+import Component from "../../components/landing/BoardMemberTile.astro";
+import "../../styles/tokens.css";
+
+// Isolation page for BoardMemberTile with no headshot — the initials fallback.
+//
+// A director added from /admin before anyone has uploaded their photo lands
+// here, so this is the first thing a newly added board member looks like. The
+// monogram has to fill the same square the photo would, keeping the row aligned
+// rather than leaving one column short.
+//
+// Paired with a bio to prove the two independent fallbacks compose: a member can
+// be missing a photo and still have prose, which is exactly the order these
+// usually arrive in.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: BoardMemberTile-Initials</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <div style="width: 228px;">
+        <Component
+          member={{
+            name: 'Krysia Lenzo',
+            role: "Executive Director · Harvard C'12",
+            bio: 'Runs the organization day to day — the programming calendar, the chapter leads, and the volunteer team that makes both work.',
+          }}
+        />
+      </div>
+    </div>
+  </body>
+</html>

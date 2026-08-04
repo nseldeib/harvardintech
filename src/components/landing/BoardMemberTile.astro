@@ -1,0 +1,96 @@
+---
+// One director in the "Board of directors" grid: a square avatar with a crimson
+// underline (or the member's initials when they have no headshot), their name,
+// their role, and — when it has been written — their bio.
+//
+// Extracted from `BoardOfDirectors.astro` when bios were added: the tile went
+// from three elements to four, which is the point at which the repeated unit of
+// a grid earns its own file. The band above it now owns only the section heading
+// and the empty state.
+//
+// NOT the same component as `../BoardMemberCard.astro`, which draws a circular
+// greyscale headshot and is rendered by nothing on the site. This is the tile the
+// live board actually uses.
+import { initials, type BoardMemberLike } from '../../lib/team';
+import { withBase } from '../../lib/url';
+import { altFor, type MediaManifest } from '../../lib/media';
+
+interface Props {
+  member: BoardMemberLike;
+  /** Passed in rather than read here, so the grid reads the media library ONCE
+   *  for the whole board instead of once per headshot. */
+  media?: MediaManifest;
+}
+const { member, media } = Astro.props as Props;
+---
+
+<div class="bm">
+  <div class="av">
+    {
+      member.photo ? (
+        <img class="pho" src={withBase(member.photo)} alt={altFor(member.photo, member.name, media)} />
+      ) : (
+        <span class="initials">{initials(member.name)}</span>
+      )
+    }
+  </div>
+  <div class="nm">{member.name}</div>
+  <div class="ro">{member.role}</div>
+  {member.bio?.trim() ? <p class="bio">{member.bio}</p> : null}
+</div>
+
+<style>
+  .bm {
+    text-align: center;
+  }
+  .av {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--paper-2);
+    border-bottom: 3px solid var(--crimson);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pho {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .initials {
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink-3);
+  }
+  .nm {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 14px;
+  }
+  .ro {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-top: 5px;
+  }
+  /* Every director ships with an empty bio today, and production starts empty,
+     so a tile with no bio is the DEFAULT rendering rather than an edge case.
+     That is why the bio is a separate block with its own top margin instead of
+     padding on the role: an absent bio has to leave the tile looking exactly as
+     it did before bios existed, with no reserved gap hinting at something
+     missing. Left-aligned because a centred paragraph of prose is hard to read
+     at any length beyond a single line. */
+  .bio {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 10px 0 0;
+    text-align: left;
+  }
+</style>

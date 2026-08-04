@@ -1,0 +1,34 @@
+---
+import Component from "../../components/landing/BoardMemberTile.astro";
+import "../../styles/tokens.css";
+
+// Isolation page for BoardMemberTile with NO bio — which is not an edge case but
+// the state every one of the five directors ships in today, and the state a
+// brand-new board starts in, since production starts empty.
+//
+// The point of capturing it: the tile must look finished without a bio. No
+// reserved gap under the role, nothing hinting that something is missing. If
+// this frame ever grows whitespace below the role, the bio block has stopped
+// being conditional.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: BoardMemberTile-NoBio</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <div style="width: 228px;">
+        <Component
+          member={{
+            name: 'Jessica Li',
+            role: "Board Member · Harvard C'16",
+            photo: '/images/team/jessica-li.png',
+          }}
+        />
+      </div>
+    </div>
+  </body>
+</html>

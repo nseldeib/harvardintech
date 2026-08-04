@@ -1,16 +1,21 @@
 ---
 // Google Analytics (GA4) via gtag.js. Renders nothing unless a Measurement ID
-// is configured in the editable `settings` singleton, so the default state of
-// the site ships zero analytics markup. Editors only ever type a
-// `G-XXXXXXXXXX` id in the CMS — this template owns the script markup, so a bad
-// value can't break page structure or inject arbitrary code (that's what the
-// separate customHeadHtml escape hatch is for).
+// is configured, so the default state of the site ships zero analytics markup.
+// Editors only ever type a `G-XXXXXXXXXX` id in the CMS — this template owns the
+// script markup, so a bad value can't break page structure or inject arbitrary
+// code (that's what the separate customHeadHtml escape hatch is for).
+//
+// The id now comes from the `siteIntegrations` collection, which is what put it
+// in /admin at all: it lived on the `settings` singleton, whose editor renders
+// inputs for five scalar keys and round-trips the rest, so this was editable
+// data with nowhere to edit it. `settings` remains the fallback.
 //
 // Included via HeadExtras so it lands in every route's <head>, blog posts
 // included. Consent-gating (a GDPR banner) is intentionally out of scope here.
 import { settings } from '../lib/site';
+import { loadIntegrations } from '../lib/integrationsContent';
 
-const gaId = settings.googleAnalyticsId?.trim();
+const { googleAnalyticsId: gaId } = await loadIntegrations(settings);
 ---
 
 {

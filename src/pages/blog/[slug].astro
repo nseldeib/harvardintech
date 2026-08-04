@@ -6,6 +6,7 @@ import SEO from '../../components/SEO.astro';
 import HeadExtras from '../../components/HeadExtras.astro';
 import Embed from '../../components/Embed.astro';
 import { settings } from '../../lib/site';
+import { loadIntegrations } from '../../lib/integrationsContent';
 import { publishedEntries } from '../../lib/drafts';
 import { INCLUDE_DRAFTS } from '../../lib/draftVisibility';
 
@@ -36,6 +37,10 @@ const { Content } = await render(post);
 const seoTitle = post.data.metaTitle ?? post.data.title;
 const seoDescription = post.data.metaDescription ?? post.data.summary;
 const seoImage = post.data.ogImage ?? post.data.coverImage;
+
+// Body HTML is injected per shell (it can't live in <head>), so this one needs
+// it explicitly for the same reason it needs <HeadExtras /> above.
+const { customBodyHtml } = await loadIntegrations(settings);
 ---
 
 <html lang="en">
@@ -60,6 +65,6 @@ const seoImage = post.data.ogImage ?? post.data.coverImage;
       </article>
     </main>
 
-    {settings.customBodyHtml?.trim() ? <Fragment set:html={settings.customBodyHtml} /> : null}
+    {customBodyHtml ? <Fragment set:html={customBodyHtml} /> : null}
   </body>
 </html>

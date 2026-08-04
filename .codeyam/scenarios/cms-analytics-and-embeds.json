@@ -1,0 +1,21 @@
+{
+  "name": "CMS Analytics And Embeds",
+  "id": "6ec298b2-99fb-4769-8306-760c3c3ce072",
+  "url": "/admin/siteIntegrations/site",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "siteIntegrations": [
+      {
+        "googleAnalyticsId": "G-GCBX577FFD",
+        "slug": "site",
+        "title": "Analytics & embeds"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The measurement id and the raw head/body HTML boxes, on a screen of their own. These were always real editable data on settings.json, but the CMS settings form renders inputs for five scalar keys plus socials and round-trips the rest untouched — so adding a verification tag or repointing analytics meant a developer and a deploy. Their own collection rather than extra fields on Page settings, because the editor renders every declared field for every entry and sharing would have put an analytics box on the Momentum Fund page's screen. Both HTML boxes carry the warning that the snippet runs on every page."
+}

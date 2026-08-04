@@ -648,6 +648,327 @@
           "type": "text",
           "optional": true,
           "hint": "Where every Give button points. Blank keeps them on the giving-inquiry email, which is what they do today. Paste a real platform URL here to switch them all over at once."
+        },
+        {
+          "name": "heroHeadlineNamed",
+          "label": "Hero headline (personalised)",
+          "type": "text",
+          "optional": true,
+          "hint": "Shown to someone arriving from the campaign email. Write {name} where their first name should go."
+        },
+        {
+          "name": "heroHeadlineGeneric",
+          "label": "Hero headline",
+          "type": "text",
+          "optional": true,
+          "hint": "Shown to everyone else, and to anyone whose link carries no name. Keep the two headlines saying the same thing."
+        },
+        {
+          "name": "heroSubhead",
+          "label": "Hero text",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The line under the headline."
+        },
+        {
+          "name": "heroImage",
+          "label": "Hero image",
+          "type": "image",
+          "optional": true,
+          "hint": "Full-bleed photo behind the headline."
+        },
+        {
+          "name": "ctaTitle",
+          "label": "Closing heading",
+          "type": "text",
+          "optional": true,
+          "hint": "The heading of the final ask at the bottom of the page."
+        },
+        {
+          "name": "ctaBody",
+          "label": "Closing text",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The paragraph under it."
+        },
+        {
+          "name": "ctaLabel",
+          "label": "Give button label",
+          "type": "text",
+          "optional": true,
+          "hint": "Used on EVERY giving button on the page — hero, donor wall, and the closing ask."
+        }
+      ]
+    },
+    {
+      "id": "volunteerPage",
+      "label": "Volunteer page",
+      "singular": "Volunteer page",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Entry name",
+          "type": "text",
+          "hint": "Names this entry in the admin list. Not shown on the site."
+        },
+        {
+          "name": "kicker",
+          "label": "Kicker",
+          "type": "text",
+          "optional": true,
+          "hint": "The small label above the headline."
+        },
+        {
+          "name": "heroImage",
+          "label": "Hero image",
+          "type": "image",
+          "optional": true,
+          "hint": "Full-bleed photo behind the headline."
+        },
+        {
+          "name": "headline",
+          "label": "Headline",
+          "type": "text",
+          "optional": true,
+          "hint": "The big line at the top of the page. Blank falls back to the wording the site ships with."
+        },
+        {
+          "name": "intro",
+          "label": "Intro",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The paragraph under the headline."
+        },
+        {
+          "name": "benefitsTitle",
+          "label": "Benefits heading",
+          "type": "text",
+          "optional": true,
+          "hint": "Heading above the \"Why Volunteer\" blocks."
+        },
+        {
+          "name": "benefits",
+          "label": "Why Volunteer blocks",
+          "type": "list",
+          "optional": true,
+          "fields": [
+            {
+              "name": "title",
+              "label": "Block heading",
+              "type": "text"
+            },
+            {
+              "name": "body",
+              "label": "Block text",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
+          "name": "projectsTitle",
+          "label": "Projects heading",
+          "type": "text",
+          "optional": true,
+          "hint": "Heading above the open-projects grid."
+        },
+        {
+          "name": "projectsIntro",
+          "label": "Projects intro",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The line under that heading."
+        },
+        {
+          "name": "projectsEmptyMessage",
+          "label": "No open projects message",
+          "type": "textarea",
+          "optional": true,
+          "hint": "Shown INSTEAD of the grid when no volunteer projects are published. This is what the page shows today, so it is worth reading as real copy rather than a fallback."
+        },
+        {
+          "name": "ctaLabel",
+          "label": "Sign-up button label",
+          "type": "text",
+          "optional": true,
+          "hint": "Used on this page AND on every individual project page."
+        },
+        {
+          "name": "ctaUrl",
+          "label": "Sign-up link",
+          "type": "text",
+          "optional": true,
+          "hint": "Where the sign-up button goes."
+        }
+      ]
+    },
+    {
+      "id": "sponsorPage",
+      "label": "Sponsorship page",
+      "singular": "Sponsorship page",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Entry name",
+          "type": "text",
+          "hint": "Names this entry in the admin list. Not shown on the site."
+        },
+        {
+          "name": "kicker",
+          "label": "Kicker",
+          "type": "text",
+          "optional": true,
+          "hint": "The small label above the headline."
+        },
+        {
+          "name": "headline",
+          "label": "Headline",
+          "type": "text",
+          "optional": true,
+          "hint": "The big line at the top of the page."
+        },
+        {
+          "name": "intro",
+          "label": "Intro",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The paragraph under the headline."
+        },
+        {
+          "name": "heroImage",
+          "label": "Hero image",
+          "type": "image",
+          "optional": true,
+          "hint": "Full-bleed photo behind the headline."
+        },
+        {
+          "name": "levelsTitle",
+          "label": "Partnership levels heading",
+          "type": "text",
+          "optional": true,
+          "hint": "Heading above the levels. The levels themselves are edited in Sponsorship levels."
+        },
+        {
+          "name": "levelsIntro",
+          "label": "Partnership levels intro",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The line under that heading."
+        },
+        {
+          "name": "wallTitle",
+          "label": "Partner wall heading",
+          "type": "text",
+          "optional": true,
+          "hint": "Heading above the logos."
+        },
+        {
+          "name": "wallEmptyMessage",
+          "label": "No partners message",
+          "type": "textarea",
+          "optional": true,
+          "hint": "Shown INSTEAD of the wall when no sponsors are published — which is the state today."
+        },
+        {
+          "name": "inquiryTitle",
+          "label": "Enquiry heading",
+          "type": "text",
+          "optional": true,
+          "hint": "Heading of the \"start a conversation\" section."
+        },
+        {
+          "name": "inquiryBody",
+          "label": "Enquiry text",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The paragraph under it."
+        },
+        {
+          "name": "inquiryFormUrl",
+          "label": "Enquiry form URL",
+          "type": "text",
+          "optional": true,
+          "hint": "A Google Form or Typeform URL. Leave BLANK to show the placeholder instead of an embedded form — clearing this box is how you take a form back down."
+        },
+        {
+          "name": "disclaimer",
+          "label": "Legal line",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The Harvard Alumni Association requires a Shared Interest Group to state that contributions go to the group and not to the University. Change the wording, but do not remove it."
+        }
+      ]
+    },
+    {
+      "id": "sponsorLevels",
+      "label": "Sponsorship levels",
+      "singular": "Level",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text",
+          "hint": "How the level is shown on the page, e.g. \"Event Partner\". Safe to rename at any time — sponsors are filed under the entry itself, not under this text."
+        },
+        {
+          "name": "summary",
+          "label": "Summary",
+          "type": "textarea",
+          "optional": true,
+          "hint": "One line saying what this level underwrites."
+        },
+        {
+          "name": "benefits",
+          "label": "What the partner gets",
+          "type": "list",
+          "optional": true,
+          "fields": [
+            {
+              "name": "text",
+              "label": "Benefit",
+              "type": "text"
+            }
+          ]
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true,
+          "hint": "Lower numbers appear higher up. The wall reads top-down from the biggest commitment."
+        }
+      ]
+    },
+    {
+      "id": "siteIntegrations",
+      "label": "Analytics & embeds",
+      "singular": "Settings",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Entry name",
+          "type": "text",
+          "hint": "Names this entry in the admin list. Not shown on the site."
+        },
+        {
+          "name": "googleAnalyticsId",
+          "label": "Google Analytics ID",
+          "type": "text",
+          "optional": true,
+          "hint": "A GA4 measurement ID, e.g. G-XXXXXXXXXX. Leave blank and the site ships no analytics at all."
+        },
+        {
+          "name": "customHeadHtml",
+          "label": "Custom <head> HTML",
+          "type": "textarea",
+          "optional": true,
+          "hint": "Verification tags and pixels. This runs on EVERY page of the site, so only paste markup you trust and got from a service you recognise."
+        },
+        {
+          "name": "customBodyHtml",
+          "label": "Custom end-of-page HTML",
+          "type": "textarea",
+          "optional": true,
+          "hint": "Same warning as above. Use this for snippets a provider tells you to put at the end of the page rather than in the head."
         }
       ]
     }

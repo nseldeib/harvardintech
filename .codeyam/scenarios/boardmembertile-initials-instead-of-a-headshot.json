@@ -1,0 +1,13 @@
+{
+  "name": "BoardMemberTile - Initials Instead Of A Headshot",
+  "id": "263e17f3-4733-408a-bf6e-0cbddfa4e2ce",
+  "url": "/isolated-components/BoardMemberTile-Initials",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BoardMemberTile",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/BoardMemberTile.astro",
+  "description": "A director added before anyone uploaded their photo — the first thing a newly added board member looks like. The monogram fills the same square the headshot would, so the row stays aligned rather than leaving one column short. Paired with a bio on purpose: the two fallbacks are independent, and prose usually arrives before the photo does, so the combination is the realistic one rather than a contrived worst case."
+}

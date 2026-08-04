@@ -23,6 +23,7 @@ import {
 } from '../lib/nav';
 import { hiddenSectionAnchors } from '../lib/homeSections';
 import { loadHomeSections } from '../lib/homeSectionsContent';
+import { loadIntegrations } from '../lib/integrationsContent';
 import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { withBase } from '../lib/url';
@@ -60,6 +61,10 @@ const communityItems = communityNavItems(communities);
 // homepage's own. Read through the same loader the homepage uses, so the menu
 // and the page can never disagree about which bands exist.
 const { sections: homeSections } = await loadHomeSections();
+
+// Custom body HTML can't live in <head>, so each shell injects it itself right
+// before </body>. Same source as the head half in `HeadExtras`.
+const { customBodyHtml } = await loadIntegrations(settings);
 
 const navItems = withoutHiddenSections(
   withCommunityItems(withChapterGroup(nav.items, chapterItems), communityItems),
@@ -228,6 +233,6 @@ const subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb';
       }
     </style>
 
-    {settings.customBodyHtml?.trim() ? <Fragment set:html={settings.customBodyHtml} /> : null}
+    {customBodyHtml ? <Fragment set:html={customBodyHtml} /> : null}
   </body>
 </html>

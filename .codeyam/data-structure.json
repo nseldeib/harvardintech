@@ -420,7 +420,7 @@
   },
   {
     "name": "VolunteerPageCopy",
-    "description": "Editable copy singleton for /volunteer (`src/data/volunteerPage.json`): headline, intro, the four 'Why Volunteer' benefit blocks, and the projects-section framing including the empty-state message. Loaded via the same readSingleton path as settings/nav, so changing the pitch is a CMS data edit, never a markup change.",
+    "description": "Editable copy for /volunteer: headline, intro, the four \"Why Volunteer\" benefit blocks, and the projects-section framing including the empty-state message. Now a single-entry markdown collection (`volunteerPage`) so it renders as a real screen in /admin — it used to be `src/data/volunteerPage.json`, read through the same readSingleton path as settings/nav, which the CMS models no editor for. That file survives as the FALLBACK: the collection entry wins when present, and deleting it leaves the page rendering the committed copy rather than a blank hero, because the editor has no notion of a required singleton and lets the last entry go.",
     "category": "datastore",
     "order": 10,
     "fields": [
@@ -473,7 +473,7 @@
   },
   {
     "name": "DonatePageCopy",
-    "description": "Editable copy for the /donate Momentum Fund campaign page, held in the `donatePage.json` singleton under the data root. `accomplishments` is the campaign's track record — the concrete things the community has already done (community size, reach, events, new chapters) — shown between the stats band and the story, because the campaign doc asks a reader to fund momentum that is already visible rather than a promise. `stats` are the headline figures the story title (\"And Every Number Represents a Story\") refers back to. `donateUrl` stays empty until a donation platform is chosen, at which point the CTA stops falling back to a giving-inquiry mailto. `donorTiers` are the giving levels the Donor Recognition wall groups by; each carries the `id` a Donor's `tier` matches on, mirroring `levels` in `sponsorPage.json`, and renaming a tier is a copy edit while its `id` stays the stable key.",
+    "description": "The page s FRAME fields — hero headline named/generic, subhead, photo, and the closing ask — now live on the `donate` PageCopy entry so an editor can rewrite them; `donatePage.json` is the fallback. `accomplishments`, `pillars`, and `donateUrl` already migrated to their own collections in the launch-ready-editing cycle. What remains below describes the singleton s full shape, which is still what the route grafts its content-sourced values onto. Editable copy for the /donate Momentum Fund campaign page, held in the `donatePage.json` singleton under the data root. `accomplishments` is the campaign's track record — the concrete things the community has already done (community size, reach, events, new chapters) — shown between the stats band and the story, because the campaign doc asks a reader to fund momentum that is already visible rather than a promise. `stats` are the headline figures the story title (\"And Every Number Represents a Story\") refers back to. `donateUrl` stays empty until a donation platform is chosen, at which point the CTA stops falling back to a giving-inquiry mailto. `donorTiers` are the giving levels the Donor Recognition wall groups by; each carries the `id` a Donor's `tier` matches on, mirroring `levels` in `sponsorPage.json`, and renaming a tier is a copy edit while its `id` stays the stable key.",
     "category": "datastore",
     "order": 11,
     "fields": [
@@ -778,7 +778,7 @@
   },
   {
     "name": "SponsorPageCopy",
-    "description": "Editable copy for /sponsor, held in the `sponsorPage.json` singleton under the data root — the same model as VolunteerPageCopy and DonatePageCopy, so the pitch, the partnership levels, and the legal line are all CMS edits rather than code changes. `levels` are the partnership tiers a sponsor chooses between; each carries the `id` a Sponsor's `tier` matches on. `disclaimer` carries the Harvard Alumni Association requirement that a shared-interest group state contributions go to the group and not to Harvard University, so it is copy the team can revise without a deploy.",
+    "description": "Now a single-entry markdown collection (`sponsorPage`) with `src/data/sponsorPage.json` as the fallback, so the pitch is editable in /admin instead of being a code change. Its `levels` array moved out to the separate SponsorLevel collection — a benefits list inside a list of levels is not expressible in the editor. Editable copy for /sponsor, held in the `sponsorPage.json` singleton under the data root — the same model as VolunteerPageCopy and DonatePageCopy, so the pitch, the partnership levels, and the legal line are all CMS edits rather than code changes. `levels` are the partnership tiers a sponsor chooses between; each carries the `id` a Sponsor's `tier` matches on. `disclaimer` carries the Harvard Alumni Association requirement that a shared-interest group state contributions go to the group and not to Harvard University, so it is copy the team can revise without a deploy.",
     "category": "datastore",
     "order": 15,
     "fields": [
@@ -1178,6 +1178,138 @@
       {
         "name": "draft",
         "type": "boolean",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "SponsorLevel",
+    "description": "One partnership level on /sponsor, as a markdown entry in the `sponsorLevels` content collection. Migrated out of the `levels` array inside `sponsorPage.json`, which the CMS could not render an input for: a level carries a `benefits` string list INSIDE a list of levels, and the editor supports a repeatable list of scalars at top level only. One entry per level makes `benefits` a top-level list and matches the shape `pillars` and `accomplishments` already use. The ENTRY FILENAME is the stable key a Sponsor s `tier` matches on — there is deliberately no `id` frontmatter field. Two reasons point the same way: an editable id text box silently re-homes every sponsor filed under the level when retyped, and the codeyam seed adapter strips `id` (like `slug`) as a filename key, which made the collection literally unseedable while the field existed — every scenario s levels failed validation and fell back to the committed JSON with nothing visibly wrong. `chapters` and `communities` key off the filename the same way. Ordering is the site-wide `order` pin so the wall reads top-down from the biggest commitment.",
+    "category": "datastore",
+    "order": 23,
+    "fields": [
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "summary",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "benefits",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "order",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "draft",
+        "type": "boolean",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "SiteIntegrations",
+    "description": "The site-wide integration keys — GA4 measurement id and the raw custom `<head>` / `<body>` HTML escape hatches — as a single-entry markdown collection. These have always been real editable data on the `settings.json` singleton, but the CMS settings screen renders inputs for five scalar keys plus socials and round-trips the rest untouched, so they were data with nowhere to edit them. Deliberately its own collection rather than extra fields on `pageCopy`: the editor renders every declared field for every entry, so sharing would put an analytics box on the Momentum Fund page s screen. `settings.json` remains the fallback, so deleting this entry cannot silently unhook analytics from every page.",
+    "category": "datastore",
+    "order": 24,
+    "fields": [
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "googleAnalyticsId",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "customHeadHtml",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "customBodyHtml",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  {
+    "name": "PageCopy",
+    "description": "Per-page settings an editor changes from /admin, one markdown entry per page in the `pageCopy` collection. Today it holds the single `donate` entry: the Momentum Fund page s donation-platform URL (blank keeps every giving button on the giving-inquiry mailto) plus the page s FIXED FRAME — the hero headline in its named and generic forms, the hero subhead and photo, and the closing ask s title, body, and button label. The frame is deliberately not part of the reorderable `momentumSections` middle: a page whose hero could be dragged to the bottom is a page an editor can break. Making its copy editable does not make it draggable. `donatePage.json` remains the fallback for every field.",
+    "category": "datastore",
+    "order": 22,
+    "fields": [
+      {
+        "name": "slug",
+        "type": "string",
+        "isId": true,
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "donateUrl",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "heroHeadlineNamed",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "heroHeadlineGeneric",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "heroSubhead",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "heroImage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "closeTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "closeBody",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "closeCtaLabel",
+        "type": "string",
         "required": false
       }
     ]

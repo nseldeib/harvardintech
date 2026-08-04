@@ -1,11 +1,12 @@
 {
   "name": "CMS Site Settings",
-  "id": "e1320b0d-9332-4628-baf9-0fb48021a93d",
+  "id": "5ce0cda9-b39a-485c-9ff8-d751ed1983e8",
   "url": "/admin/settings",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "scenarioType": "application",
-  "description": "Everything an editor can change site-wide: title, public URL, description, contact email, footer text, social links, and the navigation menu. The menu editor further down now holds four groups — Programs, Communities, Content Hub, Membership. Chapters is deliberately absent: it is generated from the chapters collection, so publishing a chapter puts it in the menu and there is nothing to hand-maintain here. The trade is that Chapters cannot be renamed or reordered from this screen."
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/settings.astro",
+  "description": "The site-wide settings screen: title, public URL, description, contact email, footer text, social links, and the navigation menu. The menu editor further down holds four groups — Programs, Communities, Content Hub, Membership. Chapters is deliberately absent: it is generated from the chapters collection, so publishing a chapter puts it in the menu and there is nothing to hand-maintain here. The trade is that Chapters cannot be renamed or reordered from this screen. Read this screen as NOT the whole of the site's settings, which is the thing it most easily misleads about: the CMS package owns this form and renders inputs for five scalar keys plus socials, round-tripping everything else in settings.json untouched. That is exactly why the Google Analytics ID and the custom head/body HTML were editable data with nowhere to edit them, and why they now live on their own Analytics & embeds screen rather than here."
 }

@@ -1,0 +1,29 @@
+{
+  "name": "CMS Volunteer Page Editor",
+  "id": "db8269ac-79f3-48cb-8b58-e0b9e9b6e096",
+  "url": "/admin/volunteerPage/volunteer",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "volunteerPage": [
+      {
+        "benefitsTitle": "Why Volunteer with Harvard Alumni in Tech?",
+        "ctaLabel": "Volunteer with us",
+        "ctaUrl": "https://hi.switchy.io/wEYK",
+        "headline": "Join the Harvard Alumni in Tech Volunteer Team",
+        "heroImage": "/images/bg/get-involved-bg.jpg",
+        "intro": "Harvard in Tech is 100% volunteer-run. Our volunteers are the heart of HIT's mission, connecting and empowering the Harvard tech community and beyond.",
+        "kicker": "Get involved",
+        "projectsEmptyMessage": "We're lining up the next round of volunteer projects. Tell us what you'd like to work on and we'll match you when the next one opens.",
+        "projectsTitle": "Projects open for volunteers",
+        "slug": "volunteer",
+        "title": "Volunteer page"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The screen that did not exist before this feature: the whole /volunteer pitch as editable fields — kicker, hero image, headline, intro, the Why Volunteer blocks, the projects framing, and the sign-up button. All of it lived in volunteerPage.json, a singleton the CMS models no editor for, so rewriting the volunteer pitch meant asking a developer. The hint under the headline says blank falls back to the wording the site ships with, which is the safety net that lets an organizer edit here without being able to leave the page with an empty hero."
+}

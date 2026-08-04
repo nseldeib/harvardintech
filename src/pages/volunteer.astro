@@ -2,13 +2,15 @@
 // /volunteer — "Join the Harvard Alumni in Tech Volunteer Team".
 //
 // Replaces the old nav link to the homepage's `/#get-involved` band with a real
-// page. The pitch and benefit blocks are editable copy (`volunteerPage.json`);
-// the open-projects grid comes from the `projects` collection, which starts
-// EMPTY in production — the page's default view is its empty state.
+// page. The pitch and benefit blocks are editable copy — now the `volunteerPage`
+// collection, with `volunteerPage.json` behind it as the fallback; the
+// open-projects grid comes from the `projects` collection, which starts EMPTY in
+// production — the page's default view is its empty state.
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import VolunteerPage from '../components/VolunteerPage.astro';
 import { volunteerPage } from '../lib/site';
+import { loadVolunteerCopy } from '../lib/volunteerPageContent';
 import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 
@@ -19,11 +21,15 @@ const projects = publishedEntries(
   slug: p.id,
   ...p.data,
 }));
+
+// Resolved here rather than inside the page component, so `VolunteerPage` stays
+// props-only and the isolated-component scenarios keep handing it their own copy.
+const copy = await loadVolunteerCopy(volunteerPage);
 ---
 
 <BaseLayout
   title="Volunteer"
   description="Harvard in Tech is 100% volunteer-run. Join the volunteer team: gain experience, expand your network, and help the community grow."
 >
-  <VolunteerPage copy={volunteerPage} projects={projects} />
+  <VolunteerPage copy={copy} projects={projects} />
 </BaseLayout>

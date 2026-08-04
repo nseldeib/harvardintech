@@ -221,17 +221,17 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for every built-in extra",
-      "line": 293,
+      "line": 315,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
-      "description": "The headline contract: every field the Chapters editor renders is a real key in the chapters Zod schema. This is the custom collection, so nothing but this test keeps collections.json and config.ts aligned.",
+      "description": "The headline contract: every field a custom collection's editor renders is a real key in that collection's Zod schema. Nothing but this test keeps collections.json and config.ts aligned, and a field declared here but absent from the schema fails the whole BUILD the moment an editor saves a value into it — so the failure lands on a deploy rather than on the person who added the field. Deliberately a loop over EVERY custom collection rather than a case for `chapters` alone. It was chapters-only wh",
       "file": "src/data/collections.test.ts",
       "format": "vitest",
-      "key": "committed CMS registry vs content schema › declares only real schema keys for the custom chapters collection",
-      "line": 272,
-      "registeredAt": "2026-07-27T18:48:12Z",
+      "key": "committed CMS registry vs content schema › declares only real schema keys for every custom collection",
+      "line": 282,
+      "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
     {
@@ -239,7 +239,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares the chapters list rows the schema expects",
-      "line": 283,
+      "line": 305,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -248,7 +248,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses",
-      "line": 337,
+      "line": 359,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -257,7 +257,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › renders an editor input for every schema key of every collection",
-      "line": 314,
+      "line": 336,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -1639,6 +1639,240 @@
       "runner": "tests"
     },
     {
+      "description": "The personalized headline is what the whole email campaign is built around, so a cleared one has to fall back rather than ship a hero with no headline.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › keeps both committed headlines when the editor cleared them",
+      "line": 331,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The `{name}` placeholder is data an editor types, so it has to survive the merge verbatim — the browser is what replaces it.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › passes the {name} placeholder through untouched",
+      "line": 340,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty object, not undefined — the route spreads this result, so it has to be spreadable even when there is nothing to contribute.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › returns nothing to spread when there is no entry",
+      "line": 313,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Only the frame. The route spreads this over a copy object whose other keys belong to loadAccomplishments / loadPillars / loadDonateUrl, so leaking a key here would silently clobber one of theirs.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › returns only frame keys, never the rest of the campaign copy",
+      "line": 349,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The migration working for the frame: the hero and closing ask are now copy an editor owns rather than values in a file only a developer opens.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › takes the frame fields the editor filled in",
+      "line": 319,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The invisible failure this guards: a site that silently stopped measuring.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
+      "line": 376,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The failure this guards is invisible: a site that quietly stopped measuring anything, on every page, with nothing on screen to notice.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
+      "line": 371,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank on both sides is the production state: `settings.json` ships these as empty strings, so that empty string is what comes back. What matters to the callers is that it stays FALSY — each one renders the fragment only when there is markup, so blank must never become an empty `<Fragment set:html>`.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
+      "line": 405,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The same guarantee when the singleton omits the keys altogether, which is the shape a scenario seed writes.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
+      "line": 414,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Moving the site to a different GA4 property is a one-box edit.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › takes a re-pointed analytics id",
+      "line": 383,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The escape hatch working — a verification tag and an end-of-page snippet both reach the page they are meant to.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › takes custom head and body HTML the editor added",
+      "line": 391,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Omitting the key is distinct from clearing it: only the latter takes a form back down, so an entry that never mentions the field keeps the committed URL.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeSponsorCopy › falls back for an inquiry form URL the entry omits",
+      "line": 302,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`null` means \"nothing migrated yet\", which is the only case that should resurrect the JSON's levels.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeSponsorCopy › falls back to the committed levels when the collection is empty",
+      "line": 266,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The distinction that makes `null` worth carrying: an editor who deleted every level meant to, and restoring them would undo that silently.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeSponsorCopy › honours an editor deleting every level",
+      "line": 272,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same per-field guarantee the volunteer copy gets, on the sponsorship page.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeSponsorCopy › keeps the committed copy for fields the editor left blank",
+      "line": 277,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The one field where clearing the box has to mean something: blank renders the unconfigured placeholder, so falling back would make taking a form back down impossible once one had been set.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeSponsorCopy › lets the editor clear the inquiry form URL",
+      "line": 288,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nothing migrated at all — the page must render exactly as it shipped.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeSponsorCopy › returns the committed copy when there is neither an entry nor levels",
+      "line": 254,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pasting a form URL turns the placeholder into a real embedded form.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeSponsorCopy › takes a newly set inquiry form URL",
+      "line": 294,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The migration working: levels come from the collection an editor controls.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeSponsorCopy › takes the levels from content when they exist",
+      "line": 259,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty list is a real edit — it takes the band off the page — so it must not be mistaken for \"the editor has not touched this\".",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeVolunteerCopy › honours an emptied benefits list instead of restoring the committed one",
+      "line": 132,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The headline is the field where a blank is most visible, so it gets its own case rather than relying on the preferText unit tests alone.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeVolunteerCopy › keeps the committed headline when the editor cleared it",
+      "line": 113,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Editing one field must not blank the rest — the merge is per field, not a wholesale replacement of the copy object.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeVolunteerCopy › keeps the committed value for every field the editor left blank",
+      "line": 103,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "All-or-nothing: an editor part-way through rewriting the blocks means the list they are building, and topping it up from the JSON would put copy back on the page that they had removed.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeVolunteerCopy › replaces the whole benefits list rather than merging it",
+      "line": 120,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The counterpart to the two cases above: absent is NOT the same as emptied, so an entry that never mentions benefits still renders the committed blocks.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeVolunteerCopy › restores the committed benefits when the entry omits them entirely",
+      "line": 138,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The deleted-entry case. The CMS lets an editor remove the only entry of a collection, so this is an ordinary mistake, not a corrupt state.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeVolunteerCopy › returns the committed copy untouched when there is no entry",
+      "line": 86,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The point of the whole migration: what an editor types is what the page shows.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeVolunteerCopy › takes each field the editor filled in",
+      "line": 91,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
       "description": "An exempted key is absent from the editor on purpose and must stay quiet.",
       "file": "src/data/collections.test.ts",
       "format": "vitest",
@@ -2005,6 +2239,60 @@
       "key": "parallaxOffset › returns zero when the section is flush with the viewport top",
       "line": 13,
       "registeredAt": "2026-06-15T01:41:28Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An editor cleared the box cleanly. Blank copy must never reach the page.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "preferText › falls back on an empty string",
+      "line": 58,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The realistic way a field ends up \"cleared\": the editor selects the text and deletes it, and the textarea keeps the trailing newline. Treated as real copy this puts a blank heading on the live page.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "preferText › falls back on whitespace only",
+      "line": 65,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The entry omits the key entirely — the shape a scenario seed writes, and the shape an older entry has before a new field is added to the schema.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "preferText › falls back when the editor value is absent",
+      "line": 53,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nothing anywhere is a legitimate outcome for an optional field — the caller renders nothing rather than being handed an empty string to print.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "preferText › is undefined when neither side has a value",
+      "line": 71,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The base case: an editor who typed something sees what they typed.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "preferText › takes the editor value when it holds something",
+      "line": 47,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Stray leading/trailing whitespace is an artefact of typing into a textarea, never something an editor meant to put on the page, so the value comes back trimmed rather than as typed.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "preferText › trims the value it returns",
+      "line": 78,
+      "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
     {
@@ -3088,6 +3376,51 @@
       "runner": "tests"
     },
     {
+      "description": "The wall reads top-down from the biggest commitment, and Order is how an editor arranges that without touching code.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "sponsorLevelsFrom › orders levels by the editor order pin",
+      "line": 212,
+      "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Ordering and reshaping happen in one pass, so this pins that the benefit rows survive the sort rather than being dropped by it.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "sponsorLevelsFrom › reshapes the benefit rows while ordering",
+      "line": 235,
+      "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The degenerate case: one level sorts to itself rather than tripping the comparator.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "sponsorLevelsFrom › returns a single level unchanged in order",
+      "line": 247,
+      "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The distinction this function exists for. `null` means \"nothing has been migrated into this collection yet\", which is the only case that should fall back to the committed JSON.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "sponsorLevelsFrom › returns null for no entries rather than an empty list",
+      "line": 206,
+      "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The wall reads top-down from the biggest commitment, so an unpinned level sorting last is what keeps a newly added one from jumping to the top.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "sponsorLevelsFrom › sorts a level with no order pin after the pinned ones",
+      "line": 224,
+      "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
+      "runner": "tests"
+    },
+    {
       "description": "`url` is derived from the identity, and the package looks assets up BY url (findAssetByUrl), so a hand-edited mismatch would silently orphan a record.",
       "file": "src/lib/media.test.ts",
       "format": "vitest",
@@ -3211,6 +3544,42 @@
       "key": "toEventDate › returns a Date instance unchanged",
       "line": 12,
       "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The editor's repeatable list writes rows of fields; there is no plain-string list control. This is the seam between that storage shape and the `string[]` the page renders.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "toSponsorLevels › flattens the benefit rows into plain strings",
+      "line": 149,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A level can legitimately have no benefit rows yet; the page renders the level without a list rather than an empty bullet list.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "toSponsorLevels › leaves benefits undefined for a level that lists none",
+      "line": 185,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Reshaping nothing yields nothing. The null-vs-empty decision belongs to sponsorLevelsFrom, not here — this function only maps.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "toSponsorLevels › returns an empty list for no entries",
+      "line": 192,
+      "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The key a sponsor's `tier` matches on comes from the ENTRY, not from frontmatter — so renaming the display name cannot re-home anyone. This is the assertion that would fail if `id` ever crept back into the schema.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "toSponsorLevels › takes the level key from the entry id, never from the name",
+      "line": 174,
+      "registeredAt": "2026-08-04T15:07:23Z",
       "runner": "tests"
     },
     {

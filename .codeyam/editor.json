@@ -236,7 +236,7 @@
   },
   "coverageThresholds": {
     "global": {
-      "minLinePercent": 90.0
+      "minLinePercent": 90
     }
   },
   "catalogAutoAdd": {

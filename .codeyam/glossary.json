@@ -256,6 +256,15 @@
     "testFile": "src/lib/contentRoot.test.ts"
   },
   {
+    "description": "The pageCopy collection entry for /donate. One page, one entry — a bare lookup shared by loadDonateUrl and loadDonateFrame so the two do not each restate the entry id, which is the kind of duplication that lets one of them keep reading a renamed entry after the other has been updated.",
+    "filePath": "src/lib/donatePageContent.ts",
+    "name": "donateEntry",
+    "untestabilityReason": {
+      "justification": "bare astro:content getCollection lookup by entry id; every rule applied to what it returns is unit-tested in pageCopyMerge.test.ts",
+      "kind": "platform-glue"
+    }
+  },
+  {
     "description": "Whether a donor card stays visible under the chosen chip. Reads the tier the SERVER already resolved onto the card's data-tier, rather than re-deriving grouping in the browser, so the filtered view and the rendered view cannot disagree. The all-donors chip shows everything, which is also the state the server ships — so the page never visibly reshuffles when the script arrives.",
     "filePath": "src/lib/donorFilter.ts",
     "name": "donorCardVisible",
@@ -466,6 +475,15 @@
     ]
   },
   {
+    "description": "Reads the pageCopy entry for /donate and returns the campaign page's frame fields merged over donatePage.json, for the route to spread onto the copy object alongside the accomplishments, pillars and donation URL the sibling loaders supply.",
+    "filePath": "src/lib/donatePageContent.ts",
+    "name": "loadDonateFrame",
+    "untestabilityReason": {
+      "justification": "astro:content getCollection boundary; the merge rules it delegates to are unit-tested in pageCopyMerge.test.ts",
+      "kind": "platform-glue"
+    }
+  },
+  {
     "description": "Where every giving button points, read from the pageCopy entry for the donate page with the donatePage.json value as fallback. This is the field that had to become editable before the migration: resolveGiveHref was already written to switch every Give button the moment a platform URL exists, so the only thing missing was somewhere an editor could type it. Blank anywhere keeps all of them on the giving-inquiry mailto, which is the production state today.",
     "filePath": "src/lib/donatePageContent.ts",
     "name": "loadDonateUrl",
@@ -506,6 +524,15 @@
     ]
   },
   {
+    "description": "Reads the single siteIntegrations entry and merges the analytics id and custom head/body HTML over settings.json. Called from components rather than routes — Analytics, HeadExtras, and the two shells that inject body HTML — because these belong to every page, and threading them through every route's props would be the one arrangement where a new shell could silently ship without analytics.",
+    "filePath": "src/lib/integrationsContent.ts",
+    "name": "loadIntegrations",
+    "untestabilityReason": {
+      "justification": "astro:content getCollection boundary; the merge rules it delegates to are unit-tested in pageCopyMerge.test.ts",
+      "kind": "platform-glue"
+    }
+  },
+  {
     "description": "Reads the momentumSections collection and returns the published sections in editor order plus any unrecognized kinds for the caller to warn about, rendering each narrative entry's markdown body. The thin astro:content edge kept out of the pure rules module, and shared by the /donate route and the isolated-component harness so the pipeline exists once.",
     "filePath": "src/lib/momentumSectionsContent.ts",
     "name": "loadMomentumSections",
@@ -523,10 +550,61 @@
     ]
   },
   {
+    "description": "Reads the single sponsorPage entry and its levels concurrently and merges both over the committed sponsorPage.json, so /sponsor renders from content an editor controls while the JSON remains the fallback.",
+    "filePath": "src/lib/sponsorPageContent.ts",
+    "name": "loadSponsorCopy",
+    "untestabilityReason": {
+      "justification": "astro:content getCollection boundary; the merge rules it delegates to are unit-tested in pageCopyMerge.test.ts",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Fetches the published sponsorLevels entries and hands them to sponsorLevelsFrom. A bare boundary call: the ordering and the empty-means-null rule deliberately live in the pure helper so they are exercised by unit tests rather than only by a rendered page.",
+    "filePath": "src/lib/sponsorPageContent.ts",
+    "name": "loadSponsorLevels",
+    "untestabilityReason": {
+      "justification": "bare astro:content getCollection passthrough; all ordering and null-vs-empty logic is unit-tested in sponsorLevelsFrom via pageCopyMerge.test.ts",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Reads the single volunteerPage collection entry and merges it over the committed JSON. The thin astro:content edge kept out of the pure rules module, the same split momentumSectionsContent and donatePageContent already use. It exists because this copy used to live only in volunteerPage.json, a singleton the CMS models no editor for, so rewriting the volunteer pitch was a developer's job.",
+    "filePath": "src/lib/volunteerPageContent.ts",
+    "name": "loadVolunteerCopy",
+    "untestabilityReason": {
+      "justification": "astro:content getCollection boundary; the merge rules it delegates to are unit-tested in pageCopyMerge.test.ts",
+      "kind": "platform-glue"
+    }
+  },
+  {
     "description": "Whether a donor belongs under a given giving-level id — the predicate behind the filter chips, shared by the server render and the client script on purpose. Two copies of 'which tier is this donor in?' is two answers that can disagree, and the one a visitor sees would be the client's. The trailing-group id matches exactly the donors groupDonorsByTier files there: untagged, or tagged with a level the page does not declare.",
     "filePath": "src/lib/donors.ts",
     "name": "matchesTier",
     "testFile": "src/lib/donors.test.ts"
+  },
+  {
+    "description": "The Momentum Fund page's fixed frame — the hero above the reorderable sections and the closing ask below them — over the committed donatePage.json. Returns ONLY the frame keys so the route can spread it over the copy object without clobbering the fields loadAccomplishments, loadPillars and loadDonateUrl own. The frame becomes editable copy and deliberately stays out of the momentumSections collection: a page whose hero could be dragged to the bottom is a page an editor can break, and making the wording changeable does not make the position changeable. The personalized headline carries the name placeholder the browser fills from the campaign link, so a cleared one falling back is what protects the email campaign's whole premise.",
+    "filePath": "src/lib/pageCopyMerge.ts",
+    "name": "mergeDonateFrame",
+    "testFile": "src/lib/pageCopyMerge.test.ts"
+  },
+  {
+    "description": "The site-wide analytics id and custom head/body HTML over settings.json. The fallback matters more here than anywhere else in this migration: every other field degrades to slightly stale copy, while these degrade to a site with no analytics and no verification tags, on every page, with nothing visible to notice. So a deleted entry or a cleared box falls back to the committed settings rather than to off — and turning analytics off is consequently a two-step edit, the right trade against one mistake silently unhooking measurement from the whole site.",
+    "filePath": "src/lib/pageCopyMerge.ts",
+    "name": "mergeIntegrations",
+    "testFile": "src/lib/pageCopyMerge.test.ts"
+  },
+  {
+    "description": "The /sponsor copy over the committed sponsorPage.json, with the partnership levels re-attached so groupSponsorsByLevel and every child component keep the exact input they always took. Levels arrive as null rather than an empty array when nothing has been migrated, which is what keeps 'an editor deleted every level' distinguishable from 'this collection is empty' — falling back on the first would resurrect levels someone deliberately removed. The inquiry form URL deliberately does NOT fall back: blank is the production state and renders the unconfigured placeholder, so falling back would make taking a form back down impossible once one had been set.",
+    "filePath": "src/lib/pageCopyMerge.ts",
+    "name": "mergeSponsorCopy",
+    "testFile": "src/lib/pageCopyMerge.test.ts"
+  },
+  {
+    "description": "The /volunteer copy an editor's content entry produces over the committed volunteerPage.json. Field-by-field via preferText, because the CMS has no notion of a required singleton: an editor can delete the only entry or clear one field, and both are ordinary mistakes that must cost a stale line of copy rather than a blank hero. The benefits list is the exception and is ALL-OR-NOTHING: an editor part-way through rewriting the blocks means the list they are building, so a half-finished list is never topped up from the JSON, and an emptied list is honoured because removing the band is itself a real edit.",
+    "filePath": "src/lib/pageCopyMerge.ts",
+    "name": "mergeVolunteerCopy",
+    "testFile": "src/lib/pageCopyMerge.test.ts"
   },
   {
     "description": "Pulls the `name` parameter out of a full URL or a bare query string, returning null when absent or unparseable.",
@@ -569,6 +647,12 @@
     "filePath": "src/lib/parallax.ts",
     "name": "parallaxOffset",
     "testFile": "src/lib/parallax.test.ts"
+  },
+  {
+    "description": "The editor's value for a copy field if it holds anything, otherwise the value committed in JSON. Whitespace-only counts as empty, because a field an editor cleared usually still holds the newline the textarea left behind and treating that as real copy puts a blank heading on the live page. The returned value is trimmed. The deliberate consequence is that a field cannot be blanked from the CMS while the JSON still carries a value: emptying a heading is a two-step edit, which is the right trade when the opposite choice's failure mode is a live page with a missing headline.",
+    "filePath": "src/lib/pageCopyMerge.ts",
+    "name": "preferText",
+    "testFile": "src/lib/pageCopyMerge.test.ts"
   },
   {
     "description": "Which sign-up call-to-action a project's detail page offers, or null for none. The project's own `applyUrl` wins; with none it falls back to the site-wide volunteer CTA, because a project posted before its sign-up form exists still needs a way in and a page that simply ends after the description leaves a willing reader nowhere to go. Only when neither link exists does the page render no ask, rather than a dead button. Empty strings count as absent, not as links, so an editor who cleared the field cannot produce an href pointing at the current page.",
@@ -700,6 +784,12 @@
     "testFile": "src/lib/team.test.ts"
   },
   {
+    "description": "The partnership levels a set of collection entries produces: ordered by the editor's order pin, reshaped for the page, or null when there are none. The null return is the whole reason this exists apart from toSponsorLevels — it is the signal mergeSponsorCopy needs to tell 'an editor deleted every level' apart from 'nothing has been migrated into this collection yet'. The second must fall back to the committed JSON and the first must not, or removing a level would silently undo itself on the next build. Takes the entries rather than their data so the loader above it stays a bare fetch with no reshaping of its own.",
+    "filePath": "src/lib/pageCopyMerge.ts",
+    "name": "sponsorLevelsFrom",
+    "testFile": "src/lib/pageCopyMerge.test.ts"
+  },
+  {
     "description": "One boolean per section saying whether it renders on the tinted band. Narrative sections alternate tinted and untinted so consecutive prose stays separated; the counter advances only on narratives, so a bespoke band between two of them does not flip the rhythm. Pure, replacing a counter that was mutated inside the page's render map.",
     "filePath": "src/lib/momentumSections.ts",
     "name": "tintedFlags",
@@ -716,6 +806,12 @@
     "filePath": "src/lib/nav.ts",
     "name": "toPath",
     "testFile": "src/lib/nav.test.ts"
+  },
+  {
+    "description": "Partnership levels reshaped from their collection entries into the shape every /sponsor component already consumes. Two storage quirks meet here. Each level s benefits are stored as rows of a single text field rather than as bare strings, because the CMS s repeatable list is a list of field rows and offers no plain-string list control — the same constraint that forced levels out of sponsorPage.json into their own collection, since a list inside a list is not expressible at all. And the level KEY that a sponsor s tier matches on comes from the entry itself (its filename), never from frontmatter: an editable id text box would silently re-home every sponsor filed under the level when retyped, and the seed adapter strips id as a filename key, which made the collection unseedable while such a field existed.",
+    "filePath": "src/lib/pageCopyMerge.ts",
+    "name": "toSponsorLevels",
+    "testFile": "src/lib/pageCopyMerge.test.ts"
   },
   {
     "description": "The unrecognized kind values on the homepage, de-duplicated and in first-seen order, for an advisory build-time warning. Advisory rather than build-failing for the same reason unknownSectionKinds is: kind is free text because the CMS has no select control, so a typo must cost that editor one band and a log line, never the deploy.",

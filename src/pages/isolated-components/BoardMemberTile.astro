@@ -1,0 +1,38 @@
+---
+import Component from "../../components/landing/BoardMemberTile.astro";
+import "../../styles/tokens.css";
+
+// Isolation page for BoardMemberTile — the tile WITH a bio, which is the state
+// this feature added and the one the board is working toward.
+//
+// Width is the tile's real one, not a guess: the board grid is five columns
+// inside the 1220px `.wrap` with 20px gaps, so (1220 - 4×20) / 5 = 228px. A bio
+// wrapping at any other width would tell you nothing about how it wraps on the
+// page.
+//
+// The bio is illustrative rather than Ben Wei's real one — nobody has written
+// those yet, and inventing biography for a named real person and committing it
+// as content would be worse than the blank field it replaces.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: BoardMemberTile</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <div style="width: 228px;">
+        <Component
+          member={{
+            name: 'Ben Wei',
+            role: "Founder · Harvard C'08",
+            photo: '/images/team/ben-wei.png',
+            bio: 'Founded Harvard in Tech in 2013 and has guided it from a single Boston meetup to a global network of six chapters.',
+          }}
+        />
+      </div>
+    </div>
+  </body>
+</html>

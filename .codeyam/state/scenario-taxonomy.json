@@ -20,8 +20,7 @@
         "reason": "Fully static (statically-exported) page with content collections resolved at build; no async/loading state."
       },
       "edge": {
-        "status": "n-a",
-        "reason": "Optional-field branches (an event with no link) are exercised within the typical scenario; no distinct edge layout."
+        "status": "covered"
       },
       "error": {
         "status": "n-a",
@@ -30,6 +29,91 @@
       "key-interaction": {
         "status": "n-a",
         "reason": "Primary actions are outbound links (Subscribe, Volunteer, View Events, mailto); no in-page interactive state to capture."
+      }
+    },
+    "/donate": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "covered"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered with no client-side fetch. The one thing that resolves in the browser is the personalized headline from ?name=, and it ships in its generic form first precisely so there is no blank or pending state to see."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "covered"
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
+    "/sponsor": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The partner wall has no overflow or truncation treatment by design — it groups by level and grows vertically, so twenty partners render as the same bands the populated scenario already shows, just taller. There is no distinct visual state past 'populated' to demonstrate."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered at build time with no client-side fetch, so a visitor never sees a pending state."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "No runtime data fetching: content resolves during the build, so a bad entry fails the deploy rather than reaching a visitor. A sponsor tagged to a level that no longer exists is the nearest thing to an error, and it is deliberately not one — groupSponsorsByLevel collects it into a visible Other partners band rather than dropping it or failing."
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
+    "/volunteer": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The projects grid sits 1,344px down the page and the capture frame is 900px tall, so a one-project whole-page shot cannot show the state it is named for. The empty-to-populated boundary is demonstrated instead by the VolunteerProjects and VolunteerProjectsEmpty component scenarios, which photograph the grid directly."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "covered"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered at build time with no client-side fetch, so a visitor never sees a pending state — the HTML arrives complete or not at all."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "No runtime data fetching: content is resolved during the build, so a bad entry fails the deploy rather than reaching a visitor as an error state. The nearest visitor-facing failure is a deleted CMS entry, which is covered by the entry-was-deleted fallback scenario rather than by an error screen."
+      },
+      "key-interaction": {
+        "status": "covered"
       }
     },
     "AdminDashboard": {

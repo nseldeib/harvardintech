@@ -1,0 +1,13 @@
+{
+  "name": "BoardMemberTile - No Bio Yet",
+  "id": "28213910-4181-4e88-b8c1-985f1a2a4c35",
+  "url": "/isolated-components/BoardMemberTile-NoBio",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BoardMemberTile",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/BoardMemberTile.astro",
+  "description": "The state every director actually ships in today, and the state a board added from /admin starts in, since production starts empty. Read this as the DEFAULT rather than the edge case: the tile has to look finished with no bio at all, so the bio block is conditional rather than an empty reserved space. If this frame ever grows whitespace under the role, that conditional has broken and every unwritten director on the live board is showing a gap."
+}

@@ -16,6 +16,7 @@ import { publishedEntries } from './drafts';
 import { INCLUDE_DRAFTS } from './draftVisibility';
 import { sortByOrder } from './order';
 import { resolvePillarIcon } from './pillars';
+import { mergeDonateFrame } from './pageCopyMerge';
 import type { DonatePageCopy } from './site';
 
 type Accomplishment = NonNullable<DonatePageCopy['accomplishments']>[number];
@@ -72,6 +73,22 @@ export async function loadPillars(): Promise<Pillar[]> {
  * production state, and the single box in /admin is what changes it.
  */
 export async function loadDonateUrl(fallback?: string): Promise<string | undefined> {
-  const entry = (await getCollection('pageCopy')).find((page) => page.id === 'donate');
+  const entry = await donateEntry();
   return entry?.data.donateUrl?.trim() || fallback;
+}
+
+/** The `pageCopy` entry for /donate. One page, one entry. */
+function donateEntry() {
+  return getCollection('pageCopy').then((pages) => pages.find((page) => page.id === 'donate'));
+}
+
+/** The campaign page's FRAME — the hero above the reorderable sections and the
+ *  closing ask below them — merged over `donatePage.json`. See
+ *  `mergeDonateFrame` for why the frame is editable copy and still not a
+ *  section, and why the fallback is field-by-field. */
+export async function loadDonateFrame(
+  fallback: DonatePageCopy,
+): Promise<Partial<DonatePageCopy>> {
+  const entry = await donateEntry();
+  return mergeDonateFrame(fallback, entry?.data);
 }

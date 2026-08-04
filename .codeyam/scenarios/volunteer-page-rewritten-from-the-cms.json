@@ -1,0 +1,45 @@
+{
+  "name": "Volunteer Page - Rewritten From The CMS",
+  "id": "d550babd-bae7-489f-a820-7900a7be4970",
+  "url": "/volunteer",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "projects": [],
+    "volunteerPage": [
+      {
+        "benefits": [
+          {
+            "body": "Volunteers own projects end to end — a chapter launch, an event series, the newsletter — rather than being handed tasks.",
+            "title": "Work on something real"
+          },
+          {
+            "body": "The fastest way into the community is helping run it. You will know the chapter leads and the organizers by name within a month.",
+            "title": "Meet the network properly"
+          },
+          {
+            "body": "The programming calendar comes out of what volunteers want to build. Bring an idea and you will be the one running it.",
+            "title": "Shape what we do next"
+          }
+        ],
+        "benefitsTitle": "What you get out of it",
+        "ctaLabel": "Get in touch",
+        "ctaUrl": "https://hi.switchy.io/wEYK",
+        "headline": "Help us run Harvard in Tech",
+        "heroImage": "/images/bg/get-involved-bg.jpg",
+        "intro": "Every event, every chapter, and every newsletter is put together by alumni volunteers. If you have a few hours a month, there is a place for you here.",
+        "kicker": "Lend a hand",
+        "projectsEmptyMessage": "Between rounds at the moment. Tell us what you would like to work on and we will match you when the next project opens.",
+        "projectsIntro": "Each project below has an organizer waiting to hear from someone. Pick the one that fits your skills and the time you have.",
+        "projectsTitle": "Where we need help right now",
+        "slug": "volunteer",
+        "title": "Volunteer page"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/volunteer.astro",
+  "description": "The migration proved end to end: an organizer has rewritten the headline, the pitch, and the Why Volunteer blocks from /admin, and the public page renders what they wrote. Before this feature the same edit was a change to volunteerPage.json and a deploy. Read it beside the default volunteer scenarios — the layout is identical and only the words differ, which is the point: the change moved where the copy lives, not how the page is built."
+}

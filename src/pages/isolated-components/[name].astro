@@ -250,6 +250,21 @@ const SAMPLE_BOARD = [
   { name: 'Jessica Li', role: "Board Member · Harvard C'16", photo: '/images/team/jessica-li.png', order: 4, active: true },
   { name: 'Nadia Eldeib', role: "Board Member · Harvard C'14", photo: '/images/team/nadia-eldeib.png', order: 5, active: true },
 ];
+// Bios, at the two lengths that actually stress the row. `Default` above carries
+// none, which mirrors production: every director ships with an empty bio, so the
+// no-bio grid is the state that renders today, not a hypothetical.
+//
+// The bios themselves are illustrative, not the real ones — nobody has written
+// those yet, and inventing biography for a named real person and shipping it as
+// content would be worse than leaving the field blank. They exist to size the
+// layout.
+const BOARD_BIOS = [
+  'Founded Harvard in Tech in 2013 and has guided it from a single Boston meetup to a global network of six chapters.',
+  'Backs early-stage founders and helped start the community that became the New York chapter.',
+  'Runs the organization day to day — the programming calendar, the chapter leads, and the volunteer team that makes both work. Before Harvard in Tech she spent a decade building community programs in the nonprofit sector, which is where the six-chapter structure the group uses today came from.',
+  'Works on the content side, from the newsletter to the Content Hub.',
+  'Leads growth, building the programs and partnerships that bring alumni into the community and keep them there.',
+];
 const upcomingEventsStates = {
   Default: { events: SAMPLE_EVENTS },
   Empty: { events: [] as typeof SAMPLE_EVENTS },
@@ -257,6 +272,16 @@ const upcomingEventsStates = {
 const boardOfDirectorsStates = {
   Default: { members: SAMPLE_BOARD },
   Empty: { members: [] as typeof SAMPLE_BOARD },
+  // Every director written up, including one deliberately much longer than the
+  // rest — the cards do not stretch to match, so this is what proves the row
+  // survives an uneven set rather than only a tidy one.
+  Bios: { members: SAMPLE_BOARD.map((m, i) => ({ ...m, bio: BOARD_BIOS[i] })) },
+  // The realistic in-between: two of five written. This is the state the board
+  // will actually be in for as long as it takes to collect the other three, and
+  // the one where a layout that reserves space for a missing bio looks broken.
+  SomeBios: {
+    members: SAMPLE_BOARD.map((m, i) => (i === 0 || i === 4 ? { ...m, bio: BOARD_BIOS[i] } : m)),
+  },
 };
 
 // OurChapters (Atlas "Our chapters" band): Default renders the six-city row;
@@ -771,6 +796,8 @@ export async function getStaticPaths() {
     { params: { name: 'UpcomingEvents-Empty' } },
     { params: { name: 'BoardOfDirectors' } },
     { params: { name: 'BoardOfDirectors-Empty' } },
+    { params: { name: 'BoardOfDirectors-Bios' } },
+    { params: { name: 'BoardOfDirectors-SomeBios' } },
     { params: { name: 'HeroCarousel' } },
     { params: { name: 'Stats' } },
     { params: { name: 'OurChapters' } },

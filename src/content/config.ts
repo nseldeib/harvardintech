@@ -440,6 +440,143 @@ const pageCopy = defineCollection({
     // Real donation-platform URL for the /donate page. Blank keeps every giving
     // button on the mailto fallback — see `resolveGiveHref` in `src/lib/giving.ts`.
     donateUrl: z.string().optional(),
+    // The campaign page's FIXED FRAME: the hero above the reorderable sections
+    // and the closing ask below them. Editable copy, still not a section — a
+    // page whose hero could be dragged to the bottom is a page an editor can
+    // break, so these stay out of `momentumSections` by design.
+    //
+    // `heroHeadlineNamed` carries a `{name}` placeholder the browser fills from
+    // `?name=` on the campaign link; `heroHeadlineGeneric` is what everyone else
+    // (and every no-JS visitor) sees. Both are here so an editor rewriting the
+    // campaign's headline changes BOTH forms in one place — editing only the
+    // named one would leave the public audience on the old wording.
+    heroHeadlineNamed: z.string().optional(),
+    heroHeadlineGeneric: z.string().optional(),
+    heroSubhead: z.string().optional(),
+    heroImage: z.string().optional(),
+    // The closing ask at the bottom of the page.
+    ctaTitle: z.string().optional(),
+    ctaBody: z.string().optional(),
+    // The giving button's label — ONE field, not one per band. The same text is
+    // rendered on the hero button, the donor wall's button, and the closing
+    // one, because they are the same ask in three places; splitting it per band
+    // would let an editor change "Make a Gift" in one spot and leave the page
+    // contradicting itself further down.
+    ctaLabel: z.string().optional(),
+  }),
+});
+
+// Editable copy for /volunteer, as a single entry. Was `volunteerPage.json`,
+// which the CMS models no editor for, so rewriting the volunteer pitch was a
+// developer's job. `benefits` is the one repeating field — a list of
+// `{title, body}` rows, which is a top-level list of scalars and therefore
+// expressible in the editor.
+//
+// Every field is optional except the entry's own `title`, and the route falls
+// back to the committed JSON field by field. That is deliberate: the CMS has no
+// notion of a required singleton, so an editor can delete this entry, and the
+// page has to survive that as ordinary copy rather than a blank hero.
+const volunteerPage = defineCollection({
+  loader: collectionGlob('volunteerPage'),
+  schema: z.object({
+    title: z.string(),
+    kicker: z.string().optional(),
+    heroImage: z.string().optional(),
+    headline: z.string().optional(),
+    intro: z.string().optional(),
+    benefitsTitle: z.string().optional(),
+    benefits: z.array(z.object({ title: z.string(), body: z.string() })).optional(),
+    projectsTitle: z.string().optional(),
+    projectsIntro: z.string().optional(),
+    // What the grid shows when no projects are open — the production default,
+    // so it is the state most visitors actually see rather than an edge case.
+    projectsEmptyMessage: z.string().optional(),
+    ctaLabel: z.string().optional(),
+    ctaUrl: z.string().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// Editable copy for /sponsor, as a single entry. Same migration and the same
+// field-by-field fallback as `volunteerPage`.
+//
+// The partnership LEVELS are deliberately not here: they live in
+// `sponsorLevels` below, because a level carries its own `benefits` list and the
+// CMS supports a repeatable list of scalars at top level only. A list inside a
+// list is not expressible, so the levels had to become entries of their own.
+const sponsorPage = defineCollection({
+  loader: collectionGlob('sponsorPage'),
+  schema: z.object({
+    title: z.string(),
+    kicker: z.string().optional(),
+    headline: z.string().optional(),
+    intro: z.string().optional(),
+    heroImage: z.string().optional(),
+    levelsTitle: z.string().optional(),
+    levelsIntro: z.string().optional(),
+    wallTitle: z.string().optional(),
+    wallEmptyMessage: z.string().optional(),
+    inquiryTitle: z.string().optional(),
+    inquiryBody: z.string().optional(),
+    // Third-party form URL (Google Forms, Typeform). Empty renders EmbedForm's
+    // unconfigured fallback, which reads as an obvious placeholder.
+    inquiryFormUrl: z.string().optional(),
+    // The Harvard Alumni Association requires a Shared Interest Group to state
+    // that contributions go to the group and not to the University. Copy rather
+    // than markup, so the team can revise the wording without a deploy.
+    disclaimer: z.string().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// One partnership level on /sponsor. Migrated out of the `levels` array inside
+// `sponsorPage.json` for the reason above — `benefits` needs to be a top-level
+// list to be editable at all.
+//
+// The entry's FILENAME is the level's stable key — the thing a sponsor's `tier`
+// matches on — so renaming the `name` below is always a safe copy edit. There is
+// deliberately no `id` field: an editable id text box silently re-homes every
+// sponsor filed under the level when retyped, and the codeyam seed adapter
+// strips `id` (like `slug`) as a filename key, which would make this collection
+// unseedable. `chapters` and `communities` key off the filename the same way.
+//
+// `groupSponsorsByLevel` collects a sponsor whose tier matches no level into a
+// trailing group rather than dropping it, which is what makes a mistyped tag
+// visible instead of silent.
+const sponsorLevels = defineCollection({
+  loader: collectionGlob('sponsorLevels'),
+  schema: z.object({
+    name: z.string(),
+    summary: z.string().optional(),
+    benefits: z.array(z.object({ text: z.string() })).optional(),
+    order: z.number().optional(),
+    draft: z.boolean().optional(),
+  }),
+});
+
+// The site-wide integration keys, as a single entry.
+//
+// These have always been real editable data on `settings.json`, but the CMS
+// settings screen renders inputs for five scalar keys plus the socials list and
+// round-trips everything else untouched — so they were data with nowhere to edit
+// them. Their own collection rather than extra fields on `pageCopy`, because the
+// editor renders every declared field for every entry: sharing would put a
+// Google Analytics box on the Momentum Fund page's editing screen.
+//
+// `settings.json` stays the fallback. Deleting this entry must not be able to
+// unhook analytics from every page on the site.
+const siteIntegrations = defineCollection({
+  loader: collectionGlob('siteIntegrations'),
+  schema: z.object({
+    title: z.string(),
+    // GA4 Measurement ID (`G-XXXXXXXXXX`); blank turns analytics off entirely.
+    googleAnalyticsId: z.string().optional(),
+    // Raw HTML injected verbatim into every page. The snippet runs site-wide, so
+    // only trusted markup belongs here — this is the power-user escape hatch the
+    // narrow, template-owned analytics field deliberately is not.
+    customHeadHtml: z.string().optional(),
+    customBodyHtml: z.string().optional(),
+    draft: z.boolean().optional(),
   }),
 });
 
@@ -461,4 +598,8 @@ export const collections = {
   accomplishments,
   pillars,
   pageCopy,
+  volunteerPage,
+  sponsorPage,
+  sponsorLevels,
+  siteIntegrations,
 };

@@ -1,0 +1,13 @@
+{
+  "name": "Board of Directors - Two Of Five Bios Written",
+  "id": "5b28fb50-aa68-4852-b98b-d3227d249af3",
+  "url": "/isolated-components/BoardOfDirectors-SomeBios",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BoardOfDirectors",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/BoardOfDirectors.astro",
+  "description": "The state the board will genuinely be in for as long as it takes to collect the other three bios, which is the most likely thing to be on the live site for months. It is also the state that catches a layout reserving space for a missing bio: the three directors without one must sit flush under their roles while the two with one hang below, and any gap under the bare three would read as broken rather than pending."
+}

@@ -25,7 +25,12 @@ import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { loadMomentumSections } from '../lib/momentumSectionsContent';
 import { loadDonors } from '../lib/donorsContent';
-import { loadAccomplishments, loadPillars, loadDonateUrl } from '../lib/donatePageContent';
+import {
+  loadAccomplishments,
+  loadPillars,
+  loadDonateUrl,
+  loadDonateFrame,
+} from '../lib/donatePageContent';
 
 const testimonials = publishedEntries(
   await getCollection('testimonials'),
@@ -60,6 +65,7 @@ if (unknownKinds.length > 0) {
 // always took, leaving the migration invisible below this line.
 const copy = {
   ...donatePage,
+  ...(await loadDonateFrame(donatePage)),
   accomplishments: await loadAccomplishments(),
   pillars: await loadPillars(),
   donateUrl: await loadDonateUrl(donatePage.donateUrl),

@@ -12,6 +12,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SponsorPage from '../components/SponsorPage.astro';
 import { sponsorPage, settings } from '../lib/site';
+import { loadSponsorCopy } from '../lib/sponsorPageContent';
 import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 
@@ -22,11 +23,17 @@ const sponsors = publishedEntries(
   slug: s.id,
   ...s.data,
 }));
+
+// The pitch and the partnership levels now come from content rather than from
+// `sponsorPage.json` — the file the CMS does not model. Resolved here so
+// `SponsorPage` stays props-only and the isolated-component scenarios keep
+// handing it their own copy.
+const copy = await loadSponsorCopy(sponsorPage);
 ---
 
 <BaseLayout
   title="Sponsorship"
   description="Partner with Harvard Alumni in Tech. Sponsor an event, back a city chapter, or host us in your space — and reach the Harvard alumni building in tech."
 >
-  <SponsorPage copy={sponsorPage} sponsors={sponsors} email={settings.contactEmail} />
+  <SponsorPage copy={copy} sponsors={sponsors} email={settings.contactEmail} />
 </BaseLayout>

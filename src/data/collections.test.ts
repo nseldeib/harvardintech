@@ -266,16 +266,38 @@ describe('schemaKeysFor', () => {
 });
 
 describe('committed CMS registry vs content schema', () => {
-  // The headline contract: every field the Chapters editor renders is a real key
-  // in the chapters Zod schema. This is the custom collection, so nothing but
-  // this test keeps collections.json and config.ts aligned.
-  it('declares only real schema keys for the custom chapters collection', () => {
-    const chapters = REGISTRY.collections.find((c) => c.id === 'chapters');
-    expect(chapters).toBeDefined();
+  // The headline contract: every field a custom collection's editor renders is a
+  // real key in that collection's Zod schema. Nothing but this test keeps
+  // collections.json and config.ts aligned, and a field declared here but absent
+  // from the schema fails the whole BUILD the moment an editor saves a value
+  // into it — so the failure lands on a deploy rather than on the person who
+  // added the field.
+  //
+  // Deliberately a loop over EVERY custom collection rather than a case for
+  // `chapters` alone. It was chapters-only when chapters was the only custom
+  // collection; the registry now carries a dozen, and one hand-written case
+  // means each new one ships unguarded unless whoever adds it also remembers to
+  // add a case — which is exactly the kind of remembering this file exists to
+  // make unnecessary.
+  it('declares only real schema keys for every custom collection', () => {
+    expect(REGISTRY.collections.length).toBeGreaterThan(0);
 
-    const schemaKeys = schemaKeysFor(CONFIG_SOURCE, 'chapters');
-    expect(schemaKeys.length).toBeGreaterThan(0);
-    expect(unknownFields(chapters!.fields, schemaKeys)).toEqual([]);
+    for (const collection of REGISTRY.collections) {
+      const schemaKeys = schemaKeysFor(CONFIG_SOURCE, collection.id);
+
+      // A collection the editor renders but `config.ts` never declares would
+      // pass the unknown-field check vacuously — every field is "unknown", so
+      // the empty-diff assertion below would be comparing against nothing.
+      expect({ collection: collection.id, declaredInSchema: schemaKeys.length > 0 }).toEqual({
+        collection: collection.id,
+        declaredInSchema: true,
+      });
+
+      expect({ collection: collection.id, unknown: unknownFields(collection.fields, schemaKeys) }).toEqual({
+        collection: collection.id,
+        unknown: [],
+      });
+    }
   });
 
   // The chapters row shapes must match too: `leads` and `links` write arrays of

@@ -57,9 +57,16 @@ src/
   layouts/BaseLayout.astro    # site shell: data-driven header/nav + footer + SEO
   content/                    # typed content collections (events, team, chapters,
                               #   communities, pages, blog, projects, sponsors,
-                              #   testimonials, donors, momentumSections)
+                              #   testimonials, donors, momentumSections, and the
+                              #   page copy an editor owns: volunteerPage,
+                              #   sponsorPage, sponsorLevels, siteIntegrations,
+                              #   pageCopy)
   data/                       # settings.json + nav.json singletons, cms.json +
-                              #   collections.json (CMS config), volunteerPage, donatePage
+                              #   collections.json (CMS config). volunteerPage,
+                              #   sponsorPage and donatePage still live here as the
+                              #   FALLBACK behind their collections — the CMS has no
+                              #   notion of a required singleton, so a deleted entry
+                              #   degrades to this committed copy rather than a blank page
   lib/                        # site.ts, mailto.ts, drafts.ts (draft filtering),
                               #   personalize.ts (?name= hero personalization), giving.ts
   styles/tokens.css           # design tokens (brand blue, Roboto, spacing)
@@ -102,6 +109,10 @@ States captured as runnable scenarios with codeyam-editor:
 
 <img src=".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png" alt="Blog Post - Welcome" width="280">
 
+### CMS Analytics And Embeds
+
+<img src=".codeyam/scenarios/screenshots/cms-analytics-and-embeds--desktop.png" alt="CMS Analytics And Embeds" width="280">
+
 ### CMS Blog List - Drafts And Published
 
 <img src=".codeyam/scenarios/screenshots/cms-blog-list-drafts-and-published--desktop.png" alt="CMS Blog List - Drafts And Published" width="280">
@@ -125,8 +136,4 @@ States captured as runnable scenarios with codeyam-editor:
 ### CMS Entry Editor - Change Staged For Review
 
 <img src=".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png" alt="CMS Entry Editor - Change Staged For Review" width="280">
-
-### CMS Entry Editor - New Chapter Form
-
-<img src=".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png" alt="CMS Entry Editor - New Chapter Form" width="280">
 <!-- codeyam:scenario-gallery:end -->
