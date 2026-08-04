@@ -1,0 +1,38 @@
+---
+// A free-form site page from the `pages` collection — About, Code of Conduct,
+// Privacy, and whatever else an editor decides the site needs.
+//
+// Composition only: the header block, the prose body, and the optional embed.
+// Both halves are their own components so each can be captured in isolation —
+// the long-title and no-description states are header concerns, and the markdown
+// rendering is a body concern, and neither needs a whole page to demonstrate.
+import SitePageHeader from './pages/SitePageHeader.astro';
+import SitePageBody from './pages/SitePageBody.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props as Props;
+---
+
+<article class="page">
+  <SitePageHeader title={title} description={description} />
+  <SitePageBody>
+    <slot />
+  </SitePageBody>
+  <slot name="embed" />
+</article>
+
+<style>
+  .page {
+    max-width: 68ch;
+    margin: 0 auto;
+    padding: 56px var(--space-lg, 24px) 96px;
+  }
+  @media (max-width: 720px) {
+    .page {
+      padding-top: 32px;
+    }
+  }
+</style>

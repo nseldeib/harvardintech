@@ -1,0 +1,13 @@
+{
+  "name": "SitePageHeader - Long Title And No Description",
+  "id": "640bd5ab-9c71-478d-ad10-824dd2b8acea",
+  "url": "/isolated-components/SitePageHeader-LongTitle",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SitePageHeader",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/pages/SitePageHeader.astro",
+  "description": "The state an editor reaches without meaning to. A CMS title field has no length limit, so a title can be a whole sentence — it wraps inside the column instead of pushing the page sideways. The description is optional and absent here, so no empty paragraph is left under the title. This is the FAQ page as actually written, not a contrived case."
+}

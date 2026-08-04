@@ -1,0 +1,13 @@
+{
+  "name": "SitePageBody - Markdown An Editor Can Write",
+  "id": "d8887f97-e294-414b-a977-21334e1026e5",
+  "url": "/isolated-components/SitePageBody",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SitePageBody",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/pages/SitePageBody.astro",
+  "description": "The prose column carrying one of each construct the editor guide teaches: sub-headings, a list, a link, and the pull quote that gets the crimson bar. The tags arrive already rendered through the slot, which is why every rule styling them has to be :global — this scenario is what proves those rules actually land."
+}

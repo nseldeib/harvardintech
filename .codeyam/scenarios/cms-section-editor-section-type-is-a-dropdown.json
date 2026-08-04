@@ -1,0 +1,29 @@
+{
+  "name": "CMS Section Editor - Section Type Is A Dropdown",
+  "id": "6eb12c62-1b20-4fc7-9843-45b440c1f8f8",
+  "url": "/admin/momentumSections/donors",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The donor recognition wall. The names come from the Donors collection; this entry only decides where the wall sits on the page.",
+        "kind": "donors",
+        "order": 6,
+        "slug": "donors"
+      },
+      {
+        "body": "Every gift goes straight into the programming that brings this community together.",
+        "kind": "narrative",
+        "layout": "image-left",
+        "order": 1,
+        "slug": "why-support",
+        "title": "Why Support Harvard in Tech?"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro"
+}

@@ -1,0 +1,26 @@
+---
+import Component from "../../../src/components/pages/SitePageHeader.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for SitePageHeader — the ordinary case: a page whose editor
+// filled in both the title and the description.
+//
+// Width matches the component's real container: SitePage wraps it in a 68ch
+// column, so anything wider would misrepresent where the title wraps.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: SitePageHeader</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 100%; max-width: 68ch;">
+      <Component
+        title="About Harvard in Tech"
+        description="Who we are, how we started, and what the community is for."
+      />
+    </div>
+  </body>
+</html>

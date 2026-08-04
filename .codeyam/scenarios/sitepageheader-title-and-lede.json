@@ -1,0 +1,13 @@
+{
+  "name": "SitePageHeader - Title And Lede",
+  "id": "2d7b26d9-f21f-42a5-98f6-c4a2490b000e",
+  "url": "/isolated-components/SitePageHeader",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "SitePageHeader",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/pages/SitePageHeader.astro",
+  "description": "The header of a CMS-authored page with both fields filled in — the title and the description as a lede. The ordinary case, and the baseline the long-title and no-description states are read against."
+}

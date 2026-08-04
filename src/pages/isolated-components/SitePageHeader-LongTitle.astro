@@ -1,0 +1,32 @@
+---
+import Component from "../../components/pages/SitePageHeader.astro";
+import "../../styles/tokens.css";
+
+// Isolation page for SitePageHeader in the state an editor reaches without
+// meaning to: a title that is a whole sentence, and no description at all.
+//
+// Both halves are why the component is built the way it is. A CMS title field
+// has no length limit, so `overflow-wrap: anywhere` is what keeps a long one
+// inside the 68ch column instead of pushing the whole page sideways — and the
+// description is optional, so there is no empty paragraph left under it. This
+// is not a contrived edge case; it is the FAQ page as written.
+//
+// Follows the `BoardMemberTile-Initials` convention: a second prerendered page
+// for a second state of the same component, because this is a static build and
+// a `?s=` query param is empty at build time.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: SitePageHeader - Long Title</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 100%; max-width: 68ch;">
+      <Component
+        title="Frequently Asked Questions About Membership, Events, Chapters, and Getting Involved"
+      />
+    </div>
+  </body>
+</html>

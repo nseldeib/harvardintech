@@ -343,6 +343,12 @@
     "testFile": "src/lib/gallery.test.ts"
   },
   {
+    "description": "Enumerates a route per publishable page entry for the static build, dropping any whose slug an existing route already answers for and warning about them. The routing decision itself lives in pageRouteEntries so it can be tested — getStaticPaths only runs inside a real Astro build.",
+    "filePath": "src/pages/[slug].astro",
+    "name": "getStaticPaths",
+    "testFile": "src/lib/sitePages.test.ts"
+  },
+  {
     "description": "Enumerates the blog collection into pre-rendered /blog/<id> routes, mapping each post entry to its slug param and props. Exercised by the blog-post-welcome route scenario.",
     "filePath": "src/pages/blog/[slug].astro",
     "name": "getStaticPaths",
@@ -465,6 +471,12 @@
     "filePath": "src/lib/nav.ts",
     "name": "internalNavUrls",
     "testFile": "src/lib/nav.test.ts"
+  },
+  {
+    "description": "Whether one slug is safe to publish at the site root — the single-slug form of shadowedPageSlugs, for a caller checking as it goes.",
+    "filePath": "src/lib/sitePages.ts",
+    "name": "isReservedPageSlug",
+    "testFile": "src/lib/sitePages.test.ts"
   },
   {
     "description": "Reads the accomplishments collection into the card shape MomentumAccomplishments already took from copy.accomplishments. Migrated out of donatePage.json, a singleton the CMS does not model at all, which is what made these cards developer-only. Maps the schema's description key onto the component's body prop because body is a reserved field id in the CMS registry and a custom field claiming it is dropped from the editor without comment.",
@@ -613,6 +625,12 @@
     "testFile": "src/lib/personalize.test.ts"
   },
   {
+    "description": "Normalize a slug for comparison — trimmed, lowercased, and stripped of surrounding slashes. Exists because a CMS slug box accepts all three variations, so an editor typing /About/ has made the same collision as one typing about, and a raw string compare would miss it.",
+    "filePath": "src/lib/sitePages.ts",
+    "name": "normalizeSlug",
+    "testFile": "src/lib/sitePages.test.ts"
+  },
+  {
     "description": "Selects the volunteer projects to render — those not explicitly closed (`active !== false`), ordered by `order`. Absent `active` means open, matching the board-member convention, so a project whose toggle was never touched still shows.",
     "filePath": "src/lib/projects.ts",
     "name": "openProjects",
@@ -629,6 +647,18 @@
     "filePath": "src/lib/momentumSections.ts",
     "name": "orderedSections",
     "testFile": "src/lib/momentumSections.test.ts"
+  },
+  {
+    "description": "Splits page entries into the ones that get a route and the ones dropped for colliding with an existing address, returning both plus the warning. Extracted from getStaticPaths, where the shadow list was computed twice and nothing could be tested because getStaticPaths only runs inside a real Astro build.",
+    "filePath": "src/lib/sitePages.ts",
+    "name": "pageRouteEntries",
+    "testFile": "src/lib/sitePages.test.ts"
+  },
+  {
+    "description": "Resolves a page's title, description, and share image: the explicit SEO override, else the page's own visible copy. Treats a blank-but-present override as absent — the CMS writes an empty string when an editor clears the box, and a bare nullish-coalesce would have published a page with no title at all.",
+    "filePath": "src/lib/sitePages.ts",
+    "name": "pageSeo",
+    "testFile": "src/lib/sitePages.test.ts"
   },
   {
     "description": "The Astro base a GitHub Pages project site must be built with: the repo name rooted with a leading slash, because such a site is served from <user>.github.io/<repo>/. Exists so the deploy workflow's DEPLOY_BASE_PATH can be checked against the repo it actually publishes to rather than being two hand-matched strings sitting far apart in the YAML. Throws on an empty repo name instead of returning a bare slash: a bare slash is the base of a user site or a custom domain, so returning it would turn a missing value into a plausible-looking one that builds every asset URL wrong.",
@@ -740,6 +770,18 @@
     "filePath": "src/lib/homeSections.ts",
     "name": "sectionAnchorId",
     "testFile": "src/lib/homeSections.test.ts"
+  },
+  {
+    "description": "The page slugs something else already answers for, in input order. Returns the offending slugs rather than a boolean so the build warning can name them, and compares case- and slash-insensitively because a slug box accepts both.",
+    "filePath": "src/lib/sitePages.ts",
+    "name": "shadowedPageSlugs",
+    "testFile": "src/lib/sitePages.test.ts"
+  },
+  {
+    "description": "The build-time warning naming the shadowed slugs and where to rename them, or null when nothing was dropped. Advisory rather than fatal, matching the orphan-chapter-tag warning: refusing to build over one badly-slugged page would turn a single invisible page into a dead site update.",
+    "filePath": "src/lib/sitePages.ts",
+    "name": "shadowedSlugWarning",
+    "testFile": "src/lib/sitePages.test.ts"
   },
   {
     "description": "Whether the wall is worth putting filter chips on. One band means the chips would read 'All donors / Leadership Circle' over a list already on screen — a control that filters nothing, which is worse than no control. Chips earn their place only once there is somewhere else to go.",

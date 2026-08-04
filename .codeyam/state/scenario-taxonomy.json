@@ -304,6 +304,38 @@
         "reason": "The only action on this page is the giving CTA, which hands off to an external mail client (donateUrl is still empty) rather than changing any in-app state, so there is no post-interaction frame to capture. Reordering, the feature's real interaction, happens in the CMS at /admin, not on this page."
       }
     },
+    "src/pages/[slug].astro": {
+      "empty": {
+        "status": "n-a",
+        "reason": "A page route is generated only for an entry that exists, so there is no zero-state. A page whose body an editor left blank still renders its title and lede, which is the edge archetype rather than an empty one."
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The route renders exactly one page entry by construction; there is no list whose one-versus-many boundary could look different."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "Nothing on the page is a list that grows unbounded. The markdown body is prose in a fixed 68ch measure with no pagination, overflow, or truncation treatment to demonstrate."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Statically prerendered Astro route built from content collections; nothing resolves asynchronously, so no pending state exists."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Static prerendered route with no runtime fetch. The one real failure — a page whose slug collides with an existing route — is caught at build time by pageRouteEntries, which drops the page and warns, so it never reaches a rendered error state."
+      },
+      "key-interaction": {
+        "status": "n-a",
+        "reason": "The page is prose with no in-page interactive state; its links are plain navigations. The editor-facing action that produces it happens in /admin, which has its own scenarios."
+      }
+    },
     "src/pages/chapters/[slug].astro": {
       "empty": {
         "status": "covered"

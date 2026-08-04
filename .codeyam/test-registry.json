@@ -37,6 +37,33 @@
       "runner": "tests"
     },
     {
+      "description": "A route missing from this list is a route a page can silently shadow.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "RESERVED_PAGE_SLUGS › covers every hand-built top-level route the site ships",
+      "line": 94,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A duplicate is a sign the list was edited by hand without checking.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "RESERVED_PAGE_SLUGS › holds no duplicates",
+      "line": 101,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Comparison normalizes the input; the reserved list must not need it too.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "RESERVED_PAGE_SLUGS › is already normalized — lowercase and slash-free",
+      "line": 106,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
       "description": "A freshly uploaded image nobody has described yet must degrade to the render site's current behavior, never emit `alt=\"undefined\"`.",
       "file": "src/lib/media.test.ts",
       "format": "vitest",
@@ -79,6 +106,24 @@
       "key": "altFor › returns the authored alt for a known image",
       "line": 52,
       "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An anchor names a band within a page, not a page — so it groups with that page rather than forming a group of its own.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "anchors group with their page › files an anchored placement under the page it is an anchor on",
+      "line": 164,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The same rule away from the homepage, so it is a rule and not a special case.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "anchors group with their page › groups an anchor on a non-homepage page with that page",
+      "line": 175,
+      "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
     {
@@ -205,6 +250,60 @@
       "key": "chipPressed › marks only the selected chip as pressed",
       "line": 31,
       "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A placement for a deleted collection is dead config that reads as coverage.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "collections.json paths map › declares no placement for a collection that does not exist",
+      "line": 42,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A collection with no placement gets the legacy guess silently, so a newly added collection must be caught here rather than by an editor hitting a 404.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "collections.json paths map › gives every collection the admin can show a placement",
+      "line": 36,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Absence is not a neutral default: with no map every collection falls back to the /<collection>/<slug> guess, which is wrong for most of them.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "collections.json paths map › is present — without it every collection falls back to the wrong guess",
+      "line": 30,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "It sets analytics and the custom head/body HTML, which apply to every page, so there is no single page to send an editor to. Claiming otherwise is the misdirection the no-page state exists to prevent.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "collections.json paths map › marks siteIntegrations as having no page of its own",
+      "line": 90,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A :slug template promises a page per entry, which on a static build means a real dynamic route file. Catches a collection whose route was renamed.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "collections.json paths map › points every per-entry template at a route file that exists",
+      "line": 50,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A template with no slug token says every entry appears on this one page. If that page does not exist the link 404s just as surely as a bad route.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "collections.json paths map › points every shared-page template at a page that exists",
+      "line": 69,
+      "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
     {
@@ -694,6 +793,128 @@
       "runner": "tests"
     },
     {
+      "description": "An unlisted kind is dropped from the page with a warning, so an option the code does not know is an option that silently does nothing.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "dropdown options match the validators that enforce them › homeSections.kind offers exactly the kinds the homepage renders",
+      "line": 45,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The list that was actually wrong before: the old prose hint omitted donors entirely, so no editor could learn that band was addable.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "dropdown options match the validators that enforce them › momentumSections.kind offers exactly the Momentum Fund section kinds",
+      "line": 51,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A mistyped layout silently falls back to text-only, losing the chosen design.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "dropdown options match the validators that enforce them › momentumSections.layout offers exactly the layouts",
+      "line": 56,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An unrecognized icon falls back to people, so a typo quietly changes the art.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "dropdown options match the validators that enforce them › pillars.icon offers exactly the drawn glyphs",
+      "line": 61,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Null placement resolves to null rather than to a plausible-looking URL.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "entryPagePath against this site’s real placements › reports siteIntegrations as having nowhere to go",
+      "line": 124,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pages ship at the root, so the legacy /pages/<slug> guess would 404.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "entryPagePath against this site’s real placements › resolves a page entry to the site root, not a /pages/ prefix",
+      "line": 99,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The legacy guess was /projects/<slug>, which has never existed on this site.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "entryPagePath against this site’s real placements › resolves a volunteer project to its real nested route",
+      "line": 104,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A director renders as a tile in the homepage board band, not on their own page, so the link points at that band's anchor.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "entryPagePath against this site’s real placements › sends a board member to the homepage band rather than a page of their own",
+      "line": 119,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every pillar is a card on /donate; none has a page of its own, so they all resolve to the same path rather than to invented per-entry URLs.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "entryPagePath against this site’s real placements › sends every gift pillar to the one page they all render on",
+      "line": 112,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A site that has declared no placements must behave exactly as before, so this fix is safe to adopt incrementally.",
+      "file": "src/lib/collectionPlacement.test.ts",
+      "format": "vitest",
+      "key": "entryPagePath against this site’s real placements › still falls back to the legacy guess for an undeclared collection",
+      "line": 130,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "enum-shaped fields are dropdowns, not text boxes › homeSections.kind is a select",
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "enum-shaped fields are dropdowns, not text boxes › momentumSections.kind is a select",
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "enum-shaped fields are dropdowns, not text boxes › momentumSections.layout is a select",
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "enum-shaped fields are dropdowns, not text boxes › pillars.icon is a select",
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
       "description": "Whitespace padding from a hand-edited YAML value is not silently trimmed.",
       "file": "src/lib/envFlag.test.ts",
       "format": "vitest",
@@ -808,6 +1029,56 @@
       "key": "eventsTaggedTo › returns only the events tagged to the given owner",
       "line": 164,
       "registeredAt": "2026-07-30T13:54:13Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A select with no options is strictly worse than the text box it replaced — there is no longer any way to enter a value at all.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "every declared select is usable › gives each select a non-empty options list",
+      "line": 69,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The control already spells unset with its own blank entry; a second one would be indistinguishable from it in the menu.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "every declared select is usable › gives no select a duplicate or blank option",
+      "line": 80,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "existing content still validates against the new dropdowns › every committed homeSections.kind value is offered",
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "existing content still validates against the new dropdowns › every committed momentumSections.kind value is offered",
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "existing content still validates against the new dropdowns › every committed momentumSections.layout value is offered",
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "existing content still validates against the new dropdowns › every committed pillars.icon value is offered",
+      "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
     {
@@ -1015,6 +1286,87 @@
       "key": "galleryStaggerDelay › wraps the delay per row of five columns",
       "line": 49,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "These have no single shared page to group under, so they share a heading that states the thing worth knowing: adding an entry adds a page.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › collects every per-entry collection under one \"own page\" group",
+      "line": 33,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A brand-new site has no collections yet and must not crash the dashboard.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › handles no cards at all",
+      "line": 100,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The homepage gets a name; other pages get the path an editor can read off their own address bar, which is more use than an invented label.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › labels the homepage in words and other pages by their path",
+      "line": 67,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Order walks an editor from the page they are most often looking at outward.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › leads with the homepage, then other pages, then own-page, then site-wide",
+      "line": 52,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Grouping must not reshuffle within a group — the caller decides that order.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › preserves the caller’s card order within a group",
+      "line": 77,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The core of the fix: an editor looking at /donate sees the collections that build it gathered, instead of scattered through an A-to-Z list.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › puts collections that share a page together",
+      "line": 21,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A site that declares no placements renders exactly the grid it did before.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › returns a single group when nothing is declared, so the grid stays flat",
+      "line": 94,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Site-wide settings are not part of any page and must not be filed under one.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › separates collections that have no page of their own",
+      "line": 44,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two must agree, or a card would be filed under a group whose link behaviour contradicts it.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "groupCardsByPage › treats an undeclared collection as having its own page, matching publicUrl",
+      "line": 88,
+      "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
     {
@@ -1546,6 +1898,15 @@
       "key": "internalNavUrls › collects site-internal urls at every level and skips external ones",
       "line": 247,
       "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The single-slug form must agree with the list form.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "isReservedPageSlug › is true for a taken slug and false for a free one",
+      "line": 116,
+      "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
     {
@@ -2131,6 +2492,141 @@
       "key": "orderedSections › sorts sections by their order field",
       "line": 13,
       "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Lets the routing rule be exercised without depending on this site's routes.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageRouteEntries › accepts an injected reserved list so the rule is testable in isolation",
+      "line": 198,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The route needs the entry itself for props, so identity must survive.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageRouteEntries › carries the whole entry through, not just its slug",
+      "line": 204,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Emitting it would make Astro fail the whole build over one bad slug.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageRouteEntries › drops a shadowed page rather than emitting a duplicate route",
+      "line": 165,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The degenerate case still produces a valid empty route list, not a crash.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageRouteEntries › drops every page when they are all shadowed",
+      "line": 191,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A site with no pages yet builds cleanly and warns about nothing.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageRouteEntries › handles an empty collection",
+      "line": 184,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Callers rely on collection order; filtering must not reshuffle it.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageRouteEntries › preserves input order among routable pages",
+      "line": 178,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The happy path: nothing is dropped and nothing is warned about.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageRouteEntries › routes every page when no slug is taken",
+      "line": 156,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A silent drop is the original bug in a new place; the loss must be reported.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageRouteEntries › warns about what it dropped",
+      "line": 172,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The one field with no acceptable empty outcome.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageSeo › always returns a title, because a page without one is unusable",
+      "line": 265,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An editor who leaves them blank expects their real title, not an empty tag.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageSeo › falls back to the page’s own title and description",
+      "line": 229,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "So <SEO /> can fall through to the site default rather than emit an empty tag.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageSeo › leaves description undefined when the page has neither",
+      "line": 254,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A blank share image must not override the site default with nothing.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageSeo › passes the share image through and drops a blank one",
+      "line": 259,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An editor who fills in the SEO fields expects them to win.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageSeo › prefers the explicit SEO overrides",
+      "line": 213,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same rule as the title: clearing the box restores the fallback.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageSeo › treats a cleared meta description as absent so the lede is used",
+      "line": 247,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The CMS writes an empty string when an editor clears the SEO title box. A bare ?? would keep it and publish a page with no <title> at all.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "pageSeo › treats a cleared override as absent, never as an empty title",
+      "line": 239,
+      "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
     {
@@ -3079,6 +3575,141 @@
       "runner": "tests"
     },
     {
+      "description": "Lets the shadow rule be exercised without depending on this site's routes.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › accepts an injected reserved list, so the rule is testable in isolation",
+      "line": 77,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The CMS injects it, so it is absent from src/pages entirely. A page slugged admin would shadow the editor's own dashboard everywhere the editor runs.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › catches /admin, which only exists on dev + the review track",
+      "line": 42,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The gated review site lives at /review as a static folder, so no Astro route declares it and a src/pages scan would call this slug free.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › catches a page shadowed by a file served verbatim from public/",
+      "line": 34,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "/blog and /chapters are directories of dynamic routes, so a page slugged blog collides with the whole subtree — easy to miss when scanning for a blog.astro that does not exist.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › catches a page shadowed by a route DIRECTORY, not just a leaf route",
+      "line": 25,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The failure this guard exists for — the page would build and never appear.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › catches a page that would be shadowed by a hand-built route",
+      "line": 18,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "No pages means no collisions and no warning.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › handles an empty page list",
+      "line": 87,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An editor typing /About into a slug box has made the same collision as one typing about, so normalization happens before comparison.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › ignores case and surrounding slashes, because a slug box accepts both",
+      "line": 51,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The common case: a normal page slug is not reserved and routes normally.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › passes an ordinary page slug through",
+      "line": 13,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The function is a filter, so a caller passing repeats should see every offending position rather than a collapsed set.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › reports a slug once per occurrence rather than de-duplicating",
+      "line": 69,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Order and identity are what let the warning name the slug to rename.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › returns the offending slugs in input order, so a message can name them",
+      "line": 60,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The boundary: with nothing reserved, nothing can be shadowed.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedPageSlugs › treats an empty reserved list as nothing being reserved",
+      "line": 82,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Naming only the first would send an editor round the loop once per bad page.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedSlugWarning › lists every offending slug, not just the first",
+      "line": 145,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The message is read by whoever is watching a deploy log, not by whoever wrote the page, so it has to be actionable on its own.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedSlugWarning › names the offending slug and where to fix it",
+      "line": 130,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Grammar, because a warning that reads as broken English reads as a bug.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedSlugWarning › reads as singular for one slug and plural for several",
+      "line": 137,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A clean build must print no warning at all, or the warning becomes noise.",
+      "file": "src/lib/sitePages.test.ts",
+      "format": "vitest",
+      "key": "shadowedSlugWarning › says nothing when nothing is shadowed",
+      "line": 124,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
       "description": "Production today: no donors, no bands, and the empty state renders instead.",
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
@@ -3472,6 +4103,42 @@
       "key": "the committed media manifest › records an alt value for every asset, empty or otherwise",
       "line": 140,
       "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "team is declared as /#board — an anchor on the homepage rather than a page of its own. It must group WITH the homepage, or an editor looking at the front page finds three of its four collections and guesses about the fourth.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "this site’s dashboard grouping › gathers the homepage collections, including the board, under the homepage",
+      "line": 139,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The worst case on this site — six collections build one page, which is exactly the situation a flat list made impossible to reason about.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "this site’s dashboard grouping › gathers the six Momentum Fund collections under /donate",
+      "line": 124,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The guarantee that matters most: grouping is a rearrangement, never a filter. A dropped collection would be invisible to the editor with no error anywhere.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "this site’s dashboard grouping › loses no collection to grouping",
+      "line": 117,
+      "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The real ordering on this site, not just the synthetic fixtures above.",
+      "file": "src/lib/dashboardGrouping.test.ts",
+      "format": "vitest",
+      "key": "this site’s dashboard grouping › opens on the homepage and closes on site-wide settings",
+      "line": 155,
+      "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
     {

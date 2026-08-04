@@ -243,7 +243,7 @@
           "name": "name",
           "label": "Name",
           "type": "text",
-          "hint": "How the donor should be credited. Still required for an anonymous gift — the site hides it, our records keep it."
+          "hint": "How the donor should be credited. Still required for an anonymous gift \u2014 the site hides it, our records keep it."
         },
         {
           "name": "tier",
@@ -257,7 +257,7 @@
           "label": "Founding donor",
           "type": "boolean",
           "optional": true,
-          "hint": "Switch ON to show the Founding Donor badge. It is a badge, not a level — a founding donor keeps whatever giving level they gave at."
+          "hint": "Switch ON to show the Founding Donor badge. It is a badge, not a level \u2014 a founding donor keeps whatever giving level they gave at."
         },
         {
           "name": "anonymous",
@@ -387,8 +387,16 @@
         {
           "name": "kind",
           "label": "Section type",
-          "type": "text",
-          "hint": "Which section this is: narrative, accomplishments, pillars, testimonials, or stats. Only \"narrative\" uses the title, layout, image, and body below — the others are bands whose content is edited elsewhere."
+          "type": "select",
+          "hint": "Which section this is. Only \"narrative\" uses the title, layout, image, and body below \u2014 the others are bands whose content is edited in their own collection.",
+          "options": [
+            "narrative",
+            "accomplishments",
+            "pillars",
+            "testimonials",
+            "donors",
+            "stats"
+          ]
         },
         {
           "name": "title",
@@ -400,9 +408,14 @@
         {
           "name": "layout",
           "label": "Layout",
-          "type": "text",
+          "type": "select",
           "optional": true,
-          "hint": "Narrative sections only: image-left, image-right, or text-only. Blank or unrecognized shows the text full width."
+          "hint": "Narrative sections only. Where the photo sits. Leave as none to run the text full width.",
+          "options": [
+            "image-left",
+            "image-right",
+            "text-only"
+          ]
         },
         {
           "name": "image",
@@ -435,8 +448,23 @@
         {
           "name": "kind",
           "label": "Section type",
-          "type": "text",
-          "hint": "Which band this is: hero, stats, events, chapters, focus, content-hub, board, get-involved, giving, whatsapp, support, gallery, or contact. A value matching none of those drops that one band and is named in the build log."
+          "type": "select",
+          "hint": "Which band of the homepage this is.",
+          "options": [
+            "hero",
+            "stats",
+            "events",
+            "chapters",
+            "focus",
+            "content-hub",
+            "board",
+            "get-involved",
+            "giving",
+            "whatsapp",
+            "support",
+            "gallery",
+            "contact"
+          ]
         },
         {
           "name": "title",
@@ -605,9 +633,14 @@
         {
           "name": "icon",
           "label": "Icon",
-          "type": "text",
+          "type": "select",
           "optional": true,
-          "hint": "One of people, book, or globe. Anything else falls back to people."
+          "hint": "One of people, book, or globe. Anything else falls back to people.",
+          "options": [
+            "people",
+            "book",
+            "globe"
+          ]
         },
         {
           "name": "linkLabel",
@@ -696,7 +729,7 @@
           "label": "Give button label",
           "type": "text",
           "optional": true,
-          "hint": "Used on EVERY giving button on the page — hero, donor wall, and the closing ask."
+          "hint": "Used on EVERY giving button on the page \u2014 hero, donor wall, and the closing ask."
         }
       ]
     },
@@ -866,7 +899,7 @@
           "label": "No partners message",
           "type": "textarea",
           "optional": true,
-          "hint": "Shown INSTEAD of the wall when no sponsors are published — which is the state today."
+          "hint": "Shown INSTEAD of the wall when no sponsors are published \u2014 which is the state today."
         },
         {
           "name": "inquiryTitle",
@@ -887,7 +920,7 @@
           "label": "Enquiry form URL",
           "type": "text",
           "optional": true,
-          "hint": "A Google Form or Typeform URL. Leave BLANK to show the placeholder instead of an embedded form — clearing this box is how you take a form back down."
+          "hint": "A Google Form or Typeform URL. Leave BLANK to show the placeholder instead of an embedded form \u2014 clearing this box is how you take a form back down."
         },
         {
           "name": "disclaimer",
@@ -907,7 +940,7 @@
           "name": "name",
           "label": "Name",
           "type": "text",
-          "hint": "How the level is shown on the page, e.g. \"Event Partner\". Safe to rename at any time — sponsors are filed under the entry itself, not under this text."
+          "hint": "How the level is shown on the page, e.g. \"Event Partner\". Safe to rename at any time \u2014 sponsors are filed under the entry itself, not under this text."
         },
         {
           "name": "summary",
@@ -1045,5 +1078,28 @@
       "group": "seo",
       "hint": "The social share card image. Falls back to the site default."
     }
-  ]
+  ],
+  "paths": {
+    "pages": "/:slug",
+    "blog": "/blog/:slug",
+    "chapters": "/chapters/:slug",
+    "communities": "/communities/:slug",
+    "projects": "/volunteer/projects/:slug",
+    "events": "/events",
+    "team": "/#board",
+    "heroSlides": "/",
+    "stats": "/",
+    "homeSections": "/",
+    "momentumSections": "/donate",
+    "accomplishments": "/donate",
+    "pillars": "/donate",
+    "testimonials": "/donate",
+    "donors": "/donate",
+    "pageCopy": "/donate",
+    "volunteerPage": "/volunteer",
+    "sponsorPage": "/sponsor",
+    "sponsors": "/sponsor",
+    "sponsorLevels": "/sponsor",
+    "siteIntegrations": null
+  }
 }

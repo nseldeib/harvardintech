@@ -67,7 +67,7 @@
         "link": "https://www.harvardintech.com/events/sf-mixer",
         "location": "San Francisco, CA",
         "slug": "founders-investors-mixer-sf",
-        "title": "Founders & Investors Mixer — San Francisco"
+        "title": "Founders & Investors Mixer \u2014 San Francisco"
       },
       {
         "body": "Panelists share career and leadership lessons.",
@@ -93,39 +93,40 @@
         "body": "",
         "name": "Ben Wei",
         "order": 1,
-        "role": "Founder · Harvard C'08",
+        "role": "Founder \u00b7 Harvard C'08",
         "slug": "ben-wei"
       },
       {
         "body": "",
         "name": "Peter Boyce",
         "order": 2,
-        "role": "Founder · Harvard C'13",
+        "role": "Founder \u00b7 Harvard C'13",
         "slug": "peter-boyce"
       },
       {
         "body": "",
         "name": "Krysia Lenzo",
         "order": 3,
-        "role": "Executive Director · Harvard C'12",
+        "role": "Executive Director \u00b7 Harvard C'12",
         "slug": "krysia-lenzo"
       },
       {
         "body": "",
         "name": "Jessica Li",
         "order": 4,
-        "role": "Director of Operations · Harvard C'19",
+        "role": "Director of Operations \u00b7 Harvard C'19",
         "slug": "jessica-li"
       },
       {
         "body": "",
         "name": "Nadia Eldeib",
         "order": 5,
-        "role": "Board Member · Harvard C'10",
+        "role": "Board Member \u00b7 Harvard C'10",
         "slug": "nadia-eldeib"
       }
     ]
   },
   "scenarioType": "application",
-  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/index.astro"
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/index.astro",
+  "description": "The content dashboard an editor meets on a populated site. Since the placement map landed, the collection cards are GROUPED BY THE PAGE THEY BUILD rather than listed flat A-to-Z \u2014 'Homepage' gathers the hero slides, stats, sections and board, '/donate' gathers the six Momentum Fund collections \u2014 and each card names where its entries appear. That grouping is the answer to the question an editor actually arrives with ('I am looking at this page, which of these do I open?'), which a flat list of 21 collection names never answered."
 }

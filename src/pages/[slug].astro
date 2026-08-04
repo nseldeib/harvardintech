@@ -1,0 +1,60 @@
+---
+// /<slug> — one page per `pages` collection entry.
+//
+// This route is why the CMS's "Pages" card means anything. The collection, its
+// schema, its dashboard card and its editor screen all shipped long before any
+// route rendered it, so an editor could write a page, publish it, watch the CMS
+// report it PUBLISHED, and get a 404 at every address the site serves. The
+// content was never lost — it was simply never rendered anywhere.
+//
+// Pages live at the ROOT (`/about`), not under a `/pages/` prefix, because that
+// is the address an editor means when they make a page. The cost is a shared
+// namespace with the hand-built routes and `public/`, which Astro resolves in
+// favour of the static route — so `shadowedPageSlugs` reports any page whose
+// slug is already spoken for rather than letting it vanish quietly. Advisory,
+// not fatal: see `shadowedSlugWarning` for why one bad slug must not fail a
+// whole deploy.
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SitePage from '../components/SitePage.astro';
+import Embed from '../components/Embed.astro';
+import { publishedEntries } from '../lib/drafts';
+import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
+import { pageRouteEntries, pageSeo } from '../lib/sitePages';
+
+// Drafts get no page of their own on the public site — a page left out of the
+// menu but still live at its own URL is public either way. In dev and on the
+// review track the page is generated so it can be read before it is promoted,
+// the same rule `blog/[slug]` and `chapters/[slug]` already apply.
+export async function getStaticPaths() {
+  const pages = publishedEntries(await getCollection('pages'), INCLUDE_DRAFTS);
+  const { routable, warning } = pageRouteEntries(pages);
+
+  if (warning) console.warn(warning);
+
+  return routable.map((page) => ({
+    params: { slug: page.id },
+    props: { page },
+  }));
+}
+
+type Props = { page: CollectionEntry<'pages'> };
+const { page } = Astro.props as Props;
+const { Content } = await render(page);
+
+// Per-page SEO overrides fall back to the page's own fields, then to the site
+// defaults inside <SEO />, which BaseLayout renders.
+const seo = pageSeo(page.data);
+---
+
+<BaseLayout title={seo.title} description={seo.description} image={seo.image}>
+  <SitePage title={page.data.title} description={page.data.description}>
+    <Content />
+    <Embed
+      slot="embed"
+      embedUrl={page.data.embedUrl}
+      embedHtml={page.data.embedHtml}
+      title={page.data.title}
+    />
+  </SitePage>
+</BaseLayout>

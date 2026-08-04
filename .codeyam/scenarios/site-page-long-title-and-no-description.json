@@ -1,0 +1,21 @@
+{
+  "name": "Site Page - Long Title And No Description",
+  "id": "5973a95b-5939-451a-b056-9e4d5710b969",
+  "url": "/frequently-asked-questions",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "pages": [
+      {
+        "body": "### Do I need to be a Harvard graduate?\n\nNo. Harvard in Tech is open to anyone Harvard-affiliated — undergraduate and graduate alumni, current students, faculty, staff, and affiliates of any school within the University.\n\n### Is there a membership fee?\n\nNo. There is no fee and no application. Some individual events have a ticket price that covers food and the room; the community itself is free.\n\n### There is no chapter in my city.\n\nStart one. Chapters begin when two or three people decide to host something small and keep hosting it. Write to us and we will help.",
+        "order": 1,
+        "slug": "frequently-asked-questions",
+        "title": "Frequently Asked Questions About Membership, Events, Chapters, and Getting Involved"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/[slug].astro"
+}

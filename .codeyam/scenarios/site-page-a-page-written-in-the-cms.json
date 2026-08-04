@@ -1,0 +1,29 @@
+{
+  "name": "Site Page - A Page Written In The CMS",
+  "id": "2f2335ad-406f-4dc4-8e77-9ea2d7cd05db",
+  "url": "/about",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "pages": [
+      {
+        "body": "Harvard in Tech connects Harvard alumni, students, and affiliates working across technology — founders and engineers, investors and designers, policy people and product people.\n\n### How we started\n\nWhat began in 2013 as a handful of alumni trading introductions over email is now a community of more than 8,000 people across five chapters and two interest-based groups. There is no membership fee and no application. If you are Harvard-affiliated and you work in or around technology, you are already one of us.\n\n### What we actually do\n\nMost of what happens here happens between people, not on a stage. The events are the visible part — panels, fireside chats, chapter dinners — but the durable value is the introduction someone makes on your behalf a year after you met them.\n\n> The best thing this community ever did for me was a five-minute conversation at a New York dinner that turned into my co-founder.\n\n### Getting involved\n\nCome to something in your city. Join the WhatsApp group. Volunteer for a project. None of it requires a commitment beyond the thing itself.",
+        "description": "Who we are, how we started, and what the community is for.",
+        "order": 1,
+        "slug": "about",
+        "title": "About Harvard in Tech"
+      },
+      {
+        "body": "We collect as little as we can get away with.",
+        "description": "What we collect and what we do with it.",
+        "order": 2,
+        "slug": "privacy",
+        "title": "Privacy"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/[slug].astro"
+}

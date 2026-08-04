@@ -1,3 +1,466 @@
+diff --git a/node_modules/@codeyam/cms/src/components/admin/CollectionCard.astro b/node_modules/@codeyam/cms/src/components/admin/CollectionCard.astro
+index d96c28a..55709ca 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/CollectionCard.astro
++++ b/node_modules/@codeyam/cms/src/components/admin/CollectionCard.astro
+@@ -9,12 +9,27 @@ import { withBase } from '../../lib/adminUrl';
+ 
+ interface Props {
+   card: CollectionCard;
++  /** Where this collection appears on the site (registry `paths`). A template
++   * with `:slug` means a page per entry; one without means a single shared page;
++   * `null` means none. Omitted → no placement line is shown. */
++  placement?: string | null;
+ }
+ 
+-const { card } = Astro.props;
++const { card, placement } = Astro.props;
+ const status = cardStatusText(card);
+ const href = withBase(`/admin/${card.collection}`);
+ const isEmpty = card.total <= 0;
++
++// The one line that tells an editor whether this is the card they want. The
++// group heading already says which page they are under, so a card on a shared
++// page repeats nothing; a per-entry collection is the case worth spelling out,
++// because "adding one adds a page" is the surprise.
++const placementText =
++  placement == null
++    ? null
++    : placement.includes(':slug')
++      ? `A page each, under ${placement.replace('/:slug', '') || '/'}`
++      : `Appears on ${placement}`;
+ ---
+ 
+ <a
+@@ -42,6 +57,11 @@ const isEmpty = card.total <= 0;
+     }
+     <span style={isEmpty ? 'color: var(--color-muted);' : 'color: var(--color-fg);'}>{status}</span>
+   </div>
++  {
++    placementText && (
++      <span style="font-size: 0.78rem; color: var(--color-muted);">{placementText}</span>
++    )
++  }
+   <span style="margin-top: auto; font-size: 0.85rem; color: var(--color-accent); font-weight: 600;">
+     {isEmpty ? 'Add the first one →' : 'Manage →'}
+   </span>
+diff --git a/node_modules/@codeyam/cms/src/components/admin/CollectionGrid.astro b/node_modules/@codeyam/cms/src/components/admin/CollectionGrid.astro
+index 6054610..6b085d9 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/CollectionGrid.astro
++++ b/node_modules/@codeyam/cms/src/components/admin/CollectionGrid.astro
+@@ -1,18 +1,54 @@
+ ---
+-// The responsive grid of per-collection cards. Pure layout: maps each card
+-// descriptor to a CollectionCard component.
++// The per-collection cards, grouped by the page they appear on.
++//
++// This was a flat A-to-Z grid, which answers "what collections exist" — a
++// question an editor never has. Theirs is "I am looking at this page, which of
++// these do I open?", and nothing here connected the two. The groups come from
++// the registry's `paths` map via the pure `groupCardsByPage` helper; passing no
++// map yields a single unlabelled group, so a site that declares no placements
++// renders exactly the flat grid it did before.
+ import CollectionCard from './CollectionCard.astro';
+-import type { CollectionCard as CollectionCardData } from '../../lib/adminDashboard';
++import { groupCardsByPage, type CollectionCard as CollectionCardData } from '../../lib/adminDashboard';
+ 
+ interface Props {
+   cards: CollectionCardData[];
++  /** Where each collection appears, from the registry. */
++  paths?: Record<string, string | null>;
+ }
+ 
+-const { cards } = Astro.props;
++const { cards, paths = {} } = Astro.props;
++const groups = groupCardsByPage(cards, paths);
++// With nothing declared every card lands in one group, and a lone heading over
++// the whole grid is noise rather than orientation.
++const showHeadings = groups.length > 1;
+ ---
+ 
+-<section
+-  style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-md);"
+->
+-  {cards.map((card) => <CollectionCard card={card} />)}
+-</section>
++<div style="display: flex; flex-direction: column; gap: var(--space-xl, 2rem);">
++  {
++    groups.map((group) => (
++      <section>
++        {showHeadings && (
++          <header style="margin-bottom: var(--space-md);">
++            <h2
++              style="margin: 0; font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--color-fg);"
++            >
++              {group.label}
++            </h2>
++            {group.hint && (
++              <p style="margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--color-muted);">
++                {group.hint}
++              </p>
++            )}
++          </header>
++        )}
++        <div
++          style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-md);"
++        >
++          {group.cards.map((card) => (
++            <CollectionCard card={card} placement={paths[card.collection]} />
++          ))}
++        </div>
++      </section>
++    ))
++  }
++</div>
+diff --git a/node_modules/@codeyam/cms/src/components/admin/EntryEditor.tsx b/node_modules/@codeyam/cms/src/components/admin/EntryEditor.tsx
+index 5c2760a..5028885 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/EntryEditor.tsx
++++ b/node_modules/@codeyam/cms/src/components/admin/EntryEditor.tsx
+@@ -68,6 +68,11 @@ interface Props {
+   /** Configured public site base URL (`settings.siteUrl`) for the "View on site"
+    * link; blank when the editor hasn't set one yet. */
+   siteUrl?: string;
++  /** Where this collection appears on the site, from the registry's `paths` map:
++   * a template with `:slug` (a page per entry), one without (a single shared
++   * page), or `null` (no page of its own). `undefined` keeps the legacy
++   * `/<collection>/<slug>` guess. */
++  pageTemplate?: string | null;
+   /** Site-wide title/description (`settings.json`) — the last-resort fallbacks the
+    * SEO share-card preview shows when an entry sets no override. */
+   siteTitle?: string;
+@@ -116,6 +121,7 @@ export default function EntryEditor({
+   mediaLibrary = EMPTY_MANIFEST,
+   mediaCommitted = EMPTY_MANIFEST,
+   siteUrl = '',
++  pageTemplate,
+   siteTitle = '',
+   siteDescription = '',
+   repo = EMPTY_REPO,
+@@ -447,7 +453,13 @@ export default function EntryEditor({
+ 
+         {/* This entry exists in committed content, so it has a live page. */}
+         <span style={{ marginLeft: 'auto' }}>
+-          <ViewOnSiteLink published siteUrl={siteUrl} collection={collection} slug={slug} />
++          <ViewOnSiteLink
++            published
++            siteUrl={siteUrl}
++            collection={collection}
++            slug={slug}
++            template={pageTemplate}
++          />
+         </span>
+       </div>
+         </div>
+diff --git a/node_modules/@codeyam/cms/src/components/admin/EntryField.tsx b/node_modules/@codeyam/cms/src/components/admin/EntryField.tsx
+index 2e20e1e..6ee0f97 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/EntryField.tsx
++++ b/node_modules/@codeyam/cms/src/components/admin/EntryField.tsx
+@@ -53,7 +53,33 @@ export default function EntryField({ field, value, onChange, error }: Props) {
+         {field.label}
+         {field.optional && <span style={{ fontWeight: 400 }}> · optional</span>}
+       </label>
+-      {field.type === 'textarea' ? (
++      {field.type === 'select' ? (
++        <select
++          id={`f-${field.name}`}
++          value={String(value ?? '')}
++          onChange={(e) => onChange(e.target.value)}
++          style={{ ...fieldInputStyle, ...(error ? errorBorderStyle : null) }}
++        >
++          {/* An optional select needs a way back to "unset", and a required one
++              needs a resting state that is visibly not a choice — otherwise the
++              first option silently becomes the answer for an editor who never
++              opened the menu. */}
++          <option value="">{field.optional ? '— none —' : '— choose —'}</option>
++          {/* A value already in the file that is not among the options is still
++              shown, and still selected. Dropping it would silently rewrite an
++              entry the moment someone opened it — the exact data loss a picker
++              is supposed to prevent. */}
++          {(field.options ?? []).concat(
++            value != null && value !== '' && !(field.options ?? []).includes(String(value))
++              ? [String(value)]
++              : [],
++          ).map((option) => (
++            <option key={option} value={option}>
++              {option}
++            </option>
++          ))}
++        </select>
++      ) : field.type === 'textarea' ? (
+         <textarea
+           id={`f-${field.name}`}
+           value={String(value ?? '')}
+diff --git a/node_modules/@codeyam/cms/src/components/admin/NewEntryEditor.tsx b/node_modules/@codeyam/cms/src/components/admin/NewEntryEditor.tsx
+index 47e8912..1446b86 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/NewEntryEditor.tsx
++++ b/node_modules/@codeyam/cms/src/components/admin/NewEntryEditor.tsx
+@@ -39,11 +39,15 @@ interface Props {
+   /** Committed media manifest, for the cover-image + insert-image picker. */
+   mediaLibrary?: MediaManifest;
+   mediaCommitted?: MediaManifest;
++  /** Where this collection appears on the site — see `publicUrl`. Passed so the
++   * create form can say "no page of its own" up front, rather than promising a
++   * live page that publishing will never produce. */
++  pageTemplate?: string | null;
+ }
+ 
+ type PickerTarget = { kind: 'field'; name: string } | { kind: 'body' };
+ 
+-export default function NewEntryEditor({ collection, fields: propFields, existingSlugs, mediaLibrary = EMPTY_MANIFEST, mediaCommitted = EMPTY_MANIFEST }: Props) {
++export default function NewEntryEditor({ collection, fields: propFields, existingSlugs, mediaLibrary = EMPTY_MANIFEST, mediaCommitted = EMPTY_MANIFEST, pageTemplate }: Props) {
+   // The SEO group is refined when EDITING an entry, not at creation — keep the
+   // new-entry form focused on the content fields.
+   const allFields = propFields ?? (COLLECTION_FIELDS as Record<string, FieldDef[]>)[collection] ?? [];
+@@ -247,7 +251,7 @@ export default function NewEntryEditor({ collection, fields: propFields, existin
+ 
+         {/* A not-yet-created entry has no live page — always the "publish first" hint. */}
+         <span style={{ marginLeft: 'auto' }}>
+-          <ViewOnSiteLink published={false} siteUrl="" collection={collection} slug={status.finalSlug} />
++          <ViewOnSiteLink published={false} siteUrl="" collection={collection} slug={status.finalSlug} template={pageTemplate} />
+         </span>
+       </div>
+         </div>
+diff --git a/node_modules/@codeyam/cms/src/components/admin/ViewOnSiteLink.tsx b/node_modules/@codeyam/cms/src/components/admin/ViewOnSiteLink.tsx
+index 423b4fc..321ae45 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/ViewOnSiteLink.tsx
++++ b/node_modules/@codeyam/cms/src/components/admin/ViewOnSiteLink.tsx
+@@ -15,6 +15,9 @@ interface Props {
+   siteUrl: string;
+   collection: string;
+   slug: string;
++  /** This collection's declared placement on the site — see `publicUrl`. Omit to
++   * keep the legacy `/<collection>/<slug>` guess. */
++  template?: string | null;
+ }
+ 
+ const wrap: React.CSSProperties = {
+@@ -33,8 +36,8 @@ const linkBase: React.CSSProperties = {
+   whiteSpace: 'nowrap',
+ };
+ 
+-export default function ViewOnSiteLink({ published, siteUrl, collection, slug }: Props) {
+-  const state = viewOnSiteState({ published, siteUrl, collection, slug });
++export default function ViewOnSiteLink({ published, siteUrl, collection, slug, template }: Props) {
++  const state = viewOnSiteState({ published, siteUrl, collection, slug, template });
+ 
+   if (state.kind === 'enabled') {
+     return (
+diff --git a/node_modules/@codeyam/cms/src/lib/adminDashboard.ts b/node_modules/@codeyam/cms/src/lib/adminDashboard.ts
+index 9cecb42..3c46b09 100644
+--- a/node_modules/@codeyam/cms/src/lib/adminDashboard.ts
++++ b/node_modules/@codeyam/cms/src/lib/adminDashboard.ts
+@@ -101,3 +101,115 @@ export function cardStatusText(counts: StatusCounts): string {
+   if (counts.total <= 0) return 'No entries yet';
+   return `${counts.published} published`;
+ }
++
++// ─── Grouping the dashboard by where content appears ─────────────────────────
++//
++// A flat A-to-Z grid of collection cards answers "what collections exist", which
++// is a question an editor never has. Theirs is the reverse: "I am looking at
++// this page — which of these do I open to change it?" Nothing on the dashboard
++// connected a page to the collections that build it, so the only way through was
++// to already know that the homepage headline lives in "Homepage hero slides".
++//
++// The registry's `paths` map is exactly that missing link, so the grid groups by
++// it. Collections that share a page are shown together under that page's
++// address — the thing the editor can read off their own browser's URL bar.
++
++/** A dashboard section: the site page these collections build, and their cards. */
++export interface DashboardGroup {
++  /**
++   * The group's identity:
++   * - a site path (`/donate`) — every card here appears on that one page
++   * - `'own-page'` — each entry in these collections gets a page of its own
++   * - `'no-page'` — these configure the site without appearing as a page
++   */
++  key: string;
++  /** Heading shown above the group. */
++  label: string;
++  /** Sub-heading explaining what the grouping means, or `null` for none. */
++  hint: string | null;
++  cards: CollectionCard[];
++}
++
++/** Token marking a per-entry route in a `paths` template. */
++const SLUG_TOKEN = ':slug';
++
++const OWN_PAGE_KEY = 'own-page';
++const NO_PAGE_KEY = 'no-page';
++
++/**
++ * Which group a collection belongs in, from its declared placement.
++ * An `undefined` template (collection not declared) is treated as a page per
++ * entry, matching the legacy `/<collection>/<slug>` fallback in `publicUrl`.
++ */
++function groupKeyFor(template: string | null | undefined): string {
++  if (template === null) return NO_PAGE_KEY;
++  if (template === undefined) return OWN_PAGE_KEY;
++  const trimmed = template.trim();
++  if (trimmed === '') return NO_PAGE_KEY;
++  if (trimmed.includes(SLUG_TOKEN)) return OWN_PAGE_KEY;
++  // An anchor names a band WITHIN a page, not a page — `/#board` is the board
++  // section of the homepage. Grouping on the anchor would file the board apart
++  // from the rest of the homepage, which is exactly backwards for an editor
++  // looking at the homepage and wondering what builds it. The full path with the
++  // anchor is still what the card shows and what "View on site" links to.
++  const [path] = trimmed.split('#');
++  return path === '' ? '/' : path;
++}
++
++/** Sort key: shared pages first (homepage leading), then per-entry, then none. */
++function groupRank(key: string): [number, string] {
++  if (key === NO_PAGE_KEY) return [3, ''];
++  if (key === OWN_PAGE_KEY) return [2, ''];
++  // The homepage sorts ahead of the other shared pages — it is the page an
++  // editor is most often looking at, and '/' would otherwise sort arbitrarily.
++  return [key === '/' ? 0 : 1, key];
++}
++
++function labelFor(key: string): { label: string; hint: string | null } {
++  if (key === OWN_PAGE_KEY) {
++    return {
++      label: 'Each entry has its own page',
++      hint: 'Adding an entry here adds a page to the site.',
++    };
++  }
++  if (key === NO_PAGE_KEY) {
++    return {
++      label: 'Site-wide settings',
++      hint: 'These change every page at once rather than appearing on one.',
++    };
++  }
++  if (key === '/') return { label: 'Homepage', hint: 'Everything on the front page.' };
++  return { label: key, hint: `Everything on the ${key} page.` };
++}
++
++/**
++ * Group the dashboard's cards by the page they appear on.
++ *
++ * Cards keep the order they arrive in within a group, so the caller's ordering
++ * still decides what comes first inside a page. Groups are ordered homepage →
++ * other shared pages (by path) → per-entry collections → site-wide settings,
++ * which walks an editor from the most-looked-at page outward.
++ *
++ * Pure and framework-free so the dashboard page stays data wiring and this rule
++ * unit-tests with no DOM — the same split the rest of this module keeps.
++ */
++export function groupCardsByPage(
++  cards: readonly CollectionCard[],
++  paths: Readonly<Record<string, string | null>> = {},
++): DashboardGroup[] {
++  const byKey = new Map<string, CollectionCard[]>();
++  for (const card of cards) {
++    const key = groupKeyFor(paths[card.collection]);
++    const bucket = byKey.get(key);
++    if (bucket) bucket.push(card);
++    else byKey.set(key, [card]);
++  }
++
++  return [...byKey.entries()]
++    .sort(([a], [b]) => {
++      const [ra, sa] = groupRank(a);
++      const [rb, sb] = groupRank(b);
++      return ra - rb || sa.localeCompare(sb);
++    })
++    .map(([key, groupCards]) => ({ key, ...labelFor(key), cards: groupCards }));
++}
+diff --git a/node_modules/@codeyam/cms/src/lib/collectionRegistry.ts b/node_modules/@codeyam/cms/src/lib/collectionRegistry.ts
+index 7d1fa0c..ffd984b 100644
+--- a/node_modules/@codeyam/cms/src/lib/collectionRegistry.ts
++++ b/node_modules/@codeyam/cms/src/lib/collectionRegistry.ts
+@@ -85,6 +85,20 @@ export interface CollectionsRegistry {
+    * schema (`content-helpers` `seoFields`).
+    */
+   seo?: FieldDef[];
++  /**
++   * Where each collection appears on the consuming site, keyed by collection id.
++   * A template containing `:slug` means a page per entry (`/blog/:slug`); one
++   * without it means every entry appears on that single shared page
++   * (`/donate`); `null` means the collection has no page of its own.
++   *
++   * The admin cannot infer this — it is a property of the site's ROUTES, which
++   * live in the consumer's repo. Without it "View on site" guessed
++   * `/<collection>/<slug>` for everything, which is correct only for the handful
++   * of collections whose routes happen to have that shape and sends the editor
++   * to a 404 for the rest. A collection absent from this map keeps that legacy
++   * guess, so declaring nothing preserves the previous behaviour exactly.
++   */
++  paths?: Record<string, string | null>;
+ }
+ 
+ /** Production / never-seeded default: no custom collections. */
+@@ -196,6 +210,16 @@ function toJson(value: unknown): string {
+ function normalizeField(f: FieldDef): FieldDef {
+   const out: FieldDef = { name: f.name, label: f.label, type: f.type };
+   if (f.optional) out.optional = true;
++  // A select's options ARE its schema — a select that loses them is a dropdown
++  // with nothing in it. Same class of bug as `hint` below.
++  if (f.options && f.options.length > 0) out.options = [...f.options];
++  // `hint` is the per-field guidance an editor reads under the input, and it was
++  // being dropped here: this serializer rebuilds every field from a fixed key
++  // list, so staging ANY registry change (adding one collection in the builder)
++  // rewrote the whole file without hints and silently deleted the only
++  // documentation the free-text fields have. `normalizeSeoField` already kept
++  // its hint for exactly this reason; content fields need the same treatment.
++  if (f.hint) out.hint = f.hint;
+   // A list carries its scalar sub-schema; normalize each sub-field the same way
+   // so the serialized registry stays canonical for the nested shape.
+   if (f.type === 'list') out.fields = (f.fields ?? []).map(normalizeField);
+@@ -246,6 +270,12 @@ export function serializeRegistry(reg: CollectionsRegistry): string {
+     if (Object.keys(builtins).length > 0) out.builtins = builtins;
+   }
+   if (reg.seo && reg.seo.length > 0) out.seo = reg.seo.map(normalizeSeoField);
++  // `paths` is site-authored routing config the admin never edits, but it MUST be
++  // re-emitted here: this serializer rebuilds the file from known keys only, so a
++  // key it does not know about is dropped the first time an editor adds a
++  // collection in the builder — silently deleting the site's placement map as a
++  // side effect of an unrelated action.
++  if (reg.paths && Object.keys(reg.paths).length > 0) out.paths = { ...reg.paths };
+   return toJson(out);
+ }
+ 
+diff --git a/node_modules/@codeyam/cms/src/lib/entryEditor.ts b/node_modules/@codeyam/cms/src/lib/entryEditor.ts
+index 626fc48..8635874 100644
+--- a/node_modules/@codeyam/cms/src/lib/entryEditor.ts
++++ b/node_modules/@codeyam/cms/src/lib/entryEditor.ts
+@@ -14,7 +14,15 @@ import type { FrontmatterScalar, FrontmatterValue } from './frontmatter';
+ // imports the SEO/field values from this module).
+ import type { CollectionsRegistry } from './collectionRegistry';
+ 
+-export type FieldType = 'text' | 'textarea' | 'date' | 'number' | 'boolean' | 'image' | 'list';
++export type FieldType =
++  | 'text'
++  | 'textarea'
++  | 'date'
++  | 'number'
++  | 'boolean'
++  | 'image'
++  | 'list'
++  | 'select';
+ 
+ export interface FieldDef {
+   /** Frontmatter key — also the form input name. */
+@@ -26,6 +34,20 @@ export interface FieldDef {
+    * holds. Present only when `type === 'list'`; sub-fields are scalar-only
+    * (no nested lists, matching the frontmatter engine's 2-level cap). */
+   fields?: FieldDef[];
++  /**
++   * The allowed values for a `select` field, in menu order.
++   *
++   * A select carries a plain string exactly like a `text` field — it is the
++   * INPUT that differs, not the stored value — so a schema whose validator
++   * already accepts free text needs no migration to adopt one, and a value typed
++   * before the options existed still round-trips.
++   *
++   * This closes the gap that forced every enum-shaped field on a site to be a
++   * text box with the valid values written out in its hint: an editor adding a
++   * homepage section had to type one of thirteen exact strings from prose, and a
++   * typo silently dropped the section off the page.
++   */
++  options?: string[];
+   /** Optional fields may be left blank; a blank optional field is omitted from
+    * the written frontmatter (matching the "missing optional" content scenarios). */
+   optional?: boolean;
 diff --git a/node_modules/@codeyam/cms/src/lib/githubCommit.ts b/node_modules/@codeyam/cms/src/lib/githubCommit.ts
 index d1349bd..1d8b2e9 100644
 --- a/node_modules/@codeyam/cms/src/lib/githubCommit.ts
@@ -60,10 +523,10 @@ index d1349bd..1d8b2e9 100644
    const ref = await gh(fetchFn, token, target, 'GET', `git/ref/heads/${target.branch}`);
    const baseCommitSha: string = ref.object.sha;
 diff --git a/node_modules/@codeyam/cms/src/lib/mediaLibrary.ts b/node_modules/@codeyam/cms/src/lib/mediaLibrary.ts
-index c2d7fc6..7b50b95 100644
+index c2d7fc6..64cb414 100644
 --- a/node_modules/@codeyam/cms/src/lib/mediaLibrary.ts
 +++ b/node_modules/@codeyam/cms/src/lib/mediaLibrary.ts
-@@ -507,3 +507,49 @@ export function buildUploadedAsset(
+@@ -507,3 +507,50 @@ export function buildUploadedAsset(
      ...(meta.uploadedAt ? { uploadedAt: meta.uploadedAt } : {}),
    };
  }
@@ -113,3 +576,215 @@ index c2d7fc6..7b50b95 100644
 +    .filter((filename) => !before.has(filename))
 +    .filter((filename) => !stagedBytes.has(assetRepoPath(filename)));
 +}
++
+diff --git a/node_modules/@codeyam/cms/src/lib/publicUrl.ts b/node_modules/@codeyam/cms/src/lib/publicUrl.ts
+index 1afdc10..bd962cf 100644
+--- a/node_modules/@codeyam/cms/src/lib/publicUrl.ts
++++ b/node_modules/@codeyam/cms/src/lib/publicUrl.ts
+@@ -8,25 +8,83 @@
+ // (harvardintech.com) works the same as a github.io project site. Framework-free
+ // and `fs`-free (the `siteConfig.ts` pattern) so it runs in the admin islands AND
+ // unit-tests with no DOM.
++//
++// WHERE AN ENTRY APPEARS is a property of the consuming site's routes, not of the
++// CMS. The original `<collection>/<slug>` guess held only for collections that
++// happen to have a route of that exact shape — on a real site most do not. A
++// collection can appear on the site in three genuinely different ways, and the
++// link has to tell them apart or it sends the editor somewhere that 404s:
++//
++//   1. A page per entry      `blog`      → /blog/:slug
++//   2. One shared page       `pillars`   → /donate     (every entry is a card on it)
++//   3. No page of its own    `siteIntegrations`        (it configures every page)
++//
++// `paths` in the collections registry declares which of the three each collection
++// is; a collection absent from the map keeps the historical `<collection>/<slug>`
++// default, so a site that declares nothing behaves exactly as before.
++
++/** The token a path template uses to stand in for the entry's slug. */
++export const SLUG_TOKEN = ':slug';
++
++/**
++ * How one collection appears on the site:
++ * - a template containing {@link SLUG_TOKEN} — a page per entry
++ * - a template without it — every entry appears on that one shared page
++ * - `null` — the collection has no page of its own
++ */
++export type PagePathTemplate = string | null;
++
++/** The site's declared placement for each collection, keyed by collection id. */
++export type CollectionPagePaths = Readonly<Record<string, PagePathTemplate>>;
+ 
+ /**
+- * Join the configured site base URL with an entry's public path
+- * (`<collection>/<slug>`, the convention the existing `blog/[slug]` route already
+- * follows). Tolerates a trailing slash and/or a base path on `siteUrl`, always
+- * emitting exactly one slash between segments. Returns `''` when `siteUrl` is
+- * blank so callers can treat "no URL configured" as a distinct state.
++ * The site-relative path an entry appears at, or `null` when it has no page of
++ * its own.
++ *
++ * An `undefined` template (the collection is not in the map) falls back to the
++ * historical `/<collection>/<slug>` convention, so this is a safe drop-in for a
++ * site that has declared no placements.
+  */
+-export function entryPublicUrl(siteUrl: string, collection: string, slug: string): string {
++export function entryPagePath(
++  collection: string,
++  slug: string,
++  template?: PagePathTemplate,
++): string | null {
++  if (template === null) return null;
++  if (template === undefined) return `/${collection}/${slug}`;
++
++  const trimmed = template.trim();
++  if (trimmed === '') return null;
++  // A template without the slug token is a shared page — every entry in the
++  // collection is rendered somewhere on it, so they all resolve to one path.
++  if (!trimmed.includes(SLUG_TOKEN)) return trimmed;
++  return trimmed.split(SLUG_TOKEN).join(slug);
++}
++
++/**
++ * Join the configured site base URL with an entry's public path. Tolerates a
++ * trailing slash and/or a base path on `siteUrl`, always emitting exactly one
++ * slash between segments. Returns `''` when `siteUrl` is blank so callers can
++ * treat "no URL configured" as a distinct state, and `''` when the entry has no
++ * page of its own.
++ */
++export function entryPublicUrl(
++  siteUrl: string,
++  collection: string,
++  slug: string,
++  template?: PagePathTemplate,
++): string {
+   const base = siteUrl.trim().replace(/\/+$/, '');
+   if (base === '') return '';
+-  const path = `${collection}/${slug}`.replace(/^\/+/, '');
+-  return `${base}/${path}`;
++  const page = entryPagePath(collection, slug, template);
++  if (page === null) return '';
++  return `${base}/${page.replace(/^\/+/, '')}`;
+ }
+ 
+-/** The three states a "View on site" affordance can be in. */
++/** The states a "View on site" affordance can be in. */
+ export type ViewOnSiteState =
+   | { kind: 'enabled'; href: string }
+-  | { kind: 'disabled'; reason: 'unpublished' | 'no-site-url'; hint: string };
++  | { kind: 'disabled'; reason: 'unpublished' | 'no-site-url' | 'no-page'; hint: string };
+ 
+ export interface ViewOnSiteInput {
+   /** Whether a committed/published page exists for this entry (false for a
+@@ -36,19 +94,38 @@ export interface ViewOnSiteInput {
+   siteUrl: string;
+   collection: string;
+   slug: string;
++  /** This collection's declared placement; omit to keep the legacy default. */
++  template?: PagePathTemplate;
+ }
+ 
+ /**
+- * Derive the link state from two facts: is the entry published, and is a site URL
+- * configured. Unpublished wins over a missing URL — a brand-new entry has no live
+- * page to point at regardless of the URL, so it always reads "Publish to view
+- * live". A published entry with no configured URL points the editor at Settings.
++ * Derive the link state from three facts: does this collection appear on the
++ * site at all, is the entry published, and is a site URL configured.
++ *
++ * "No page of its own" is checked FIRST and regardless of publish state, because
++ * it is a property of the collection rather than of the entry: telling an editor
++ * to "publish to view live" when publishing will never produce a page is the
++ * misdirection this state exists to prevent. Unpublished then wins over a missing
++ * URL — a brand-new entry has no live page to point at regardless of the URL.
+  */
+-export function viewOnSiteState({ published, siteUrl, collection, slug }: ViewOnSiteInput): ViewOnSiteState {
++export function viewOnSiteState({
++  published,
++  siteUrl,
++  collection,
++  slug,
++  template,
++}: ViewOnSiteInput): ViewOnSiteState {
++  if (entryPagePath(collection, slug, template) === null) {
++    return {
++      kind: 'disabled',
++      reason: 'no-page',
++      hint: 'This content has no page of its own',
++    };
++  }
+   if (!published) {
+     return { kind: 'disabled', reason: 'unpublished', hint: 'Publish to view live' };
+   }
+-  const href = entryPublicUrl(siteUrl, collection, slug);
++  const href = entryPublicUrl(siteUrl, collection, slug, template);
+   if (href === '') {
+     return { kind: 'disabled', reason: 'no-site-url', hint: 'Set your site URL in Settings' };
+   }
+diff --git a/node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro b/node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro
+index 6c07b09..167fdee 100644
+--- a/node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro
++++ b/node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro
+@@ -30,7 +30,11 @@ export function getStaticPaths() {
+ const collection = Astro.params.collection as CollectionName;
+ const slug = Astro.params.entry as string;
+ const { raw } = Astro.props as { raw: string };
+-const def = resolveCollection(collection, readCollectionsRegistry())!;
++const registry = readCollectionsRegistry();
++const def = resolveCollection(collection, registry)!;
++// Where this collection appears on the site. `undefined` (collection not
++// declared) keeps the legacy `/<collection>/<slug>` guess — see `publicUrl`.
++const pageTemplate = registry.paths?.[collection];
+ 
+ const { data, body } = parseEntry(raw);
+ const initialValues = dataToFormValues(def.fields, data);
+@@ -61,6 +65,7 @@ const cms = loadCmsConfig();
+     mediaLibrary={mediaLibrary}
+     mediaCommitted={mediaCommitted}
+     siteUrl={siteUrl}
++    pageTemplate={pageTemplate}
+     siteTitle={settings.siteTitle}
+     siteDescription={settings.description}
+     repo={cms.repo}
+diff --git a/node_modules/@codeyam/cms/src/pages/admin/index.astro b/node_modules/@codeyam/cms/src/pages/admin/index.astro
+index 06b781f..2937f74 100644
+--- a/node_modules/@codeyam/cms/src/pages/admin/index.astro
++++ b/node_modules/@codeyam/cms/src/pages/admin/index.astro
+@@ -22,7 +22,8 @@ import { entryToSearchable, type SearchableEntry } from '../../lib/entrySearch';
+ // only knows the four collections statically defined in `content/config.ts`).
+ // The same pass builds the dashboard-wide search index: one entry per file with
+ // a title+body match haystack, handed to the client search island below.
+-const collections = resolveCollections(readCollectionsRegistry());
++const registry = readCollectionsRegistry();
++const collections = resolveCollections(registry);
+ const searchIndex: SearchableEntry[] = [];
+ const cards: CollectionCard[] = collections.map((def) => {
+   const labelField = labelFieldName(def.fields);
+@@ -41,5 +42,5 @@ const { total, published, draft, collectionCount } = dashboardTotals(cards);
+   <DashboardHeader total={total} draft={draft} collectionCount={collectionCount} />
+   <DashboardStats total={total} published={published} draft={draft} />
+   <DashboardSearch client:load entries={searchIndex} />
+-  <CollectionGrid cards={cards} />
++  <CollectionGrid cards={cards} paths={registry.paths ?? {}} />
+ </AdminLayout>
+diff --git a/node_modules/@codeyam/cms/src/pages/admin/new/[collection].astro b/node_modules/@codeyam/cms/src/pages/admin/new/[collection].astro
+index fede73d..721090e 100644
+--- a/node_modules/@codeyam/cms/src/pages/admin/new/[collection].astro
++++ b/node_modules/@codeyam/cms/src/pages/admin/new/[collection].astro
+@@ -23,7 +23,9 @@ export function getStaticPaths() {
+ }
+ 
+ const collection = Astro.params.collection as CollectionName;
+-const def = resolveCollection(collection, readCollectionsRegistry())!;
++const registry = readCollectionsRegistry();
++const def = resolveCollection(collection, registry)!;
++const pageTemplate = registry.paths?.[collection];
+ const { existingSlugs } = Astro.props as { existingSlugs: string[] };
+ const mediaLibrary = readMediaLibrary();
+ const mediaCommitted = readCommittedManifest();
+@@ -35,5 +37,5 @@ const mediaCommitted = readCommittedManifest();
+     title={`New ${def.singular}`}
+     subtitle={`Adds a new file under src/content/${collection}/`}
+   />
+-  <NewEntryEditor client:load collection={collection} fields={def.fields} existingSlugs={existingSlugs} mediaLibrary={mediaLibrary} mediaCommitted={mediaCommitted} />
++  <NewEntryEditor client:load collection={collection} fields={def.fields} existingSlugs={existingSlugs} mediaLibrary={mediaLibrary} mediaCommitted={mediaCommitted} pageTemplate={pageTemplate} />
+ </AdminLayout>

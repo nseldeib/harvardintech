@@ -1,0 +1,49 @@
+---
+import Component from "../../../src/components/pages/SitePageBody.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for SitePageBody — the prose column, carrying one of each
+// markdown construct the editor guide actually teaches: sub-headings, a list,
+// a link, and the pull quote that gets the crimson bar.
+//
+// The slot content is hand-written HTML rather than rendered markdown because
+// that is exactly what the component receives at runtime: Astro's `render()`
+// hands it finished tags, which is why the styles all have to be `:global`.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: SitePageBody</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 100%; max-width: 68ch;">
+      <Component>
+        <p>
+          Harvard in Tech connects Harvard alumni, students, and affiliates working across
+          technology — founders and engineers, investors and designers, policy people and
+          product people.
+        </p>
+        <h3>How we started</h3>
+        <p>
+          What began in 2013 as a handful of alumni trading introductions over email is now a
+          community of more than 8,000 people across five chapters and two interest-based
+          groups.
+        </p>
+        <blockquote>
+          The best thing this community ever did for me was a five-minute conversation at a New
+          York dinner that turned into my co-founder.
+        </blockquote>
+        <h3>Getting involved</h3>
+        <ul>
+          <li>Come to something in your city.</li>
+          <li>Join the WhatsApp group.</li>
+          <li>
+            <a href="/volunteer">Volunteer for a project.</a>
+          </li>
+        </ul>
+      </Component>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+{
+  "timestamp": "2026-08-04T20:08:04Z",
+  "title": "The CMS stops losing an editor's work",
+  "type": "feature",
+  "userRequest": "Project context: We need to modernize the https://www.harvardintech.com/ website from the outside. The site was built with a no-code product so we need to faithfully reproduce it using modern technologies and host it as a GitHub pages website. It also needs a CRM that can be run locally or, ideally also in the cloud via GitHub pages as well (protected with a password and/or GitHub OAuth). Can we dig into this?",
+  "description": "An audit of what a non-technical editor can actually do in /admin, driven by hand rather than read off the code, plus fixes for everything it turned up. The headline: the CMS has always shown a Pages card and reported pages as PUBLISHED, but nothing in src/ ever rendered the pages collection — every page an editor wrote returned 404 at every address the site serves, with no error anywhere to say why. src/pages/[slug].astro now renders them at the site root, guarded by shadowedPageSlugs so a page slugged donate is reported at build time instead of vanishing.\n\nThree more fixes came out of the same pass. View on site was building /<collection>/<slug> for all 21 collections — correct for three, a 404 for the rest — so collections.json now declares where each collection actually appears and the link uses it; a collection with no page of its own says so instead of offering a dead link. The dashboard groups its cards by the page they build rather than listing 21 names A-to-Z, which is the first thing that answers the question an editor actually arrives with. And the enum-shaped fields (section kind, layout, pillar icon) became real dropdowns via a new select field type, replacing thirteen exact strings an editor had to type from a prose hint — a hint that was itself wrong, omitting the donors band entirely.\n\nTwo bugs found that nobody had reported: settings.siteUrl was blank, so View on site was disabled for every collection on the site; and the registry serializer dropped every field hint on rewrite, meaning the first person to click New collection would have silently wiped the CMS's own inline documentation. The upload guard from the earlier lost-photo bug was verified rather than rebuilt — it is already patched and already tested, and media.json is clean at 68 records with no missing files.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-analytics-and-embeds.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-dashboard-populated.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-analytics-and-embeds--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-chapter-editor-marked-as-draft--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-chapter-editor-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-populated--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-populated--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-sponsorship-level-editor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-volunteer-page-editor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "patches/@codeyam+cms+0.2.2.patch",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/settings.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-section-editor-section-type-is-a-dropdown.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-section-type-is-a-dropdown--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-section-type-is-a-dropdown--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-a-page-written-in-the-cms--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-a-page-written-in-the-cms--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-long-title-and-no-description--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-long-title-and-no-description--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitepagebody-markdown-an-editor-can-write--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitepageheader-long-title-and-no-description--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitepageheader-title-and-lede--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/site-page-a-page-written-in-the-cms.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/site-page-long-title-and-no-description.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sitepagebody-markdown-an-editor-can-write.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sitepageheader-long-title-and-no-description.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/sitepageheader-title-and-lede.json",
+      "status": "added"
+    },
+    {
+      "path": "src/components/SitePage.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/pages/SitePageBody.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/pages/SitePageHeader.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/collectionPlacement.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/dashboardGrouping.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/selectOptions.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/sitePages.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/sitePages.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/[slug].astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/SitePageBody.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/SitePageHeader-LongTitle.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/SitePageHeader.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Site Page - A Page Written In The CMS",
+      "screenshotPath": "site-page-a-page-written-in-the-cms--desktop.png"
+    },
+    {
+      "name": "Site Page - Long Title And No Description",
+      "screenshotPath": "site-page-long-title-and-no-description--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 520,
+    "passed": 520,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 520,
+        "passed": 520
+      }
+    ]
+  }
+}

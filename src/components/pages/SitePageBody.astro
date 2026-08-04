@@ -1,0 +1,70 @@
+---
+// The prose column of a CMS-authored site page — the editor's markdown body,
+// already rendered by Astro's `render()` and arriving through the slot.
+//
+// Because those tags come from the slot rather than this file's template,
+// Astro's scoped-style attribute is never applied to them and they can only be
+// reached with `:global` — the same arrangement `VolunteerProjectBody`
+// documents.
+//
+// The rule along the top separates the body from the header above it. It lives
+// here rather than on the header because the body is the thing that may be
+// absent-ish (an editor can publish a page that is only a heading), and a
+// trailing rule under a header with nothing after it reads as broken.
+---
+
+<div class="prose">
+  <slot />
+</div>
+
+<style>
+  .prose {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.8;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule, rgba(0, 0, 0, 0.1));
+  }
+  .prose :global(h2),
+  .prose :global(h3) {
+    font-family: var(--font-sans, inherit);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 36px 0 12px;
+  }
+  .prose :global(h2) {
+    font-size: 24px;
+  }
+  .prose :global(h3) {
+    font-size: 20px;
+  }
+  .prose :global(p) {
+    margin: 16px 0;
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 22px;
+    margin: 16px 0;
+  }
+  .prose :global(li) {
+    margin: 8px 0;
+  }
+  .prose :global(a) {
+    color: var(--crimson);
+  }
+  /* A blockquote is the one markdown flourish the editor guide already teaches
+     ("a line starting with > becomes a large pull quote"), so it gets the same
+     crimson bar here that the momentum sections give it. */
+  .prose :global(blockquote) {
+    margin: 28px 0;
+    padding: 4px 0 4px 20px;
+    border-left: 3px solid var(--crimson);
+    font-size: 19px;
+    color: var(--ink-2);
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

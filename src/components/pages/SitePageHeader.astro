@@ -1,0 +1,38 @@
+---
+// The head of a CMS-authored site page: its title and, when there is one, the
+// description as a lede.
+//
+// Only `title` is required, matching the collection schema — an editor can
+// publish a page the moment they have a heading and fill the rest in later, so
+// the header must not leave a hole when they do. Mirrors
+// `volunteer/VolunteerProjectHeader.astro`, which makes the same promise.
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props as Props;
+---
+
+<header>
+  <h1>{title}</h1>
+  {description ? <p class="lede">{description}</p> : null}
+</header>
+
+<style>
+  h1 {
+    font-size: clamp(30px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0;
+    /* A CMS title has no length limit — the FAQ page's is a full sentence — so
+       it wraps rather than overflowing the column. */
+    overflow-wrap: anywhere;
+  }
+  .lede {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 18px 0 0;
+  }
+</style>
