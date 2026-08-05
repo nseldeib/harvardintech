@@ -63,13 +63,21 @@ const {
 <section class="intro" id="about" data-hero-carousel>
   <div class="track" data-track>
     {
-      slides.map((slide) => (
+      /* Only the FIRST slide's headline is an `h1`; the rest are `h2`. The
+         heading was inside the map unconditionally, so the homepage emitted one
+         `h1` per slide — two today, and one more every time an editor adds a
+         slide — while every other route on the site emits exactly one. A page
+         with several `h1`s has no single answer to "what is this page about",
+         which costs exactly the search legibility this rebuild exists to gain.
+         Styled identically below, so this changes the document outline and not
+         a single pixel. */
+      slides.map((slide, i) => (
         <div class="slide">
           {slide.image ? <img class="pho" src={withBase(slide.image)} alt="" /> : null}
           <div class="scrim" />
           <div class="intro-in">
             {slide.kicker ? <span class="kick" style="color:#fff">{slide.kicker}</span> : null}
-            <h1>{slide.title}</h1>
+            {i === 0 ? <h1>{slide.title}</h1> : <h2>{slide.title}</h2>}
             {slide.lede ? <p class="lede">{slide.lede}</p> : null}
             <div class="actions">
               {(slide.ctas ?? []).map((cta) => (
@@ -156,7 +164,11 @@ const {
     margin: 0 auto;
     padding: 96px 48px;
   }
-  .intro h1 {
+  /* h1 and h2 share one rule: which element a slide's headline uses is a
+     document-outline decision (only the first slide is the page's h1), never a
+     visual one — every slide must look identical. */
+  .intro h1,
+  .intro h2 {
     font-size: clamp(40px, 6.4vw, 82px);
     line-height: 1;
     font-weight: 800;

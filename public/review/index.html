@@ -110,6 +110,14 @@
 
       /* Item cards */
       .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+      /* For a section holding ONE card. The auto-fill track above is right for a
+         grid of short status cards, but it strands a single card in a 320px
+         column and turns any real explanation into a tall ribbon of text. This
+         caps the measure at a readable width instead. */
+      .cards--wide { grid-template-columns: minmax(0, 760px); }
+      .card .pts { margin: 0 0 10px; padding-left: 18px; }
+      .card .pts li { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin-bottom: 6px; }
+      .card .pts li b { color: var(--ink); }
       .card { background: #fff; border: 1px solid var(--line); border-radius: 5px; padding: 18px 18px 16px; }
       .card .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
       .card h3 { margin: 0; font-size: 16px; }
@@ -148,7 +156,7 @@
             Where the new site (a modern rebuild of the current Strikingly site, hosted on
             GitHub Pages) stands today, and the decisions we need your input on before launch.
           </p>
-          <div class="meta">Living snapshot · last updated 2026-07-30 · 276 tests green, build clean · new since the last update: Sponsorship page, Momentum Fund donate refresh, chapters roster refresh, Founders &amp; AI communities · this private preview is now live (you are reading it)</div>
+          <div class="meta">Living snapshot · last updated 2026-08-05 · 589 tests green, build clean · new since the last update: supporter recognition review (the donor wall as built, nine directions, and the spreadsheet import), board bios tracking, and a content-completeness sweep of this page · this private preview is now live (you are reading it)</div>
         </div>
       </header>
 
@@ -161,27 +169,23 @@
         <div class="wrap">
           <h2>Also under review</h2>
           <div class="lede">Design work that is not part of the site yet, shared for comment.</div>
-          <div class="cards">
+          <!-- One card, so it gets the wide single-column grid rather than being
+               stranded in a 320px auto-fill track with a very tall column of prose
+               beside two empty ones. -->
+          <div class="cards cards--wide">
             <div class="card">
-              <div class="top"><h3>Supporter recognition — the wall, nine directions, and the import</h3></div>
+              <div class="top"><h3>Supporter recognition</h3><span class="badge b-partial">Your call</span></div>
               <p class="desc">
-                One page covering supporter recognition end to end. It opens with the
-                donor wall <em>as it is built today</em> — giving levels, the Founding
-                Donor badge, the anonymity contract, the designed empty state — because
-                the nine directions below it are alternatives to something, and that
-                something was never shown. Then the nine: seven readings of Nicole's
-                note that it is “a network of nodes on a power grid,” not a wall, plus
-                two deliberate off-brief controls with no graph at all, so the metaphor
-                gets tested rather than assumed. Open any one full-screen, search for a
-                name, and grow the network to 200. It closes with a walkthrough of the
-                bi-weekly spreadsheet import, which is where the awkward part lives:
-                the file carries no dollar amounts, no founding column and no anonymity
-                column, so three of the fields the wall is built on cannot be filled
-                from it at all. The 200 supporters shown are illustrative — there is no
-                real donor list yet.
+                One page, three parts: the donor wall <em>as built today</em>, nine
+                directions for replacing it, and a walkthrough of the bi-weekly
+                spreadsheet import. The 200 supporters shown are illustrative — there
+                is no real donor list yet.
               </p>
-              <div class="row"><span class="k">Decision needed</span> Which direction, and what the page is called — Nicole ruled out “wall” and left five candidate names, one carried by each direction. Plus the three the import forces: the founding threshold, whether school and class year are public, and how an anonymity request reaches us at all.</div>
-              <div class="row"><span class="k">Feedback</span> The page collects nothing. It ends with an outline to paste into a doc, and every reviewable item carries a quotable id — W1–W5 for the wall, 01–09 for the directions, I1–I4 for the import, Q1–Q4 for the open questions.</div>
+              <ul class="pts">
+                <li><b>Pick a direction, and a name.</b> Each of the nine carries a different candidate name, so they can be judged in place.</li>
+                <li><b>The import needs three answers.</b> The spreadsheet has no dollar amounts, no founding column and no anonymity column — so giving level, Founding Donor and “please don't name me” can't be filled from it at all.</li>
+                <li><b>Feedback goes in a doc.</b> The page collects nothing; it ends with an outline to paste. Everything is numbered (W1–W5, 01–09, I1–I4, Q1–Q4) so a one-line reaction lands exactly where you meant it.</li>
+              </ul>
               <!-- RELATIVE, deliberately. Both tracks deploy under a base path
                    (/harvardintech, /harvardintech-staging), so a root-absolute
                    href would resolve to nseldeib.github.io/donor-network.html and
@@ -318,16 +322,24 @@
               <p class="desc">Same as Podcasts — no Webinars content yet, so the menu item was removed. Re-add the item (and a section) once there's real content.</p>
             </div>
             <div class="card">
-              <div class="top"><h3>Events calendar (Luma)</h3><span class="badge b-partial">Fill</span></div>
-              <p class="desc">The events page is wired to Luma, but the inline calendar embed isn't turned on yet — it shows a "subscribe on Luma" button instead of the embedded calendar. Provide the Luma embed link to show it inline.</p>
+              <div class="top"><h3>Events calendar (Luma)</h3><span class="badge b-built">Done</span></div>
+              <p class="desc">The inline Luma calendar is live on the events page — it renders the real calendar, currently showing the next Alumni Founders Co-working Day. Nothing further needed here; new events added in Luma appear automatically.</p>
             </div>
             <div class="card">
               <div class="top"><h3>Events list</h3><span class="badge b-partial">Fill</span></div>
-              <p class="desc">No individual events are entered yet (homepage "Upcoming Events" + event gallery). Add events, or rely on the Luma calendar for the live list.</p>
+              <p class="desc">Eight events are entered, but every one has now passed — the most recent was in July. The homepage "Upcoming events" band therefore shows its empty state, pointing visitors at the Luma calendar instead. Either add the upcoming events to the site, or treat Luma as the single source of truth and let the band stay an invitation to subscribe.</p>
             </div>
             <div class="card">
               <div class="top"><h3>Stats numbers</h3><span class="badge b-partial">Verify</span></div>
-              <p class="desc">The homepage shows "8,000+ alumni technologists · 5 global chapters · 100+ events · Est. 2013." These are now editable in the CMS (Site Settings → Homepage stats band). Confirm they're the real, current numbers.</p>
+              <p class="desc">The homepage shows "8,000+ alumni technologists · 6 global chapters · 100+ events · Est. 2013." These are editable in the CMS (Site Settings → Homepage stats band). Confirm they're the real, current numbers.</p>
+            </div>
+            <div class="card">
+              <div class="top"><h3>Sponsors</h3><span class="badge b-missing">Decide</span></div>
+              <p class="desc">The sponsors page currently lists three example partners — "Example Presenting Partner", "Example Chapter Partner", "Example Event Partner" — which read as real placements to anyone who doesn't know better. Replace them with real partners, or remove them and let the page show its designed "partners coming soon" state.</p>
+            </div>
+            <div class="card">
+              <div class="top"><h3>Volunteer projects</h3><span class="badge b-partial">Fill</span></div>
+              <p class="desc">One project has been written but is still marked Draft, so the volunteer projects grid renders empty on the public site. Publish it — or add the rest of the open roles — to turn that section on.</p>
             </div>
             <div class="card">
               <div class="top"><h3>Board of Directors</h3><span class="badge b-partial">Fill</span></div>

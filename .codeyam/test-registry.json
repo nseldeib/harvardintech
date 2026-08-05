@@ -1063,7 +1063,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › carries the optional fields the event cards render",
-      "line": 180,
+      "line": 194,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1072,7 +1072,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › does not match a tag that only looks like the owner id",
-      "line": 201,
+      "line": 215,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1081,7 +1081,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › excludes events with no tag at all",
-      "line": 209,
+      "line": 223,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1090,7 +1090,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › matches a community id through the same chapter tag",
-      "line": 172,
+      "line": 186,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1099,7 +1099,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › returns nothing when no event is tagged to the owner",
-      "line": 216,
+      "line": 230,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1108,7 +1108,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › returns only the events tagged to the given owner",
-      "line": 164,
+      "line": 178,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -4371,7 +4371,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "splitEvents › does not mutate the input array order",
-      "line": 84,
+      "line": 98,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -4391,6 +4391,15 @@
       "key": "splitEvents › returns no past events when all are upcoming",
       "line": 77,
       "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The mirror of the all-upcoming case, and the state the real site is in whenever the calendar has not been topped up: every entered event has passed, so upcoming is empty even though the collection is full. The homepage renders its subscribe-on-Luma band off exactly this, and before it called splitEvents it showed those past events under a heading reading Upcoming events.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "splitEvents › returns no upcoming events when every event has passed",
+      "line": 89,
+      "registeredAt": "2026-08-05T20:56:12Z",
       "runner": "tests"
     },
     {
@@ -4938,7 +4947,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › catches a tag that differs only by whitespace",
-      "line": 115,
+      "line": 129,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4956,7 +4965,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › names a chapter tag that matches no chapter",
-      "line": 94,
+      "line": 108,
       "registeredAt": "2026-07-28T20:50:40Z",
       "runner": "tests"
     },
@@ -4965,7 +4974,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports each distinct tag once, in first-seen order",
-      "line": 122,
+      "line": 136,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4974,7 +4983,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports every tag when there are no chapters at all",
-      "line": 149,
+      "line": 163,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4983,7 +4992,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports nothing when every tag matches a chapter",
-      "line": 105,
+      "line": 119,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4992,7 +5001,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › treats a blank tag as untagged",
-      "line": 133,
+      "line": 147,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
