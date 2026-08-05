@@ -1,0 +1,46 @@
+{
+  "summary": "Closed out \"board bios\" as an open content gap across the repo's scoping and client-review docs, recording the verified finding that the live Strikingly site has no bios to reproduce. No code changed — the board already renders correctly without bios, and the docs now say so.",
+  "changes": [
+    {
+      "title": "Record the board-bios finding in the scoping report",
+      "description": "Item 13's Board entry called board bios \"the largest content gap and the most visible one,\" which read as pending engineering work and caused the gap to be re-investigated from scratch each session. It is now struck as Resolved-with-a-caveat and states the finding: the live harvardintech.com board is a single flat image with no bio text under it, so photo + name + role is faithful reproduction rather than a shortfall. The entry names the three places the display path already exists (the bio field in the content schema, the /admin editor, and BoardMemberTile) so a future reader can see there is nothing to build. Item 10 drops board photos from the pending data-entry list — all five are in place — and reframes bios as net-new writing rather than data entry. Decision #5 is narrowed to the three items that genuinely still need an owner; it is deliberately left un-struck because chapter committees, per-chapter events, and blog entries remain open.",
+      "files": [
+        "docs/scoping/README.md"
+      ],
+      "waysToTest": [
+        {
+          "kind": "read-tests",
+          "text": "Read src/lib/team.test.ts — it covers sortBoardMembers and filterActiveBoardMembers, the helpers behind the board rendering these docs now describe as already-working. No test asserts the prose itself; documentation has no runner."
+        },
+        {
+          "kind": "run-scenario",
+          "text": "Open the Board of Directors - Two Of Five Bios Written scenario. It is the state item 13 now cites as evidence that a partially-filled board is a supported end state rather than a broken intermediate one.",
+          "scenario": "board-of-directors-two-of-five-bios-written"
+        },
+        {
+          "kind": "run-scenario",
+          "text": "Compare against Board of Directors - Every Bio Written to confirm the same layout absorbs full bios whenever the client supplies them.",
+          "scenario": "board-of-directors-every-bio-written"
+        }
+      ]
+    },
+    {
+      "title": "Reframe board bios as optional in the client review doc",
+      "description": "The \"Still open (team todos, not code)\" list gave board bios no context beyond \"the live site has none to reproduce,\" leaving a reader to assume the site is waiting on them. The entry now states they are optional and not a launch blocker, that the board renders as photo + name + role exactly as harvardintech.com shows today, and that bios can be added through /admin one at a time — a half-filled board is a supported state, not a broken one.",
+      "files": [
+        "docs/nicole-review.md"
+      ],
+      "waysToTest": [
+        {
+          "kind": "read-tests",
+          "text": "Read src/lib/team.test.ts for the board helper coverage behind the claim, then read docs/nicole-review.md's Still open section to confirm it no longer reads as a blocker."
+        },
+        {
+          "kind": "run-scenario",
+          "text": "Open Board of Directors - Empty to see the fallback the docs describe: with no bios the tiles show photo, name, and role with no reserved gap hinting at missing content.",
+          "scenario": "board-of-directors-empty"
+        }
+      ]
+    }
+  ]
+}

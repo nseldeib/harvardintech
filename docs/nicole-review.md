@@ -168,7 +168,10 @@ dropped.
 
 ## Still open (team todos, not code)
 
-- Real **board bios** (the live site has none to reproduce).
+- Real **board bios** (the live site has none to reproduce). *Optional, and not a
+  launch blocker* — the board renders as photo + name + role, matching what
+  harvardintech.com shows today. Add them in /admin whenever they're written,
+  one at a time if that's easier; a half-filled board is a supported state.
 - A **donation-platform URL** (the Donate button currently opens an email).
 - **Chapter + event content** for the 5 cities.
 
