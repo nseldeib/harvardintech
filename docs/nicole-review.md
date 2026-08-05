@@ -14,6 +14,7 @@ until the Strikingly migration.
 |---|---|---|
 | **Website** | https://nseldeib.github.io/harvardintech/ | `crimson2026` |
 | **Todos / project status** | https://nseldeib.github.io/harvardintech/review | `crimson2026` |
+| **Supporter recognition review** | https://nseldeib.github.io/harvardintech/donor-network.html | `crimson2026` |
 | **CMS / admin dashboard** | https://nseldeib.github.io/harvardintech/admin | *(GitHub token — see below)* |
 
 The site and the todos page share one passphrase. It is a **deterrent, not
@@ -33,9 +34,19 @@ HTML is fetchable by anyone who has the address.
 >
 > • **Website:** https://nseldeib.github.io/harvardintech/
 > • **What's done / what's open (todos):** https://nseldeib.github.io/harvardintech/review
+> • **Supporter recognition:** https://nseldeib.github.io/harvardintech/donor-network.html
 > • **Content editor (CMS):** https://nseldeib.github.io/harvardintech/admin
 >
 > The todos page walks through what's built and the decisions we need from you.
+>
+> The supporter recognition link is the one I'd most like your reaction to. It
+> shows the donor wall as it's built today, then nine directions for replacing
+> it, then what actually happens when the bi-weekly spreadsheet meets either —
+> which turns out to be the interesting problem. Nothing on that page records
+> anything; at the bottom there's an outline to paste into a doc. Everything is
+> numbered (W1–W5, 01–09, I1–I4, Q1–Q4) so a one-line reaction lands exactly
+> where you meant it.
+>
 > Please keep the links and password internal for now. The editor needs a
 > separate access token, which I'll send you privately if you'd like to make
 > edits directly.

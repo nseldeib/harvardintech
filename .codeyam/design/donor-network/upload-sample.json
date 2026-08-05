@@ -1,0 +1,106 @@
+{
+  "_warning": "ILLUSTRATIVE DATA — no real supporter appears in this file. It stands in for the bi-weekly spreadsheet the team receives, so the import walkthrough can be judged against a file that behaves like the real one.",
+  "_why_these_rows": "Every row here earns its place by being a case the importer has to DECIDE something about. A file of fourteen clean rows would let the walkthrough claim a success it never has to work for, and would hide the four questions this whole review exists to ask. The first six are ordinary. The rest are the ones that make an importer either honest or lossy.",
+  "columns": ["Name", "School", "Class Year", "Email"],
+  "_columns_note": "Four columns, and that is the whole file. There is no amount column, no founding column, and no anonymity column — which is exactly why tier, founding and anonymous cannot be derived here no matter how good the matching is.",
+  "rows": [
+    {
+      "Name": "Margaret Chen-Alvarez",
+      "School": "Harvard Business School",
+      "Class Year": "1998",
+      "Email": "m.chenalvarez@example.com",
+      "_case": "clean, and already on the wall — the duplicate the importer must not add twice"
+    },
+    {
+      "Name": "Priya Raman",
+      "School": "Harvard SEAS",
+      "Class Year": "2014",
+      "Email": "priya.raman@example.com",
+      "_case": "clean, already on the wall, currently carrying the Founding Donor badge"
+    },
+    {
+      "Name": "Wendell Achebe-Okoro",
+      "School": "Harvard Kennedy School",
+      "Class Year": "2007",
+      "Email": "w.achebeokoro@example.com",
+      "_case": "clean, new — the ordinary happy path"
+    },
+    {
+      "Name": "Sofia Marchetti",
+      "School": "Harvard College",
+      "Class Year": "2019",
+      "Email": "sofia.marchetti@example.com",
+      "_case": "clean, new"
+    },
+    {
+      "Name": "Jae-Won Park",
+      "School": "Harvard Medical School",
+      "Class Year": "2005",
+      "Email": "jw.park@example.com",
+      "_case": "clean, new"
+    },
+    {
+      "Name": "Beatrice Nkemelu",
+      "School": "Harvard Chan School",
+      "Class Year": "2021",
+      "Email": "b.nkemelu@example.com",
+      "_case": "clean, new"
+    },
+    {
+      "Name": "  robert k. whitmore  ",
+      "School": "Harvard College",
+      "Class Year": "1987",
+      "Email": "rkw@example.com",
+      "_case": "the same person as an existing supporter, in different case and padded with whitespace — a match a naive comparison misses, producing a second card for one human. He is also currently anonymous on the wall, so a careless re-import would publish the name he asked to withhold."
+    },
+    {
+      "Name": "Tomas Vidal",
+      "School": "Harvard SEAS",
+      "Class Year": "2009",
+      "Email": "t.vidal@example.com",
+      "_case": "existing supporter spelled without the accent (Tomás). Matching strips diacritics, so this resolves as the same person rather than becoming a second card — the accent is dropped constantly in exports and re-entry, and treating it as a new supporter is the likeliest duplicate this file produces."
+    },
+    {
+      "Name": "Eleanor Whitcombe-Stanhope",
+      "School": "Harvard Graduate School of Design",
+      "Class Year": "2016",
+      "Email": "e.whitcombe@example.com",
+      "_case": "school written out in full where the site's short form is 'Harvard GSD' — a value that needs mapping, not rejection"
+    },
+    {
+      "Name": "Devon Ashworth",
+      "School": "Harvard Extension School",
+      "Class Year": "",
+      "Email": "d.ashworth@example.com",
+      "_case": "no class year. Directions 01, 03 and 09 group by graduation year, so this supporter has nowhere to sit in three of the nine designs."
+    },
+    {
+      "Name": "Ravi Balasubramanian",
+      "School": "",
+      "Class Year": "2012",
+      "Email": "ravi.b@example.com",
+      "_case": "no school. Same problem from the other side — school is the other axis those three directions are built on."
+    },
+    {
+      "Name": "Anonymous",
+      "School": "Harvard Law School",
+      "Class Year": "2001",
+      "Email": "private.donor.2026@example.com",
+      "_case": "the anonymity request arriving as a NAME rather than as a column, which is how it will actually turn up in a spreadsheet with no anonymity field. Importing this literally puts a card reading 'Anonymous' on the wall as though that were someone's name."
+    },
+    {
+      "Name": "",
+      "School": "Harvard College",
+      "Class Year": "2010",
+      "Email": "unknown@example.com",
+      "_case": "blank name. The one field the wall genuinely requires, missing."
+    },
+    {
+      "Name": "Gregory Tanaka-Lindqvist III",
+      "School": "Harvard GSAS",
+      "Class Year": "'04",
+      "Email": "g.tanakalindqvist@example.com",
+      "_case": "class year as a two-digit apostrophe form, and a long name with a suffix — the layout case the tier bands and the network labels both have to survive"
+    }
+  ]
+}

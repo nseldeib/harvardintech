@@ -1,0 +1,31 @@
+{
+  "name": "Supporter Recognition - Import Step Three What The File Cannot Answer",
+  "id": "8d9c99f8-e224-4e4c-b50c-8cc321aae12e",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "The centre of the import section, and the state that does not depend on the rows at all: tier has no dollar amounts to derive from, founding has no column and no agreed rule, anonymity has no column so the request arrives inside the name field, while school and class year are carried by the file and have nowhere to go in the donors collection. A spreadsheet where every row was spotless would still stop exactly here, because these are properties of the file's shape — which is the argument the page exists to make, so it is captured rather than trusted to a render.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    },
+    {
+      "action": "click",
+      "selector": "a[href=\"#import\"]"
+    },
+    {
+      "action": "click",
+      "selector": ".steprail[data-step=\"2\"]"
+    }
+  ]
+}

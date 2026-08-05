@@ -163,24 +163,36 @@
           <div class="lede">Design work that is not part of the site yet, shared for comment.</div>
           <div class="cards">
             <div class="card">
-              <div class="top"><h3>Supporter network — nine directions</h3></div>
+              <div class="top"><h3>Supporter recognition — the wall, nine directions, and the import</h3></div>
               <p class="desc">
-                Nine design directions for the supporter recognition page, built from
-                Nicole's note that it is “a network of nodes on a power grid,” not a
-                wall. Seven readings of the network idea plus two deliberate off-brief
-                controls with no graph at all, so the metaphor gets tested rather than
-                assumed. Open any one full-screen, search for a name, and grow the
-                network to 200. The 200 supporters shown are illustrative — there is
-                no real donor list yet.
+                One page covering supporter recognition end to end. It opens with the
+                donor wall <em>as it is built today</em> — giving levels, the Founding
+                Donor badge, the anonymity contract, the designed empty state — because
+                the nine directions below it are alternatives to something, and that
+                something was never shown. Then the nine: seven readings of Nicole's
+                note that it is “a network of nodes on a power grid,” not a wall, plus
+                two deliberate off-brief controls with no graph at all, so the metaphor
+                gets tested rather than assumed. Open any one full-screen, search for a
+                name, and grow the network to 200. It closes with a walkthrough of the
+                bi-weekly spreadsheet import, which is where the awkward part lives:
+                the file carries no dollar amounts, no founding column and no anonymity
+                column, so three of the fields the wall is built on cannot be filled
+                from it at all. The 200 supporters shown are illustrative — there is no
+                real donor list yet.
               </p>
-              <div class="row"><span class="k">Decision needed</span> Which direction, and what the page is called — Nicole ruled out “wall” and left five candidate names, one carried by each direction.</div>
+              <div class="row"><span class="k">Decision needed</span> Which direction, and what the page is called — Nicole ruled out “wall” and left five candidate names, one carried by each direction. Plus the three the import forces: the founding threshold, whether school and class year are public, and how an anonymity request reaches us at all.</div>
+              <div class="row"><span class="k">Feedback</span> The page collects nothing. It ends with an outline to paste into a doc, and every reviewable item carries a quotable id — W1–W5 for the wall, 01–09 for the directions, I1–I4 for the import, Q1–Q4 for the open questions.</div>
               <!-- RELATIVE, deliberately. Both tracks deploy under a base path
                    (/harvardintech, /harvardintech-staging), so a root-absolute
                    href would resolve to nseldeib.github.io/donor-network.html and
                    404. A raw public/ file cannot read Astro's BASE_URL, so
                    ../ is the only form that survives every base — and a file://
                    open of this page as well. -->
-              <div class="row"><span class="k">Link</span> <a href="../donor-network.html">Open the nine directions</a> — same passphrase as this page.</div>
+              <div class="row"><span class="k">Link</span> <a href="../donor-network.html">Open the supporter recognition review</a> — same passphrase as this page.</div>
+              <!-- The live wall itself, on the gated site build. Relative for the
+                   same base-path reason as the link above: this file is copied
+                   verbatim into dist/ and cannot read Astro's BASE_URL. -->
+              <div class="row"><span class="k">The wall, live</span> <a href="../donate#donors">See it on the Momentum Fund page</a> — it is empty today, which is the point of W5.</div>
             </div>
           </div>
         </div>

@@ -220,6 +220,12 @@
     "testFile": "src/lib/donorFilter.test.ts"
   },
   {
+    "description": "One upload row normalized, matched, and carrying everything still undecided about it. Its ready flag means 'nothing about this row needs a human before it lands', NOT 'complete' — tier, founding and anonymous are unanswered for every row in the file no matter how clean, which is why summarizeImport reports those once for the whole import rather than as an issue on each row.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "classifyRow",
+    "testFile": "src/lib/donorImport.test.ts"
+  },
+  {
     "description": "Dev-only Astro integration exposing a content-layer refresh endpoint the seed adapter calls after writing a scenario's markdown. Astro normally notices a seed via its file watcher, but a collection whose directory had no matching files at boot never got a watcher at all — so seeding donors or testimonials for the first time in a session changed nothing on the page. Refreshing re-runs every loader, which both ingests the new files and registers the skipped watcher. It also invalidates the data-store module and pushes a reload before answering, because Astro only invalidates rendered pages when it sees the store change on disk, and that write lands after the refresh resolves — which would leave the very next request, the capture, serving the pre-seed render.",
     "filePath": "astro.config.mjs",
     "name": "codeyamContentRefresh",
@@ -254,6 +260,12 @@
     "filePath": "src/lib/contentRoot.ts",
     "name": "dataRoot",
     "testFile": "src/lib/contentRoot.test.ts"
+  },
+  {
+    "description": "A design direction's id as every surface writes it: zero-padded to two digits. It exists because the page contradicted itself — variations.js carries num as a NUMBER, so the card badge and the full-screen bar rendered '3' while the contents list, the open questions, the README and the doc outline all said '03'. The whole purpose of the id scheme is that a reviewer writing '3' in a doc means exactly one thing, so a card labelled differently from the line they type under reintroduces the ambiguity the renumbering removed. A value that is not a number returns nothing rather than a guess, since a wrong id points a comment at the wrong design.",
+    "filePath": "src/lib/reviewOutline.js",
+    "name": "directionLabel",
+    "testFile": "src/lib/reviewOutline.test.ts"
   },
   {
     "description": "The name a supporter's node and profile card print: their real name, or the standing 'Anonymous supporter' label when they asked not to be named. Every reader-facing surface in the exploration goes through here rather than reading .name, because one component that forgets publishes a name against someone's explicit request.",
@@ -601,6 +613,30 @@
     }
   },
   {
+    "description": "Whether the name column is really an anonymity request. The upload has no anonymity column, so a supporter asking not to be named has only the free text field to say it in — 'Anonymous', 'Withheld', 'Prefer not to say'. Imported literally the wall shows a card reading 'Anonymous' as though that were somebody's name. Matches the whole normalized cell rather than a substring, so a real name that merely contains a marker word keeps its identity.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "looksAnonymous",
+    "testFile": "src/lib/donorImport.test.ts"
+  },
+  {
+    "description": "One row of the bi-weekly supporter spreadsheet, re-keyed from its human column headings onto the field names every import rule reads. The seam worth having a function for: the rules read row.gradYear while the file says 'Class Year', so a renamed heading yields undefined for every row — normalizeGradYear then returns null fourteen times and the import reports 'no usable class year' for the whole file while looking like it worked. A column the donors collection has nowhere to put is dropped rather than carried, since carrying it would imply the wall can show it; a heading the file omits stays absent rather than becoming an empty string, because 'not supplied' and 'supplied blank' are different answers downstream.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "mapUploadRow",
+    "testFile": "src/lib/donorImport.test.ts"
+  },
+  {
+    "description": "Every row of an upload, mapped through mapUploadRow. Returns an empty list rather than throwing when handed a file that failed to parse, because this runs on a published review page where an exception costs the reviewer the whole walkthrough rather than one row.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "mapUploadRows",
+    "testFile": "src/lib/donorImport.test.ts"
+  },
+  {
+    "description": "How one spreadsheet row relates to the supporters already on the wall: new, duplicate, or possible. The middle outcome is the point — names differing only by punctuation or a suffix might be one person or might be relatives, and deciding automatically either duplicates someone or merges two people, so it does neither and asks. A duplicate whose existing record is anonymous is flagged separately, because that is the specific path by which a withheld name reaches the public site: the upload carries the real name and no anonymity column, so a blind overwrite republishes what someone asked to keep private.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "matchExisting",
+    "testFile": "src/lib/donorImport.test.ts"
+  },
+  {
     "description": "Whether a donor belongs under a given giving-level id — the predicate behind the filter chips, shared by the server render and the client script on purpose. Two copies of 'which tier is this donor in?' is two answers that can disagree, and the one a visitor sees would be the client's. The trailing-group id matches exactly the donors groupDonorsByTier files there: untagged, or tagged with a level the page does not declare.",
     "filePath": "src/lib/donors.ts",
     "name": "matchesTier",
@@ -641,6 +677,24 @@
     "filePath": "src/lib/personalize.ts",
     "name": "nameFromSearch",
     "testFile": "src/lib/personalize.test.ts"
+  },
+  {
+    "description": "A four-digit graduation year from a spreadsheet cell, or nothing. Accepts the apostrophe form people actually write and a spreadsheet preserves as text, reading two digits as 1930-2029 — a Harvard alum's class year is neither 2104 nor 1904. Returns nothing rather than a guess for anything else, because a wrong year is worse than a missing one here: it places a supporter in the wrong cohort in three of the nine directions, where the error looks exactly like data.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "normalizeGradYear",
+    "testFile": "src/lib/donorImport.test.ts"
+  },
+  {
+    "description": "A supporter's name reduced to the form two spellings of one person share: trimmed, inner whitespace collapsed, diacritics stripped, lowercased. Each of those is a real way one human arrives twice — a padded cell from a spreadsheet export, 'Tomas' for 'Tomás', an uppercasing web form — and a bare equality check misses all of them, putting a second card on the wall for someone already there. Punctuation is deliberately KEPT so a suffix does not silently merge two people: 'Gregory Tanaka-Lindqvist III' may be the same person as 'Gregory Tanaka Lindqvist' or may be his father, and collapsing them deletes a supporter without telling anyone. That case is surfaced as a possible match for a human instead.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "normalizeName",
+    "testFile": "src/lib/donorImport.test.ts"
+  },
+  {
+    "description": "The site's spelling of a Harvard school, from whatever the spreadsheet says. Someone filling a form writes it out in full while the site stores a short form, so without the alias map an ordinary correct answer arrives as an unknown value. An unrecognized school passes through unchanged rather than being discarded — it is a mapping to confirm, not a value to drop, and losing it silently would empty that supporter out of the three directions that group by school. An empty cell returns nothing rather than an empty school, since 'the file did not say' is what rowIssues reports on.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "normalizeSchool",
+    "testFile": "src/lib/donorImport.test.ts"
   },
   {
     "description": "Normalize a slug for comparison — trimmed, lowercased, and stripped of surrounding slashes. Exists because a CMS slug box accepts all three variations, so an editor typing /About/ has made the same collision as one typing about, and a raw string compare would miss it.",
@@ -778,6 +832,12 @@
     "testFile": "src/lib/homeSections.test.ts"
   },
   {
+    "description": "The outline a reviewer pastes into a doc, built from the LIVE directions list the deck renders its cards from rather than a transcription of it. The review page collects nothing on purpose — a published artifact cannot post anywhere, and a review needing a backend stops working when the link outlives the server — so the outline is the actual interface between the page and the reviewer's notes, and it must name every id the page shows. Hand-written beside the page it would fail that silently: rename a direction and the outline keeps the old name, so the reviewer types under headings that no longer match what they are looking at, and the drift lands in their feedback instead of in a build. The off-brief pair is labelled as controls so they are not read as two more candidates, and no line carries trailing whitespace, which would survive the paste as invisible junk.",
+    "filePath": "src/lib/reviewOutline.js",
+    "name": "reviewOutline",
+    "testFile": "src/lib/reviewOutline.test.ts"
+  },
+  {
     "description": "A seeded pseudo-random generator (mulberry32) giving each direction a reproducible layout. Determinism is the point: a network that reshuffles between renders reads as a different design, so a reviewer would be rating noise — and a screenshot they already commented on would stop matching the page.",
     "filePath": "src/lib/donorNetwork.js",
     "name": "rng",
@@ -788,6 +848,12 @@
     "filePath": "src/lib/robots.ts",
     "name": "robotsTxtBody",
     "testFile": "src/lib/robots.test.ts"
+  },
+  {
+    "description": "Everything wrong with, or undecidable about, one upload row, each carrying a severity. Blocking means the row cannot become a supporter without a human — no name at all, an anonymity request sitting in the name column, or a re-import that would unmask someone already anonymous. Review means it can land but a decision was deferred, which is where an ordinary duplicate and a missing school or class year sit. Nothing is auto-corrected: that is the contract, because each wrong guess costs a misstated giving level, an unearned badge, or a published name, and only the last is beyond repair by a later edit.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "rowIssues",
+    "testFile": "src/lib/donorImport.test.ts"
   },
   {
     "description": "Normalizes a raw ?name= value into a display-safe first name, or null when it is absent, over-long, or does not look like a name. The security boundary for the /donate hero: the value is attacker-controlled via URL, so markup and digits are rejected and only the first token is kept.",
@@ -866,6 +932,12 @@
     "filePath": "src/lib/pageCopyMerge.ts",
     "name": "sponsorLevelsFrom",
     "testFile": "src/lib/pageCopyMerge.test.ts"
+  },
+  {
+    "description": "The whole upload classified, plus the fields it structurally cannot fill. The unresolvable and unmodelled lists come back unconditionally rather than only when something goes wrong, because they are properties of the FILE FORMAT and not of any row: a spreadsheet where every line is spotless still cannot say who gave at what level, who is a founding donor, or who asked to stay anonymous, and it still carries school and class year the donors collection has no field for. A summary that hid them on a clean file would report success for a job it did a third of.",
+    "filePath": "src/lib/donorImport.js",
+    "name": "summarizeImport",
+    "testFile": "src/lib/donorImport.test.ts"
   },
   {
     "description": "The mark drawn in a supporter's avatar on the network explorations: their initials, or a neutral dash when they asked not to be named. Named for what it produces rather than reusing 'initials' from team.ts, which takes a name string and knows nothing about anonymity — this one takes the whole supporter because the anonymous case must return a mark identifying nobody. Initials would leak the withheld name, since two letters beside 'Anonymous supporter' identifies them to anyone who knows them. Capped at two letters so a long name cannot spell itself out.",

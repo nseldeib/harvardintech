@@ -333,6 +333,37 @@
         "status": "added"
       }
     },
+    "public/review/index.html": {
+      "empty": {
+        "status": "n-a",
+        "reason": "The page's content is hand-authored HTML rather than rendered from data, so there is no zero-state it can be put into. A page with nothing on it would be an empty file, not an empty state."
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "No list here is generated from a collection, so no one-versus-many boundary exists. The cards and decision rows are written into the file individually."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "Nothing on this page grows unbounded. It is a fixed authored roadmap with no pagination, truncation or overflow treatment to demonstrate."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "A raw public/ file copied verbatim into dist/. Nothing resolves asynchronously, so there is no pending state."
+      },
+      "edge": {
+        "status": "n-a",
+        "reason": "Every string on the page is authored prose set at a fixed measure. There are no variable-length or optional data fields whose extremes could produce a distinct visual treatment."
+      },
+      "error": {
+        "status": "covered"
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
     "src/pages/[slug].astro": {
       "empty": {
         "status": "n-a",

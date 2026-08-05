@@ -1,0 +1,23 @@
+{
+  "name": "Project Review - Gate Refused",
+  "id": "432784ca-d6eb-4cdb-8f6f-8103db2df0b2",
+  "url": "/review/index.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/review/index.html",
+  "description": "The status page's gate refusing a wrong passphrase, with none of the internal roadmap disclosed behind it. The only in-page failure state this view has, since nothing here fetches anything at runtime. It is worth capturing rather than assuming because the refusal path is where a gate silently fails open: this page hand-rolls its own gate, exactly as the supporter-recognition deck does, because a raw public/ file is copied verbatim into dist/ and no Astro component ever renders it.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "not-the-passphrase"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    }
+  ]
+}

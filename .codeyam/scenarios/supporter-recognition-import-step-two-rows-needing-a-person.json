@@ -1,0 +1,31 @@
+{
+  "name": "Supporter Recognition - Import Step Two Rows Needing A Person",
+  "id": "3f54a293-482d-4695-bd7a-773f1fed80a3",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "Every row checked against the supporters already on the wall, which is where the walkthrough stops being hypothetical. Eleven rows could land, three need a human, four are already present — including one filed under a real name who is anonymous on the live wall, flagged in crimson because importing it publishes the name they asked to withhold, the one mistake on this page that no later edit can take back. Worth capturing rather than assuming: the matching runs through donorImport.js, so a regression that quietly stopped detecting duplicates would still render a confident-looking table.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    },
+    {
+      "action": "click",
+      "selector": "a[href=\"#import\"]"
+    },
+    {
+      "action": "click",
+      "selector": ".steprail[data-step=\"1\"]"
+    }
+  ]
+}

@@ -25,11 +25,18 @@
     var card = el('div', 'card', grid);
     card.setAttribute('data-family', v.family);
 
+    /* Zero-padded via the shared rule, not printed raw. `num` is a NUMBER in
+       variations.js, so a raw render put "3" on the card while the contents
+       list, the open questions and the doc outline all said "03" — which
+       defeats the point of an id scheme whose whole job is that a reviewer
+       writing "3" in a doc means exactly one thing. */
+    var label = window.HIT_OUTLINE.directionLabel(v.num);
+
     var thumb = el('button', 'thumb', card);
     thumb.type = 'button';
-    thumb.setAttribute('aria-label', 'Open direction ' + v.num + ': ' + v.name);
+    thumb.setAttribute('aria-label', 'Open direction ' + label + ': ' + v.name);
     var mount = el('div', 'thumb-mount', thumb);
-    el('span', 'badge', thumb).textContent = v.num;
+    el('span', 'badge', thumb).textContent = label;
     el('span', 'expand', thumb).textContent = 'Expand ↗';
     el('span', 'thumb-veil', thumb);
     thumb.addEventListener('click', function () { open(v); });
@@ -55,7 +62,7 @@
 
   function open(v) {
     current = VARS.indexOf(v);
-    ovNum.textContent = v.num;
+    ovNum.textContent = window.HIT_OUTLINE.directionLabel(v.num);
     ovName.textContent = v.name;
     ovMeta.textContent = v.metaphor + (v.family === 'off-brief' ? ' · off-brief' : '');
     stage.innerHTML = '';

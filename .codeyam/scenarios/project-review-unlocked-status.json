@@ -1,6 +1,6 @@
 {
   "name": "Project Review - Unlocked Status",
-  "id": "72d8fda3-0528-4916-bb27-d7469fad89dc",
+  "id": "d8e0d881-83ff-4a68-b436-17ed3f9f5772",
   "url": "/review/index.html",
   "dimensions": [
     "Desktop"
@@ -8,7 +8,7 @@
   "mocks": {},
   "scenarioType": "application",
   "pageFilePath": "public/review/index.html",
-  "description": "The internal status-and-decisions page past its passphrase, which this scenario types rather than bypasses. It now opens with an \"Also under review\" section linking the supporter-network directions deck, so one internal link reaches everything under review instead of raw URLs pasted into separate emails. The deck link is relative rather than root-absolute: both tracks deploy under a base path, and a raw public/ file cannot read Astro's BASE_URL, so /donor-network.html would 404 on the real deploy.",
+  "description": "The internal status-and-decisions page past its passphrase, which this scenario types rather than bypasses. Its \"Also under review\" card now describes supporter recognition end to end rather than only the directions deck — the wall as built, the nine directions, and the spreadsheet import — and names the id families a reviewer quotes back (W1-W5, 01-09, I1-I4, Q1-Q4), so one internal link reaches everything under review instead of raw URLs pasted into separate emails. It carries two links now: the review page itself, and the live wall on the Momentum Fund page, which was previously reachable from nothing here even though it is the one part of supporter recognition that is actually shipped. Both are relative rather than root-absolute: each track deploys under a base path and a raw public/ file cannot read Astro's BASE_URL, so /donor-network.html would 404 on the real deploy.",
   "interactions": [
     {
       "action": "fill",

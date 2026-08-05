@@ -30,6 +30,7 @@ places the page has to render.
 Usage: python3 build.py
 """
 
+import base64
 import json
 import os
 import re
@@ -40,8 +41,24 @@ REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 PUBLIC_OUT = os.path.join(REPO, "public", "donor-network.html")
 ARTIFACT_OUT = os.path.join(HERE, "artifact-body.html")
 PREVIEW_GATE_TS = os.path.join(REPO, "src", "lib", "previewGate.ts")
+SHOTS = os.path.join(REPO, ".codeyam", "scenarios", "screenshots")
 
-TITLE = "Harvard in Tech — Powering the Network: nine directions"
+TITLE = "Harvard in Tech — Supporter recognition review"
+
+# The wall section shows the REAL component, by way of the screenshots the
+# committed scenarios already capture. Not a redrawn approximation: two copies of
+# a page diverge on the first fix and the one that diverges is always the one
+# already sent to the reviewer — the same reasoning that makes this whole page
+# generated rather than hand-maintained.
+#
+# They are inlined as data URIs rather than referenced from public/ because this
+# body also ships as `artifact-body.html`, which renders under a CSP that blocks
+# every external host, and because the page has to survive a `file://` open. It
+# costs a few hundred KB; a review page that renders everywhere is worth it.
+WALL_SHOTS = {
+    "__WALL_CAPTURE__": "donor-wall-three-levels-and-twenty-names--desktop.png",
+    "__WALL_EMPTY_CAPTURE__": "donor-wall-empty-the-invitation--desktop.png",
+}
 
 # The page is an internal design artifact that must never be indexed. Note this
 # is belt-and-braces rather than the only protection today: the gated review
@@ -91,9 +108,35 @@ def passphrase():
     return value
 
 
+def wall_shot(filename):
+    """One committed scenario screenshot, as a data URI.
+
+    Raises rather than emitting a blank `src`: the wall section is the review's
+    "here is what you already have", and a broken image there would silently turn
+    it into a page of assertions about a wall the reviewer cannot see. A missing
+    capture means the scenario was renamed or dropped, which is worth failing the
+    build over.
+    """
+    path = os.path.join(SHOTS, filename)
+    if not os.path.exists(path):
+        raise SystemExit(
+            f"missing scenario screenshot {filename} under .codeyam/scenarios/screenshots. "
+            "The wall section shows the real component through its captured scenarios, so "
+            "re-capture that scenario rather than removing the image — a review page that "
+            "describes a wall without showing it is the gap this section exists to close."
+        )
+    with open(path, "rb") as f:
+        return "data:image/png;base64," + base64.b64encode(f.read()).decode("ascii")
+
+
 def build_body():
     with open(os.path.join(HERE, "donors.json"), encoding="utf-8") as f:
         data = json.load(f)
+
+    # The stand-in for the bi-weekly spreadsheet. Inlined for the same reason the
+    # supporters are: the page must render with nothing fetchable.
+    with open(os.path.join(HERE, "upload-sample.json"), encoding="utf-8") as f:
+        upload = json.load(f)
 
     # The pure rules live under src/ so vitest can reach them (its `include` is
     # `src/**`), and are inlined here rather than fetched — a published artifact
@@ -101,6 +144,17 @@ def build_body():
     # same-directory fetch. One file, two consumers, no second copy to drift.
     with open(os.path.join(REPO, "src", "lib", "donorNetwork.js"), encoding="utf-8") as f:
         rules = f.read()
+
+    # The import walkthrough's rules, from src/ for exactly the same reasons —
+    # one copy, and vitest can reach it there (src/lib/donorImport.test.ts).
+    with open(os.path.join(REPO, "src", "lib", "donorImport.js"), encoding="utf-8") as f:
+        import_rules = f.read()
+
+    # The id vocabulary + the doc outline. Inlined BEFORE shell.js and import.js
+    # because both call into it at parse time — shell.js to label every card,
+    # import.js to render the outline.
+    with open(os.path.join(REPO, "src", "lib", "reviewOutline.js"), encoding="utf-8") as f:
+        outline_rules = f.read()
 
     # The gate's accept/refuse rule, from src/ for the same reason: one copy, and
     # vitest can reach it there. It is emitted in its own <script> BEFORE the
@@ -120,11 +174,23 @@ def build_body():
         )
     shell = shell.replace(PASSPHRASE_TOKEN, passphrase())
 
+    # The wall captures. Substituted rather than referenced so the section works
+    # from a file:// open and under an artifact CSP, same as everything else here.
+    for token, filename in WALL_SHOTS.items():
+        if token not in shell:
+            raise SystemExit(
+                f"shell.html no longer contains {token}. Either the wall section was "
+                "removed — in which case drop this substitution too — or the token was "
+                "renamed and the page would ship an <img> pointing at a literal string."
+            )
+        shell = shell.replace(token, wall_shot(filename))
+
     parts = [
         "<style>",
         read("shell.css"),
         read("engine.css"),
         read("variations.css"),
+        read("review.css"),
         "</style>",
         "<script>",
         gate_rules,
@@ -132,10 +198,14 @@ def build_body():
         shell,
         "<script>",
         "window.HIT_DATA = " + json.dumps(data, ensure_ascii=False) + ";",
+        "window.HIT_UPLOAD = " + json.dumps(upload, ensure_ascii=False) + ";",
         rules,
+        import_rules,
+        outline_rules,
         read("engine.js"),
         read("variations.js"),
         read("shell.js"),
+        read("import.js"),
         "</script>",
     ]
     return "\n".join(parts)

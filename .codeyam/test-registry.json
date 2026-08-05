@@ -127,6 +127,24 @@
       "runner": "tests"
     },
     {
+      "description": "The check must not fire on a real name that merely contains a marker word, or it would strip the identity of someone who wanted to be listed.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "anonymity arriving in the name column › does not mistake a real name for an anonymity request",
+      "line": 113,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The file has no anonymity column, so the request turns up in the only free text field there is. Imported literally it becomes a card reading \"Anonymous\" as though that were a person's name.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "anonymity arriving in the name column › recognizes the ways a supporter writes \"do not name me\"",
+      "line": 104,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
       "description": "A subject is appended as a query parameter.",
       "file": "src/lib/mailto.test.ts",
       "format": "vitest",
@@ -250,6 +268,33 @@
       "key": "chipPressed › marks only the selected chip as pressed",
       "line": 31,
       "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The apostrophe form is how people actually write a class year, and a spreadsheet preserves it as text.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "class year › accepts the apostrophe form a spreadsheet produces",
+      "line": 153,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case, from both a text cell and a numeric one — a spreadsheet export gives either depending on how the column was typed.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "class year › accepts the four-digit form",
+      "line": 146,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A wrong year is worse than a missing one: it places a supporter in the wrong cohort in three of the nine directions, where it looks like data rather than like an error.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "class year › refuses to guess at anything else",
+      "line": 162,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -619,6 +664,42 @@
       "key": "deploy.yml track coherence › writes no CNAME on the staging track",
       "line": 122,
       "registeredAt": "2026-08-03T18:10:23Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The page hands it whatever the data carries; a numeric string is the likely shape if the fixture is ever authored by hand.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "directionLabel › accepts a numeric string",
+      "line": 30,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Padding must not corrupt an id that is already two digits, which is what a tenth direction would be.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "directionLabel › leaves a two-digit id alone",
+      "line": 23,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The bug this function exists for: variations.js carries `num` as a number, so the card badge rendered \"3\" while everything else on the page said \"03\".",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "directionLabel › pads a single digit so the card matches what the reviewer types",
+      "line": 16,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A wrong id is worse than a missing one — it points a reviewer's comment at the wrong design.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "directionLabel › returns nothing for a value that is not a number",
+      "line": 36,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -1964,6 +2045,51 @@
       "runner": "tests"
     },
     {
+      "description": "A column the collection has nowhere to put is dropped rather than carried, since carrying it would imply the wall can show it.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › drops a column the site has no field for",
+      "line": 37,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The seam this exists for: every rule below reads `row.gradYear`, while the file arrives with human headings. Get the mapping wrong and normalizeGradYear returns null for every row — the import then reports \"no usable class year\" fourteen times while looking like it worked.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › keys a row by the field names the rules read",
+      "line": 19,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The upload arrives as `{rows: [...]}`; a file that failed to parse gives undefined, and an empty walkthrough beats a thrown error on a review page.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › maps a whole upload, and survives one that carries no rows",
+      "line": 59,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A missing column must stay missing rather than becoming an empty string — the difference between \"not supplied\" and \"supplied as blank\".",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › omits a heading the file does not carry",
+      "line": 44,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The page hands it whatever is in the JSON. A malformed entry should cost one row, not the whole import.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › returns an empty object for a non-row rather than throwing",
+      "line": 52,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
       "description": "A donor in a real tier must NOT be swept into the trailing group.",
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
@@ -1997,6 +2123,42 @@
       "key": "matchesTier › matches an untagged donor against the trailing group",
       "line": 325,
       "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Each of these is a real way one supporter arrives twice, and each is invisible to the eye scanning the file.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "matching against the wall › finds an exact match through padding, case and a dropped accent",
+      "line": 173,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The specific path by which a withheld name reaches the public site: the upload carries the real name and no anonymity column, so a blind overwrite republishes it.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "matching against the wall › flags when the matched supporter is anonymous",
+      "line": 195,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The middle outcome is the point of the function: it neither duplicates a supporter nor merges two of them, it asks.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "matching against the wall › reports a suffix difference as possible rather than deciding it",
+      "line": 180,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The baseline: most of a bi-weekly upload is genuinely new people, and they must not be flagged as anything.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "matching against the wall › reports an unknown name as new",
+      "line": 188,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -2321,6 +2483,42 @@
       "key": "missingFields › treats every key as missing when the editor renders nothing",
       "line": 233,
       "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Punctuation is deliberately KEPT, so a suffix does not silently merge two people. Father and son share a name; an importer that collapses them deletes one supporter without telling anyone.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "name normalization — the ways one person arrives twice › does not collapse a suffix into the bare name",
+      "line": 86,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The accent is dropped constantly in exports and re-entry. Treating \"Tomas\" as a new supporter is the single most likely duplicate this file produces.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "name normalization — the ways one person arrives twice › reads a dropped accent as the same person",
+      "line": 79,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A spreadsheet export pads cells and a web form uppercases. Neither is a different human, but a bare === treats both as new supporters and puts a second card on the wall.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "name normalization — the ways one person arrives twice › reads padding and case as the same person",
+      "line": 71,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A blank cell reaches here as undefined from the column mapping, so the normalizer is on the path for every missing name in the file.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "name normalization — the ways one person arrives twice › returns an empty string for a non-string, rather than throwing",
+      "line": 94,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -3368,6 +3566,60 @@
       "runner": "tests"
     },
     {
+      "description": "The reviewer pastes this into a document, where trailing spaces survive as invisible junk that shows up when they select a line.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › leaves no trailing whitespace on any line",
+      "line": 81,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two controls exist to test the network metaphor rather than to compete with it, so a reviewer has to be able to tell them apart from the seven.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › marks the off-brief controls as controls",
+      "line": 73,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same requirement as the wall items: an id on the page with no line in the outline is a reaction with nowhere to go.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › names every open question and every import step",
+      "line": 55,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The load-bearing property. The outline IS the feedback interface, so an id shown on the page but absent here is a reaction that has nowhere to land.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › names every wall behaviour the page shows",
+      "line": 46,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Degrades to a usable outline rather than throwing, so a page that failed to load its variations still gives the reviewer the wall and the questions.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › still produces the fixed sections when given no directions",
+      "line": 90,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Built from the live list rather than a hand-copied one: rename a direction in variations.js and the outline follows, instead of quietly asking the reviewer about a design by a name it no longer has.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › takes the direction names from the list it is given",
+      "line": 65,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
       "description": "Each direction seeds its own layout, so different seeds must actually diverge or every direction would scatter its nodes identically.",
       "file": "src/lib/donorNetwork.test.ts",
       "format": "vitest",
@@ -3599,6 +3851,33 @@
       "key": "schemaKeysFor › returns an empty list for a collection that is not declared",
       "line": 263,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An unrecognized school is a mapping to confirm, not a value to discard — dropping it would quietly empty that supporter out of three directions.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "school mapping › keeps an unrecognized school rather than discarding it",
+      "line": 130,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Someone filling a form writes the school out in full; the site stores a short form. Without the alias map an ordinary correct answer arrives as an unknown value.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "school mapping › maps a written-out school onto the spelling the site uses",
+      "line": 123,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Null and empty string mean different things downstream: null is \"the file did not say\", which is what rowIssues reports on.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "school mapping › reports an empty cell as nothing, not as an empty school",
+      "line": 136,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -4331,6 +4610,33 @@
       "runner": "tests"
     },
     {
+      "description": "The numbers the walkthrough puts on screen at I2, so they are worth pinning rather than trusting to a render.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "the summary of a whole upload › counts what can land against what needs a decision",
+      "line": 262,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The load-bearing assertion of this file. tier, founding and anonymous are properties of the FILE FORMAT, not of any row — a spreadsheet where every row is spotless still cannot say who gave at what level, who is a founding donor, or who asked to stay anonymous. A summary that hid them on a clean file would report success for a job it did a third of.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "the summary of a whole upload › reports the unanswerable fields even when every row is clean",
+      "line": 276,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A zero-row file still has a shape, and its shape still cannot answer tier, founding or anonymous.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "the summary of a whole upload › survives an empty upload",
+      "line": 289,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
       "description": "Returns a copy: the sampled point list is reused across re-renders, and a caller mutating it would corrupt every later layout.",
       "file": "src/lib/donorNetwork.test.ts",
       "format": "vitest",
@@ -4724,6 +5030,60 @@
       "key": "unresolvedNavUrls › resolves a fragment against its page",
       "line": 332,
       "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A duplicate is a correctable mistake, so it asks rather than blocks — unless it is the unmasking case above.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › asks about an ordinary duplicate rather than blocking it",
+      "line": 225,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Name is the one field the wall genuinely requires, so a blank one cannot be resolved by any later edit to the tier or badge.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › blocks a row with no name at all",
+      "line": 204,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blocking rather than asking: imported literally this publishes a card that reads \"Anonymous\" as if it were a person's name.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › blocks an anonymity request sitting in the name column",
+      "line": 211,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The harm here is one-way. Every other issue can be corrected after the fact; a published name that was meant to be withheld cannot.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › blocks re-importing someone who is anonymous on the wall",
+      "line": 218,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The negative case that keeps the others honest: if everything raised an issue, the issue list would carry no information.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › finds nothing to raise on a clean, new row",
+      "line": 242,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Not blocking — the supporter can still land — but directions 01, 03 and 09 group by these, so the gap decides which designs stay viable.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › notes a missing school and a missing class year",
+      "line": 234,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {

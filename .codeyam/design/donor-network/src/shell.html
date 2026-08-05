@@ -18,9 +18,9 @@
 <div id="gate">
   <div class="gate-box">
     <h1>Harvard in Tech</h1>
-    <p>Supporter network — design review. Enter the passphrase you were given.</p>
+    <p>Supporter recognition — design review. Enter the passphrase you were given.</p>
     <input id="pass" type="password" placeholder="Passphrase" autocomplete="off" />
-    <button id="enter" type="button">View the directions</button>
+    <button id="enter" type="button">Open the review</button>
     <div class="gate-err" id="err"></div>
     <p class="gate-fine">
       Internal review — please don't forward this link. The passphrase keeps the page
@@ -38,13 +38,13 @@
 <div class="deck">
   <header class="cover">
     <div class="cover-tab"></div>
-    <div class="kick">Harvard in Tech · Donor recognition · Design review</div>
+    <div class="kick">Harvard in Tech · Supporter recognition · Design review</div>
     <h1>Not a wall. <span>A network.</span></h1>
     <p class="lede">
-      Nine directions for the supporter recognition page, built from Nicole's note.
-      Every one runs on the same 200 illustrative supporters, so what differs is the
-      idea and not the content. Open any of them, search for a name, and grow the
-      network to 200.
+      Three things in one place: the supporter wall that is <em>already built</em>, nine
+      directions for replacing it, and what actually happens when the bi-weekly
+      spreadsheet meets either one. Every direction runs on the same 200 illustrative
+      supporters, so what differs is the idea and not the content.
     </p>
 
     <div class="brief">
@@ -55,6 +55,26 @@
       </blockquote>
     </div>
 
+    <!-- Contents. Every item Nicole might react to carries a short id, and the
+         three families deliberately cannot be confused with one another in a
+         doc: W for what is built, bare numbers for the directions, I for the
+         import steps, Q for the open questions. "3" was ambiguous before. -->
+    <nav class="contents" aria-label="Contents">
+      <div class="contents-kick">What's in here — quote these ids in your notes</div>
+      <ol class="contents-list">
+        <li><a href="#wall"><span class="idchip idchip--w">W1–W5</span> The wall as it stands</a>
+          <span class="contents-note">built and live today</span></li>
+        <li><a href="#directions"><span class="idchip idchip--d">01–09</span> Nine directions</a>
+          <span class="contents-note">designs, none built</span></li>
+        <li><a href="#import"><span class="idchip idchip--i">I1–I4</span> The spreadsheet import</a>
+          <span class="contents-note">walkthrough, not built</span></li>
+        <li><a href="#questions"><span class="idchip idchip--q">Q1–Q4</span> Open questions</a>
+          <span class="contents-note">decisions we need</span></li>
+        <li><a href="#outline"><span class="idchip idchip--o">Doc</span> Leaving feedback</a>
+          <span class="contents-note">an outline to paste</span></li>
+      </ol>
+    </nav>
+
     <div class="legend">
       <span class="chip"><span class="sw sw--net"></span> <b>Seven network directions</b> — different answers to what governs the shape</span>
       <span class="chip"><span class="sw sw--off"></span> <b>Two off-brief</b> — no graph at all, as a control</span>
@@ -62,10 +82,111 @@
 
     <div class="toolbar">
       <span class="tbtn ghost">Click any card to open it full-screen</span>
-      <span class="tnote">Arrow keys move between directions once one is open. Send your
-        reactions back in whatever doc suits you — there is nothing to fill in here.</span>
+      <span class="tnote">Arrow keys move between directions once one is open. There is
+        nothing to fill in here — send your reactions in a doc, quoting the ids.</span>
     </div>
   </header>
+
+  <!-- ══════════ PART ONE — THE WALL AS IT STANDS ══════════
+       This section exists because it was the gap: the one thing that is actually
+       shipped was the one thing the review never pointed at. Nine alternative
+       designs cannot be judged without seeing what they would replace.
+
+       The screenshots are the real component, captured from the committed
+       scenarios (donor-wall-three-levels-and-twenty-names, donor-wall-empty-the-
+       invitation) and inlined by build.py. A hand-drawn reproduction would
+       diverge from the shipped wall on the first fix, and the copy that diverges
+       is always the one already sent to the reviewer. -->
+  <section class="sec" id="wall">
+    <div class="sec-head">
+      <span class="sec-kick">Part one · built</span>
+      <h2>The wall as it stands</h2>
+      <!-- Relative, deliberately. Both tracks deploy under a base path
+           (/harvardintech, /harvardintech-staging) and a raw public/ file cannot
+           read Astro's BASE_URL, so a root-absolute href would 404 on the real
+           deploy — the same trap /review/'s link hit. -->
+      <a class="sec-link" href="donate#donors">Open it live ↗</a>
+    </div>
+    <p class="sec-lede">
+      This is on the Momentum Fund page today. It is organised entirely by giving level,
+      which is the assumption every direction below either keeps or throws away — so it
+      is worth deciding what you want to keep before choosing a design.
+    </p>
+
+    <figure class="shot">
+      <img id="wallShot" src="__WALL_CAPTURE__" alt="The donor recognition wall as it renders today: three giving levels as separate bands, each with a heading and a row of supporter cards, with filter chips above them." />
+      <figcaption>The wall with three giving levels and twenty supporters. Captured from the shipped component, not redrawn.</figcaption>
+    </figure>
+
+    <ol class="ids ids--w">
+      <li id="W1">
+        <span class="idchip idchip--w">W1</span>
+        <div>
+          <strong>Giving levels are the structure.</strong> Supporters are grouped into
+          bands by level, each with its own heading and a line about what that level
+          funds. Anyone whose level is blank or unrecognised collects in a trailing
+          <em>Other supporters</em> band rather than disappearing.
+        </div>
+      </li>
+      <li id="W2">
+        <span class="idchip idchip--w">W2</span>
+        <div>
+          <strong>Founding Donor is a badge, not a level.</strong> It cuts across the
+          bands, so a founding donor keeps whichever level actually reflects their gift
+          instead of being pushed into one that misstates it.
+        </div>
+      </li>
+      <li id="W3">
+        <span class="idchip idchip--w">W3</span>
+        <div>
+          <strong>Anonymity withholds four things at once.</strong> Name, photo, outbound
+          link, and even the initials — two letters beside “Anonymous supporter” identifies
+          someone to anyone who knows them. The real name stays in the entry for your
+          records. This is the one thing on the page that a later edit cannot take back,
+          which is why it is built in rather than handled by convention.
+        </div>
+      </li>
+      <li id="W4">
+        <span class="idchip idchip--w">W4</span>
+        <div>
+          <strong>Filter chips, and a note that opens.</strong> One chip per band, plus
+          All; a card reveals the supporter's note when clicked. Both are conveniences —
+          every name is in the page itself, so with JavaScript off the wall is the same
+          complete list it always was. The chips only appear when there is more than one
+          band to move between.
+        </div>
+      </li>
+      <li id="W5">
+        <span class="idchip idchip--w">W5</span>
+        <div>
+          <strong>Empty is the designed default, not a gap.</strong> There is no supporter
+          list yet, so this is what the page shows today and will keep showing until the
+          first import: an invitation and the giving button, rather than an empty
+          scaffold. Whatever replaces the wall inherits this requirement.
+        </div>
+      </li>
+    </ol>
+
+    <figure class="shot shot--narrow">
+      <img id="wallEmptyShot" src="__WALL_EMPTY_CAPTURE__" alt="The donor wall's empty state: a short invitation message and a Give button, with no supporter cards." />
+      <figcaption>W5 — the state the page is in right now.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ══════════ PART TWO — THE NINE DIRECTIONS ══════════ -->
+  <section class="sec sec--flush" id="directions">
+    <div class="sec-head">
+      <span class="sec-kick">Part two · designs</span>
+      <h2>Nine directions</h2>
+      <span class="sec-link sec-link--plain">Quote these as 01–09</span>
+    </div>
+    <p class="sec-lede">
+      Seven readings of the network idea, plus two deliberate off-brief controls with no
+      graph at all — so the metaphor gets tested rather than assumed. Each carries a
+      different candidate name, so the naming question is judged in place rather than off
+      a list. Open any one full-screen, search for a name, and grow the network to 200.
+    </p>
+  </section>
 
   <div class="group-head">
     <span class="gsw sw--net"></span>
@@ -81,39 +202,107 @@
   </div>
   <div class="grid" data-family="off-brief"></div>
 
-  <section class="qs">
+  <!-- ══════════ PART THREE — THE IMPORT ══════════
+       Built as a walkthrough rather than described in prose because the
+       interesting content is not "you upload a file", it is the four things the
+       file cannot tell us — and a list of four sentences reads as a caveat while
+       a step that stops and asks reads as a decision. -->
+  <section class="sec" id="import">
+    <div class="sec-head">
+      <span class="sec-kick">Part three · not built</span>
+      <h2>The spreadsheet import</h2>
+      <span class="sec-link sec-link--plain">Quote these as I1–I4</span>
+    </div>
+    <p class="sec-lede">
+      However the recognition page ends up looking, supporters have to get onto it from
+      the bi-weekly spreadsheet. This is a walkthrough of that, not working software —
+      click through it and see where it stops. It stops in the same place every time, and
+      that place is the reason this section exists.
+    </p>
+
+    <div class="steps" id="importSteps">
+      <div class="steps-rail" role="tablist" aria-label="Import steps">
+        <button class="steprail" type="button" data-step="0" role="tab"><span class="idchip idchip--i">I1</span> The file</button>
+        <button class="steprail" type="button" data-step="1" role="tab"><span class="idchip idchip--i">I2</span> What matched</button>
+        <button class="steprail" type="button" data-step="2" role="tab"><span class="idchip idchip--i">I3</span> What it can't say</button>
+        <button class="steprail" type="button" data-step="3" role="tab"><span class="idchip idchip--i">I4</span> What would land</button>
+      </div>
+      <div class="steps-body" id="importBody"></div>
+    </div>
+  </section>
+
+  <!-- ══════════ OPEN QUESTIONS ══════════
+       Explicitly Q-prefixed. They used to render as a bare 1.-4. list, which
+       collided with the directions' 01-09 the moment anyone wrote "3" in a doc. -->
+  <section class="qs" id="questions">
     <div class="kick">Open questions these directions can't answer on their own</div>
-    <ol>
-      <li>
-        <strong>What is it called?</strong> Nicole ruled out “wall” but left five candidate
-        names. Each direction carries a different one so they can be judged in place
-        rather than on a list.
+    <ol class="ids ids--q">
+      <li id="Q1">
+        <span class="idchip idchip--q">Q1</span>
+        <div>
+          <strong>What is it called?</strong> Nicole ruled out “wall” but left five candidate
+          names. Each direction carries a different one so they can be judged in place
+          rather than on a list.
+        </div>
       </li>
-      <li>
-        <strong>Is $500 the founding threshold, and does the spreadsheet say so?</strong>
-        The note asks it as a question. Since the upload carries no dollar amounts,
-        founding status has to arrive as its own column — or be derived from
-        <em>when</em> someone gave. These mockups assume the early cohort.
+      <li id="Q2">
+        <span class="idchip idchip--q">Q2</span>
+        <div>
+          <strong>Is $500 the founding threshold, and does the spreadsheet say so?</strong>
+          The note asks it as a question. Since the upload carries no dollar amounts,
+          founding status has to arrive as its own column — or be derived from
+          <em>when</em> someone gave. These mockups assume the early cohort. See
+          <a href="#import">I3</a>.
+        </div>
       </li>
-      <li>
-        <strong>What happens to a supporter who asks not to be named?</strong>
-        The live site already withholds an anonymous donor's name, photo, link and
-        initials together. Search and a shareable card are both new ways to undo that,
-        so here an anonymous supporter is a visible node that counts toward every
-        milestone but cannot be looked up or turned into a card. Worth confirming that
-        is the behaviour Nicole wants.
+      <li id="Q3">
+        <span class="idchip idchip--q">Q3</span>
+        <div>
+          <strong>What happens to a supporter who asks not to be named?</strong>
+          The live site already withholds an anonymous donor's name, photo, link and
+          initials together (<a href="#wall">W3</a>). Search and a shareable card are both
+          new ways to undo that, so here an anonymous supporter is a visible node that
+          counts toward every milestone but cannot be looked up or turned into a card.
+          Worth confirming that is the behaviour you want.
+        </div>
       </li>
-      <li>
-        <strong>Are school and graduation year public?</strong> They are the only
-        structure the spreadsheet offers, and directions 01, 03 and 09 are built on them —
-        but they are also personal details some supporters may not expect to be listed.
+      <li id="Q4">
+        <span class="idchip idchip--q">Q4</span>
+        <div>
+          <strong>Are school and graduation year public?</strong> They are the only
+          structure the spreadsheet offers, and directions 01, 03 and 09 are built on them —
+          but they are also personal details some supporters may not expect to be listed.
+          They are not currently fields on the site at all.
+        </div>
       </li>
     </ol>
   </section>
 
+  <!-- ══════════ THE DOC OUTLINE ══════════
+       The page collects nothing on purpose — a published artifact cannot post
+       anywhere, and a review that needs a backend stops working the moment the
+       link outlives the server. What it can do is make the doc easy to start:
+       the outline below mirrors every id on the page, so it is pasted once and
+       typed under. -->
+  <section class="outline" id="outline">
+    <div class="kick">Leaving feedback</div>
+    <h2>Paste this into a doc and type under each heading</h2>
+    <p class="outline-lede">
+      Nothing on this page records anything — no boxes, no sliders, no submit. Copy the
+      outline, drop it into a Google doc, and answer only the lines you have something to
+      say about. The ids are what let a one-line reaction land exactly where it belongs.
+    </p>
+    <div class="outline-actions">
+      <button class="tbtn" type="button" id="copyOutline">Copy the outline</button>
+      <span class="outline-copied" id="copyStatus" role="status"></span>
+    </div>
+    <pre class="outline-pre" id="outlineText"></pre>
+  </section>
+
   <footer class="foot">
-    Harvard in Tech · supporter network — nine directions · 200 illustrative supporters,
-    no real donor data · prepared for Nicole's review.
+    Harvard in Tech · supporter recognition review · the wall as built, nine directions,
+    and the import · 200 illustrative supporters, no real donor data · prepared for
+    Nicole's review.
   </footer>
 </div>
 
