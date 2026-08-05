@@ -256,6 +256,12 @@
     "testFile": "src/lib/contentRoot.test.ts"
   },
   {
+    "description": "The name a supporter's node and profile card print: their real name, or the standing 'Anonymous supporter' label when they asked not to be named. Every reader-facing surface in the exploration goes through here rather than reading .name, because one component that forgets publishes a name against someone's explicit request.",
+    "filePath": "src/lib/donorNetwork.js",
+    "name": "displayName",
+    "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
     "description": "The pageCopy collection entry for /donate. One page, one entry — a bare lookup shared by loadDonateUrl and loadDonateFrame so the two do not each restate the entry id, which is the kind of duplication that lets one of them keep reading a renamed entry after the other has been updated.",
     "filePath": "src/lib/donatePageContent.ts",
     "name": "donateEntry",
@@ -479,6 +485,12 @@
     "testFile": "src/lib/sitePages.test.ts"
   },
   {
+    "description": "Whether a supporter can be found by typing their name in the network's search box. False for anyone who asked not to be named. The live donor wall already withholds an anonymous donor's name, photo, link and initials together, and a search box is a new way to undo all four at once — so anonymity has to reach it. They remain a visible node counting toward every total and every milestone, because withholding the node instead would make the wall quietly undercount people who asked only not to be named.",
+    "filePath": "src/lib/donorNetwork.js",
+    "name": "isSearchable",
+    "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
     "description": "Reads the accomplishments collection into the card shape MomentumAccomplishments already took from copy.accomplishments. Migrated out of donatePage.json, a singleton the CMS does not model at all, which is what made these cards developer-only. Maps the schema's description key onto the component's body prop because body is a reserved field id in the CMS registry and a custom field claiming it is dropped from the editor without comment.",
     "filePath": "src/lib/donatePageContent.ts",
     "name": "loadAccomplishments",
@@ -619,6 +631,12 @@
     "testFile": "src/lib/pageCopyMerge.test.ts"
   },
   {
+    "description": "The milestone the supporter count passed between two frames of the growth animation, or null. Crossing rather than landing: the growth step accelerates as the count climbs, so asking whether the new count EQUALS a milestone means 50, 100 and 150 fire only when the arithmetic happens to hit them exactly — which in practice never happened, and 200 only appeared to work because it is clamped. When one step clears several, the earliest wins so no moment the campaign wants to mark is skipped.",
+    "filePath": "src/lib/donorNetwork.js",
+    "name": "milestoneCrossed",
+    "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
     "description": "Pulls the `name` parameter out of a full URL or a bare query string, returning null when absent or unparseable.",
     "filePath": "src/lib/personalize.ts",
     "name": "nameFromSearch",
@@ -754,6 +772,12 @@
     "testFile": "src/lib/homeSections.test.ts"
   },
   {
+    "description": "A seeded pseudo-random generator (mulberry32) giving each direction a reproducible layout. Determinism is the point: a network that reshuffles between renders reads as a different design, so a reviewer would be rating noise — and a screenshot they already commented on would stop matching the page.",
+    "filePath": "src/lib/donorNetwork.js",
+    "name": "rng",
+    "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
     "description": "Builds a robots.txt body for either publishing track, taking the resolved sitemap URL and a disallowAll flag. The public track gets allow-all directives plus the Sitemap reference; the gated review track gets Disallow for everything and, deliberately, no Sitemap line at all, because astro.config.mjs omits the sitemap integration on that track so advertising sitemap-index.xml there would point crawlers at a 404. Extracted out of the robots.txt endpoint and given the gate as a parameter so both tracks' output is unit-testable — the endpoint resolves the gate from process.env at module load, so a test importing it could only ever reach one branch. The endpoint keeps origin resolution and response shaping.",
     "filePath": "src/lib/robots.ts",
     "name": "robotsTxtBody",
@@ -782,6 +806,12 @@
     "filePath": "src/lib/sitePages.ts",
     "name": "shadowedSlugWarning",
     "testFile": "src/lib/sitePages.test.ts"
+  },
+  {
+    "description": "The short label for a Harvard school — HBS, SEAS, College — used wherever the full name will not fit. An unrecognized school passes through unchanged rather than becoming blank, so a typo in the bi-weekly upload costs a long label rather than silently losing the supporter's affiliation.",
+    "filePath": "src/lib/donorNetwork.js",
+    "name": "shortSchool",
+    "testFile": "src/lib/donorNetwork.test.ts"
   },
   {
     "description": "Whether the wall is worth putting filter chips on. One band means the chips would read 'All donors / Leadership Circle' over a list already on screen — a control that filters nothing, which is worse than no control. Chips earn their place only once there is somewhere else to go.",
@@ -830,6 +860,18 @@
     "filePath": "src/lib/pageCopyMerge.ts",
     "name": "sponsorLevelsFrom",
     "testFile": "src/lib/pageCopyMerge.test.ts"
+  },
+  {
+    "description": "The mark drawn in a supporter's avatar on the network explorations: their initials, or a neutral dash when they asked not to be named. Named for what it produces rather than reusing 'initials' from team.ts, which takes a name string and knows nothing about anonymity — this one takes the whole supporter because the anonymous case must return a mark identifying nobody. Initials would leak the withheld name, since two letters beside 'Anonymous supporter' identifies them to anyone who knows them. Capped at two letters so a long name cannot spell itself out.",
+    "filePath": "src/lib/donorNetwork.js",
+    "name": "supporterMonogram",
+    "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
+    "description": "N items spread evenly across a larger list, used to place supporters through points sampled from a letterform. Taking the first N instead would fill the top of the first glyph and leave the rest of the word empty, because the sampler emits points in scan order. Returns a copy, so a caller cannot mutate the sampled source.",
+    "filePath": "src/lib/donorNetwork.js",
+    "name": "thin",
+    "testFile": "src/lib/donorNetwork.test.ts"
   },
   {
     "description": "One boolean per section saying whether it renders on the tinted band. Narrative sections alternate tinted and untinted so consecutive prose stays separated; the counter advances only on narratives, so a bespoke band between two of them does not flip the rhythm. Pure, replacing a counter that was mutated inside the page's render map.",

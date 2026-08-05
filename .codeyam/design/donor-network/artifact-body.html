@@ -1,0 +1,2900 @@
+<title>Harvard in Tech — Powering the Network: eight directions</title>
+<style>
+/* The review deck itself — the frame Nicole reads, not one of the directions.
+   Kept deliberately plain (the site's paper/ink/crimson, no personality of its
+   own) so it never competes with the eight things it is presenting. */
+
+:root {
+  --d-bg: #f4f2ee;
+  --d-card: #ffffff;
+  --d-ink: #1e1a1b;
+  --d-soft: #5c5559;
+  --d-faint: #928b8e;
+  --d-line: rgba(30, 26, 27, 0.14);
+  --d-crimson: #a41034;
+  --d-crimson-deep: #7d1424;
+  --d-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --d-serif: 'Times New Roman', Times, Georgia, serif;
+  --d-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--d-bg);
+  color: var(--d-ink);
+  font-family: var(--d-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck { padding-bottom: 20px; }
+
+/* ── Cover ────────────────────────────────────────────────────────────── */
+.cover {
+  padding: 54px clamp(22px, 4vw, 56px) 34px;
+  border-bottom: 1px solid var(--d-line);
+  background: var(--d-card);
+}
+.cover-tab { width: 64px; height: 12px; background: var(--d-crimson); margin-bottom: 22px; }
+.kick {
+  font-family: var(--d-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--d-crimson);
+}
+.cover h1 {
+  font-size: clamp(34px, 5vw, 62px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.0;
+  margin: 14px 0 16px;
+}
+.cover h1 span { color: var(--d-crimson); font-style: italic; }
+.lede {
+  font-family: var(--d-serif);
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.52;
+  color: var(--d-soft);
+  max-width: 68ch;
+  margin: 0;
+}
+
+.brief {
+  margin: 26px 0 0;
+  padding: 18px 22px;
+  background: var(--d-bg);
+  border-left: 3px solid var(--d-crimson);
+  max-width: 68ch;
+}
+.brief-kick {
+  font-family: var(--d-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--d-faint);
+  margin-bottom: 8px;
+}
+.brief blockquote { margin: 0; }
+.brief blockquote p {
+  margin: 0 0 6px;
+  font-family: var(--d-serif);
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--d-ink);
+}
+.brief blockquote p:last-child { margin-bottom: 0; }
+
+.legend {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+  font-size: 13px;
+  color: var(--d-soft);
+}
+.chip { display: inline-flex; align-items: center; gap: 8px; }
+.chip b { color: var(--d-ink); }
+.sw { width: 13px; height: 13px; border-radius: 3px; flex: none; }
+.sw--net { background: var(--d-crimson); }
+.sw--off { background: var(--d-ink); }
+
+.toolbar { display: flex; align-items: center; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.tbtn {
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 11px 18px;
+  cursor: pointer;
+  border: 1.5px solid var(--d-ink);
+  background: var(--d-card);
+  color: var(--d-ink);
+  font-family: var(--d-sans);
+}
+.tbtn.primary { background: var(--d-crimson); border-color: var(--d-crimson); color: #fff; }
+.tbtn.primary:hover { background: var(--d-crimson-deep); border-color: var(--d-crimson-deep); }
+.tbtn.ghost { border-color: var(--d-line); color: var(--d-soft); font-weight: 600; cursor: default; }
+button.tbtn.ghost { cursor: pointer; }
+.tnote { font-family: var(--d-mono); font-size: 11px; color: var(--d-faint); }
+.notes {
+  display: block;
+  width: 100%;
+  max-width: 980px;
+  margin-top: 14px;
+  border: 1px solid var(--d-line);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font: 14px/1.5 var(--d-sans);
+  color: var(--d-ink);
+  resize: vertical;
+  min-height: 58px;
+  background: var(--d-card);
+}
+.notes:focus { outline: none; border-color: var(--d-crimson); }
+
+/* ── Group headers + grid ─────────────────────────────────────────────── */
+.group-head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 38px clamp(22px, 4vw, 56px) 0;
+}
+.gsw { width: 15px; height: 15px; border-radius: 4px; }
+.group-head h2 { font-size: 19px; font-weight: 800; letter-spacing: -0.015em; margin: 0; }
+.gcount { font-family: var(--d-mono); font-size: 11px; color: var(--d-faint); margin-left: auto; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 20px clamp(22px, 4vw, 56px) 4px;
+}
+@media (max-width: 1180px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--d-card);
+  border: 1px solid var(--d-line);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  background: #e9e7e2;
+  border-bottom: 1px solid var(--d-line);
+  cursor: pointer;
+}
+/* The thumbnail is the real renderer at small scale, not a screenshot — so it
+   cannot drift from the direction it opens. */
+.thumb-mount { position: absolute; inset: 0; }
+.thumb-veil { position: absolute; inset: 0; z-index: 2; transition: background 0.15s ease; }
+.thumb:hover .thumb-veil { background: rgba(164, 16, 52, 0.08); }
+.badge {
+  position: absolute;
+  top: 11px;
+  left: 11px;
+  z-index: 3;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 6px;
+  background: var(--d-crimson);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.card[data-family='off-brief'] .badge { background: var(--d-ink); }
+.expand {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  z-index: 3;
+  background: rgba(20, 18, 19, 0.72);
+  color: #fff;
+  font: 700 9.5px var(--d-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 9px;
+  border-radius: 5px;
+}
+
+.meta { padding: 17px 19px 19px; display: flex; flex-direction: column; flex: 1; }
+.meta .nm { font-size: 17px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.2; }
+.meta .sys {
+  font-family: var(--d-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--d-crimson);
+  margin-top: 5px;
+}
+.card[data-family='off-brief'] .meta .sys { color: var(--d-soft); }
+.meta .why { font-size: 13.5px; color: var(--d-soft); line-height: 1.5; margin-top: 9px; }
+
+/* ── Per-card feedback (same shape as the board review deck) ──────────── */
+.fb { margin-top: auto; padding-top: 15px; border-top: 1px dashed var(--d-line); }
+.fb-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+.fb-lab {
+  font-family: var(--d-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--d-faint);
+}
+.fb-val { font-size: 15px; font-weight: 800; }
+.fb-val.muted { color: var(--d-faint); font-weight: 600; }
+.fb-range {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--d-line);
+  outline: none;
+  margin: 2px 0 4px;
+}
+.fb-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--d-crimson);
+  cursor: pointer;
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.fb-range::-moz-range-thumb {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--d-crimson);
+  cursor: pointer;
+  border: 3px solid #fff;
+}
+.fb-scale {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--d-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--d-faint);
+  margin-bottom: 9px;
+}
+.fb-note {
+  width: 100%;
+  border: 1px solid var(--d-line);
+  border-radius: 6px;
+  padding: 9px 11px;
+  font: 13px/1.45 var(--d-sans);
+  color: var(--d-ink);
+  resize: vertical;
+  min-height: 44px;
+}
+.fb-note:focus { outline: none; border-color: var(--d-crimson); }
+.fb-saved {
+  font-family: var(--d-mono);
+  font-size: 9.5px;
+  color: #2d8a5a;
+  margin-top: 5px;
+  height: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.fb-saved.show { opacity: 1; }
+
+/* ── Open questions + footer ──────────────────────────────────────────── */
+.qs {
+  margin: 44px clamp(22px, 4vw, 56px) 0;
+  padding: 30px 34px;
+  background: var(--d-card);
+  border: 1px solid var(--d-line);
+  border-radius: 12px;
+}
+.qs ol { margin: 16px 0 0; padding-left: 20px; max-width: 82ch; }
+.qs li { font-size: 14.5px; line-height: 1.6; color: var(--d-soft); margin-bottom: 13px; }
+.qs li strong { color: var(--d-ink); }
+.foot {
+  padding: 32px clamp(22px, 4vw, 56px) 46px;
+  color: var(--d-faint);
+  font-family: var(--d-mono);
+  font-size: 11px;
+  margin-top: 26px;
+  border-top: 1px solid var(--d-line);
+}
+
+/* ── Expand overlay ───────────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #0d0b0c;
+  display: flex;
+  flex-direction: column;
+}
+.overlay[hidden] { display: none; }
+.overlay-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px clamp(14px, 3vw, 26px);
+  background: #0d0b0c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+.overlay-num {
+  font: 800 13px var(--d-sans);
+  background: var(--d-crimson);
+  border-radius: 5px;
+  min-width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  padding: 0 7px;
+}
+.overlay-name { font-size: 15px; font-weight: 800; letter-spacing: -0.01em; }
+.overlay-meta {
+  font-family: var(--d-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+.overlay-actions { margin-left: auto; display: flex; gap: 7px; }
+.ovbtn {
+  font: 700 12px var(--d-sans);
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 4px;
+  padding: 8px 13px;
+  cursor: pointer;
+}
+.ovbtn:hover { background: rgba(255, 255, 255, 0.12); }
+.ovbtn--x { border-color: transparent; background: rgba(255, 255, 255, 0.14); }
+.overlay-stage { flex: 1 1 auto; position: relative; overflow: hidden; }
+.overlay-stage > .viz { position: absolute; inset: 0; overflow: auto; }
+
+/* Chrome shared by all eight directions. Everything here is driven by CSS
+   variables the variation sets on its own root, so a direction restyles itself
+   by declaring a palette rather than by shipping its own stylesheet. */
+
+.viz {
+  --bg: #1e1a1b;
+  --fg: #ffffff;
+  --muted: rgba(255, 255, 255, 0.62);
+  --line: rgba(255, 255, 255, 0.16);
+  --accent: #a41034;
+  --node: #ffffff;
+  --edge: rgba(255, 255, 255, 0.22);
+  --font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-serif: 'Times New Roman', Times, Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+
+  position: relative;
+  background-color: var(--bg);
+  /* Atmosphere. A flat fill reads as a slide; a shaped light source gives the
+     network somewhere to sit. Each direction supplies its own. */
+  background-image: var(--bg-image, none);
+  color: var(--fg);
+  font-family: var(--font-display);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Oversized direction numeral, bled off the right edge. */
+.viz-ghost {
+  position: absolute;
+  right: -0.06em;
+  bottom: -0.3em;
+  z-index: 0;
+  font-size: clamp(200px, 34vw, 560px);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+  color: var(--fg);
+  opacity: 0.045;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+.viz--preview .viz-ghost { display: none; }
+
+/* The artwork is the page. Type floats on it rather than sitting in a caption
+   block above it, which is the difference between a composed spread and a
+   chart with a title. */
+.viz--full { min-height: 100%; }
+.viz--full .viz-stage { position: absolute; inset: 0; }
+.viz--full > .viz-custom {
+  position: absolute;
+  inset: clamp(58px, 9vh, 96px) clamp(18px, 4vw, 54px) clamp(64px, 9vh, 92px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Kicker as a vertical rail up the left edge. */
+.viz-rail {
+  position: absolute;
+  left: 14px;
+  bottom: 84px;
+  z-index: 3;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  pointer-events: none;
+}
+.viz--preview .viz-rail { display: none; }
+
+.viz--full .viz-head {
+  position: absolute;
+  z-index: 3;
+  max-width: min(46ch, 44vw);
+  pointer-events: none;
+}
+/* A soft scrim under the type. The overlap onto the artwork is deliberate —
+   it's what makes the page read as layered rather than stacked — but without
+   this the letterforms fight the dots underneath and both lose. */
+.viz--full .viz-head::before {
+  content: '';
+  position: absolute;
+  inset: -34px -52px -28px -44px;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    68% 62% at 42% 48%,
+    color-mix(in srgb, var(--bg) 92%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 62%, transparent) 46%,
+    transparent 78%
+  );
+}
+.is-type-tl .viz-head { top: clamp(26px, 5vh, 54px); left: clamp(44px, 6vw, 84px); }
+.is-type-bl .viz-head { bottom: clamp(74px, 12vh, 116px); left: clamp(44px, 6vw, 84px); }
+.is-type-tr .viz-head {
+  top: clamp(26px, 5vh, 54px);
+  right: clamp(30px, 5vw, 64px);
+  text-align: right;
+}
+.is-type-br .viz-head {
+  bottom: clamp(74px, 12vh, 116px);
+  right: clamp(30px, 5vw, 64px);
+  text-align: right;
+}
+
+/* Grain overlay — one inline turbulence, no external asset (the artifact CSP
+   blocks every remote host). */
+.viz-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.viz--preview .viz-grain { display: none; }
+
+.viz--preview {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── Head ─────────────────────────────────────────────────────────────── */
+.viz-head { flex: none; max-width: 62ch; }
+.viz-kick {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.viz-title {
+  font-size: clamp(32px, 4.6vw, 68px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+  margin: 0;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.viz-title em { font-style: italic; color: var(--accent); }
+.viz-sub {
+  margin: 12px 0 0;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ── Bar: search + count + state chips ────────────────────────────────── */
+/* Demoted to a utility strip along the bottom. It was taking the top third of
+   every direction, which put a form control where the composition should be. */
+.viz--full .viz-bar {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px clamp(18px, 4vw, 54px);
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.viz-search { position: relative; flex: 1 1 240px; max-width: 340px; }
+.viz-input {
+  width: 100%;
+  font: 500 14px/1.2 var(--font-display);
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 12px 18px;
+  outline: none;
+}
+.viz-input::placeholder { color: var(--muted); }
+.viz-input:focus { border-color: var(--accent); }
+.viz-results {
+  display: none;
+  position: absolute;
+  z-index: 30;
+  /* Opens upward — the search now lives on the bottom strip, so a dropdown
+     below it would render off the viewport. */
+  bottom: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+}
+.viz-results.open { display: block; }
+.viz-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--fg);
+  font: 600 14px var(--font-display);
+  padding: 11px 16px;
+  cursor: pointer;
+}
+.viz-result:last-child { border-bottom: 0; }
+.viz-result:hover { background: var(--accent); color: #fff; }
+.viz-result em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.viz-result:hover em { color: rgba(255, 255, 255, 0.8); }
+.viz-result--none { color: var(--muted); font-weight: 500; cursor: default; }
+.viz-result--none:hover { background: none; color: var(--muted); }
+
+.viz-meter { display: flex; align-items: baseline; gap: 8px; margin-left: auto; }
+.viz-count {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.viz-count-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.viz-ctrls { display: flex; gap: 7px; flex-wrap: wrap; }
+.viz-chip {
+  font: 700 11px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 13px;
+  cursor: pointer;
+}
+.viz-chip:hover { color: var(--fg); border-color: var(--fg); }
+.viz-chip--play { color: #fff; background: var(--accent); border-color: var(--accent); }
+.viz-chip--play:hover { color: #fff; filter: brightness(1.12); }
+
+/* ── Stage ────────────────────────────────────────────────────────────── */
+.viz-stage { position: relative; flex: 1 1 auto; min-height: 320px; }
+.viz-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.edge {
+  fill: none;
+  stroke: var(--edge);
+  stroke-width: 1;
+  transition: stroke 0.25s ease, opacity 0.25s ease, stroke-width 0.25s ease;
+}
+.node-dot { fill: var(--node); transition: fill 0.25s ease, r 0.25s ease; }
+.node-halo { fill: var(--accent); opacity: 0; transition: opacity 0.25s ease; }
+.node.is-founding .node-dot { fill: var(--accent); }
+.node.is-anon .node-dot { fill: none; stroke: var(--node); stroke-width: 1.2; opacity: 0.6; }
+.node { transition: opacity 0.3s ease; }
+
+/* Staggered entrance. The network assembles itself rather than appearing all at
+   once, which is the difference between a chart loading and a thing arriving.
+   Capped stagger so the last node is never more than a beat behind the first. */
+.g-nodes.is-entering .node {
+  animation: nodeIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 6ms);
+}
+.g-nodes.is-entering .node > * { transform-box: fill-box; transform-origin: center; }
+@keyframes nodeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.g-edges { animation: edgesIn 1.1s ease both 0.12s; }
+@keyframes edgesIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Ambient life. The brightness drift is per-node and slow enough to read as a
+   living field rather than a blink — a still network looks like a screenshot
+   of itself. Positional drift is deliberately avoided: the <g> already carries
+   a transform, and animating it would fight the layout. */
+.node-dot { animation: breathe calc(var(--tw, 3) * 1s) ease-in-out infinite alternate; }
+.node-dot { animation-delay: calc(var(--i, 0) * -37ms); }
+@keyframes breathe {
+  from { opacity: 0.68; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .node-dot { animation: none; }
+  .g-nodes.is-entering .node,
+  .g-edges { animation: none; }
+}
+
+/* Focus: the rest of the network recedes rather than disappearing, so the
+   person can still see the size of the thing they are part of. */
+.viz.is-focused .g-nodes .node:not(.is-focus) { opacity: 0.14; }
+.viz.is-focused .g-edges .edge:not(.is-lit) { opacity: 0.07; }
+.viz.is-focused .g-decor { opacity: 0.25; }
+.g-decor { transition: opacity 0.3s ease; }
+/* The camera move. Slow enough to read as travelling to someone rather than
+   cutting to them — the difference between "moves into focus" and a jump. */
+.g-cam { transition: transform 0.85s cubic-bezier(0.32, 0, 0.16, 1); }
+@media (prefers-reduced-motion: reduce) { .g-cam { transition: none; } }
+
+.node.is-focus .node-halo { opacity: 0.28; }
+.node.is-focus .node-dot { fill: var(--accent); }
+.node.is-focus { filter: drop-shadow(0 0 10px var(--accent)); }
+/* "The connecting lines glow" is the phrase from the brief, so the lit edge
+   gets an actual glow rather than just a colour change — at one-pixel widths a
+   recolour alone barely registers against a dimmed network. */
+.edge.is-lit {
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  opacity: 1;
+  filter: drop-shadow(0 0 5px var(--accent));
+}
+
+.viz.is-milestone .g-nodes { animation: vizPulse 0.8s ease; }
+@keyframes vizPulse {
+  0% { opacity: 1; }
+  30% { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+
+/* ── Milestone flash ──────────────────────────────────────────────────── */
+.viz-flash {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 20;
+}
+.viz-flash.on { opacity: 1; }
+.viz-flash-in { text-align: center; }
+.viz-flash-in strong {
+  display: block;
+  font-size: clamp(80px, 16vw, 200px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.viz-flash-in span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────── */
+.viz-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  z-index: 15;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+}
+.viz-empty-in { max-width: 44ch; padding: 0 24px; }
+.viz-empty-in p {
+  font-family: var(--font-serif);
+  font-size: clamp(19px, 2.2vw, 26px);
+  line-height: 1.45;
+  color: var(--fg);
+  margin: 12px 0 22px;
+}
+.viz-empty-cta {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font: 700 13px var(--font-display);
+  padding: 13px 22px;
+  border-radius: 3px;
+}
+
+/* ── Profile panel ────────────────────────────────────────────────────── */
+.viz-profile {
+  position: absolute;
+  right: clamp(18px, 4vw, 54px);
+  bottom: 74px;
+  width: min(340px, calc(100% - 36px));
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  z-index: 25;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+.viz-profile.open { opacity: 1; transform: none; pointer-events: auto; }
+.viz-profile-x {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.viz-profile-x:hover { color: var(--fg); }
+.viz-card { display: flex; gap: 14px; align-items: flex-start; }
+.viz-card-av {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: #fff;
+  font: 700 15px var(--font-display);
+  letter-spacing: 0.02em;
+}
+.viz-card-name { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; }
+.viz-card-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.viz-card-badge {
+  display: inline-block;
+  margin-top: 9px;
+  font: 700 10px var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 4px 9px;
+}
+.viz-card-note {
+  margin: 11px 0 0;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.viz-card-actions { display: flex; gap: 8px; margin-top: 16px; }
+.viz-card-btn {
+  flex: 1;
+  font: 700 12px var(--font-display);
+  color: #fff;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  padding: 11px 12px;
+  cursor: pointer;
+}
+.viz-card-btn--ghost { flex: 0 0 auto; background: transparent; color: var(--fg); border-color: var(--line); }
+.viz-card-btn:hover { filter: brightness(1.1); }
+
+@media (max-width: 720px) {
+  .viz-meter { margin-left: 0; }
+  .viz-profile { right: 12px; left: 12px; width: auto; }
+}
+
+/* Per-direction styling. Every rule is scoped by [data-var], so eight
+   aesthetics can share one document without leaking into each other. */
+
+.node-ring { fill: none; stroke: var(--accent); stroke-width: 1.1; opacity: 0.55; }
+
+/* ── 1 · Letterform network ───────────────────────────────────────────── */
+[data-var='letterform'] .node-dot {
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+}
+[data-var='letterform'] .node.is-founding .node-dot {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+[data-var='letterform'] .edge { stroke: var(--edge); }
+
+/* ── 2 · Woven circle ─────────────────────────────────────────────────── */
+[data-var='weave'] .rim {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+/* Threads lighten where they cross, so the weave gains depth from overlap
+   rather than from any single line being drawn heavier. */
+[data-var='weave'] .thread { mix-blend-mode: screen; }
+[data-var='weave'] .node-dot { filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6)); }
+[data-var='weave'] .node.is-founding .node-dot {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 7px var(--accent));
+}
+
+/* ── 3 · One line ─────────────────────────────────────────────────────── */
+/* One filled shape, not 200 stacked strokes: overlapping semi-transparent
+   round caps darken at every join, which beads the ribbon along its length. */
+[data-var='oneline'] .ribbon {
+  fill: var(--accent);
+  stroke: none;
+}
+[data-var='oneline'] .stroke { stroke: var(--accent); stroke-linecap: round; }
+[data-var='oneline'] .node-dot {
+  fill: var(--bg);
+  stroke: var(--accent);
+  stroke-width: 1.6;
+}
+/* Invisible until focused — the supporter is still a target, just not a hole
+   punched in the stroke. */
+[data-var='oneline'] .node-dot.is-quiet { opacity: 0; animation: none; }
+[data-var='oneline'] .node.is-focus .node-dot.is-quiet { opacity: 1; }
+[data-var='oneline'] .node.is-anon .node-dot { stroke: var(--fg); opacity: 0.5; }
+
+/* ── 4 · Bloom ────────────────────────────────────────────────────────── */
+/* Multiply is the whole direction: overlapping fields deepen instead of
+   stacking flatly, which is what turns 200 circles into one atmosphere. */
+[data-var='bloom'] .bloom-field {
+  fill: var(--accent);
+  opacity: 0.055;
+  mix-blend-mode: multiply;
+}
+[data-var='bloom'] .node.is-founding .bloom-field { opacity: 0.1; }
+[data-var='bloom'] .node.is-anon .bloom-field { opacity: 0.03; }
+[data-var='bloom'] .node-dot { fill: var(--accent); opacity: 0.55; }
+[data-var='bloom'] .node.is-founding .node-dot { opacity: 1; }
+[data-var='bloom'] .node.is-anon .node-dot { fill: none; stroke: var(--accent); }
+[data-var='bloom'] .node.is-focus .bloom-field { opacity: 0.34; }
+
+/* ── 5 · Halftone numeral ─────────────────────────────────────────────── */
+[data-var='halftone'] .node-dot { fill: var(--node); }
+[data-var='halftone'] .node.is-founding .node-dot { fill: var(--accent); }
+[data-var='halftone'] .node.is-anon .node-dot {
+  fill: none;
+  stroke: var(--node);
+  stroke-width: 1.4;
+  opacity: 0.65;
+}
+
+/* ── 6 · Ripple ───────────────────────────────────────────────────────── */
+[data-var='ripple'] .ripple-ring { fill: none; stroke: var(--fg); }
+[data-var='ripple'] .origin-glow {
+  fill: var(--accent);
+  opacity: 0.12;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: originPulse 3.4s ease-in-out infinite;
+}
+@keyframes originPulse {
+  0%, 100% { opacity: 0.06; transform: scale(0.86); }
+  50% { opacity: 0.2; transform: scale(1.1); }
+}
+[data-var='ripple'] .origin-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  opacity: 0.7;
+}
+[data-var='ripple'] .origin-label {
+  fill: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+}
+[data-var='ripple'] .spoke { stroke: var(--edge); }
+
+/* ── 7 · Marquee (no graph) ───────────────────────────────────────────── */
+.viz-custom { position: relative; z-index: 1; }
+.marquee-wrap {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  align-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.06em 0.4em;
+  padding-top: 4px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+.viz--preview .marquee-wrap {
+  padding: 46px 20px 20px;
+  overflow: hidden;
+  gap: 0.05em 0.32em;
+  -webkit-mask-image: linear-gradient(#000 70%, transparent 100%);
+  mask-image: linear-gradient(#000 70%, transparent 100%);
+}
+.viz--preview .marquee-name { font-size: 12px; }
+.viz--preview .marquee-name.is-founding { font-size: 19px; }
+/* Two type sizes, not one: founding names carry the composition and everyone
+   else sets around them. A single scale across 200 names is a list. */
+.marquee-name {
+  color: var(--fg);
+  opacity: 0.72;
+  font-size: clamp(15px, 1.9vw, 27px);
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+.marquee-name.is-founding {
+  color: var(--accent);
+  opacity: 1;
+  font-size: clamp(23px, 3.5vw, 52px);
+  letter-spacing: -0.045em;
+}
+.marquee-name.is-anon {
+  opacity: 0.26;
+  font-style: italic;
+  font-weight: 400;
+  font-family: var(--font-serif);
+}
+.marquee-name:hover { opacity: 1; }
+.viz.is-focused .marquee-name:not(.is-focus) { opacity: 0.1; }
+.marquee-name.is-focus { color: var(--accent); opacity: 1; }
+
+/* ── 8 · Strata (no graph) ────────────────────────────────────────────── */
+.strata-wrap {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+  padding-bottom: 4px;
+}
+.viz--preview .strata-wrap { padding: 46px 20px 20px; gap: 2px; }
+
+.strat {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 14px;
+  padding: 0 16px;
+  /* One accent varied in weight — the band's depth already carries the
+     magnitude, so colour only has to keep the stack legible. */
+  background: rgba(164, 16, 52, var(--shade));
+}
+.strat-label {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 120px;
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.strat-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.strat-count {
+  font-size: clamp(15px, 2vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.viz--preview .strat-label { min-width: 62px; }
+.viz--preview .strat-name { font-size: 6.5px; letter-spacing: 0.1em; }
+.viz--preview .strat-count { font-size: 11px; }
+
+.strat-lane {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 3px;
+  padding: 4px 0;
+}
+.strat-tick {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.strat-tick.is-founding { opacity: 1; }
+.strat-tick.is-anon { background: none; box-shadow: inset 0 0 0 1px #fff; opacity: 0.4; }
+.strat-tick:hover { opacity: 1; }
+.viz.is-focused .strat-tick:not(.is-focus) { opacity: 0.12; }
+.strat-tick.is-focus { opacity: 1; transform: scale(2.2); background: #fff; }
+
+.strat-quote {
+  flex: none;
+  margin: 14px 16px 0;
+  max-width: 62ch;
+}
+.strat-quote p {
+  margin: 0 0 7px;
+  font-family: var(--font-serif);
+  font-size: clamp(15px, 1.6vw, 21px);
+  line-height: 1.4;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.strat-quote cite {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-style: normal;
+  color: var(--muted);
+}
+
+/* ── 1 · Power grid at night ──────────────────────────────────────────── */
+[data-var='grid'] .junction-glow {
+  fill: var(--accent);
+  opacity: 0.16;
+  filter: blur(9px);
+}
+[data-var='grid'] .junction {
+  fill: #fff;
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+[data-var='grid'] .feeder { stroke: var(--edge); }
+[data-var='grid'] .trunk-base { stroke: var(--accent); }
+/* Two layers on one path: a dim standing conductor and a short bright dash
+   travelling it. A single dashed line reads as a dotted border, not current. */
+[data-var='grid'] .trunk-pulse {
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-dasharray: 2 66;
+  filter: drop-shadow(0 0 6px var(--accent));
+  animation: current 3.2s linear infinite;
+}
+@keyframes current { to { stroke-dashoffset: -136; } }
+[data-var='grid'] .node-dot { filter: drop-shadow(0 0 4px rgba(255, 217, 168, 0.8)); }
+[data-var='grid'] .node.is-founding .node-dot {
+  fill: #fff;
+  filter: drop-shadow(0 0 7px var(--accent));
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-var='grid'] .trunk-pulse { animation: none; opacity: 0.5; }
+}
+
+</style>
+<div class="deck">
+  <header class="cover">
+    <div class="cover-tab"></div>
+    <div class="kick">Harvard in Tech · Donor recognition · Design review</div>
+    <h1>Not a wall. <span>A network.</span></h1>
+    <p class="lede">
+      Nine directions for the supporter recognition page, built from Nicole's note.
+      Every one runs on the same 200 illustrative supporters, so what differs is the
+      idea and not the content. Open any of them, search for a name, and grow the
+      network to 200.
+    </p>
+
+    <div class="brief">
+      <div class="brief-kick">From Nicole's note</div>
+      <blockquote>
+        <p>“I don't think it should be called a wall. It's a network of nodes on a power grid.”</p>
+        <p>“Every gift starts with one person and together those gifts create growth.”</p>
+      </blockquote>
+    </div>
+
+    <div class="legend">
+      <span class="chip"><span class="sw sw--net"></span> <b>Seven network directions</b> — different answers to what governs the shape</span>
+      <span class="chip"><span class="sw sw--off"></span> <b>Two off-brief</b> — no graph at all, as a control</span>
+    </div>
+
+    <div class="toolbar">
+      <span class="tbtn ghost">Click any card to open it full-screen</span>
+      <button class="tbtn primary" id="exportBtn">⤓ Export all feedback</button>
+      <button class="tbtn ghost" id="clearBtn">Clear feedback</button>
+      <span class="tnote">Rate each 1–10 and add a comment. Saved in this browser; Export downloads everything.</span>
+    </div>
+    <textarea id="sessionNotes" class="notes" rows="2"
+      placeholder="Overall reactions, recurring themes, what the page should be called… (saved automatically, included in Export)"></textarea>
+  </header>
+
+  <div class="group-head">
+    <span class="gsw sw--net"></span>
+    <h2>Network directions</h2>
+    <span class="gcount">07</span>
+  </div>
+  <div class="grid" data-family="network"></div>
+
+  <div class="group-head">
+    <span class="gsw sw--off"></span>
+    <h2>Off-brief controls</h2>
+    <span class="gcount">02</span>
+  </div>
+  <div class="grid" data-family="off-brief"></div>
+
+  <section class="qs">
+    <div class="kick">Open questions these directions can't answer on their own</div>
+    <ol>
+      <li>
+        <strong>What is it called?</strong> Nicole ruled out “wall” but left five candidate
+        names. Each direction carries a different one so they can be judged in place
+        rather than on a list.
+      </li>
+      <li>
+        <strong>Is $500 the founding threshold, and does the spreadsheet say so?</strong>
+        The note asks it as a question. Since the upload carries no dollar amounts,
+        founding status has to arrive as its own column — or be derived from
+        <em>when</em> someone gave. These mockups assume the early cohort.
+      </li>
+      <li>
+        <strong>What happens to a supporter who asks not to be named?</strong>
+        The live site already withholds an anonymous donor's name, photo, link and
+        initials together. Search and a shareable card are both new ways to undo that,
+        so here an anonymous supporter is a visible node that counts toward every
+        milestone but cannot be looked up or turned into a card. Worth confirming that
+        is the behaviour Nicole wants.
+      </li>
+      <li>
+        <strong>Are school and graduation year public?</strong> They are the only
+        structure the spreadsheet offers, and directions 01, 03 and 09 are built on them —
+        but they are also personal details some supporters may not expect to be listed.
+      </li>
+    </ol>
+  </section>
+
+  <footer class="foot">
+    Harvard in Tech · supporter network — nine directions · 200 illustrative supporters,
+    no real donor data · prepared for Nicole's review.
+  </footer>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="overlay-bar">
+    <span class="overlay-num" id="ovNum"></span>
+    <span class="overlay-name" id="ovName"></span>
+    <span class="overlay-meta" id="ovMeta"></span>
+    <div class="overlay-actions">
+      <button class="ovbtn" id="ovPrev" aria-label="Previous direction">←</button>
+      <button class="ovbtn" id="ovNext" aria-label="Next direction">→</button>
+      <button class="ovbtn ovbtn--x" id="ovClose">Close ✕</button>
+    </div>
+  </div>
+  <div class="overlay-stage" id="overlayStage"></div>
+</div>
+
+<script>
+window.HIT_DATA = {"_warning": "ILLUSTRATIVE DATA — no real donor appears in this file. Generated by build-donors.py for design exploration only.", "generatedBy": "build-donors.py", "milestones": [50, 100, 150, 200], "donors": [{"name": "Margaret Chen-Alvarez", "school": "Harvard Business School", "gradYear": 1998, "founding": true, "anonymous": false, "note": "Gave the week the fund opened, before there was anything to show for it.", "joinIndex": 1, "slug": "margaret-chen-alvarez"}, {"name": "Robert K. Whitmore", "school": "Harvard College", "gradYear": 1987, "founding": true, "anonymous": true, "note": null, "joinIndex": 2, "slug": "robert-k--whitmore"}, {"name": "David Osei-Bonsu", "school": "Harvard Kennedy School", "gradYear": 2011, "founding": false, "anonymous": false, "note": null, "joinIndex": 3, "slug": "david-osei-bonsu"}, {"name": "Priya Raman", "school": "Harvard SEAS", "gradYear": 2014, "founding": true, "anonymous": false, "note": "Two intros from a founder dinner turned into my first enterprise customer.", "joinIndex": 4, "slug": "priya-raman"}, {"name": "Jonathan Feld", "school": "Harvard College", "gradYear": 2003, "founding": false, "anonymous": false, "note": null, "joinIndex": 5, "slug": "jonathan-feld"}, {"name": "Aisha Rahman", "school": "Harvard Business School", "gradYear": 2016, "founding": false, "anonymous": false, "note": "For the London chapter, which is the only reason I still feel connected.", "joinIndex": 6, "slug": "aisha-rahman"}, {"name": "Tomás Vidal", "school": "Harvard SEAS", "gradYear": 2009, "founding": false, "anonymous": false, "note": null, "joinIndex": 7, "slug": "tomás-vidal"}, {"name": "Hannah Brightwell", "school": "Harvard Law School", "gradYear": 2012, "founding": false, "anonymous": false, "note": null, "joinIndex": 8, "slug": "hannah-brightwell"}, {"name": "Kwame Boateng", "school": "Harvard College", "gradYear": 2019, "founding": false, "anonymous": false, "note": "Small gift, every year, for as long as this keeps going.", "joinIndex": 9, "slug": "kwame-boateng"}, {"name": "Elena Marchetti", "school": "Harvard GSD", "gradYear": 2007, "founding": false, "anonymous": false, "note": null, "joinIndex": 10, "slug": "elena-marchetti"}, {"name": "Samuel Oyelaran", "school": "Harvard SEAS", "gradYear": 2021, "founding": false, "anonymous": false, "note": null, "joinIndex": 11, "slug": "samuel-oyelaran"}, {"name": "Grace Lindqvist", "school": "Harvard College", "gradYear": 1995, "founding": true, "anonymous": false, "note": null, "joinIndex": 12, "slug": "grace-lindqvist"}, {"name": "Nina Petrova", "school": "Harvard Chan School", "gradYear": 2013, "founding": false, "anonymous": true, "note": null, "joinIndex": 13, "slug": "nina-petrova"}, {"name": "Michael Okonkwo", "school": "Harvard Business School", "gradYear": 2006, "founding": false, "anonymous": false, "note": null, "joinIndex": 14, "slug": "michael-okonkwo"}, {"name": "Rebecca Stern", "school": "Harvard College", "gradYear": 2018, "founding": false, "anonymous": false, "note": null, "joinIndex": 15, "slug": "rebecca-stern"}, {"name": "Yusuf Al-Amin", "school": "Harvard Kennedy School", "gradYear": 2015, "founding": false, "anonymous": false, "note": null, "joinIndex": 16, "slug": "yusuf-al-amin"}, {"name": "The Lindgren Family", "school": "Harvard College", "gradYear": 1979, "founding": false, "anonymous": false, "note": "Three generations went through the College. This is the least we can do.", "joinIndex": 17, "slug": "the-lindgren-family"}, {"name": "Clara Ndiaye", "school": "Harvard Extension School", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 18, "slug": "clara-ndiaye"}, {"name": "Farida Eriksen", "school": "Harvard GSD", "gradYear": 1994, "founding": true, "anonymous": false, "note": null, "joinIndex": 19, "slug": "farida-eriksen"}, {"name": "Isabel Bianchi", "school": "Harvard Kennedy School", "gradYear": 2012, "founding": true, "anonymous": false, "note": null, "joinIndex": 20, "slug": "isabel-bianchi"}, {"name": "Soren Barros", "school": "Harvard College", "gradYear": 2020, "founding": true, "anonymous": false, "note": null, "joinIndex": 21, "slug": "soren-barros"}, {"name": "Noor Fitzgerald", "school": "Harvard GSAS", "gradYear": 2015, "founding": true, "anonymous": true, "note": "Supporting the people doing the unglamorous organizing work.", "joinIndex": 22, "slug": "noor-fitzgerald"}, {"name": "Niamh Bouchard", "school": "Harvard SEAS", "gradYear": 2021, "founding": true, "anonymous": false, "note": "The NYC chapter is where I met my co-founder.", "joinIndex": 23, "slug": "niamh-bouchard"}, {"name": "Esther Tadesse", "school": "Harvard Law School", "gradYear": 2020, "founding": true, "anonymous": false, "note": null, "joinIndex": 24, "slug": "esther-tadesse"}, {"name": "Anjali Espinoza", "school": "Harvard College", "gradYear": 1997, "founding": true, "anonymous": false, "note": "The NYC chapter is where I met my co-founder.", "joinIndex": 25, "slug": "anjali-espinoza"}, {"name": "Tariq Larsson", "school": "Harvard College", "gradYear": 2016, "founding": true, "anonymous": false, "note": "Twenty years out and this is the only alumni thing I actually show up to.", "joinIndex": 26, "slug": "tariq-larsson"}, {"name": "Niamh Virtanen", "school": "Harvard Business School", "gradYear": 2011, "founding": true, "anonymous": false, "note": null, "joinIndex": 27, "slug": "niamh-virtanen"}, {"name": "Maja Adeyemi", "school": "Harvard GSAS", "gradYear": 1984, "founding": true, "anonymous": false, "note": null, "joinIndex": 28, "slug": "maja-adeyemi"}, {"name": "Lars Moreau", "school": "Harvard College", "gradYear": 1999, "founding": true, "anonymous": false, "note": null, "joinIndex": 29, "slug": "lars-moreau"}, {"name": "Niamh Vargas", "school": "Harvard GSAS", "gradYear": 2012, "founding": true, "anonymous": false, "note": null, "joinIndex": 30, "slug": "niamh-vargas"}, {"name": "Beatriz Saito", "school": "Harvard Law School", "gradYear": 2015, "founding": true, "anonymous": false, "note": null, "joinIndex": 31, "slug": "beatriz-saito"}, {"name": "Xavier Dubois", "school": "Harvard College", "gradYear": 1999, "founding": true, "anonymous": false, "note": null, "joinIndex": 32, "slug": "xavier-dubois"}, {"name": "Julia Oyelaran", "school": "Harvard College", "gradYear": 1998, "founding": true, "anonymous": false, "note": null, "joinIndex": 33, "slug": "julia-oyelaran"}, {"name": "Carmen Petrov", "school": "Harvard College", "gradYear": 2013, "founding": true, "anonymous": false, "note": null, "joinIndex": 34, "slug": "carmen-petrov"}, {"name": "Chidi Reyes", "school": "Harvard SEAS", "gradYear": 1986, "founding": true, "anonymous": false, "note": null, "joinIndex": 35, "slug": "chidi-reyes"}, {"name": "Miriam Petrov", "school": "Harvard Business School", "gradYear": 2011, "founding": true, "anonymous": false, "note": null, "joinIndex": 36, "slug": "miriam-petrov"}, {"name": "Nadia Barros", "school": "Harvard Law School", "gradYear": 2002, "founding": true, "anonymous": false, "note": null, "joinIndex": 37, "slug": "nadia-barros"}, {"name": "Gabriel Diallo", "school": "Harvard Law School", "gradYear": 2010, "founding": true, "anonymous": false, "note": null, "joinIndex": 38, "slug": "gabriel-diallo"}, {"name": "Ulrich Rasmussen", "school": "Harvard Extension School", "gradYear": 2004, "founding": true, "anonymous": false, "note": null, "joinIndex": 39, "slug": "ulrich-rasmussen"}, {"name": "Valentina Eriksen", "school": "Harvard Kennedy School", "gradYear": 2025, "founding": true, "anonymous": false, "note": null, "joinIndex": 40, "slug": "valentina-eriksen"}, {"name": "Miriam Adeyemi", "school": "Harvard Kennedy School", "gradYear": 2024, "founding": true, "anonymous": false, "note": "Giving because I was asked directly, which is apparently all it takes.", "joinIndex": 41, "slug": "miriam-adeyemi"}, {"name": "Bjorn Kowalski", "school": "Harvard SEAS", "gradYear": 2001, "founding": true, "anonymous": false, "note": null, "joinIndex": 42, "slug": "bjorn-kowalski"}, {"name": "Khalid Bakker", "school": "Harvard Chan School", "gradYear": 2005, "founding": true, "anonymous": false, "note": null, "joinIndex": 43, "slug": "khalid-bakker"}, {"name": "Imani Adeyemi", "school": "Harvard GSAS", "gradYear": 1995, "founding": true, "anonymous": false, "note": null, "joinIndex": 44, "slug": "imani-adeyemi"}, {"name": "Dawit Weiss", "school": "Harvard GSAS", "gradYear": 2010, "founding": true, "anonymous": false, "note": null, "joinIndex": 45, "slug": "dawit-weiss"}, {"name": "Santiago Fernandes", "school": "Harvard Business School", "gradYear": 2006, "founding": true, "anonymous": false, "note": null, "joinIndex": 46, "slug": "santiago-fernandes"}, {"name": "Zara Grimaldi", "school": "Harvard College", "gradYear": 1995, "founding": true, "anonymous": false, "note": "HIT introduced me to my first investor. That is not a small thing.", "joinIndex": 47, "slug": "zara-grimaldi"}, {"name": "Jamal Rasmussen", "school": "Harvard Kennedy School", "gradYear": 2017, "founding": true, "anonymous": false, "note": null, "joinIndex": 48, "slug": "jamal-rasmussen"}, {"name": "Mei Nakamura", "school": "Harvard College", "gradYear": 2020, "founding": true, "anonymous": false, "note": null, "joinIndex": 49, "slug": "mei-nakamura"}, {"name": "Tariq Lindqvist", "school": "Harvard Kennedy School", "gradYear": 2015, "founding": true, "anonymous": false, "note": null, "joinIndex": 50, "slug": "tariq-lindqvist"}, {"name": "Ulrich Moreau", "school": "Harvard Kennedy School", "gradYear": 2007, "founding": true, "anonymous": false, "note": null, "joinIndex": 51, "slug": "ulrich-moreau"}, {"name": "Imani Cardoso", "school": "Harvard Kennedy School", "gradYear": 2016, "founding": true, "anonymous": true, "note": null, "joinIndex": 52, "slug": "imani-cardoso"}, {"name": "Wei Wang", "school": "Harvard Kennedy School", "gradYear": 1986, "founding": true, "anonymous": false, "note": null, "joinIndex": 53, "slug": "wei-wang"}, {"name": "Zainab Mensah", "school": "Harvard College", "gradYear": 2020, "founding": true, "anonymous": false, "note": "I believe alumni networks should be useful, not ceremonial.", "joinIndex": 54, "slug": "zainab-mensah"}, {"name": "Nadia Lindqvist", "school": "Harvard Medical School", "gradYear": 2007, "founding": true, "anonymous": false, "note": null, "joinIndex": 55, "slug": "nadia-lindqvist"}, {"name": "Wei Adeyemi", "school": "Harvard Kennedy School", "gradYear": 2011, "founding": true, "anonymous": false, "note": null, "joinIndex": 56, "slug": "wei-adeyemi"}, {"name": "Ibrahim Delacroix", "school": "Harvard SEAS", "gradYear": 2012, "founding": true, "anonymous": false, "note": null, "joinIndex": 57, "slug": "ibrahim-delacroix"}, {"name": "Gunnar Okafor", "school": "Harvard Law School", "gradYear": 1996, "founding": true, "anonymous": false, "note": null, "joinIndex": 58, "slug": "gunnar-okafor"}, {"name": "Ravi Bianchi", "school": "Harvard SEAS", "gradYear": 1996, "founding": true, "anonymous": false, "note": null, "joinIndex": 59, "slug": "ravi-bianchi"}, {"name": "Beatriz Wachowski", "school": "Harvard SEAS", "gradYear": 1995, "founding": true, "anonymous": false, "note": "The LA chapter got started because a few people cared. I want to be one of them.", "joinIndex": 60, "slug": "beatriz-wachowski"}, {"name": "Leonardo Hoffmann", "school": "Harvard College", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 61, "slug": "leonardo-hoffmann"}, {"name": "Leila Vargas", "school": "Harvard GSE", "gradYear": 1999, "founding": false, "anonymous": true, "note": null, "joinIndex": 62, "slug": "leila-vargas"}, {"name": "Yuki Nkemelu", "school": "Harvard SEAS", "gradYear": 1995, "founding": false, "anonymous": false, "note": "Supporting the people doing the unglamorous organizing work.", "joinIndex": 63, "slug": "yuki-nkemelu"}, {"name": "Theo Rossi", "school": "Harvard College", "gradYear": 2005, "founding": false, "anonymous": false, "note": "I got my first job in tech through someone I met at a HIT dinner.", "joinIndex": 64, "slug": "theo-rossi"}, {"name": "Marcus Dubois", "school": "Harvard Business School", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 65, "slug": "marcus-dubois"}, {"name": "Helena Nakamura", "school": "Harvard College", "gradYear": 2016, "founding": false, "anonymous": false, "note": null, "joinIndex": 66, "slug": "helena-nakamura"}, {"name": "Lucas Weiss", "school": "Harvard College", "gradYear": 2022, "founding": false, "anonymous": false, "note": null, "joinIndex": 67, "slug": "lucas-weiss"}, {"name": "Thandiwe Vargas", "school": "Harvard College", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 68, "slug": "thandiwe-vargas"}, {"name": "Sofia Silva", "school": "Harvard Business School", "gradYear": 2010, "founding": false, "anonymous": false, "note": null, "joinIndex": 69, "slug": "sofia-silva"}, {"name": "Gunnar Moreau", "school": "Harvard GSAS", "gradYear": 1988, "founding": false, "anonymous": true, "note": null, "joinIndex": 70, "slug": "gunnar-moreau"}, {"name": "Oscar Grimaldi", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": true, "note": null, "joinIndex": 71, "slug": "oscar-grimaldi"}, {"name": "Sabine Bakker", "school": "Harvard GSE", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 72, "slug": "sabine-bakker"}, {"name": "Kirsten Dubois", "school": "Harvard College", "gradYear": 2001, "founding": false, "anonymous": false, "note": null, "joinIndex": 73, "slug": "kirsten-dubois"}, {"name": "Hana Eriksen", "school": "Harvard Business School", "gradYear": 1990, "founding": false, "anonymous": false, "note": null, "joinIndex": 74, "slug": "hana-eriksen"}, {"name": "Mei Gonzalez", "school": "Harvard Business School", "gradYear": 2000, "founding": false, "anonymous": false, "note": null, "joinIndex": 75, "slug": "mei-gonzalez"}, {"name": "Salma Zhang", "school": "Harvard College", "gradYear": 1986, "founding": false, "anonymous": false, "note": "I got my first job in tech through someone I met at a HIT dinner.", "joinIndex": 76, "slug": "salma-zhang"}, {"name": "Adaeze Sorensen", "school": "Harvard Business School", "gradYear": 2023, "founding": false, "anonymous": false, "note": null, "joinIndex": 77, "slug": "adaeze-sorensen"}, {"name": "Paulo Navarro", "school": "Harvard Business School", "gradYear": 1990, "founding": false, "anonymous": false, "note": null, "joinIndex": 78, "slug": "paulo-navarro"}, {"name": "Wei Bouchard", "school": "Harvard Kennedy School", "gradYear": 2013, "founding": false, "anonymous": true, "note": null, "joinIndex": 79, "slug": "wei-bouchard"}, {"name": "Rania Kaur", "school": "Harvard SEAS", "gradYear": 1993, "founding": false, "anonymous": false, "note": null, "joinIndex": 80, "slug": "rania-kaur"}, {"name": "Kirsten Iwu", "school": "Harvard SEAS", "gradYear": 1987, "founding": false, "anonymous": true, "note": null, "joinIndex": 81, "slug": "kirsten-iwu"}, {"name": "Paulo Halvorsen", "school": "Harvard College", "gradYear": 2006, "founding": false, "anonymous": true, "note": null, "joinIndex": 82, "slug": "paulo-halvorsen"}, {"name": "Leila Yamamoto", "school": "Harvard GSD", "gradYear": 1987, "founding": false, "anonymous": false, "note": null, "joinIndex": 83, "slug": "leila-yamamoto"}, {"name": "Zara Nkemelu", "school": "Harvard SEAS", "gradYear": 2020, "founding": false, "anonymous": false, "note": "I got my first job in tech through someone I met at a HIT dinner.", "joinIndex": 84, "slug": "zara-nkemelu"}, {"name": "Petra Weiss", "school": "Harvard SEAS", "gradYear": 2014, "founding": false, "anonymous": false, "note": null, "joinIndex": 85, "slug": "petra-weiss"}, {"name": "Fatima Ahmed", "school": "Harvard College", "gradYear": 1994, "founding": false, "anonymous": false, "note": null, "joinIndex": 86, "slug": "fatima-ahmed"}, {"name": "Jasmine Nakamura", "school": "Harvard SEAS", "gradYear": 2019, "founding": false, "anonymous": false, "note": null, "joinIndex": 87, "slug": "jasmine-nakamura"}, {"name": "Sabine Wang", "school": "Harvard College", "gradYear": 1991, "founding": false, "anonymous": false, "note": null, "joinIndex": 88, "slug": "sabine-wang"}, {"name": "Rohan Fontaine", "school": "Harvard SEAS", "gradYear": 1988, "founding": false, "anonymous": false, "note": null, "joinIndex": 89, "slug": "rohan-fontaine"}, {"name": "Hassan Devereux", "school": "Harvard Business School", "gradYear": 2025, "founding": false, "anonymous": false, "note": null, "joinIndex": 90, "slug": "hassan-devereux"}, {"name": "Caleb Dabiri", "school": "Harvard SEAS", "gradYear": 2001, "founding": false, "anonymous": false, "note": null, "joinIndex": 91, "slug": "caleb-dabiri"}, {"name": "Esther Schneider", "school": "Harvard College", "gradYear": 2023, "founding": false, "anonymous": false, "note": "HIT introduced me to my first investor. That is not a small thing.", "joinIndex": 92, "slug": "esther-schneider"}, {"name": "Fatima Kowalski", "school": "Harvard SEAS", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 93, "slug": "fatima-kowalski"}, {"name": "Olga Sorensen", "school": "Harvard Business School", "gradYear": 1997, "founding": false, "anonymous": false, "note": null, "joinIndex": 94, "slug": "olga-sorensen"}, {"name": "Chidi Bergstrom", "school": "Harvard College", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 95, "slug": "chidi-bergstrom"}, {"name": "Ibrahim Haddad", "school": "Harvard SEAS", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 96, "slug": "ibrahim-haddad"}, {"name": "Zainab Delacroix", "school": "Harvard College", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 97, "slug": "zainab-delacroix"}, {"name": "Dawit Tanaka", "school": "Harvard College", "gradYear": 2018, "founding": false, "anonymous": false, "note": null, "joinIndex": 98, "slug": "dawit-tanaka"}, {"name": "Yara Yamamoto", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 99, "slug": "yara-yamamoto"}, {"name": "Miriam Chowdhury", "school": "Harvard College", "gradYear": 2022, "founding": false, "anonymous": false, "note": null, "joinIndex": 100, "slug": "miriam-chowdhury"}, {"name": "Ibrahim Almeida", "school": "Harvard Law School", "gradYear": 2018, "founding": false, "anonymous": false, "note": null, "joinIndex": 101, "slug": "ibrahim-almeida"}, {"name": "Isabel Okafor", "school": "Harvard SEAS", "gradYear": 2017, "founding": false, "anonymous": false, "note": null, "joinIndex": 102, "slug": "isabel-okafor"}, {"name": "Elias Schneider", "school": "Harvard College", "gradYear": 1992, "founding": false, "anonymous": false, "note": null, "joinIndex": 103, "slug": "elias-schneider"}, {"name": "Ines Almeida", "school": "Harvard Kennedy School", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 104, "slug": "ines-almeida"}, {"name": "Dawit Bouchard", "school": "Harvard Kennedy School", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 105, "slug": "dawit-bouchard"}, {"name": "Santiago Mabaso", "school": "Harvard GSD", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 106, "slug": "santiago-mabaso"}, {"name": "Andrei Chowdhury", "school": "Harvard Business School", "gradYear": 1991, "founding": false, "anonymous": false, "note": "Met three of my current teammates through this network.", "joinIndex": 107, "slug": "andrei-chowdhury"}, {"name": "Hassan Eriksen", "school": "Harvard Kennedy School", "gradYear": 1988, "founding": false, "anonymous": false, "note": null, "joinIndex": 108, "slug": "hassan-eriksen"}, {"name": "Imani Gonzalez", "school": "Harvard College", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 109, "slug": "imani-gonzalez"}, {"name": "Anjali Virtanen", "school": "Harvard SEAS", "gradYear": 1990, "founding": false, "anonymous": false, "note": null, "joinIndex": 110, "slug": "anjali-virtanen"}, {"name": "Nikhil Fitzgerald", "school": "Harvard Medical School", "gradYear": 1995, "founding": false, "anonymous": false, "note": null, "joinIndex": 111, "slug": "nikhil-fitzgerald"}, {"name": "Thandiwe Jensen", "school": "Harvard Business School", "gradYear": 1992, "founding": false, "anonymous": false, "note": null, "joinIndex": 112, "slug": "thandiwe-jensen"}, {"name": "Gunnar Tadesse", "school": "Harvard College", "gradYear": 2007, "founding": false, "anonymous": false, "note": null, "joinIndex": 113, "slug": "gunnar-tadesse"}, {"name": "Jasmine Abebe", "school": "Harvard Business School", "gradYear": 1986, "founding": false, "anonymous": false, "note": "Twenty years out and this is the only alumni thing I actually show up to.", "joinIndex": 114, "slug": "jasmine-abebe"}, {"name": "Amara Petrov", "school": "Harvard SEAS", "gradYear": 1987, "founding": false, "anonymous": false, "note": null, "joinIndex": 115, "slug": "amara-petrov"}, {"name": "Jae-won Delacroix", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 116, "slug": "jae-won-delacroix"}, {"name": "Fiona Okafor", "school": "Harvard Kennedy School", "gradYear": 1985, "founding": false, "anonymous": false, "note": null, "joinIndex": 117, "slug": "fiona-okafor"}, {"name": "Yohannes Fernandes", "school": "Harvard Business School", "gradYear": 2008, "founding": false, "anonymous": false, "note": "This is the group that answered when I was between jobs.", "joinIndex": 118, "slug": "yohannes-fernandes"}, {"name": "Paulo Mabaso", "school": "Harvard Business School", "gradYear": 1988, "founding": false, "anonymous": false, "note": null, "joinIndex": 119, "slug": "paulo-mabaso"}, {"name": "Kirsten Silva", "school": "Harvard GSAS", "gradYear": 2016, "founding": false, "anonymous": false, "note": null, "joinIndex": 120, "slug": "kirsten-silva"}, {"name": "Ulrich Ivanova", "school": "Harvard Kennedy School", "gradYear": 1985, "founding": false, "anonymous": false, "note": null, "joinIndex": 121, "slug": "ulrich-ivanova"}, {"name": "Maja Thompson", "school": "Harvard Law School", "gradYear": 1994, "founding": false, "anonymous": false, "note": null, "joinIndex": 122, "slug": "maja-thompson"}, {"name": "Petra Almeida", "school": "Harvard GSAS", "gradYear": 2024, "founding": false, "anonymous": false, "note": null, "joinIndex": 123, "slug": "petra-almeida"}, {"name": "Omar Maalouf", "school": "Harvard Law School", "gradYear": 2010, "founding": false, "anonymous": false, "note": null, "joinIndex": 124, "slug": "omar-maalouf"}, {"name": "Jonas Tanaka", "school": "Harvard Law School", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 125, "slug": "jonas-tanaka"}, {"name": "Ruth Halvorsen", "school": "Harvard GSE", "gradYear": 2009, "founding": false, "anonymous": false, "note": "For the students. The job market is brutal right now.", "joinIndex": 126, "slug": "ruth-halvorsen"}, {"name": "Rosa Adeyemi", "school": "Harvard Business School", "gradYear": 2012, "founding": false, "anonymous": false, "note": "Because nobody did this for me when I graduated, and it took me years longer.", "joinIndex": 127, "slug": "rosa-adeyemi"}, {"name": "Salma Kimura", "school": "Harvard College", "gradYear": 2009, "founding": false, "anonymous": false, "note": null, "joinIndex": 128, "slug": "salma-kimura"}, {"name": "Elias Novak", "school": "Harvard Kennedy School", "gradYear": 1993, "founding": false, "anonymous": false, "note": null, "joinIndex": 129, "slug": "elias-novak"}, {"name": "Vera Saito", "school": "Harvard Business School", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 130, "slug": "vera-saito"}, {"name": "Soren Ibarra", "school": "Harvard Law School", "gradYear": 2006, "founding": false, "anonymous": false, "note": null, "joinIndex": 131, "slug": "soren-ibarra"}, {"name": "Rosa Larsson", "school": "Harvard College", "gradYear": 2000, "founding": false, "anonymous": true, "note": null, "joinIndex": 132, "slug": "rosa-larsson"}, {"name": "Valentina Tadesse", "school": "Harvard Business School", "gradYear": 2010, "founding": false, "anonymous": false, "note": null, "joinIndex": 133, "slug": "valentina-tadesse"}, {"name": "Theo Nakamura", "school": "Harvard Business School", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 134, "slug": "theo-nakamura"}, {"name": "Marcus Tadesse", "school": "Harvard College", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 135, "slug": "marcus-tadesse"}, {"name": "Niamh Abebe", "school": "Harvard Kennedy School", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 136, "slug": "niamh-abebe"}, {"name": "Malika Iwu", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": false, "note": "This is the group that answered when I was between jobs.", "joinIndex": 137, "slug": "malika-iwu"}, {"name": "Elias Petrov", "school": "Harvard GSD", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 138, "slug": "elias-petrov"}, {"name": "Tariq Tanaka", "school": "Harvard College", "gradYear": 2012, "founding": false, "anonymous": false, "note": "The SF events have been worth more to me than any conference I've paid for.", "joinIndex": 139, "slug": "tariq-tanaka"}, {"name": "Deepa Bergstrom", "school": "Harvard GSAS", "gradYear": 2012, "founding": false, "anonymous": false, "note": null, "joinIndex": 140, "slug": "deepa-bergstrom"}, {"name": "Esther Nkemelu", "school": "Harvard Business School", "gradYear": 2002, "founding": false, "anonymous": false, "note": "This is the group that answered when I was between jobs.", "joinIndex": 141, "slug": "esther-nkemelu"}, {"name": "Rosa Maalouf", "school": "Harvard GSD", "gradYear": 2020, "founding": false, "anonymous": true, "note": "HIT introduced me to my first investor. That is not a small thing.", "joinIndex": 142, "slug": "rosa-maalouf"}, {"name": "Quentin Takahashi", "school": "Harvard College", "gradYear": 1994, "founding": false, "anonymous": false, "note": null, "joinIndex": 143, "slug": "quentin-takahashi"}, {"name": "Vera Cardoso", "school": "Harvard GSD", "gradYear": 2023, "founding": false, "anonymous": false, "note": null, "joinIndex": 144, "slug": "vera-cardoso"}, {"name": "Xavier Eriksen", "school": "Harvard SEAS", "gradYear": 2007, "founding": false, "anonymous": false, "note": null, "joinIndex": 145, "slug": "xavier-eriksen"}, {"name": "Niamh Rasmussen", "school": "Harvard College", "gradYear": 1994, "founding": false, "anonymous": false, "note": null, "joinIndex": 146, "slug": "niamh-rasmussen"}, {"name": "Petra Maalouf", "school": "Harvard College", "gradYear": 1993, "founding": false, "anonymous": false, "note": null, "joinIndex": 147, "slug": "petra-maalouf"}, {"name": "Khalid Achebe", "school": "Harvard College", "gradYear": 1990, "founding": false, "anonymous": false, "note": "For the Tokyo chapter — being an alum abroad is lonely without it.", "joinIndex": 148, "slug": "khalid-achebe"}, {"name": "Carmen Eriksen", "school": "Harvard GSAS", "gradYear": 2003, "founding": false, "anonymous": false, "note": null, "joinIndex": 149, "slug": "carmen-eriksen"}, {"name": "Jasmine Gonzalez", "school": "Harvard College", "gradYear": 2010, "founding": false, "anonymous": false, "note": null, "joinIndex": 150, "slug": "jasmine-gonzalez"}, {"name": "Marcus Mensah", "school": "Harvard College", "gradYear": 1997, "founding": false, "anonymous": false, "note": null, "joinIndex": 151, "slug": "marcus-mensah"}, {"name": "Caleb Nkemelu", "school": "Harvard College", "gradYear": 1991, "founding": false, "anonymous": true, "note": null, "joinIndex": 152, "slug": "caleb-nkemelu"}, {"name": "Sofia Sorensen", "school": "Harvard Business School", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 153, "slug": "sofia-sorensen"}, {"name": "Zainab Fitzgerald", "school": "Harvard SEAS", "gradYear": 2009, "founding": false, "anonymous": false, "note": null, "joinIndex": 154, "slug": "zainab-fitzgerald"}, {"name": "Theo Cardoso", "school": "Harvard SEAS", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 155, "slug": "theo-cardoso"}, {"name": "Rania Vargas", "school": "Harvard College", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 156, "slug": "rania-vargas"}, {"name": "Andrei Haddad", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 157, "slug": "andrei-haddad"}, {"name": "Vera Takahashi", "school": "Harvard SEAS", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 158, "slug": "vera-takahashi"}, {"name": "Zara Almeida", "school": "Harvard Kennedy School", "gradYear": 1986, "founding": false, "anonymous": false, "note": null, "joinIndex": 159, "slug": "zara-almeida"}, {"name": "Sofia Tanaka", "school": "Harvard Business School", "gradYear": 1985, "founding": false, "anonymous": false, "note": "The NYC chapter is where I met my co-founder.", "joinIndex": 160, "slug": "sofia-tanaka"}, {"name": "Hana Devereux", "school": "Harvard Law School", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 161, "slug": "hana-devereux"}, {"name": "Vera Bakker", "school": "Harvard Extension School", "gradYear": 1986, "founding": false, "anonymous": false, "note": null, "joinIndex": 162, "slug": "vera-bakker"}, {"name": "Anjali Maalouf", "school": "Harvard Business School", "gradYear": 1992, "founding": false, "anonymous": true, "note": null, "joinIndex": 163, "slug": "anjali-maalouf"}, {"name": "Marcus Diallo", "school": "Harvard SEAS", "gradYear": 1999, "founding": false, "anonymous": false, "note": "HIT introduced me to my first investor. That is not a small thing.", "joinIndex": 164, "slug": "marcus-diallo"}, {"name": "Noor Ahmed", "school": "Harvard College", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 165, "slug": "noor-ahmed"}, {"name": "Beatriz Kowalski", "school": "Harvard Business School", "gradYear": 2021, "founding": false, "anonymous": false, "note": null, "joinIndex": 166, "slug": "beatriz-kowalski"}, {"name": "Lars Maalouf", "school": "Harvard College", "gradYear": 2001, "founding": false, "anonymous": false, "note": null, "joinIndex": 167, "slug": "lars-maalouf"}, {"name": "Xavier Hoffmann", "school": "Harvard Business School", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 168, "slug": "xavier-hoffmann"}, {"name": "Jamal Wachowski", "school": "Harvard GSAS", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 169, "slug": "jamal-wachowski"}, {"name": "Noor Hoffmann", "school": "Harvard Law School", "gradYear": 2019, "founding": false, "anonymous": false, "note": null, "joinIndex": 170, "slug": "noor-hoffmann"}, {"name": "Yohannes Tadesse", "school": "Harvard College", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 171, "slug": "yohannes-tadesse"}, {"name": "Lucas Kaur", "school": "Harvard Kennedy School", "gradYear": 2025, "founding": false, "anonymous": false, "note": null, "joinIndex": 172, "slug": "lucas-kaur"}, {"name": "Xavier Okafor", "school": "Harvard SEAS", "gradYear": 1988, "founding": false, "anonymous": false, "note": "Met three of my current teammates through this network.", "joinIndex": 173, "slug": "xavier-okafor"}, {"name": "Lucas Takahashi", "school": "Harvard College", "gradYear": 2014, "founding": false, "anonymous": false, "note": null, "joinIndex": 174, "slug": "lucas-takahashi"}, {"name": "Hana Tanaka", "school": "Harvard Medical School", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 175, "slug": "hana-tanaka"}, {"name": "Kenji Wang", "school": "Harvard Extension School", "gradYear": 2006, "founding": false, "anonymous": false, "note": null, "joinIndex": 176, "slug": "kenji-wang"}, {"name": "Leila Bergstrom", "school": "Harvard Kennedy School", "gradYear": 2013, "founding": false, "anonymous": false, "note": null, "joinIndex": 177, "slug": "leila-bergstrom"}, {"name": "Fiona Dabiri", "school": "Harvard Chan School", "gradYear": 2025, "founding": false, "anonymous": false, "note": null, "joinIndex": 178, "slug": "fiona-dabiri"}, {"name": "Marcus Navarro", "school": "Harvard College", "gradYear": 2022, "founding": false, "anonymous": false, "note": "Supporting the people doing the unglamorous organizing work.", "joinIndex": 179, "slug": "marcus-navarro"}, {"name": "Zainab Pereira", "school": "Harvard SEAS", "gradYear": 2022, "founding": false, "anonymous": false, "note": null, "joinIndex": 180, "slug": "zainab-pereira"}, {"name": "Emeka Wachowski", "school": "Harvard Law School", "gradYear": 2023, "founding": false, "anonymous": false, "note": null, "joinIndex": 181, "slug": "emeka-wachowski"}, {"name": "Deepa Novak", "school": "Harvard College", "gradYear": 1992, "founding": false, "anonymous": false, "note": "Small gift now, bigger one when my company exits.", "joinIndex": 182, "slug": "deepa-novak"}, {"name": "Caleb Chatterjee", "school": "Harvard College", "gradYear": 2022, "founding": false, "anonymous": false, "note": null, "joinIndex": 183, "slug": "caleb-chatterjee"}, {"name": "Chidi Larsson", "school": "Harvard Business School", "gradYear": 2021, "founding": false, "anonymous": false, "note": null, "joinIndex": 184, "slug": "chidi-larsson"}, {"name": "Gunnar Zielinski", "school": "Harvard Law School", "gradYear": 1994, "founding": false, "anonymous": false, "note": "The mentorship program matched me with someone who talked me out of quitting.", "joinIndex": 185, "slug": "gunnar-zielinski"}, {"name": "Wendy Ibarra", "school": "Harvard Kennedy School", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 186, "slug": "wendy-ibarra"}, {"name": "Leila Larsson", "school": "Harvard Law School", "gradYear": 1985, "founding": false, "anonymous": false, "note": null, "joinIndex": 187, "slug": "leila-larsson"}, {"name": "Camila Abebe", "school": "Harvard Chan School", "gradYear": 2011, "founding": false, "anonymous": false, "note": null, "joinIndex": 188, "slug": "camila-abebe"}, {"name": "Rosa Nguyen", "school": "Harvard College", "gradYear": 1992, "founding": false, "anonymous": true, "note": null, "joinIndex": 189, "slug": "rosa-nguyen"}, {"name": "Laila Larsson", "school": "Harvard SEAS", "gradYear": 1989, "founding": false, "anonymous": false, "note": "The NYC chapter is where I met my co-founder.", "joinIndex": 190, "slug": "laila-larsson"}, {"name": "Jae-won Maalouf", "school": "Harvard GSAS", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 191, "slug": "jae-won-maalouf"}, {"name": "Ravi Barros", "school": "Harvard Law School", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 192, "slug": "ravi-barros"}, {"name": "Yara Saito", "school": "Harvard GSAS", "gradYear": 1999, "founding": false, "anonymous": false, "note": "Paying back the intro that changed my career.", "joinIndex": 193, "slug": "yara-saito"}, {"name": "Caleb Jensen", "school": "Harvard SEAS", "gradYear": 2019, "founding": false, "anonymous": false, "note": null, "joinIndex": 194, "slug": "caleb-jensen"}, {"name": "Julia Sharma", "school": "Harvard Medical School", "gradYear": 2009, "founding": false, "anonymous": false, "note": null, "joinIndex": 195, "slug": "julia-sharma"}, {"name": "Kirsten Rasmussen", "school": "Harvard Business School", "gradYear": 1985, "founding": false, "anonymous": false, "note": null, "joinIndex": 196, "slug": "kirsten-rasmussen"}, {"name": "Khalid Haddad", "school": "Harvard Business School", "gradYear": 2018, "founding": false, "anonymous": false, "note": null, "joinIndex": 197, "slug": "khalid-haddad"}, {"name": "Marcus Andersson", "school": "Harvard Kennedy School", "gradYear": 2013, "founding": false, "anonymous": false, "note": "Because nobody did this for me when I graduated, and it took me years longer.", "joinIndex": 198, "slug": "marcus-andersson"}, {"name": "Tobias Ivanova", "school": "Harvard College", "gradYear": 2013, "founding": false, "anonymous": false, "note": null, "joinIndex": 199, "slug": "tobias-ivanova"}, {"name": "Hassan Espinoza", "school": "Harvard GSAS", "gradYear": 1998, "founding": false, "anonymous": false, "note": null, "joinIndex": 200, "slug": "hassan-espinoza"}]};
+/* Pure rules behind the donor-network design explorations.
+ *
+ * Written once, in plain JavaScript, and used from two places that cannot
+ * share an ES module: `.codeyam/design/donor-network/build.py` inlines this
+ * file verbatim into a self-contained page (a published artifact runs under a
+ * CSP that blocks every external host, so nothing can be fetched at runtime),
+ * while vitest imports it as CommonJS. A UMD wrapper is what lets one file
+ * serve both — the alternative is two copies of the anonymity rule, and two
+ * copies of a privacy rule is one copy that will eventually disagree.
+ *
+ * It lives under `src/` because vitest's `include` is `src/**` — a module
+ * parked beside the exploration in `.codeyam/` is a module no test can reach.
+ */
+(function (root, factory) {
+  var api = factory();
+  root.HIT_RULES = api;
+  if (typeof module === 'object' && module.exports) module.exports = api;
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  var ANONYMOUS_LABEL = 'Anonymous supporter';
+
+  var SCHOOL_SHORT = {
+    'Harvard College': 'College',
+    'Harvard Business School': 'HBS',
+    'Harvard SEAS': 'SEAS',
+    'Harvard Kennedy School': 'HKS',
+    'Harvard Law School': 'HLS',
+    'Harvard Medical School': 'HMS',
+    'Harvard GSD': 'GSD',
+    'Harvard GSE': 'GSE',
+    'Harvard GSAS': 'GSAS',
+    'Harvard Chan School': 'Chan',
+    'Harvard Extension School': 'Extension'
+  };
+
+  /**
+   * Whether a supporter can be found by typing their name.
+   *
+   * The live site withholds an anonymous donor's name, photo, link and even
+   * their initials together (`src/lib/donors.ts`). A search box is a new way to
+   * undo all of that at once, so anonymity has to reach it: an anonymous
+   * supporter is still a visible node and still counts toward every total and
+   * every milestone — withholding the node would make the wall quietly
+   * undercount people who asked only not to be named — but they cannot be
+   * looked up, and they get no shareable card.
+   */
+  function isSearchable(donor) {
+    return !donor.anonymous;
+  }
+
+  /** The name to print, or the standing label when the donor asked not to be named. */
+  function displayName(donor) {
+    return donor.anonymous ? ANONYMOUS_LABEL : donor.name;
+  }
+
+  /**
+   * The avatar mark: initials, or a neutral dash when anonymous.
+   *
+   * Initials leak the withheld name — two letters beside "Anonymous supporter"
+   * identifies them to anyone who knows them — so the anonymous case gets a
+   * mark that identifies nobody.
+   */
+  function supporterMonogram(donor) {
+    if (donor.anonymous) return '—';
+    return String(donor.name).split(/\s+/).filter(Boolean).slice(0, 2)
+      .map(function (w) { return w[0]; }).join('').toUpperCase();
+  }
+
+  /** Short label for a Harvard school, or the name unchanged if unrecognized. */
+  function shortSchool(name) {
+    return SCHOOL_SHORT[name] || name;
+  }
+
+  /**
+   * The milestone the count passed between two frames of the growth animation,
+   * or null.
+   *
+   * Crossing, not landing. The growth step accelerates as the count climbs, so
+   * asking whether the new count EQUALS a milestone means 50, 100 and 150 fire
+   * only when the arithmetic happens to hit them exactly — in practice never.
+   * Only 200 appeared to work, and only because it is clamped.
+   */
+  function milestoneCrossed(prev, next, milestones) {
+    for (var i = 0; i < milestones.length; i++) {
+      if (prev < milestones[i] && milestones[i] <= next) return milestones[i];
+    }
+    return null;
+  }
+
+  /**
+   * `n` items spread evenly across `items`.
+   *
+   * Used to place supporters through sampled letterforms. Taking the first `n`
+   * instead would fill the top of the first glyph and leave the rest of the
+   * word empty, because the sampler emits points in scan order.
+   */
+  function thin(items, n) {
+    if (n <= 0) return [];
+    if (items.length <= n) return items.slice();
+    var out = [], stride = items.length / n;
+    for (var i = 0; i < n; i++) out.push(items[Math.floor(i * stride)]);
+    return out;
+  }
+
+  /**
+   * Seeded PRNG (mulberry32).
+   *
+   * Layouts must be reproducible: a network that reshuffles between renders
+   * reads as a different design, so a reviewer would be rating noise — and a
+   * screenshot they already commented on would stop matching the page.
+   */
+  function rng(seed) {
+    var s = seed >>> 0;
+    return function () {
+      s = (s + 0x6d2b79f5) >>> 0;
+      var t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  return {
+    ANONYMOUS_LABEL: ANONYMOUS_LABEL,
+    isSearchable: isSearchable,
+    displayName: displayName,
+    supporterMonogram: supporterMonogram,
+    shortSchool: shortSchool,
+    milestoneCrossed: milestoneCrossed,
+    thin: thin,
+    rng: rng
+  };
+});
+
+/* Shared runtime for every variation.
+ *
+ * The eight directions differ in where nodes go and what they look like. They do
+ * NOT differ in what the page does: search a name, focus that person, count up
+ * through the milestones, hand someone a card they can post. Those behaviours
+ * live here once, so a change to how focus dims the network is one edit rather
+ * than eight, and so Nicole is comparing visual directions rather than eight
+ * slightly different feature sets.
+ *
+ * A variation supplies: copy, a palette, and a `layout(donors, W, H)` returning
+ * node positions and edges. Everything below is generic over that.
+ */
+(function () {
+  'use strict';
+
+  var DATA = window.HIT_DATA;
+  var DONORS = DATA.donors;
+  var MILESTONES = DATA.milestones;
+
+  /* The pure rules live in src/lib/donorNetwork.js, which build.py inlines
+     just above this file and vitest covers directly. Re-declaring them here
+     would give the anonymity contract a second copy that no test can see. */
+  var R = window.HIT_RULES;
+  var rng = R.rng;
+  var isSearchable = R.isSearchable;
+  var displayName = R.displayName;
+  var monogram = R.supporterMonogram;
+  var shortSchool = R.shortSchool;
+  var thin = R.thin;
+
+  function el(tag, cls, parent) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function svgEl(tag, parent) {
+    var n = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+  function attrs(node, o) {
+    for (var k in o) node.setAttribute(k, o[k]);
+    return node;
+  }
+
+
+  /* ── Mount ────────────────────────────────────────────────────────────── */
+
+  /* mode 'preview' is the miniature inside a card: the same layout and palette,
+     no chrome, no interaction. It exists so the card grid shows what each
+     direction actually looks like rather than a label — and because it is the
+     real renderer, the thumbnail can never drift from the thing it opens. */
+  function mount(container, variation, opts) {
+    opts = opts || {};
+    var mode = opts.mode || 'full';
+    var preview = mode === 'preview';
+    var count = opts.count != null ? opts.count : (preview ? 200 : 200);
+
+    container.innerHTML = '';
+    /* Add rather than assign: the host element usually carries a positioning
+       class of its own (the card's .thumb-mount), and clobbering className
+       drops it — which leaves the miniature unpositioned and invisible. */
+    container.classList.remove('viz--preview', 'viz--full');
+    container.classList.add('viz', 'viz--' + mode);
+    container.setAttribute('data-var', variation.id);
+    var t = variation.theme || {};
+    for (var k in t) container.style.setProperty('--' + k, t[k]);
+
+    var state = {
+      variation: variation, container: container, mode: mode,
+      count: count, focus: null, nodes: [], byslug: {}, edgesOf: {}
+    };
+
+    /* Chrome first, then the body. Building the stage first and inserting the
+       head at the front afterwards leaves the search bar appended BELOW the
+       visualization, where the profile panel sits on top of it. */
+    if (!preview) buildChrome(container, state);
+
+    if (variation.custom) {
+      variation.custom(container, state, API);
+      state.body = container.querySelector('.viz-custom');
+      if (!preview) finishChrome(container, state);
+      return state;
+    }
+
+    var stage = el('div', 'viz-stage', container);
+    state.body = stage;
+    /* Composition, declared per direction. Eight centred objects each captioned
+       from the top-left is one template used eight times — the layout has to
+       vary as much as the artwork, or every direction reads as the same page
+       with different contents. */
+    container.classList.add('is-type-' + (variation.compose || 'tl'));
+    /* Size the coordinate space to the stage's real shape instead of a fixed
+       1000x640. A layout drawn at one aspect and displayed at another has to be
+       either letterboxed or cropped, and cropping is what cut the root tree off
+       at its own seed. Measuring means each layout is composed for the space it
+       will actually occupy. */
+    var box = stage.getBoundingClientRect();
+    var W = 1000;
+    var H = box.width > 0
+      ? Math.max(360, Math.min(900, Math.round(1000 * box.height / box.width)))
+      : 620;
+    var svg = svgEl('svg', stage);
+    attrs(svg, { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+    svg.setAttribute('class', 'viz-svg');
+    state.svg = svg;
+    state.W = W; state.H = H;
+
+    /* A camera group wrapping the whole scene. Nicole's note asks that a
+       searched supporter "moves into focus" — enlarging the dot in place is
+       only half of that, so the camera pans and zooms to bring them to the
+       middle. It has to be an ancestor of every layer or the edges and decor
+       would stay put while the nodes moved. */
+    var cam = svgEl('g', svg); cam.setAttribute('class', 'g-cam');
+    var world = svgEl('g', cam); world.setAttribute('class', 'g-world');
+    var gDecor = svgEl('g', world); gDecor.setAttribute('class', 'g-decor');
+    var gEdges = svgEl('g', world); gEdges.setAttribute('class', 'g-edges');
+    var gNodes = svgEl('g', world); gNodes.setAttribute('class', 'g-nodes');
+    state.cam = cam; state.world = world;
+    state.gDecor = gDecor; state.gEdges = gEdges; state.gNodes = gNodes;
+
+    render(state);
+    if (!preview) finishChrome(container, state);
+    return state;
+  }
+
+  /* The pieces that have to be layered OVER the body, so they are added once
+     the body exists rather than ahead of it. */
+  function finishChrome(container, state) {
+    /* Grain, over everything. Flat vector fills read as software output; a
+       little tooth reads as something that was made. */
+    el('div', 'viz-grain', container).setAttribute('aria-hidden', 'true');
+    state.flash = el('div', 'viz-flash', container);
+    buildProfile(container, state);
+    if (state.count === 0) showEmpty(state);
+  }
+
+  function visibleDonors(count) { return DONORS.slice(0, count); }
+
+  function render(state) {
+    var v = state.variation;
+    var donors = visibleDonors(state.count);
+    /* Bleed: compose the layout on a canvas larger than the frame and centre
+       it, so the artwork runs off the edges instead of sitting politely inside
+       them. Work that fits entirely within its border reads as an illustration
+       of an idea; work that is cropped reads as a view onto something bigger. */
+    /* Capped in the miniature. A hard crop is right at full size, where the
+       viewer can see the whole field; on a card it leaves a sliver of arc and
+       the direction can't be judged from the grid at all. */
+    var b = v.bleed || 1;
+    if (state.mode === 'preview') b = Math.min(b, 1.1);
+    var LW = state.W * b, LH = state.H * b;
+    var scene = v.layout(donors, LW, LH, rng(v.seed || 7));
+    state.offX = -(LW - state.W) / 2;
+    state.offY = -(LH - state.H) / 2;
+    state.world.setAttribute('transform',
+      'translate(' + state.offX.toFixed(1) + ',' + state.offY.toFixed(1) + ')');
+
+    state.gDecor.innerHTML = '';
+    state.gEdges.innerHTML = '';
+    state.gNodes.innerHTML = '';
+    state.nodes = []; state.byslug = {}; state.edgesOf = {};
+
+    (scene.decor || []).forEach(function (d) {
+      var n = svgEl(d.tag, state.gDecor);
+      attrs(n, d.attrs || {});
+      if (d.cls) n.setAttribute('class', d.cls);
+      if (d.text) n.textContent = d.text;
+    });
+
+    (scene.edges || []).forEach(function (e, i) {
+      var p = svgEl('path', state.gEdges);
+      attrs(p, { d: e.d, 'class': 'edge' + (e.cls ? ' ' + e.cls : '') });
+      /* Per-edge weight and opacity. A network drawn at one uniform hairline
+         reads as a diagram; varying the stroke is what makes a root taper into
+         a twig and a trunk line carry more than a service drop. */
+      /* Inline style, NOT a presentation attribute: engine.css carries a
+         `.edge { stroke-width: 1 }` default, and any CSS rule outranks a
+         presentation attribute — so setAttribute here is silently discarded
+         and every taper and weight in the set collapses to one hairline. */
+      if (e.w != null) p.style.strokeWidth = e.w.toFixed(2);
+      if (e.op != null) p.style.opacity = e.op;
+      if (e.slug) {
+        (state.edgesOf[e.slug] = state.edgesOf[e.slug] || []).push(p);
+      }
+      if (e.slug2) {
+        (state.edgesOf[e.slug2] = state.edgesOf[e.slug2] || []).push(p);
+      }
+    });
+
+    /* Entrance animation on a deliberate render, but NOT during the growth
+       playback — that re-renders ~50 times, and re-running the reveal on every
+       frame makes the whole network strobe instead of grow. */
+    state.gNodes.classList.toggle('is-entering', state.animateIn !== false);
+
+    scene.nodes.forEach(function (n, i) {
+      var g = svgEl('g', state.gNodes);
+      g.setAttribute('class', 'node'
+        + (n.d.founding ? ' is-founding' : '')
+        + (n.d.anonymous ? ' is-anon' : ''));
+      g.setAttribute('transform', 'translate(' + n.x.toFixed(1) + ',' + n.y.toFixed(1) + ')');
+      g.style.setProperty('--i', i % 90);
+      /* A stable per-person variation so the field has texture instead of
+         reading as one repeated dot. Keyed off the donor, not the render, so a
+         given person is the same size every time. */
+      g.style.setProperty('--tw', (2.6 + ((n.d.joinIndex * 37) % 23) / 7).toFixed(2));
+      (v.drawNode || drawNodeDefault)(g, n, state);
+      if (state.mode !== 'preview') {
+        g.style.cursor = 'pointer';
+        g.addEventListener('click', function () { focus(state, n.d.slug); });
+      }
+      n.g = g;
+      state.nodes.push(n);
+      state.byslug[n.d.slug] = n;
+    });
+
+    if (v.drawExtras) v.drawExtras(state, scene);
+  }
+
+  function drawNodeDefault(g, n, state) {
+    var r = n.r || (n.d.founding ? 5.2 : 3.4);
+    attrs(svgEl('circle', g), { r: r + 6, 'class': 'node-halo' });
+    attrs(svgEl('circle', g), { r: r, 'class': 'node-dot' });
+  }
+
+  /* ── Chrome: search, milestones, counts ───────────────────────────────── */
+
+  function buildChrome(container, state) {
+    var v = state.variation;
+    /* An oversized direction numeral bled off the right edge. It gives every
+       direction a compositional anchor besides the graph itself — the thing
+       that makes a page look art-directed rather than plotted. */
+    var ghost = el('div', 'viz-ghost', container);
+    ghost.textContent = v.num < 10 ? '0' + v.num : String(v.num);
+    ghost.setAttribute('aria-hidden', 'true');
+
+    /* The kicker runs up the left edge as a rail rather than sitting above the
+       headline: it frees the corner for the title and gives every direction a
+       fixed vertical anchor the artwork can be composed against. */
+    var rail = el('div', 'viz-rail', container);
+    rail.textContent = v.kicker;
+
+    var head = el('div', 'viz-head', container);
+    var h = el('h2', 'viz-title', head);
+    h.innerHTML = v.headline;
+    if (v.sub) el('p', 'viz-sub', head).textContent = v.sub;
+
+    var bar = el('div', 'viz-bar', container);
+
+    /* Search sits in the design, not in the reviewer chrome, because how a
+       direction presents "find your place in the network" is part of what is
+       being judged. */
+    var sw = el('div', 'viz-search', bar);
+    var input = el('input', 'viz-input', sw);
+    input.type = 'search';
+    input.placeholder = 'Find your place in the network…';
+    input.setAttribute('aria-label', 'Search supporters by name');
+    var results = el('div', 'viz-results', sw);
+    state.input = input;
+
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      results.innerHTML = '';
+      if (!q) { results.classList.remove('open'); return; }
+      var hits = visibleDonors(state.count).filter(function (d) {
+        return isSearchable(d) && d.name.toLowerCase().indexOf(q) >= 0;
+      }).slice(0, 6);
+      if (!hits.length) {
+        var none = el('div', 'viz-result viz-result--none', results);
+        none.textContent = 'No supporter by that name in the network yet.';
+      }
+      hits.forEach(function (d) {
+        var r = el('button', 'viz-result', results);
+        r.type = 'button';
+        r.innerHTML = '<span>' + escapeHtml(d.name) + '</span><em>'
+          + escapeHtml(shortSchool(d.school)) + ' &rsquo;' + String(d.gradYear).slice(2) + '</em>';
+        r.addEventListener('click', function () {
+          focus(state, d.slug);
+          input.value = d.name;
+          results.classList.remove('open');
+        });
+      });
+      results.classList.add('open');
+    });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { input.value = ''; results.classList.remove('open'); clearFocus(state); }
+      if (e.key === 'Enter') {
+        var first = results.querySelector('.viz-result:not(.viz-result--none)');
+        if (first) first.click();
+      }
+    });
+
+    var meter = el('div', 'viz-meter', bar);
+    var num = el('span', 'viz-count', meter);
+    num.textContent = state.count;
+    el('span', 'viz-count-label', meter).textContent = 'supporters';
+    state.countEl = num;
+
+    var ctrls = el('div', 'viz-ctrls', bar);
+    /* The four states the brief actually asks a design to survive: day one,
+       a handful, a crowd, and the 200 milestone. */
+    [['Empty', 0], ['12', 12], ['150', 150], ['200', 200]].forEach(function (p) {
+      var b = el('button', 'viz-chip', ctrls);
+      b.type = 'button';
+      b.textContent = p[0];
+      b.addEventListener('click', function () { setCount(state, p[1]); });
+    });
+    var play = el('button', 'viz-chip viz-chip--play', ctrls);
+    play.type = 'button';
+    play.textContent = '▶ Grow to 200';
+    play.addEventListener('click', function () { playGrowth(state); });
+
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* Always hand `custom` the viz container, never the host it created: the host
+     looks up `.viz-custom` inside what it is given, so passing the host itself
+     makes it build a second one nested in the first. */
+  function redraw(state) {
+    if (state.variation.custom) state.variation.custom(state.container, state, API, true);
+    else render(state);
+  }
+
+  function setCount(state, n) {
+    state.count = n;
+    clearFocus(state);
+    if (state.countEl) state.countEl.textContent = n;
+    redraw(state);
+    if (n === 0) showEmpty(state); else hideEmpty(state);
+  }
+
+  /* Production starts empty and stays empty until the first upload, so every
+     direction has to be judged on the state it will spend its first week in —
+     not only on the state with 200 nodes in it. */
+  function showEmpty(state) {
+    hideEmpty(state);
+    /* Over the body only — covering the whole container would hide the
+       headline, and the headline is most of what the empty state IS. */
+    var e = el('div', 'viz-empty', state.body || state.container);
+    e.innerHTML = '<div class="viz-empty-in"><div class="viz-kick">Day one</div>'
+      + '<p>' + escapeHtml(state.variation.emptyLine
+        || 'The network has no supporters yet. The first gift starts it.')
+      + '</p><span class="viz-empty-cta">Become a founding supporter</span></div>';
+    state.emptyEl = e;
+  }
+  function hideEmpty(state) {
+    if (state.emptyEl && state.emptyEl.parentNode) state.emptyEl.parentNode.removeChild(state.emptyEl);
+    state.emptyEl = null;
+  }
+
+  /* Milestone animation. Nicole asked for 50 / 100 / 150 / 200; the growth runs
+     continuously and pauses to name each one as it lands, because the point she
+     made is that the milestones are moments, not labels on an axis. */
+  function playGrowth(state) {
+    if (state.playing) return;
+    state.playing = true;
+    clearFocus(state);
+    hideEmpty(state);
+    var n = 0;
+    var step = function () {
+      if (!state.playing) return;
+      var prev = n;
+      n += Math.max(1, Math.round(n / 22) + 1);
+
+      /* Snap to a milestone we STEPPED OVER rather than requiring an exact
+         landing. The increment accelerates with the count, so asking for
+         `n === 50` means the 50/100/150 flashes fire only when the arithmetic
+         happens to land there — in practice never, and only 200 showed because
+         it is clamped. Nicole asked for all four. */
+      var hit = R.milestoneCrossed(prev, n, MILESTONES);
+      if (hit != null) n = hit;
+      if (n >= 200) { n = 200; hit = 200; }
+
+      setCountQuiet(state, n);
+      if (hit != null) {
+        milestoneFlash(state, hit);
+        if (n >= 200) { state.playing = false; return; }
+        setTimeout(step, 950);
+      } else {
+        setTimeout(step, 26);
+      }
+    };
+    step();
+  }
+  function setCountQuiet(state, n) {
+    state.count = n;
+    if (state.countEl) state.countEl.textContent = n;
+    state.animateIn = false;
+    redraw(state);
+    state.animateIn = true;
+  }
+  function milestoneFlash(state, n) {
+    if (!state.flash) return;
+    /* Not "founding supporters" — founding is the early cohort, not everyone
+       who has given by the time the count reaches 200. */
+    state.flash.innerHTML = '<div class="viz-flash-in"><strong>' + n + '</strong><span>'
+      + (n >= 200 ? 'supporters' : 'supporters and growing') + '</span></div>';
+    state.flash.classList.add('on');
+    state.container.classList.add('is-milestone');
+    setTimeout(function () {
+      state.flash.classList.remove('on');
+      state.container.classList.remove('is-milestone');
+    }, 800);
+  }
+
+  /* ── Focus + profile + shareable card ─────────────────────────────────── */
+
+  function focus(state, slug) {
+    var n = state.byslug[slug];
+    if (!n) return;
+    if (n.d.anonymous) return; /* nothing to open: there is no name to show */
+    clearFocus(state, true);
+    state.focus = slug;
+    state.container.classList.add('is-focused');
+    if (n.g) n.g.classList.add('is-focus');
+    (state.edgesOf[slug] || []).forEach(function (p) { p.classList.add('is-lit'); });
+    moveCamera(state, n);
+    showProfile(state, n.d);
+  }
+
+  /* Pan and zoom so the focused supporter sits in the clear. Framed left of
+     centre and a little high: the profile card occupies the lower right, and
+     centring exactly would put the person underneath their own card. */
+  function moveCamera(state, n) {
+    if (!state.cam || n.x == null) return;
+    var s = 1.85;
+    var sx = n.x + state.offX, sy = n.y + state.offY;
+    var tx = state.W * 0.38 - sx * s, ty = state.H * 0.44 - sy * s;
+    state.cam.setAttribute('transform',
+      'translate(' + tx.toFixed(1) + ',' + ty.toFixed(1) + ') scale(' + s + ')');
+  }
+  function resetCamera(state) {
+    if (state.cam) state.cam.setAttribute('transform', '');
+  }
+
+  function clearFocus(state, keepPanel) {
+    state.container.classList.remove('is-focused');
+    state.nodes.forEach(function (n) { if (n.g) n.g.classList.remove('is-focus'); });
+    Object.keys(state.edgesOf).forEach(function (k) {
+      state.edgesOf[k].forEach(function (p) { p.classList.remove('is-lit'); });
+    });
+    state.focus = null;
+    resetCamera(state);
+    if (!keepPanel && state.profile) state.profile.classList.remove('open');
+  }
+
+  function buildProfile(container, state) {
+    var p = el('div', 'viz-profile', container);
+    state.profile = p;
+  }
+
+  function showProfile(state, d) {
+    var p = state.profile;
+    if (!p) return;
+    p.innerHTML = '';
+    var close = el('button', 'viz-profile-x', p);
+    close.type = 'button';
+    close.setAttribute('aria-label', 'Close');
+    close.textContent = '×';
+    close.addEventListener('click', function () { clearFocus(state); if (state.input) state.input.value = ''; });
+
+    var card = el('div', 'viz-card', p);
+    var av = el('div', 'viz-card-av', card);
+    av.textContent = monogram(d);
+    var body = el('div', 'viz-card-body', card);
+    el('div', 'viz-card-name', body).textContent = displayName(d);
+    el('div', 'viz-card-meta', body).textContent =
+      shortSchool(d.school) + ' · Class of ' + d.gradYear;
+    if (d.founding) {
+      var badge = el('span', 'viz-card-badge', body);
+      badge.textContent = 'Founding Supporter';
+    }
+    if (d.note) {
+      var q = el('p', 'viz-card-note', body);
+      q.textContent = '“' + d.note + '”';
+    }
+    var actions = el('div', 'viz-card-actions', p);
+    var dl = el('button', 'viz-card-btn', actions);
+    dl.type = 'button';
+    dl.textContent = '↓ Download supporter card';
+    dl.addEventListener('click', function () { downloadCard(state, d); });
+    var sh = el('button', 'viz-card-btn viz-card-btn--ghost', actions);
+    sh.type = 'button';
+    sh.textContent = 'Share';
+    sh.addEventListener('click', function () { shareCard(state, d); });
+
+    p.classList.add('open');
+  }
+
+  /* The shareable card is drawn rather than screenshotted so it comes out at a
+     fixed 1080 square whatever the viewer's screen is — the size a social post
+     actually wants. */
+  function renderCardCanvas(state, d) {
+    var S = 1080;
+    var c = document.createElement('canvas');
+    c.width = S; c.height = S;
+    var g = c.getContext('2d');
+    var t = state.variation.theme || {};
+    var bg = t.cardBg || t.bg || '#1e1a1b';
+    var fg = t.cardFg || '#ffffff';
+    var accent = t.accent || '#a41034';
+
+    g.fillStyle = bg; g.fillRect(0, 0, S, S);
+
+    /* A few strands of the network behind the name, so the card reads as a
+       piece of the thing rather than a generic certificate. */
+    var r = rng(d.joinIndex * 977);
+    g.strokeStyle = accent; g.globalAlpha = 0.22; g.lineWidth = 2;
+    var pts = [];
+    for (var i = 0; i < 26; i++) pts.push([r() * S, r() * S]);
+    pts.forEach(function (a, i) {
+      var b = pts[(i + 3) % pts.length];
+      g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke();
+    });
+    g.globalAlpha = 0.5;
+    pts.forEach(function (a) {
+      g.beginPath(); g.fillStyle = accent; g.arc(a[0], a[1], 4, 0, 6.284); g.fill();
+    });
+    g.globalAlpha = 1;
+
+    g.fillStyle = accent;
+    g.font = '600 26px "JetBrains Mono", ui-monospace, monospace';
+    g.fillText('HARVARD IN TECH', 88, 150);
+
+    g.fillStyle = fg;
+    g.font = '800 84px "Helvetica Neue", Helvetica, Arial, sans-serif';
+    wrap(g, d.name, 88, 420, S - 176, 92);
+
+    g.fillStyle = fg; g.globalAlpha = 0.7;
+    g.font = '400 34px "Times New Roman", Times, serif';
+    g.fillText(shortSchool(d.school) + ' · Class of ' + d.gradYear, 88, 520);
+    g.globalAlpha = 1;
+
+    if (d.founding) {
+      g.fillStyle = accent;
+      g.fillRect(88, 570, 340, 56);
+      g.fillStyle = '#fff';
+      g.font = '700 22px "JetBrains Mono", ui-monospace, monospace';
+      g.fillText('FOUNDING SUPPORTER', 108, 606);
+    }
+
+    g.fillStyle = fg; g.globalAlpha = 0.85;
+    g.font = 'italic 400 36px "Times New Roman", Times, serif';
+    wrap(g, d.note ? '“' + d.note + '”' : 'Powering the Harvard alumni in tech network.',
+      88, 760, S - 176, 48);
+    g.globalAlpha = 1;
+
+    g.fillStyle = accent;
+    g.fillRect(88, S - 120, 64, 8);
+    g.fillStyle = fg; g.globalAlpha = 0.55;
+    g.font = '400 24px "JetBrains Mono", ui-monospace, monospace';
+    g.fillText('harvardintech.com', 88, S - 70);
+
+    return c;
+  }
+
+  function wrap(g, text, x, y, maxW, lh) {
+    var words = String(text).split(/\s+/), line = '', yy = y;
+    words.forEach(function (w) {
+      var test = line ? line + ' ' + w : w;
+      if (g.measureText(test).width > maxW && line) { g.fillText(line, x, yy); yy += lh; line = w; }
+      else line = test;
+    });
+    if (line) g.fillText(line, x, yy);
+  }
+
+  function downloadCard(state, d) {
+    var c = renderCardCanvas(state, d);
+    try {
+      var a = document.createElement('a');
+      a.href = c.toDataURL('image/png');
+      a.download = 'hit-supporter-' + d.slug + '.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    } catch (e) { /* a download blocked by the host is not worth an alert */ }
+  }
+
+  function shareCard(state, d) {
+    var c = renderCardCanvas(state, d);
+    if (navigator.share && c.toBlob) {
+      c.toBlob(function (blob) {
+        var file = new File([blob], 'hit-supporter-' + d.slug + '.png', { type: 'image/png' });
+        var payload = {
+          title: 'Harvard in Tech',
+          text: displayName(d) + ' is powering the Harvard alumni in tech network.'
+        };
+        if (navigator.canShare && navigator.canShare({ files: [file] })) payload.files = [file];
+        navigator.share(payload).catch(function () { });
+      });
+    } else {
+      downloadCard(state, d);
+    }
+  }
+
+  /* ── Layout helpers shared by more than one direction ─────────────────── */
+
+  /* Type as a container for the network. Renders a word to an offscreen canvas
+     and returns points inside the letterforms, so supporters can BE the
+     typography rather than sit in a chart beside it. Canvas is the only way to
+     get glyph interiors — SVG can clip to text, but clipping hides nodes that
+     fall outside instead of placing them where they belong, which leaves the
+     count wrong and the letters half-empty. */
+  function glyphPoints(text, W, H, opts) {
+    opts = opts || {};
+    var c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var g = c.getContext('2d');
+    var fam = "900 {S}px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+    var size = H * (opts.heightFrac || 0.6);
+    g.font = fam.replace('{S}', size);
+    var wide = g.measureText(text).width;
+    var maxW = W * (opts.widthFrac || 0.9);
+    if (wide > maxW) { size *= maxW / wide; g.font = fam.replace('{S}', size); }
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillStyle = '#000';
+    g.fillText(text, W / 2, H * (opts.cy || 0.5));
+
+    var img = g.getImageData(0, 0, W, H).data;
+    var step = opts.step || 3;
+    var pts = [];
+    for (var y = 0; y < H; y += step) {
+      for (var x = 0; x < W; x += step) {
+        if (img[(y * W + x) * 4 + 3] > 128) pts.push([x, y]);
+      }
+    }
+    return pts;
+  }
+
+  /* Halftone: a coarse grid over the glyph, each cell carrying how much of it
+     the letterform covers, so dot size can vary the way a printed halftone
+     does rather than every dot being identical. */
+  function halftoneCells(text, W, H, cell, opts) {
+    opts = opts || {};
+    var c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var g = c.getContext('2d');
+    var fam = "900 {S}px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+    var size = H * (opts.heightFrac || 0.72);
+    g.font = fam.replace('{S}', size);
+    var wide = g.measureText(text).width;
+    var maxW = W * (opts.widthFrac || 0.88);
+    if (wide > maxW) { size *= maxW / wide; g.font = fam.replace('{S}', size); }
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillStyle = '#000';
+    g.fillText(text, W / 2, H * (opts.cy || 0.5));
+
+    var img = g.getImageData(0, 0, W, H).data;
+    var cells = [];
+    for (var y = cell / 2; y < H; y += cell) {
+      for (var x = cell / 2; x < W; x += cell) {
+        var hit = 0, tot = 0;
+        for (var dy = -cell / 2; dy < cell / 2; dy += 2) {
+          for (var dx = -cell / 2; dx < cell / 2; dx += 2) {
+            var px = Math.round(x + dx), py = Math.round(y + dy);
+            if (px < 0 || py < 0 || px >= W || py >= H) continue;
+            tot++;
+            if (img[(py * W + px) * 4 + 3] > 128) hit++;
+          }
+        }
+        if (tot && hit / tot > 0.12) cells.push({ x: x, y: y, cov: hit / tot });
+      }
+    }
+    return cells;
+  }
+
+  var API = {
+    DONORS: DONORS, MILESTONES: MILESTONES,
+    rng: rng, el: el, svgEl: svgEl, attrs: attrs,
+    displayName: displayName, monogram: monogram, isSearchable: isSearchable,
+    shortSchool: shortSchool, escapeHtml: escapeHtml,
+    visibleDonors: visibleDonors, focus: focus,
+    glyphPoints: glyphPoints, halftoneCells: halftoneCells, thin: thin,
+    schools: function (donors) {
+      var m = {};
+      donors.forEach(function (d) { (m[d.school] = m[d.school] || []).push(d); });
+      return m;
+    },
+    decade: function (y) { return Math.floor(y / 10) * 10; }
+  };
+
+  window.HIT = {
+    mount: mount, DONORS: DONORS, MILESTONES: MILESTONES, api: API,
+    displayName: displayName, shortSchool: shortSchool, escapeHtml: escapeHtml
+  };
+})();
+
+/* The nine directions.
+ *
+ * These are graphic compositions, not charts. The distinction is the whole
+ * point of the set: an earlier pass drew each idea as a technical diagram — a
+ * grid schematic, a PCB, a cluster scatter — and every one of them read as
+ * infrastructure documentation rather than as something you would put on a
+ * page people are meant to feel something about. What survived that pass were
+ * the two that were designed rather than plotted: the concentric rings (06)
+ * and the typographic honour roll (07). The rest are rebuilt to that bar.
+ *
+ * The rule each direction follows: the 200 supporters MAKE the graphic. They
+ * are the letterforms, the weave, the line, the bloom — not points scattered
+ * on top of one. All eight stay inside the site's committed Atlas palette
+ * (crimson #a41034 on ink or warm paper, Helvetica display, Times serif,
+ * JetBrains Mono labels).
+ */
+(function () {
+  'use strict';
+
+  var A = window.HIT.api;
+  var TAU = Math.PI * 2;
+  var GOLDEN = Math.PI * (3 - Math.sqrt(5));
+
+  function path(pts) {
+    return pts.map(function (p, i) {
+      return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1);
+    }).join(' ');
+  }
+  function quad(a, c, b) {
+    return 'M' + a[0].toFixed(1) + ' ' + a[1].toFixed(1)
+      + ' Q' + c[0].toFixed(1) + ' ' + c[1].toFixed(1)
+      + ' ' + b[0].toFixed(1) + ' ' + b[1].toFixed(1);
+  }
+
+  /* ── 1 · Power grid ───────────────────────────────────────────────────
+     Nicole's own metaphor, taken literally: a network of nodes on a power
+     grid. Drawn as a grid looks at night from above rather than as a wiring
+     schematic — substations as points of light, transmission lines carrying
+     visible current, everything else dark. An earlier pass rendered this with
+     pylon glyphs and silkscreen labels and it read as infrastructure
+     documentation; the subject was right and the register was wrong. */
+  var grid = {
+    id: 'grid', num: 1, family: 'network',
+    compose: 'tl', bleed: 1.16,
+    name: 'Powering the Harvard Alumni in Tech Network',
+    metaphor: 'Power grid at night',
+    why: 'Nicole\'s metaphor, literally: nodes on a power grid. Seen the way a grid looks from the air after dark — the schools are the bright junctions, and you can watch the current move between them.',
+    kicker: 'Direction 01 · Power grid',
+    headline: 'A grid, <em>lit from within</em>.',
+    sub: 'Each school is a junction; each supporter a light hung off it. The current running between them is what the fund pays for.',
+    emptyLine: 'The grid is built and dark. The first gift energizes the first junction.',
+    seed: 5,
+    theme: {
+      bg: '#07070a', fg: '#fff6ee', muted: 'rgba(255,246,238,.5)',
+      line: 'rgba(255,246,238,.14)', accent: '#ff2d55',
+      node: '#ffd9a8', edge: 'rgba(255,217,168,.3)', cardBg: '#07070a',
+      'bg-image':
+        'radial-gradient(58% 44% at 32% 34%, rgba(255,45,85,.22) 0%, transparent 64%),'
+        + 'radial-gradient(50% 40% at 74% 68%, rgba(255,170,90,.16) 0%, transparent 62%)'
+    },
+    layout: function (donors, W, H, rnd) {
+      var schools = A.schools(donors);
+      var names = Object.keys(schools).sort(function (a, b) {
+        return schools[b].length - schools[a].length;
+      });
+      var subs = {}, decor = [], edges = [], nodes = [];
+      var cols = 4;
+      var rows = Math.ceil(names.length / cols);
+
+      names.forEach(function (s, i) {
+        var c = i % cols, r = Math.floor(i / cols);
+        var x = W * (c + 0.5) / cols + (rnd() - 0.5) * W * 0.1;
+        var y = H * (r + 0.5) / rows + (rnd() - 0.5) * H * 0.12;
+        subs[s] = [x, y];
+        /* A junction is a bloom of light, not a labelled box — size carries
+           how many people are on it, so the map has hierarchy without a key. */
+        var mag = 16 + Math.sqrt(schools[s].length) * 9;
+        decor.push({ tag: 'circle', cls: 'junction-glow', attrs: { cx: x, cy: y, r: mag } });
+        decor.push({ tag: 'circle', cls: 'junction', attrs: { cx: x, cy: y, r: 3.6 } });
+      });
+
+      /* Trunk lines: a dim standing conductor with a short bright dash
+         travelling the identical path. One dashed line on its own reads as a
+         dotted border; two layers read as current. */
+      var order = names.slice();
+      for (var i = 0; i < order.length; i++) {
+        var a = subs[order[i]], b = subs[order[(i + 1) % order.length]];
+        var d = path([a, b]);
+        edges.push({ d: d, cls: 'trunk-base', w: 1, op: 0.3 });
+        edges.push({ d: d, cls: 'trunk-pulse', w: 2 });
+      }
+
+      donors.forEach(function (d) {
+        var s = subs[d.school];
+        var ang = rnd() * TAU;
+        var rad = 30 + rnd() * 76;
+        var x = s[0] + Math.cos(ang) * rad * 1.4;
+        var y = s[1] + Math.sin(ang) * rad * 0.9;
+        nodes.push({ d: d, x: x, y: y, r: d.founding ? 3.6 : 2.2 });
+        edges.push({
+          d: path([[x, y], s]), slug: d.slug, cls: 'feeder',
+          w: d.founding ? 0.9 : 0.5, op: 0.16 + rnd() * 0.2
+        });
+      });
+      return { nodes: nodes, edges: edges, decor: decor };
+    },
+    drawNode: function (g, n) {
+      A.attrs(A.svgEl('circle', g), { r: n.r + 8, 'class': 'node-halo' });
+      A.attrs(A.svgEl('circle', g), { r: n.r, 'class': 'node-dot' });
+    }
+  };
+
+  /* ── 2 · Letterform network ───────────────────────────────────────────
+     The word is built out of the people. Type and network stop being two
+     things on one page — the supporters ARE the headline, and the sentence
+     only exists because enough of them turned up to spell it. */
+  var letterform = {
+    id: 'letterform', num: 2, family: 'network',
+    compose: 'bl', bleed: 1.0,
+    name: 'The Word',
+    metaphor: 'Letterform network',
+    why: 'The supporters spell the word. Type and network are the same object, so the headline literally cannot exist without enough people to form it — and you watch it resolve as the network grows.',
+    kicker: 'Direction 02 · Letterform',
+    headline: 'The word is made of <em>the people</em>.',
+    sub: 'Two hundred supporters, positioned to spell what they paid for. Below fifty the word is unreadable; that is the point.',
+    emptyLine: 'Nothing to spell it with yet. The first gift places the first point.',
+    seed: 11,
+    /* Five letters, not eight. Two hundred points spread across POWERING gives
+       ~25 per letter, which is under the threshold where a glyph reads — the
+       word has to be short enough that each letter gets enough people. */
+    word: 'POWER',
+    theme: {
+      bg: '#0d0b0c', fg: '#ffffff', muted: 'rgba(255,255,255,.55)',
+      line: 'rgba(255,255,255,.15)', accent: '#e01b41',
+      node: '#ffffff', edge: 'rgba(255,255,255,.3)', cardBg: '#0d0b0c',
+      'bg-image': 'radial-gradient(80% 70% at 50% 46%, rgba(224,27,65,.24) 0%, transparent 64%)'
+    },
+    layout: function (donors, W, H, rnd) {
+      var nodes = [], edges = [];
+      var pts = A.thin(
+        A.glyphPoints(this.word, W, H, { heightFrac: 0.68, widthFrac: 0.9, cy: 0.5, step: 3 }),
+        donors.length
+      );
+      donors.forEach(function (d, i) {
+        var p = pts[i] || [W / 2, H / 2];
+        nodes.push({
+          d: d,
+          x: p[0] + (rnd() - 0.5) * 4,
+          y: p[1] + (rnd() - 0.5) * 4,
+          r: d.founding ? 6.5 : 4.6
+        });
+      });
+      /* Short links only. Long ones would web across the counters of the
+         letters and close them up, and a filled 'O' stops being an 'O'. */
+      nodes.forEach(function (n, i) {
+        var best = null, bd = 1e9;
+        for (var j = i + 1; j < Math.min(nodes.length, i + 14); j++) {
+          var dx = n.x - nodes[j].x, dy = n.y - nodes[j].y;
+          var dd = dx * dx + dy * dy;
+          if (dd < bd) { bd = dd; best = j; }
+        }
+        if (best != null && bd < 1600) {
+          edges.push({
+            d: path([[n.x, n.y], [nodes[best].x, nodes[best].y]]),
+            slug: n.d.slug, slug2: nodes[best].d.slug, w: 0.8, op: 0.4
+          });
+        }
+      });
+      return { nodes: nodes, edges: edges, decor: [] };
+    }
+  };
+
+  /* ── 2 · Woven circle ─────────────────────────────────────────────────
+     Every supporter sits on the rim; the threads inside connect people from
+     the same school. The density in the middle is not decoration — it is how
+     many shared affiliations there actually are. */
+  var weave = {
+    id: 'weave', num: 3, family: 'network',
+    compose: 'tl', bleed: 1.34,
+    name: 'Founders Circle',
+    metaphor: 'Woven circle',
+    why: 'A literal circle, woven. Threads join people from the same school, so the pattern in the middle is the community\'s actual shape — and it is beautiful before you know that.',
+    kicker: 'Direction 03 · Weave',
+    headline: 'The <em>Founders Circle</em>, woven.',
+    sub: 'Everyone sits on the rim in the order they gave. Each thread joins two supporters from the same school — the pattern is what the community has in common.',
+    emptyLine: 'An empty circle. Nothing to weave with until the first gift.',
+    seed: 23,
+    theme: {
+      bg: '#0a0a0f', fg: '#f6f5f2', muted: 'rgba(246,245,242,.5)',
+      line: 'rgba(246,245,242,.14)', accent: '#e0244b',
+      node: '#f6f5f2', edge: 'rgba(224,36,75,.5)', cardBg: '#0a0a0f',
+      'bg-image': 'radial-gradient(58% 62% at 50% 50%, rgba(224,36,75,.16) 0%, transparent 68%)'
+    },
+    layout: function (donors, W, H, rnd) {
+      var nodes = [], edges = [], decor = [];
+      var cx = W / 2, cy = H / 2;
+      var R = Math.min(W, H) * 0.42;
+      var n = donors.length;
+
+      decor.push({ tag: 'circle', cls: 'rim', attrs: { cx: cx, cy: cy, r: R } });
+
+      var at = {};
+      donors.forEach(function (d, i) {
+        var a = (i / Math.max(1, n)) * TAU - Math.PI / 2;
+        var x = cx + Math.cos(a) * R * 1.34, y = cy + Math.sin(a) * R;
+        at[d.slug] = [x, y];
+        nodes.push({ d: d, x: x, y: y, r: d.founding ? 4.4 : 2.6 });
+      });
+
+      /* One thread per adjacent pair within a school, bowed toward the middle.
+         Joining every pair would fill the circle solid; chaining them keeps the
+         weave open enough to read as threads. */
+      var schools = A.schools(donors);
+      Object.keys(schools).forEach(function (s) {
+        var m = schools[s];
+        for (var i = 0; i < m.length - 1; i++) {
+          var a = at[m[i].slug], b = at[m[i + 1].slug];
+          if (!a || !b) continue;
+          edges.push({
+            d: quad(a, [cx + (rnd() - 0.5) * R * 0.3, cy + (rnd() - 0.5) * R * 0.3], b),
+            slug: m[i].slug, slug2: m[i + 1].slug,
+            w: 0.7, op: 0.22 + rnd() * 0.16, cls: 'thread'
+          });
+        }
+      });
+      return { nodes: nodes, edges: edges, decor: decor };
+    }
+  };
+
+  /* ── 3 · One line ─────────────────────────────────────────────────────
+     "Every gift starts with one person" drawn as exactly that: a single
+     unbroken stroke that begins hairline-thin at the first supporter and is
+     eight times heavier by the two-hundredth. Growth you can see in the
+     weight of the line rather than in a number. */
+  var oneline = {
+    id: 'oneline', num: 4, family: 'network',
+    compose: 'tr', bleed: 1.06,
+    name: 'Founding Momentum Donors (2026)',
+    metaphor: 'One continuous line',
+    why: 'One unbroken stroke through all 200 supporters, thickening as it goes. The most literal drawing of "every gift starts with one person" — and the only one where growth is visible without counting.',
+    kicker: 'Direction 04 · One line',
+    headline: 'One line, <em>getting stronger</em>.',
+    sub: 'A single stroke through every supporter in the order they gave. It starts as a hairline and ends eight times heavier — the line is the fund.',
+    emptyLine: 'The line has not been started. The first gift draws it.',
+    seed: 37,
+    theme: {
+      bg: '#f7f4ef', fg: '#1e1a1b', muted: 'rgba(30,26,27,.55)',
+      line: 'rgba(30,26,27,.15)', accent: '#a41034',
+      node: '#1e1a1b', edge: 'rgba(164,16,52,.9)', cardBg: '#1e1a1b',
+      'bg-image': 'radial-gradient(72% 60% at 84% 96%, rgba(164,16,52,.14) 0%, transparent 62%)'
+    },
+    layout: function (donors, W, H, rnd) {
+      var nodes = [], edges = [], decor = [];
+      var n = donors.length;
+      /* Few, long rows. More rows would pack the serpentine tighter and turn
+         the stroke into hatching — the direction only works if the line stays
+         a line you can follow from one end to the other. */
+      var rows = Math.max(2, Math.min(5, Math.round(Math.sqrt(n / 9))));
+      var padX = W * 0.09, padY = H * 0.2;
+      var xL = padX, xR = W - padX;
+      var gap = (H - padY * 2) / (rows - 1);
+      var turnR = gap / 2;
+
+      /* The path is built as real geometry — straight runs joined by half-turns
+         — and then sampled at even arc length. Placing supporters row-by-row
+         instead leaves a hard 180° reversal at each row end, and a ribbon with
+         thickness cannot round a zero-radius corner: it folds through itself. */
+      var segs = [], totalLen = 0;
+      for (var r = 0; r < rows; r++) {
+        var y = padY + r * gap;
+        var a = r % 2 ? [xR, y] : [xL, y];
+        var b = r % 2 ? [xL, y] : [xR, y];
+        segs.push({ line: true, a: a, b: b, len: Math.abs(xR - xL) });
+        if (r < rows - 1) {
+          segs.push({
+            line: false, cx: b[0], cy: y + turnR, r: turnR,
+            a0: -Math.PI / 2, a1: r % 2 ? -Math.PI * 1.5 : Math.PI / 2,
+            len: Math.PI * turnR
+          });
+        }
+      }
+      segs.forEach(function (s) { totalLen += s.len; });
+
+      var at = function (t) {
+        var target = t * totalLen, acc = 0;
+        for (var i = 0; i < segs.length; i++) {
+          var s = segs[i];
+          if (acc + s.len >= target || i === segs.length - 1) {
+            var u = s.len ? (target - acc) / s.len : 0;
+            u = Math.max(0, Math.min(1, u));
+            if (s.line) {
+              return [s.a[0] + (s.b[0] - s.a[0]) * u, s.a[1] + (s.b[1] - s.a[1]) * u];
+            }
+            var ang = s.a0 + (s.a1 - s.a0) * u;
+            return [s.cx + Math.cos(ang) * s.r, s.cy + Math.sin(ang) * s.r];
+          }
+          acc += s.len;
+        }
+        return [xL, padY];
+      };
+
+      /* Sampled finely for the ribbon outline, independently of where the 200
+         supporters land — the outline needs enough points to stay smooth
+         around the turns even when only twelve people have given. */
+      var STEPS = 420;
+      var hwAt = function (t) { return 1.2 + t * 13; };
+      var Lside = [], Rside = [];
+      for (var i = 0; i <= STEPS; i++) {
+        var t = i / STEPS;
+        var p = at(t);
+        var q = at(Math.min(1, t + 0.002));
+        var dx = q[0] - p[0], dy = q[1] - p[1];
+        var len = Math.sqrt(dx * dx + dy * dy) || 1;
+        var nx = -dy / len, ny = dx / len, hw = hwAt(t);
+        Lside.push([p[0] + nx * hw, p[1] + ny * hw]);
+        Rside.push([p[0] - nx * hw, p[1] - ny * hw]);
+      }
+      decor.push({
+        tag: 'path', cls: 'ribbon',
+        attrs: {
+          d: path(Lside) + ' L' + Rside.reverse().map(function (p) {
+            return p[0].toFixed(1) + ' ' + p[1].toFixed(1);
+          }).join(' L') + ' Z'
+        }
+      });
+
+      donors.forEach(function (d, i) {
+        var t = n === 1 ? 0 : i / (n - 1);
+        var p = at(t);
+        nodes.push({ d: d, x: p[0], y: p[1], r: d.founding ? 3.4 : 2.6 });
+        if (i > 0) {
+          var pPrev = at((i - 1) / Math.max(1, n - 1));
+          /* Carried at zero opacity purely so focus has a segment to light:
+             the ribbon is one shape and cannot highlight a single person. */
+          edges.push({
+            d: path([pPrev, p]), cls: 'stroke',
+            slug: d.slug, slug2: donors[i - 1].slug,
+            w: hwAt(t) * 2, op: 0
+          });
+        }
+      });
+      return { nodes: nodes, edges: edges, decor: decor };
+    },
+    drawNode: function (g, n) {
+      A.attrs(A.svgEl('circle', g), { r: 7, 'class': 'node-halo' });
+      /* Marks sit ON the stroke, so a visible dot per supporter punches 200
+         holes in it and the continuous line reads as a dashed one. Only
+         founding supporters get a standing mark; everyone else appears when
+         they are focused and is otherwise part of the line. */
+      A.attrs(A.svgEl('circle', g), {
+        r: n.d.founding ? 4.2 : 3, 'class': 'node-dot' + (n.d.founding ? '' : ' is-quiet')
+      });
+    }
+  };
+
+  /* ── 4 · Bloom ────────────────────────────────────────────────────────
+     Each gift is a soft field of colour rather than a dot, and the fields
+     overlap and multiply. Nobody reads as a data point; the depth in the
+     middle is simply what happens when enough people show up. */
+  var bloom = {
+    id: 'bloom', num: 5, family: 'network',
+    compose: 'tr', bleed: 1.18,
+    name: 'Community of Supporters',
+    metaphor: 'Overlapping bloom',
+    why: 'No dots, no lines. Every gift is a soft field of colour and they multiply where they overlap — so density reads as warmth instead of as a data point. The least clinical of the set.',
+    kicker: 'Direction 05 · Bloom',
+    headline: 'Every gift <em>casts light</em>.',
+    sub: 'Each supporter is a field rather than a point. Where they overlap the colour deepens — the community is the part where everyone is standing close together.',
+    emptyLine: 'No light yet. The first gift is the first glow.',
+    seed: 53,
+    theme: {
+      bg: '#fdfaf6', fg: '#241a1c', muted: 'rgba(36,26,28,.55)',
+      line: 'rgba(36,26,28,.14)', accent: '#a41034',
+      node: '#a41034', edge: 'transparent', cardBg: '#241a1c',
+      'bg-image': 'radial-gradient(60% 60% at 50% 52%, rgba(255,214,180,.5) 0%, transparent 70%)'
+    },
+    layout: function (donors, W, H, rnd) {
+      var nodes = [];
+      var schools = A.schools(donors);
+      var names = Object.keys(schools).sort(function (a, b) {
+        return schools[b].length - schools[a].length;
+      });
+      var cx = W / 2, cy = H / 2;
+      /* Schools gather into loose clouds so the picture has structure without
+         drawing a single boundary — the grouping is felt, not labelled. */
+      names.forEach(function (s, si) {
+        var a = si * GOLDEN * 1.6;
+        var rad = Math.sqrt(si / Math.max(1, names.length)) * Math.min(W, H) * 0.36;
+        var gx = cx + Math.cos(a) * rad * 1.5;
+        var gy = cy + Math.sin(a) * rad;
+        schools[s].forEach(function (d, j) {
+          var aa = j * GOLDEN;
+          var rr = Math.sqrt(j / schools[s].length) * (34 + schools[s].length * 1.5);
+          nodes.push({
+            d: d,
+            x: gx + Math.cos(aa) * rr * 1.35 + (rnd() - 0.5) * 16,
+            y: gy + Math.sin(aa) * rr + (rnd() - 0.5) * 16,
+            r: (d.founding ? 62 : 40) + rnd() * 22
+          });
+        });
+      });
+      return { nodes: nodes, edges: [], decor: [] };
+    },
+    drawNode: function (g, n) {
+      A.attrs(A.svgEl('circle', g), { r: n.r * 0.34, 'class': 'node-halo' });
+      A.attrs(A.svgEl('circle', g), { r: n.r, 'class': 'bloom-field' });
+      /* A small solid core keeps a focused supporter findable — a blurred
+         field alone gives the eye nothing to land on. */
+      A.attrs(A.svgEl('circle', g), { r: n.d.founding ? 3.4 : 2.2, 'class': 'node-dot' });
+    }
+  };
+
+  /* ── 5 · Halftone milestone ───────────────────────────────────────────
+     The count draws itself. Every supporter is one dot of a printed halftone,
+     so the numeral is made of exactly the people it counts — and it visibly
+     resolves as the network grows toward each milestone. */
+  var halftone = {
+    id: 'halftone', num: 6, family: 'network',
+    compose: 'bl', bleed: 1.02,
+    name: 'Founding Supporters Showcase',
+    metaphor: 'Halftone numeral',
+    why: 'The milestone number IS the network — one dot per supporter, printed as a halftone. It resolves from noise into a legible numeral as the count climbs, which makes 50/100/150/200 land as events rather than labels.',
+    kicker: 'Direction 06 · Halftone',
+    headline: 'The number <em>draws itself</em>.',
+    sub: 'One dot per supporter, set as a printed halftone. At twelve it is a scatter; by two hundred it is a number you can read across a room.',
+    emptyLine: 'Nothing to print with. The first gift lays the first dot.',
+    seed: 71,
+    theme: {
+      bg: '#12100f', fg: '#faf7f2', muted: 'rgba(250,247,242,.5)',
+      line: 'rgba(250,247,242,.15)', accent: '#e01b41',
+      node: '#faf7f2', edge: 'transparent', cardBg: '#12100f',
+      'bg-image': 'radial-gradient(74% 66% at 50% 50%, rgba(224,27,65,.2) 0%, transparent 66%)'
+    },
+    layout: function (donors, W, H, rnd) {
+      var nodes = [];
+      var n = donors.length;
+      /* The cell scales with the population so the numeral stays filled: a
+         fixed grid would leave 12 supporters as three stray dots in a corner
+         instead of a small, complete number. */
+      var cell = Math.max(11, Math.min(46, Math.sqrt((W * H * 0.16) / Math.max(1, n))));
+      var cells = A.halftoneCells(String(n), W, H, cell, { heightFrac: 0.62, widthFrac: 0.8 });
+      var picked = A.thin(cells, n);
+      donors.forEach(function (d, i) {
+        var c = picked[i] || { x: W / 2, y: H / 2, cov: 1 };
+        nodes.push({
+          d: d, x: c.x, y: c.y,
+          r: Math.max(1.6, (cell / 2) * (0.42 + c.cov * 0.6))
+        });
+      });
+      return { nodes: nodes, edges: [], decor: [] };
+    },
+    drawNode: function (g, n) {
+      A.attrs(A.svgEl('circle', g), { r: n.r + 5, 'class': 'node-halo' });
+      A.attrs(A.svgEl('circle', g), { r: n.r, 'class': 'node-dot' });
+    }
+  };
+
+  /* ── 6 · Concentric ripples ───────────────────────────────────────────
+     Kept from the previous round — the restraint is the reason it works.
+     Arrival order as the organizing principle, so a bi-weekly upload has a
+     visible, recurring effect on the shape. */
+  var ripple = {
+    id: 'ripple', num: 7, family: 'network',
+    compose: 'tl', bleed: 1.46,
+    name: 'Donor Honor Roll',
+    metaphor: 'Concentric ripples',
+    why: 'Laid out by when you gave, so each upload visibly pushes the network outward. The milestones land as completed rings rather than as a number changing.',
+    kicker: 'Direction 07 · Ripple',
+    headline: 'It started with <em>one gift</em>, and moved outward.',
+    sub: 'Rings are arrival order — the centre gave first. Every upload adds to the outer edge, so the shape of the network is a record of how it grew.',
+    emptyLine: 'Still water. The first gift is the stone.',
+    seed: 89,
+    theme: {
+      bg: '#f6f3f1', fg: '#1e1a1b', muted: 'rgba(30,26,27,.55)',
+      line: 'rgba(30,26,27,.15)', accent: '#a41034',
+      node: '#1e1a1b', edge: 'rgba(30,26,27,.12)', cardBg: '#1e1a1b',
+      'bg-image': 'radial-gradient(48% 62% at 50% 50%, rgba(164,16,52,.14) 0%, rgba(164,16,52,.03) 45%, transparent 72%)'
+    },
+    layout: function (donors, W, H, rnd) {
+      var nodes = [], edges = [], decor = [];
+      var cx = W / 2, cy = H / 2;
+      var maxR = Math.min(W, H) * 0.44;
+      var ringOf = function (i) { return Math.floor(Math.sqrt(i * 1.35)); };
+      var maxRing = ringOf(Math.max(1, donors.length - 1));
+
+      for (var r = 1; r <= maxRing; r++) {
+        var t = r / maxRing;
+        decor.push({
+          tag: 'ellipse', cls: 'ripple-ring',
+          attrs: {
+            cx: cx, cy: cy, rx: (maxR * t) * 1.55, ry: maxR * t,
+            'stroke-opacity': (0.5 - t * 0.34).toFixed(3),
+            'stroke-width': (1.5 - t * 0.9).toFixed(2)
+          }
+        });
+      }
+      decor.push({ tag: 'circle', cls: 'origin-glow', attrs: { cx: cx, cy: cy, r: 26 } });
+      decor.push({ tag: 'circle', cls: 'origin-ring', attrs: { cx: cx, cy: cy, r: 13 } });
+      decor.push({
+        tag: 'text', cls: 'origin-label', text: 'THE FIRST GIFT',
+        attrs: { x: cx, y: cy + 40, 'text-anchor': 'middle' }
+      });
+
+      donors.forEach(function (d, i) {
+        var ring = ringOf(i);
+        var rad = maxR * (ring / Math.max(1, maxRing));
+        var inRing = i - Math.ceil((ring * ring) / 1.35);
+        var perRing = Math.max(1, Math.ceil(((ring + 1) * (ring + 1) - ring * ring) / 1.35));
+        var a = (inRing / perRing) * TAU + ring * 0.6;
+        var x = cx + Math.cos(a) * rad * 1.55;
+        var y = cy + Math.sin(a) * rad;
+        nodes.push({ d: d, x: x, y: y, r: d.founding ? 4.6 : 3 });
+        if (i > 0) {
+          edges.push({
+            d: path([[cx, cy], [x, y]]), slug: d.slug, cls: 'spoke',
+            w: 0.5, op: Math.max(0.05, 0.34 - (ring / maxRing) * 0.26)
+          });
+        }
+      });
+      return { nodes: nodes, edges: edges, decor: decor };
+    }
+  };
+
+  /* ── 7 · Marquee honour roll (off-brief) ──────────────────────────────
+     Kept from the previous round. No graph at all — a masthead at poster
+     scale, founding names carrying the composition. */
+  var marquee = {
+    id: 'marquee', num: 8, family: 'off-brief',
+    /* The off-brief pair get descriptive labels rather than one of Nicole's
+       five candidates: each of hers is carried by exactly one direction, so a
+       name can be judged in place instead of appearing twice. */
+    name: 'The Names',
+    metaphor: 'Marquee typography',
+    why: 'Deliberately off-brief: no nodes, no lines, type doing all the work at poster scale. Tests whether the network metaphor is earning its keep.',
+    kicker: 'Direction 08 · Off-brief',
+    headline: 'Just the <em>names</em>.',
+    sub: 'No diagram. The connections are implied by the company you keep on the page — the oldest version of a donor wall, at full volume.',
+    emptyLine: 'A blank masthead, waiting for the first name.',
+    seed: 101,
+    theme: {
+      bg: '#141011', fg: '#ffffff', muted: 'rgba(255,255,255,.5)',
+      line: 'rgba(255,255,255,.14)', accent: '#e01b41',
+      node: '#ffffff', edge: 'transparent', cardBg: '#141011',
+      'bg-image': 'radial-gradient(70% 55% at 12% -8%, rgba(224,27,65,.26) 0%, transparent 62%)'
+    },
+    custom: function (container, state, api) {
+      var host = container.querySelector('.viz-custom');
+      if (!host) host = api.el('div', 'viz-custom marquee-wrap', container);
+      host.innerHTML = '';
+      state.nodes = []; state.byslug = {}; state.edgesOf = {};
+      api.visibleDonors(state.count).forEach(function (d) {
+        var s = api.el('span', 'marquee-name' + (d.founding ? ' is-founding' : '')
+          + (d.anonymous ? ' is-anon' : ''), host);
+        s.textContent = api.displayName(d);
+        var n = { d: d, g: s };
+        state.nodes.push(n);
+        state.byslug[d.slug] = n;
+        if (state.mode !== 'preview' && !d.anonymous) {
+          s.style.cursor = 'pointer';
+          s.addEventListener('click', function () { api.focus(state, d.slug); });
+        }
+      });
+    }
+  };
+
+  /* ── 8 · Strata (off-brief) ───────────────────────────────────────────
+     Off-brief the other way: no graph, no rim, no scatter. The schools stack
+     as bands whose depth is how many people came from each — a designed
+     stratigraphy rather than a bar chart, with the supporters' own reasons
+     set alongside. */
+  var strata = {
+    id: 'strata', num: 9, family: 'off-brief',
+    compose: 'tr', bleed: 1.0,
+    name: 'Who Showed Up',
+    metaphor: 'Stacked strata',
+    why: 'Off-brief the other way: the schools stack as bands, deepest first, each band made of its own supporters. Reads as a poster of who showed up rather than as a chart of it.',
+    kicker: 'Direction 09 · Off-brief',
+    headline: 'Who actually <em>showed up</em>.',
+    sub: 'One band per school, deepest first, each built from the people in it. The only direction whose shape comes straight out of the spreadsheet.',
+    emptyLine: 'No strata yet. The first gift lays down the first band.',
+    seed: 127,
+    theme: {
+      bg: '#faf8f5', fg: '#1e1a1b', muted: 'rgba(30,26,27,.55)',
+      line: 'rgba(30,26,27,.12)', accent: '#a41034',
+      node: '#1e1a1b', edge: 'transparent', cardBg: '#1e1a1b',
+      'bg-image': 'linear-gradient(180deg, rgba(164,16,52,.08) 0%, transparent 40%)'
+    },
+    custom: function (container, state, api) {
+      var host = container.querySelector('.viz-custom');
+      if (!host) host = api.el('div', 'viz-custom strata-wrap', container);
+      host.innerHTML = '';
+      state.nodes = []; state.byslug = {}; state.edgesOf = {};
+      var donors = api.visibleDonors(state.count);
+      var schools = api.schools(donors);
+      var names = Object.keys(schools).sort(function (a, b) {
+        return schools[b].length - schools[a].length;
+      });
+      var top = names.length ? schools[names[0]].length : 1;
+
+      names.forEach(function (s, i) {
+        var m = schools[s];
+        var band = api.el('div', 'strat', host);
+        /* Band depth is the count, so the picture is the distribution — the
+           thing a reader would otherwise have to add up from a legend. */
+        band.style.flexGrow = String(m.length);
+        band.style.setProperty('--shade', (0.1 + (1 - i / Math.max(1, names.length)) * 0.72).toFixed(3));
+
+        var lab = api.el('div', 'strat-label', band);
+        api.el('span', 'strat-name', lab).textContent = api.shortSchool(s);
+        api.el('span', 'strat-count', lab).textContent = m.length;
+
+        var lane = api.el('div', 'strat-lane', band);
+        m.forEach(function (d) {
+          var t = api.el('span', 'strat-tick' + (d.founding ? ' is-founding' : '')
+            + (d.anonymous ? ' is-anon' : ''), lane);
+          t.title = api.displayName(d);
+          var n = { d: d, g: t };
+          state.nodes.push(n);
+          state.byslug[d.slug] = n;
+          if (state.mode !== 'preview' && !d.anonymous) {
+            t.style.cursor = 'pointer';
+            t.addEventListener('click', function () { api.focus(state, d.slug); });
+          }
+        });
+      });
+
+      var quote = donors.filter(function (d) { return d.note && !d.anonymous; }).slice(-1)[0];
+      if (quote && state.mode !== 'preview') {
+        var q = api.el('blockquote', 'strat-quote', host);
+        api.el('p', null, q).textContent = '“' + quote.note + '”';
+        api.el('cite', null, q).textContent = quote.name + ' · ' + api.shortSchool(quote.school)
+          + ' ’' + String(quote.gradYear).slice(2);
+      }
+    }
+  };
+
+  window.HIT_VARIATIONS = [grid, letterform, weave, oneline, bloom, halftone, ripple, marquee, strata];
+})();
+
+/* The review deck: builds the cards, mounts a live miniature in each, opens the
+   full-screen view, and collects Nicole's ratings.
+ *
+ * Feedback persists to localStorage and exports as one text file. That is
+ * deliberately low-tech: a published page cannot post anywhere (the artifact CSP
+ * blocks every external host), and a review that depends on a backend is a
+ * review that stops working the moment the link outlives the server. */
+(function () {
+  'use strict';
+
+  var VARS = window.HIT_VARIATIONS;
+  var KEY = 'hitNetworkFeedback_v1';
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+  }
+  function saveAll(d) {
+    try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) { }
+  }
+  var data = load();
+
+  function el(tag, cls, parent) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (parent) parent.appendChild(n);
+    return n;
+  }
+
+  /* ── Cards ────────────────────────────────────────────────────────────── */
+  VARS.forEach(function (v) {
+    var grid = document.querySelector('.grid[data-family="' + v.family + '"]');
+    if (!grid) return;
+
+    var card = el('div', 'card', grid);
+    card.setAttribute('data-family', v.family);
+    card.setAttribute('data-fb', v.id);
+    card.setAttribute('data-name', v.num + ' · ' + v.name);
+
+    var thumb = el('button', 'thumb', card);
+    thumb.type = 'button';
+    thumb.setAttribute('aria-label', 'Open direction ' + v.num + ': ' + v.name);
+    var mount = el('div', 'thumb-mount', thumb);
+    el('span', 'badge', thumb).textContent = v.num;
+    el('span', 'expand', thumb).textContent = 'Expand ↗';
+    el('span', 'thumb-veil', thumb);
+    thumb.addEventListener('click', function () { open(v); });
+
+    /* Miniatures render at 110 supporters — enough that the school clusters and
+       the ripple rings have real structure to show, still light enough that
+       eight of them share one screen without cost. */
+    window.HIT.mount(mount, v, { mode: 'preview', count: 110 });
+
+    var meta = el('div', 'meta', card);
+    el('div', 'nm', meta).textContent = v.name;
+    el('div', 'sys', meta).textContent = v.metaphor;
+    el('div', 'why', meta).textContent = v.why;
+    buildFeedback(card, meta, v);
+  });
+
+  function buildFeedback(card, meta, v) {
+    var fb = el('div', 'fb', meta);
+    fb.innerHTML =
+      '<div class="fb-head"><span class="fb-lab">Your rating</span>'
+      + '<span class="fb-val muted">— / 10</span></div>'
+      + '<input type="range" class="fb-range" min="1" max="10" step="1" value="5" data-set="0"'
+      + ' aria-label="Rating 1 to 10 for ' + window.HIT.escapeHtml(v.name) + '">'
+      + '<div class="fb-scale"><span>Not this</span><span>This one</span></div>'
+      + '<textarea class="fb-note" rows="2" placeholder="What works, what doesn’t…"></textarea>'
+      + '<div class="fb-saved">✓ saved</div>';
+
+    var range = fb.querySelector('.fb-range');
+    var val = fb.querySelector('.fb-val');
+    var note = fb.querySelector('.fb-note');
+    var saved = fb.querySelector('.fb-saved');
+    var rec = data[v.id] || {};
+
+    if (rec.rating) {
+      range.value = rec.rating;
+      val.textContent = rec.rating + ' / 10';
+      val.classList.remove('muted');
+      range.setAttribute('data-set', '1');
+    }
+    if (rec.comment) note.value = rec.comment;
+
+    var t;
+    function flash() {
+      saved.classList.add('show');
+      clearTimeout(t);
+      t = setTimeout(function () { saved.classList.remove('show'); }, 900);
+    }
+    function persist() {
+      var isSet = range.getAttribute('data-set') === '1';
+      data[v.id] = {
+        name: card.getAttribute('data-name'),
+        rating: isSet ? parseInt(range.value, 10) : null,
+        comment: note.value
+      };
+      saveAll(data);
+      flash();
+    }
+    range.addEventListener('input', function () {
+      range.setAttribute('data-set', '1');
+      val.textContent = range.value + ' / 10';
+      val.classList.remove('muted');
+      persist();
+    });
+    note.addEventListener('input', persist);
+  }
+
+  /* ── Session notes ────────────────────────────────────────────────────── */
+  var notesEl = document.getElementById('sessionNotes');
+  if (notesEl) {
+    if (data._notes) notesEl.value = data._notes;
+    notesEl.addEventListener('input', function () {
+      data._notes = notesEl.value;
+      saveAll(data);
+    });
+  }
+
+  /* ── Overlay ──────────────────────────────────────────────────────────── */
+  var overlay = document.getElementById('overlay');
+  var stage = document.getElementById('overlayStage');
+  var ovNum = document.getElementById('ovNum');
+  var ovName = document.getElementById('ovName');
+  var ovMeta = document.getElementById('ovMeta');
+  var current = -1;
+
+  function open(v) {
+    current = VARS.indexOf(v);
+    ovNum.textContent = v.num;
+    ovName.textContent = v.name;
+    ovMeta.textContent = v.metaphor + (v.family === 'off-brief' ? ' · off-brief' : '');
+    stage.innerHTML = '';
+    var host = el('div', '', stage);
+    /* A fresh mount every time rather than a hidden-and-reshown one: the growth
+       animation and the focus state should start clean, the way Nicole will see
+       it the first time. */
+    window.HIT.mount(host, v, { mode: 'full', count: 200 });
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    overlay.hidden = true;
+    stage.innerHTML = '';
+    document.body.style.overflow = '';
+    current = -1;
+  }
+  function step(dir) {
+    if (current < 0) return;
+    open(VARS[(current + dir + VARS.length) % VARS.length]);
+  }
+
+  document.getElementById('ovClose').addEventListener('click', close);
+  document.getElementById('ovPrev').addEventListener('click', function () { step(-1); });
+  document.getElementById('ovNext').addEventListener('click', function () { step(1); });
+  document.addEventListener('keydown', function (e) {
+    if (overlay.hidden) return;
+    /* Arrow keys move between directions — unless the reviewer is in the search
+       box, where they belong to the text cursor. */
+    var typing = document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName);
+    if (e.key === 'Escape') close();
+    if (!typing && e.key === 'ArrowRight') step(1);
+    if (!typing && e.key === 'ArrowLeft') step(-1);
+  });
+
+  /* ── Export ───────────────────────────────────────────────────────────── */
+  document.getElementById('exportBtn').addEventListener('click', function () {
+    var d = load();
+    var lines = ['HARVARD IN TECH — SUPPORTER NETWORK, DESIGN FEEDBACK',
+      'Exported ' + new Date().toLocaleString(), ''];
+    if ((d._notes || '').trim()) {
+      lines.push('OVERALL NOTES', '-------------------------', d._notes.trim(), '', '');
+    }
+    lines.push('PER-DIRECTION FEEDBACK', '-------------------------', '');
+    VARS.forEach(function (v) {
+      var r = d[v.id] || {};
+      lines.push(v.num + ' · ' + v.name + '  (' + v.metaphor + ')');
+      lines.push('  Rating: ' + (r.rating != null ? r.rating + '/10' : '—'));
+      lines.push('  Comment: ' + ((r.comment || '').trim() || '(no comment)'));
+      lines.push('');
+    });
+    var text = lines.join('\n');
+    if (navigator.clipboard) navigator.clipboard.writeText(text).catch(function () { });
+    try {
+      var blob = new Blob([text], { type: 'text/plain' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'hit-network-feedback.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (e) { alert(text); }
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', function () {
+    if (confirm('Clear all feedback saved in this browser?')) {
+      localStorage.removeItem(KEY);
+      location.reload();
+    }
+  });
+})();
+
+</script>

@@ -1,0 +1,269 @@
+/* Per-direction styling. Every rule is scoped by [data-var], so eight
+   aesthetics can share one document without leaking into each other. */
+
+.node-ring { fill: none; stroke: var(--accent); stroke-width: 1.1; opacity: 0.55; }
+
+/* ── 1 · Letterform network ───────────────────────────────────────────── */
+[data-var='letterform'] .node-dot {
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+}
+[data-var='letterform'] .node.is-founding .node-dot {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+[data-var='letterform'] .edge { stroke: var(--edge); }
+
+/* ── 2 · Woven circle ─────────────────────────────────────────────────── */
+[data-var='weave'] .rim {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+/* Threads lighten where they cross, so the weave gains depth from overlap
+   rather than from any single line being drawn heavier. */
+[data-var='weave'] .thread { mix-blend-mode: screen; }
+[data-var='weave'] .node-dot { filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.6)); }
+[data-var='weave'] .node.is-founding .node-dot {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 7px var(--accent));
+}
+
+/* ── 3 · One line ─────────────────────────────────────────────────────── */
+/* One filled shape, not 200 stacked strokes: overlapping semi-transparent
+   round caps darken at every join, which beads the ribbon along its length. */
+[data-var='oneline'] .ribbon {
+  fill: var(--accent);
+  stroke: none;
+}
+[data-var='oneline'] .stroke { stroke: var(--accent); stroke-linecap: round; }
+[data-var='oneline'] .node-dot {
+  fill: var(--bg);
+  stroke: var(--accent);
+  stroke-width: 1.6;
+}
+/* Invisible until focused — the supporter is still a target, just not a hole
+   punched in the stroke. */
+[data-var='oneline'] .node-dot.is-quiet { opacity: 0; animation: none; }
+[data-var='oneline'] .node.is-focus .node-dot.is-quiet { opacity: 1; }
+[data-var='oneline'] .node.is-anon .node-dot { stroke: var(--fg); opacity: 0.5; }
+
+/* ── 4 · Bloom ────────────────────────────────────────────────────────── */
+/* Multiply is the whole direction: overlapping fields deepen instead of
+   stacking flatly, which is what turns 200 circles into one atmosphere. */
+[data-var='bloom'] .bloom-field {
+  fill: var(--accent);
+  opacity: 0.055;
+  mix-blend-mode: multiply;
+}
+[data-var='bloom'] .node.is-founding .bloom-field { opacity: 0.1; }
+[data-var='bloom'] .node.is-anon .bloom-field { opacity: 0.03; }
+[data-var='bloom'] .node-dot { fill: var(--accent); opacity: 0.55; }
+[data-var='bloom'] .node.is-founding .node-dot { opacity: 1; }
+[data-var='bloom'] .node.is-anon .node-dot { fill: none; stroke: var(--accent); }
+[data-var='bloom'] .node.is-focus .bloom-field { opacity: 0.34; }
+
+/* ── 5 · Halftone numeral ─────────────────────────────────────────────── */
+[data-var='halftone'] .node-dot { fill: var(--node); }
+[data-var='halftone'] .node.is-founding .node-dot { fill: var(--accent); }
+[data-var='halftone'] .node.is-anon .node-dot {
+  fill: none;
+  stroke: var(--node);
+  stroke-width: 1.4;
+  opacity: 0.65;
+}
+
+/* ── 6 · Ripple ───────────────────────────────────────────────────────── */
+[data-var='ripple'] .ripple-ring { fill: none; stroke: var(--fg); }
+[data-var='ripple'] .origin-glow {
+  fill: var(--accent);
+  opacity: 0.12;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: originPulse 3.4s ease-in-out infinite;
+}
+@keyframes originPulse {
+  0%, 100% { opacity: 0.06; transform: scale(0.86); }
+  50% { opacity: 0.2; transform: scale(1.1); }
+}
+[data-var='ripple'] .origin-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  opacity: 0.7;
+}
+[data-var='ripple'] .origin-label {
+  fill: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+}
+[data-var='ripple'] .spoke { stroke: var(--edge); }
+
+/* ── 7 · Marquee (no graph) ───────────────────────────────────────────── */
+.viz-custom { position: relative; z-index: 1; }
+.marquee-wrap {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  align-content: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.06em 0.4em;
+  padding-top: 4px;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+.viz--preview .marquee-wrap {
+  padding: 46px 20px 20px;
+  overflow: hidden;
+  gap: 0.05em 0.32em;
+  -webkit-mask-image: linear-gradient(#000 70%, transparent 100%);
+  mask-image: linear-gradient(#000 70%, transparent 100%);
+}
+.viz--preview .marquee-name { font-size: 12px; }
+.viz--preview .marquee-name.is-founding { font-size: 19px; }
+/* Two type sizes, not one: founding names carry the composition and everyone
+   else sets around them. A single scale across 200 names is a list. */
+.marquee-name {
+  color: var(--fg);
+  opacity: 0.72;
+  font-size: clamp(15px, 1.9vw, 27px);
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+.marquee-name.is-founding {
+  color: var(--accent);
+  opacity: 1;
+  font-size: clamp(23px, 3.5vw, 52px);
+  letter-spacing: -0.045em;
+}
+.marquee-name.is-anon {
+  opacity: 0.26;
+  font-style: italic;
+  font-weight: 400;
+  font-family: var(--font-serif);
+}
+.marquee-name:hover { opacity: 1; }
+.viz.is-focused .marquee-name:not(.is-focus) { opacity: 0.1; }
+.marquee-name.is-focus { color: var(--accent); opacity: 1; }
+
+/* ── 8 · Strata (no graph) ────────────────────────────────────────────── */
+.strata-wrap {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+  padding-bottom: 4px;
+}
+.viz--preview .strata-wrap { padding: 46px 20px 20px; gap: 2px; }
+
+.strat {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 14px;
+  padding: 0 16px;
+  /* One accent varied in weight — the band's depth already carries the
+     magnitude, so colour only has to keep the stack legible. */
+  background: rgba(164, 16, 52, var(--shade));
+}
+.strat-label {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 120px;
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.strat-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.strat-count {
+  font-size: clamp(15px, 2vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.viz--preview .strat-label { min-width: 62px; }
+.viz--preview .strat-name { font-size: 6.5px; letter-spacing: 0.1em; }
+.viz--preview .strat-count { font-size: 11px; }
+
+.strat-lane {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 3px;
+  padding: 4px 0;
+}
+.strat-tick {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.strat-tick.is-founding { opacity: 1; }
+.strat-tick.is-anon { background: none; box-shadow: inset 0 0 0 1px #fff; opacity: 0.4; }
+.strat-tick:hover { opacity: 1; }
+.viz.is-focused .strat-tick:not(.is-focus) { opacity: 0.12; }
+.strat-tick.is-focus { opacity: 1; transform: scale(2.2); background: #fff; }
+
+.strat-quote {
+  flex: none;
+  margin: 14px 16px 0;
+  max-width: 62ch;
+}
+.strat-quote p {
+  margin: 0 0 7px;
+  font-family: var(--font-serif);
+  font-size: clamp(15px, 1.6vw, 21px);
+  line-height: 1.4;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.strat-quote cite {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-style: normal;
+  color: var(--muted);
+}
+
+/* ── 1 · Power grid at night ──────────────────────────────────────────── */
+[data-var='grid'] .junction-glow {
+  fill: var(--accent);
+  opacity: 0.16;
+  filter: blur(9px);
+}
+[data-var='grid'] .junction {
+  fill: #fff;
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+[data-var='grid'] .feeder { stroke: var(--edge); }
+[data-var='grid'] .trunk-base { stroke: var(--accent); }
+/* Two layers on one path: a dim standing conductor and a short bright dash
+   travelling it. A single dashed line reads as a dotted border, not current. */
+[data-var='grid'] .trunk-pulse {
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-dasharray: 2 66;
+  filter: drop-shadow(0 0 6px var(--accent));
+  animation: current 3.2s linear infinite;
+}
+@keyframes current { to { stroke-dashoffset: -136; } }
+[data-var='grid'] .node-dot { filter: drop-shadow(0 0 4px rgba(255, 217, 168, 0.8)); }
+[data-var='grid'] .node.is-founding .node-dot {
+  fill: #fff;
+  filter: drop-shadow(0 0 7px var(--accent));
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-var='grid'] .trunk-pulse { animation: none; opacity: 0.5; }
+}

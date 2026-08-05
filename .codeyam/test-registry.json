@@ -2234,6 +2234,51 @@
       "runner": "tests"
     },
     {
+      "description": "A milestone already behind the count must not re-fire, or the animation would celebrate 50 again on every subsequent frame.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › does not re-report a milestone already behind the count",
+      "line": 76,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The regression this exists for: the growth step accelerates with the count, so an equality check fired only when the arithmetic happened to land exactly on a milestone. In practice 50/100/150 never showed.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › reports a milestone that was stepped over, not just landed on",
+      "line": 50,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Most frames cross nothing; returning a milestone on those would fire the celebration continuously through the whole animation.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › reports nothing when the step stays between milestones",
+      "line": 63,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A jump from 40 to 160 passes three milestones. Announcing 150 would skip two moments the campaign wants to mark, so the earliest wins and the caller snaps the count back to it.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › reports the lowest milestone when a single step clears several",
+      "line": 70,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The exact-landing case still has to work — it is the one the old equality check got right, and it must not regress in the other direction.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › still reports an exact landing",
+      "line": 57,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
       "description": "An exempted key is absent from the editor on purpose and must stay quiet.",
       "file": "src/data/collections.test.ts",
       "format": "vitest",
@@ -3233,6 +3278,33 @@
       "runner": "tests"
     },
     {
+      "description": "Each direction seeds its own layout, so different seeds must actually diverge or every direction would scatter its nodes identically.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "rng › gives different sequences for different seeds",
+      "line": 123,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Determinism is the point: a network that reshuffles between renders reads as a different design, so a reviewer would be rating noise and a screenshot they already commented on would stop matching the page.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "rng › gives the same sequence for the same seed",
+      "line": 115,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Layouts multiply this by canvas dimensions, so a value outside the unit range would place a supporter off-canvas.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "rng › stays at or above zero and below one",
+      "line": 129,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
       "description": "Emits the standard allow-all directives.",
       "file": "src/lib/seoEndpoints.test.ts",
       "format": "vitest",
@@ -3710,6 +3782,24 @@
       "runner": "tests"
     },
     {
+      "description": "An editor typo, or a school nobody has mapped yet, must still reach the page — a blank label loses the supporter's affiliation silently.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "shortSchool › passes an unrecognized school through rather than dropping it",
+      "line": 148,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The full school names do not fit the labels the layouts have room for.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "shortSchool › shortens the schools the upload uses",
+      "line": 141,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
       "description": "Production today: no donors, no bands, and the empty state renders instead.",
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
@@ -4052,6 +4142,51 @@
       "runner": "tests"
     },
     {
+      "description": "Initials leak the withheld name: \"RKW\" beside \"Anonymous supporter\" names them to anyone who knows them, so the anonymous case gets a mark that identifies nobody.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › does not leak the withheld name through initials",
+      "line": 26,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A search box is a new way to undo anonymity that the old donor wall never had: typing a withheld name must not find its owner, even though their node is on the page and counted.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › keeps an anonymous supporter out of search results",
+      "line": 18,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The live donor wall withholds an anonymous donor's name, photo, link and initials together. Search and a shareable card are both new ways to undo that, so these three are the arms of the same guarantee.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › prints the standing label instead of a withheld name",
+      "line": 10,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Capped at two letters — an avatar that expanded to every initial would spell out a long name rather than abbreviate it.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › takes at most two initials, so a long name cannot spell itself out",
+      "line": 33,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Names arrive from a bi-weekly spreadsheet upload, where padding and double spaces are normal; they must not produce a blank or malformed monogram.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › tolerates the extra whitespace a spreadsheet upload arrives with",
+      "line": 39,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
       "description": "`url` is derived from the identity, and the package looks assets up BY url (findAssetByUrl), so a hand-edited mismatch would silently orphan a record.",
       "file": "src/lib/media.test.ts",
       "format": "vitest",
@@ -4103,6 +4238,42 @@
       "key": "the committed media manifest › records an alt value for every asset, empty or otherwise",
       "line": 140,
       "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Returns a copy: the sampled point list is reused across re-renders, and a caller mutating it would corrupt every later layout.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "thin › copies rather than aliasing, so a caller cannot mutate the source",
+      "line": 104,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Early on there are fewer supporters than sample points; everyone must still be placed rather than the list being truncated.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "thin › returns everything when asked for more than it has",
+      "line": 92,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Production starts empty and stays empty until the first upload, so a zero count is the state the page ships in, not an edge case.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "thin › returns nothing for the day-one empty state",
+      "line": 98,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Taking the first four would fill the top of one letterform and leave the rest of the word empty, because the glyph sampler emits points in scan order rather than spread across the glyphs.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "thin › spreads the selection across the whole input",
+      "line": 85,
+      "registeredAt": "2026-08-05T15:59:21Z",
       "runner": "tests"
     },
     {

@@ -1,0 +1,98 @@
+<div class="deck">
+  <header class="cover">
+    <div class="cover-tab"></div>
+    <div class="kick">Harvard in Tech · Donor recognition · Design review</div>
+    <h1>Not a wall. <span>A network.</span></h1>
+    <p class="lede">
+      Nine directions for the supporter recognition page, built from Nicole's note.
+      Every one runs on the same 200 illustrative supporters, so what differs is the
+      idea and not the content. Open any of them, search for a name, and grow the
+      network to 200.
+    </p>
+
+    <div class="brief">
+      <div class="brief-kick">From Nicole's note</div>
+      <blockquote>
+        <p>“I don't think it should be called a wall. It's a network of nodes on a power grid.”</p>
+        <p>“Every gift starts with one person and together those gifts create growth.”</p>
+      </blockquote>
+    </div>
+
+    <div class="legend">
+      <span class="chip"><span class="sw sw--net"></span> <b>Seven network directions</b> — different answers to what governs the shape</span>
+      <span class="chip"><span class="sw sw--off"></span> <b>Two off-brief</b> — no graph at all, as a control</span>
+    </div>
+
+    <div class="toolbar">
+      <span class="tbtn ghost">Click any card to open it full-screen</span>
+      <button class="tbtn primary" id="exportBtn">⤓ Export all feedback</button>
+      <button class="tbtn ghost" id="clearBtn">Clear feedback</button>
+      <span class="tnote">Rate each 1–10 and add a comment. Saved in this browser; Export downloads everything.</span>
+    </div>
+    <textarea id="sessionNotes" class="notes" rows="2"
+      placeholder="Overall reactions, recurring themes, what the page should be called… (saved automatically, included in Export)"></textarea>
+  </header>
+
+  <div class="group-head">
+    <span class="gsw sw--net"></span>
+    <h2>Network directions</h2>
+    <span class="gcount">07</span>
+  </div>
+  <div class="grid" data-family="network"></div>
+
+  <div class="group-head">
+    <span class="gsw sw--off"></span>
+    <h2>Off-brief controls</h2>
+    <span class="gcount">02</span>
+  </div>
+  <div class="grid" data-family="off-brief"></div>
+
+  <section class="qs">
+    <div class="kick">Open questions these directions can't answer on their own</div>
+    <ol>
+      <li>
+        <strong>What is it called?</strong> Nicole ruled out “wall” but left five candidate
+        names. Each direction carries a different one so they can be judged in place
+        rather than on a list.
+      </li>
+      <li>
+        <strong>Is $500 the founding threshold, and does the spreadsheet say so?</strong>
+        The note asks it as a question. Since the upload carries no dollar amounts,
+        founding status has to arrive as its own column — or be derived from
+        <em>when</em> someone gave. These mockups assume the early cohort.
+      </li>
+      <li>
+        <strong>What happens to a supporter who asks not to be named?</strong>
+        The live site already withholds an anonymous donor's name, photo, link and
+        initials together. Search and a shareable card are both new ways to undo that,
+        so here an anonymous supporter is a visible node that counts toward every
+        milestone but cannot be looked up or turned into a card. Worth confirming that
+        is the behaviour Nicole wants.
+      </li>
+      <li>
+        <strong>Are school and graduation year public?</strong> They are the only
+        structure the spreadsheet offers, and directions 01, 03 and 09 are built on them —
+        but they are also personal details some supporters may not expect to be listed.
+      </li>
+    </ol>
+  </section>
+
+  <footer class="foot">
+    Harvard in Tech · supporter network — nine directions · 200 illustrative supporters,
+    no real donor data · prepared for Nicole's review.
+  </footer>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="overlay-bar">
+    <span class="overlay-num" id="ovNum"></span>
+    <span class="overlay-name" id="ovName"></span>
+    <span class="overlay-meta" id="ovMeta"></span>
+    <div class="overlay-actions">
+      <button class="ovbtn" id="ovPrev" aria-label="Previous direction">←</button>
+      <button class="ovbtn" id="ovNext" aria-label="Next direction">→</button>
+      <button class="ovbtn ovbtn--x" id="ovClose">Close ✕</button>
+    </div>
+  </div>
+  <div class="overlay-stage" id="overlayStage"></div>
+</div>
