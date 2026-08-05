@@ -1,3 +1,40 @@
+<!-- ============ PASSPHRASE GATE ============ -->
+<!-- Deterrent-level privacy, the same shape public/review/index.html uses. It is
+     hand-rolled here rather than inherited from PreviewGate.astro for two
+     reasons: this page is a raw public/ file, so no Astro component ever renders
+     it; and PreviewGate keys off PREVIEW_GATE, which deploy.yml leaves unset on
+     the public track — so at the Strikingly cutover an inherited gate would
+     silently un-gate itself on harvardintech.com, which is precisely when this
+     deck must stay private. Always on, therefore, with no env switch.
+
+     It sits FIRST in the document and covers everything opaquely rather than
+     hiding the deck with display:none. The nine miniatures mount into these
+     grids on load and the engine measures its container, so a hidden deck would
+     render nine zero-height canvases and unlock to an empty page.
+
+     #pass / #enter keep the ids the review page uses, so the scenario capture
+     drives the real gate (fill #pass, click #enter) instead of needing a
+     screenshot-only bypass path. -->
+<div id="gate">
+  <div class="gate-box">
+    <h1>Harvard in Tech</h1>
+    <p>Supporter network — design review. Enter the passphrase you were given.</p>
+    <input id="pass" type="password" placeholder="Passphrase" autocomplete="off" />
+    <button id="enter" type="button">View the directions</button>
+    <div class="gate-err" id="err"></div>
+    <p class="gate-fine">
+      Internal review — please don't forward this link. The passphrase keeps the page
+      out of search results and casual view; it is a deterrent, not strong security.
+    </p>
+  </div>
+</div>
+<script>
+  /* Lock scrolling while the gate is up. Inline and immediately after the gate
+     markup so it runs before the deck below is parsed. */
+  document.documentElement.classList.add('gated');
+</script>
+
+<div id="content">
 <div class="deck">
   <header class="cover">
     <div class="cover-tab"></div>
@@ -25,12 +62,9 @@
 
     <div class="toolbar">
       <span class="tbtn ghost">Click any card to open it full-screen</span>
-      <button class="tbtn primary" id="exportBtn">⤓ Export all feedback</button>
-      <button class="tbtn ghost" id="clearBtn">Clear feedback</button>
-      <span class="tnote">Rate each 1–10 and add a comment. Saved in this browser; Export downloads everything.</span>
+      <span class="tnote">Arrow keys move between directions once one is open. Send your
+        reactions back in whatever doc suits you — there is nothing to fill in here.</span>
     </div>
-    <textarea id="sessionNotes" class="notes" rows="2"
-      placeholder="Overall reactions, recurring themes, what the page should be called… (saved automatically, included in Export)"></textarea>
   </header>
 
   <div class="group-head">
@@ -96,3 +130,57 @@
   </div>
   <div class="overlay-stage" id="overlayStage"></div>
 </div>
+</div><!-- /#content -->
+
+<script>
+  /* Gate unlock. DETERRENT ONLY: the passphrase is in this page's source, so a
+     determined viewer can read the directions without it. Combined with an
+     unlisted URL and the noindex meta build.py emits, it is enough to keep the
+     deck out of search results and casual view. For real per-person access
+     control the answer is a host that can check a password server-side
+     (Cloudflare Access), not a stronger client-side check.
+
+     PASSPHRASE is substituted by build.py from src/lib/previewGate.ts, so
+     rotating it there moves this page, /review/ and the whole review site
+     together instead of leaving one of the three behind. */
+  (function () {
+    var PASSPHRASE = '__PASSPHRASE__';
+    /* Its own sessionStorage key: unlocking this deck should not also unlock
+       /review/ (hait-review-ok) or the gated site build (hait-preview-ok). */
+    var KEY = 'hait-network-ok';
+    var gate = document.getElementById('gate');
+    var input = document.getElementById('pass');
+    var err = document.getElementById('err');
+
+    function unlock() {
+      document.documentElement.classList.remove('gated');
+      gate.remove();
+    }
+    /* Read through a try: a blocked-storage context (file:// in some browsers,
+       third-party-cookie blocking in an iframe) throws on access, and an
+       unguarded read would take the unlock handler down with it and leave the
+       page gated with a button that does nothing. */
+    var remembered = false;
+    try { remembered = sessionStorage.getItem(KEY) === '1'; } catch (e) { }
+    if (remembered) { unlock(); return; }
+
+    function tryEnter() {
+      /* The accept/refuse rule lives in src/lib/reviewGate.js, inlined above by
+         build.py and covered by src/lib/reviewGate.test.ts. Notably it refuses an
+         empty PASSPHRASE outright — a bare `trim() === PASSPHRASE` here would
+         open the page to anyone who just clicked the button if the substitution
+         ever produced one. */
+      if (window.HIT_GATE.passphraseAccepted(input.value, PASSPHRASE)) {
+        try { sessionStorage.setItem(KEY, '1'); } catch (e) { }
+        unlock();
+      } else {
+        err.textContent = 'Incorrect passphrase.';
+        input.value = '';
+        input.focus();
+      }
+    }
+    document.getElementById('enter').addEventListener('click', tryEnter);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryEnter(); });
+    input.focus();
+  })();
+</script>

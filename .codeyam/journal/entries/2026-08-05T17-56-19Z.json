@@ -1,0 +1,211 @@
+{
+  "timestamp": "2026-08-05T17:56:19Z",
+  "title": "Gate The Network Directions Deck For Nicole",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe nine-directions design deck is deployed and **publicly readable right now**:\n`https://nseldeib.github.io/harvardintech/donor-network.html` returns HTTP 200 to\nanyone, with no passphrase. Jared wants to send the link to Nicole, so it needs a\ngate first.\n\n`public/donor-network.html` is a raw file in `public/`, copied verbatim into\n`dist/`, so no Astro component ever touches it — which is why the site-wide\n`PreviewGate.astro` does not apply. `public/review/index.html` hit this same wall\nin July and solved it by inlining its own always-on gate; this plan follows that\nprecedent exactly.\n\nNicole will send her reactions in a separate doc, so the in-page reviewer\nfeedback (per-card 1–10 rating, comment boxes, overall notes, export/clear) comes\nout entirely. It was built on the assumption that a published artifact cannot post\nanywhere — true, but moot once feedback arrives by another channel, and nine\nrating sliders on a page nobody will type into is just noise between her and the\ndesigns.\n\n## Key Decisions\n\n- **An always-on inline gate, NOT `PreviewGate.astro`.** The site-wide gate keys\n  off `PREVIEW_GATE`, which `deploy.yml` deliberately leaves unset on the public\n  track. At the Strikingly cutover `main` becomes `harvardintech.com`, so a deck\n  relying on that gate would **silently un-gate itself** at exactly the moment the\n  site becomes public. Internal design exploration must stay private permanently,\n  which means the gate cannot be env-conditional. This is presumably why\n  `/review/index.html` hand-rolled its own rather than reusing the component.\n\n- **Deterrent-level privacy, and the page says so.** The passphrase ships in the\n  page source; anyone who opens dev tools can read the directions. It stops search\n  engines, casual browsing, and a forwarded link — not a determined viewer. That is\n  acceptable here because the 200 supporters are fabricated by `build-donors.py`\n  and no real donor data exists yet. Real per-person auth (Cloudflare Access) stays\n  available as a follow-on and is out of scope.\n\n- **The passphrase is `crimson2026`, shared with the rest of the review site.**\n  One passphrase for everything a reviewer opens. To avoid pasting the literal a\n  third time (it already lives in `previewGate.ts` and `review/index.html`),\n  `build.py` reads the default out of `src/lib/previewGate.ts` and fails loudly if\n  it cannot find it — a build that cannot resolve the passphrase must not emit a\n  page with an empty one.\n\n- **Scenarios drive the real gate rather than bypassing it.** The earlier idea of a\n  `localhost` bypass is dropped: `project-review-unlocked-status` already captures\n  a gated static page by filling `#pass` and clicking `#enter` in its\n  `interactions`. Reusing that keeps the captured page byte-identical to the\n  deployed one, with no screenshot-only code path.\n\n- **`noindex` as well, even though `robots.txt` already covers it.** The deployed\n  review track serves `Disallow: /` (verified live), so crawlers are already warned\n  off today. But `robots.txt` flips to `Allow: /` at the cutover while this page\n  stays internal, so the meta tag has to be on the page itself to outlive that.\n\n- **Edit `src/`, never the generated outputs.** `build.py` owns\n  `public/donor-network.html` and `artifact-body.html`. Hand-editing either is the\n  drift the build script exists to prevent.\n\n## Implementation\n\n### 1. The gate\n\n**File**: `.codeyam/design/donor-network/src/shell.html`\n\nAdd `#gate` markup above `.deck` and wrap the existing deck in `#content`,\nmirroring `public/review/index.html:127-140`: a centred box with an `#pass`\npassword input, an `#enter` button, and an `#err` line. Include the same\n\"deterrent, please don't forward\" note the review page carries in its footer, so\nNicole understands the sharing model.\n\nThe unlock script goes in `shell.html` as its own inline `<script>`, not in\n`shell.js`: `build.py` concatenates every JS source into one trailing `<script>`\ntag, and the gate has to run before the deck paints. Key it on `sessionStorage`\nunder `hait-network-ok` — its own key, so unlocking the deck does not silently\nunlock `/review/` or vice versa.\n\n**File**: `.codeyam/design/donor-network/src/shell.css`\n\nGate styles, reusing the deck's existing crimson tokens. `#content { display: none }`\nuntil unlocked.\n\n**File**: `.codeyam/design/donor-network/build.py`\n\n- Read the passphrase default out of `src/lib/previewGate.ts` and substitute it\n  into the gate script; raise if the pattern does not match.\n- Add `<meta name=\"robots\" content=\"noindex, nofollow\">` to the `PUBLIC_OUT` head.\n  Not to `ARTIFACT_OUT` — the Artifact publisher supplies its own `<head>`, which\n  is why that output gets only a `<title>` line today.\n- Fix `TITLE`: it says \"eight directions\" for nine.\n\n### 2. Remove the reviewer feedback\n\n**File**: `.codeyam/design/donor-network/src/shell.js`\n\nDelete `buildFeedback()` and its call, the session-notes block, the `exportBtn`\nand `clearBtn` handlers, and the now-unused `KEY` / `load()` / `saveAll()` / `data`\nstate. Update the module's header comment, which currently describes collecting\nratings. The overlay, keyboard navigation, and card mounting are untouched.\n\n**File**: `.codeyam/design/donor-network/src/shell.html`\n\nDrop the \"Export all feedback\" / \"Clear feedback\" buttons, the \"Rate each 1–10\"\nnote, and the `#sessionNotes` textarea. Keep \"Click any card to open it\nfull-screen\" and add a line telling Nicole where to send comments.\n\n**File**: `.codeyam/design/donor-network/src/shell.css`\n\nRemove the `.fb-*` block (`shell.css:223-294`).\n\n`engine.js`'s **\"Download supporter card\"** stays — that is a feature of the\ndirections being evaluated, not a review mechanism.\n\n### 3. Link it from the internal review index\n\n**File**: `public/review/index.html`\n\nAdd a card linking to `/donor-network.html`, so there is one internal link that\nreaches everything under review. Hand-edited: this page is not generated.\n\n### 4. Regenerate\n\n`python3 .codeyam/design/donor-network/build.py` — rewrites\n`public/donor-network.html` and `artifact-body.html`. Both are committed.\n\n## Reused existing code\n\n- `public/review/index.html:30-58` (gate CSS), `:127-140` (gate markup),\n  `:380-415` (unlock script) — the pattern being followed.\n- `.codeyam/scenarios/project-review-unlocked-status.json` — the `interactions`\n  shape that captures a gated static page.\n- `src/lib/previewGate.ts` — source of the passphrase default.\n- The deck's existing crimson tokens in `shell.css`.\n\n## Scenarios to Demonstrate\n\n- **Supporter Network - Nine Directions** (existing, re-capture): gains the\n  fill-`#pass` / click-`#enter` interactions. Re-capturing is required regardless\n  of the gate — removing the rating panel from every card changes the deck's\n  layout, so the committed Desktop and Mobile screenshots are stale.\n- **Supporter Network - Gate Locked** (new): the passphrase prompt with the deck\n  blurred behind it — what a stranger with the URL sees. Desktop and Mobile, since\n  the link is as likely to be opened on a phone.\n\nThe deck carries no seed. Its data states (day-one empty, sparse, rich, full 200)\nare switchable inside the page from inlined illustrative data, because a published\nartifact runs under a CSP that blocks every external host.\n\n## Out of scope (this cycle)\n\n- **Real authentication** (Cloudflare Pages + Access, per-person email OTP). The\n  documented-but-not-chosen alternative in the two-track publishing plan; still the\n  answer if deterrent-level privacy proves insufficient.\n- **Keeping internal artifacts off the public build at cutover.** `public/` ships\n  wholesale, so `/review/`, `/donor-network.html` and the 13 mockups under\n  `/design-review-4ece6c14/` will all land on `harvardintech.com` behind nothing\n  but their own inline gates. Worth a checklist item on\n  `migrate-harvardintech-com-off-strikingly`, not a change here.\n- **Acting on Nicole's answers.** The three open questions the deck raises (tiers\n  with no dollar input, `school`/`gradYear` absent from `DonorLike`, the anonymity\n  contract vs. search) stay open questions on the page.",
+  "description": "Jared asked whether there was a password-protected link he could send Nicole for the network directions. There was a link, and it was not protected: yesterday's nine-directions deck had shipped as `public/donor-network.html` and was answering HTTP 200 to anyone at `nseldeib.github.io/harvardintech/donor-network.html`, with no passphrase and no `noindex` of its own. The site-wide gate never applied to it — `PreviewGate.astro` reaches only pages Astro renders, and a raw `public/` file is copied verbatim into `dist/`. `public/review/index.html` hit the same wall in July and hand-rolled its own gate; this follows that precedent.\n\nThe gate is deliberately always-on rather than inheriting `PREVIEW_GATE`, and that is the load-bearing decision here. That flag is unset on the public track by design, so at the Strikingly cutover — when `main` becomes harvardintech.com — an inherited gate would silently un-gate this deck at precisely the moment it must stay private. Internal design exploration has no public-track state, so the gate cannot be env-conditional. Presumably the same reasoning led `/review/` to hand-roll rather than reuse the component.\n\nThe gate covers the deck opaquely instead of hiding it with `display: none`, which is not a style preference: the nine miniatures mount on load and the engine measures its container, so a hidden deck would build nine zero-height canvases and unlock to an empty page. Scenario captures type the real passphrase — reusing the `fill #pass` / `click #enter` shape `project-review-unlocked-status` already used — rather than taking a localhost bypass, so what is screenshotted is the page as it ships with no screenshot-only code path. The earlier plan to bypass on localhost was dropped once that precedent turned up.\n\nAll of the reviewer feedback came out: the per-card 1-10 slider and comment box, the overall-notes textarea, the export and clear buttons, and the `hitNetworkFeedback_v1` store. It was built on the sound premise that a published artifact cannot post anywhere, but Nicole sends reactions in a doc, so nine sliders nobody will touch only sat between her and the designs. The `Download supporter card` button stays — that is a feature of a direction being evaluated, not a review mechanism.\n\nOne rule was worth extracting rather than leaving as a comparison. `passphraseAccepted` now lives in `src/lib/reviewGate.js`, UMD-wrapped so `build.py` inlines it and vitest imports it, for the same reason `donorNetwork.js` is shaped that way. It hides a real hole: trimming an empty string still equals an empty string, so the bare `input.value.trim() === PASSPHRASE` it replaced would have opened the deck to anyone who merely clicked the button had the substitution ever produced a blank passphrase. `build.py` now refuses to emit one and the rule refuses to accept one, because a published page outlives the build that made it. Ten tests pin it, including that whitespace around a pasted passphrase is forgiven while case is not; reverting the function to the bare comparison turns two of them red.\n\nThe passphrase itself is no longer written down a third time. `build.py` parses the default out of `src/lib/previewGate.ts` and substitutes it for a `__PASSPHRASE__` token, so rotating it there moves this deck, `/review/` and the gated site build together instead of leaving one behind.\n\nTwo things caught in passing. The `/review/` card's link had to be relative: both tracks deploy under a base path and a raw `public/` file cannot read Astro's `BASE_URL`, so `/donor-network.html` would have 404'd on the real deploy. And the page title still said `eight directions` for nine.\n\nThe taxonomy walk found three states this view had never captured, each of which earned its scenario: the gate refusing a wrong passphrase — the only in-page failure state here, and the place a gate silently fails open; a direction full-screen, the deck's actual key action, since a thumbnail is not what Nicole judges; and the day-one empty network, which is the state the real page ships in, because production starts empty and a graphic that only reads well when full greets the first visitor with nothing.\n\nTwo limits stated plainly rather than papered over. This is deterrent-level privacy — the directions remain readable in the page source to anyone who opens dev tools; it stops search engines, casual browsing and a forwarded link, and it is acceptable only because the 200 supporters are fabricated and no real donor list exists yet. Cloudflare Access remains the answer if that stops being enough. Separately, at the cutover `public/` ships wholesale, so `/review/`, this deck and the thirteen older mockups all land on harvardintech.com behind nothing but their own inline gates — a checklist item the migration plan owes, not something fixed here.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/README.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/artifact-body.html",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/build.py",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/src/shell.css",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/src/shell.html",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/src/shell.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/ne--gate-the-network-directions-deck-for-nicole.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/project-review-unlocked-status.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-nine-directions--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-nine-directions--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-network-nine-directions.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "public/donor-network.html",
+      "status": "modified"
+    },
+    {
+      "path": "public/review/index.html",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-a-direction-full-screen--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-a-direction-full-screen--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-day-one-empty-network--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-day-one-empty-network--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-locked--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-locked--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-locked--mobile.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-refused--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-refused--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-nine-directions--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-network-a-direction-full-screen.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-network-day-one-empty-network.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-network-gate-locked.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-network-gate-refused.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/reviewGate.js",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/reviewGate.test.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Project Review - Unlocked Status",
+      "screenshotPath": "project-review-unlocked-status--desktop.png"
+    },
+    {
+      "name": "Supporter Network - A Direction Full-Screen",
+      "screenshotPath": "supporter-network-a-direction-full-screen--desktop.png"
+    },
+    {
+      "name": "Supporter Network - Day One Empty Network",
+      "screenshotPath": "supporter-network-day-one-empty-network--desktop.png"
+    },
+    {
+      "name": "Supporter Network - Gate Locked",
+      "screenshotPath": "supporter-network-gate-locked--desktop.png"
+    },
+    {
+      "name": "Supporter Network - Gate Refused",
+      "screenshotPath": "supporter-network-gate-refused--desktop.png"
+    },
+    {
+      "name": "Supporter Network - Nine Directions",
+      "screenshotPath": "supporter-network-nine-directions--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 549,
+    "passed": 549,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 549,
+        "passed": 549
+      }
+    ]
+  }
+}

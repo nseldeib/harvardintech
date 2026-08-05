@@ -697,6 +697,12 @@
     "testFile": "src/lib/parallax.test.ts"
   },
   {
+    "description": "Whether a typed passphrase opens one of the review artifacts. Surrounding whitespace is forgiven because the passphrase is shared out of band and arrives pasted out of an email, carrying a trailing space more often than not; case is not, since a case-insensitive passphrase is a materially weaker one and case is not a likely error when pasting. The case worth having a function for at all: an empty expected passphrase never opens the gate. Trimming an empty string still equals an empty string, so the bare comparison this replaced would have admitted anyone who merely clicked the button had the build ever substituted a blank value. build.py refuses to emit one; this is the same guard at the point the decision is actually made, because a published page outlives the build that produced it. Plain JavaScript with a UMD wrapper for the same reason donorNetwork.js is: build.py inlines it verbatim into a self-contained page that must work from a file:// open and under a CSP blocking every host, while vitest imports it as CommonJS. Distinct from previewGate.ts, which is server-only, decides whether the whole site build is gated, and un-gates on the public track by design; it stays the source of the passphrase value, which build.py parses out of it.",
+    "filePath": "src/lib/reviewGate.js",
+    "name": "passphraseAccepted",
+    "testFile": "src/lib/reviewGate.test.ts"
+  },
+  {
     "description": "The editor's value for a copy field if it holds anything, otherwise the value committed in JSON. Whitespace-only counts as empty, because a field an editor cleared usually still holds the newline the textarea left behind and treating that as real copy puts a blank heading on the live page. The returned value is trimmed. The deliberate consequence is that a field cannot be blanked from the CMS while the JSON still carries a value: emptying a heading is a two-step edit, which is the right trade when the opposite choice's failure mode is a live page with a missing headline.",
     "filePath": "src/lib/pageCopyMerge.ts",
     "name": "preferText",

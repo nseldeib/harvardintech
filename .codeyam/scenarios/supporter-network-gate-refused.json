@@ -1,0 +1,23 @@
+{
+  "name": "Supporter Network - Gate Refused",
+  "id": "7facf723-e84c-455c-a906-d5b07943d0bd",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "The gate refusing a wrong passphrase: the error line shows and the field is cleared for another try, with none of the deck disclosed behind it. The only in-page failure state this view has, since nothing here fetches anything at runtime. It is worth capturing rather than assuming because the refusal path is where a gate silently fails open — the rule behind it also refuses an empty expected passphrase, which a bare string comparison would have admitted.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "not-the-passphrase"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    }
+  ]
+}

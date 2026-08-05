@@ -2783,6 +2783,96 @@
       "runner": "tests"
     },
     {
+      "description": "The ordinary case: the passphrase the reviewer was given opens the page.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › accepts the exact passphrase",
+      "line": 10,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Fail closed rather than forgiving: if the build ever substituted a passphrase carrying its own stray whitespace, nobody gets in and the reviewer reports a passphrase that does not work — louder, and safer, than silently trimming the expected value and letting a malformed config look healthy.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › fails closed when the expected passphrase carries stray whitespace",
+      "line": 86,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The passphrase is shared out of band and arrives pasted out of an email or a chat message, which carries surrounding whitespace more often than not. Refusing that would read to the reviewer as a wrong passphrase.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › forgives whitespace around a pasted passphrase",
+      "line": 17,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A missing input element yields null rather than a string. Reading .value off it would already have thrown, but the rule must not be the thing that turns a missing element into an open page.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses a non-string input",
+      "line": 74,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Neither half of a partial match counts: the comparison is whole-string, so a prefix, a suffix and a superstring are all refused.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses a partial or padded match",
+      "line": 39,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole point of the gate.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses a wrong passphrase",
+      "line": 24,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty box never opens the gate, which is unremarkable on its own.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses an empty input against a real passphrase",
+      "line": 46,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE case this function exists for. Trimming an empty string still equals an empty string, so the bare comparison this replaced would have opened the page for anyone who simply clicked the button, had the build ever substituted an empty passphrase. build.py refuses to emit one; this is the same guard at the point the decision is actually made, because a published page outlives its build.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses an empty input even when the expected passphrase is empty",
+      "line": 57,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same hole one step along: a whitespace-only expected value is as absent as an empty one, and must not be satisfiable by typing whitespace.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses everything when the expected passphrase is only whitespace",
+      "line": 65,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Case-insensitivity would make the passphrase materially weaker, and nothing about pasting a shared string makes case a likely transcription error — so this strictness is deliberate rather than incidental.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › stays case-sensitive",
+      "line": 32,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
       "description": "An editor cleared the box cleanly. Blank copy must never reach the page.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",

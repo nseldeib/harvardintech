@@ -1,6 +1,6 @@
 {
   "name": "Project Review - Unlocked Status",
-  "id": "05d10a78-e413-4eca-a579-b9acc6acec74",
+  "id": "72d8fda3-0528-4916-bb27-d7469fad89dc",
   "url": "/review/index.html",
   "dimensions": [
     "Desktop"
@@ -8,6 +8,7 @@
   "mocks": {},
   "scenarioType": "application",
   "pageFilePath": "public/review/index.html",
+  "description": "The internal status-and-decisions page past its passphrase, which this scenario types rather than bypasses. It now opens with an \"Also under review\" section linking the supporter-network directions deck, so one internal link reaches everything under review instead of raw URLs pasted into separate emails. The deck link is relative rather than root-absolute: both tracks deploy under a base path, and a raw public/ file cannot read Astro's BASE_URL, so /donor-network.html would 404 on the real deploy.",
   "interactions": [
     {
       "action": "fill",

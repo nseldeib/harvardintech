@@ -1,6 +1,6 @@
 /* The review deck itself — the frame Nicole reads, not one of the directions.
    Kept deliberately plain (the site's paper/ink/crimson, no personality of its
-   own) so it never competes with the eight things it is presenting. */
+   own) so it never competes with the nine things it is presenting. */
 
 :root {
   --d-bg: #f4f2ee;
@@ -24,6 +24,69 @@ body {
   font-family: var(--d-sans);
   -webkit-font-smoothing: antialiased;
 }
+
+/* ── Passphrase gate ──────────────────────────────────────────────────────
+   Opaque and fixed over the whole viewport rather than hiding #content: the
+   miniatures mount on load and the engine measures its container, so a deck
+   hidden with display:none would build nine zero-height canvases. Covering it
+   instead means the page behind the gate is fully laid out the moment it is
+   unlocked. See the gate comment in shell.html for why this is always-on. */
+#gate {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--d-ink);
+}
+.gate-box {
+  background: var(--d-card);
+  border-radius: 6px;
+  padding: 34px 30px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+.gate-box h1 { font-size: 18px; margin: 0 0 6px; }
+.gate-box p { color: var(--d-soft); font-size: 13px; margin: 0 0 18px; }
+.gate-box input {
+  width: 100%;
+  padding: 11px 12px;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1px solid var(--d-line);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.gate-box button {
+  width: 100%;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: var(--d-crimson);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.gate-box button:hover { background: var(--d-crimson-deep); }
+.gate-err { color: var(--d-crimson); font-size: 12px; min-height: 16px; margin-top: 8px; }
+.gate-fine {
+  margin: 14px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid var(--d-line);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--d-faint);
+  text-align: left;
+}
+/* Set on <html> by the inline script beside the gate markup, cleared on unlock —
+   so the locked page cannot be scrolled behind the panel. */
+.gated, .gated body { overflow: hidden; }
 
 .deck { padding-bottom: 20px; }
 
@@ -109,26 +172,14 @@ body {
   color: var(--d-ink);
   font-family: var(--d-sans);
 }
-.tbtn.primary { background: var(--d-crimson); border-color: var(--d-crimson); color: #fff; }
-.tbtn.primary:hover { background: var(--d-crimson-deep); border-color: var(--d-crimson-deep); }
 .tbtn.ghost { border-color: var(--d-line); color: var(--d-soft); font-weight: 600; cursor: default; }
-button.tbtn.ghost { cursor: pointer; }
-.tnote { font-family: var(--d-mono); font-size: 11px; color: var(--d-faint); }
-.notes {
-  display: block;
-  width: 100%;
-  max-width: 980px;
-  margin-top: 14px;
-  border: 1px solid var(--d-line);
-  border-radius: 6px;
-  padding: 12px 14px;
-  font: 14px/1.5 var(--d-sans);
-  color: var(--d-ink);
-  resize: vertical;
-  min-height: 58px;
-  background: var(--d-card);
+.tnote {
+  font-family: var(--d-mono);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--d-faint);
+  max-width: 46ch;
 }
-.notes:focus { outline: none; border-color: var(--d-crimson); }
 
 /* ── Group headers + grid ─────────────────────────────────────────────── */
 .group-head {
@@ -219,79 +270,6 @@ button.tbtn.ghost { cursor: pointer; }
 }
 .card[data-family='off-brief'] .meta .sys { color: var(--d-soft); }
 .meta .why { font-size: 13.5px; color: var(--d-soft); line-height: 1.5; margin-top: 9px; }
-
-/* ── Per-card feedback (same shape as the board review deck) ──────────── */
-.fb { margin-top: auto; padding-top: 15px; border-top: 1px dashed var(--d-line); }
-.fb-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
-.fb-lab {
-  font-family: var(--d-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--d-faint);
-}
-.fb-val { font-size: 15px; font-weight: 800; }
-.fb-val.muted { color: var(--d-faint); font-weight: 600; }
-.fb-range {
-  width: 100%;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--d-line);
-  outline: none;
-  margin: 2px 0 4px;
-}
-.fb-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-  background: var(--d-crimson);
-  cursor: pointer;
-  border: 3px solid #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
-.fb-range::-moz-range-thumb {
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  background: var(--d-crimson);
-  cursor: pointer;
-  border: 3px solid #fff;
-}
-.fb-scale {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--d-mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--d-faint);
-  margin-bottom: 9px;
-}
-.fb-note {
-  width: 100%;
-  border: 1px solid var(--d-line);
-  border-radius: 6px;
-  padding: 9px 11px;
-  font: 13px/1.45 var(--d-sans);
-  color: var(--d-ink);
-  resize: vertical;
-  min-height: 44px;
-}
-.fb-note:focus { outline: none; border-color: var(--d-crimson); }
-.fb-saved {
-  font-family: var(--d-mono);
-  font-size: 9.5px;
-  color: #2d8a5a;
-  margin-top: 5px;
-  height: 12px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.fb-saved.show { opacity: 1; }
 
 /* ── Open questions + footer ──────────────────────────────────────────── */
 .qs {

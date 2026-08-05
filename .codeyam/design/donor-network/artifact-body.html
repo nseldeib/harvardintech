@@ -1,8 +1,8 @@
-<title>Harvard in Tech — Powering the Network: eight directions</title>
+<title>Harvard in Tech — Powering the Network: nine directions</title>
 <style>
 /* The review deck itself — the frame Nicole reads, not one of the directions.
    Kept deliberately plain (the site's paper/ink/crimson, no personality of its
-   own) so it never competes with the eight things it is presenting. */
+   own) so it never competes with the nine things it is presenting. */
 
 :root {
   --d-bg: #f4f2ee;
@@ -26,6 +26,69 @@ body {
   font-family: var(--d-sans);
   -webkit-font-smoothing: antialiased;
 }
+
+/* ── Passphrase gate ──────────────────────────────────────────────────────
+   Opaque and fixed over the whole viewport rather than hiding #content: the
+   miniatures mount on load and the engine measures its container, so a deck
+   hidden with display:none would build nine zero-height canvases. Covering it
+   instead means the page behind the gate is fully laid out the moment it is
+   unlocked. See the gate comment in shell.html for why this is always-on. */
+#gate {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--d-ink);
+}
+.gate-box {
+  background: var(--d-card);
+  border-radius: 6px;
+  padding: 34px 30px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+.gate-box h1 { font-size: 18px; margin: 0 0 6px; }
+.gate-box p { color: var(--d-soft); font-size: 13px; margin: 0 0 18px; }
+.gate-box input {
+  width: 100%;
+  padding: 11px 12px;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1px solid var(--d-line);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.gate-box button {
+  width: 100%;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: var(--d-crimson);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.gate-box button:hover { background: var(--d-crimson-deep); }
+.gate-err { color: var(--d-crimson); font-size: 12px; min-height: 16px; margin-top: 8px; }
+.gate-fine {
+  margin: 14px 0 0;
+  padding-top: 13px;
+  border-top: 1px solid var(--d-line);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--d-faint);
+  text-align: left;
+}
+/* Set on <html> by the inline script beside the gate markup, cleared on unlock —
+   so the locked page cannot be scrolled behind the panel. */
+.gated, .gated body { overflow: hidden; }
 
 .deck { padding-bottom: 20px; }
 
@@ -111,26 +174,14 @@ body {
   color: var(--d-ink);
   font-family: var(--d-sans);
 }
-.tbtn.primary { background: var(--d-crimson); border-color: var(--d-crimson); color: #fff; }
-.tbtn.primary:hover { background: var(--d-crimson-deep); border-color: var(--d-crimson-deep); }
 .tbtn.ghost { border-color: var(--d-line); color: var(--d-soft); font-weight: 600; cursor: default; }
-button.tbtn.ghost { cursor: pointer; }
-.tnote { font-family: var(--d-mono); font-size: 11px; color: var(--d-faint); }
-.notes {
-  display: block;
-  width: 100%;
-  max-width: 980px;
-  margin-top: 14px;
-  border: 1px solid var(--d-line);
-  border-radius: 6px;
-  padding: 12px 14px;
-  font: 14px/1.5 var(--d-sans);
-  color: var(--d-ink);
-  resize: vertical;
-  min-height: 58px;
-  background: var(--d-card);
+.tnote {
+  font-family: var(--d-mono);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--d-faint);
+  max-width: 46ch;
 }
-.notes:focus { outline: none; border-color: var(--d-crimson); }
 
 /* ── Group headers + grid ─────────────────────────────────────────────── */
 .group-head {
@@ -221,79 +272,6 @@ button.tbtn.ghost { cursor: pointer; }
 }
 .card[data-family='off-brief'] .meta .sys { color: var(--d-soft); }
 .meta .why { font-size: 13.5px; color: var(--d-soft); line-height: 1.5; margin-top: 9px; }
-
-/* ── Per-card feedback (same shape as the board review deck) ──────────── */
-.fb { margin-top: auto; padding-top: 15px; border-top: 1px dashed var(--d-line); }
-.fb-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
-.fb-lab {
-  font-family: var(--d-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--d-faint);
-}
-.fb-val { font-size: 15px; font-weight: 800; }
-.fb-val.muted { color: var(--d-faint); font-weight: 600; }
-.fb-range {
-  width: 100%;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--d-line);
-  outline: none;
-  margin: 2px 0 4px;
-}
-.fb-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-  background: var(--d-crimson);
-  cursor: pointer;
-  border: 3px solid #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
-.fb-range::-moz-range-thumb {
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  background: var(--d-crimson);
-  cursor: pointer;
-  border: 3px solid #fff;
-}
-.fb-scale {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--d-mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--d-faint);
-  margin-bottom: 9px;
-}
-.fb-note {
-  width: 100%;
-  border: 1px solid var(--d-line);
-  border-radius: 6px;
-  padding: 9px 11px;
-  font: 13px/1.45 var(--d-sans);
-  color: var(--d-ink);
-  resize: vertical;
-  min-height: 44px;
-}
-.fb-note:focus { outline: none; border-color: var(--d-crimson); }
-.fb-saved {
-  font-family: var(--d-mono);
-  font-size: 9.5px;
-  color: #2d8a5a;
-  margin-top: 5px;
-  height: 12px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.fb-saved.show { opacity: 1; }
 
 /* ── Open questions + footer ──────────────────────────────────────────── */
 .qs {
@@ -1128,6 +1106,101 @@ button.tbtn.ghost { cursor: pointer; }
 }
 
 </style>
+<script>
+/* The rule behind the review artifacts' passphrase gate: does this typed input
+ * open the page?
+ *
+ * Written in plain JavaScript with a UMD wrapper for the same reason
+ * `donorNetwork.js` is — two consumers that cannot share an ES module.
+ * `.codeyam/design/donor-network/build.py` inlines this file verbatim into a
+ * self-contained page (a review artifact has to work from a `file://` open and
+ * under an artifact CSP that blocks every external host, so nothing can be
+ * fetched at runtime), while vitest imports it as CommonJS.
+ *
+ * It lives under `src/` because vitest's `include` is `src/**` — a module parked
+ * beside the exploration in `.codeyam/` is a module no test can reach.
+ *
+ * This is NOT `previewGate.ts`. That module is server-only: it reads
+ * `process.env.PREVIEW_GATE` in `.astro` frontmatter to decide whether the whole
+ * site build is gated, and it un-gates on the public track by design. This one
+ * runs in the browser and decides a single comparison for an artifact whose gate
+ * is always on. `previewGate.ts` remains the source of the passphrase VALUE —
+ * `build.py` parses its default and substitutes it in.
+ */
+(function (root, factory) {
+  var api = factory();
+  root.HIT_GATE = api;
+  if (typeof module === 'object' && module.exports) module.exports = api;
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  /**
+   * Whether `typed` should unlock a page gated by `expected`.
+   *
+   * Surrounding whitespace on the typed value is forgiven: the passphrase is
+   * shared out of band and arrives pasted out of an email or a chat message,
+   * which carries a trailing space more often than not. Refusing that would
+   * read to the reviewer as a wrong passphrase.
+   *
+   * The comparison stays case-sensitive. A passphrase that ignores case is a
+   * materially weaker passphrase, and nothing about pasting a shared string
+   * makes case a likely transcription error.
+   *
+   * An empty `expected` NEVER opens the gate. This is the case worth having a
+   * function for: `''.trim() === ''` is true, so the bare comparison this
+   * replaces would have let anyone who simply clicked the button straight in,
+   * had the build ever substituted an empty passphrase. `build.py` also refuses
+   * to emit one — this is the second half of that guard, at the point where the
+   * decision is actually made, because the page can outlive the build that
+   * produced it.
+   */
+  function passphraseAccepted(typed, expected) {
+    if (typeof expected !== 'string' || expected.trim() === '') return false;
+    if (typeof typed !== 'string') return false;
+    return typed.trim() === expected;
+  }
+
+  return { passphraseAccepted: passphraseAccepted };
+});
+
+</script>
+<!-- ============ PASSPHRASE GATE ============ -->
+<!-- Deterrent-level privacy, the same shape public/review/index.html uses. It is
+     hand-rolled here rather than inherited from PreviewGate.astro for two
+     reasons: this page is a raw public/ file, so no Astro component ever renders
+     it; and PreviewGate keys off PREVIEW_GATE, which deploy.yml leaves unset on
+     the public track — so at the Strikingly cutover an inherited gate would
+     silently un-gate itself on harvardintech.com, which is precisely when this
+     deck must stay private. Always on, therefore, with no env switch.
+
+     It sits FIRST in the document and covers everything opaquely rather than
+     hiding the deck with display:none. The nine miniatures mount into these
+     grids on load and the engine measures its container, so a hidden deck would
+     render nine zero-height canvases and unlock to an empty page.
+
+     #pass / #enter keep the ids the review page uses, so the scenario capture
+     drives the real gate (fill #pass, click #enter) instead of needing a
+     screenshot-only bypass path. -->
+<div id="gate">
+  <div class="gate-box">
+    <h1>Harvard in Tech</h1>
+    <p>Supporter network — design review. Enter the passphrase you were given.</p>
+    <input id="pass" type="password" placeholder="Passphrase" autocomplete="off" />
+    <button id="enter" type="button">View the directions</button>
+    <div class="gate-err" id="err"></div>
+    <p class="gate-fine">
+      Internal review — please don't forward this link. The passphrase keeps the page
+      out of search results and casual view; it is a deterrent, not strong security.
+    </p>
+  </div>
+</div>
+<script>
+  /* Lock scrolling while the gate is up. Inline and immediately after the gate
+     markup so it runs before the deck below is parsed. */
+  document.documentElement.classList.add('gated');
+</script>
+
+<div id="content">
 <div class="deck">
   <header class="cover">
     <div class="cover-tab"></div>
@@ -1155,12 +1228,9 @@ button.tbtn.ghost { cursor: pointer; }
 
     <div class="toolbar">
       <span class="tbtn ghost">Click any card to open it full-screen</span>
-      <button class="tbtn primary" id="exportBtn">⤓ Export all feedback</button>
-      <button class="tbtn ghost" id="clearBtn">Clear feedback</button>
-      <span class="tnote">Rate each 1–10 and add a comment. Saved in this browser; Export downloads everything.</span>
+      <span class="tnote">Arrow keys move between directions once one is open. Send your
+        reactions back in whatever doc suits you — there is nothing to fill in here.</span>
     </div>
-    <textarea id="sessionNotes" class="notes" rows="2"
-      placeholder="Overall reactions, recurring themes, what the page should be called… (saved automatically, included in Export)"></textarea>
   </header>
 
   <div class="group-head">
@@ -1226,6 +1296,60 @@ button.tbtn.ghost { cursor: pointer; }
   </div>
   <div class="overlay-stage" id="overlayStage"></div>
 </div>
+</div><!-- /#content -->
+
+<script>
+  /* Gate unlock. DETERRENT ONLY: the passphrase is in this page's source, so a
+     determined viewer can read the directions without it. Combined with an
+     unlisted URL and the noindex meta build.py emits, it is enough to keep the
+     deck out of search results and casual view. For real per-person access
+     control the answer is a host that can check a password server-side
+     (Cloudflare Access), not a stronger client-side check.
+
+     PASSPHRASE is substituted by build.py from src/lib/previewGate.ts, so
+     rotating it there moves this page, /review/ and the whole review site
+     together instead of leaving one of the three behind. */
+  (function () {
+    var PASSPHRASE = 'crimson2026';
+    /* Its own sessionStorage key: unlocking this deck should not also unlock
+       /review/ (hait-review-ok) or the gated site build (hait-preview-ok). */
+    var KEY = 'hait-network-ok';
+    var gate = document.getElementById('gate');
+    var input = document.getElementById('pass');
+    var err = document.getElementById('err');
+
+    function unlock() {
+      document.documentElement.classList.remove('gated');
+      gate.remove();
+    }
+    /* Read through a try: a blocked-storage context (file:// in some browsers,
+       third-party-cookie blocking in an iframe) throws on access, and an
+       unguarded read would take the unlock handler down with it and leave the
+       page gated with a button that does nothing. */
+    var remembered = false;
+    try { remembered = sessionStorage.getItem(KEY) === '1'; } catch (e) { }
+    if (remembered) { unlock(); return; }
+
+    function tryEnter() {
+      /* The accept/refuse rule lives in src/lib/reviewGate.js, inlined above by
+         build.py and covered by src/lib/reviewGate.test.ts. Notably it refuses an
+         empty PASSPHRASE outright — a bare `trim() === PASSPHRASE` here would
+         open the page to anyone who just clicked the button if the substitution
+         ever produced one. */
+      if (window.HIT_GATE.passphraseAccepted(input.value, PASSPHRASE)) {
+        try { sessionStorage.setItem(KEY, '1'); } catch (e) { }
+        unlock();
+      } else {
+        err.textContent = 'Incorrect passphrase.';
+        input.value = '';
+        input.focus();
+      }
+    }
+    document.getElementById('enter').addEventListener('click', tryEnter);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryEnter(); });
+    input.focus();
+  })();
+</script>
 
 <script>
 window.HIT_DATA = {"_warning": "ILLUSTRATIVE DATA — no real donor appears in this file. Generated by build-donors.py for design exploration only.", "generatedBy": "build-donors.py", "milestones": [50, 100, 150, 200], "donors": [{"name": "Margaret Chen-Alvarez", "school": "Harvard Business School", "gradYear": 1998, "founding": true, "anonymous": false, "note": "Gave the week the fund opened, before there was anything to show for it.", "joinIndex": 1, "slug": "margaret-chen-alvarez"}, {"name": "Robert K. Whitmore", "school": "Harvard College", "gradYear": 1987, "founding": true, "anonymous": true, "note": null, "joinIndex": 2, "slug": "robert-k--whitmore"}, {"name": "David Osei-Bonsu", "school": "Harvard Kennedy School", "gradYear": 2011, "founding": false, "anonymous": false, "note": null, "joinIndex": 3, "slug": "david-osei-bonsu"}, {"name": "Priya Raman", "school": "Harvard SEAS", "gradYear": 2014, "founding": true, "anonymous": false, "note": "Two intros from a founder dinner turned into my first enterprise customer.", "joinIndex": 4, "slug": "priya-raman"}, {"name": "Jonathan Feld", "school": "Harvard College", "gradYear": 2003, "founding": false, "anonymous": false, "note": null, "joinIndex": 5, "slug": "jonathan-feld"}, {"name": "Aisha Rahman", "school": "Harvard Business School", "gradYear": 2016, "founding": false, "anonymous": false, "note": "For the London chapter, which is the only reason I still feel connected.", "joinIndex": 6, "slug": "aisha-rahman"}, {"name": "Tomás Vidal", "school": "Harvard SEAS", "gradYear": 2009, "founding": false, "anonymous": false, "note": null, "joinIndex": 7, "slug": "tomás-vidal"}, {"name": "Hannah Brightwell", "school": "Harvard Law School", "gradYear": 2012, "founding": false, "anonymous": false, "note": null, "joinIndex": 8, "slug": "hannah-brightwell"}, {"name": "Kwame Boateng", "school": "Harvard College", "gradYear": 2019, "founding": false, "anonymous": false, "note": "Small gift, every year, for as long as this keeps going.", "joinIndex": 9, "slug": "kwame-boateng"}, {"name": "Elena Marchetti", "school": "Harvard GSD", "gradYear": 2007, "founding": false, "anonymous": false, "note": null, "joinIndex": 10, "slug": "elena-marchetti"}, {"name": "Samuel Oyelaran", "school": "Harvard SEAS", "gradYear": 2021, "founding": false, "anonymous": false, "note": null, "joinIndex": 11, "slug": "samuel-oyelaran"}, {"name": "Grace Lindqvist", "school": "Harvard College", "gradYear": 1995, "founding": true, "anonymous": false, "note": null, "joinIndex": 12, "slug": "grace-lindqvist"}, {"name": "Nina Petrova", "school": "Harvard Chan School", "gradYear": 2013, "founding": false, "anonymous": true, "note": null, "joinIndex": 13, "slug": "nina-petrova"}, {"name": "Michael Okonkwo", "school": "Harvard Business School", "gradYear": 2006, "founding": false, "anonymous": false, "note": null, "joinIndex": 14, "slug": "michael-okonkwo"}, {"name": "Rebecca Stern", "school": "Harvard College", "gradYear": 2018, "founding": false, "anonymous": false, "note": null, "joinIndex": 15, "slug": "rebecca-stern"}, {"name": "Yusuf Al-Amin", "school": "Harvard Kennedy School", "gradYear": 2015, "founding": false, "anonymous": false, "note": null, "joinIndex": 16, "slug": "yusuf-al-amin"}, {"name": "The Lindgren Family", "school": "Harvard College", "gradYear": 1979, "founding": false, "anonymous": false, "note": "Three generations went through the College. This is the least we can do.", "joinIndex": 17, "slug": "the-lindgren-family"}, {"name": "Clara Ndiaye", "school": "Harvard Extension School", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 18, "slug": "clara-ndiaye"}, {"name": "Farida Eriksen", "school": "Harvard GSD", "gradYear": 1994, "founding": true, "anonymous": false, "note": null, "joinIndex": 19, "slug": "farida-eriksen"}, {"name": "Isabel Bianchi", "school": "Harvard Kennedy School", "gradYear": 2012, "founding": true, "anonymous": false, "note": null, "joinIndex": 20, "slug": "isabel-bianchi"}, {"name": "Soren Barros", "school": "Harvard College", "gradYear": 2020, "founding": true, "anonymous": false, "note": null, "joinIndex": 21, "slug": "soren-barros"}, {"name": "Noor Fitzgerald", "school": "Harvard GSAS", "gradYear": 2015, "founding": true, "anonymous": true, "note": "Supporting the people doing the unglamorous organizing work.", "joinIndex": 22, "slug": "noor-fitzgerald"}, {"name": "Niamh Bouchard", "school": "Harvard SEAS", "gradYear": 2021, "founding": true, "anonymous": false, "note": "The NYC chapter is where I met my co-founder.", "joinIndex": 23, "slug": "niamh-bouchard"}, {"name": "Esther Tadesse", "school": "Harvard Law School", "gradYear": 2020, "founding": true, "anonymous": false, "note": null, "joinIndex": 24, "slug": "esther-tadesse"}, {"name": "Anjali Espinoza", "school": "Harvard College", "gradYear": 1997, "founding": true, "anonymous": false, "note": "The NYC chapter is where I met my co-founder.", "joinIndex": 25, "slug": "anjali-espinoza"}, {"name": "Tariq Larsson", "school": "Harvard College", "gradYear": 2016, "founding": true, "anonymous": false, "note": "Twenty years out and this is the only alumni thing I actually show up to.", "joinIndex": 26, "slug": "tariq-larsson"}, {"name": "Niamh Virtanen", "school": "Harvard Business School", "gradYear": 2011, "founding": true, "anonymous": false, "note": null, "joinIndex": 27, "slug": "niamh-virtanen"}, {"name": "Maja Adeyemi", "school": "Harvard GSAS", "gradYear": 1984, "founding": true, "anonymous": false, "note": null, "joinIndex": 28, "slug": "maja-adeyemi"}, {"name": "Lars Moreau", "school": "Harvard College", "gradYear": 1999, "founding": true, "anonymous": false, "note": null, "joinIndex": 29, "slug": "lars-moreau"}, {"name": "Niamh Vargas", "school": "Harvard GSAS", "gradYear": 2012, "founding": true, "anonymous": false, "note": null, "joinIndex": 30, "slug": "niamh-vargas"}, {"name": "Beatriz Saito", "school": "Harvard Law School", "gradYear": 2015, "founding": true, "anonymous": false, "note": null, "joinIndex": 31, "slug": "beatriz-saito"}, {"name": "Xavier Dubois", "school": "Harvard College", "gradYear": 1999, "founding": true, "anonymous": false, "note": null, "joinIndex": 32, "slug": "xavier-dubois"}, {"name": "Julia Oyelaran", "school": "Harvard College", "gradYear": 1998, "founding": true, "anonymous": false, "note": null, "joinIndex": 33, "slug": "julia-oyelaran"}, {"name": "Carmen Petrov", "school": "Harvard College", "gradYear": 2013, "founding": true, "anonymous": false, "note": null, "joinIndex": 34, "slug": "carmen-petrov"}, {"name": "Chidi Reyes", "school": "Harvard SEAS", "gradYear": 1986, "founding": true, "anonymous": false, "note": null, "joinIndex": 35, "slug": "chidi-reyes"}, {"name": "Miriam Petrov", "school": "Harvard Business School", "gradYear": 2011, "founding": true, "anonymous": false, "note": null, "joinIndex": 36, "slug": "miriam-petrov"}, {"name": "Nadia Barros", "school": "Harvard Law School", "gradYear": 2002, "founding": true, "anonymous": false, "note": null, "joinIndex": 37, "slug": "nadia-barros"}, {"name": "Gabriel Diallo", "school": "Harvard Law School", "gradYear": 2010, "founding": true, "anonymous": false, "note": null, "joinIndex": 38, "slug": "gabriel-diallo"}, {"name": "Ulrich Rasmussen", "school": "Harvard Extension School", "gradYear": 2004, "founding": true, "anonymous": false, "note": null, "joinIndex": 39, "slug": "ulrich-rasmussen"}, {"name": "Valentina Eriksen", "school": "Harvard Kennedy School", "gradYear": 2025, "founding": true, "anonymous": false, "note": null, "joinIndex": 40, "slug": "valentina-eriksen"}, {"name": "Miriam Adeyemi", "school": "Harvard Kennedy School", "gradYear": 2024, "founding": true, "anonymous": false, "note": "Giving because I was asked directly, which is apparently all it takes.", "joinIndex": 41, "slug": "miriam-adeyemi"}, {"name": "Bjorn Kowalski", "school": "Harvard SEAS", "gradYear": 2001, "founding": true, "anonymous": false, "note": null, "joinIndex": 42, "slug": "bjorn-kowalski"}, {"name": "Khalid Bakker", "school": "Harvard Chan School", "gradYear": 2005, "founding": true, "anonymous": false, "note": null, "joinIndex": 43, "slug": "khalid-bakker"}, {"name": "Imani Adeyemi", "school": "Harvard GSAS", "gradYear": 1995, "founding": true, "anonymous": false, "note": null, "joinIndex": 44, "slug": "imani-adeyemi"}, {"name": "Dawit Weiss", "school": "Harvard GSAS", "gradYear": 2010, "founding": true, "anonymous": false, "note": null, "joinIndex": 45, "slug": "dawit-weiss"}, {"name": "Santiago Fernandes", "school": "Harvard Business School", "gradYear": 2006, "founding": true, "anonymous": false, "note": null, "joinIndex": 46, "slug": "santiago-fernandes"}, {"name": "Zara Grimaldi", "school": "Harvard College", "gradYear": 1995, "founding": true, "anonymous": false, "note": "HIT introduced me to my first investor. That is not a small thing.", "joinIndex": 47, "slug": "zara-grimaldi"}, {"name": "Jamal Rasmussen", "school": "Harvard Kennedy School", "gradYear": 2017, "founding": true, "anonymous": false, "note": null, "joinIndex": 48, "slug": "jamal-rasmussen"}, {"name": "Mei Nakamura", "school": "Harvard College", "gradYear": 2020, "founding": true, "anonymous": false, "note": null, "joinIndex": 49, "slug": "mei-nakamura"}, {"name": "Tariq Lindqvist", "school": "Harvard Kennedy School", "gradYear": 2015, "founding": true, "anonymous": false, "note": null, "joinIndex": 50, "slug": "tariq-lindqvist"}, {"name": "Ulrich Moreau", "school": "Harvard Kennedy School", "gradYear": 2007, "founding": true, "anonymous": false, "note": null, "joinIndex": 51, "slug": "ulrich-moreau"}, {"name": "Imani Cardoso", "school": "Harvard Kennedy School", "gradYear": 2016, "founding": true, "anonymous": true, "note": null, "joinIndex": 52, "slug": "imani-cardoso"}, {"name": "Wei Wang", "school": "Harvard Kennedy School", "gradYear": 1986, "founding": true, "anonymous": false, "note": null, "joinIndex": 53, "slug": "wei-wang"}, {"name": "Zainab Mensah", "school": "Harvard College", "gradYear": 2020, "founding": true, "anonymous": false, "note": "I believe alumni networks should be useful, not ceremonial.", "joinIndex": 54, "slug": "zainab-mensah"}, {"name": "Nadia Lindqvist", "school": "Harvard Medical School", "gradYear": 2007, "founding": true, "anonymous": false, "note": null, "joinIndex": 55, "slug": "nadia-lindqvist"}, {"name": "Wei Adeyemi", "school": "Harvard Kennedy School", "gradYear": 2011, "founding": true, "anonymous": false, "note": null, "joinIndex": 56, "slug": "wei-adeyemi"}, {"name": "Ibrahim Delacroix", "school": "Harvard SEAS", "gradYear": 2012, "founding": true, "anonymous": false, "note": null, "joinIndex": 57, "slug": "ibrahim-delacroix"}, {"name": "Gunnar Okafor", "school": "Harvard Law School", "gradYear": 1996, "founding": true, "anonymous": false, "note": null, "joinIndex": 58, "slug": "gunnar-okafor"}, {"name": "Ravi Bianchi", "school": "Harvard SEAS", "gradYear": 1996, "founding": true, "anonymous": false, "note": null, "joinIndex": 59, "slug": "ravi-bianchi"}, {"name": "Beatriz Wachowski", "school": "Harvard SEAS", "gradYear": 1995, "founding": true, "anonymous": false, "note": "The LA chapter got started because a few people cared. I want to be one of them.", "joinIndex": 60, "slug": "beatriz-wachowski"}, {"name": "Leonardo Hoffmann", "school": "Harvard College", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 61, "slug": "leonardo-hoffmann"}, {"name": "Leila Vargas", "school": "Harvard GSE", "gradYear": 1999, "founding": false, "anonymous": true, "note": null, "joinIndex": 62, "slug": "leila-vargas"}, {"name": "Yuki Nkemelu", "school": "Harvard SEAS", "gradYear": 1995, "founding": false, "anonymous": false, "note": "Supporting the people doing the unglamorous organizing work.", "joinIndex": 63, "slug": "yuki-nkemelu"}, {"name": "Theo Rossi", "school": "Harvard College", "gradYear": 2005, "founding": false, "anonymous": false, "note": "I got my first job in tech through someone I met at a HIT dinner.", "joinIndex": 64, "slug": "theo-rossi"}, {"name": "Marcus Dubois", "school": "Harvard Business School", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 65, "slug": "marcus-dubois"}, {"name": "Helena Nakamura", "school": "Harvard College", "gradYear": 2016, "founding": false, "anonymous": false, "note": null, "joinIndex": 66, "slug": "helena-nakamura"}, {"name": "Lucas Weiss", "school": "Harvard College", "gradYear": 2022, "founding": false, "anonymous": false, "note": null, "joinIndex": 67, "slug": "lucas-weiss"}, {"name": "Thandiwe Vargas", "school": "Harvard College", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 68, "slug": "thandiwe-vargas"}, {"name": "Sofia Silva", "school": "Harvard Business School", "gradYear": 2010, "founding": false, "anonymous": false, "note": null, "joinIndex": 69, "slug": "sofia-silva"}, {"name": "Gunnar Moreau", "school": "Harvard GSAS", "gradYear": 1988, "founding": false, "anonymous": true, "note": null, "joinIndex": 70, "slug": "gunnar-moreau"}, {"name": "Oscar Grimaldi", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": true, "note": null, "joinIndex": 71, "slug": "oscar-grimaldi"}, {"name": "Sabine Bakker", "school": "Harvard GSE", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 72, "slug": "sabine-bakker"}, {"name": "Kirsten Dubois", "school": "Harvard College", "gradYear": 2001, "founding": false, "anonymous": false, "note": null, "joinIndex": 73, "slug": "kirsten-dubois"}, {"name": "Hana Eriksen", "school": "Harvard Business School", "gradYear": 1990, "founding": false, "anonymous": false, "note": null, "joinIndex": 74, "slug": "hana-eriksen"}, {"name": "Mei Gonzalez", "school": "Harvard Business School", "gradYear": 2000, "founding": false, "anonymous": false, "note": null, "joinIndex": 75, "slug": "mei-gonzalez"}, {"name": "Salma Zhang", "school": "Harvard College", "gradYear": 1986, "founding": false, "anonymous": false, "note": "I got my first job in tech through someone I met at a HIT dinner.", "joinIndex": 76, "slug": "salma-zhang"}, {"name": "Adaeze Sorensen", "school": "Harvard Business School", "gradYear": 2023, "founding": false, "anonymous": false, "note": null, "joinIndex": 77, "slug": "adaeze-sorensen"}, {"name": "Paulo Navarro", "school": "Harvard Business School", "gradYear": 1990, "founding": false, "anonymous": false, "note": null, "joinIndex": 78, "slug": "paulo-navarro"}, {"name": "Wei Bouchard", "school": "Harvard Kennedy School", "gradYear": 2013, "founding": false, "anonymous": true, "note": null, "joinIndex": 79, "slug": "wei-bouchard"}, {"name": "Rania Kaur", "school": "Harvard SEAS", "gradYear": 1993, "founding": false, "anonymous": false, "note": null, "joinIndex": 80, "slug": "rania-kaur"}, {"name": "Kirsten Iwu", "school": "Harvard SEAS", "gradYear": 1987, "founding": false, "anonymous": true, "note": null, "joinIndex": 81, "slug": "kirsten-iwu"}, {"name": "Paulo Halvorsen", "school": "Harvard College", "gradYear": 2006, "founding": false, "anonymous": true, "note": null, "joinIndex": 82, "slug": "paulo-halvorsen"}, {"name": "Leila Yamamoto", "school": "Harvard GSD", "gradYear": 1987, "founding": false, "anonymous": false, "note": null, "joinIndex": 83, "slug": "leila-yamamoto"}, {"name": "Zara Nkemelu", "school": "Harvard SEAS", "gradYear": 2020, "founding": false, "anonymous": false, "note": "I got my first job in tech through someone I met at a HIT dinner.", "joinIndex": 84, "slug": "zara-nkemelu"}, {"name": "Petra Weiss", "school": "Harvard SEAS", "gradYear": 2014, "founding": false, "anonymous": false, "note": null, "joinIndex": 85, "slug": "petra-weiss"}, {"name": "Fatima Ahmed", "school": "Harvard College", "gradYear": 1994, "founding": false, "anonymous": false, "note": null, "joinIndex": 86, "slug": "fatima-ahmed"}, {"name": "Jasmine Nakamura", "school": "Harvard SEAS", "gradYear": 2019, "founding": false, "anonymous": false, "note": null, "joinIndex": 87, "slug": "jasmine-nakamura"}, {"name": "Sabine Wang", "school": "Harvard College", "gradYear": 1991, "founding": false, "anonymous": false, "note": null, "joinIndex": 88, "slug": "sabine-wang"}, {"name": "Rohan Fontaine", "school": "Harvard SEAS", "gradYear": 1988, "founding": false, "anonymous": false, "note": null, "joinIndex": 89, "slug": "rohan-fontaine"}, {"name": "Hassan Devereux", "school": "Harvard Business School", "gradYear": 2025, "founding": false, "anonymous": false, "note": null, "joinIndex": 90, "slug": "hassan-devereux"}, {"name": "Caleb Dabiri", "school": "Harvard SEAS", "gradYear": 2001, "founding": false, "anonymous": false, "note": null, "joinIndex": 91, "slug": "caleb-dabiri"}, {"name": "Esther Schneider", "school": "Harvard College", "gradYear": 2023, "founding": false, "anonymous": false, "note": "HIT introduced me to my first investor. That is not a small thing.", "joinIndex": 92, "slug": "esther-schneider"}, {"name": "Fatima Kowalski", "school": "Harvard SEAS", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 93, "slug": "fatima-kowalski"}, {"name": "Olga Sorensen", "school": "Harvard Business School", "gradYear": 1997, "founding": false, "anonymous": false, "note": null, "joinIndex": 94, "slug": "olga-sorensen"}, {"name": "Chidi Bergstrom", "school": "Harvard College", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 95, "slug": "chidi-bergstrom"}, {"name": "Ibrahim Haddad", "school": "Harvard SEAS", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 96, "slug": "ibrahim-haddad"}, {"name": "Zainab Delacroix", "school": "Harvard College", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 97, "slug": "zainab-delacroix"}, {"name": "Dawit Tanaka", "school": "Harvard College", "gradYear": 2018, "founding": false, "anonymous": false, "note": null, "joinIndex": 98, "slug": "dawit-tanaka"}, {"name": "Yara Yamamoto", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 99, "slug": "yara-yamamoto"}, {"name": "Miriam Chowdhury", "school": "Harvard College", "gradYear": 2022, "founding": false, "anonymous": false, "note": null, "joinIndex": 100, "slug": "miriam-chowdhury"}, {"name": "Ibrahim Almeida", "school": "Harvard Law School", "gradYear": 2018, "founding": false, "anonymous": false, "note": null, "joinIndex": 101, "slug": "ibrahim-almeida"}, {"name": "Isabel Okafor", "school": "Harvard SEAS", "gradYear": 2017, "founding": false, "anonymous": false, "note": null, "joinIndex": 102, "slug": "isabel-okafor"}, {"name": "Elias Schneider", "school": "Harvard College", "gradYear": 1992, "founding": false, "anonymous": false, "note": null, "joinIndex": 103, "slug": "elias-schneider"}, {"name": "Ines Almeida", "school": "Harvard Kennedy School", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 104, "slug": "ines-almeida"}, {"name": "Dawit Bouchard", "school": "Harvard Kennedy School", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 105, "slug": "dawit-bouchard"}, {"name": "Santiago Mabaso", "school": "Harvard GSD", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 106, "slug": "santiago-mabaso"}, {"name": "Andrei Chowdhury", "school": "Harvard Business School", "gradYear": 1991, "founding": false, "anonymous": false, "note": "Met three of my current teammates through this network.", "joinIndex": 107, "slug": "andrei-chowdhury"}, {"name": "Hassan Eriksen", "school": "Harvard Kennedy School", "gradYear": 1988, "founding": false, "anonymous": false, "note": null, "joinIndex": 108, "slug": "hassan-eriksen"}, {"name": "Imani Gonzalez", "school": "Harvard College", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 109, "slug": "imani-gonzalez"}, {"name": "Anjali Virtanen", "school": "Harvard SEAS", "gradYear": 1990, "founding": false, "anonymous": false, "note": null, "joinIndex": 110, "slug": "anjali-virtanen"}, {"name": "Nikhil Fitzgerald", "school": "Harvard Medical School", "gradYear": 1995, "founding": false, "anonymous": false, "note": null, "joinIndex": 111, "slug": "nikhil-fitzgerald"}, {"name": "Thandiwe Jensen", "school": "Harvard Business School", "gradYear": 1992, "founding": false, "anonymous": false, "note": null, "joinIndex": 112, "slug": "thandiwe-jensen"}, {"name": "Gunnar Tadesse", "school": "Harvard College", "gradYear": 2007, "founding": false, "anonymous": false, "note": null, "joinIndex": 113, "slug": "gunnar-tadesse"}, {"name": "Jasmine Abebe", "school": "Harvard Business School", "gradYear": 1986, "founding": false, "anonymous": false, "note": "Twenty years out and this is the only alumni thing I actually show up to.", "joinIndex": 114, "slug": "jasmine-abebe"}, {"name": "Amara Petrov", "school": "Harvard SEAS", "gradYear": 1987, "founding": false, "anonymous": false, "note": null, "joinIndex": 115, "slug": "amara-petrov"}, {"name": "Jae-won Delacroix", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 116, "slug": "jae-won-delacroix"}, {"name": "Fiona Okafor", "school": "Harvard Kennedy School", "gradYear": 1985, "founding": false, "anonymous": false, "note": null, "joinIndex": 117, "slug": "fiona-okafor"}, {"name": "Yohannes Fernandes", "school": "Harvard Business School", "gradYear": 2008, "founding": false, "anonymous": false, "note": "This is the group that answered when I was between jobs.", "joinIndex": 118, "slug": "yohannes-fernandes"}, {"name": "Paulo Mabaso", "school": "Harvard Business School", "gradYear": 1988, "founding": false, "anonymous": false, "note": null, "joinIndex": 119, "slug": "paulo-mabaso"}, {"name": "Kirsten Silva", "school": "Harvard GSAS", "gradYear": 2016, "founding": false, "anonymous": false, "note": null, "joinIndex": 120, "slug": "kirsten-silva"}, {"name": "Ulrich Ivanova", "school": "Harvard Kennedy School", "gradYear": 1985, "founding": false, "anonymous": false, "note": null, "joinIndex": 121, "slug": "ulrich-ivanova"}, {"name": "Maja Thompson", "school": "Harvard Law School", "gradYear": 1994, "founding": false, "anonymous": false, "note": null, "joinIndex": 122, "slug": "maja-thompson"}, {"name": "Petra Almeida", "school": "Harvard GSAS", "gradYear": 2024, "founding": false, "anonymous": false, "note": null, "joinIndex": 123, "slug": "petra-almeida"}, {"name": "Omar Maalouf", "school": "Harvard Law School", "gradYear": 2010, "founding": false, "anonymous": false, "note": null, "joinIndex": 124, "slug": "omar-maalouf"}, {"name": "Jonas Tanaka", "school": "Harvard Law School", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 125, "slug": "jonas-tanaka"}, {"name": "Ruth Halvorsen", "school": "Harvard GSE", "gradYear": 2009, "founding": false, "anonymous": false, "note": "For the students. The job market is brutal right now.", "joinIndex": 126, "slug": "ruth-halvorsen"}, {"name": "Rosa Adeyemi", "school": "Harvard Business School", "gradYear": 2012, "founding": false, "anonymous": false, "note": "Because nobody did this for me when I graduated, and it took me years longer.", "joinIndex": 127, "slug": "rosa-adeyemi"}, {"name": "Salma Kimura", "school": "Harvard College", "gradYear": 2009, "founding": false, "anonymous": false, "note": null, "joinIndex": 128, "slug": "salma-kimura"}, {"name": "Elias Novak", "school": "Harvard Kennedy School", "gradYear": 1993, "founding": false, "anonymous": false, "note": null, "joinIndex": 129, "slug": "elias-novak"}, {"name": "Vera Saito", "school": "Harvard Business School", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 130, "slug": "vera-saito"}, {"name": "Soren Ibarra", "school": "Harvard Law School", "gradYear": 2006, "founding": false, "anonymous": false, "note": null, "joinIndex": 131, "slug": "soren-ibarra"}, {"name": "Rosa Larsson", "school": "Harvard College", "gradYear": 2000, "founding": false, "anonymous": true, "note": null, "joinIndex": 132, "slug": "rosa-larsson"}, {"name": "Valentina Tadesse", "school": "Harvard Business School", "gradYear": 2010, "founding": false, "anonymous": false, "note": null, "joinIndex": 133, "slug": "valentina-tadesse"}, {"name": "Theo Nakamura", "school": "Harvard Business School", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 134, "slug": "theo-nakamura"}, {"name": "Marcus Tadesse", "school": "Harvard College", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 135, "slug": "marcus-tadesse"}, {"name": "Niamh Abebe", "school": "Harvard Kennedy School", "gradYear": 2020, "founding": false, "anonymous": false, "note": null, "joinIndex": 136, "slug": "niamh-abebe"}, {"name": "Malika Iwu", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": false, "note": "This is the group that answered when I was between jobs.", "joinIndex": 137, "slug": "malika-iwu"}, {"name": "Elias Petrov", "school": "Harvard GSD", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 138, "slug": "elias-petrov"}, {"name": "Tariq Tanaka", "school": "Harvard College", "gradYear": 2012, "founding": false, "anonymous": false, "note": "The SF events have been worth more to me than any conference I've paid for.", "joinIndex": 139, "slug": "tariq-tanaka"}, {"name": "Deepa Bergstrom", "school": "Harvard GSAS", "gradYear": 2012, "founding": false, "anonymous": false, "note": null, "joinIndex": 140, "slug": "deepa-bergstrom"}, {"name": "Esther Nkemelu", "school": "Harvard Business School", "gradYear": 2002, "founding": false, "anonymous": false, "note": "This is the group that answered when I was between jobs.", "joinIndex": 141, "slug": "esther-nkemelu"}, {"name": "Rosa Maalouf", "school": "Harvard GSD", "gradYear": 2020, "founding": false, "anonymous": true, "note": "HIT introduced me to my first investor. That is not a small thing.", "joinIndex": 142, "slug": "rosa-maalouf"}, {"name": "Quentin Takahashi", "school": "Harvard College", "gradYear": 1994, "founding": false, "anonymous": false, "note": null, "joinIndex": 143, "slug": "quentin-takahashi"}, {"name": "Vera Cardoso", "school": "Harvard GSD", "gradYear": 2023, "founding": false, "anonymous": false, "note": null, "joinIndex": 144, "slug": "vera-cardoso"}, {"name": "Xavier Eriksen", "school": "Harvard SEAS", "gradYear": 2007, "founding": false, "anonymous": false, "note": null, "joinIndex": 145, "slug": "xavier-eriksen"}, {"name": "Niamh Rasmussen", "school": "Harvard College", "gradYear": 1994, "founding": false, "anonymous": false, "note": null, "joinIndex": 146, "slug": "niamh-rasmussen"}, {"name": "Petra Maalouf", "school": "Harvard College", "gradYear": 1993, "founding": false, "anonymous": false, "note": null, "joinIndex": 147, "slug": "petra-maalouf"}, {"name": "Khalid Achebe", "school": "Harvard College", "gradYear": 1990, "founding": false, "anonymous": false, "note": "For the Tokyo chapter — being an alum abroad is lonely without it.", "joinIndex": 148, "slug": "khalid-achebe"}, {"name": "Carmen Eriksen", "school": "Harvard GSAS", "gradYear": 2003, "founding": false, "anonymous": false, "note": null, "joinIndex": 149, "slug": "carmen-eriksen"}, {"name": "Jasmine Gonzalez", "school": "Harvard College", "gradYear": 2010, "founding": false, "anonymous": false, "note": null, "joinIndex": 150, "slug": "jasmine-gonzalez"}, {"name": "Marcus Mensah", "school": "Harvard College", "gradYear": 1997, "founding": false, "anonymous": false, "note": null, "joinIndex": 151, "slug": "marcus-mensah"}, {"name": "Caleb Nkemelu", "school": "Harvard College", "gradYear": 1991, "founding": false, "anonymous": true, "note": null, "joinIndex": 152, "slug": "caleb-nkemelu"}, {"name": "Sofia Sorensen", "school": "Harvard Business School", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 153, "slug": "sofia-sorensen"}, {"name": "Zainab Fitzgerald", "school": "Harvard SEAS", "gradYear": 2009, "founding": false, "anonymous": false, "note": null, "joinIndex": 154, "slug": "zainab-fitzgerald"}, {"name": "Theo Cardoso", "school": "Harvard SEAS", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 155, "slug": "theo-cardoso"}, {"name": "Rania Vargas", "school": "Harvard College", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 156, "slug": "rania-vargas"}, {"name": "Andrei Haddad", "school": "Harvard College", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 157, "slug": "andrei-haddad"}, {"name": "Vera Takahashi", "school": "Harvard SEAS", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 158, "slug": "vera-takahashi"}, {"name": "Zara Almeida", "school": "Harvard Kennedy School", "gradYear": 1986, "founding": false, "anonymous": false, "note": null, "joinIndex": 159, "slug": "zara-almeida"}, {"name": "Sofia Tanaka", "school": "Harvard Business School", "gradYear": 1985, "founding": false, "anonymous": false, "note": "The NYC chapter is where I met my co-founder.", "joinIndex": 160, "slug": "sofia-tanaka"}, {"name": "Hana Devereux", "school": "Harvard Law School", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 161, "slug": "hana-devereux"}, {"name": "Vera Bakker", "school": "Harvard Extension School", "gradYear": 1986, "founding": false, "anonymous": false, "note": null, "joinIndex": 162, "slug": "vera-bakker"}, {"name": "Anjali Maalouf", "school": "Harvard Business School", "gradYear": 1992, "founding": false, "anonymous": true, "note": null, "joinIndex": 163, "slug": "anjali-maalouf"}, {"name": "Marcus Diallo", "school": "Harvard SEAS", "gradYear": 1999, "founding": false, "anonymous": false, "note": "HIT introduced me to my first investor. That is not a small thing.", "joinIndex": 164, "slug": "marcus-diallo"}, {"name": "Noor Ahmed", "school": "Harvard College", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 165, "slug": "noor-ahmed"}, {"name": "Beatriz Kowalski", "school": "Harvard Business School", "gradYear": 2021, "founding": false, "anonymous": false, "note": null, "joinIndex": 166, "slug": "beatriz-kowalski"}, {"name": "Lars Maalouf", "school": "Harvard College", "gradYear": 2001, "founding": false, "anonymous": false, "note": null, "joinIndex": 167, "slug": "lars-maalouf"}, {"name": "Xavier Hoffmann", "school": "Harvard Business School", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 168, "slug": "xavier-hoffmann"}, {"name": "Jamal Wachowski", "school": "Harvard GSAS", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 169, "slug": "jamal-wachowski"}, {"name": "Noor Hoffmann", "school": "Harvard Law School", "gradYear": 2019, "founding": false, "anonymous": false, "note": null, "joinIndex": 170, "slug": "noor-hoffmann"}, {"name": "Yohannes Tadesse", "school": "Harvard College", "gradYear": 1989, "founding": false, "anonymous": false, "note": null, "joinIndex": 171, "slug": "yohannes-tadesse"}, {"name": "Lucas Kaur", "school": "Harvard Kennedy School", "gradYear": 2025, "founding": false, "anonymous": false, "note": null, "joinIndex": 172, "slug": "lucas-kaur"}, {"name": "Xavier Okafor", "school": "Harvard SEAS", "gradYear": 1988, "founding": false, "anonymous": false, "note": "Met three of my current teammates through this network.", "joinIndex": 173, "slug": "xavier-okafor"}, {"name": "Lucas Takahashi", "school": "Harvard College", "gradYear": 2014, "founding": false, "anonymous": false, "note": null, "joinIndex": 174, "slug": "lucas-takahashi"}, {"name": "Hana Tanaka", "school": "Harvard Medical School", "gradYear": 2004, "founding": false, "anonymous": false, "note": null, "joinIndex": 175, "slug": "hana-tanaka"}, {"name": "Kenji Wang", "school": "Harvard Extension School", "gradYear": 2006, "founding": false, "anonymous": false, "note": null, "joinIndex": 176, "slug": "kenji-wang"}, {"name": "Leila Bergstrom", "school": "Harvard Kennedy School", "gradYear": 2013, "founding": false, "anonymous": false, "note": null, "joinIndex": 177, "slug": "leila-bergstrom"}, {"name": "Fiona Dabiri", "school": "Harvard Chan School", "gradYear": 2025, "founding": false, "anonymous": false, "note": null, "joinIndex": 178, "slug": "fiona-dabiri"}, {"name": "Marcus Navarro", "school": "Harvard College", "gradYear": 2022, "founding": false, "anonymous": false, "note": "Supporting the people doing the unglamorous organizing work.", "joinIndex": 179, "slug": "marcus-navarro"}, {"name": "Zainab Pereira", "school": "Harvard SEAS", "gradYear": 2022, "founding": false, "anonymous": false, "note": null, "joinIndex": 180, "slug": "zainab-pereira"}, {"name": "Emeka Wachowski", "school": "Harvard Law School", "gradYear": 2023, "founding": false, "anonymous": false, "note": null, "joinIndex": 181, "slug": "emeka-wachowski"}, {"name": "Deepa Novak", "school": "Harvard College", "gradYear": 1992, "founding": false, "anonymous": false, "note": "Small gift now, bigger one when my company exits.", "joinIndex": 182, "slug": "deepa-novak"}, {"name": "Caleb Chatterjee", "school": "Harvard College", "gradYear": 2022, "founding": false, "anonymous": false, "note": null, "joinIndex": 183, "slug": "caleb-chatterjee"}, {"name": "Chidi Larsson", "school": "Harvard Business School", "gradYear": 2021, "founding": false, "anonymous": false, "note": null, "joinIndex": 184, "slug": "chidi-larsson"}, {"name": "Gunnar Zielinski", "school": "Harvard Law School", "gradYear": 1994, "founding": false, "anonymous": false, "note": "The mentorship program matched me with someone who talked me out of quitting.", "joinIndex": 185, "slug": "gunnar-zielinski"}, {"name": "Wendy Ibarra", "school": "Harvard Kennedy School", "gradYear": 1984, "founding": false, "anonymous": false, "note": null, "joinIndex": 186, "slug": "wendy-ibarra"}, {"name": "Leila Larsson", "school": "Harvard Law School", "gradYear": 1985, "founding": false, "anonymous": false, "note": null, "joinIndex": 187, "slug": "leila-larsson"}, {"name": "Camila Abebe", "school": "Harvard Chan School", "gradYear": 2011, "founding": false, "anonymous": false, "note": null, "joinIndex": 188, "slug": "camila-abebe"}, {"name": "Rosa Nguyen", "school": "Harvard College", "gradYear": 1992, "founding": false, "anonymous": true, "note": null, "joinIndex": 189, "slug": "rosa-nguyen"}, {"name": "Laila Larsson", "school": "Harvard SEAS", "gradYear": 1989, "founding": false, "anonymous": false, "note": "The NYC chapter is where I met my co-founder.", "joinIndex": 190, "slug": "laila-larsson"}, {"name": "Jae-won Maalouf", "school": "Harvard GSAS", "gradYear": 1996, "founding": false, "anonymous": false, "note": null, "joinIndex": 191, "slug": "jae-won-maalouf"}, {"name": "Ravi Barros", "school": "Harvard Law School", "gradYear": 1999, "founding": false, "anonymous": false, "note": null, "joinIndex": 192, "slug": "ravi-barros"}, {"name": "Yara Saito", "school": "Harvard GSAS", "gradYear": 1999, "founding": false, "anonymous": false, "note": "Paying back the intro that changed my career.", "joinIndex": 193, "slug": "yara-saito"}, {"name": "Caleb Jensen", "school": "Harvard SEAS", "gradYear": 2019, "founding": false, "anonymous": false, "note": null, "joinIndex": 194, "slug": "caleb-jensen"}, {"name": "Julia Sharma", "school": "Harvard Medical School", "gradYear": 2009, "founding": false, "anonymous": false, "note": null, "joinIndex": 195, "slug": "julia-sharma"}, {"name": "Kirsten Rasmussen", "school": "Harvard Business School", "gradYear": 1985, "founding": false, "anonymous": false, "note": null, "joinIndex": 196, "slug": "kirsten-rasmussen"}, {"name": "Khalid Haddad", "school": "Harvard Business School", "gradYear": 2018, "founding": false, "anonymous": false, "note": null, "joinIndex": 197, "slug": "khalid-haddad"}, {"name": "Marcus Andersson", "school": "Harvard Kennedy School", "gradYear": 2013, "founding": false, "anonymous": false, "note": "Because nobody did this for me when I graduated, and it took me years longer.", "joinIndex": 198, "slug": "marcus-andersson"}, {"name": "Tobias Ivanova", "school": "Harvard College", "gradYear": 2013, "founding": false, "anonymous": false, "note": null, "joinIndex": 199, "slug": "tobias-ivanova"}, {"name": "Hassan Espinoza", "school": "Harvard GSAS", "gradYear": 1998, "founding": false, "anonymous": false, "note": null, "joinIndex": 200, "slug": "hassan-espinoza"}]};
@@ -2695,26 +2819,17 @@ window.HIT_DATA = {"_warning": "ILLUSTRATIVE DATA — no real donor appears in t
   window.HIT_VARIATIONS = [grid, letterform, weave, oneline, bloom, halftone, ripple, marquee, strata];
 })();
 
-/* The review deck: builds the cards, mounts a live miniature in each, opens the
-   full-screen view, and collects Nicole's ratings.
+/* The review deck: builds the cards, mounts a live miniature in each, and opens
+   the full-screen view.
  *
- * Feedback persists to localStorage and exports as one text file. That is
- * deliberately low-tech: a published page cannot post anywhere (the artifact CSP
- * blocks every external host), and a review that depends on a backend is a
- * review that stops working the moment the link outlives the server. */
+ * It collects nothing. The deck once carried a 1-10 rating and a comment box per
+ * card with a text-file export, built on the assumption that a published page
+ * cannot post anywhere — true, but moot: Nicole sends her reactions in a doc, and
+ * nine rating sliders nobody will touch only sit between her and the designs. */
 (function () {
   'use strict';
 
   var VARS = window.HIT_VARIATIONS;
-  var KEY = 'hitNetworkFeedback_v1';
-
-  function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
-  }
-  function saveAll(d) {
-    try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) { }
-  }
-  var data = load();
 
   function el(tag, cls, parent) {
     var n = document.createElement(tag);
@@ -2730,8 +2845,6 @@ window.HIT_DATA = {"_warning": "ILLUSTRATIVE DATA — no real donor appears in t
 
     var card = el('div', 'card', grid);
     card.setAttribute('data-family', v.family);
-    card.setAttribute('data-fb', v.id);
-    card.setAttribute('data-name', v.num + ' · ' + v.name);
 
     var thumb = el('button', 'thumb', card);
     thumb.type = 'button';
@@ -2744,75 +2857,14 @@ window.HIT_DATA = {"_warning": "ILLUSTRATIVE DATA — no real donor appears in t
 
     /* Miniatures render at 110 supporters — enough that the school clusters and
        the ripple rings have real structure to show, still light enough that
-       eight of them share one screen without cost. */
+       nine of them share one screen without cost. */
     window.HIT.mount(mount, v, { mode: 'preview', count: 110 });
 
     var meta = el('div', 'meta', card);
     el('div', 'nm', meta).textContent = v.name;
     el('div', 'sys', meta).textContent = v.metaphor;
     el('div', 'why', meta).textContent = v.why;
-    buildFeedback(card, meta, v);
   });
-
-  function buildFeedback(card, meta, v) {
-    var fb = el('div', 'fb', meta);
-    fb.innerHTML =
-      '<div class="fb-head"><span class="fb-lab">Your rating</span>'
-      + '<span class="fb-val muted">— / 10</span></div>'
-      + '<input type="range" class="fb-range" min="1" max="10" step="1" value="5" data-set="0"'
-      + ' aria-label="Rating 1 to 10 for ' + window.HIT.escapeHtml(v.name) + '">'
-      + '<div class="fb-scale"><span>Not this</span><span>This one</span></div>'
-      + '<textarea class="fb-note" rows="2" placeholder="What works, what doesn’t…"></textarea>'
-      + '<div class="fb-saved">✓ saved</div>';
-
-    var range = fb.querySelector('.fb-range');
-    var val = fb.querySelector('.fb-val');
-    var note = fb.querySelector('.fb-note');
-    var saved = fb.querySelector('.fb-saved');
-    var rec = data[v.id] || {};
-
-    if (rec.rating) {
-      range.value = rec.rating;
-      val.textContent = rec.rating + ' / 10';
-      val.classList.remove('muted');
-      range.setAttribute('data-set', '1');
-    }
-    if (rec.comment) note.value = rec.comment;
-
-    var t;
-    function flash() {
-      saved.classList.add('show');
-      clearTimeout(t);
-      t = setTimeout(function () { saved.classList.remove('show'); }, 900);
-    }
-    function persist() {
-      var isSet = range.getAttribute('data-set') === '1';
-      data[v.id] = {
-        name: card.getAttribute('data-name'),
-        rating: isSet ? parseInt(range.value, 10) : null,
-        comment: note.value
-      };
-      saveAll(data);
-      flash();
-    }
-    range.addEventListener('input', function () {
-      range.setAttribute('data-set', '1');
-      val.textContent = range.value + ' / 10';
-      val.classList.remove('muted');
-      persist();
-    });
-    note.addEventListener('input', persist);
-  }
-
-  /* ── Session notes ────────────────────────────────────────────────────── */
-  var notesEl = document.getElementById('sessionNotes');
-  if (notesEl) {
-    if (data._notes) notesEl.value = data._notes;
-    notesEl.addEventListener('input', function () {
-      data._notes = notesEl.value;
-      saveAll(data);
-    });
-  }
 
   /* ── Overlay ──────────────────────────────────────────────────────────── */
   var overlay = document.getElementById('overlay');
@@ -2858,42 +2910,6 @@ window.HIT_DATA = {"_warning": "ILLUSTRATIVE DATA — no real donor appears in t
     if (e.key === 'Escape') close();
     if (!typing && e.key === 'ArrowRight') step(1);
     if (!typing && e.key === 'ArrowLeft') step(-1);
-  });
-
-  /* ── Export ───────────────────────────────────────────────────────────── */
-  document.getElementById('exportBtn').addEventListener('click', function () {
-    var d = load();
-    var lines = ['HARVARD IN TECH — SUPPORTER NETWORK, DESIGN FEEDBACK',
-      'Exported ' + new Date().toLocaleString(), ''];
-    if ((d._notes || '').trim()) {
-      lines.push('OVERALL NOTES', '-------------------------', d._notes.trim(), '', '');
-    }
-    lines.push('PER-DIRECTION FEEDBACK', '-------------------------', '');
-    VARS.forEach(function (v) {
-      var r = d[v.id] || {};
-      lines.push(v.num + ' · ' + v.name + '  (' + v.metaphor + ')');
-      lines.push('  Rating: ' + (r.rating != null ? r.rating + '/10' : '—'));
-      lines.push('  Comment: ' + ((r.comment || '').trim() || '(no comment)'));
-      lines.push('');
-    });
-    var text = lines.join('\n');
-    if (navigator.clipboard) navigator.clipboard.writeText(text).catch(function () { });
-    try {
-      var blob = new Blob([text], { type: 'text/plain' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'hit-network-feedback.txt';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    } catch (e) { alert(text); }
-  });
-
-  document.getElementById('clearBtn').addEventListener('click', function () {
-    if (confirm('Clear all feedback saved in this browser?')) {
-      localStorage.removeItem(KEY);
-      location.reload();
-    }
   });
 })();
 

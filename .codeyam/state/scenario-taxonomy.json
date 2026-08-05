@@ -304,6 +304,35 @@
         "reason": "The only action on this page is the giving CTA, which hands off to an external mail client (donateUrl is still empty) rather than changing any in-app state, so there is no post-interaction frame to capture. Reordering, the feature's real interaction, happens in the CMS at /admin, not on this page."
       }
     },
+    "public/donor-network.html": {
+      "empty": {
+        "status": "added"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The deck's growth control steps through day one, a handful, a crowd and the campaign target; there is no one-supporter step. A single node also has no edges, so the network readings would have nothing to draw. The sparse handful is the real low-count state this view can be put into, and it is a data quantity rather than a distinct visual treatment."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The campaign target is the ceiling every direction is composed for, not an overflow condition. There is no pagination, truncation or overflow treatment to demonstrate, and the page cannot be driven past that count, so a denser state does not exist here."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Nothing on this page resolves asynchronously. The supporters, the CSS and the rules module are all inlined at build time, deliberately, because a review artifact has to render from a file:// open and under an artifact CSP that blocks every external host. There is no pending state."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
     "src/pages/[slug].astro": {
       "empty": {
         "status": "n-a",

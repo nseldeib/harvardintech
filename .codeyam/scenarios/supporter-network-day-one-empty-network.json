@@ -1,0 +1,31 @@
+{
+  "name": "Supporter Network - Day One Empty Network",
+  "id": "c20b01b9-84aa-4037-a291-8d56ad3ee22a",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "A direction with no supporters at all — the state the real page ships in, because a codeyam project's production database starts empty and stays that way until the first upload. Every direction has to survive being looked at on day one, before any gift has been recorded, and a graphic that only reads well once it is full is a graphic that greets the first visitor with nothing. Driven by the deck's own day-one control rather than a seed, since the page inlines its illustrative supporters and fetches nothing.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    },
+    {
+      "action": "click",
+      "selector": ".thumb"
+    },
+    {
+      "action": "click",
+      "text": "Empty"
+    }
+  ]
+}
