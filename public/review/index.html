@@ -156,7 +156,7 @@
             Where the new site (a modern rebuild of the current Strikingly site, hosted on
             GitHub Pages) stands today, and the decisions we need your input on before launch.
           </p>
-          <div class="meta">Living snapshot · last updated 2026-08-05 · 589 tests green, build clean · new since the last update: supporter recognition review (the donor wall as built, nine directions, and the spreadsheet import), board bios tracking, and a content-completeness sweep of this page · this private preview is now live (you are reading it)</div>
+          <div class="meta">Living snapshot · last updated 2026-08-05 · 589 tests green, build clean · new since the last update: the domain cutover runbook (the move mapped out in full, none of it performed) and the supporter recognition review (the donor wall as built, nine directions, and the spreadsheet import) · this private preview is now live (you are reading it)</div>
         </div>
       </header>
 
@@ -168,10 +168,10 @@
       <section>
         <div class="wrap">
           <h2>Also under review</h2>
-          <div class="lede">Design work that is not part of the site yet, shared for comment.</div>
-          <!-- One card, so it gets the wide single-column grid rather than being
-               stranded in a 320px auto-fill track with a very tall column of prose
-               beside two empty ones. -->
+          <div class="lede">Work that is not part of the live site yet, shared for comment.</div>
+          <!-- Prose-heavy cards, so they get the wide single-column grid and stack
+               rather than being stranded in a 320px auto-fill track as very tall
+               columns of text beside empty ones. -->
           <div class="cards cards--wide">
             <div class="card">
               <div class="top"><h3>Supporter recognition</h3><span class="badge b-partial">Your call</span></div>
@@ -198,6 +198,26 @@
                    verbatim into dist/ and cannot read Astro's BASE_URL. -->
               <div class="row"><span class="k">The wall, live</span> <a href="../donate#donors">See it on the Momentum Fund page</a> — it is empty today, which is the point of W5.</div>
             </div>
+
+            <div class="card">
+              <div class="top"><h3>Domain cutover runbook</h3><span class="badge b-partial">Your call</span></div>
+              <p class="desc">
+                What it takes to move <code>harvardintech.com</code> off Strikingly and onto
+                the new site — written out in full so it can be reviewed <em>before</em> it is
+                run. <b>None of it has been done.</b> No DNS record has been read or changed,
+                and the live site is untouched.
+              </p>
+              <ul class="pts">
+                <li><b>Email is the thing that must not break.</b> <code>@harvardintech.com</code> mail runs separately from the website but through the same registrar screen, so the plan changes two settings and leaves the mail records strictly alone — and proves mail still flows before calling the move done.</li>
+                <li><b>Five questions are yours, not ours.</b> Who holds the GoDaddy login (that one blocks everything), whether the content is ready to be public, what happens to two internal pages that would otherwise ship to the public domain, and when to cut over.</li>
+                <li><b>Two layers.</b> The top reads plainly; the exact records, commands and rollback values are one click down for whoever runs it.</li>
+              </ul>
+              <!-- Relative for the same base-path reason as the links above: both
+                   tracks deploy under a base path and a raw public/ file cannot
+                   read Astro's BASE_URL. -->
+              <div class="row"><span class="k">Link</span> <a href="../cutover-runbook.html">Open the domain cutover runbook</a> — same passphrase as this page.</div>
+              <div class="row decide"><span class="k">Decision</span> D1 (who holds the domain login) is the one that blocks the rest — it has been open since 2026-07-02.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -221,7 +241,7 @@
               <tr><td>Member login / Harvard Key SSO</td><td><span class="badge b-missing">Not built</span></td><td class="hide-sm">Hard, externally-gated — needs a decision</td></tr>
               <tr><td>Sponsorship page</td><td><span class="badge b-built">Built</span></td><td class="hide-sm">New: a sponsor wall + inquiry section. Needs real sponsor names and logos</td></tr>
               <tr><td>Donate / Momentum Fund</td><td><span class="badge b-partial">Built, needs a link</span></td><td class="hide-sm">Page refreshed; the button still opens an email because there is no donation platform yet (see decision 5)</td></tr>
-              <tr><td>Domain transfer from Strikingly</td><td><span class="badge b-missing">Not started</span></td><td class="hide-sm">Low effort; needs registrar/DNS access. The migration is now planned in detail: DNS stays at GoDaddy, e-mail is untouched, and the old site stays up as rollback</td></tr>
+              <tr><td>Domain transfer from Strikingly</td><td><span class="badge b-missing">Not started</span></td><td class="hide-sm">Low effort; needs registrar/DNS access. Now mapped out step by step in the <a href="../cutover-runbook.html">domain cutover runbook</a>: DNS stays at GoDaddy, e-mail is untouched, and the old site stays up as rollback</td></tr>
               <tr><td>Content population</td><td><span class="badge b-partial">In progress</span></td><td class="hide-sm">CMS data entry (chapters, board, events)</td></tr>
               <tr><td>Private shareable preview</td><td><span class="badge b-built">Live</span></td><td class="hide-sm">Done — this page is it. Password-protected and hidden from search engines. Nothing here is public, and harvardintech.com is untouched</td></tr>
             </tbody>

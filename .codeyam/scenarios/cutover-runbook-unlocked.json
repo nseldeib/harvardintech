@@ -1,0 +1,24 @@
+{
+  "name": "Cutover Runbook - Unlocked",
+  "id": "ad1aa5e6-0ccb-4040-8415-b1beb334021f",
+  "url": "/cutover-runbook.html",
+  "dimensions": [
+    "Desktop",
+    "Mobile"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/cutover-runbook.html",
+  "description": "The domain cutover runbook past its passphrase, which this scenario types rather than bypasses. It is the plan for moving harvardintech.com off Strikingly written out in full and performed in no part: the utility bar reads 'a plan, not a record', a standing banner says nothing has happened yet, and every one of the nine steps carries a Not started badge. The layer-1 half is what Nicole reads — what the move is, that email must not break, what the day feels like — and the five decisions below it are hers rather than ours, D1 (who holds the GoDaddy login) being the one that blocks every other step and has been open since the 2026-07-02 discovery. Captured at both widths because the page ends in a six-row DNS record table whose values are long enough to force horizontal overflow at 390px; the table stacks into per-row blocks there instead, which is what keeps the third column — the one carrying the 'Do not touch' badges — on screen at all.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    }
+  ]
+}

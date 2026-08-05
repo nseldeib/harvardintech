@@ -1,0 +1,23 @@
+{
+  "name": "Cutover Runbook - Gate Refused",
+  "id": "7f58744c-a53c-4851-96da-606fcd4c8a0e",
+  "url": "/cutover-runbook.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/cutover-runbook.html",
+  "description": "The gate refusing a wrong passphrase, with none of the runbook disclosed behind it. The only in-page failure state this view has, since nothing on it fetches anything at runtime. It earns a capture because refusal is where a client-side gate silently fails open — the content is already in the downloaded document, so an unlock path that runs on the wrong branch reveals everything while looking like it refused. This asserts the visible half of that: wrong passphrase in, error out, page still covered.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "not-the-passphrase"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    }
+  ]
+}

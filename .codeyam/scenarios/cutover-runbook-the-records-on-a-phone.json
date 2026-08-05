@@ -1,0 +1,27 @@
+{
+  "name": "Cutover Runbook - The Records On A Phone",
+  "id": "0f918604-d6f0-4190-abae-a783abb2b488",
+  "url": "/cutover-runbook.html",
+  "dimensions": [
+    "Mobile"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/cutover-runbook.html",
+  "description": "The DNS record table at 390px, brought into frame by hovering the section rather than by a URL fragment — a bare #records does not scroll a capture, so a fragment-only scenario silently frames the hero instead and proves nothing. This capture is the reason the table stacks here instead of scrolling. The first build let it scroll horizontally inside its own box, which kept the page body from widening and looked correct; what the capture showed was that values like www.harvardintech.com.s.strikinglydns.com pushed the third column entirely off-screen, and the third column is where the 'Do not touch' badges on the Email and SPF rows live. The single most important instruction on the page was invisible on the device someone is most likely to be holding in the registrar console, with nothing on screen suggesting more existed. Stacked, every row shows all three fields with its own label, and the page still does not scroll sideways.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    },
+    {
+      "action": "hover",
+      "selector": "#records"
+    }
+  ]
+}

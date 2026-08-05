@@ -1,0 +1,147 @@
+{
+  "timestamp": "2026-08-05T23:21:19Z",
+  "title": "Domain Cutover Runbook Page",
+  "type": "feature",
+  "userRequest": "## Summary\n\nMap the Strikingly → GitHub Pages migration as a readable runbook on the gated\nreview site. **Perform none of it.** No DNS record is touched, no redirect map is\nwritten, no `public/CNAME` is added, no `deploy.yml` flag is flipped.\n`harvardintech.com` stays on Strikingly and the preview site stays gated,\nexactly as they are today.\n\nThis plan began life as an executable nine-step cutover (that body is preserved\nbelow in \"Content the page carries\" — the steps are re-aimed as the page's\nsource material rather than discarded). It was rescoped on 2026-08-05: Jared\nasked to see the plan mapped out, not run. The migration itself remains queued\nwork for a later cycle, and this page is what the team will read when that cycle\nstarts.\n\nThe discovery it rests on is real and already done. `docs/scoping/domain-transfer-runbook.md`\nestablished on 2026-07-02 that registrar and DNS are at GoDaddy — not locked\ninside Strikingly, so no 5–7 day registrar transfer is needed — and that email\nruns on HostGator via `MX → mail.harvardintech.com` with SPF\n`include:websitewelcome.com`. That record table is the factual core of the page.\n\n## Key Decisions\n\n- **Two layers, one page.** The audience is genuinely split: Nicole and the team\n  need to know what happens and what stays working; whoever sits in the GoDaddy\n  console needs exact values. Splitting into two pages means the operator reads\n  a summary that has drifted from the steps. One page, plain-language top,\n  operator detail below.\n- **Email preservation is the headline, not a footnote.** The single action that\n  could do real damage is \"replace all records\" at GoDaddy, which would break\n  `nadia@harvardintech.com` and every other mailbox. Every layer of the page\n  states it: only the apex `A` records and the `www` `CNAME` change; `MX`, the\n  `mail.` host record, and the SPF `TXT` are never touched.\n- **Reached from `/review`.** A card on the existing status page, same\n  passphrase — sitting next to the row it is the detail behind (\"Domain transfer\n  — Not started\"). Not a separately-shared link: anyone reviewing the project\n  should be able to find it.\n- **Stable numbering, no state.** Every step and open decision carries an\n  identifier the way the donor deck uses W1–W5 / Q1–Q4, so a one-line reaction\n  lands exactly where it was meant. The page records nothing — no checkboxes, no\n  persistence. A half-ticked checklist in one person's browser is worse than no\n  checklist, because it reads as progress that nobody else can see.\n- **The two `public/` exposures are named as open decisions, not resolved.**\n  Both `public/design-review-4ece6c14/` (20MB, thirteen mockups, `noindex` but no\n  passphrase) and `public/review/index.html` (carries `crimson2026` in\n  client-side JS) become reachable on `harvardintech.com` the moment the gate\n  comes off. The design gallery's unguessable URL *is* its access mechanism and\n  it is an active board share, so deleting it breaks a live link. The page\n  presents both with their trade-offs and picks neither — Jared settles them\n  with the team.\n- **Flat file in `public/`, not a directory.** `public/cutover-runbook.html`,\n  following `public/donor-network.html`. Astro's dev server serves `public/`\n  without directory-index resolution, so `/cutover-runbook/` 404s in the codeyam\n  preview even though GitHub Pages would resolve it. This is a constraint the\n  donor-network build already learned the hard way.\n\n## Implementation\n\n### 1. The runbook page\n\n**New file**: `public/cutover-runbook.html`\n\nA standalone document with `<meta name=\"robots\" content=\"noindex, nofollow\">`\nand its own passphrase gate, matching `public/review/index.html`. Its own\n`sessionStorage` key — unlocking the runbook should not also unlock the status\npage, the same isolation `donor-network` chose (`src/shell.html:337`). Reuse the\nreview page's gate markup, styles, and deterrent-only comment rather than\ninventing a second visual language; the two pages are read back to back.\n\nHand-maintained like `public/review/index.html`, not generated like\n`donor-network.html`. The generator there exists because that page ships to two\ntargets with incompatible packaging (a complete document plus an\nArtifact-publisher body); this page has one target, so a build step would be\nmachinery without a job.\n\nStructure:\n\n- **Layer 1 — plain language.** What the move is, that the site is already built\n  and this is only about pointing the domain at it, that email keeps flowing\n  untouched, the size of the risk window (minutes, with TTLs lowered a day\n  ahead), that Strikingly stays paid as rollback, and what is needed from the\n  team before anyone can start.\n- **Layer 2 — operator detail.** The current-record table, the four GitHub A\n  records, the exact sequence, verification, and rollback values. Collapsed by\n  default (`<details>`) so layer 1 reads clean, but present on the same page and\n  in the same numbering.\n- **Open decisions.** Numbered, each with options and trade-offs, no\n  recommendation where the call is the team's.\n\n### 2. Entry point\n\n**File**: `public/review/index.html`\n\nAdd a card in the \"Also under review\" section — the section that already holds\nthe supporter-recognition card — linking to `./cutover-runbook.html`. Same\nrelative-link form the existing donor-network card uses. The status table's\n\"Domain transfer from Strikingly\" row gains a pointer to it, so the row and its\ndetail are connected in both directions.\n\n### 3. Content the page carries\n\nThe material below is the nine-step sequence from the original plan plus the\n2026-07-02 runbook discovery. It is the page's source content — writing it into\nthe page is the work; executing it is not.\n\n- **Re-verify DNS first.** The record table was captured 2026-07-02; re-read it\n  live before touching anything. Confirm the apex is still `A → 54.183.102.22`\n  (Strikingly) and `www` still `CNAME → www.harvardintech.com.s.strikinglydns.com`,\n  and capture the current `MX` and `TXT` verbatim so they can be diffed\n  afterwards. Confirm who holds the GoDaddy login — still an open question.\n- **Stage on the real domain before cutting over.** `review.harvardintech.com`\n  from the two-track plan already serves this purpose, so no separate\n  `new.harvardintech.com` is needed — a simplification over the original\n  runbook's Phase 1.\n- **Inventory the Strikingly URLs and build a redirect map.** `src/lib/redirects.ts`\n  plus a lookup in `src/pages/404.astro`. GitHub Pages cannot serve a\n  server-side 301, so this is a client-side soft redirect: good for humans\n  following old links, weak for search engines. That loss is deliberate — putting\n  Cloudflare in front purely for redirect rules is not worth the moving part at\n  this size.\n- **Add `public/CNAME`** containing `harvardintech.com` — the mechanism\n  `DEPLOY_SETUP.md` \"Path A\" documents. It also lands in the review track's\n  output, which is harmless as long as the review publish step writes its own\n  `CNAME` *after* the copy, not before.\n- **Flip the public track.** In `.github/workflows/deploy.yml`: drop\n  `DEPLOY_BASE_PATH` (so `base` → `/`), set `PAGES_SITE: https://harvardintech.com`,\n  drop `PREVIEW_GATE`. `astro.config.mjs` needs no change — both values are\n  already env-driven for exactly this switch. Two things follow for free:\n  `robots.txt` flips `Disallow: /` → `Allow: /` with a correct absolute\n  `Sitemap:` line, and `sitemap-index.xml` plus `llms.txt` start emitting the\n  real domain. A useful side effect: with `base` back at `/`, the `@codeyam/cms`\n  admin's root-absolute links resolve correctly again — they are currently broken\n  on the `/harvardintech` subpath deploy.\n- **Pre-launch cleanup of `public/`** — the two exposures above, presented as\n  open decisions.\n- **DNS cutover at GoDaddy**, low-risk steps first: lower TTLs to 300s a day\n  ahead → set the custom domain in Settings → Pages → replace the apex `A`\n  records with `185.199.108.153`, `.109.153`, `.110.153`, `.111.153` and repoint\n  `CNAME www → nseldeib.github.io`, leaving `MX`/`mail.`/`TXT` untouched → wait\n  for the certificate, then enable Enforce HTTPS → **send a test email to and\n  from an `@harvardintech.com` address before declaring the cutover done, not\n  after.**\n- **Post-cutover verification.** Both hosts serve over HTTPS with no certificate\n  warning; `robots.txt` says `Allow: /`; a sample of old Strikingly URLs land\n  somewhere sensible; the Search Console verification meta tag survives (it\n  lives in the CMS \"Custom `<head>` HTML\" field); and\n  `review.harvardintech.com` is still gated — the cutover must not disturb the\n  review track.\n- **Retire Strikingly** only after several clean days, and record the rollback\n  (apex `A` → `54.183.102.22`, `www` → the Strikingly `CNAME`) somewhere the\n  team can reach without this repo.\n\n## Explicitly out of scope\n\nNamed so the boundary is checkable rather than remembered:\n\n- No `src/lib/redirects.ts`, no URL crawl, no `404.astro` change.\n- No `public/CNAME`.\n- No `.github/workflows/deploy.yml` change — the site stays gated.\n- No DNS record is read from or written to GoDaddy.\n- No deletion or relocation of `public/design-review-4ece6c14/` or\n  `public/review/index.html`.\n- No rewrite of `docs/scoping/domain-transfer-runbook.md` into past tense; it\n  stays a proposal because nothing has been done yet.\n\n## Reused existing code\n\n- `public/review/index.html` — the passphrase gate (markup, styles, and the\n  DETERRENT-ONLY comment at `:439`), the card/section layout including the\n  `cards--wide` modifier added in the last cycle, and the badge vocabulary. The\n  runbook page is a sibling of this file, not a new design.\n- `.codeyam/design/donor-network/src/shell.html:337` — the per-page\n  `sessionStorage` key convention, so each standalone page unlocks\n  independently.\n- `docs/scoping/domain-transfer-runbook.md` — the DNS discovery table, the\n  MX-preservation rule, and the stage-then-cutover shape.\n- `docs/scoping/README.md` — item 9 and decision #3, which this page is the\n  detail behind.\n\n**Existing-implementation survey.** No cutover runbook page exists: `public/`\nholds only `favicon.svg`, `images/`, `review/`, `design-review-4ece6c14/`, and\n`donor-network.html`. The `/review` page's \"Also under review\" section currently\nholds exactly one card (supporter recognition).\n\n## Reproduction Test\n\nNot applicable — this is a documentation page, not a bug fix. The page carries no\nlogic worth a unit test; its correctness is whether the content is true and the\ngate holds, which the scenarios below demonstrate.\n\n## Scenarios to Demonstrate\n\n- **Runbook gate locked** — someone with the link and no passphrase. The page\n  must reveal nothing behind the overlay.\n- **Runbook gate refused** — a wrong passphrase, showing the error state.\n- **Runbook unlocked, desktop** — the full page: plain-language layer, the open\n  decisions, the numbering.\n- **Runbook unlocked, mobile** — the same page narrow. A DNS record table is the\n  classic thing that breaks at 375px, so this is the scenario that earns its\n  keep.\n- **Operator detail expanded** — the collapsed layer-2 sections open, showing the\n  record values and the cutover sequence.\n- **`/review` carrying the new card** — proving the entry point exists rather\n  than asserting it, and that the existing supporter-recognition card still\n  sits correctly alongside it.",
+  "description": "Jared picked the queued Strikingly migration plan and then narrowed it: map the move out, do not perform it. So the plan was rewritten before any code was written — from an executable nine-step cutover ending in real GoDaddy DNS edits, into a page that lays the same nine steps out for review. Nothing was migrated. No DNS record was read or written, no public/CNAME, no redirect map, no deploy.yml change; the site is still gated and harvardintech.com is still served by Strikingly. The plan file now carries an explicit out-of-scope list so that boundary is checkable rather than remembered.\n\nThe page is public/cutover-runbook.html, a sibling of public/review/index.html rather than a new design: same tokens, same badge vocabulary, same hand-rolled passphrase gate — hand-rolled because a raw public/ file is copied verbatim into dist/ and no Astro component ever renders it, so it cannot inherit the site's PreviewGate. Its sessionStorage key is its own (hait-cutover-ok), so unlocking the status page does not unlock this one; each artifact is shared, and revoked, on its own terms.\n\nIt is two layers on one page rather than two pages, because a separate operator doc drifts from the summary that describes it and the operator is the one who then reads a stale summary. Layer 1 is what Nicole and the team read: what the move is, that the site is already built and this is only about pointing the address at it, what the day feels like, and — stated at every layer rather than footnoted — that email must not break. That is the one rule worth repeating: @harvardintech.com mail runs on HostGator, separately from the website but through the same registrar screen, so the tempting action is the destructive one. Only the apex A records and the www CNAME change; MX, the mail. host record and the SPF TXT are never touched, and V5 makes sending a real test email both ways a required step before the cutover is called done rather than something checked after someone complains.\n\nEverything is numbered so a one-line reaction lands where it was meant — S1–S9 steps, D1–D5 decisions, V1–V6 checks, R1–R3 rollback — the same convention the supporter-recognition deck established. The page records nothing: no checkboxes, no persistence. A half-ticked checklist living in one person's browser reads as progress nobody else can see, which is worse than no checklist at all.\n\nFive decisions are left open because they are Jared's rather than mine. D1 (who holds the GoDaddy login) has been unanswered since the 2026-07-02 discovery and blocks S1, so it blocks everything. D3 and D4 are the two exposures the last cycle's audit surfaced and deliberately did not resolve: the 20MB board design gallery, whose unguessable URL IS its access mechanism and which is an active board share, and the status page plus this runbook, both carrying crimson2026 in client-side JavaScript. Both become reachable on the public domain the moment the gate comes off. The page presents each with its trade-offs and picks none.\n\nThe mobile capture earned its place by finding a real defect rather than confirming a good one. The DNS record table was built to scroll inside its own overflow box, which kept the page body from widening and looked correct on a desktop. At 390px what that actually produced was values like www.harvardintech.com.s.strikinglydns.com pushing the third column entirely off-screen — and the third column is where the 'Do not touch' badges on the Email and SPF rows live. The single most important instruction on the page was invisible on the device someone is most likely to be holding while standing in the registrar console, with nothing on screen suggesting more existed to scroll to. The rows stack into labelled blocks below 620px now; nothing is hidden and the page still does not scroll sideways.\n\nNothing was extracted and no test was written, which is the honest outcome rather than a gap. The page computes nothing — every number on it is authored prose — and the gate is triplicated across this page, the status page and the donor-network deck. That duplication is real and was left in place: a shared gate.js would break the file:// fallback these pages are relied on for and open a window where content is visible before the gate covers it, and a generator is machinery the plan rejected for a page with one output target. Extracting the comparison into src/lib would produce a test covering a copy that is not the one running, which is worse than no test. The gate's two failure modes — revealing content unprompted, and failing open on a wrong passphrase — are asserted instead by the locked and refused scenarios against the actually-shipped page.\n\nThe /review page gained a card pointing here and a link from its 'Domain transfer from Strikingly' row, so the row and its detail reach each other in both directions. Its section lede no longer says 'design work', because half that section is now a runbook and a header that misdescribes its contents is how a reader learns to skim it.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/migrate-harvardintech-com-off-strikingly.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/plans/migrate-harvardintech-com-off-strikingly.md",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/project-review-unlocked-status.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-gate-refused--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": "public/review/index.html",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-gate-locked.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-gate-refused.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-the-records-on-a-phone.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-unlocked.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-gate-locked--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-gate-locked--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-gate-refused--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-gate-refused--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-unlocked--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-unlocked--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-unlocked--mobile.png",
+      "status": "added"
+    },
+    {
+      "path": "public/cutover-runbook.html",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Cutover Runbook - Gate Locked",
+      "screenshotPath": "cutover-runbook-gate-locked--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Gate Refused",
+      "screenshotPath": "cutover-runbook-gate-refused--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - The Records On A Phone",
+      "screenshotPath": "cutover-runbook-the-records-on-a-phone--mobile.png"
+    },
+    {
+      "name": "Cutover Runbook - Unlocked",
+      "screenshotPath": "cutover-runbook-unlocked--desktop.png"
+    },
+    {
+      "name": "Project Review - Gate Refused",
+      "screenshotPath": "project-review-gate-refused--desktop.png"
+    },
+    {
+      "name": "Project Review - Unlocked Status",
+      "screenshotPath": "project-review-unlocked-status--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 590,
+    "passed": 590,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 590,
+        "passed": 590
+      }
+    ]
+  }
+}

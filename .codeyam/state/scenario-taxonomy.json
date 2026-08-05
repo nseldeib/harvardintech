@@ -304,6 +304,36 @@
         "reason": "The only action on this page is the giving CTA, which hands off to an external mail client (donateUrl is still empty) rather than changing any in-app state, so there is no post-interaction frame to capture. Reordering, the feature's real interaction, happens in the CMS at /admin, not on this page."
       }
     },
+    "public/cutover-runbook.html": {
+      "empty": {
+        "status": "n-a",
+        "reason": "The page is hand-authored HTML rather than rendered from data, so there is no zero-state to put it into. Its nearest analogue is the locked gate, which is a covered access state, not an empty one."
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "No list here is generated from a collection. The nine steps, five decisions and six checks are each written into the file individually, so no one-versus-many boundary exists."
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "Nothing on this page grows unbounded. It is a fixed authored sequence with no pagination, truncation or overflow treatment to demonstrate."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "A raw public/ file copied verbatim into dist/. Nothing resolves asynchronously, so there is no pending state."
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
     "public/donor-network.html": {
       "empty": {
         "status": "added"
