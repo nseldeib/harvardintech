@@ -14,9 +14,10 @@ benefits:
     body: Be a part of something bigger and contribute your time and talent to initiatives that drive innovation, foster community engagement, and support the responsible growth of technology. Your impact will be felt not only within the Harvard in Tech ecosystem but also across broader communities where technology can create positive change.
   - title: Other Benefits
     body: Discounts on select Harvard University online courses.
-projectsTitle: Projects open for volunteers
+projectsTitle: Marketing projects open for volunteers
 projectsIntro: Each project below is looking for help right now. Pick the one that fits your skills and the time you have.
 projectsEmptyMessage: We're lining up the next round of volunteer projects. Tell us what you'd like to work on and we'll match you when the next one opens.
 ctaLabel: Volunteer with us
 ctaUrl: https://hi.switchy.io/wEYK
 ---
+
