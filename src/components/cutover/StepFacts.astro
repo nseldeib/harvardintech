@@ -1,0 +1,30 @@
+---
+// The three facts every step carries: who is on the hook, roughly how long, and
+// whether it changes anything a visitor can see.
+//
+// The third is the one that earns its place. Six of the nine steps touch nothing
+// live, and saying so on each of them — rather than only flagging the two that
+// do — is what makes S5 and S7 stand out instead of disappearing into a page
+// where everything looks equally cautious.
+import { OWNER_LABELS, type StepDef } from '../../lib/cutoverProgress';
+
+interface Props {
+  step: StepDef;
+}
+const { step } = Astro.props;
+---
+
+<div class="facts">
+  <div>
+    <span class="k">Who</span>
+    {OWNER_LABELS[step.owner]}
+  </div>
+  <div>
+    <span class="k">How long</span>
+    {step.duration}
+  </div>
+  <div>
+    <span class="k">Live site</span>
+    {step.touchesLive ? 'Changes what visitors see' : 'Touches nothing visitors see'}
+  </div>
+</div>

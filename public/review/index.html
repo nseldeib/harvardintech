@@ -215,7 +215,12 @@
               <!-- Relative for the same base-path reason as the links above: both
                    tracks deploy under a base path and a raw public/ file cannot
                    read Astro's BASE_URL. -->
-              <div class="row"><span class="k">Link</span> <a href="../cutover-runbook.html">Open the domain cutover runbook</a> — same passphrase as this page.</div>
+              <!-- Trailing slash, not `.html`: the runbook stopped being a raw
+                   public/ file and became a real route, so its output is
+                   cutover-runbook/index.html. Without the slash a relative link
+                   from this directory would resolve to a sibling FILE that no
+                   longer exists. -->
+              <div class="row"><span class="k">Link</span> <a href="../cutover-runbook/">Open the domain cutover runbook</a> — same passphrase as this page, and it now records what has been done.</div>
               <div class="row decide"><span class="k">Decision</span> D1 (who holds the domain login) is the one that blocks the rest — it has been open since 2026-07-02.</div>
             </div>
           </div>
@@ -241,7 +246,7 @@
               <tr><td>Member login / Harvard Key SSO</td><td><span class="badge b-missing">Not built</span></td><td class="hide-sm">Hard, externally-gated — needs a decision</td></tr>
               <tr><td>Sponsorship page</td><td><span class="badge b-built">Built</span></td><td class="hide-sm">New: a sponsor wall + inquiry section. Needs real sponsor names and logos</td></tr>
               <tr><td>Donate / Momentum Fund</td><td><span class="badge b-partial">Built, needs a link</span></td><td class="hide-sm">Page refreshed; the button still opens an email because there is no donation platform yet (see decision 5)</td></tr>
-              <tr><td>Domain transfer from Strikingly</td><td><span class="badge b-missing">Not started</span></td><td class="hide-sm">Low effort; needs registrar/DNS access. Now mapped out step by step in the <a href="../cutover-runbook.html">domain cutover runbook</a>: DNS stays at GoDaddy, e-mail is untouched, and the old site stays up as rollback</td></tr>
+              <tr><td>Domain transfer from Strikingly</td><td><span class="badge b-missing">Not started</span></td><td class="hide-sm">Low effort; needs registrar/DNS access. Now mapped out step by step in the <a href="../cutover-runbook/">domain cutover runbook</a>, which the team ticks off as it goes: DNS stays at GoDaddy, e-mail is untouched, and the old site stays up as rollback</td></tr>
               <tr><td>Content population</td><td><span class="badge b-partial">In progress</span></td><td class="hide-sm">CMS data entry (chapters, board, events)</td></tr>
               <tr><td>Private shareable preview</td><td><span class="badge b-built">Live</span></td><td class="hide-sm">Done — this page is it. Password-protected and hidden from search engines. Nothing here is public, and harvardintech.com is untouched</td></tr>
             </tbody>

@@ -1,0 +1,45 @@
+---
+// One row of the DNS discovery table.
+//
+// This component is structural, not cosmetic. Every cell carries a `data-label`,
+// and below 620px the stylesheet hides the header row and renders those labels
+// above each value so the table stacks into labelled blocks instead of scrolling
+// sideways.
+//
+// That behaviour was earned by a defect. The first build let the table scroll
+// horizontally inside its own box, which looked correct on a desktop; at 390px
+// the long values pushed the third column entirely off-screen — and the third
+// column is where the "Do not touch" badges on the Email and SPF rows live. The
+// single most important instruction on the page was invisible on the device
+// someone is most likely to be holding while standing in the registrar console,
+// with nothing on screen suggesting more existed.
+//
+// Retyped by hand on 18 cells, one omitted `data-label` silently reintroduces
+// that. As a component the contract is stated once and cannot be half-applied.
+interface Props {
+  /** What the record is — the row's heading cell. */
+  label: string;
+  /** The value as it reads today. */
+  value: string;
+  /** `keep` | `change` | `danger` — drives the badge's colour and wording. */
+  action: 'keep' | 'change' | 'danger';
+  /** The badge text, e.g. `Keep` or `Do not touch`. */
+  actionLabel: string;
+}
+const { label, value, action, actionLabel } = Astro.props;
+
+const BADGE: Record<Props['action'], string> = {
+  keep: 'b-built',
+  change: 'b-partial',
+  danger: 'b-missing',
+};
+---
+
+<tr>
+  <td data-label="What" set:html={label} />
+  <td class="val" data-label="Value today">{value}</td>
+  <td data-label="Action">
+    <span class:list={['badge', BADGE[action]]}>{actionLabel}</span>
+    <slot />
+  </td>
+</tr>

@@ -1,0 +1,27 @@
+---
+// R1–R3: the values that put the domain back.
+//
+// In the page rather than only in a runbook document on purpose. The operator
+// note on S9 says these must ALSO live somewhere reachable without a checkout,
+// because a rollback procedure only its author can open is not a rollback
+// procedure — but the version here is what someone reads while deciding whether
+// to roll back at all.
+import NumberedLine from './NumberedLine.astro';
+---
+<section id="rollback">
+  <div class="wrap">
+    <h2>If something's wrong</h2>
+    <div class="lede">Putting it back is three values, and they're written here on purpose.</div>
+    <p class="sub">
+      Rollback works because Strikingly stays alive until S9 and because the TTLs were
+      lowered in S7 — so reverting propagates in minutes, the same as the switch did.
+      These are the values as of the 2026-07-02 discovery; S1 re-confirms them, and
+      whatever S1 finds is what belongs here.
+    </p>
+    <ul class="lines danger">
+      <NumberedLine id="R1">Apex <code>harvardintech.com</code> → <code>A 54.183.102.22</code> (Strikingly). Remove the four GitHub <code>A</code> records.</NumberedLine>
+      <NumberedLine id="R2"><code>www</code> → <code>CNAME www.harvardintech.com.s.strikinglydns.com</code>.</NumberedLine>
+      <NumberedLine id="R3">Leave <code>MX</code>, <code>mail.</code>, and <code>TXT</code> alone — as in the cutover, so they are alone in the rollback. If email <em>has</em> broken, these records are where to look, and the fix is restoring exactly what S1 captured.</NumberedLine>
+    </ul>
+  </div>
+</section>

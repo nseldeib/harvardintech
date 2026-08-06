@@ -1,0 +1,36 @@
+---
+// The five open decisions.
+//
+// Placed before the sequence rather than after it, because they gate it: D1 in
+// particular has been open since the 2026-07-02 discovery and blocks S1, which
+// blocks everything. A reader who reaches the nine steps without meeting the
+// decisions first has read a plan that cannot start.
+import { DECISIONS, type CutoverProgress } from '../../lib/cutoverProgress';
+import type { RepoTarget } from '@codeyam/cms/lib/githubCommit';
+import DecisionCard from './DecisionCard.astro';
+
+interface Props {
+  progress: CutoverProgress;
+  target: RepoTarget;
+}
+const { progress, target } = Astro.props;
+---
+
+<section id="decisions">
+  <div class="wrap">
+    <h2>What we need from you first</h2>
+    <div class="lede">Five open questions. The first one blocks everything.</div>
+    <p class="sub">
+      Nothing below is a technical blocker — the work is ready. These are the calls
+      that are yours rather than ours, and D1 in particular gates the whole sequence:
+      without it, S1 can't even be started. Each carries what we'd suggest, so there
+      is something to react to rather than a blank page.
+    </p>
+
+    {
+      DECISIONS.map((decision) => (
+        <DecisionCard decision={decision} progress={progress} target={target} />
+      ))
+    }
+  </div>
+</section>

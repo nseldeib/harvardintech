@@ -1,0 +1,106 @@
+{
+  "name": "Cutover Runbook - Cutover Day",
+  "id": "d2b116eb-40c6-4a1d-8ab4-9ef69752c167",
+  "url": "/cutover-runbook",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "command": "bash .codeyam/seed-cutover-progress.sh",
+    "data": {
+      "cutoverDecisions": [
+        {
+          "answer": "Nadia has the GoDaddy login and will make the record edits herself with Jared on a call; we never hold the credentials. Kathy is being added as a second account holder.",
+          "answered": true,
+          "at": "2026-08-10T16:12:00Z",
+          "by": "nseldeib",
+          "id": "D1"
+        },
+        {
+          "answer": "Split it — the three example sponsors come down before cutover because they name organisations that aren't actually partners. Board bios and the donation platform can be filled in live.",
+          "answered": true,
+          "at": "2026-08-11T11:30:00Z",
+          "by": "nseldeib",
+          "id": "D2"
+        },
+        {
+          "answer": "Gate the design gallery behind the same passphrase as the review site. The link the board has keeps working; it just stops being open to anyone who is forwarded it.",
+          "answered": true,
+          "at": "2026-08-11T11:44:00Z",
+          "by": "nseldeib",
+          "id": "D3"
+        },
+        {
+          "answer": "Status page moves to the review site only, same as this runbook already does. Neither belongs on the public domain.",
+          "answered": true,
+          "at": "2026-08-11T15:02:00Z",
+          "by": "jaredcosulich",
+          "id": "D4"
+        },
+        {
+          "answer": "Tuesday 25 August, 9am ET. Clear of the Boston chapter event on the 27th.",
+          "answered": true,
+          "at": "2026-08-12T20:15:00Z",
+          "by": "jaredcosulich",
+          "id": "D5"
+        }
+      ],
+      "cutoverSteps": [
+        {
+          "at": "2026-08-11T14:20:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S1"
+        },
+        {
+          "at": "2026-08-12T09:05:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S2"
+        },
+        {
+          "at": "2026-08-13T17:40:00Z",
+          "by": "jaredcosulich",
+          "done": true,
+          "id": "S3"
+        },
+        {
+          "at": "2026-08-13T18:02:00Z",
+          "by": "jaredcosulich",
+          "done": true,
+          "id": "S4"
+        },
+        {
+          "at": "2026-08-24T10:15:00Z",
+          "by": "jaredcosulich",
+          "done": true,
+          "id": "S5"
+        },
+        {
+          "at": "2026-08-24T14:30:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S6"
+        },
+        {
+          "at": "2026-08-25T13:08:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S7"
+        },
+        {
+          "done": false,
+          "id": "S8"
+        },
+        {
+          "done": false,
+          "id": "S9"
+        }
+      ]
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/cutover-runbook/[...path].astro",
+  "description": "Through the switch itself, with the checks outstanding — the riskiest hour of the whole migration, caught mid-flight. The distinction this state exists to hold is that S7 being ticked does NOT mean the cutover worked: V5, sending a real email both ways, has not been done yet, and mail failures are silent. A page that let 'the domain is switched' read as 'we are finished' would be encouraging the one mistake that costs something."
+}

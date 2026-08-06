@@ -1,0 +1,51 @@
+---
+import Component from "../../components/cutover/DecisionTick.tsx";
+import type { AuthSession } from "@codeyam/cms/lib/authSession";
+import "../../styles/tokens.css";
+import "../../styles/cutover-runbook.css";
+
+// Isolation page for DecisionTick — a decided decision seen WITHOUT repo write.
+// What the wider team sees: the answer and who gave it, with no controls. The
+// point of committing the answer is that everyone can read it, not that everyone
+// can change it.
+//
+// `initialSession` is the scenario seam `useAuthSession` exposes: it pins a
+// fixed session instead of consulting the live store, so this page captures the
+// same state on every run without a GitHub token and without depending on
+// whatever session the preview happens to hold.
+//
+// A separate page per state rather than one `?s=`-switched page: this is a
+// prerendered static build, so query params are empty at build time and a single
+// page would capture its default frame for every state.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const SIGNED_OUT: AuthSession = { status: 'signed-out', user: null };
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DecisionTick</title>
+  </head>
+  <body style="margin: 0; background: var(--paper-2, #f6f3f1);">
+    <div id="codeyam-capture" style="padding: 24px; max-width: 720px;">
+      <div class="decision is-answered">
+        <div class="top">
+          <span class="id">D5</span>
+          <h3>When do we cut over?</h3>
+          <span class="badge b-built">Answered</span>
+        </div>
+        <Component
+          client:load
+          id="D5"
+          initialAnswered={true}
+          initialAnswer="Tuesday 25 August, 9am ET. Clear of the Boston chapter event on the 27th."
+          initialBy="jaredcosulich"
+          initialAt="2026-08-12T20:15:00Z"
+          target={TARGET}
+          initialSession={SIGNED_OUT}
+        />
+      </div>
+    </div>
+  </body>
+</html>

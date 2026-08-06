@@ -1,0 +1,12 @@
+{
+  "name": "Decision Tick - Decided Read Only",
+  "id": "f829f050-f8d0-4f12-b707-dc459f9b38e3",
+  "url": "/isolated-components/DecisionTick-ReadOnly",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DecisionTick",
+  "scenarioType": "component",
+  "description": "What the wider team sees on a decided decision: the answer and who gave it, with no controls at all. Worth capturing separately from the signed-in view because the read-only path is a different branch rather than the same markup with disabled buttons — and because this is the view that matters most for the page's actual purpose. The point of committing an answer is that everyone can read it; being able to change it is the narrower privilege."
+}

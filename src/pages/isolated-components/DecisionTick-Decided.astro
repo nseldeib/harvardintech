@@ -1,0 +1,50 @@
+---
+import Component from "../../components/cutover/DecisionTick.tsx";
+import type { AuthSession } from "@codeyam/cms/lib/authSession";
+import "../../styles/tokens.css";
+import "../../styles/cutover-runbook.css";
+
+// Isolation page for DecisionTick — a decision with its answer recorded.
+// The answer is kept in the team's own words rather than reduced to a flag,
+// because 'D1 is answered' tells the next reader nothing about what was decided.
+//
+// `initialSession` is the scenario seam `useAuthSession` exposes: it pins a
+// fixed session instead of consulting the live store, so this page captures the
+// same state on every run without a GitHub token and without depending on
+// whatever session the preview happens to hold.
+//
+// A separate page per state rather than one `?s=`-switched page: this is a
+// prerendered static build, so query params are empty at build time and a single
+// page would capture its default frame for every state.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const SIGNED_IN: AuthSession = { status: 'signed-in', user: { login: 'nseldeib', name: 'Nadia Eldeib', avatarUrl: '' } };
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DecisionTick</title>
+  </head>
+  <body style="margin: 0; background: var(--paper-2, #f6f3f1);">
+    <div id="codeyam-capture" style="padding: 24px; max-width: 720px;">
+      <div class="decision is-answered">
+        <div class="top">
+          <span class="id">D1</span>
+          <h3>Who holds the GoDaddy login?</h3>
+          <span class="badge b-built">Answered</span>
+        </div>
+        <Component
+          client:load
+          id="D1"
+          initialAnswered={true}
+          initialAnswer="Nadia has the GoDaddy login. She'll make the record edits herself with Jared on a call; we never hold the credentials. Kathy is being added as a second account holder this week."
+          initialBy="nseldeib"
+          initialAt="2026-08-10T16:12:00Z"
+          target={TARGET}
+          initialSession={SIGNED_IN}
+        />
+      </div>
+    </div>
+  </body>
+</html>

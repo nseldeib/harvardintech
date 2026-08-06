@@ -1,0 +1,97 @@
+---
+// The domain cutover runbook.
+//
+// Was `public/cutover-runbook.html`, a standalone file with its own hand-rolled
+// passphrase gate. It is a real route now for one reason: a raw `public/` file is
+// copied verbatim into `dist/` and no component ever renders it, so it could read
+// no content and hold no state — and a runbook that cannot record what has been
+// done is a document, not a checklist. See `docs/scoping/domain-transfer-runbook.md`
+// for the discovery this rests on.
+//
+// Two things follow from being a route, both deliberate:
+//
+//   - It inherits `PreviewGate` through `HeadExtras`, so the hand-rolled gate is
+//     gone. One passphrase now opens this and the status page together, where
+//     before each was unlocked separately. They already shared a passphrase and
+//     already linked to each other, so the separation was nominal.
+//   - It is EXCLUDED from the public build by `includeCutoverRunbook`. The gate
+//     un-gates on the public track by design, so without that exclusion the
+//     cutover would have published this page — the one naming where the domain's
+//     records live — on the domain, ungated. See the predicate for the full note;
+//     it is this page's own decision D4, settled in code.
+//
+// A dynamic route rather than a flat `.astro` file purely because
+// `getStaticPaths` is the seam that lets the public build emit nothing at all.
+import SEO from '../../components/SEO.astro';
+import HeadExtras from '../../components/HeadExtras.astro';
+import RunbookHeader from '../../components/cutover/RunbookHeader.astro';
+import RunbookSummary from '../../components/cutover/RunbookSummary.astro';
+import RunbookWhatThisIs from '../../components/cutover/RunbookWhatThisIs.astro';
+import RunbookDecisions from '../../components/cutover/RunbookDecisions.astro';
+import RunbookTimeline from '../../components/cutover/RunbookTimeline.astro';
+import RunbookOnTheDay from '../../components/cutover/RunbookOnTheDay.astro';
+import RunbookSteps from '../../components/cutover/RunbookSteps.astro';
+import RunbookChecks from '../../components/cutover/RunbookChecks.astro';
+import RunbookRollback from '../../components/cutover/RunbookRollback.astro';
+import RunbookRecords from '../../components/cutover/RunbookRecords.astro';
+import RunbookFooter from '../../components/cutover/RunbookFooter.astro';
+import { settings } from '../../lib/site';
+import { loadIntegrations } from '../../lib/integrationsContent';
+import { PREVIEW_GATE_ENABLED } from '../../lib/previewGate';
+import { includeCutoverRunbook } from '../../lib/publishTrack';
+import { loadCutoverProgress, rollup } from '../../lib/cutoverProgress';
+import { withBase } from '../../lib/url';
+import cmsConfig from '../../data/cms.json';
+import '../../styles/cutover-runbook.css';
+
+export function getStaticPaths() {
+  // The public build emits no page at all. `import.meta.env.DEV` is true under
+  // `astro dev` (where codeyam captures), and PREVIEW_GATE marks the review
+  // track — the same two conditions that ship /admin.
+  return includeCutoverRunbook(import.meta.env.DEV, PREVIEW_GATE_ENABLED)
+    ? [{ params: { path: undefined } }]
+    : [];
+}
+
+const progress = loadCutoverProgress();
+const counts = rollup(progress);
+const target = cmsConfig.repo;
+const { customBodyHtml } = await loadIntegrations(settings);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO
+      title="Domain Cutover Runbook"
+      description="What it takes to point harvardintech.com at the new site, in the order it has to happen."
+    />
+    <HeadExtras />
+  </head>
+  <body>
+    <RunbookHeader />
+
+    <RunbookSummary counts={counts} />
+
+    <RunbookWhatThisIs />
+
+    <RunbookDecisions progress={progress} target={target} />
+
+    <RunbookTimeline progress={progress} />
+
+    <RunbookOnTheDay />
+
+    <RunbookSteps progress={progress} target={target} />
+
+    <RunbookChecks />
+
+    <RunbookRollback />
+
+    <RunbookRecords />
+
+    <RunbookFooter />
+
+    {customBodyHtml ? <Fragment set:html={customBodyHtml} /> : null}
+  </body>
+</html>

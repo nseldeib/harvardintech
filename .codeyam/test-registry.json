@@ -145,6 +145,186 @@
       "runner": "tests"
     },
     {
+      "description": "A decision absent from the file is appended rather than dropped.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › appends a decision the file does not yet know about",
+      "line": 108,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pure: the caller holds an optimistic copy of the old state to revert to when the commit fails, so mutating the input would corrupt that rollback.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › does not mutate the progress it was given",
+      "line": 66,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Reopening drops the text. A decision back in the open column must not still display the conclusion it no longer holds.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › drops the answer text when a decision is reopened",
+      "line": 96,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same non-interference rule as steps.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › leaves every other decision untouched",
+      "line": 102,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A decision has content, not just a flag. Recording only \"answered\" is what left D1's actual answer stranded in whichever meeting produced it.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › records the answer text alongside the flag",
+      "line": 76,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A step added to the runbook after this file was committed still has to be tickable, or adding a step would silently make it unrecordable.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › appends a step the file does not yet know about",
+      "line": 58,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Un-ticking drops the attribution with it. A step recorded as not done but still carrying \"nseldeib · 11 Aug\" would read as a step someone finished and then someone else quietly reversed, which is not what happened.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › clears the attribution when a step is un-ticked",
+      "line": 36,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pure: the caller holds an optimistic copy of the old state to revert to when the commit fails, so mutating the input would corrupt that rollback.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › does not mutate the progress it was given",
+      "line": 66,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The concurrency rule. Two people ticking DIFFERENT steps are not in conflict, and both ticks must survive — this is why the commit path re-reads and re-applies rather than refusing on drift.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › leaves every other step untouched",
+      "line": 44,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ticking records who and when. That attribution is the entire argument for committing this file instead of keeping ticks in a browser, so it is the first thing worth pinning down.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › records the login and timestamp when a step is ticked",
+      "line": 22,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Two people ticking the SAME step converge rather than duplicating it.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › replaces rather than duplicates an existing step",
+      "line": 50,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "S6 today — the only two-decision step.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockedLabel › joins two decisions with and",
+      "line": 39,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The common case on this page: one decision holding a step up.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockedLabel › names a single decision on its own",
+      "line": 34,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A step with nothing outstanding renders no waiting line at all, so the empty case must produce nothing rather than a stray separator.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockedLabel › returns an empty string when nothing is blocking",
+      "line": 51,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The case the inline `join(' and ')` got wrong. No step needs three decisions today, which is exactly why this was invisible and worth pinning down.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockedLabel › uses a comma before the final and for three or more",
+      "line": 45,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Partially answered: only the outstanding one is named.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › drops decisions that have been answered",
+      "line": 123,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "S6 waits on two, and both must be reported — reporting only the first would tell the team they are one decision away when they are two.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › names every outstanding decision, not just the first",
+      "line": 117,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "S1 needs D1. With nothing answered, D1 is what is holding it up — and the page prints this list, so it has to be the ids rather than a boolean.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › names the unanswered decisions a step needs",
+      "line": 104,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A step with no prerequisites is never blocked.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › returns nothing for a step that needs no decisions",
+      "line": 129,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Once answered, nothing blocks it.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › returns nothing once the decisions are answered",
+      "line": 110,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
       "description": "A subject is appended as a query parameter.",
       "file": "src/lib/mailto.test.ts",
       "format": "vitest",
@@ -223,6 +403,33 @@
       "key": "byOrder › treats order 0 as ordered, not as missing",
       "line": 21,
       "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The timeline's three buckets must between them hold every step — a step missing from the calendar is work nobody has scheduled.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "byPhase › accounts for every step across the three phases",
+      "line": 199,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Retiring Strikingly is deliberately afterwards — doing it on the day is the mistake the runbook exists to prevent, so its phase is load-bearing.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "byPhase › leaves retiring the old site until afterwards",
+      "line": 211,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The switch and its checks are the on-the-day work.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "byPhase › puts the switch itself on the day",
+      "line": 205,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -500,7 +707,7 @@
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
       "key": "contentRoot › defaults to src/content when the override is unset",
-      "line": 24,
+      "line": 27,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -509,7 +716,7 @@
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
       "key": "contentRoot › returns CODEYAM_CONTENT_ROOT when it is set",
-      "line": 18,
+      "line": 21,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -518,7 +725,7 @@
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
       "key": "dataRoot › defaults to src/data when the override is unset",
-      "line": 44,
+      "line": 47,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -527,7 +734,7 @@
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
       "key": "dataRoot › returns CODEYAM_DATA_ROOT when it is set",
-      "line": 38,
+      "line": 41,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -1752,7 +1959,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeCmsIntegration › excludes the CMS from the public build",
-      "line": 11,
+      "line": 15,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1761,7 +1968,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeCmsIntegration › includes the CMS on the review track",
-      "line": 16,
+      "line": 20,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1770,7 +1977,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeCmsIntegration › includes the CMS under astro dev",
-      "line": 22,
+      "line": 26,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1779,8 +1986,44 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeCmsIntegration › includes the CMS when both dev and review track are set",
-      "line": 28,
+      "line": 32,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The load-bearing case. PreviewGate un-gates on the public track, so if this ever returns true here the runbook is not merely visible — it is visible WITHOUT a passphrase, on the domain, naming the project's soft spots. This is the assertion that keeps the page's answer to its own decision D4 true.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCutoverRunbook › excludes the runbook from the public build",
+      "line": 56,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The gated review origin is where the team reads it — the same place /admin lives, and for the same reason.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCutoverRunbook › includes the runbook on the review track",
+      "line": 62,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Dev keeps it, or the codeyam scenarios that capture the checklist have no route to capture.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCutoverRunbook › includes the runbook under astro dev",
+      "line": 68,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Not a real deploy shape; must not resolve to excluded by accident.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCutoverRunbook › includes the runbook when both dev and review track are set",
+      "line": 73,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -1788,7 +2031,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeSitemapIntegration › omits the sitemap on the review track",
-      "line": 42,
+      "line": 46,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1797,7 +2040,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeSitemapIntegration › publishes a sitemap on the public track",
-      "line": 35,
+      "line": 39,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1982,12 +2225,93 @@
       "runner": "tests"
     },
     {
+      "description": "An answered decision reads as answered.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isDecisionAnswered › reports an answered decision",
+      "line": 218,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "D1 has been open since 2026-07-02 and the page must keep saying so.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isDecisionAnswered › reports an open decision as unanswered",
+      "line": 223,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same hand-edited-file tolerance as the step lookup.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isDecisionAnswered › treats a decision absent from the file as unanswered",
+      "line": 228,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
       "description": "The single-slug form must agree with the list form.",
       "file": "src/lib/sitePages.test.ts",
       "format": "vitest",
       "key": "isReservedPageSlug › is true for a taken slug and false for a free one",
       "line": 116,
       "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A recorded tick reads as done.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepDone › reports a ticked step as done",
+      "line": 84,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An untouched step does not.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepDone › reports an untouched step as not done",
+      "line": 89,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A state file predating a step — or naming one that no longer exists — must not throw or report done. The file is committed and hand-editable, so this is reachable rather than theoretical.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepDone › treats a step absent from the file as not done",
+      "line": 96,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Already done is not \"ready to start\" — otherwise the banner's \"could be started today\" count would keep counting finished work.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepReady › reports a completed step as not ready",
+      "line": 150,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A blocked step is not ready however much anyone wants it to be.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepReady › reports a step waiting on a decision as not ready",
+      "line": 143,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ready means startable now: prerequisites met and not already done.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepReady › reports an unblocked, unticked step as ready",
+      "line": 137,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -3332,6 +3656,51 @@
       "runner": "tests"
     },
     {
+      "description": "The reason this function exists at all, and the reason it must not be a bare readFileSync('src/data/…'): every read has to follow the sandbox redirect, or a seeded scenario silently renders committed production content instead of its own.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › follows the sandbox redirect rather than reading src/data",
+      "line": 84,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: a singleton parses into the shape its caller expects.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › parses a singleton from the resolved data root",
+      "line": 75,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Two callers de-duplicated onto this function; both read more than one singleton, so resolving the name per call rather than caching a path is part of the contract.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › resolves each name independently within one data root",
+      "line": 93,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A missing singleton throws rather than yielding an empty object. Silently returning a blank would render the site's settings, nav, or the cutover checklist as empty and look like real content.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › throws when the singleton is absent",
+      "line": 102,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Malformed JSON throws for the same reason — a half-written data file should fail the build, not render as nothing.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › throws when the singleton is not valid JSON",
+      "line": 109,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
       "description": "Subject spaces are percent-encoded so the mail client parses the query.",
       "file": "src/lib/giving.test.ts",
       "format": "vitest",
@@ -3734,6 +4103,78 @@
       "key": "robotsTxtBody review track › omits the Sitemap line entirely when gated",
       "line": 37,
       "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every step done is the end state, and drives a different banner.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › reports complete when every step is done",
+      "line": 174,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The production default. `untouched` drives the \"nothing has happened yet\" banner, which is the loudest and most important state this page has.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › reports the default state as untouched",
+      "line": 159,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ready and blocked partition the unfinished steps: every step that is not done is either startable or waiting, never both and never neither.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › splits unfinished steps into ready and blocked with none left over",
+      "line": 182,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An answered decision alone means work has started, even with no step ticked — so the banner must stop claiming nothing has happened.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › stops reporting untouched once a decision is answered",
+      "line": 169,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The totals come from the authored runbook, not the state file, so a state file missing entries cannot shrink the denominator the banner prints.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › takes its totals from the runbook rather than the state file",
+      "line": 189,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every `needs` entry must name a decision that exists, or a step is blocked forever by something the page never renders and nobody can answer.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "runbook structure › only blocks steps on decisions that exist",
+      "line": 236,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "And the reverse: a decision claiming to block a step that does not exist would print a promise the sequence never keeps.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "runbook structure › only claims to block steps that exist",
+      "line": 245,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reversible-first ordering is the plan's central safety property: the two steps that change what the public can see must not come before steps that touch nothing, or the runbook stops being safe to abandon partway.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "runbook structure › puts every step that touches nothing live before the last live one",
+      "line": 255,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -4151,6 +4592,51 @@
       "runner": "tests"
     },
     {
+      "description": "A date-only string (no time) is still a legitimate ISO value someone might type by hand into the JSON; it must format rather than fall through.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › accepts a date without a time component",
+      "line": 36,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The year is deliberately omitted — the whole migration happens inside one window, so a year only costs width in a cramped row.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › omits the year",
+      "line": 17,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: a tick's stored timestamp becomes the caption beside the GitHub login. Asserted on parts rather than one literal string because the separator and order are locale-dependent and the test must not encode the runner's locale as the requirement.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › renders a stored timestamp as a day and month",
+      "line": 9,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same policy for an absent value. A record written before the field existed parses to NaN the same way, and must not render either.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › returns an empty string for an empty value",
+      "line": 30,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The case the function exists for. `cutoverProgress.json` is committed and hand-editable, so a mangled timestamp is reachable — and it must cost the reader a missing date, not an \"Invalid Date\" string sitting on the page.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › returns an empty string for an unparseable value",
+      "line": 24,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
       "description": "An editor typo, or a school nobody has mapped yet, must still reach the page — a blank label loses the supporter's affiliation silently.",
       "file": "src/lib/donorNetwork.test.ts",
       "format": "vitest",
@@ -4520,6 +5006,42 @@
       "runner": "tests"
     },
     {
+      "description": "With nothing blocked the sentence changes meaning, not just number — it tells the team the decisions are in and the ball is no longer theirs.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "summaryLine › reports readiness rather than blockage when nothing is waiting",
+      "line": 70,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Singular is the case that reveals a hand-written sentence: nobody seeds exactly one blocked step while looking at the banner.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "summaryLine › says step is for exactly one blocked step",
+      "line": 59,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Singular again on the unblocked branch.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "summaryLine › says step is for exactly one ready step",
+      "line": 77,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Plural for more than one.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "summaryLine › says steps are for several blocked steps",
+      "line": 64,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
       "description": "Initials leak the withheld name: \"RKW\" beside \"Anonymous supporter\" names them to anyone who knows them, so the anonymous case gets a mark that identifies nobody.",
       "file": "src/lib/donorNetwork.test.ts",
       "format": "vitest",
@@ -4715,6 +5237,24 @@
       "key": "this site’s dashboard grouping › opens on the homepage and closes on site-wide settings",
       "line": 155,
       "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Un-ticking is a distinct event and must not read as completion.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "tickCommitMessage › distinguishes reopening from completing",
+      "line": 129,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The repo history is a second, permanent record of this checklist, so a tick should read as progress there rather than as \"Update cutoverProgress.json\".",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "tickCommitMessage › names the step and what happened to it",
+      "line": 124,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {

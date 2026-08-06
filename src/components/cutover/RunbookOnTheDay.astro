@@ -1,0 +1,22 @@
+---
+// What the cutover feels like from the outside, for people who will not be
+// running it.
+//
+// Every line here answers "what will visitors experience", not "what do we
+// type" — the honest answer being that the risk window is minutes, some people
+// briefly see yesterday's site, and nobody sees an error. The operator's
+// version of the same period lives in S7.
+---
+<section id="day">
+  <div class="wrap">
+    <h2>What it feels like on the day</h2>
+    <div class="lede">Minutes of risk, not hours — and a way back the whole time.</div>
+    <ul class="opts">
+      <li><b>The switch itself takes a few minutes.</b> A day beforehand we shorten how long the internet is allowed to remember the old address (from hours to five minutes), so when we do flip it, it takes effect almost immediately instead of trickling out over an afternoon.</li>
+      <li><b>Some visitors see the old site briefly.</b> During those few minutes, whether someone gets the old or new site depends on their internet provider's cache. Both sites work, so nobody sees an error — some people just see yesterday's page for a moment.</li>
+      <li><b>The certificate takes a little longer.</b> GitHub issues the HTTPS certificate for the domain after the records point at it — typically minutes, occasionally up to an hour. We wait for it before turning on "Enforce HTTPS", so nobody meets a browser warning.</li>
+      <li><b>We stage on a real subdomain first.</b> Before the apex flips, the new site runs on <code>review.harvardintech.com</code> with a real certificate, so we've seen it work on the real domain (S2) before anything visitors use is touched.</li>
+      <li><b>Strikingly stays paid for several days after.</b> Rollback is then just putting the old records back (R1–R3), with nothing to re-create or re-configure. We only cancel once the new site has been stable for a few days (S9).</li>
+    </ul>
+  </div>
+</section>

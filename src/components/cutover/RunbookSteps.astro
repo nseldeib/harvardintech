@@ -1,0 +1,32 @@
+---
+// The sequence: nine steps, reversible ones first.
+//
+// That ordering is the plan's central safety property rather than a
+// presentation choice — every step before S5 can be abandoned with nothing
+// changed for anyone — so it lives in `STEPS` and this component only renders
+// it in order.
+import { STEPS, type CutoverProgress } from '../../lib/cutoverProgress';
+import type { RepoTarget } from '@codeyam/cms/lib/githubCommit';
+import StepCard from './StepCard.astro';
+
+interface Props {
+  progress: CutoverProgress;
+  target: RepoTarget;
+}
+const { progress, target } = Astro.props;
+---
+
+<section id="sequence">
+  <div class="wrap">
+    <h2>The sequence</h2>
+    <div class="lede">Nine steps, reversible ones first.</div>
+    <p class="sub">
+      Each step reads plainly first. Open <em>Operator detail</em> for the exact values,
+      commands, and file changes — same numbering, on the same page, so the summary
+      can't drift away from the steps it summarises. Ticking a step records it for
+      everyone, under the name of whoever ticked it.
+    </p>
+
+    {STEPS.map((step) => <StepCard step={step} progress={progress} target={target} />)}
+  </div>
+</section>

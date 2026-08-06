@@ -1,0 +1,316 @@
+/* The domain cutover runbook's own styling, ported verbatim from the
+ * standalone public/cutover-runbook.html this route replaces.
+ *
+ * Deliberately a sibling of public/review/index.html rather than the site's
+ * design system: the two pages are read back to back and a second visual
+ * language would read as a second project. The passphrase-gate rules are gone
+ * — the page is a real route now, so PreviewGate covers it and the hand-rolled
+ * gate they styled no longer exists. */
+
+/* Deliberately a sibling of public/review/index.html, not a new design:
+   the two pages are read back to back and a second visual language would
+   read as a second project. Same tokens, same badge vocabulary, same gate. */
+:root {
+  --crimson: #a41034;
+  --crimson-deep: #7d1424;
+  --ink: #1e1a1b;
+  --ink-2: #5c5559;
+  --ink-3: #928b8e;
+  --paper: #ffffff;
+  --paper-2: #f6f3f1;
+  --line: rgba(30, 26, 27, 0.14);
+  --green: #1c7c46;
+  --amber: #b7791f;
+  --red: #a4102f;
+  --sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --serif: 'Times New Roman', Times, Georgia, serif;
+  --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper-2);
+  line-height: 1.55;
+}
+a { color: var(--crimson); }
+
+/* ---- Layout ---- */
+.util {
+  background: var(--crimson); color: #fff; font-family: var(--mono);
+  font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  text-align: center; padding: 7px 16px;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+header.page { background: var(--ink); color: #fff; padding: 40px 0 34px; }
+header.page .kick {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--crimson);
+}
+header.page h1 { font-size: 34px; margin: 8px 0 10px; letter-spacing: -0.02em; }
+header.page p { color: #cfcacb; max-width: 680px; margin: 0; font-size: 15px; }
+header.page .back { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+header.page .back a { color: #cfcacb; }
+.meta { margin-top: 16px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+section { padding: 40px 0; border-bottom: 1px solid var(--line); }
+section h2 {
+  font-size: 12px; font-family: var(--mono); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--crimson); margin: 0 0 4px;
+}
+section .lede { font-size: 22px; margin: 0 0 22px; letter-spacing: -0.01em; }
+section .sub { font-size: 14.5px; color: var(--ink-2); margin: -12px 0 22px; max-width: 720px; }
+
+/* The nothing-has-happened banner. This page is a map, and the single
+   most likely misreading is that some of it has already been done. */
+.standing {
+  background: #fff; border: 1px solid var(--line); border-left: 3px solid var(--green);
+  border-radius: 4px; padding: 16px 18px; margin-top: 18px;
+}
+.standing b { color: var(--green); }
+.standing p { margin: 6px 0 0; font-size: 14px; color: var(--ink-2); }
+
+/* The one rule. Stated at every layer, because "replace all records" is
+   the single action here that would do real, immediate damage. */
+.rule {
+  background: #fff; border: 1px solid rgba(164,16,47,0.35); border-left: 3px solid var(--crimson);
+  border-radius: 4px; padding: 18px 20px; margin: 22px 0 0;
+}
+.rule .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--crimson); }
+.rule h3 { margin: 4px 0 8px; font-size: 19px; }
+.rule p { margin: 0 0 8px; font-size: 14.5px; color: var(--ink-2); }
+.rule p:last-child { margin-bottom: 0; }
+.rule b { color: var(--ink); }
+
+/* Steps */
+.step {
+  background: #fff; border: 1px solid var(--line); border-radius: 4px;
+  padding: 18px 20px; margin-bottom: 14px;
+}
+.step .top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.step .id {
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  color: #fff; background: var(--ink); padding: 3px 8px; border-radius: 3px; white-space: nowrap;
+}
+.step h3 { margin: 0; font-size: 17px; flex: 1 1 auto; }
+.step .plain { margin: 0; font-size: 14.5px; color: var(--ink-2); }
+.step .who { margin-top: 10px; font-size: 12.5px; }
+.step .who .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: block; }
+
+/* Layer 2 — operator detail. Collapsed so layer 1 reads clean, but on the
+   same page and in the same numbering, so the summary can never drift
+   away from the steps it summarises. */
+details.op { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+details.op > summary {
+  cursor: pointer; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--crimson); list-style: none;
+}
+details.op > summary::-webkit-details-marker { display: none; }
+details.op > summary::before { content: '▸ '; }
+details.op[open] > summary::before { content: '▾ '; }
+details.op .body { padding-top: 12px; font-size: 13.5px; color: var(--ink-2); }
+details.op .body ol, details.op .body ul { margin: 0 0 10px; padding-left: 20px; }
+details.op .body li { margin-bottom: 7px; }
+details.op .body p { margin: 0 0 10px; }
+details.op .body p:last-child, details.op .body ol:last-child, details.op .body ul:last-child { margin-bottom: 0; }
+code, .mono { font-family: var(--mono); font-size: 12px; background: var(--paper-2); padding: 1px 5px; border-radius: 3px; }
+details.op .body code { background: var(--paper-2); }
+
+/* Record table. A DNS table is the classic thing that breaks on a phone,
+   so it scrolls inside its own box rather than widening the page. */
+.tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; background: #fff; border: 1px solid var(--line); border-radius: 4px; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; background: #fff; min-width: 620px; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+tbody tr:last-child td { border-bottom: 0; }
+td.val { font-family: var(--mono); font-size: 12px; word-break: break-all; }
+
+.badge {
+  display: inline-block; font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; white-space: nowrap;
+}
+.b-built { background: rgba(28,124,70,0.12); color: var(--green); }
+.b-partial { background: rgba(183,121,31,0.14); color: var(--amber); }
+.b-missing { background: rgba(164,16,47,0.10); color: var(--red); }
+.b-hold { background: rgba(30,26,27,0.08); color: var(--ink-2); }
+
+/* Decisions — same shape as the status page's decision blocks. */
+.decision {
+  background: #fff; border: 1px solid var(--line); border-left: 3px solid var(--crimson);
+  border-radius: 4px; padding: 18px 20px; margin-bottom: 16px;
+}
+.decision .top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.decision h3 { margin: 0; font-size: 17px; flex: 1 1 auto; }
+.decision .q { color: var(--ink-2); margin: 0 0 12px; font-size: 14px; }
+.opts { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.opts li { font-size: 13.5px; padding: 9px 12px; background: var(--paper-2); border-radius: 4px; }
+.opts b { color: var(--ink); }
+.feedback { margin-top: 12px; font-size: 12.5px; color: var(--ink-3); font-style: italic; }
+
+/* Checks + rollback: numbered lines, no state. */
+.lines { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.lines li { background: #fff; border: 1px solid var(--line); border-radius: 4px; padding: 12px 14px; font-size: 14px; display: flex; gap: 12px; align-items: baseline; }
+.lines .id {
+  font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--ink-2); background: var(--paper-2); padding: 3px 7px; border-radius: 3px; white-space: nowrap;
+}
+.lines.danger li { border-left: 3px solid var(--crimson); }
+
+footer.page { padding: 34px 0 60px; color: var(--ink-2); font-size: 13px; }
+footer.page code { background: #fff; border: 1px solid var(--line); }
+.callout { background: #fff; border: 1px solid var(--line); border-radius: 5px; padding: 14px 16px; font-size: 13px; color: var(--ink-2); margin-top: 14px; }
+
+/* ---- Shared state: ticks, answers, timeline ----
+   Added when the runbook stopped being a document and became a checklist the
+   team works through together. */
+
+/* A step's tick sits in the card header, opposite its id and title. It is a
+   real control rather than a badge, so it reads as something you DO — but it
+   still has to carry the old badge's job of saying, at a glance and from across
+   the page, whether this step has happened. */
+.tick { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tick-box { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+.tick-box input { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; margin: 0; }
+.tick-box input:disabled { cursor: default; }
+.tick-label {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 3px;
+  background: rgba(164,16,47,0.10); color: var(--red);
+}
+.step.is-done .tick-label { background: rgba(28,124,70,0.12); color: var(--green); }
+
+/* Attribution. The whole argument for committing ticks instead of keeping them
+   in a browser is that a tick carries a name; that name has to be visible or
+   the argument is theoretical. */
+.tick-who { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+
+/* Latency and failure, both stated rather than hidden. A tick is a commit and
+   then a rebuild, so "saved" and "everyone can see it" are a minute or two
+   apart, and a box that stays ticked after a failed commit is a lie. */
+.tick-note { font-size: 11.5px; color: var(--ink-3); }
+.tick-error { font-size: 11.5px; color: var(--red); }
+
+/* A done step recedes; a blocked one is marked at its edge. Neither is hidden —
+   the sequence has to stay readable end to end, because someone reading ahead
+   is exactly the audience this page was rebuilt for. */
+.step.is-done { background: #fbfbfa; border-color: rgba(28,124,70,0.28); }
+.step.is-blocked { border-left: 3px solid var(--amber); }
+.who.blocked { color: var(--amber); }
+.who.blocked .k { color: var(--amber); }
+
+/* The three facts that were missing: who is on the hook, how long it takes,
+   and whether it touches anything a visitor can see. */
+.facts {
+  display: flex; flex-wrap: wrap; gap: 18px; margin-top: 12px;
+  padding-top: 12px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-2);
+}
+.facts .k {
+  display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+
+/* What goes wrong. Deliberately on every step, including the six whose honest
+   answer is "nothing visible happens" — saying that plainly is what makes S5
+   and S7 stand out instead of blending into a wall of warnings. */
+.risk { margin-top: 12px; background: var(--paper-2); border-radius: 4px; padding: 10px 12px; }
+.risk .k {
+  display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: 3px;
+}
+.risk p { margin: 0; font-size: 13.5px; color: var(--ink-2); }
+
+/* The recommendation on a decision. Visually distinct from the options above it
+   because it is ours, not one of the choices. */
+.rec { margin-top: 12px; border-left: 3px solid var(--green); background: rgba(28,124,70,0.05); padding: 10px 12px; border-radius: 0 4px 4px 0; }
+.rec .k {
+  display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--green); margin-bottom: 3px;
+}
+.rec-what { margin: 0 0 4px; font-size: 14px; font-weight: 600; }
+.rec-why { margin: 0; font-size: 13px; color: var(--ink-2); }
+
+/* Where an answer is recorded. A decision has CONTENT, not just a flag — the
+   reason D1 is still open is that its answer was never written down anywhere
+   durable, so a control that recorded only "answered" would repeat the fault. */
+.answer { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.answer .k {
+  display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px;
+}
+.answer.is-set .k { color: var(--green); }
+.answer p { margin: 0 0 6px; font-size: 14px; }
+.answer textarea {
+  width: 100%; font-family: inherit; font-size: 14px; padding: 9px 10px;
+  border: 1px solid var(--line); border-radius: 4px; resize: vertical;
+}
+.answer-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.answer-actions button {
+  font-family: var(--sans); font-size: 12.5px; padding: 6px 12px; border-radius: 4px;
+  border: 1px solid var(--line); background: #fff; color: var(--ink); cursor: pointer;
+}
+.answer-actions button:hover:not(:disabled) { border-color: var(--crimson); color: var(--crimson); }
+.answer-actions button.primary { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+.answer-actions button.primary:hover:not(:disabled) { background: var(--crimson-deep); color: #fff; }
+.answer-actions button:disabled { opacity: 0.5; cursor: default; }
+.decision.is-answered { border-left-color: var(--green); }
+
+/* The standing banner. Three states, because the file now has three: nothing
+   started (the production default and the loudest case), partway, and done. */
+.summary { padding: 26px 0 0; border-bottom: 0; }
+.standing.part { border-left-color: var(--amber); }
+.standing.part b { color: var(--amber); }
+.standing.done b { color: var(--green); }
+
+/* The calendar view. The flat list of nine answers "what happens"; this answers
+   "when, and what does it cost us" — which is what a team approving the move is
+   actually being asked about. */
+.timeline { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.phase { background: #fff; border: 1px solid var(--line); border-radius: 4px; padding: 16px 18px; }
+.phase-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.phase-name { font-size: 16px; font-weight: 700; }
+.phase-count { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.phase-blurb { margin: 6px 0 12px; font-size: 13px; color: var(--ink-2); }
+.phase-steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+/* Two lines per step, not one. The first attempt put the title and the duration
+   on one row with the duration right-aligned, which reads fine in a mockup and
+   falls apart in a 260px column: "Minutes to set up, then wait for the
+   certificate" wrapped across two lines and ran into the title beside it, so the
+   two longest steps were the two hardest to read. Stacking costs a line each and
+   nothing wraps into anything else. */
+.phase-steps li { display: grid; grid-template-columns: auto 1fr; gap: 2px 9px; font-size: 13px; }
+.phase-steps li.done .phase-step-title { color: var(--ink-3); text-decoration: line-through; }
+.id.sm { font-size: 10px; padding: 2px 6px; align-self: start; }
+.phase-step-title { grid-column: 2; }
+.phase-step-dur { grid-column: 2; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+
+@media (max-width: 620px) {
+  header.page h1 { font-size: 26px; }
+  .step .top { gap: 8px; }
+  .hide-sm { display: none; }
+
+  /* The record table STACKS on a phone rather than scrolling sideways.
+     Scrolling was the first attempt and it was wrong: the values here are
+     long enough (www.harvardintech.com.s.strikinglydns.com) that the third
+     column sat entirely off-screen — and that column is where the
+     "Do not touch" badges on the Email and SPF rows live. The single most
+     important instruction on the page was invisible on the device someone
+     is most likely to be holding while standing in the registrar console,
+     with no affordance suggesting anything was there to scroll to.
+     Stacking hides nothing. */
+  .tablewrap { overflow-x: visible; border: 0; background: transparent; }
+  table { min-width: 0; }
+  thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  tbody tr {
+    display: block; background: #fff; border: 1px solid var(--line);
+    border-radius: 4px; margin-bottom: 10px; padding: 4px 0;
+  }
+  tbody td { display: block; border-bottom: 0; padding: 6px 14px; }
+  tbody td::before {
+    content: attr(data-label);
+    display: block;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-3); margin-bottom: 2px;
+  }
+  td.val { word-break: break-word; }
+}

@@ -217,6 +217,20 @@ export default defineConfig({
       // 'default'". Naming the chain here forces Vite to pre-bundle it to ESM.
       // Dev-only concern — `astro build` bundles these correctly on its own.
       include: ['micromark', 'micromark-extension-gfm', 'debug'],
+      // The cutover runbook's tick controls are the first NON-admin islands to
+      // import @codeyam/cms client libs, and they import them from a page the
+      // dev server had already optimized for. Vite discovered them mid-session,
+      // began re-bundling, and served 504s for
+      // `.vite/deps/@codeyam_cms_lib_authSession.js` while it did — the page
+      // rendered but never hydrated, so every checkbox sat dead.
+      //
+      // `exclude` rather than `include` because the package exports raw `.ts`
+      // (its exports map points at `src/**`), so it is SOURCE: pre-bundling it
+      // is what fails, and leaving it to the normal transform pipeline is what
+      // the admin routes already do successfully. Its transitive CJS deps are
+      // still named in `include` above — that is the part that does need
+      // pre-bundling, and the two lists are not in conflict.
+      exclude: ['@codeyam/cms'],
     },
   },
 });

@@ -1,0 +1,46 @@
+---
+// One open decision: the situation, the options, what we'd suggest, and where
+// the answer gets recorded.
+//
+// The badge does double duty. Unanswered, it names the steps this decision is
+// holding up — so the cost of leaving it open is visible on the decision itself
+// rather than only on the steps below. Answered, it simply says so.
+import { isDecisionAnswered, type CutoverProgress, type DecisionDef } from '../../lib/cutoverProgress';
+import type { RepoTarget } from '@codeyam/cms/lib/githubCommit';
+import DecisionDetail from './DecisionDetail.astro';
+import DecisionRecommendation from './DecisionRecommendation.astro';
+import DecisionTick from './DecisionTick.tsx';
+
+interface Props {
+  decision: DecisionDef;
+  progress: CutoverProgress;
+  target: RepoTarget;
+}
+const { decision, progress, target } = Astro.props;
+
+const state = progress.decisions.find((d) => d.id === decision.id);
+const answered = isDecisionAnswered(progress, decision.id);
+---
+
+<div class:list={['decision', answered && 'is-answered']}>
+  <div class="top">
+    <span class="id">{decision.id}</span>
+    <h3>{decision.question}</h3>
+    <span class:list={['badge', answered ? 'b-built' : 'b-missing']}>
+      {answered ? 'Answered' : `Blocks ${decision.blocks.join(', ')}`}
+    </span>
+  </div>
+
+  <DecisionDetail id={decision.id} />
+  <DecisionRecommendation decision={decision} />
+
+  <DecisionTick
+    client:load
+    id={decision.id}
+    initialAnswered={answered}
+    initialAnswer={state?.answer}
+    initialBy={state?.by}
+    initialAt={state?.at}
+    target={target}
+  />
+</div>

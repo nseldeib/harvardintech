@@ -1313,5 +1313,23 @@
         "required": false
       }
     ]
+  },
+  {
+    "name": "CutoverProgress",
+    "description": "Shared progress on the domain cutover, as the singleton `src/data/cutoverProgress.json`. One record per runbook step (S1–S9) and per open decision (D1–D5), each carrying whether it is done/answered plus the GitHub login that set it and when. Ships with everything open, which is the true state of the migration — nothing has been performed. Written from the runbook page itself via the CMS's GitHub commit path (an editor's own token, committed to the `staging` branch named in `src/data/cms.json`), so a tick is attributed to a real GitHub identity and every reader loads the same state rather than a browser-local copy. Read through `src/lib/cutoverProgress.ts`, which uses `readSingleton` so the codeyam sandbox redirect is honored and each scenario can seed a different state.",
+    "category": "datastore",
+    "order": 25,
+    "fields": [
+      {
+        "name": "steps",
+        "type": "array",
+        "required": true
+      },
+      {
+        "name": "decisions",
+        "type": "array",
+        "required": true
+      }
+    ]
   }
 ]

@@ -1,0 +1,94 @@
+{
+  "name": "Cutover Runbook - Partway Through",
+  "id": "5b4798b0-620a-47cb-a799-717bb6fed680",
+  "url": "/cutover-runbook",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "command": "bash .codeyam/seed-cutover-progress.sh",
+    "data": {
+      "cutoverDecisions": [
+        {
+          "answer": "Nadia has the GoDaddy login and will make the record edits herself with Jared on a call; we never hold the credentials. Kathy is being added as a second account holder.",
+          "answered": true,
+          "at": "2026-08-10T16:12:00Z",
+          "by": "nseldeib",
+          "id": "D1"
+        },
+        {
+          "answer": "Split it — the three example sponsors come down before cutover because they name organisations that aren't actually partners. Board bios and the donation platform can be filled in live.",
+          "answered": true,
+          "at": "2026-08-11T11:30:00Z",
+          "by": "nseldeib",
+          "id": "D2"
+        },
+        {
+          "answered": false,
+          "id": "D3"
+        },
+        {
+          "answered": false,
+          "id": "D4"
+        },
+        {
+          "answer": "Tuesday 25 August, 9am ET. Clear of the Boston chapter event on the 27th.",
+          "answered": true,
+          "at": "2026-08-12T20:15:00Z",
+          "by": "jaredcosulich",
+          "id": "D5"
+        }
+      ],
+      "cutoverSteps": [
+        {
+          "at": "2026-08-11T14:20:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S1"
+        },
+        {
+          "at": "2026-08-12T09:05:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S2"
+        },
+        {
+          "at": "2026-08-13T17:40:00Z",
+          "by": "jaredcosulich",
+          "done": true,
+          "id": "S3"
+        },
+        {
+          "at": "2026-08-13T18:02:00Z",
+          "by": "jaredcosulich",
+          "done": true,
+          "id": "S4"
+        },
+        {
+          "done": false,
+          "id": "S5"
+        },
+        {
+          "done": false,
+          "id": "S6"
+        },
+        {
+          "done": false,
+          "id": "S7"
+        },
+        {
+          "done": false,
+          "id": "S8"
+        },
+        {
+          "done": false,
+          "id": "S9"
+        }
+      ]
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/cutover-runbook/[...path].astro",
+  "description": "The state the page is built for: work genuinely in progress, ticked by different people on different days, with some decisions still open. This is where the shared-state argument either holds or falls over — the reversible steps are done and attributed, S6 sits amber because D3 and D4 are still unanswered, and the banner reports both at once. It is also the mixed case the wording has to survive: a count, a blocked step, and a set of ready ones in the same sentence."
+}

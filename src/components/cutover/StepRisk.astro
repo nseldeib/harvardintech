@@ -1,0 +1,20 @@
+---
+// What goes wrong if this step goes wrong.
+//
+// Present on every step, including the ones whose honest answer is "nothing
+// visible happens" — that uniformity is the design. A page that carries a
+// warning only where there is danger teaches the reader to skim for warnings; a
+// page that answers the same question everywhere lets the two genuinely risky
+// answers (S5, S7) do the work of standing out on their own content.
+import type { StepDef } from '../../lib/cutoverProgress';
+
+interface Props {
+  step: StepDef;
+}
+const { step } = Astro.props;
+---
+
+<div class="risk">
+  <span class="k">If it goes wrong</span>
+  <p>{step.risk}</p>
+</div>

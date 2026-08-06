@@ -33,3 +33,28 @@ export function includeCmsIntegration(isDev: boolean, isReviewTrack: boolean): b
 export function includeSitemapIntegration(isReviewTrack: boolean): boolean {
   return !isReviewTrack;
 }
+
+/**
+ * Whether the domain cutover runbook (`/cutover-runbook`) is built.
+ *
+ * Same answer as `/admin`, for a related reason. The runbook is an internal
+ * operational document: it names where the domain's records live, what has not
+ * been built yet, and which internal artifacts are still exposed. None of that
+ * becomes useful to a visitor by being public, and all of it is a map of the
+ * project's soft spots.
+ *
+ * This has to be decided at BUILD time rather than left to `PreviewGate`, and
+ * that is the whole point of the predicate. The gate un-gates on the public
+ * track by design — so a plain route would have been fully public the moment the
+ * domain cut over, which is strictly worse than the standalone `public/` file it
+ * replaces. Excluding the route from the public build means the page cannot leak
+ * by a configuration mistake, because on `harvardintech.com` it does not exist.
+ *
+ * This is the answer to the runbook's own decision D4 ("this page becomes public
+ * too — where should it live?"), settled in code rather than left open until the
+ * riskiest day. D4 remains open for the status page and the design gallery,
+ * which are still raw `public/` files this predicate cannot reach.
+ */
+export function includeCutoverRunbook(isDev: boolean, isReviewTrack: boolean): boolean {
+  return isDev || isReviewTrack;
+}

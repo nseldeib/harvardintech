@@ -3,7 +3,11 @@
 // publishes /admin — and with it every draft's raw markdown, since the sign-in
 // gate is client-side only — onto the public domain.
 import { describe, it, expect } from 'vitest';
-import { includeCmsIntegration, includeSitemapIntegration } from './publishTrack';
+import {
+  includeCmsIntegration,
+  includeCutoverRunbook,
+  includeSitemapIntegration,
+} from './publishTrack';
 
 describe('includeCmsIntegration', () => {
   // The public production build must NOT ship /admin. This is the case that
@@ -41,5 +45,32 @@ describe('includeSitemapIntegration', () => {
   // same track — disagreement means the review site advertises a URL that 404s.
   it('omits the sitemap on the review track', () => {
     expect(includeSitemapIntegration(true)).toBe(false);
+  });
+});
+
+describe('includeCutoverRunbook', () => {
+  // The load-bearing case. PreviewGate un-gates on the public track, so if this
+  // ever returns true here the runbook is not merely visible — it is visible
+  // WITHOUT a passphrase, on the domain, naming the project's soft spots. This
+  // is the assertion that keeps the page's answer to its own decision D4 true.
+  it('excludes the runbook from the public build', () => {
+    expect(includeCutoverRunbook(false, false)).toBe(false);
+  });
+
+  // The gated review origin is where the team reads it — the same place /admin
+  // lives, and for the same reason.
+  it('includes the runbook on the review track', () => {
+    expect(includeCutoverRunbook(false, true)).toBe(true);
+  });
+
+  // Dev keeps it, or the codeyam scenarios that capture the checklist have no
+  // route to capture.
+  it('includes the runbook under astro dev', () => {
+    expect(includeCutoverRunbook(true, false)).toBe(true);
+  });
+
+  // Not a real deploy shape; must not resolve to excluded by accident.
+  it('includes the runbook when both dev and review track are set', () => {
+    expect(includeCutoverRunbook(true, true)).toBe(true);
   });
 });

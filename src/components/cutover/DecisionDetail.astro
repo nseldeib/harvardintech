@@ -1,0 +1,109 @@
+---
+// The context and options for one decision, ported verbatim from the standalone
+// page this route replaces.
+//
+// Same split as OperatorDetail: `cutoverProgress.ts` holds what the page
+// reasons about a decision — which steps it blocks, what we recommend and why —
+// while the situation and the trade-offs stay as authored prose here, because
+// nothing computes over them and a data structure would only make them harder
+// to revise.
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+{
+  id === 'D1' ? (
+    <Fragment>
+      <p class="q">
+The domain is registered at GoDaddy and its DNS is managed there too — which is
+              good news, because it means no slow registrar transfer is needed. But we've never
+              had access, and this has been an open question since the 2026-07-02 investigation.
+              Nothing can start without it.
+      </p>
+      <ul class="opts">
+<li><b>Someone on the team has it</b> — point us at them and we'll walk them through it screen by screen; they make the edits, we never hold the credentials.</li>
+              <li><b>Give us access directly</b> — GoDaddy supports delegate access, which can be revoked afterwards and doesn't mean handing over the account password.</li>
+              <li><b>Nobody knows</b> — then finding out is genuinely the first task, and it may take longer than the rest of this page combined. GoDaddy's account recovery runs on the registrant email on file.</li>
+      </ul>
+    </Fragment>
+  ) : null
+}
+{
+  id === 'D2' ? (
+    <Fragment>
+      <p class="q">
+Right now the site is behind a passphrase, so placeholders are fine — they read
+              as work in progress. At cutover they stop being drafts and become what the
+              organisation says about itself. The status page's "content to fill or remove"
+              list is the checklist; the open items are three example sponsors rendering as
+              real partners, five board members with no bios, a volunteer project still in
+              draft, and a Give button that opens an email because there's no donation platform yet.
+      </p>
+      <ul class="opts">
+<li><b>Close the list first</b> — fill or remove each item, then cut over. Slower, but nothing embarrassing goes live.</li>
+              <li><b>Cut over and fix live</b> — the site is editable through the CMS and redeploys in a minute or two, so gaps can be closed after. Faster, but the gaps are public while they're open.</li>
+              <li><b>Split it</b> — treat the sponsors specifically as blocking (they name organisations that aren't actually partners) and let the rest be fixed live.</li>
+      </ul>
+    </Fragment>
+  ) : null
+}
+{
+  id === 'D3' ? (
+    <Fragment>
+      <p class="q">
+There are thirteen homepage design mockups (about 20MB) published at an
+              unguessable URL for the board to look at. They're hidden from search engines but
+              have no passphrase — the unguessable address <em>is</em> the access mechanism,
+              and it's a link that's actively been shared. The moment the site becomes public,
+              that folder ships to <code>harvardintech.com</code> along with everything else.
+              Anyone who has the link — or is forwarded it — keeps working access to
+              abandoned design directions on the organisation's real domain.
+      </p>
+      <ul class="opts">
+<li><b>Leave it</b> — it's already effectively public and nobody is going to guess the URL. Costs nothing, changes nothing, and the board's link keeps working.</li>
+              <li><b>Move it to the review site</b> — it stays reachable for the board behind the same passphrase they already use, and never lands on the public domain. Their current link breaks and has to be re-sent.</li>
+              <li><b>Remove it</b> — the mockups have served their purpose and the chosen direction is built. Their link breaks permanently.</li>
+      </ul>
+    </Fragment>
+  ) : null
+}
+{
+  id === 'D4' ? (
+    <Fragment>
+      <p class="q">
+<b>Half of this is now settled.</b> This runbook is no longer an ordinary file
+              inside the site — it is a route excluded from the public build, so it cannot
+              appear on <code>harvardintech.com</code> at all. What is left of D4 is the status
+              page, which is still a raw file that would
+              ship to the public domain at cutover. Their passphrase is a deterrent
+              that runs in the browser — the text is technically in the downloaded page — so on
+              a public domain it protects against casual readers and not much else. What's
+              behind it is internal candour: what isn't built, what we still need from you,
+              and where the domain's records live.
+      </p>
+      <ul class="opts">
+<li><b>Move the status page too</b> — the gated track exists precisely for this, and it is what the runbook already does. Your link changes once, and it can never leak onto the public domain by accident.</li>
+              <li><b>Leave it</b> — the passphrase plus an unlisted URL is what's protecting it today, and that stays true after cutover. Simplest, and no links change.</li>
+              <li><b>Remove it at cutover</b> — it's a launch-phase artifact. Cleanest, but you lose the shared status view exactly when the project moves into its next phase.</li>
+      </ul>
+    </Fragment>
+  ) : null
+}
+{
+  id === 'D5' ? (
+    <Fragment>
+      <p class="q">
+The switch itself is minutes and can be scheduled tightly, but the day matters
+              for a reason that isn't technical: if something is wrong, we want people
+              available to notice and decide, not to find out on Saturday night.
+      </p>
+      <ul class="opts">
+<li><b>A weekday morning</b> — the whole team is around, everyone can check email straight after, and there's a full working day to react. This is what we'd pick.</li>
+              <li><b>Right before an event or campaign</b> — worst case; traffic peaks exactly while the change is settling.</li>
+              <li><b>After a specific milestone</b> — e.g. once the board has signed off, or the content list is closed. Tell us the milestone and we'll work back from it.</li>
+      </ul>
+    </Fragment>
+  ) : null
+}

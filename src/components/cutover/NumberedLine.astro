@@ -1,0 +1,24 @@
+---
+// One numbered line — a V-check or an R-rollback value.
+//
+// The numbering is the page's whole reaction protocol: every step, decision,
+// check and rollback value carries a stable identifier so a one-line comment
+// ("V5 is the one I'd want proof of") lands exactly where it was meant. That
+// convention is worth a component rather than a repeated pair of spans, because
+// the id chip and the text are a unit and an id typed into the wrong span is a
+// reference that silently points at nothing.
+//
+// `<slot />` rather than a text prop: these lines carry inline <code> and <b>,
+// and threading marked-up prose through an attribute would either lose the
+// markup or require `set:html` at every call site.
+interface Props {
+  /** The stable identifier, e.g. `V5` or `R2`. */
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<li>
+  <span class="id">{id}</span>
+  <span><slot /></span>
+</li>

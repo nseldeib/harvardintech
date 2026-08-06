@@ -1,0 +1,27 @@
+---
+// The banner at the top of the runbook: one headline and one paragraph.
+//
+// Presentational on purpose — it takes a tone and some words and knows nothing
+// about progress. `RunbookSummary` decides WHICH of the three things to say;
+// this decides how it looks. Keeping those apart is what lets the wording of the
+// most important state on the page be reviewed as prose rather than picked out
+// of a nested ternary.
+interface Props {
+  /** `open` = nothing started, `part` = in progress, `done` = finished. */
+  tone: 'open' | 'part' | 'done';
+  /** The headline, which is the whole message for a reader who stops there. */
+  title: string;
+}
+const { tone, title } = Astro.props;
+
+const TONE: Record<Props['tone'], string> = {
+  open: '',
+  part: 'part',
+  done: 'done',
+};
+---
+
+<div class:list={['standing', TONE[tone]]}>
+  <b>{title}</b>
+  <p><slot /></p>
+</div>

@@ -68,6 +68,17 @@
     ]
   },
   {
+    "description": "Records the answer to one open runbook decision. Deliberately not just a checkbox: a step is done or it isn't, but a decision has a CONTENT, and a control that recorded only 'answered' would strand the answer in whichever meeting produced it — which is exactly why D1 has been open since 2026-07-02. The text and the flag save together, so a decision can never read as answered with nothing recorded against it, and reopening drops both. Read-only for anyone without repo write: the answer still shows, because the point of committing it is that everyone can read it.",
+    "filePath": "src/components/cutover/DecisionTick.tsx",
+    "name": "DecisionTick",
+    "scenarios": [
+      "decision-tick-open",
+      "decision-tick-writing-the-answer",
+      "decision-tick-decided",
+      "decision-tick-decided-read-only"
+    ]
+  },
+  {
     "description": "External-form embed for the static site: renders one of three states — a MailChimp-style POST form (action prop), an embedded provider iframe (embedUrl prop), or an unconfigured fallback message. Delegates submission to a third-party service since a static build has no backend.",
     "filePath": "src/components/EmbedForm.astro",
     "name": "EmbedForm",
@@ -181,6 +192,16 @@
     ]
   },
   {
+    "description": "The tick control on one runbook step. Three states, and the distinction between them is the point: signed out, the box renders disabled showing whatever the branch says, because everyone can read the checklist and only repo-write holders can change it; signed in it is a real checkbox that commits; saving, the tick shows immediately while the commit is in flight with the latency stated rather than hidden, since a tick is a commit and then a rebuild. A failed commit reverts the box and says why — a tick that looks saved but was not is worse than an error, because the whole value of the page is that what it shows is what everyone else sees.",
+    "filePath": "src/components/cutover/StepTick.tsx",
+    "name": "StepTick",
+    "scenarios": [
+      "step-tick-read-only",
+      "step-tick-done-with-attribution",
+      "step-tick-commit-refused"
+    ]
+  },
+  {
     "description": "The crimson strip above the header: a one-line where-we-are reading as a global-community lede followed by the chapter cities. The city list is derived from the chapters collection by the layout rather than hand-maintained, so it cannot fall behind the chapters the site actually has — the failure it used to have when it read the labels back out of a nav group. With no chapters it degrades to the lede alone instead of leaving a dangling separator.",
     "filePath": "src/components/nav/UtilityBar.astro",
     "name": "UtilityBar",
@@ -196,6 +217,30 @@
     "testFile": "src/lib/media.test.ts"
   },
   {
+    "description": "Applies one decision answer to a progress object, returning a new one. Keeps the answer text alongside the flag so the page can show what was decided rather than only that something was — the whole reason D1 stayed open is that its answer was never written anywhere durable. Reopening drops the text with the flag, so a decision back in the open column cannot still display a conclusion it no longer holds.",
+    "filePath": "src/lib/cutoverTicks.ts",
+    "name": "applyDecisionAnswer",
+    "testFile": "src/lib/cutoverTicks.test.ts"
+  },
+  {
+    "description": "Applies one step toggle to a progress object, returning a new one. This is the function that decides what 'two people ticked at once' resolves to: ticks on different steps both survive, ticks on the same step converge, and an unknown id is appended rather than dropped so a step added after the file was committed is still tickable. Pure, because the caller holds an optimistic copy to revert to when the commit fails.",
+    "filePath": "src/lib/cutoverTicks.ts",
+    "name": "applyStepTick",
+    "testFile": "src/lib/cutoverTicks.test.ts"
+  },
+  {
+    "description": "Renders the decision ids in a step's 'Waiting on …' line as English. Replaces an inline join(' and ') that read correctly for the one and two cases the runbook has today and produced 'D1 and D2 and D3' for three — invisible because no step needs three decisions, which is exactly why it earned a function with a test. The page names what it is waiting on so the reader knows what to resolve; garbling the list undercuts the only reason it is printed.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "blockedLabel",
+    "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
+    "description": "The decisions holding a runbook step up — the ones it needs that are still unanswered. Returns the ids as a list rather than a boolean because the page names them: 'waiting on D3 and D4' tells the reader what to go and resolve, where 'blocked' only tells them to give up.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "blockingDecisions",
+    "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
     "description": "Builds a mailto: URL with optional pre-filled subject/body, normalizing space encoding to %20. Used by the Support Us, Contact Us, and footer links.",
     "filePath": "src/lib/mailto.ts",
     "name": "buildMailto",
@@ -206,6 +251,21 @@
     "filePath": "src/lib/order.ts",
     "name": "byOrder",
     "testFile": "src/lib/order.test.ts"
+  },
+  {
+    "description": "The runbook steps in one timeline bucket — beforehand, on the day, or afterwards — with order preserved. The three buckets between them must hold every step, since a step missing from the calendar is work nobody has scheduled.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "byPhase",
+    "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
+    "description": "Whether this browser holds a GitHub token that could commit a runbook tick at all. Everyone can read the checklist; only repo-write holders can change it.",
+    "filePath": "src/lib/cutoverTicks.ts",
+    "name": "canTick",
+    "untestabilityReason": {
+      "justification": "A single read of the CMS package's localStorage-backed token store; there is no branching of our own to exercise.",
+      "kind": "platform-glue"
+    }
   },
   {
     "description": "Maps published chapters to header menu items — label from the chapter's own city, url built from its slug as /chapters/<slug> — ordered exactly the way the Our Chapters section orders its cards: by the order field, with city breaking ties and sorting entries that carry no order. Sharing that convention is what keeps the menu and the homepage section from ever listing the same chapters in different sequences. Callers pass chapters already draft-filtered through publishedEntries, so draft visibility stays one rule applied at every call site. Paths are returned base-agnostic; the layout wraps them in withBase at render. Returns an empty list for no chapters, and does not mutate the input.",
@@ -240,6 +300,15 @@
     "name": "collectionGlob",
     "untestabilityReason": {
       "justification": "A loader wrapper around astro/loaders glob, exercised only inside a running Astro content-layer sync. Its effect is asserted end-to-end by the scenario-isolation behaviour of momentum-fund-a-wall-of-donors and momentum-fund-arriving-from-the-email, which render different seeds on the same route without leaking into one another.",
+      "kind": "platform-glue"
+    }
+  },
+  {
+    "description": "Re-reads the runbook's state file from the branch, applies a mutation to it, and commits the result under the editor's own GitHub identity. Read-modify-write deliberately, instead of commitAll's staged-change drift check: that check refuses the whole commit when a path moved underneath the editor, which is right for a batch of content edits reviewed as a unit and wrong for a single boolean. Refuses outright when there is no token, or when the state file is missing on the branch — inventing one would quietly commit a checklist with every step reset.",
+    "filePath": "src/lib/cutoverTicks.ts",
+    "name": "commitTick",
+    "untestabilityReason": {
+      "justification": "A GitHub REST round-trip against the live branch. The merge rule it applies is the pure applyStepTick/applyDecisionAnswer pair, both covered in cutoverTicks.test.ts; the transport is the CMS package's own commitAll.",
       "kind": "platform-glue"
     }
   },
@@ -395,6 +464,20 @@
     ]
   },
   {
+    "description": "Enumerates a route per publishable page entry for the static build, dropping any whose slug an existing route already answers for and warning about them. The routing decision itself lives in pageRouteEntries so it can be tested — getStaticPaths only runs inside a real Astro build.",
+    "filePath": "src/pages/cutover-runbook/[...path].astro",
+    "name": "getStaticPaths",
+    "scenarios": [
+      "cutover-runbook-nothing-started",
+      "cutover-runbook-decisions-answered-nothing-begun",
+      "cutover-runbook-partway-through",
+      "cutover-runbook-cutover-day",
+      "cutover-runbook-complete",
+      "cutover-runbook-the-records-on-a-phone"
+    ],
+    "testFile": "src/lib/sitePages.test.ts"
+  },
+  {
     "description": "Enumerates the projects collection into pre-rendered /volunteer/projects/<slug> routes, mapping each project entry to its slug param and props. Draft-filtered by publishedEntries, so a project held back from the grid is readable on the review track and absent from the public build rather than staying fetchable at its own URL after being hidden. Exercised by the volunteer project detail scenarios, whose captured renders prove the params resolve.",
     "filePath": "src/pages/volunteer/projects/[slug].astro",
     "name": "getStaticPaths",
@@ -446,6 +529,12 @@
     "testFile": "src/lib/publishTrack.test.ts"
   },
   {
+    "description": "Whether the domain cutover runbook route is built at all. Dev and the gated review track only — the same answer /admin gets. Decided at build time rather than left to PreviewGate because the gate un-gates on the public track by design, so without this the cutover would have published the page naming where the domain's records live on the public domain, ungated. This is the runbook's own decision D4 settled in code.",
+    "filePath": "src/lib/publishTrack.ts",
+    "name": "includeCutoverRunbook",
+    "testFile": "src/lib/publishTrack.test.ts"
+  },
+  {
     "description": "Decides whether a build publishes a sitemap: the public track only. The review origin is noindex and serves Disallow for everything, so it has nothing to offer a sitemap and emitting one would contradict the gate. Must stay in agreement with robotsTxtBody, which omits its Sitemap line on the same track — if the two disagree the review site advertises a sitemap URL that 404s. Extracted from astro.config.mjs alongside includeCmsIntegration so the decision is unit-testable.",
     "filePath": "src/lib/publishTrack.ts",
     "name": "includeSitemapIntegration",
@@ -491,6 +580,12 @@
     "testFile": "src/lib/nav.test.ts"
   },
   {
+    "description": "Whether a runbook decision is recorded answered in the progress singleton. Same tolerance for an absent entry as isStepDone, and the same reason: the state file is hand-editable.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "isDecisionAnswered",
+    "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
     "description": "Whether one slug is safe to publish at the site root — the single-slug form of shadowedPageSlugs, for a caller checking as it goes.",
     "filePath": "src/lib/sitePages.ts",
     "name": "isReservedPageSlug",
@@ -503,12 +598,33 @@
     "testFile": "src/lib/donorNetwork.test.ts"
   },
   {
+    "description": "Whether a runbook step is recorded done in the progress singleton. A step absent from the file reads as not done rather than throwing — the file is committed and hand-editable, so an entry predating a step is reachable rather than theoretical.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "isStepDone",
+    "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
+    "description": "Whether a cutover step can be started right now: every decision it needs is answered and it is not already done. Excluding done steps is what keeps the banner's 'could be started today' count from counting finished work.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "isStepReady",
+    "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
     "description": "Reads the accomplishments collection into the card shape MomentumAccomplishments already took from copy.accomplishments. Migrated out of donatePage.json, a singleton the CMS does not model at all, which is what made these cards developer-only. Maps the schema's description key onto the component's body prop because body is a reserved field id in the CMS registry and a custom field claiming it is dropped from the editor without comment.",
     "filePath": "src/lib/donatePageContent.ts",
     "name": "loadAccomplishments",
     "scenarios": [
       "momentum-fund-public-visitor"
     ]
+  },
+  {
+    "description": "Loads the committed or seeded tick state for the cutover runbook from the cutoverProgress.json singleton. Read through readSingleton so it honours the codeyam sandbox redirect, which is what lets each scenario seed a different state without touching production.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "loadCutoverProgress",
+    "untestabilityReason": {
+      "justification": "A filesystem read of a singleton path; the parsing and sandbox-resolution it delegates to are covered by contentRoot.test.ts, and the shapes it returns are exercised throughout cutoverProgress.test.ts.",
+      "kind": "platform-glue"
+    }
   },
   {
     "description": "Reads the pageCopy entry for /donate and returns the campaign page's frame fields merged over donatePage.json, for the route to spread onto the copy object alongside the accomplishments, pillars and donation URL the sibling loaders supply.",
@@ -793,9 +909,10 @@
     "testFile": "src/lib/media.test.ts"
   },
   {
-    "description": "Reads and JSON-parses a singleton data file (settings.json / nav.json) from the resolved dataRoot(), so the site settings/nav honor the codeyam sandbox redirect.",
-    "filePath": "src/lib/site.ts",
+    "description": "Reads and JSON-parses one singleton data file from the resolved dataRoot(), so every singleton read honours the codeyam sandbox redirect. Moved here from site.ts and de-duplicated when cutoverProgress.ts grew a second identical private copy - two implementations of respecting the sandbox is how one of them ends up not respecting it. Server-only: it touches the filesystem at call time.",
+    "filePath": "src/lib/contentRoot.ts",
     "name": "readSingleton",
+    "testFile": "src/lib/contentRoot.test.ts",
     "untestabilityReason": {
       "justification": "filesystem boundary — readFileSync + JSON.parse of a data-dir file",
       "kind": "platform-glue"
@@ -850,6 +967,12 @@
     "testFile": "src/lib/robots.test.ts"
   },
   {
+    "description": "The counts the runbook's standing banner prints: steps done, decisions answered, how many are ready versus blocked, plus the complete and untouched flags that select which of the three banners renders. Totals come from the authored runbook rather than the state file, so a state file missing entries cannot shrink the denominator shown to the team.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "rollup",
+    "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
     "description": "Everything wrong with, or undecidable about, one upload row, each carrying a severity. Blocking means the row cannot become a supporter without a human — no name at all, an anonymity request sitting in the name column, or a re-import that would unmask someone already anonymous. Review means it can land but a decision was deferred, which is where an ordinary duplicate and a missing school or class year sit. Nothing is auto-corrected: that is the contract, because each wrong guess costs a misstated giving level, an unearned badge, or a published name, and only the last is beyond repair by a later edit.",
     "filePath": "src/lib/donorImport.js",
     "name": "rowIssues",
@@ -878,6 +1001,12 @@
     "filePath": "src/lib/sitePages.ts",
     "name": "shadowedSlugWarning",
     "testFile": "src/lib/sitePages.test.ts"
+  },
+  {
+    "description": "Formats an ISO timestamp as a short '8 Aug' for the attribution line beside a GitHub login on the cutover runbook. Day and month only — every tick happens inside one migration window, so a year costs width and tells the reader nothing. An unparseable value yields an empty string rather than 'Invalid Date', because the timestamps live in a committed, hand-editable JSON file and a mangled one should cost a missing date, not a broken-looking page.",
+    "filePath": "src/lib/cutoverFormat.ts",
+    "name": "shortDate",
+    "testFile": "src/lib/cutoverFormat.test.ts"
   },
   {
     "description": "The short label for a Harvard school — HBS, SEAS, College — used wherever the full name will not fit. An unrecognized school passes through unchanged rather than becoming blank, so a typo in the bi-weekly upload costs a long label rather than silently losing the supporter's affiliation.",
@@ -940,6 +1069,12 @@
     "testFile": "src/lib/donorImport.test.ts"
   },
   {
+    "description": "The sentence under the progress count in the runbook's partway banner. Pure so the pluralisation is testable — it was a nested ternary in markup, where '1 steps are waiting' is the kind of thing that ships because nobody seeds exactly one blocked step while looking at the page. The two branches say different things deliberately: with something blocked the useful fact is what is stuck; with nothing blocked it is that the decisions are all in.",
+    "filePath": "src/lib/cutoverProgress.ts",
+    "name": "summaryLine",
+    "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
     "description": "The mark drawn in a supporter's avatar on the network explorations: their initials, or a neutral dash when they asked not to be named. Named for what it produces rather than reusing 'initials' from team.ts, which takes a name string and knows nothing about anonymity — this one takes the whole supporter because the anonymous case must return a mark identifying nobody. Initials would leak the withheld name, since two letters beside 'Anonymous supporter' identifies them to anyone who knows them. Capped at two letters so a long name cannot spell itself out.",
     "filePath": "src/lib/donorNetwork.js",
     "name": "supporterMonogram",
@@ -950,6 +1085,12 @@
     "filePath": "src/lib/donorNetwork.js",
     "name": "thin",
     "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
+    "description": "The commit subject a runbook tick lands under, so the repo history reads as migration progress rather than a series of 'Update cutoverProgress.json'. Distinguishes completing from reopening, since those are different events.",
+    "filePath": "src/lib/cutoverTicks.ts",
+    "name": "tickCommitMessage",
+    "testFile": "src/lib/cutoverTicks.test.ts"
   },
   {
     "description": "One boolean per section saying whether it renders on the tinted band. Narrative sections alternate tinted and untinted so consecutive prose stays separated; the counter advances only on narratives, so a bespoke band between two of them does not flip the rhythm. Pure, replacing a counter that was mutated inside the page's render map.",
@@ -998,6 +1139,15 @@
     "filePath": "src/lib/nav.ts",
     "name": "unresolvedNavUrls",
     "testFile": "src/lib/nav.test.ts"
+  },
+  {
+    "description": "Tracks the CMS sign-in session for the runbook's tick controls, hydration-safely. Every render starts signed-out and adopts the real session in an effect after mount: the store answers signed-out on the server and, inside the codeyam preview, signed-in in the browser, so seeding state from it directly rendered two different trees and React discarded the subtree. Accepts an initialSession to pin a fixed session, the seam a scenario uses to capture the signed-out and signed-in states without a token.",
+    "filePath": "src/components/cutover/useAuthSession.ts",
+    "name": "useAuthSession",
+    "untestabilityReason": {
+      "justification": "A React hook over the CMS package's localStorage-backed session store and its window event subscription. Its observable behaviour — which branch of each tick control renders — is covered by the runbook's signed-out and signed-in component scenarios.",
+      "kind": "platform-glue"
+    }
   },
   {
     "description": "Prefixes an internal absolute path with import.meta.env.BASE_URL so links resolve under either the domain root (custom domain, base /) or a project subpath (user.github.io/<repo>). External URLs, mailto, and bare hash anchors pass through untouched. Used by the header nav/logo, chapter back link, 404, and blog links for GitHub Pages deployment.",

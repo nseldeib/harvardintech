@@ -1,0 +1,25 @@
+---
+// V1–V6: what has to be true before the cutover is called done.
+//
+// The list exists because "the site loads" and "the cutover worked" are not the
+// same claim — email, the search-engine instructions, and the review track can
+// all break silently while the homepage looks perfect. V5 is the one that
+// matters most and is deliberately a REQUIRED step rather than a follow-up,
+// because a mail failure announces itself only when someone gives up waiting
+// for a reply.
+import NumberedLine from './NumberedLine.astro';
+---
+<section id="checks">
+  <div class="wrap">
+    <h2>Checks before we call it done</h2>
+    <div class="lede">Six things to confirm. V5 is the one that matters most.</div>
+    <ul class="lines">
+      <NumberedLine id="V1">Both <code>harvardintech.com</code> and <code>www.harvardintech.com</code> serve the new site over HTTPS, with no certificate warning in a fresh browser.</NumberedLine>
+      <NumberedLine id="V2"><code>robots.txt</code> reads <code>Allow: /</code> and points at a <code>Sitemap:</code> URL on the real domain — not the old placeholder, and not the gated track's <code>Disallow</code>.</NumberedLine>
+      <NumberedLine id="V3"><code>sitemap-index.xml</code> lists real <code>harvardintech.com</code> URLs, and <code>llms.txt</code> emits the real origin.</NumberedLine>
+      <NumberedLine id="V4">A sample of old Strikingly URLs from the S3 crawl land somewhere sensible rather than on a bare 404.</NumberedLine>
+      <NumberedLine id="V5"><b>Send a real email to and from an <code>@harvardintech.com</code> address.</b> Both directions, before declaring the cutover done — not after someone reports it. This is the check that catches the one mistake that actually costs something.</NumberedLine>
+      <NumberedLine id="V6"><code>review.harvardintech.com</code> still resolves and is still gated. The public launch must not disturb the review track — and it's easy not to notice that it did, because nobody visits it on cutover day. Also confirm the Search Console verification tag survived; it lives in the CMS "Custom <code>&lt;head&gt;</code> HTML" field, not in the code.</NumberedLine>
+    </ul>
+  </div>
+</section>

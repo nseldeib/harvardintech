@@ -1,0 +1,39 @@
+---
+// The plain-language opening: what the move actually is, and the one rule.
+//
+// Layer 1 of the two the page carries. It exists so the team can understand
+// what they are approving without reading an operator's checklist, and it says
+// the reassuring thing first — the site is built; this is only about the
+// address — because the fear this page has to answer is that cutover means
+// rebuilding something.
+import EmailRule from './EmailRule.astro';
+---
+<section id="what">
+  <div class="wrap">
+    <h2>What this actually is</h2>
+    <div class="lede">The site is already built. This is only about pointing the address at it.</div>
+    <p class="sub">
+      <code>harvardintech.com</code> is served today by Strikingly, the no-code tool
+      the current site was built in. The replacement site is finished and running —
+      it's the one you've been reviewing. Nothing about it changes at cutover. What
+      changes is a handful of settings at the domain registrar, so that typing
+      <code>harvardintech.com</code> lands on the new site instead of the old one.
+    </p>
+    <p class="sub">
+      The technical work is genuinely small. The care is all in sequencing: doing
+      the reversible parts first, proving each one before the next, and keeping the
+      old site alive underneath the whole time so there is always a way back.
+    </p>
+
+    {/*
+      The "nothing has happened yet" banner used to be hardcoded here. It is
+      now <RunbookSummary /> at the top of the page, because the state it
+      asserts is real: with ticks committed, a fixed line claiming nothing
+      has happened sits directly under a count saying four steps are done.
+      One statement of where we are, derived from the file — not two, one of
+      which is a guess that goes stale the first time anyone ticks anything.
+    */}
+
+    <EmailRule />
+  </div>
+</section>

@@ -1,0 +1,48 @@
+---
+import Component from "../../components/cutover/StepTick.tsx";
+import type { AuthSession } from "@codeyam/cms/lib/authSession";
+import "../../styles/tokens.css";
+import "../../styles/cutover-runbook.css";
+
+// Isolation page for StepTick — a step nobody has started, seen by someone WITHOUT repo write.
+// This is the state the control spends most of its life in and the one most of
+// the team sees: the box renders and shows the branch's answer, disabled, with
+// the reason stated. Everyone can read the checklist; only repo-write holders
+// can change it.
+//
+// `initialSession` is the scenario seam `useAuthSession` exposes: it pins a
+// fixed session instead of consulting the live store, so this page captures the
+// same state on every run without a GitHub token and without depending on
+// whatever session the preview happens to hold.
+//
+// A separate page per state rather than one `?s=`-switched page: this is a
+// prerendered static build, so query params are empty at build time and a single
+// page would capture its default frame for every state.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const SIGNED_OUT: AuthSession = { status: 'signed-out', user: null };
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: StepTick</title>
+  </head>
+  <body style="margin: 0; background: var(--paper-2, #f6f3f1);">
+    <div id="codeyam-capture" style="padding: 24px; max-width: 720px;">
+      <div class="step">
+        <div class="top">
+          <span class="id">S6</span>
+          <h3>Clear out what shouldn’t be public</h3>
+          <Component
+            client:load
+            id="S6"
+            initialDone={false}
+            target={TARGET}
+            initialSession={SIGNED_OUT}
+          />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

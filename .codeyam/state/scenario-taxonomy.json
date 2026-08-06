@@ -210,6 +210,33 @@
         "status": "added"
       }
     },
+    "CutoverRunbook": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "added"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "covered"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "The route is prerendered and fetches nothing at runtime — every value is server-rendered from the committed progress file, so there is no pending state. The tick's in-flight Saving caption is a sub-second transient of the component, not a state of this view, and is not deterministically capturable."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
     "EventsRoute": {
       "empty": {
         "status": "n-a",

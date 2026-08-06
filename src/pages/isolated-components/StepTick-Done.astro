@@ -1,0 +1,49 @@
+---
+import Component from "../../components/cutover/StepTick.tsx";
+import type { AuthSession } from "@codeyam/cms/lib/authSession";
+import "../../styles/tokens.css";
+import "../../styles/cutover-runbook.css";
+
+// Isolation page for StepTick — a step recorded done, seen by a signed-in editor.
+// The attribution is the whole argument for committing ticks instead of keeping
+// them in a browser, so this is the state that has to be legible: who ticked it
+// and when, beside a box that can be un-ticked.
+//
+// `initialSession` is the scenario seam `useAuthSession` exposes: it pins a
+// fixed session instead of consulting the live store, so this page captures the
+// same state on every run without a GitHub token and without depending on
+// whatever session the preview happens to hold.
+//
+// A separate page per state rather than one `?s=`-switched page: this is a
+// prerendered static build, so query params are empty at build time and a single
+// page would capture its default frame for every state.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const SIGNED_IN: AuthSession = { status: 'signed-in', user: { login: 'nseldeib', name: 'Nadia Eldeib', avatarUrl: '' } };
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: StepTick</title>
+  </head>
+  <body style="margin: 0; background: var(--paper-2, #f6f3f1);">
+    <div id="codeyam-capture" style="padding: 24px; max-width: 720px;">
+      <div class="step is-done">
+        <div class="top">
+          <span class="id">S2</span>
+          <h3>Prove it on a real subdomain</h3>
+          <Component
+            client:load
+            id="S2"
+            initialDone={true}
+            initialBy="nseldeib"
+            initialAt="2026-08-12T09:05:00Z"
+            target={TARGET}
+            initialSession={SIGNED_IN}
+          />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

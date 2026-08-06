@@ -14,14 +14,7 @@
 // to a sandbox copy and seeding never overwrites the committed production JSON.
 // Server-only module — imported from `.astro` frontmatter, never a client
 // island, so `fs`/`process.env` are always available here.
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { dataRoot } from './contentRoot';
-
-function readSingleton<T>(name: string): T {
-  const file = path.resolve(dataRoot(), name);
-  return JSON.parse(fs.readFileSync(file, 'utf-8')) as T;
-}
+import { readSingleton } from './contentRoot';
 
 export interface SocialLink {
   label: string;

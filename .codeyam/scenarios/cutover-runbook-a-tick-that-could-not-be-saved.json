@@ -1,0 +1,96 @@
+{
+  "name": "Cutover Runbook - A Tick That Could Not Be Saved",
+  "id": "4ab9ea0b-cd64-4454-9e34-cca30162c911",
+  "url": "/cutover-runbook",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "command": "bash .codeyam/seed-cutover-progress.sh",
+    "data": {
+      "cutoverDecisions": [
+        {
+          "answer": "Nadia has the GoDaddy login and will make the record edits herself with Jared on a call.",
+          "answered": true,
+          "at": "2026-08-10T16:12:00Z",
+          "by": "nseldeib",
+          "id": "D1"
+        },
+        {
+          "answer": "Split it — the example sponsors come down before cutover; the rest can be fixed live.",
+          "answered": true,
+          "at": "2026-08-11T11:30:00Z",
+          "by": "nseldeib",
+          "id": "D2"
+        },
+        {
+          "answered": false,
+          "id": "D3"
+        },
+        {
+          "answered": false,
+          "id": "D4"
+        },
+        {
+          "answer": "Tuesday 25 August, 9am ET.",
+          "answered": true,
+          "at": "2026-08-12T20:15:00Z",
+          "by": "jaredcosulich",
+          "id": "D5"
+        }
+      ],
+      "cutoverSteps": [
+        {
+          "at": "2026-08-11T14:20:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S1"
+        },
+        {
+          "at": "2026-08-12T09:05:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S2"
+        },
+        {
+          "done": false,
+          "id": "S3"
+        },
+        {
+          "done": false,
+          "id": "S4"
+        },
+        {
+          "done": false,
+          "id": "S5"
+        },
+        {
+          "done": false,
+          "id": "S6"
+        },
+        {
+          "done": false,
+          "id": "S7"
+        },
+        {
+          "done": false,
+          "id": "S8"
+        },
+        {
+          "done": false,
+          "id": "S9"
+        }
+      ]
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/cutover-runbook/[...path].astro",
+  "description": "A tick that could not be saved, shown where a reader would actually meet it rather than in isolation. The preview holds a signed-in session but no GitHub token, so the commit is genuinely refused — this is the real failure path, not a mocked likeness of it. What matters is that the box goes BACK: the tick shows optimistically, the commit fails, and the step returns to not-started with the reason beside it. On a page whose whole claim is that what it shows is what everyone else sees, a tick that stayed ticked locally would be a lie the next reader has no way to detect, and worse than having no checkbox at all.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "input[aria-label=\"Mark S3 done\"]"
+    }
+  ]
+}
