@@ -222,6 +222,30 @@ Apply the failures whose fix is unambiguous and scripted. These have a
 Re-run `codeyam-editor editor audit --format json` after the mechanical pass so
 the remaining set is only the judgment calls.
 
+> GOTCHA — **Platform-gate drift can only be reconciled AFTER a full
+> `refresh-tests`, so do not hand-run `reconcile-registry` for it here.**
+> `REGISTRY_HAS_FOREIGN_HOST_GATED_TEST` fires when a test's registry
+> `platform_gate` disagrees with the `#[cfg(...)]` its source declares — the
+> shape you get the moment you add a `#[cfg(unix)]` to an already-registered
+> test. `reconcile-registry --auto-apply` re-infers the gate from source, but
+> it reads the **per-partition test cache**, so run before a full refresh it
+> sees the pre-edit cache and reports clean. The finding then surfaces in
+> `session-finalize` Phase 2 — after Phase 1's full suite has already run —
+> costing a `--start-from-phase 2` round trip of roughly 15 minutes.
+>
+> You do not need to sequence this by hand: `session-finalize` heals it
+> itself, in a Phase 1.5 pass between the refresh and the audit (whenever
+> Phase 2 is about to run, `--start-from-phase 2` included). It logs
+> `Phase 1.5/5: re-inferred platform_gate from source cfg for N registry
+> entr…` naming every rewritten key, and stays silent when nothing drifted.
+> If it ever fails it warns and continues, and Phase 2 reports the finding
+> with its usual recovery — so the only action left to you is reading that
+> line to understand a registry change in the resulting diff.
+>
+> Note `backfill-platform-gates` is **not** the recovery for this: it is
+> fill-only (`None → Some`) and deliberately never overwrites a concrete
+> gate, which is exactly what a drifted entry carries.
+
 ### 4b. Judgment fixes (STOP and ask — never mass-apply)
 
 What's left needs a decision, not a script. **Surface the count and the items,
