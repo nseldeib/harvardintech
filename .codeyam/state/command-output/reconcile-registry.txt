@@ -1,0 +1,46 @@
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786104275,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4057287}
+## Stale test cache — 1 partition(s) drifted from source since the last refresh-tests: all. The runner output reconcile reads back is OUT OF DATE for these, so a renamed test can be missed (the cache still emits its old name) and a still-present test can look like an orphan. Run this first, then re-run reconcile-registry:
+  codeyam-editor editor refresh-tests --partition all
+This clears the PARTITION caches, which is what this check reads — that is the whole recovery. The run will also warn that the full-suite `test-cache.json` was not updated; that is expected and does not concern this check. Do NOT reach for `refresh-tests --force` — the narrow scope above is enough.
+## Inherited registry drift (32) — 32 adds referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). Held out of the `actions` array; `summary` above still counts the whole diff, and nothing about how these rows are applied changed. See them in full with `codeyam-editor editor reconcile-registry --include-inherited`.
+auto-apply: 24 action(s) applied; 8 add(s) skipped.
+{
+  "summary": {
+    "realOrphans": 0,
+    "stalePhantoms": 0,
+    "adds": 32,
+    "renames": 0,
+    "updateLines": 0,
+    "gateUpdates": 0
+  skipped: add 'enum-shaped fields are dropdowns, not text boxes › homeSections.kind is a select' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
+  skipped: add 'enum-shaped fields are dropdowns, not text boxes › momentumSections.kind is a select' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
+  },
+  "actions": [],
+  "inherited": {
+    "total": 32,
+    "counts": {
+      "realOrphans": 0,
+      "stalePhantoms": 0,
+      "adds": 32,
+      "renames": 0,
+      "updateLines": 0,
+      "gateUpdates": 0
+    },
+    "includedInActions": false,
+  skipped: add 'enum-shaped fields are dropdowns, not text boxes › momentumSections.layout is a select' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
+  skipped: add 'enum-shaped fields are dropdowns, not text boxes › pillars.icon is a select' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
+  skipped: add 'existing content still validates against the new dropdowns › every committed homeSections.kind value is offered' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
+  skipped: add 'existing content still validates against the new dropdowns › every committed momentumSections.kind value is offered' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
+  skipped: add 'existing content still validates against the new dropdowns › every committed momentumSections.layout value is offered' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
+  skipped: add 'existing content still validates against the new dropdowns › every committed pillars.icon value is offered' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
+  To see the canonical shape of what is already registered (key, `file:line`, runner — including the cargo `file: None` convention), run `codeyam-editor editor registry-query --runner <name>` or `--crate <pkg>`; for the cache rows behind a skipped add, `codeyam-editor editor test-cache-query --test <substring>`. Do not walk the JSON by hand.
+  recorded per-test evidence for 24 newly-added test(s) from the existing test-cache — no `refresh-tests --force` needed to fill it in.
+    "command": "codeyam-editor editor reconcile-registry --include-inherited"
+  },
+  "platform_gated_absences": [],
+  "runner_gated_absences": []
+}
+  Tip: For adds skipped due to `description_missing` where a comment actually
+  exists in source, run `codeyam-editor editor backfill-descriptions` to attempt
+  to resolve and backfill them automatically.
+reconcile-registry exited 2: 8 add(s) need manual intervention. Run the suggested `register-test` command(s) printed above. These adds could not be auto-resolved from source — the test name is ambiguous (matches more than one declaration), its `//`/`///` description comment is missing, or the runner emitted no file path and no source declaration matched. Fix the named cause, then re-run. Do NOT `git checkout` the registry to start over; that destroys work.

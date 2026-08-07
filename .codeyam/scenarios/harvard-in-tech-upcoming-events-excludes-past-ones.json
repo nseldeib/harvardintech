@@ -10,7 +10,7 @@
     "events": [
       {
         "city": "London",
-        "date": "2026-06-12",
+        "date": "@today-56d",
         "slug": "alumni-founders-co-working-day-past",
         "summary": "A working afternoon for alumni building companies — laptops open, introductions made over coffee.",
         "title": "Alumni Founders Co-working Day",
@@ -18,7 +18,7 @@
       },
       {
         "city": "New York City",
-        "date": "2026-04-30",
+        "date": "@today-99d",
         "slug": "leaders-in-engineering-panel-past",
         "summary": "Four engineering leaders on what changes when you stop writing code all day.",
         "title": "Harvard Alumni in Tech: Leaders in Engineering Panel",
@@ -26,7 +26,7 @@
       },
       {
         "city": "Boston & Cambridge",
-        "date": "2026-09-18",
+        "date": "@today+42d",
         "slug": "cambridge-alumni-day-meetup-upcoming",
         "summary": "The autumn gathering back on campus, with a walk to the river afterwards for anyone who wants it.",
         "title": "Alumni Day Meetup in Cambridge",
@@ -34,7 +34,7 @@
       },
       {
         "city": "Seattle / Pacific Northwest",
-        "date": "2026-10-02",
+        "date": "@today+56d",
         "slug": "seattle-founders-dinner-upcoming",
         "summary": "A long table, twenty founders, and no panel — the format the Seattle chapter keeps asking to repeat.",
         "title": "Pacific Northwest Founders Dinner",

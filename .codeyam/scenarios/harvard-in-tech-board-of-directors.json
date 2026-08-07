@@ -10,7 +10,7 @@
     "events": [
       {
         "body": "Join hundreds of alumni technologists for keynotes and breakout sessions on AI, climate, fintech, and the future of the startup ecosystem.",
-        "date": "2026-09-24",
+        "date": "@today+48d",
         "description": "Our flagship annual gathering of Harvard founders, operators, and investors for a day of talks, panels, and networking across the technology landscape.",
         "link": "https://www.harvardintech.com/events/summit-2026",
         "location": "New York, NY",
@@ -18,7 +18,7 @@
         "title": "Harvard in Tech Summit 2026"
       },
       {
-        "date": "2026-07-15",
+        "date": "@today-23d",
         "description": "An evening connecting Harvard alumni founders with active investors across the Bay Area.",
         "link": "https://www.harvardintech.com/events/sf-mixer",
         "location": "San Francisco, CA",
@@ -26,7 +26,7 @@
         "title": "Founders & Investors Mixer — San Francisco"
       },
       {
-        "date": "2026-08-06",
+        "date": "@today-1d",
         "description": "A conversation with Harvard alumnae leading engineering, product, and venture teams.",
         "link": "https://www.harvardintech.com/events/women-in-tech-panel",
         "location": "Cambridge, MA",

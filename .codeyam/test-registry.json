@@ -843,7 +843,7 @@
       "format": "vitest",
       "key": "deploy.yml track coherence › builds the reviewed track with a base matching this repo",
       "line": 112,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -852,7 +852,7 @@
       "format": "vitest",
       "key": "deploy.yml track coherence › builds the staging track with a base matching the repo it publishes to",
       "line": 102,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -861,7 +861,7 @@
       "format": "vitest",
       "key": "deploy.yml track coherence › gates both tracks while neither is meant to be public",
       "line": 130,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -870,7 +870,7 @@
       "format": "vitest",
       "key": "deploy.yml track coherence › writes no CNAME on the staging track",
       "line": 122,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -1171,35 +1171,35 @@
       "runner": "tests"
     },
     {
-      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "description": "Asserts the CMS renders homeSections.kind as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "enum-shaped fields are dropdowns, not text boxes › homeSections.kind is a select",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "description": "Asserts the CMS renders momentumSections.kind as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "enum-shaped fields are dropdowns, not text boxes › momentumSections.kind is a select",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "description": "Asserts the CMS renders momentumSections.layout as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "enum-shaped fields are dropdowns, not text boxes › momentumSections.layout is a select",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "description": "Asserts the CMS renders pillars.icon as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "enum-shaped fields are dropdowns, not text boxes › pillars.icon is a select",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
@@ -1338,35 +1338,35 @@
       "runner": "tests"
     },
     {
-      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "description": "Checks every homeSections.kind value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed homeSections.kind value is offered",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "description": "Checks every momentumSections.kind value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed momentumSections.kind value is offered",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "description": "Checks every momentumSections.layout value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed momentumSections.layout value is offered",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "description": "Checks every pillars.icon value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed pillars.icon value is offered",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
@@ -3202,7 +3202,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › handles the reviewed track repo too",
       "line": 39,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3211,7 +3211,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › returns the repo name as a rooted path",
       "line": 34,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3220,7 +3220,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › throws on an empty repo name rather than returning a bare slash",
       "line": 56,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3229,7 +3229,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › tolerates surrounding slashes rather than doubling them",
       "line": 44,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3238,7 +3238,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › trims surrounding whitespace",
       "line": 49,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3616,7 +3616,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › reads the repo out of an HTTPS remote",
       "line": 78,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3625,7 +3625,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › reads the repo out of an SSH push command",
       "line": 64,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3634,7 +3634,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › reads the repo when the .git suffix is absent",
       "line": 71,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3643,7 +3643,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › returns the repo, not the owner",
       "line": 85,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3652,7 +3652,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › returns undefined when the command contains no remote",
       "line": 91,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4363,7 +4363,7 @@
       "format": "vitest",
       "key": "seeded team headshots › ben-wei.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4372,7 +4372,7 @@
       "format": "vitest",
       "key": "seeded team headshots › ben-wei.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4390,7 +4390,7 @@
       "format": "vitest",
       "key": "seeded team headshots › jessica-li.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4399,7 +4399,7 @@
       "format": "vitest",
       "key": "seeded team headshots › jessica-li.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4408,7 +4408,7 @@
       "format": "vitest",
       "key": "seeded team headshots › krysia-lenzo.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4417,7 +4417,7 @@
       "format": "vitest",
       "key": "seeded team headshots › krysia-lenzo.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4426,7 +4426,7 @@
       "format": "vitest",
       "key": "seeded team headshots › nadia-eldeib.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4435,7 +4435,7 @@
       "format": "vitest",
       "key": "seeded team headshots › nadia-eldeib.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4444,7 +4444,7 @@
       "format": "vitest",
       "key": "seeded team headshots › peter-boyce.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -4453,7 +4453,7 @@
       "format": "vitest",
       "key": "seeded team headshots › peter-boyce.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {

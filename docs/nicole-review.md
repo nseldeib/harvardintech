@@ -15,12 +15,21 @@ until the Strikingly migration.
 | **Website** | https://nseldeib.github.io/harvardintech/ | `crimson2026` |
 | **Todos / project status** | https://nseldeib.github.io/harvardintech/review | `crimson2026` |
 | **Supporter recognition review** | https://nseldeib.github.io/harvardintech/donor-network.html | `crimson2026` |
+| **Domain cutover runbook** | https://nseldeib.github.io/harvardintech/cutover-runbook/ | `crimson2026` |
 | **CMS / admin dashboard** | https://nseldeib.github.io/harvardintech/admin | *(GitHub token — see below)* |
 
-The site and the todos page share one passphrase. It is a **deterrent, not
-authentication** — it ships in the client bundle — so it keeps the preview out of
-search results and away from casual visitors, and that is all. Every page also
-carries `noindex`.
+The trailing slash on the runbook link matters — it is a directory route, and
+without it the link 404s.
+
+The site, the todos page and the runbook share one passphrase. It is a
+**deterrent, not authentication** — it ships in the client bundle — so it keeps
+the preview out of search results and away from casual visitors, and that is
+all. Every page also carries `noindex`.
+
+The runbook is additionally **never built for the public site**: it is excluded
+from the public track in code rather than merely gated, so it cannot appear on
+`harvardintech.com` even by a configuration mistake at cutover. That matters
+because it names where the domain's records live.
 
 The **CMS is not behind the passphrase.** It is behind a GitHub token sign-in
 instead, and the dashboard is `noindex, nofollow`. Treat its URL as
@@ -29,15 +38,28 @@ HTML is fetchable by anyone who has the address.
 
 ## Ready-to-send note
 
-> Hi Nicole — here's the Harvard in Tech site preview to review. The site and
-> the todos page use the password **crimson2026**:
+> Hi Nicole — here's the Harvard in Tech site preview to review. Everything
+> except the content editor uses the password **crimson2026**:
 >
 > • **Website:** https://nseldeib.github.io/harvardintech/
 > • **What's done / what's open (todos):** https://nseldeib.github.io/harvardintech/review
 > • **Supporter recognition:** https://nseldeib.github.io/harvardintech/donor-network.html
+> • **Moving the domain over:** https://nseldeib.github.io/harvardintech/cutover-runbook/
 > • **Content editor (CMS):** https://nseldeib.github.io/harvardintech/admin
 >
 > The todos page walks through what's built and the decisions we need from you.
+>
+> The domain link is the one with something we need back from you. The site is
+> finished — moving harvardintech.com onto it is just a handful of settings at
+> the registrar, and that page lays out every step in the order it has to happen,
+> including how we keep your email working throughout. Nothing has been done yet;
+> it's written so the move can be reviewed before it's run.
+>
+> Five questions on that page are yours rather than ours, and the first one
+> blocks all the others: **who has the GoDaddy login?** We've never had access,
+> and until that's answered nothing can start — not even the first step, which
+> only reads the current settings and changes nothing. Each question has what
+> we'd suggest, so there's something to react to rather than a blank page.
 >
 > The supporter recognition link is the one I'd most like your reaction to. It
 > shows the donor wall as it's built today, then nine directions for replacing
@@ -184,12 +206,15 @@ editor's next upload. That matters because the bug is invisible at publish time
 
 ## Still open (team todos, not code)
 
-- Real **board bios** (the live site has none to reproduce). *Optional, and not a
-  launch blocker* — the board renders as photo + name + role, matching what
-  harvardintech.com shows today. Add them in /admin whenever they're written,
-  one at a time if that's easier; a half-filled board is a supported state.
+- Real **board bios** — **2 of the 5 are now written** (Ben Wei and Nadia
+  Eldeib); three are still blank. *Optional, and not a launch blocker* — a
+  member without one renders as photo + name + role, which is exactly what
+  harvardintech.com shows today. Add the rest in /admin whenever they are
+  written, one at a time if that is easier; a half-filled board is a supported
+  state, not a broken one.
 - A **donation-platform URL** (the Donate button currently opens an email).
-- **Chapter + event content** for the 5 cities.
+- **Chapter + event content** for the 6 chapters (Boston/Cambridge, DC-DMV,
+  London, NYC, Seattle, SF Bay Area). 8 events and 11 blog posts are in.
 
 ## Two sites, and which one to send
 

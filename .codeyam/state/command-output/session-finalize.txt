@@ -1,0 +1,66 @@
+⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
+> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786107037,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786107037,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+session-finalize started: 2026-08-07T12:50:37Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 4086543)
+Finalizing session — running flag-free test suite + strict audit. This is the only full-suite run for this feature.
+Coverage thresholds … skipped (no runner declares a coverage_path)
+Phase 0/5: session-cleanup …
+Phase 1/5: refresh-tests (no filters) — source Merkle hash changed for partition 'all'
+
+warning: about to run the FULL test suite (~650 tests) — this can take many minutes.
+warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
+Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
+  tests  ::  npx vitest run --reporter=json
+note: full re-run requested; merkle-hash optimization skipped
+Test refresh triggered. Waiting for results...
+[   2s] Running runner: tests
+{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786107047,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786107047,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+[  12s] Still running: tests
+{"command":"session-finalize","elapsed_secs":20,"emitted_at_unix":1786107057,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":20,"emitted_at_unix":1786107057,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+[  20s] Tests completed.
+{"failed":0,"passed":650,"skipped":0,"success":true,"total":650}
+All 650 tests passed.
+Phase 2/5: audit (--gate-mode strict, comprehensive) …
+[   0s] audit: running static checks
+[   0s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+{
+Analyzed 289 files, found 533 import edges, graph has 304 nodes
+  "analyzed": 289,
+  "entityCount": 381,
+  "graphSize": 304,
+  "totalImports": 533
+}
+{"command":"session-finalize","elapsed_secs":30,"emitted_at_unix":1786107067,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":30,"emitted_at_unix":1786107067,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":40,"emitted_at_unix":1786107077,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":40,"emitted_at_unix":1786107077,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":50,"emitted_at_unix":1786107087,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":50,"emitted_at_unix":1786107087,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":60,"emitted_at_unix":1786107097,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":60,"emitted_at_unix":1786107097,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+[  45s] audit: running registry invariant checks
+[  46s] audit: gather complete
+Phase 3/5: analyze-imports …
+{"command":"session-finalize","elapsed_secs":70,"emitted_at_unix":1786107107,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{"command":"session-finalize","elapsed_secs":70,"emitted_at_unix":1786107107,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4086543}
+{
+  "analyzed": 289,
+  "entityCount": 381,
+  "graphSize": 304,
+  "totalImports": 533
+Analyzed 289 files, found 533 import edges, graph has 304 nodes
+}
+Phase 3.5/5: screenshot coverage …
+Phase 3.5/5: screenshot coverage … 0 stale, 0 missing
+Phase 3.6/5: glossary reconciliation …
+Phase 4/5: verify-build …
+[SKIP] tsc — no matching files
+[SKIP] astro-check — no matching files
+CODEYAM_VERIFY_BUILD: PASS — 0 check(s) passed
+Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
+Session finalize complete: ready to push.
+Presentability (open-source pass): README needs refresh. Review with `codeyam-editor editor presentability-scan`, then refresh the README with `codeyam-editor editor readme-sync` before merge. Remove only what you are sure about — ask the user about anything uncertain.
+session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=76.5s

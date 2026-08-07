@@ -1,0 +1,9 @@
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786104278,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4058611}
+analyze-imports: scoped to 8 changed / 0 deleted file(s) since HEAD
+{
+  "analyzed": 0,
+Analyzed 0 files, found 0 import edges, graph has 304 nodes
+  "entityCount": 381,
+  "graphSize": 304,
+  "totalImports": 0
+}
