@@ -207,6 +207,20 @@ export default defineConfig({
   site,
   base,
   integrations,
+  // The Astro dev toolbar fires on load and calls Vite's HMR `.send()` before
+  // the HMR WebSocket has connected through the fleet editor proxy, throwing
+  // "Cannot read properties of undefined (reading 'send')" in the Live Preview.
+  //
+  // The throw is Vite's rough edge rather than ours: its client guards teardown
+  // with `ws?.close()` but leaves `send()` as a bare `ws.send(...)`, so any
+  // caller before a successful connect hits an undefined socket. And the
+  // connect cannot succeed here — served over HTTPS on the default port, the
+  // client derives its socket host as `${hostname}:${''}`, which is not a
+  // reachable URL.
+  //
+  // Disabling the toolbar removes the caller. It is a dev-only overlay that
+  // `output: 'static'` ships none of, so nothing about the built site changes.
+  devToolbar: { enabled: false },
   vite: {
     optimizeDeps: {
       // @codeyam/cms ships raw `.ts`/`.tsx` (its package exports point at
