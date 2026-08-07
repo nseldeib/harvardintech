@@ -3,6 +3,7 @@ title: Social Media Marketing Specialist- Events
 blurb: Help promote HIT events from start to finish by creating and scheduling engaging social media content before, during, and after each event. This project is ideal for a volunteer who enjoys event marketing, storytelling, and turning event recordings into reusable content.
 commitment: 25 hours
 draft: true
+ogImage: /images/volunteers.webp
 ---
 
 For this specific New York event, the volunteer will support the full social media promotion cycle, including:
