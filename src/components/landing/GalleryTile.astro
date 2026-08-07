@@ -1,0 +1,95 @@
+---
+// One square photo in a gallery grid: the crop, and the button that opens it
+// full-size. Rendered by EventGallery for both the shared 40-photo wall and a
+// chapter's curated set — it never learns which.
+//
+// This file IS the lightbox's data contract. `src/lib/lightbox.ts` finds tiles
+// by `[data-lightbox-open]`, reads `data-full` / `data-caption` / `data-alt`
+// off them, and decides what's reachable by arrowing from whether the enclosing
+// `.gallery-item` is `hidden`. Change an attribute name here and the lightbox
+// goes quiet rather than erroring — so keep the two in step.
+import { withBase } from '../../lib/url';
+
+interface Props {
+  /** Photo path, root-relative. Passed through `withBase` here, not by callers. */
+  src: string;
+  /** Editorial caption shown under the enlarged photo. Absent for most photos. */
+  caption?: string;
+  alt: string;
+  /** Over the gallery's cap: shipped in the HTML but not shown until "Show all".
+   *  Hidden tiles are display:none, so they occupy no grid cell and the visible
+   *  photos flow as one continuous run. */
+  overflow?: boolean;
+  /** Per-tile stagger for the scroll-in fade, in ms. */
+  delayMs?: number;
+}
+
+const { src, caption, alt, overflow = false, delayMs = 0 } = Astro.props;
+---
+
+<figure
+  class="gallery-item"
+  hidden={overflow}
+  data-gallery-overflow={overflow ? '' : undefined}
+  style={`transition-delay: ${delayMs}ms;`}
+>
+  {/* A button, not a link: there is no URL to navigate to, and a button is
+      keyboard-operable with no tabindex/role patching. */}
+  <button
+    type="button"
+    class="gallery-open"
+    data-lightbox-open
+    data-full={withBase(src)}
+    data-caption={caption ?? ''}
+    data-alt={alt}
+  >
+    <img src={withBase(src)} alt={alt} loading="lazy" />
+  </button>
+</figure>
+
+<style>
+  .gallery-item {
+    margin: 0;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--color-bg-soft);
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+  }
+  .gallery-item.in-view {
+    opacity: 1;
+    transform: none;
+  }
+  /* The button is invisible as a control — same crop, no chrome — so the tile
+     looks exactly as it did before it became clickable. */
+  .gallery-open {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+  }
+  .gallery-open:focus-visible {
+    outline: 3px solid var(--color-accent, #a41034);
+    outline-offset: -3px;
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Respect reduced motion — show immediately, no transform. */
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

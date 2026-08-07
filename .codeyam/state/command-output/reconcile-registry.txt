@@ -1,46 +1,289 @@
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786104275,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4057287}
+⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
+> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786129773,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":88030}
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786129773,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":88030}
 ## Stale test cache — 1 partition(s) drifted from source since the last refresh-tests: all. The runner output reconcile reads back is OUT OF DATE for these, so a renamed test can be missed (the cache still emits its old name) and a still-present test can look like an orphan. Run this first, then re-run reconcile-registry:
   codeyam-editor editor refresh-tests --partition all
 This clears the PARTITION caches, which is what this check reads — that is the whole recovery. The run will also warn that the full-suite `test-cache.json` was not updated; that is expected and does not concern this check. Do NOT reach for `refresh-tests --force` — the narrow scope above is enough.
-## Inherited registry drift (32) — 32 adds referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). Held out of the `actions` array; `summary` above still counts the whole diff, and nothing about how these rows are applied changed. See them in full with `codeyam-editor editor reconcile-registry --include-inherited`.
-auto-apply: 24 action(s) applied; 8 add(s) skipped.
+## Inherited registry drift (17) — 17 line updates referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). Held out of the `actions` array; `summary` above still counts the whole diff, and nothing about how these rows are applied changed. See them in full with `codeyam-editor editor reconcile-registry --include-inherited`.
 {
   "summary": {
     "realOrphans": 0,
     "stalePhantoms": 0,
-    "adds": 32,
+    "adds": 0,
     "renames": 0,
-    "updateLines": 0,
+    "updateLines": 45,
     "gateUpdates": 0
-  skipped: add 'enum-shaped fields are dropdowns, not text boxes › homeSections.kind is a select' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
-  skipped: add 'enum-shaped fields are dropdowns, not text boxes › momentumSections.kind is a select' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
   },
-  "actions": [],
+  "actions": [
+    {
+      "kind": "updateLine",
+      "key": "galleryColumns › clamps to the maximum for a large gallery",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 192,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryColumns › floors at one column",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 203,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryColumns › honours a custom maximum",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 209,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryColumns › returns the maximum when the count equals it",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 197,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryColumns › uses one column per photo below the maximum",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 187,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+auto-apply: 45 action(s) applied; 0 add(s) skipped.
+      "key": "galleryRevealImmediately › animates when IntersectionObserver exists and motion is allowed",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 6,
+      "new_line": 12,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryRevealImmediately › reveals immediately when IntersectionObserver is unavailable",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 21,
+      "new_line": 27,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryRevealImmediately › reveals immediately when both reduced motion and no observer",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 28,
+      "new_line": 34,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryRevealImmediately › reveals immediately when the user prefers reduced motion",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 13,
+      "new_line": 19,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryStaggerDelay › respects a custom column count",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 55,
+      "new_line": 61,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryStaggerDelay › returns zero for the first column",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 37,
+      "new_line": 43,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryStaggerDelay › staggers later columns by 60ms each",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 43,
+      "new_line": 49,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "galleryStaggerDelay › wraps the delay per row of five columns",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 49,
+      "new_line": 55,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "initGalleryReveal › is a no-op when there are no gallery tiles",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 124,
+      "new_line": 130,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "initGalleryReveal › observes tiles instead of revealing them when animation is enabled",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 108,
+      "new_line": 114,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "initGalleryReveal › reveals every tile immediately under reduced motion",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 87,
+      "new_line": 93,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "initGalleryReveal › reveals every tile immediately when IntersectionObserver is missing",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": 96,
+      "new_line": 102,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toGalleryPhotos › accepts a mixed list",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 155,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toGalleryPhotos › drops rows with a missing or blank image",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 165,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toGalleryPhotos › normalizes CMS rows and keeps the caption",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 148,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toGalleryPhotos › normalizes a list of plain srcs",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 140,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toGalleryPhotos › returns nothing for an empty list",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 180,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toGalleryPhotos › treats a blank caption as absent",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 173,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "visibleGalleryPhotos › does not mutate the input",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 239,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "visibleGalleryPhotos › returns everything when expanded",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 223,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "visibleGalleryPhotos › returns everything when no cap is given",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 229,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "visibleGalleryPhotos › returns everything when the cap exceeds the count",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 234,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "visibleGalleryPhotos › returns the first cap photos when collapsed",
+      "file": "src/lib/gallery.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 218,
+      "classification": "change-introduced"
+    }
+  ],
   "inherited": {
-    "total": 32,
+    "total": 17,
     "counts": {
       "realOrphans": 0,
       "stalePhantoms": 0,
-      "adds": 32,
+      "adds": 0,
       "renames": 0,
-      "updateLines": 0,
+      "updateLines": 17,
       "gateUpdates": 0
     },
     "includedInActions": false,
-  skipped: add 'enum-shaped fields are dropdowns, not text boxes › momentumSections.layout is a select' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
-  skipped: add 'enum-shaped fields are dropdowns, not text boxes › pillars.icon is a select' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
-  skipped: add 'existing content still validates against the new dropdowns › every committed homeSections.kind value is offered' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
-  skipped: add 'existing content still validates against the new dropdowns › every committed momentumSections.kind value is offered' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
-  skipped: add 'existing content still validates against the new dropdowns › every committed momentumSections.layout value is offered' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
-  skipped: add 'existing content still validates against the new dropdowns › every committed pillars.icon value is offered' (description_missing: line could not be resolved in 'src/lib/selectOptions.test.ts'; add a `// description` above the test and re-run, or register manually)
-  To see the canonical shape of what is already registered (key, `file:line`, runner — including the cargo `file: None` convention), run `codeyam-editor editor registry-query --runner <name>` or `--crate <pkg>`; for the cache rows behind a skipped add, `codeyam-editor editor test-cache-query --test <substring>`. Do not walk the JSON by hand.
-  recorded per-test evidence for 24 newly-added test(s) from the existing test-cache — no `refresh-tests --force` needed to fill it in.
     "command": "codeyam-editor editor reconcile-registry --include-inherited"
   },
   "platform_gated_absences": [],
   "runner_gated_absences": []
 }
-  Tip: For adds skipped due to `description_missing` where a comment actually
-  exists in source, run `codeyam-editor editor backfill-descriptions` to attempt
-  to resolve and backfill them automatically.
-reconcile-registry exited 2: 8 add(s) need manual intervention. Run the suggested `register-test` command(s) printed above. These adds could not be auto-resolved from source — the test name is ambiguous (matches more than one declaration), its `//`/`///` description comment is missing, or the runner emitted no file path and no source declaration matched. Fix the named cause, then re-run. Do NOT `git checkout` the registry to start over; that destroys work.
+  backfilled 33 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.

@@ -1,0 +1,42 @@
+---
+import Component from "../../../src/components/landing/GalleryLightbox.astro";
+import "../../../src/styles/tokens.css";
+
+// Second isolation page for GalleryLightbox: the SAME component with no caption.
+//
+// A separate page rather than a `?s=` state because this is a static build —
+// query params are empty at build time, so one page can only ever prerender one
+// state. See the note `editor isolate` prints.
+//
+// This is the majority case, not an edge one: the shared 40-photo set carries no
+// captions at all, so every photo on the landing page opens like this. The
+// figcaption stays hidden rather than rendering empty, which would leave a band
+// of dead space under the photo.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GalleryLightbox (no caption)</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <Component />
+    </div>
+  </body>
+</html>
+
+<script>
+  // What lightbox.ts's `show()` does for a photo with no caption: Astro omits
+  // `data-caption=""` entirely, so the dataset read yields undefined and the
+  // figcaption is left hidden.
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  const image = document.querySelector<HTMLImageElement>('[data-lightbox-image]');
+
+  if (image) {
+    image.src = '/images/gallery/event-07.jpg';
+    image.alt = 'Harvard in Tech event photo';
+  }
+  if (dialog && typeof dialog.showModal === 'function') dialog.showModal();
+</script>

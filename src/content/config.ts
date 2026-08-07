@@ -152,13 +152,25 @@ const chapters = defineCollection({
     blurb: z.string().optional(),
     // Full-bleed city header (mirrors the live harvardintech.com chapter pages):
     // `heroImage` is the background photo, `tagline` the subtitle beneath the
-    // "HARVARD IN TECH <CITY>" title. `showGallery` toggles the shared event
-    // photo gallery; absent → shown (the live site shows it on every chapter),
-    // set `false` to opt out. All optional → a chapter without them falls back
+    // "HARVARD IN TECH <CITY>" title. `showGallery` toggles the event photo
+    // gallery; absent → shown (the live site shows it on every chapter), set
+    // `false` to opt out. All optional → a chapter without them falls back
     // to the centered header.
     heroImage: z.string().optional(),
     tagline: z.string().optional(),
     showGallery: z.boolean().optional(),
+    // This chapter's OWN event photos, curated in /admin. Absent or empty →
+    // the page falls back to the shared 40-photo landing-page gallery, which
+    // is what every chapter showed before this field existed — so adding the
+    // field changed nothing until someone curates a chapter.
+    //
+    // `caption` is editorial ("Spring mixer at Cornell Tech") and is what makes
+    // the lightbox worth opening. Alt text deliberately does NOT live here:
+    // `altFor` resolves it from `media.json`, which is the site's single source
+    // for alt, and a second field would be a competing one that drifts.
+    photos: z
+      .array(z.object({ image: z.string(), caption: z.string().optional() }))
+      .optional(),
     // Per-chapter "Connect With Us" email; absent → fall back to the global
     // settings contact email.
     contactEmail: z.string().optional(),

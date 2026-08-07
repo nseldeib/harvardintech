@@ -418,6 +418,12 @@
     "testFile": "src/lib/donors.test.ts"
   },
   {
+    "description": "How many columns a gallery grid should use for a given photo count: one per photo up to a maximum of five, so a three-photo chapter renders three columns rather than five with two holes, while the shared 40-photo wall stays on the full-width grid. Floors at one so an empty gallery cannot produce an invalid grid-template.",
+    "filePath": "src/lib/gallery.ts",
+    "name": "galleryColumns",
+    "testFile": "src/lib/gallery.test.ts"
+  },
+  {
     "description": "Pure decision for the Event Gallery fade-in: returns true when every tile should be shown immediately instead of animated — when the user prefers reduced motion, or the browser lacks IntersectionObserver (old browsers / SSR) so tiles never get stuck invisible.",
     "filePath": "src/lib/gallery.ts",
     "name": "galleryRevealImmediately",
@@ -562,6 +568,12 @@
     "testFile": "src/lib/gallery.test.ts"
   },
   {
+    "description": "Idempotent, SSR-safe DOM wiring for click-to-enlarge: binds each gallery tile to open its photo in the native `dialog`, plus the close/prev/next controls and the backdrop click. No-ops without a DOM or `HTMLDialogElement`, which is what leaves the un-enhanced gallery usable rather than half-bound. Resolves the tile list at click time rather than capturing it, so tiles bound before 'Show all' still arrow through the photos it reveals, and skips tiles inside a hidden `.gallery-item` so arrowing never lands on a photo that is not in the grid.",
+    "filePath": "src/lib/lightbox.ts",
+    "name": "initLightbox",
+    "testFile": "src/lib/lightbox.test.ts"
+  },
+  {
     "description": "Idempotent client-side DOM wiring for the banner parallax: no-op under SSR/vitest and on re-invocation. When parallaxEnabled (read via matchMedia) is true, sizes every [data-parallax] <img> to 100vh and, on a rAF-throttled scroll/resize listener, sets translateY(parallaxOffset(rootTop)) so the photo stays fixed while its [data-parallax-root] section scrolls over it; otherwise leaves the images as static object-fit: cover. Hoisted from Hero.astro and GetInvolved.astro.",
     "filePath": "src/lib/parallax.ts",
     "name": "initParallax",
@@ -608,6 +620,12 @@
     "filePath": "src/lib/cutoverProgress.ts",
     "name": "isStepReady",
     "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
+    "description": "Maps a KeyboardEvent.key to a lightbox action — Escape to close, the arrows to next/prev — or null to ignore it. Mapping Escape is deliberate redundancy: `dialog` closes itself on Escape, so routing it here keeps ONE close path that also runs our teardown rather than letting the native cancel and our handler drift apart.",
+    "filePath": "src/lib/lightbox.ts",
+    "name": "lightboxKeyAction",
+    "testFile": "src/lib/lightbox.test.ts"
   },
   {
     "description": "Reads the accomplishments collection into the card shape MomentumAccomplishments already took from copy.accomplishments. Migrated out of donatePage.json, a singleton the CMS does not model at all, which is what made these cards developer-only. Maps the schema's description key onto the component's body prop because body is a reserved field id in the CMS registry and a custom field claiming it is dropped from the editor without comment.",
@@ -793,6 +811,12 @@
     "filePath": "src/lib/personalize.ts",
     "name": "nameFromSearch",
     "testFile": "src/lib/personalize.test.ts"
+  },
+  {
+    "description": "The gallery index `delta` steps from `current`, wrapping at both ends. Wraps rather than clamps because a lightbox is a carousel, not a list: arrowing past the last photo should reach the first, and a disabled arrow at each end is a dead control the user has to notice. Returns 0 for an empty gallery so a caller cannot index into nothing, and normalizes the negative modulo that a naive expression would produce going backwards off the front.",
+    "filePath": "src/lib/lightbox.ts",
+    "name": "nextPhotoIndex",
+    "testFile": "src/lib/lightbox.test.ts"
   },
   {
     "description": "A four-digit graduation year from a spreadsheet cell, or nothing. Accepts the apostrophe form people actually write and a spreadsheet preserves as text, reading two digits as 1930-2029 — a Harvard alum's class year is neither 2104 nor 1904. Returns nothing rather than a guess for anything else, because a wrong year is worse than a missing one here: it places a supporter in the wrong cohort in three of the nine directions, where the error looks exactly like data.",
@@ -1105,6 +1129,12 @@
     "testFile": "src/lib/events.test.ts"
   },
   {
+    "description": "Normalizes a gallery's photos to a single shape from either call form: the landing page's plain srcs or the CMS's `{ image, caption? }` rows. Drops rows whose image is missing or blank — the CMS list control adds an empty row before a photo is picked, and rendering it would give a tile with no image and a lightbox that opens onto nothing — and treats a whitespace-only caption as absent so no empty figcaption takes space under the photo.",
+    "filePath": "src/lib/gallery.ts",
+    "name": "toGalleryPhotos",
+    "testFile": "src/lib/gallery.test.ts"
+  },
+  {
     "description": "Reduces a nav url to the page it actually lands on, so the integrity guard compares like with like: any fragment is dropped so an anchor link resolves against its own page, a bare hash resolves against the home page, and a trailing slash is ignored. Module-private to nav.ts and exercised through unresolvedNavUrls, whose tests pin each of those three normalizations.",
     "filePath": "src/lib/nav.ts",
     "name": "toPath",
@@ -1148,6 +1178,12 @@
       "justification": "A React hook over the CMS package's localStorage-backed session store and its window event subscription. Its observable behaviour — which branch of each tick control renders — is covered by the runbook's signed-out and signed-in component scenarios.",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "The photos a gallery shows before and after its 'Show all N photos' control: the first `cap` when collapsed, everything when expanded or when no cap is given. The absent-cap case is what keeps the landing page's 40-photo wall uncapped — a default cap would silently truncate it. Pure; the caller renders from the result and its input is never mutated.",
+    "filePath": "src/lib/gallery.ts",
+    "name": "visibleGalleryPhotos",
+    "testFile": "src/lib/gallery.test.ts"
   },
   {
     "description": "Prefixes an internal absolute path with import.meta.env.BASE_URL so links resolve under either the domain root (custom domain, base /) or a project subpath (user.github.io/<repo>). External URLs, mailto, and bare hash anchors pass through untouched. Used by the header nav/logo, chapter back link, 404, and blog links for GitHub Pages deployment.",

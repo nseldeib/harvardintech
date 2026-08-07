@@ -1,0 +1,13 @@
+{
+  "name": "GalleryLightbox - No Caption",
+  "id": "30a75029-3a48-4f4b-95c2-b4a91e42b0a9",
+  "url": "/isolated-components/GalleryLightboxUncaptioned",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GalleryLightbox",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/GalleryLightbox.astro",
+  "description": "The viewer opened on a photo with no caption — the majority case, since the shared 40-photo set carries none. The figcaption stays hidden rather than rendering empty, so the photo sits over the backdrop with no band of dead space under it."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "GalleryTile - Captioned Photo",
+  "id": "c0935426-045b-4bc0-ac2d-9859131fded6",
+  "url": "/isolated-components/GalleryTile",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GalleryTile",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/GalleryTile.astro",
+  "description": "One square tile at the width a five-column grid gives it. The photo is cropped to fill, the button around it is invisible as a control so the tile looks the same as it did before it became clickable, and the caption rides along in data attributes for the lightbox rather than showing here."
+}

@@ -148,6 +148,34 @@
         "reason": "The dashboard itself is a launchpad: its actions navigate into a collection or entry route. The in-page interactive state now lives on the entry editor and is captured there by cms-entry-editor-change-staged-for-review."
       }
     },
+    "ChapterPage": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "added"
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "added"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "the page is statically prerendered — photos ship in the HTML with no fetch, so there is no pending state to render"
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "photos come from the content collection through a schema-validated field; a malformed row fails the build rather than reaching this view, and a blank image row is dropped by toGalleryPhotos before render"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
     "ChapterRoute": {
       "empty": {
         "status": "covered"

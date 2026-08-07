@@ -50,7 +50,8 @@ export async function getStaticPaths() {
 type Props = { chapter: CollectionEntry<'chapters'> };
 const { chapter } = Astro.props as Props;
 const { Content } = await render(chapter);
-const { city, region, blurb, heroImage, tagline, showGallery, contactEmail, leads, links } = chapter.data;
+const { city, region, blurb, heroImage, tagline, showGallery, photos, contactEmail, leads, links } =
+  chapter.data;
 
 // Upcoming events explicitly tagged to this chapter (soonest first). Events with
 // no `chapter` (e.g. the Cambridge panel) belong to no chapter and are excluded.
@@ -66,6 +67,7 @@ const { upcoming } = splitEvents(eventsTaggedTo(events, chapter.id));
     heroImage={heroImage}
     tagline={tagline}
     showGallery={showGallery}
+    photos={photos}
     events={upcoming}
     contactEmail={contactEmail}
     leads={leads}

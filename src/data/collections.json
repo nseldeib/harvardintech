@@ -45,6 +45,26 @@
           "hint": "Blank shows the gallery; switch off to hide it on this chapter."
         },
         {
+          "name": "photos",
+          "label": "Chapter photos",
+          "type": "list",
+          "optional": true,
+          "hint": "This chapter's own event photos. Leave empty to show the shared event gallery.",
+          "fields": [
+            {
+              "name": "image",
+              "label": "Photo",
+              "type": "image"
+            },
+            {
+              "name": "caption",
+              "label": "Caption",
+              "type": "text",
+              "optional": true
+            }
+          ]
+        },
+        {
           "name": "contactEmail",
           "label": "Contact email",
           "type": "text",

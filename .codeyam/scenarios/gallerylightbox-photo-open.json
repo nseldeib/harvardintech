@@ -1,0 +1,13 @@
+{
+  "name": "GalleryLightbox - Photo Open",
+  "id": "5b2ac90d-c912-4e4c-b73e-60ed15c2fb5e",
+  "url": "/isolated-components/GalleryLightbox",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GalleryLightbox",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/GalleryLightbox.astro",
+  "description": "The viewer as it appears once a tile is clicked: the photo at its own resolution over a dimmed backdrop, its caption underneath, and close / previous / next controls. Empty until showModal runs, so this page fills and opens it the way lightbox.ts does."
+}

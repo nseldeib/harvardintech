@@ -1,9 +1,10 @@
-{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786104278,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4058611}
-analyze-imports: scoped to 8 changed / 0 deleted file(s) since HEAD
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1e3968f4-d648-4e10-96a7-4ac0e3be8109/tasks/bwkia7pox.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786129936,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":91148}
+analyze-imports: scoped to 24 changed / 3 deleted file(s) since HEAD
+Analyzed 11 files, found 34 import edges, graph has 309 nodes
 {
-  "analyzed": 0,
-Analyzed 0 files, found 0 import edges, graph has 304 nodes
-  "entityCount": 381,
-  "graphSize": 304,
-  "totalImports": 0
+  "analyzed": 11,
+  "entityCount": 383,
+  "graphSize": 309,
+  "totalImports": 34
 }

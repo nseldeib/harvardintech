@@ -1,0 +1,90 @@
+{
+  "name": "Chapter Gallery - Three Photos, Three Columns",
+  "id": "7689d47d-a5e3-431d-bd7f-1224b85fc3a2",
+  "url": "/chapters/london",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "chapters": [
+      {
+        "blurb": "Our European hub across the London tech scene.",
+        "body": "Evening socials and founder roundtables connecting Harvard alumni across the UK and Europe.",
+        "city": "London",
+        "heroImage": "/images/gallery/event-05.jpg",
+        "photos": [
+          {
+            "caption": "Founder roundtable in Shoreditch",
+            "image": "/images/gallery/event-04.jpg"
+          },
+          {
+            "caption": "Evening social with alumni across the UK and Europe",
+            "image": "/images/gallery/event-12.jpg"
+          },
+          {
+            "image": "/images/gallery/event-21.jpg"
+          }
+        ],
+        "region": "London, UK",
+        "slug": "london",
+        "tagline": "We are the London Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "Our founding chapter and largest community.",
+        "body": "Regular founder dinners, panels, and community gatherings across the city.",
+        "city": "New York City",
+        "contactEmail": "info@harvardintech.com",
+        "heroImage": "/images/chapters/nyc.jpg",
+        "region": "New York, NY",
+        "slug": "nyc",
+        "tagline": "We are the New York Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "Home of Harvard, our Cambridge and Boston community.",
+        "body": "Founder dinners, campus meetups, and panels with Harvard faculty and alumni operators, steps from the Yard.",
+        "city": "Boston & Cambridge",
+        "heroImage": "/images/bg/hero-bg.jpg",
+        "region": "Boston & Cambridge, MA",
+        "slug": "boston-cambridge",
+        "tagline": "We are the Boston & Cambridge Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "Our West Coast chapter across San Francisco and Silicon Valley.",
+        "body": "Founder dinners, investor mixers, and small-group conversations with Harvard alumni building across San Francisco, the Peninsula, and Silicon Valley.",
+        "city": "SF & Bay Area",
+        "heroImage": "/images/chapters/san-francisco.jpg",
+        "region": "San Francisco Bay Area, CA",
+        "slug": "sf-bay-area",
+        "tagline": "We are the SF & Bay Area Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "The Pacific Northwest chapter.",
+        "body": "Meetups with alumni across cloud, devtools, and consumer tech in the Pacific Northwest.",
+        "city": "Seattle / Pacific Northwest",
+        "heroImage": "/images/gallery/event-27.jpg",
+        "region": "Seattle, WA",
+        "slug": "seattle",
+        "tagline": "We are the Seattle / Pacific Northwest Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "The DC, Maryland & Virginia community.",
+        "body": "Policy-meets-tech happy hours and gatherings across the Washington metro area.",
+        "city": "DC and DMV Area",
+        "heroImage": "/images/gallery/event-18.jpg",
+        "region": "Washington, DC",
+        "slug": "dc-dmv",
+        "tagline": "We are the DC and DMV Chapter of Harvard Alumni in Tech."
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/chapters/[slug].astro",
+  "description": "London has curated only three photos. The grid narrows to three columns rather than leaving two holes in a five-column row, and no \"Show all\" control appears because nothing is hidden. This is the state a chapter lands in the day someone starts curating.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "#gallery h2"
+    }
+  ]
+}

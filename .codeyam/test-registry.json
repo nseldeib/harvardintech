@@ -1505,11 +1505,56 @@
       "runner": "tests"
     },
     {
+      "description": "The shared 40-photo wall stays on the full-width grid.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › clamps to the maximum for a large gallery",
+      "line": 192,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A zero-column grid is not a thing — an empty list must not produce an invalid grid-template.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › floors at one column",
+      "line": 203,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ceiling is a parameter so a caller can ask for a narrower grid.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › honours a custom maximum",
+      "line": 209,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Exactly at the boundary.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › returns the maximum when the count equals it",
+      "line": 197,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A small chapter gallery should fill its row rather than leave holes.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › uses one column per photo below the maximum",
+      "line": 187,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
       "description": "Capable browser, no reduced-motion preference: animate the tiles in.",
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryRevealImmediately › animates when IntersectionObserver exists and motion is allowed",
-      "line": 6,
+      "line": 12,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1518,7 +1563,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryRevealImmediately › reveals immediately when IntersectionObserver is unavailable",
-      "line": 21,
+      "line": 27,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1527,7 +1572,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryRevealImmediately › reveals immediately when both reduced motion and no observer",
-      "line": 28,
+      "line": 34,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1536,7 +1581,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryRevealImmediately › reveals immediately when the user prefers reduced motion",
-      "line": 13,
+      "line": 19,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1545,7 +1590,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryStaggerDelay › respects a custom column count",
-      "line": 55,
+      "line": 61,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1554,7 +1599,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryStaggerDelay › returns zero for the first column",
-      "line": 37,
+      "line": 43,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1563,7 +1608,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryStaggerDelay › staggers later columns by 60ms each",
-      "line": 43,
+      "line": 49,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1572,7 +1617,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryStaggerDelay › wraps the delay per row of five columns",
-      "line": 49,
+      "line": 55,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -2094,7 +2139,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "initGalleryReveal › is a no-op when there are no gallery tiles",
-      "line": 124,
+      "line": 130,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -2103,7 +2148,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "initGalleryReveal › observes tiles instead of revealing them when animation is enabled",
-      "line": 108,
+      "line": 114,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -2112,7 +2157,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "initGalleryReveal › reveals every tile immediately under reduced motion",
-      "line": 87,
+      "line": 93,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -2121,8 +2166,71 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "initGalleryReveal › reveals every tile immediately when IntersectionObserver is missing",
-      "line": 96,
+      "line": 102,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The regression the visible-button filter exists for: with two over-cap tiles still hidden, arrowing off the last VISIBLE photo wraps to the first rather than stepping onto a photo that isn't in the grid.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › arrows only through the visible photos while the rest are hidden",
+      "line": 146,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Re-running the wiring is how \"Show all\" picks up the revealed tiles, so a second call must not double-bind the tiles that were already bound.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › does not rebind a tile on a second call",
+      "line": 188,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "After \"Show all\" unhides the rest, the ALREADY-BOUND tiles must arrow through the full set. This is why the button list is resolved at click time instead of captured when initLightbox first ran.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › extends the arrow range once the hidden photos are revealed",
+      "line": 165,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An uncaptioned photo hides the figcaption rather than rendering an empty one, which would still take space under the image. Astro drops `data-caption=\"\"` entirely, so this is the undefined-dataset path.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › hides the caption for a photo that has none",
+      "line": 130,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A page with no gallery is the common case — every route that isn't a chapter or the landing page. It must be a clean no-op, not a throw.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › is a no-op when there is no gallery on the page",
+      "line": 203,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A gallery scope with no tiles yet leaves the dialog unbound rather than wiring arrows that would index into nothing.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › leaves an empty gallery unbound",
+      "line": 211,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Clicking a tile loads that photo and its caption into the dialog.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › opens the clicked photo with its caption",
+      "line": 110,
+      "registeredAt": "2026-08-07T19:09:04Z",
       "runner": "tests"
     },
     {
@@ -2339,6 +2447,42 @@
       "key": "landing image base paths › prefixes every internal landing image with the project base on a subpath deploy",
       "line": 33,
       "registeredAt": "2026-06-14T15:03:38Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Key names are case-sensitive in the DOM; a lowercase spelling is not a KeyboardEvent.key value and must not match.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "lightboxKeyAction › does not match a lowercased key name",
+      "line": 28,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Anything else is ignored rather than swallowed — the handler calls preventDefault only on a mapped key, so Tab still moves focus inside the dialog and the browser's own shortcuts keep working.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "lightboxKeyAction › ignores unrelated keys",
+      "line": 20,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Escape closes. `<dialog>` also cancels on Escape by itself; mapping it here keeps ONE close path so the native cancel and our handler can't drift.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "lightboxKeyAction › maps Escape to close",
+      "line": 7,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two arrows move through the gallery.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "lightboxKeyAction › maps the arrow keys to next and prev",
+      "line": 12,
+      "registeredAt": "2026-08-07T19:09:04Z",
       "runner": "tests"
     },
     {
@@ -2879,6 +3023,60 @@
       "key": "nameFromSearch › returns null when the parameter or query is absent",
       "line": 129,
       "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A delta larger than the gallery still lands in range — the modulo runs once, so this is the guard against a multi-step jump escaping the list.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › keeps a delta larger than the gallery in range",
+      "line": 67,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty gallery must not yield an index the caller would index into.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › returns zero for an empty gallery",
+      "line": 60,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A single-photo gallery has nowhere to go; both arrows stay put rather than producing an out-of-range index.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › stays put in a one-photo gallery",
+      "line": 54,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary forward and backward steps.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › steps forward and backward within range",
+      "line": 35,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "And the same in reverse, which is where a naive `%` returns a negative index and the caller reads `undefined`.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › wraps backward past the first photo",
+      "line": 48,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Arrowing past the last photo reaches the first. A lightbox is a carousel, not a list — a disabled arrow at the end is a dead control.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › wraps forward past the last photo",
+      "line": 42,
+      "registeredAt": "2026-08-07T19:09:04Z",
       "runner": "tests"
     },
     {
@@ -5330,6 +5528,60 @@
       "runner": "tests"
     },
     {
+      "description": "Both shapes reach the same prop, so both must survive one pass.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › accepts a mixed list",
+      "line": 155,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The case this filter exists for: the CMS list control adds a row before a photo is picked. Rendering it gives a tile with no image — and a lightbox that opens onto nothing.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › drops rows with a missing or blank image",
+      "line": 165,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The CMS shape: an image plus the editorial caption the lightbox shows.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › normalizes CMS rows and keeps the caption",
+      "line": 148,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The landing page's shape: plain srcs, no captions.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › normalizes a list of plain srcs",
+      "line": 140,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty gallery is a real state — a chapter mid-curation.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › returns nothing for an empty list",
+      "line": 180,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A whitespace-only caption is no caption; it would render an empty figcaption that still takes space under the photo.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › treats a blank caption as absent",
+      "line": 173,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
       "description": "The editor's repeatable list writes rows of fields; there is no plain-string list control. This is the seam between that storage shape and the `string[]` the page renders.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
@@ -5579,6 +5831,51 @@
       "key": "unresolvedNavUrls › resolves a fragment against its page",
       "line": 332,
       "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pure: the caller renders from this and must not have its source mutated.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › does not mutate the input",
+      "line": 239,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "After \"Show all N photos\".",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › returns everything when expanded",
+      "line": 223,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The landing page passes no cap and must keep rendering all 40. This is the case that stops the cap from becoming a silent default.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › returns everything when no cap is given",
+      "line": 229,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A cap larger than the gallery is not an error, just uncapped in practice.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › returns everything when the cap exceeds the count",
+      "line": 234,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The load state for a capped gallery.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › returns the first cap photos when collapsed",
+      "line": 218,
+      "registeredAt": "2026-08-07T19:09:04Z",
       "runner": "tests"
     },
     {

@@ -1,0 +1,45 @@
+---
+import Component from "../../../src/components/landing/GalleryLightbox.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GalleryLightbox — the full-screen photo viewer.
+//
+// This component takes no props: everything visible in it is written in at
+// click time by `src/lib/lightbox.ts`, and the `<dialog>` renders nothing at
+// all until showModal() is called. So a bare capture of it would be an empty
+// page, which is why the script below stands in for the tile click — it fills
+// the image and caption the same way the real handler does, then opens it.
+//
+// No centering wrapper here beyond the scaffold's: showModal() puts the dialog
+// in the top layer, where it centers itself against the viewport.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GalleryLightbox</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg);">
+      <Component />
+    </div>
+  </body>
+</html>
+
+<script>
+  // What lightbox.ts's `show()` does, minus the tile it would read it from.
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  const image = document.querySelector<HTMLImageElement>('[data-lightbox-image]');
+  const caption = document.querySelector<HTMLElement>('[data-lightbox-caption]');
+
+  if (image) {
+    image.src = '/images/gallery/event-19.jpg';
+    image.alt = 'Harvard in Tech members talking at a rooftop social';
+  }
+  if (caption) {
+    caption.textContent = 'Rooftop social closing out the summer season';
+    caption.hidden = false;
+  }
+  if (dialog && typeof dialog.showModal === 'function') dialog.showModal();
+</script>

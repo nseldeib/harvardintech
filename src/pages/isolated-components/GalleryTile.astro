@@ -1,0 +1,39 @@
+---
+import Component from "../../../src/components/landing/GalleryTile.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GalleryTile — one square tile from a gallery grid.
+//
+// Width is set from the real usage site: EventGallery's grid is max-width
+// 1000px across 5 columns with a 6px gap, so a tile lands at roughly 195px.
+// The tile is aspect-ratio 1/1, so the height follows.
+//
+// The tile starts at opacity 0 and only fades in when `initGalleryReveal` adds
+// `.in-view` on scroll — that script lives in EventGallery, not here, so the
+// class is applied directly below. Without it the capture is a blank square,
+// which would look like a broken component rather than an un-revealed one.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GalleryTile</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 195px;">
+      <Component
+        src="/images/gallery/event-03.jpg"
+        caption="Alumni panel on AI infrastructure at Cornell Tech"
+        alt="Panellists seated on yellow stools in front of a small Harvard in Tech audience"
+      />
+    </div>
+  </body>
+</html>
+
+<script>
+  // Stand in for EventGallery's scroll reveal, which does not run on this page.
+  document
+    .querySelectorAll('.gallery-item')
+    .forEach((tile) => tile.classList.add('in-view'));
+</script>

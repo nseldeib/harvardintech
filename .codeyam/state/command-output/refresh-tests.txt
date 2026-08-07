@@ -1,43 +1,52 @@
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786104218,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4055679}
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786131210,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":106500}
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786104218,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4055679}
-════════════════════════════════════════════════════════════════════
-WARNING: refresh-tests --force is running the ENTIRE test suite.
-════════════════════════════════════════════════════════════════════
-You're at backend step 9: backend-extract-tdd. The full suite is reserved
-for the `finalize` step, where `session-finalize` runs it
-automatically. Running it here is slow and almost always avoidable.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786131210,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":106500}
+[refresh-tests --changed] scope: 16 changed path(s) (44 untracked included)
+[refresh-tests --changed]   matched runner(s): tests
 
-To update the cache for a NEW or RENAMED test, use:
-  codeyam-editor editor refresh-tests --test <name>
-  codeyam-editor editor refresh-tests --changed
-  codeyam-editor editor refresh-tests --runner <name>
+action required: 1 brand-new test file(s) ran scoped to themselves, but will NOT reach the audit-gate cache via --changed — re-run with --force before finalize
+note: --changed is a partial run: it updates only the affected partition cache(s),
+note: NOT the audit-gate full-suite cache. The untracked test file(s):
+  src/lib/lightbox.test.ts
+note: to land them in the gated full-suite cache (required before finalize), run:
+note:   codeyam-editor editor refresh-tests --force
+{
+  "analyzed": 15,
+Analyzed 15 files, found 42 import edges, graph has 313 nodes
+  "entityCount": 389,
+  "graphSize": 313,
+  "totalImports": 42
+}
 
-If the audit just bailed reporting cache staleness, the documented
-recovery is flag-free `refresh-tests` (no `--force`). See
-`reconcile.txt` for the full guidance.
-
-Proceeding with the full suite anyway.
-════════════════════════════════════════════════════════════════════
-
-warning: about to run the FULL test suite — this can take many minutes.
-warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
+note: dependency graph was stale — auto-refreshed 15 changed file(s) so --changed maps them this run:
+  src/components/ChapterPage.astro
+  src/components/landing/EventGallery.astro
+  src/components/landing/GalleryExpand.astro
+  src/components/landing/GalleryLightbox.astro
+  src/components/landing/GalleryTile.astro
+  src/content/config.ts
+  src/lib/gallery.test.ts
+  src/lib/gallery.ts
+  src/lib/lightbox.test.ts
+  src/lib/lightbox.ts
+  src/pages/chapters/[slug].astro
+  src/pages/isolated-components/GalleryExpand.astro
+  src/pages/isolated-components/GalleryLightbox.astro
+  src/pages/isolated-components/GalleryLightboxUncaptioned.astro
+  src/pages/isolated-components/GalleryTile.astro
+note: the change→test mapping is now current; no analyze-imports or raw-runner fallback is needed.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
-note: full re-run requested; merkle-hash optimization skipped
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
-{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786104228,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4055679}
-{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786104228,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4055679}
-[  12s] Still running: tests
-{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786104238,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4055679}
-{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786104238,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":4055679}
-[  20s] Tests completed.
-{"failed":0,"passed":650,"skipped":0,"success":true,"total":650}
-All 650 tests passed.
+[   4s] Tests completed.
+All 45 tests passed.
+{"failed":0,"passed":45,"skipped":0,"success":true,"total":45}
 
-[warn] per-test-evidence drift: 0 registered tests have no evidence row, 32 evidence rows reference unregistered tests.
-[warn] session-finalize Phase 5 will block until reconciled. Re-run a flag-free
-[warn] `refresh-tests` to cover the missing tests, or `editor remove-test --key <k>`
-[warn] / `editor rename-test --from <old> --to <new>` for orphans.
+Partial run — partition caches WERE updated; the full-suite test-cache.json was
+NOT (full-suite hash invariant). If a stale-partition bail sent you here, that
+recovery has landed — re-run the command that bailed.
+Audit gates read the full-suite cache. Flag-free `refresh-tests` updates it but
+is gated until `finalize`. To update the full-suite cache now (e.g. for
+brand-new tests), run: codeyam-editor editor refresh-tests --force

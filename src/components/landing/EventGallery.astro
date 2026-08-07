@@ -1,100 +1,151 @@
 ---
-// "Photos from Latest Harvard in Tech Events" — a dense 5-column grid of real
-// event photos (40 of them, downloaded from the live site) that fade + rise
-// into view as they scroll into the viewport, matching harvardintech.com.
-// Defaults to the locally-hosted set under /public/images/gallery; accepts an
-// `images` override for scenarios.
-import { withBase } from '../../lib/url';
-import { galleryStaggerDelay } from '../../lib/gallery';
+// "Photos from Latest Harvard in Tech Events" — a dense grid of real event
+// photos that fade + rise into view as they scroll, matching harvardintech.com.
+// Defaults to the locally-hosted 40-photo set under /public/images/gallery.
+//
+// Two call shapes, one code path. The landing page renders the shared 40 with
+// no props; a chapter page passes its own curated `photos` from the CMS. Both
+// normalize through `toGalleryPhotos`, so the grid, the reveal and the lightbox
+// never learn which caller they are serving.
+//
+// `cap` and the adaptive column count are OPT-IN per call site, never defaults.
+// A default cap would silently truncate the homepage's 40-photo wall, which is
+// the one thing this component must keep rendering exactly as it did.
+//
+// This file is now normalization + composition: the tile, the viewer and the
+// expand control each own their own markup and styles.
+import GalleryTile from './GalleryTile.astro';
+import GalleryLightbox from './GalleryLightbox.astro';
+import GalleryExpand from './GalleryExpand.astro';
+import {
+  galleryColumns,
+  galleryStaggerDelay,
+  toGalleryPhotos,
+  visibleGalleryPhotos,
+} from '../../lib/gallery';
 import { altFor, readMediaManifest } from '../../lib/media';
+
 interface Props {
+  /** Curated photos: plain srcs, or the CMS's `{ image, caption? }` rows. */
+  photos?: (string | { image?: string; caption?: string })[];
+  /**
+   * Retained alias for `photos`. The landing page and the captured
+   * `event-gallery` scenario both pass `images`, so changing the prop name
+   * outright would break a scenario for no gain.
+   */
   images?: string[];
+  /** Collapse past this many photos behind "Show all N". Absent → uncapped. */
+  cap?: number;
+  heading?: string;
+  kicker?: string;
 }
+
 const defaults = Array.from(
   { length: 40 },
   (_, i) => `/images/gallery/event-${String(i + 1).padStart(2, '0')}.jpg`,
 );
-const { images = defaults } = Astro.props;
+
+const {
+  photos,
+  images,
+  cap,
+  heading = 'From our events',
+  kicker = 'Community',
+} = Astro.props;
+
+const all = toGalleryPhotos(photos ?? images ?? defaults);
+const columns = galleryColumns(all.length);
+const shown = visibleGalleryPhotos(all, { cap });
+const hidden = all.length - shown.length;
+
 // Read the library once for the whole grid rather than per photo.
 const media = readMediaManifest();
+
+// The reveal helper and the section anchor both key off `id="gallery"`, so a
+// page may render exactly one gallery. A chapter page renders one; this is a
+// real constraint worth stating rather than rediscovering.
 ---
 
-<section class="sec" id="gallery">
+<section class="sec" id="gallery" data-lightbox-scope data-lightbox-index="0">
   <div class="wrap">
     <div class="sec-head">
       <div>
-        <span class="kick">Community</span>
-        <h2>From our events</h2>
+        <span class="kick">{kicker}</span>
+        <h2>{heading}</h2>
       </div>
     </div>
-    <div class="gallery-grid">
+    {/* ONE grid holding every photo, with the over-cap ones hidden, rather than
+        a visible grid plus a second "rest" grid. Two grids reflow as two
+        independent runs, so revealing the remainder left the first grid's short
+        last row stranded above a second short row. Hidden tiles are display:none
+        and take no grid cell, so unhiding them makes 12 + 2 flow as 5/5/4. */}
+    <div class="gallery-grid" style={`--gallery-cols: ${columns};`}>
       {
-        images.map((src, i) => (
-          <figure class="gallery-item" style={`transition-delay: ${galleryStaggerDelay(i)}ms;`}>
-            <img
-              src={withBase(src)}
-              alt={altFor(src, `Harvard in Tech event photo ${i + 1}`, media)}
-              loading="lazy"
-            />
-          </figure>
+        all.map((photo, i) => (
+          <GalleryTile
+            src={photo.src}
+            caption={photo.caption}
+            alt={altFor(photo.src, `Harvard in Tech event photo ${i + 1}`, media)}
+            overflow={i >= shown.length}
+            delayMs={galleryStaggerDelay(i, columns)}
+          />
         ))
       }
     </div>
+
+    {hidden > 0 ? <GalleryExpand total={all.length} /> : null}
   </div>
+
+  <GalleryLightbox />
 </section>
 
 <style>
   .gallery-grid {
     display: grid;
     gap: 6px;
-    grid-template-columns: repeat(5, 1fr);
-    max-width: 1000px;
+    /* Driven by the photo count so a 3-photo chapter renders 3 columns rather
+       than 5 with two holes. The breakpoints below are CEILINGS via min(), so a
+       small gallery never gains columns on a narrower screen. */
+    grid-template-columns: repeat(var(--gallery-cols, 5), 1fr);
+    /* Scale the grid to its column count, capped at the full 1000px the shared
+       40-photo wall uses. Without the min(), a one-photo chapter stretched that
+       single tile across the whole 1000px — a 400px source blown up 2.5x, which
+       reads as broken rather than sparse. 206px a column keeps a small gallery's
+       tiles at about the size they are on the five-column wall (1000 / 5). */
+    max-width: min(1000px, calc(var(--gallery-cols, 5) * 206px));
     margin: 0 auto;
   }
-  .gallery-item {
-    margin: 0;
-    aspect-ratio: 1 / 1;
-    overflow: hidden;
-    background: var(--color-bg-soft);
-    opacity: 0;
-    transform: translateY(24px);
-    transition:
-      opacity 0.7s ease,
-      transform 0.7s ease;
-  }
-  .gallery-item.in-view {
-    opacity: 1;
-    transform: none;
-  }
-  .gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+
   @media (max-width: 900px) {
     .gallery-grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(min(var(--gallery-cols, 5), 4), 1fr);
     }
   }
   @media (max-width: 600px) {
     .gallery-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-  /* Respect reduced motion — show everything immediately, no transform. */
-  @media (prefers-reduced-motion: reduce) {
-    .gallery-item {
-      opacity: 1;
-      transform: none;
-      transition: none;
+      grid-template-columns: repeat(min(var(--gallery-cols, 5), 3), 1fr);
     }
   }
 </style>
 
 <script>
-  // Fade each photo in as it scrolls into view. The reveal decision + DOM
-  // wiring live in the unit-tested gallery helper.
+  // Fade each photo in as it scrolls into view, and enlarge on click. Both
+  // decisions live in unit-tested helpers; this is only the wiring.
   import { initGalleryReveal } from '../../lib/gallery';
+  import { initLightbox } from '../../lib/lightbox';
+
   initGalleryReveal();
+  initLightbox();
+
+  // "Show all N photos" unhides the over-cap tiles in place, then re-runs both:
+  // the revealed tiles need observing (they were display:none on the first
+  // pass, so they could never intersect) and their buttons need binding.
+  document.querySelector('[data-gallery-expand]')?.addEventListener('click', (event) => {
+    document
+      .querySelectorAll<HTMLElement>('[data-gallery-overflow]')
+      .forEach((tile) => (tile.hidden = false));
+    (event.currentTarget as HTMLElement).closest('.gallery-more')?.remove();
+    initGalleryReveal();
+    initLightbox();
+  });
 </script>

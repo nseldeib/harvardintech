@@ -96,7 +96,7 @@ git clone https://github.com/nseldeib/harvardintech && cd harvardintech
 npm install -g @codeyam-editor/codeyam-editor@latest
 
 # Launch the editor (split-screen terminal + live preview)
-codeyam-editor editor
+codeyam-editor start
 ```
 <!-- codeyam:run-and-edit:end -->
 
@@ -108,6 +108,10 @@ States captured as runnable scenarios with codeyam-editor:
 ### Blog Post - Welcome
 
 <img src=".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png" alt="Blog Post - Welcome" width="280">
+
+### Cutover Runbook - The Records On A Phone
+
+<img src=".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png" alt="Cutover Runbook - The Records On A Phone" width="280">
 
 ### CMS Analytics And Embeds
 
@@ -121,19 +125,15 @@ States captured as runnable scenarios with codeyam-editor:
 
 <img src=".codeyam/scenarios/screenshots/cms-chapter-editor-marked-as-draft--desktop.png" alt="CMS Chapter Editor - Marked As Draft" width="280">
 
-### CMS Chapter Editor - New York City
-
-<img src=".codeyam/scenarios/screenshots/cms-chapter-editor-new-york-city--desktop.png" alt="CMS Chapter Editor - New York City" width="280">
-
 ### CMS Dashboard - Empty
 
 <img src=".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png" alt="CMS Dashboard - Empty" width="280">
 
-### CMS Dashboard - Populated
-
-<img src=".codeyam/scenarios/screenshots/cms-dashboard-populated--desktop.png" alt="CMS Dashboard - Populated" width="280">
-
 ### CMS Entry Editor - Change Staged For Review
 
 <img src=".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png" alt="CMS Entry Editor - Change Staged For Review" width="280">
+
+### CMS Media Library - Adopted Images
+
+<img src=".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png" alt="CMS Media Library - Adopted Images" width="280">
 <!-- codeyam:scenario-gallery:end -->

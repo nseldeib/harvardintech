@@ -34,6 +34,15 @@ interface Props {
   heroImage?: string;
   tagline?: string;
   showGallery?: boolean;
+  /**
+   * This surface's own curated photos. Absent or EMPTY falls back to the shared
+   * 40-photo gallery, which is what every chapter showed before this existed —
+   * so a chapter nobody has curated looks exactly as it did.
+   *
+   * /communities renders this same shell and deliberately never passes it,
+   * which is what keeps community pages byte-for-byte unchanged.
+   */
+  photos?: { image?: string; caption?: string }[];
   events?: EventLike[];
   /** Heading over the events list. Defaults to "Upcoming Events in <name>",
    *  which reads wrong for a community ("...in Founders") — /communities passes
@@ -55,6 +64,7 @@ const {
   heroImage,
   tagline,
   showGallery = true,
+  photos,
   events = [],
   eventsHeading,
   contactEmail,
@@ -96,6 +106,18 @@ const hasContent = leads.length > 0 || links.length > 0 || hasBody;
   ) : null
 }
 
-{showGallery ? <EventGallery /> : null}
+{
+  /* An empty `photos` list is treated as absent, not as "an empty gallery":
+     the CMS leaves an empty array behind when an editor removes the last row,
+     and rendering nothing there would look like a bug rather than a fallback.
+     `cap` is passed ONLY here — the landing page stays uncapped. */
+  showGallery ? (
+    photos?.length ? (
+      <EventGallery photos={photos} cap={12} heading={`Photos from ${name}`} />
+    ) : (
+      <EventGallery />
+    )
+  ) : null
+}
 
 <ChapterConnect email={contactEmail} />

@@ -1,0 +1,13 @@
+{
+  "name": "GalleryExpand - Fourteen Photos",
+  "id": "0823c3e9-2650-44c3-9568-1a093b65f505",
+  "url": "/isolated-components/GalleryExpand",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GalleryExpand",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/GalleryExpand.astro",
+  "description": "The control under a capped gallery, labelled with the full photo count rather than the hidden remainder — \"Show all 14 photos\" on a chapter showing twelve. Centred within the grid's width, as it sits on a real page."
+}

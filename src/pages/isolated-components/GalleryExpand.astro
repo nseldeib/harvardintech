@@ -1,0 +1,27 @@
+---
+import Component from "../../../src/components/landing/GalleryExpand.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GalleryExpand — the "Show all N photos" control that sits
+// under a capped gallery.
+//
+// The component centres itself within whatever width it is given (the grid's
+// 1000px on a real page), so the wrapper below carries that width rather than
+// letting the button hug its own text and lose the centring behaviour.
+//
+// 14 is the count from the curated New York chapter — a real number rather than
+// a round one, so the label's width is representative.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GalleryExpand</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 100%; max-width: 1000px;">
+      <Component total={14} />
+    </div>
+  </body>
+</html>
