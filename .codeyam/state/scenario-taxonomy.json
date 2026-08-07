@@ -210,6 +210,36 @@
         "status": "added"
       }
     },
+    "CmsPublishReview": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The screen groups changes by collection and each group is a scrollable list with no truncation or overflow treatment, so a large staged set differs from a small one only in length"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "The staged set is read synchronously from localStorage on mount, so there is no pending state; the only async work is the deploy-status check, whose transient Checking the last deploy line is a sub-second network artifact rather than a state of this view"
+      },
+      "edge": {
+        "status": "n-a",
+        "reason": "The summary lines are generated from field names and change kinds rather than authored copy, so there is no long-text or missing-optional-field variant to exercise here; the underlying parser edge cases are covered by upstream changeSummary tests"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Publish failures need a real refused GitHub commit, which this preview cannot produce without a token; the two failure paths that matter are asserted as unit tests instead — the media guard in mediaCommitGuard.test.ts and the drift refusal upstream in githubCommit.test.ts"
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
     "CutoverRunbook": {
       "empty": {
         "status": "covered"

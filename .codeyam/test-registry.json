@@ -563,7 +563,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "commitAll media guard › refuses to publish a record with no bytes, before touching GitHub",
-      "line": 113,
+      "line": 120,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -5370,7 +5370,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "unbackedManifestRecords › ignores a manifest edit that adds no records",
-      "line": 85,
+      "line": 92,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -5379,7 +5379,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "unbackedManifestRecords › ignores a staging set that does not touch the manifest",
-      "line": 95,
+      "line": 102,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -5388,7 +5388,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "unbackedManifestRecords › passes an upload whose bytes are staged alongside its record",
-      "line": 70,
+      "line": 77,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -5397,7 +5397,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "unbackedManifestRecords › reports records the commit adds without their image bytes",
-      "line": 63,
+      "line": 70,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },

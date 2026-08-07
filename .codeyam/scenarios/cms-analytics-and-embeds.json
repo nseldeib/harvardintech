@@ -1,6 +1,6 @@
 {
   "name": "CMS Analytics And Embeds",
-  "id": "6ec298b2-99fb-4769-8306-760c3c3ce072",
+  "id": "dc1f0df4-25ce-4ce6-8ba1-57f7339a23d4",
   "url": "/admin/siteIntegrations/site",
   "dimensions": [
     "Desktop"
@@ -17,5 +17,5 @@
   },
   "scenarioType": "application",
   "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
-  "description": "The measurement id and the raw head/body HTML boxes, on a screen of their own. These were always real editable data on settings.json, but the CMS settings form renders inputs for five scalar keys and round-trips the rest untouched \u2014 so adding a verification tag meant a developer and a deploy. Note the View-on-site control: this collection is declared as having no page of its own, so it reads 'This content has no page of its own' instead of offering a link. It configures every page, so there is no single page to send an editor to, and the old behaviour \u2014 a link to /siteIntegrations/site \u2014 pointed at a 404."
+  "description": "The measurement id and the raw head/body HTML boxes, on a screen of their own. These were always real editable data on settings.json, but the CMS settings form renders inputs for five scalar keys and round-trips the rest untouched — so adding a verification tag meant a developer and a deploy. Note the View-on-site control: this collection is declared as having no page of its own, so it reads 'This content has no page of its own' instead of offering a link. It configures every page, so there is no single page to send an editor to, and the old behaviour — a link to /siteIntegrations/site — pointed at a 404."
 }

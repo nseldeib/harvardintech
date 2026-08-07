@@ -1,6 +1,6 @@
 {
   "name": "CMS Entry Editor - Change Staged For Review",
-  "id": "9f8a8e85-d1b9-4f84-a1f6-7ab6238d1a2c",
+  "id": "7216a13a-b104-4c9f-92c3-8d25ea181fb8",
   "url": "/admin/chapters/nyc",
   "dimensions": [
     "Desktop"
@@ -128,15 +128,16 @@
   },
   "scenarioType": "application",
   "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "An entry mid-edit with the change saved for publishing but not yet published — the state an editor sits in between typing and committing, and the one the publish review is reached from. Two things about how it is driven, both learned from the @codeyam/cms 0.4.0 upgrade. The button is 'Save for publishing'; it was 'Stage change' until 0.4.0 renamed it while detechnicalising this flow. And the blurb is filled by its `#f-blurb` id rather than by its visible text, because a value-matched target silently stopped matching across that upgrade and left the scenario capturing an unedited form — a stable selector is the difference between a scenario that proves something and one that quietly proves nothing.",
   "interactions": [
     {
       "action": "fill",
-      "text": "Our founding chapter and largest community.",
+      "selector": "#f-blurb",
       "value": "Our founding chapter and largest community - now hosting monthly founder dinners."
     },
     {
       "action": "click",
-      "text": "Stage change"
+      "text": "Save for publishing"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "CMS Sponsorship Level Editor",
-  "id": "bb00cf91-f029-4d86-b4e8-ce28de771690",
+  "id": "225a1c66-433f-4ecb-8481-ced9b5b66035",
   "url": "/admin/sponsorLevels/presenting",
   "dimensions": [
     "Desktop"
@@ -32,5 +32,5 @@
   },
   "scenarioType": "application",
   "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
-  "description": "A partnership level with its benefits as a repeatable list \u2014 rows an organizer can add, reorder, and delete. This is the state that was not merely unedited before but INEXPRESSIBLE: a level carries a benefits list inside the list of levels, and the editor supports a repeatable list of scalars at top level only, so a list inside a list had no control that could render it. Splitting levels into their own collection is what made the inner list a top-level one. Note the warning on Level ID: renaming the display Name is always safe, while changing the ID re-homes every sponsor filed under it into Other partners."
+  "description": "A partnership level with its benefits as a repeatable list — rows an organizer can add, reorder, and delete. This is the state that was not merely unedited before but INEXPRESSIBLE: a level carries a benefits list inside the list of levels, and the editor supports a repeatable list of scalars at top level only, so a list inside a list had no control that could render it. Splitting levels into their own collection is what made the inner list a top-level one. Note the warning on Level ID: renaming the display Name is always safe, while changing the ID re-homes every sponsor filed under it into Other partners."
 }

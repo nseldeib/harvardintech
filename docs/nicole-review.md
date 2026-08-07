@@ -172,10 +172,15 @@ One thing worth knowing: an upload has to be **published from the media library*
 before it appears on the site. Selecting a file stages it; it is not live until
 the publish commits.
 
-The underlying upload bug is in the `@codeyam/cms` package, not this site. The
-guard ships here as `patches/@codeyam+cms+0.2.2.patch` (applied automatically on
-`npm install`) and should be filed upstream so the patch can eventually be
-dropped.
+The underlying upload bug was in the `@codeyam/cms` package, not this site. The
+guard shipped here as a local patch at first; it is now **fixed upstream and
+released in `@codeyam/cms` 0.4.0**, which this site depends on, so the patch has
+been deleted. Every site using the package gets the fix, not just this one.
+
+`src/lib/mediaCommitGuard.test.ts` stays as a check on that dependency: if a
+future release reworks or drops the guard, it fails in CI rather than at an
+editor's next upload. That matters because the bug is invisible at publish time
+— the CMS truthfully says the upload succeeded — so nothing else would catch it.
 
 ## Still open (team todos, not code)
 

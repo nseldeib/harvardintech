@@ -1,0 +1,23 @@
+{
+  "name": "CMS Publish Review - What The Edit Actually Did",
+  "id": "feb5cb1d-9184-43d0-a1ad-2eeef8a4ca12",
+  "url": "/admin/publish",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "browserState": {
+    "localStorage": {
+      "codeyam-cms:pending-changes": "[{\"collection\": \"chapters\", \"slug\": \"nyc\", \"path\": \"src/content/chapters/nyc.md\", \"title\": \"New York City\", \"original\": \"---\\ncity: New York City\\nregion: New York, NY\\nblurb: Our founding chapter and largest community.\\n---\\n\", \"updated\": \"---\\ncity: New York City\\nregion: New York, NY\\nblurb: Our founding chapter and largest community - now hosting monthly founder dinners.\\n---\\n\", \"kind\": \"edit\"}]"
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/publish.astro",
+  "description": "The same review with the changed collection opened, which is where @codeyam/cms 0.4.0 does its real work: the edit is described in words an editor recognises rather than as a +/- diff of markdown and YAML, and the diff itself moves behind a disclosure for whoever wants it. Both sides are parsed with the same lossless round-trip parser the editor saves through, so a reordered frontmatter key no longer reads as a change. Captured expanded rather than collapsed because collapsed proves only that a group exists — the summary is the thing worth seeing.",
+  "interactions": [
+    {
+      "action": "click",
+      "text": "Chapters"
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "timestamp": "2026-08-07T02:41:36Z",
+  "title": "Upgrade codeyam CMS To 0.4.0 And Drop The Patch",
+  "type": "feature",
+  "userRequest": "## Summary\n\nUpgrade `@codeyam/cms` 0.2.2 → 0.4.0 and **delete the patch**. This is the\ndownstream half of the work whose upstream half is\n[codeyam-ai/codeyam-cms#4](https://github.com/codeyam-ai/codeyam-cms/pull/4),\nmerged by Jared and published as 0.4.0.\n\nVerified before planning, not assumed: 0.4.0 contains both upstreamed features\n(`unbackedManifestRecords` / `UnbackedMediaError` in the commit path, and\n`entryPagePath` / `SLUG_TOKEN` / `groupCardsByPage` for placement), and a\nfile-by-file comparison of the patched tree against the published 0.4.0 tree\nshows **nothing the patch added is missing**. The patch is redundant, not merely\ninconvenient, so deleting it removes a mechanism rather than a protection.\n\n## Why deleting the patch is the point\n\n`patch-package` matches patches to versions by filename. For as long as the\nguard lived in `patches/@codeyam+cms+0.2.2.patch`, every future version bump was\none forgotten rebase away from silently dropping a data-integrity fix — and the\nbug it prevents is invisible at publish time, because the CMS truthfully reports\nthe upload succeeded. The failure only surfaces later as a broken image an editor\ncannot fix from the UI. Carrying that risk was acceptable while the fix was ours\nalone; now that it is released, carrying it would be negligent.\n\n## Key Decisions\n\n- **Keep `mediaCommitGuard.test.ts`.** It stops being a test of our patch and\n  becomes a test of our *dependency* — a downstream canary that fails at CI time\n  if a future `@codeyam/cms` reworks or drops the guard. That is worth more now\n  than it was before, because we no longer control the code it guards. Its\n  header currently says the fix \"ships as a patch this repo applies on install\";\n  that sentence becomes false on this change and gets rewritten rather than left\n  to mislead the next reader.\n\n- **Keep `patch-package` in `postinstall`.** With `patches/` empty it is a\n  no-op costing one no-op invocation per install, and removing it means the next\n  person who needs a patch has to rediscover the wiring. Low cost to keep, real\n  cost to remove.\n\n- **Take 0.3.0's publish-flow work too.** 0.4.0 subsumes 0.3.0, so this upgrade\n  also brings the plain-language change summaries and the published-baseline\n  fix. Both land on Nicole's actual workflow, so both get demonstrated rather\n  than assumed — the agreed scope from the earlier planning round still holds.\n\n- **Recapture rather than trust.** The 15 existing CMS scenarios render\n  `/admin`, which this changes. A frame that does *not* move is evidence the\n  upgrade did not reach it, so the diffs get read rather than accepted.\n\n## Implementation\n\n### 1. The upgrade\n\n- `package.json`: `@codeyam/cms` `0.2.2` → `0.4.0`.\n- `git rm patches/@codeyam+cms+0.2.2.patch`.\n- `npm install` — `postinstall` runs `patch-package`, which should now report\n  nothing to apply rather than a version mismatch.\n- Confirm the installed tree carries the guard and the placement exports, so the\n  deletion provably lost nothing.\n\n### 2. Prove nothing regressed\n\nFive test files in this repo exercise the CMS API directly and are the real\nacceptance criteria:\n\n- `mediaCommitGuard.test.ts` — the guard, now against the released package.\n- `collectionPlacement.test.ts` and `dashboardGrouping.test.ts` — the placement\n  feature against this site's real 21-entry `paths` map.\n- `collections.test.ts`, `deployMarker.test.ts` — the surrounding contract.\n\nFull suite green is the bar; the guard test passing against an unpatched\n`node_modules` is the specific thing that proves the upstream landed correctly.\n\n### 3. Docs that name the patch\n\n- `src/lib/mediaCommitGuard.test.ts` header — rewrite the \"ships as a patch\"\n  paragraph to describe the canary role.\n- `docs/nicole-review.md` — names `patches/@codeyam+cms+0.2.2.patch` when\n  explaining the photo fix, and says it \"should be filed upstream so the patch\n  can eventually be dropped\". That is now done; the doc should say so rather\n  than point at a file that no longer exists.\n\n### 4. Scenarios\n\n- Recapture the 15 existing CMS scenarios and read the diffs.\n- Add scenarios for what 0.4.0 changes for an editor: the publish review with\n  plain-language change summaries instead of a raw diff, the same screen with\n  the diff disclosure open (the diff moved, it did not vanish), and a\n  post-publish edit demonstrating that a second edit on a still-open page no\n  longer reads as a co-editor conflict.\n\n## Out of scope\n\n- Any further upstream work on `@codeyam/cms`.\n- The domain cutover, the runbook, and `deploy.yml`. `harvardintech.com` remains\n  Strikingly's.\n- The other session's queued per-chapter-galleries plan and its unpushed commits.",
+  "description": "Upgraded @codeyam/cms from 0.2.2 to 0.4.0 and deleted patches/@codeyam+cms+0.2.2.patch. The patch carried two things this site needed and the package did not: the guard that refuses to publish a media-manifest record whose image bytes went missing, and the dashboard grouping that says where each collection appears on the site. Both are now upstream, released, and depended on rather than patched in.\n\nThe deletion is the point rather than a tidy-up. patch-package matches patches to versions BY FILENAME, so for as long as the guard lived in a file named for 0.2.2, every future bump was one forgotten rebase away from silently dropping it — and the bug it prevents is invisible at publish time, because the CMS truthfully reports the upload succeeded. It surfaces later as a broken image an editor cannot fix from the UI. Carrying that risk was defensible while the fix was ours alone; once released, it was not.\n\nVerified before deleting rather than after: a file-by-file comparison of the patched tree against the published 0.4.0 tree showed nothing the patch added was missing. The guard is present in an unpatched node_modules, and mediaCommitGuard.test.ts passes against it — that test was written with the explicit note that it exists so a future @codeyam/cms dropping the guard fails at CI time instead of at an editor's next upload, and this upgrade is the event it was written for. Its header changed to match its new job: it no longer covers our own code, it holds a dependency to its contract. That is worth more now than before, not less.\n\n0.4.0 subsumes 0.3.0, so the upgrade also brings the two publish-flow changes that land on the editor's actual workflow. The publish review used to lead with a raw +/- diff of markdown and YAML — code, shown to a non-technical editor at the moment she decides whether to publish; it now says 'Blurb changed' in words and keeps the diff behind a 'Show the file changes' disclosure. And the published-baseline fix stops a second edit on a still-open page from being narrated as a co-editor conflict about the editor's own publish, which is exactly the loop the review handoff describes to her.\n\nTwo findings the upgrade surfaced that no test would have. The release renamed the publish controls — 'Stage change' became 'Save for publishing', '1 pending change' became '1 change ready to publish' — so the one scenario that drove that button broke. Fixing it also meant retargeting its field from visible text to the stable #f-blurb id, because the value-matched target had silently stopped matching and left the scenario capturing an unedited form: a scenario that passes while proving nothing is worse than one that fails. And more consequentially for future work in this repo: staleness detection did not flag ANY of this. node_modules is not in the dependency graph, so all 15 CMS scenarios reported fresh while rendering pre-upgrade labels. They were force-recaptured through register; only three frames actually moved, which usefully localises the change to the entry-editor save flow, the media library, and settings. The lesson generalises — after a dependency bump in this repo, '0 stale' does not mean 'unaffected'.\n\nThree new scenarios cover the publish review, seeded through browserState.localStorage rather than driven, because scenario interactions cannot navigate between pages: nothing staged (where an editor lands most times, and after a successful publish), one change summarised, and the disclosure opened to show the summary and the link to the raw diff. They assert the render of a staged state; the round-trip that produces it stays covered by the entry-editor scenario.\n\nThe upstream half shipped as codeyam-ai/codeyam-cms#4 — 509 lines across 15 files with 25 new tests extending the four existing suites, taking that repo from 957 to 982 passing. It was reviewed and merged by Jared, who published 0.4.0; the version bump and publish were deliberately left out of the PR as the maintainer's call. docs/nicole-review.md, which named the patch file and said it should be filed upstream 'eventually', now records that this is done.\n\n650 tests pass here, tsc and astro-check pass, and the audit reports zero findings. Nothing about the site's content or the domain migration changed: harvardintech.com is still served by Strikingly.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/upgrade-codeyam-cms-to-0-4-0-and-drop-the-patch.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-analytics-and-embeds.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-blog-list-drafts-and-published.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-chapter-editor-marked-as-draft.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-chapter-editor-new-york-city.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-dashboard-empty.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-dashboard-populated.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-entry-editor-change-staged-for-review.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-entry-editor-new-chapter-form.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-media-library-adopted-images.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-section-editor-section-type-is-a-dropdown.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-site-settings.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-sponsorship-level-editor.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-volunteer-page-editor.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "patches/@codeyam+cms+0.2.2.patch",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/mediaCommitGuard.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-publish-review-nothing-to-publish.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-publish-review-plain-language-change-summary.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-publish-review-what-the-edit-actually-did.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-nothing-to-publish--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-plain-language-change-summary--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-what-the-edit-actually-did--desktop.png",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 650,
+    "passed": 650,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 650,
+        "passed": 650
+      }
+    ]
+  }
+}
