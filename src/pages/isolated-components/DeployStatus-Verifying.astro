@@ -1,0 +1,36 @@
+---
+import Component from "@codeyam/cms/components/admin/DeployStatus.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for DeployStatus at `verifying` — the build has finished and
+// the poll is watching the site's own marker for the new bytes to appear.
+//
+// Captured because it is the stage the old bug died on, and because it is the
+// one state that reads almost identically to the state that replaced it. Both
+// say the site is still catching up; the difference is that this one is still
+// WATCHING (close reads "Keep editing", no Check again) while `unconfirmed` has
+// stopped (close reads "Done", Check again offered). Having both captured is
+// what makes that distinction reviewable rather than a claim in a comment.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const COMMIT_URL = 'https://github.com/nseldeib/harvardintech/commit/a0dec62273d5ec475ae0825ed31184a84447c6f1';
+const SITE_URL = 'https://nseldeib.github.io/harvardintech-staging';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DeployStatus - Verifying</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component
+        client:load
+        repo={TARGET}
+        siteUrl={SITE_URL}
+        commitUrl={COMMIT_URL}
+        state={{ stage: 'verifying' }}
+      />
+    </div>
+  </body>
+</html>

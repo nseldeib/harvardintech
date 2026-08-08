@@ -838,6 +838,159 @@
       "runner": "tests"
     },
     {
+      "description": "Each outcome reads differently in the compact chip, so the colour dot is never the only thing carrying the result.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployChipLabel › gives each terminal outcome its own wording",
+      "line": 120,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "In-flight stages say which step they are on, so a long build still looks like progress rather than a stall.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployChipLabel › names the current step while publishing",
+      "line": 128,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Green, red and amber have to differ or the chip's one glanceable signal collapses.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployDotColor › gives live, failed and unconfirmed distinct colours",
+      "line": 138,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every in-flight stage shares one colour: the chip reports that work is happening, not which step it reached.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployDotColor › shares one colour across the in-flight stages",
+      "line": 146,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An errored build keeps GitHub's own message, which is the only thing that says why.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployStateFromBuild › carries the build error message through on failure",
+      "line": 163,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`unconfirmed` is produced only by the poll giving up — never by a build record, which always says something definite.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployStateFromBuild › never derives unconfirmed from a build status",
+      "line": 155,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Success completes every row, including Live.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › marks every row done when live",
+      "line": 86,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`unconfirmed` is the literal truth of the state: everything up to and including the wait is done, and only \"Live\" is unproven.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › marks everything before Live done and leaves Live pending when unconfirmed",
+      "line": 63,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The stepper must not change shape between stages — a row appearing or vanishing mid-deploy reads as something having gone wrong.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › renders one row per pipeline stage for every stage",
+      "line": 55,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "It must not borrow the failure marker. Nothing failed — the deploy was simply never observed finishing — and a red step would say otherwise.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › shows no failed step when unconfirmed",
+      "line": 74,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A real failure still reads as one, pinned to the step where a build works.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › still marks the building row failed on a failed build",
+      "line": 79,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The unconfirmed copy must not be the generic in-flight line, which claims GitHub Pages is actively rebuilding — by then nothing is watching.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySubhead › does not reuse the in-flight rebuilding copy",
+      "line": 103,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Success names where it published, which on a two-track repo is the part an editor actually needs to know.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySubhead › names the repo and branch on success",
+      "line": 109,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "States the commit as fact and the deploy as unknown — it promises nothing and blames nothing.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySubhead › says the change is committed and the site is still updating",
+      "line": 94,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two original terminal stages keep their meaning.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › isTerminalStage › keeps live and failed terminal",
+      "line": 37,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "In-flight stages must stay non-terminal, or the poll would stop early and report a deploy as finished while it is still building.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › isTerminalStage › leaves every in-flight stage non-terminal",
+      "line": 44,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole bug in one assertion. If `unconfirmed` is not terminal, the panel's close button never enables and the admin is unusable after a publish that could not be verified.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › isTerminalStage › treats unconfirmed as terminal so the status view can rest",
+      "line": 32,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
       "description": "The reviewed track is served from a subpath of this repo's own Pages site, so the same rule applies even though it publishes by artifact upload.",
       "file": "src/lib/deployTracks.test.ts",
       "format": "vitest",
@@ -871,6 +1024,132 @@
       "key": "deploy.yml track coherence › writes no CNAME on the staging track",
       "line": 122,
       "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Both publish surfaces build their record here so the watch behaves identically wherever Publish was pressed.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › buildDeployRecord › carries the commit url, marker url and sampled baseline",
+      "line": 35,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A null baseline is a real answer, not a missing one: the site served no marker before the commit, so propagation cannot be verified and the poll must be told that rather than left to guess.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › buildDeployRecord › preserves a null marker baseline rather than dropping the field",
+      "line": 55,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A new record always starts at the moment the commit landed — nothing has been observed about the deploy yet.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › buildDeployRecord › starts at the committed stage stamped with the supplied clock",
+      "line": 45,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The key drives the poll effect. Two different commits are two different watches — publishing again mid-deploy must move the watch to the new one.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › deployWatchKey › distinguishes two different commits",
+      "line": 66,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "This is what makes \"Check again\" work. It re-watches the SAME commit with a fresh start time, and unless that reads as a new watch the poll effect never re-runs and the button does nothing.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › deployWatchKey › distinguishes two watches of the same commit started at different times",
+      "line": 76,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Re-reading the same stored record across a navigation must not look like a new watch, or every page load would restart the poll from scratch.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › deployWatchKey › is stable for the same commit and start time",
+      "line": 85,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The happy path: what the store round-trips through JSON.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isDeployRecord › accepts a record built by buildDeployRecord",
+      "line": 140,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Storage is a string under a key anything on the origin can write, so a half-written or hand-edited value must not resurrect as a watch that polls a garbage URL for ten minutes.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isDeployRecord › rejects a record missing the fields the poll depends on",
+      "line": 149,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Null and primitives reach here whenever JSON.parse succeeds on junk.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isDeployRecord › rejects null and non-object values",
+      "line": 156,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A record left behind by a tab closed yesterday must not resurrect.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isWatchExpired › expires a watch left over from a much earlier session",
+      "line": 131,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An exhausted record is dropped rather than resumed: restarting a watch with no budget would report \"still updating\" instantly and read as a fresh failure of a deploy that finished long ago.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isWatchExpired › expires a watch whose budget is exactly spent",
+      "line": 124,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A fresh record is resumable — this is the ordinary re-attach after the editor opens another entry mid-deploy.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isWatchExpired › treats a just-started watch as resumable",
+      "line": 115,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Budget runs from when the deploy STARTED, not from when the current page mounted — otherwise an editor moving between entries would keep renewing a hopeless watch indefinitely.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › remainingWatchMs › counts down from the start time rather than from now",
+      "line": 96,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Never negative: the value is handed straight to a poll timeout, and a negative budget would be a nonsense argument.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › remainingWatchMs › floors at zero once the budget is spent",
+      "line": 105,
+      "registeredAt": "2026-08-08T00:50:27Z",
       "runner": "tests"
     },
     {

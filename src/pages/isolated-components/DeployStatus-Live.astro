@@ -1,0 +1,38 @@
+---
+import Component from "@codeyam/cms/components/admin/DeployStatus.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for DeployStatus at `live` — the happy ending, and the state
+// this site could not reach before the fix.
+//
+// `live` here is not "GitHub said the build finished": the poll holds at
+// `verifying` until the site's own `/deploy-status.json` marker CHANGES, so
+// reaching this panel means the new bytes are genuinely being served. That is
+// only true now that the watch reads the marker on the site the `staging` branch
+// actually deploys to — it used to read the main site's marker, which this
+// commit never touches, so the change it was waiting for could never happen.
+//
+// "View live site" points at that same site for the same reason.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const COMMIT_URL = 'https://github.com/nseldeib/harvardintech/commit/a0dec62273d5ec475ae0825ed31184a84447c6f1';
+const SITE_URL = 'https://nseldeib.github.io/harvardintech-staging';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DeployStatus - Live</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component
+        client:load
+        repo={TARGET}
+        siteUrl={SITE_URL}
+        commitUrl={COMMIT_URL}
+        state={{ stage: 'live' }}
+      />
+    </div>
+  </body>
+</html>

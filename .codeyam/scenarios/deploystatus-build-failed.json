@@ -1,0 +1,12 @@
+{
+  "name": "DeployStatus - Build Failed",
+  "id": "e3da0c26-d60a-4aea-b67b-281eb5267004",
+  "url": "/isolated-components/DeployStatus-Failed",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component",
+  "description": "A build that errored. Registered because it is the state most easily broken by making the panel always-dismissible: a failure still has to read as a failure, keep its error text, and keep both ways to act on it (View build log, Retry). The close button says 'Done' rather than 'Keep editing' — the deploy is over, so there is nothing left to watch."
+}

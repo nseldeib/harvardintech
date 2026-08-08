@@ -1,0 +1,12 @@
+{
+  "name": "StagingBar - Publish Again While Deploying",
+  "id": "78f1b584-e3a9-4aff-9ea6-b11138d74e3e",
+  "url": "/isolated-components/StagingBar-PublishAgainWhileDeploying",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "StagingBar",
+  "scenarioType": "component",
+  "description": "The state that used to be impossible: a deploy in flight and a fresh change ready to publish at the same time. Both pills are the assertion — the chip is the first publish still deploying, the bar below is a second edit staged since, with 'Review & publish' live rather than blocked. Publishing was previously a phase the component sat in until Pages finished, so a second publish had to wait out the first. The watch now lives beside the publish flow rather than inside it."
+}

@@ -1,0 +1,12 @@
+{
+  "name": "DeployStatus - Waiting For The Site",
+  "id": "b4fe6062-ebd9-479b-8128-bc6f5d30857b",
+  "url": "/isolated-components/DeployStatus-Verifying",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component",
+  "description": "The build has finished and the poll is watching the site's own marker for the new bytes to appear. Captured because it is the stage the old bug died on, and because it reads almost identically to the state that replaced it: both say the site is catching up, but this one is still WATCHING (close reads 'Keep editing', no Check again) while 'unconfirmed' has stopped watching (close reads 'Done', Check again offered). Having both captured makes that distinction reviewable rather than a claim in a comment."
+}

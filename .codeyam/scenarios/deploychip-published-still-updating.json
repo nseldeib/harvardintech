@@ -1,0 +1,12 @@
+{
+  "name": "DeployChip - Published, Still Updating",
+  "id": "b897eba2-ace4-4641-a8db-9d8f920481c0",
+  "url": "/isolated-components/DeployChip-StillUpdating",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployChip",
+  "scenarioType": "component",
+  "description": "The parked outcome in compact form, and the chip's third colour. Amber sits between the green of 'live' and the red of 'failed', so if the dot were the only signal an editor would have to know a convention nobody taught her. The label carries it in words instead, and this capture is what keeps that true."
+}

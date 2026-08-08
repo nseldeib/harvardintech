@@ -4,6 +4,7 @@
     "repo": "harvardintech",
     "branch": "staging"
   },
+  "siteUrl": "https://nseldeib.github.io/harvardintech-staging",
   "authEndpoint": "/auth",
   "auth": {
     "token": true,

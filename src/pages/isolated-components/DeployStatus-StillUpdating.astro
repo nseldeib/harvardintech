@@ -1,0 +1,39 @@
+---
+import Component from "@codeyam/cms/components/admin/DeployStatus.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for DeployStatus at `unconfirmed` — how a watch that ran out
+// of budget now ends.
+//
+// This is the state that did not exist before, and the reason the admin used to
+// lock up: `pollDeploy` returned whatever in-flight stage it happened to be
+// sitting on, which is non-terminal, so the panel's close button stayed disabled
+// forever. It now resolves here instead — the commit is stated as fact, the
+// deploy is not claimed, and there are three ways out: check again, go look at
+// the site, or close.
+//
+// Worth its own capture because the wording is the whole point. "Published — the
+// site is still updating" has to read as a normal slow deploy, not as a failure.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const COMMIT_URL = 'https://github.com/nseldeib/harvardintech/commit/a0dec62273d5ec475ae0825ed31184a84447c6f1';
+const SITE_URL = 'https://nseldeib.github.io/harvardintech-staging';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DeployStatus - Still Updating</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component
+        client:load
+        repo={TARGET}
+        siteUrl={SITE_URL}
+        commitUrl={COMMIT_URL}
+        state={{ stage: 'unconfirmed' }}
+      />
+    </div>
+  </body>
+</html>

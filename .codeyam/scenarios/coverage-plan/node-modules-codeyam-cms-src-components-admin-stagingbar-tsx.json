@@ -1,0 +1,156 @@
+{
+  "surface": "node_modules/@codeyam/cms/src/components/admin/StagingBar.tsx",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "phase",
+      "value": "error",
+      "rationale": "source-derived state phase=error",
+      "status": "covered"
+    },
+    {
+      "dimension": "phase",
+      "value": "committing",
+      "rationale": "source-derived state phase=committing",
+      "status": "covered"
+    },
+    {
+      "dimension": "phase",
+      "value": "reviewing",
+      "rationale": "source-derived state phase=reviewing",
+      "status": "planned"
+    },
+    {
+      "dimension": "collections",
+      "value": "empty",
+      "rationale": "source-derived state collections=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "collections",
+      "value": "one",
+      "rationale": "source-derived state collections=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "collections",
+      "value": "many",
+      "rationale": "source-derived state collections=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "changes",
+      "value": "empty",
+      "rationale": "source-derived state changes=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "changes",
+      "value": "one",
+      "rationale": "source-derived state changes=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "changes",
+      "value": "many",
+      "rationale": "source-derived state changes=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "deploy",
+      "value": "true",
+      "rationale": "source-derived state deploy=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "deploy",
+      "value": "false",
+      "rationale": "source-derived state deploy=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "commit",
+      "value": "true",
+      "rationale": "source-derived state commit=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "commit",
+      "value": "false",
+      "rationale": "source-derived state commit=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "existing",
+      "value": "true",
+      "rationale": "source-derived state existing=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "existing",
+      "value": "false",
+      "rationale": "source-derived state existing=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "initialDeploy",
+      "value": "true",
+      "rationale": "source-derived state initialDeploy=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "initialDeploy",
+      "value": "false",
+      "rationale": "source-derived state initialDeploy=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "initialChanges",
+      "value": "true",
+      "rationale": "source-derived state initialChanges=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "initialChanges",
+      "value": "false",
+      "rationale": "source-derived state initialChanges=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "v",
+      "value": "true",
+      "rationale": "source-derived state v=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "v",
+      "value": "false",
+      "rationale": "source-derived state v=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "watch",
+      "value": "true",
+      "rationale": "source-derived state watch=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "watch",
+      "value": "false",
+      "rationale": "source-derived state watch=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "deployView",
+      "value": "true",
+      "rationale": "source-derived state deployView=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "deployView",
+      "value": "false",
+      "rationale": "source-derived state deployView=false",
+      "status": "covered"
+    }
+  ]
+}

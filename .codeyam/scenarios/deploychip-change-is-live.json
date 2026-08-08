@@ -1,0 +1,12 @@
+{
+  "name": "DeployChip - Change Is Live",
+  "id": "42707703-00db-451d-bc3a-1abfe21b00a6",
+  "url": "/isolated-components/DeployChip-Live",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployChip",
+  "scenarioType": "component",
+  "description": "The payoff of persisting the watch across page loads. Reaching this means the editor published, carried on working through other entries, and was told her change went live anyway. Without the per-tab record the watch died at the first navigation and she would never have found out. The dot is never the only signal — the label says it in words."
+}

@@ -1,0 +1,12 @@
+{
+  "name": "DeployChip - Publishing",
+  "id": "b8263e33-3f51-4c5b-9b89-7cf6025dbd6b",
+  "url": "/isolated-components/DeployChip-Publishing",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployChip",
+  "scenarioType": "component",
+  "description": "The feature in one component: the same deploy that used to hold a full-screen scrim over the admin, reduced to a line in the corner. Still watching, still says so, takes nothing away. An editor reaches it by dismissing the panel or simply by opening another entry — the watch is recorded per tab and re-attached by the StagingBar on whichever admin page loads next."
+}

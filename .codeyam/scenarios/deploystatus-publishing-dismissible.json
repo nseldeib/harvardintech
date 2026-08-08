@@ -1,0 +1,12 @@
+{
+  "name": "DeployStatus - Publishing, Dismissible",
+  "id": "e1f5cd65-c886-44b0-8be8-8399dd62ca87",
+  "url": "/isolated-components/DeployStatus-Publishing",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component",
+  "description": "The deploy panel mid-build — the 1-3 minutes a GitHub Actions build takes. The button on the right is the change: it reads 'Keep editing' and it is enabled. It previously read 'Working…' and was disabled until the deploy reached a terminal stage, inside a fixed full-screen scrim; on this site the watch could never reach one, so publishing locked the whole admin until the page was reloaded. Closing now demotes this to a chip and the watch continues."
+}

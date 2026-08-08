@@ -79,6 +79,28 @@
     ]
   },
   {
+    "description": "The deploy status shrunk to a line in the corner, so publishing stops interrupting the work. Shown once the full panel is dismissed, and re-attached by StagingBar on whichever admin page loads next — which is what lets an editor publish, carry on editing elsewhere, and still be told her change went live. Its colour dot is never the only signal; the label says the outcome in words.",
+    "filePath": "node_modules/@codeyam/cms/src/components/admin/DeployChip.tsx",
+    "name": "DeployChip",
+    "scenarios": [
+      "deploychip-publishing",
+      "deploychip-published-still-updating",
+      "deploychip-change-is-live"
+    ]
+  },
+  {
+    "description": "The full deploy panel an editor sees after pressing Publish: a stepper from Committed through Live, the commit link, and the actions for each outcome. Dismissible at EVERY stage — it sits in a fixed full-screen scrim, so a close button that only enables on a terminal stage is a modal lock on the whole admin, which is exactly what it used to be on this site. Closing demotes it to DeployChip; the watch continues either way.",
+    "filePath": "node_modules/@codeyam/cms/src/components/admin/DeployStatus.tsx",
+    "name": "DeployStatus",
+    "scenarios": [
+      "deploystatus-publishing-dismissible",
+      "deploystatus-waiting-for-the-site",
+      "deploystatus-published-still-updating",
+      "deploystatus-live",
+      "deploystatus-build-failed"
+    ]
+  },
+  {
     "description": "External-form embed for the static site: renders one of three states — a MailChimp-style POST form (action prop), an embedded provider iframe (embedUrl prop), or an unconfigured fallback message. Delegates submission to a third-party service since a static build has no backend.",
     "filePath": "src/components/EmbedForm.astro",
     "name": "EmbedForm",
@@ -181,6 +203,15 @@
       "primarynav-derived-chapters",
       "primarynav-sixth-chapter-published",
       "primarynav-no-chapters-yet"
+    ]
+  },
+  {
+    "description": "The floating pill mounted in AdminLayout, so it rides along on every admin page: it counts the browser staging set, opens the review drawer, commits every staged file as one commit, and owns the deploy watch. The watch lives in its own state beside the publish flow rather than being a phase of it, which is what allows publishing again while a deploy is still in flight.",
+    "filePath": "node_modules/@codeyam/cms/src/components/admin/StagingBar.tsx",
+    "name": "StagingBar",
+    "scenarios": [
+      "stagingbar-publish-again-while-deploying",
+      "stagingbar-reviewing-before-publish"
     ]
   },
   {

@@ -1,0 +1,12 @@
+{
+  "name": "StagingBar - Reviewing Before Publish",
+  "id": "96be94dd-790c-47ef-a5fe-2933d73060f1",
+  "url": "/isolated-components/StagingBar-Reviewing",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "StagingBar",
+  "scenarioType": "component",
+  "description": "The review drawer, captured because this feature narrowed StagingBar's phase enum. `phase` used to carry a 'deploying' member and sit on it for the whole GitHub Pages build; the deploy now lives in its own state beside the publish flow, leaving idle / reviewing / committing / error. This is the state that proves the remaining flow still works — two staged changes still group by area and 'Publish 2 changes' is still reachable. Two areas rather than one so the grouping is visible."
+}
