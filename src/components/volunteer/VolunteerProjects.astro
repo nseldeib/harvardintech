@@ -11,6 +11,11 @@ export interface VolunteerProjectLike extends ProjectLike {
   image?: string;
   applyUrl?: string;
   commitment?: string;
+  /** Display only — see `formatProjectDates`. Frontmatter reaches a component as
+   *  a `Date` once `z.coerce.date()` has run, but scenarios and tests hand in
+   *  ISO strings, so both are accepted here as they are on the card. */
+  startDate?: string | Date;
+  endDate?: string | Date;
 }
 
 interface Props {
@@ -51,6 +56,8 @@ const open = openProjects(projects);
               image={p.image}
               applyUrl={p.applyUrl}
               commitment={p.commitment}
+              startDate={p.startDate}
+              endDate={p.endDate}
               slug={p.slug}
             />
           ))}

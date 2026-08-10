@@ -1,0 +1,48 @@
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1e3968f4-d648-4e10-96a7-4ac0e3be8109/tasks/bj814x5h6.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"wait-for","elapsed_secs":0,"emitted_at_unix":1786379516,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2311003}
+━━━ WAIT_FOR COMPLETE ━━━
+target: /tmp/claude-0/-workspace/1e3968f4-d648-4e10-96a7-4ac0e3be8109/tasks/b2jkqglid.output
+status: ok
+counts: passed=741 failed=0
+─── output tail ───
+{"command":"session-finalize","elapsed_secs":40,"emitted_at_unix":1786379430,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+[  21s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+{"command":"session-finalize","elapsed_secs":50,"emitted_at_unix":1786379440,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+{
+  "analyzed": 317,
+  "entityCount": 414,
+Analyzed 317 files, found 581 import edges, graph has 332 nodes
+  "graphSize": 332,
+  "totalImports": 581
+}
+{"command":"session-finalize","elapsed_secs":60,"emitted_at_unix":1786379450,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+{"command":"session-finalize","elapsed_secs":70,"emitted_at_unix":1786379460,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+{"command":"session-finalize","elapsed_secs":80,"emitted_at_unix":1786379470,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+{"command":"session-finalize","elapsed_secs":90,"emitted_at_unix":1786379480,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+{"command":"session-finalize","elapsed_secs":100,"emitted_at_unix":1786379490,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+[  74s] audit: running registry invariant checks
+[  75s] audit: gather complete
+Phase 3/5: analyze-imports …
+{
+Analyzed 317 files, found 581 import edges, graph has 332 nodes
+  "analyzed": 317,
+  "entityCount": 414,
+  "graphSize": 332,
+  "totalImports": 581
+}
+Phase 3.5/5: screenshot coverage …
+Phase 3.5/5: screenshot coverage … 0 stale, 0 missing
+Phase 3.6/5: glossary reconciliation …
+Phase 4/5: verify-build …
+{"command":"session-finalize","elapsed_secs":110,"emitted_at_unix":1786379500,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+{"command":"session-finalize","elapsed_secs":120,"emitted_at_unix":1786379510,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+{"command":"session-finalize","elapsed_secs":130,"emitted_at_unix":1786379520,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2308668}
+[PASS] tsc (5.21s)
+[PASS] astro-check (15.82s)
+CODEYAM_VERIFY_BUILD: PASS — 2 check(s) passed
+Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
+Session finalize complete: ready to push.
+session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=132.6s
+CODEYAM_FULL_OUTPUT: complete output (stdout + stderr) also saved to .codeyam/state/command-output/session-finalize.txt — re-read it any time with: cat .codeyam/state/command-output/session-finalize.txt (no need to re-run, and no need to pipe)
+{"command":"session-finalize","counts":{"failed":0,"passed":741},"mode":"ui","sentinel":"CODEYAM_CMD_COMPLETE","status":"ok","step":25,"stepLabel":"Finalize"}
+━━━ END WAIT_FOR ━━━

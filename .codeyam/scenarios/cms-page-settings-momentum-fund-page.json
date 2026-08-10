@@ -7,6 +7,6 @@
   ],
   "mocks": {},
   "scenarioType": "application",
-  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[slug].astro",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
   "description": "The /donate page-settings editor, which is where the new Hero video field lives. Note what this frame does and does not prove: it shows the form rendering with its hero fields intact after the field was added — the regression that matters — but the Hero video box itself sits below Hero image, past the fold of a viewport-sized capture, and the harness cannot scroll here. The field's presence, type, label and hint are asserted in src/data/collections.test.ts instead, which is a durable check rather than a screenshot that happens to frame the right scroll position."
 }

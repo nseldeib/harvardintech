@@ -1,19 +1,19 @@
-{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786146293,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":267982}
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
+{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786370851,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2220028}
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786146293,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":267982}
-{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786146303,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":267982}
-{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786146303,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":267982}
-{"command":"diagnose-preview","elapsed_secs":20,"emitted_at_unix":1786146313,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":267982}
-{"command":"diagnose-preview","elapsed_secs":20,"emitted_at_unix":1786146313,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":267982}
-{"command":"diagnose-preview","elapsed_secs":30,"emitted_at_unix":1786146323,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":267982}
-{"command":"diagnose-preview","elapsed_secs":30,"emitted_at_unix":1786146323,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":267982}
-━━━ Preview Diagnostic: /isolated-components/DeployStatus-Publishing ━━━
+{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786370851,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2220028}
+{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786370861,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2220028}
+{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786370861,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2220028}
+{"command":"diagnose-preview","elapsed_secs":20,"emitted_at_unix":1786370871,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2220028}
+{"command":"diagnose-preview","elapsed_secs":20,"emitted_at_unix":1786370871,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2220028}
+{"command":"diagnose-preview","elapsed_secs":30,"emitted_at_unix":1786370881,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2220028}
+{"command":"diagnose-preview","elapsed_secs":30,"emitted_at_unix":1786370881,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2220028}
+━━━ Preview Diagnostic: / ━━━
 
-  proxy port 4321 — HTTP 200, no Transfer-Encoding, Content-Length: 42175
+  proxy port 4321 — HTTP 200, no Transfer-Encoding, Content-Length: 108169
   direct port 4322 — HTTP 200, Transfer-Encoding: chunked, no Content-Length
 
-Script tags — proxy: 8, direct: 4
+Script tags — proxy: 32, direct: 28
   No script delta between proxy and direct.
 
 Most likely cause: no HTTP-level anomaly detected between proxy and direct dev port. If the page still won't hydrate, run `editor client-errors` to check for console errors or JavaScript exceptions.

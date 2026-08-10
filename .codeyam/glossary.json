@@ -437,6 +437,12 @@
     "testFile": "src/lib/events.test.ts"
   },
   {
+    "description": "A volunteer project's start and end dates as one display string, or null when it has neither so the caller renders nothing rather than an empty chip. Four cases: both dates write the shared year once (\"September 1 – December 15, 2026\") and both years across a boundary; a start alone reads \"Starts …\"; an end alone reads \"Through …\". Each date goes through `formatEventDate`, the site's single \"Month D, YYYY\" formatter, so a project date and an event date cannot drift into two formats. An inverted range formats in the order authored rather than being silently swapped — a visibly wrong range gets reported, a quietly reordered one becomes a mystery — and it never throws.",
+    "filePath": "src/lib/projects.ts",
+    "name": "formatProjectDates",
+    "testFile": "src/lib/projects.test.ts"
+  },
+  {
     "description": "The donors carrying the Founding Donor badge, in input order. Founding is recognition for giving early rather than for giving more, so it is a flag cutting across every giving level instead of a level of its own — which is what lets a founding donor keep the level that describes their actual gift.",
     "filePath": "src/lib/donors.ts",
     "name": "foundingDonors",
@@ -934,6 +940,12 @@
     "testFile": "src/lib/pageCopyMerge.test.ts"
   },
   {
+    "description": "Projects collection entries projected into the flat shape the cards render, with the entry's `id` promoted to `slug`. Lives in the lib rather than inline in the detail route because it is the piece most likely to drift silently: a new field on the `projects` schema that is not added here simply never reaches a suggestion card, with no type error and no failing build to say so. Keeps `relatedProjects` and every card component free of any `astro:content` type. Non-mutating; preserves input order so the caller decides sorting.",
+    "filePath": "src/lib/projects.ts",
+    "name": "projectCardData",
+    "testFile": "src/lib/projects.test.ts"
+  },
+  {
     "description": "Which sign-up call-to-action a project's detail page offers, or null for none. The project's own `applyUrl` wins; with none it falls back to the site-wide volunteer CTA, because a project posted before its sign-up form exists still needs a way in and a page that simply ends after the description leaves a willing reader nowhere to go. Only when neither link exists does the page render no ask, rather than a dead button. Empty strings count as absent, not as links, so an editor who cleared the field cannot produce an href pointing at the current page.",
     "filePath": "src/lib/projects.ts",
     "name": "projectCta",
@@ -972,6 +984,12 @@
       "justification": "filesystem boundary — readFileSync + JSON.parse of a data-dir file",
       "kind": "platform-glue"
     }
+  },
+  {
+    "description": "Up to `limit` other open projects to suggest at the bottom of one project's detail page. \"Related\" means ADJACENT IN EDITOR ORDER, wrapping past the end — not semantically similar: the collection carries no tag, category, or topic field, so there is nothing to compute similarity from, and of the honest alternatives the editor's own ordering is the only one reflecting a human decision. Wrapping means the last project still gets suggestions instead of none. Filtered through `openProjects` so a retired project is never advertised at the bottom of an open one — the detail route generates a page for every published entry regardless of `active`. Returns an empty list when there is no other open project, which is the collection's real state today.",
+    "filePath": "src/lib/projects.ts",
+    "name": "relatedProjects",
+    "testFile": "src/lib/projects.test.ts"
   },
   {
     "description": "Resolves where a giving CTA points: the donation platform when `donateUrl` is configured, otherwise a mailto with a campaign-specific subject. Treats empty/whitespace-only as unset and trims pasted URLs, so a cleared CMS field cannot produce href=\"\".",

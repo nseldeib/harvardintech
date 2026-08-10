@@ -1,0 +1,66 @@
+{
+  "name": "Volunteer Project Detail - Retired Projects Never Suggested",
+  "id": "4d08a150-b5c0-45f2-84db-82fa063d0f63",
+  "url": "/volunteer/projects/social-media-marketing-specialist-events",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "projects": [
+      {
+        "blurb": "Help promote HIT events from start to finish by creating and scheduling engaging social media content before, during, and after each event. This project is ideal for a volunteer who enjoys event marketing, storytelling, and turning event recordings into reusable content.",
+        "body": "For this specific New York event, the volunteer will support the full social media promotion cycle, including:\n\n- Develop a social media content plan and posting schedule for before, during, and after the event.\n- Write engaging LinkedIn posts that align with HIT's brand, audience, and event goals.\n- Create promotional posts announcing the event, speakers, panelists, partners, and key discussion topics.\n- Develop a LinkedIn tagging strategy for speakers, panelists, sponsors, partners, volunteers, and relevant organizations to increase visibility and engagement.\n- Coordinate with featured individuals to confirm their correct LinkedIn profiles and company pages.\n- Create supporting content, such as speaker spotlights, quotes, polls, discussion questions, countdown posts, and attendee-engagement posts.\n- Prepare suggested social copy that speakers, partners, and HIT leaders can share with their own networks.\n- Create or coordinate social media graphics and ensure that each post includes the correct links, tags, event details, and calls to action.\n- Monitor engagement and respond to or flag relevant comments and questions.\n- Capture or coordinate real-time event content, when possible.\n- Create post-event recap and thank-you posts.\n- Repurpose event photos, videos, audio, quotes, and key takeaways into at least six additional pieces of content that can be shared throughout the year.\n\nReview post performance and provide a brief summary of results, insights, and recommendations for future events.",
+        "commitment": "25 hours",
+        "endDate": "2026-12-15",
+        "order": 1,
+        "slug": "social-media-marketing-specialist-events",
+        "startDate": "2026-09-01",
+        "title": "Social Media Marketing Specialist- Events"
+      },
+      {
+        "active": false,
+        "applyUrl": "https://hi.switchy.io/wEYK",
+        "blurb": "Help stand up our next city chapter: find a venue, rally the first 30 alumni, and run the launch mixer.",
+        "body": "Toronto has more than 400 Harvard alumni working in technology and no chapter to bring them together. This project takes the city from a mailing list to a first real event.\n\n## What you'll do\n\n- Scout and book a venue for a 30–50 person evening mixer, working with our events budget.\n- Draft the invitation and work with the newsletter editor to reach Toronto-area alumni.\n- Recruit two or three co-organizers who will keep the chapter running after launch.\n- Run the launch mixer itself, including a short welcome and a round of introductions.\n- Write a short handover note so the standing chapter team inherits your contacts and vendor list.\n\n## What we're looking for\n\nYou don't need event-management experience — you need to be organized, comfortable emailing strangers, and based in or near Toronto. We'll pair you with an organizer from the NYC chapter who has done this twice.",
+        "commitment": "~3 hrs / week",
+        "endDate": "2027-03-03",
+        "image": "/images/volunteers.webp",
+        "order": 2,
+        "slug": "chapter-launch-team-toronto",
+        "startDate": "2026-12-01",
+        "title": "Chapter launch team — Toronto"
+      },
+      {
+        "blurb": "Curate the monthly roundup of member news, events, and opportunities that goes out to the full network.",
+        "body": "The monthly newsletter is how most of our members hear from us at all. It goes out on the first Tuesday of each month to the full network.\n\nThe editor collects submissions from chapter leads, picks the three or four items worth leading with, writes the intro, and schedules the send. Everything is drafted in the CMS — no HTML required.\n\nThis is a good fit if you like writing short, and you'd rather own one clearly-scoped thing every month than be on call.",
+        "commitment": "~2 hrs / month",
+        "image": "/images/sections/board.png",
+        "order": 3,
+        "slug": "newsletter-editor",
+        "startDate": "2026-10-05",
+        "title": "Newsletter editor"
+      },
+      {
+        "active": false,
+        "applyUrl": "https://hi.switchy.io/wEYK",
+        "blurb": "Line up founders, operators, and investors for panels and roundtables across all five chapters.",
+        "body": "Every panel we run starts with someone asking. This project is that someone.\n\nYou'll keep a running shortlist of alumni and non-alumni speakers by topic, make the first approach, and hand confirmed speakers to the chapter organizer running the event. Most of the work is email and a shared tracker.\n\nWe'll give you the templates that have worked, and warm introductions wherever we have them.",
+        "commitment": "~2 hrs / week",
+        "endDate": "2026-11-20",
+        "order": 4,
+        "slug": "speaker-outreach",
+        "title": "Speaker outreach"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/volunteer/projects/[slug].astro",
+  "description": "Two of the four projects in this seed have been retired with the Active toggle, and neither appears in the row. That is the whole reason the suggestion list is filtered through openProjects: the detail route generates a page for every published entry regardless of Active, so a closed project still has a readable URL and without the filter would be advertised to a reader who can no longer sign up for it. What is left is a single suggestion - the one other project still open - which also shows the section holding its shape when there is not enough to fill a row: the heading reads the same in the singular, and the lone card keeps one-third width instead of stretching across. The frame is scrolled past the site-wide volunteer CTA to reach the section.",
+  "interactions": [
+    {
+      "action": "hover",
+      "text": "Newsletter editor"
+    }
+  ]
+}

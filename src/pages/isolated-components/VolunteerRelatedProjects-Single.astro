@@ -1,0 +1,44 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerRelatedProjects.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerRelatedProjects with exactly ONE suggestion —
+// codeyam screenshots the #codeyam-capture wrapper by navigating to
+// /isolated-components/VolunteerRelatedProjects-Single.
+//
+// The state the site actually reaches first. The collection holds one project
+// today; the moment a second is posted, every detail page has exactly one other
+// project to offer, and this is what that looks like before the grid has enough
+// to fill a row.
+//
+// Two things this is here to check, neither visible in the three-card capture:
+// the heading still reads naturally in the singular case (it does — "You may
+// also be interested in" makes no count claim, which is why it was chosen over
+// "Other projects"), and a lone card sits at one-third width at the left of the
+// grid rather than stretching across it.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerRelatedProjects - Single</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="codeyam-capture" style="padding: var(--space-lg) 0;">
+      <Component
+        projects={[
+          {
+            slug: "newsletter-editor",
+            title: "Newsletter editor",
+            blurb:
+              "Curate the monthly roundup of member news, events, and opportunities that goes out to the full network.",
+            image: "/images/sections/board.png",
+            commitment: "~2 hrs / month",
+            startDate: "2026-10-05",
+          },
+        ]}
+      />
+    </div>
+  </body>
+</html>

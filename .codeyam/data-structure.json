@@ -322,7 +322,7 @@
   },
   {
     "name": "VolunteerProject",
-    "description": "An open volunteer project shown in the grid on /volunteer. Stored as a markdown file in the `projects` content collection and edited in the CMS, so organizers can open and close projects without a code change. `image` is the project thumbnail; `applyUrl` is where an interested volunteer goes. `active: false` retires a project without deleting its record.",
+    "description": "An open volunteer project shown in the grid on /volunteer. Stored as a markdown file in the `projects` content collection and edited in the CMS, so organizers can open and close projects without a code change. `image` is the project thumbnail; `applyUrl` is where an interested volunteer goes. `active: false` retires a project without deleting its record. `startDate` / `endDate` are DISPLAY-ONLY — they format into a range on the card and detail header but never gate visibility, because on a static build a date-expired project would linger until the next deploy and then vanish without anyone touching the CMS; `active` alone decides what appears.",
     "category": "datastore",
     "order": 8,
     "fields": [
@@ -365,6 +365,16 @@
       {
         "name": "active",
         "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "startDate",
+        "type": "date",
+        "required": false
+      },
+      {
+        "name": "endDate",
+        "type": "date",
         "required": false
       },
       {

@@ -1,0 +1,50 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerProjectMeta.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerProjectMeta — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/VolunteerProjectMeta.
+//
+// Every shape the row can take, stacked, because the whole point of this
+// component is that one project's framing details read the same way on the grid
+// card and on the detail page — and the differences between shapes are what a
+// reader actually has to parse:
+//
+//   1. commitment + a same-year range, the year written once
+//   2. commitment + a range crossing a year boundary, both years shown
+//   3. commitment + a start with no announced end
+//   4. commitment + a deadline with no announced start
+//   5. dates with no commitment
+//   6. commitment alone — the state every project was in before dates existed
+//
+// The seventh state, NEITHER, renders nothing at all and so has no pixels to
+// capture. It is not missing coverage: the collapse it triggers is visible in
+// the VolunteerProjectHeader scenario, where a bare header must leave no gap
+// under its title.
+//
+// Boxed at 340px — the real inner width of a card in the three-column
+// /volunteer grid — because the only interesting layout question here is where
+// a long range wraps, and that answer is width-dependent. Centering is left to
+// the <body> rule the scaffolder wrote.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerProjectMeta</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div
+      id="codeyam-capture"
+      style="padding: var(--space-lg); width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 28px;"
+    >
+      <Component commitment="25 hours" startDate="2026-09-01" endDate="2026-12-15" />
+      <Component commitment="~3 hrs / week" startDate="2026-12-01" endDate="2027-03-03" />
+      <Component commitment="~2 hrs / month" startDate="2026-10-05" />
+      <Component commitment="~2 hrs / week" endDate="2026-11-20" />
+      <Component startDate="2026-09-01" endDate="2026-12-15" />
+      <Component commitment="25 hours" />
+    </div>
+  </body>
+</html>

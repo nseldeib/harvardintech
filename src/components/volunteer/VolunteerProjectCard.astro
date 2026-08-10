@@ -13,6 +13,7 @@
 import { withBase } from '../../lib/url';
 import { projectPath } from '../../lib/projects';
 import VolunteerProjectThumb from './VolunteerProjectThumb.astro';
+import VolunteerProjectMeta from './VolunteerProjectMeta.astro';
 import VolunteerProjectCardLinks from './VolunteerProjectCardLinks.astro';
 
 interface Props {
@@ -21,12 +22,18 @@ interface Props {
   image?: string;
   applyUrl?: string;
   commitment?: string;
+  /** When the project runs. Display only, and passed straight through to
+   *  `VolunteerProjectMeta`, which formats the pair and renders nothing when a
+   *  project has neither. */
+  startDate?: string | Date;
+  endDate?: string | Date;
   /** The project's slug, which is what makes the card clickable. Absent (an
    *  isolated-component state that passes none) → the card renders exactly as it
    *  did before detail pages existed: no links, same layout. */
   slug?: string;
 }
-const { title, blurb, image, applyUrl, commitment, slug } = Astro.props as Props;
+const { title, blurb, image, applyUrl, commitment, startDate, endDate, slug } =
+  Astro.props as Props;
 
 const href = slug ? withBase(projectPath(slug)) : undefined;
 ---
@@ -35,7 +42,7 @@ const href = slug ? withBase(projectPath(slug)) : undefined;
   <VolunteerProjectThumb image={image} href={href} />
   <div class="body">
     <h3>{href ? <a class="title-link" href={href}>{title}</a> : title}</h3>
-    {commitment ? <span class="commit">{commitment}</span> : null}
+    <VolunteerProjectMeta commitment={commitment} startDate={startDate} endDate={endDate} />
     {blurb ? <p>{blurb}</p> : null}
     <VolunteerProjectCardLinks href={href} applyUrl={applyUrl} />
   </div>
@@ -70,13 +77,6 @@ const href = slug ? withBase(projectPath(slug)) : undefined;
     text-decoration: none;
   }
   .title-link:hover {
-    color: var(--crimson);
-  }
-  .commit {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--crimson);
   }
   p {

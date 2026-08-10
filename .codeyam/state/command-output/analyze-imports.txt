@@ -1,12 +1,9 @@
-⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786155933,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":399439}
-> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786155933,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":399439}
-analyze-imports: scoped to 101 changed / 3 deleted file(s) since HEAD
-Analyzed 9 files, found 26 import edges, graph has 327 nodes
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786373923,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2254356}
+analyze-imports: scoped to 30 changed / 3 deleted file(s) since HEAD
+Analyzed 12 files, found 34 import edges, graph has 330 nodes
 {
-  "analyzed": 9,
-  "entityCount": 394,
-  "graphSize": 327,
-  "totalImports": 26
+  "analyzed": 12,
+  "entityCount": 408,
+  "graphSize": 330,
+  "totalImports": 34
 }

@@ -1,0 +1,327 @@
+{
+  "timestamp": "2026-08-10T16:24:28Z",
+  "title": "Volunteer Project Dates and Related Projects",
+  "type": "feature",
+  "userRequest": "## Summary\n\nTwo additions to volunteer projects.\n\n**Dates.** A `startDate` and `endDate` on the `projects` collection, editable in the CMS and\nshown as a formatted range on the project card and its detail page. **Display only** — a\nproject's visibility stays governed solely by the existing `active` toggle, so nothing ever\ndisappears from the grid on its own and an organizer is never surprised by a project vanishing\nbecause a date passed. `openProjects` is not touched.\n\n**\"You may also be interested in\".** At the bottom of `/volunteer/projects/<slug>`, below the\nsign-up CTA, up to three other open projects rendered as the same cards the grid uses. The\nvolunteer page has no in-place expander — last week's plan deliberately chose a detail page over\nan accordion, and the card thumbnail and title link there — so \"after the user expands the\nproject\" is served by the existing click-through, and this section is the tail of that page.\n\n**Two things to know before judging the result.** The collection currently holds exactly one\nproject (`social-media-marketing-specialist-events.md`), so the related section renders nothing\nat all until more are posted — correct behaviour, invisible today. And the `projects` schema has\nno tag, category, or topic field, so \"related\" cannot be semantic. The rule below is proximity in\nthe editor's own ordering, which is honest about that rather than pretending to a relevance it\ncannot compute.\n\n## Key Decisions\n\n- **Dates are display-only, and `openProjects` stays exactly as it is.** Date-gated visibility on\n  a *static* site is a trap: the page only changes when a build runs, so a project would linger\n  past its end date until the next deploy and then vanish without anyone touching the CMS. The\n  `active` toggle is explicit, immediate on publish, and already understood by the editor.\n- **`z.coerce.date()`, matching `events`.** The `events` collection already types its `date` this\n  way and the CMS already has a native `date` field type, so an editor gets the same picker and\n  the schema accepts the same ISO strings the CMS writes. No new date convention.\n- **One date format for the whole site.** `formatEventDate` in `src/lib/events.ts` is the site's\n  \"Month D, YYYY\" formatter. The new range formatter delegates to it rather than reimplementing\n  `toLocaleDateString`. Its name is event-flavoured for a now-generic job, but renaming it would\n  ripple through the events pages for no user-visible gain — reuse it and note why.\n- **A range is one string, computed by a pure helper.** `formatProjectDates(start, end)` returns a\n  single display string or `null`, so every caller renders `{dates ? … : null}` with no date logic\n  in a `.astro` file. Four cases, all real: both dates, start only (\"Starts …\"), end only\n  (\"Through …\"), neither (`null`, render nothing).\n- **An inverted range renders as authored.** If an editor sets an end date before the start date,\n  the helper formats it in the order given rather than silently swapping them — a visibly wrong\n  range is a bug report; a quietly reordered one is a mystery. It must not throw.\n- **\"Related\" means adjacent in editor order, wrapping.** With no taxonomy on the collection, the\n  choices are recency, commitment-matching, or the order the editor already curates. Editor order\n  is the only one that reflects a human decision, and wrapping past the end means the last project\n  still gets three suggestions instead of none.\n- **Suggestions are filtered through `openProjects`.** A retired project still has a detail page\n  (`getStaticPaths` filters on draft status, not `active`), so without this a closed project would\n  be advertised at the bottom of an open one. Reusing the existing helper keeps \"what counts as\n  open\" defined in exactly one place.\n- **Suggest only pages that were actually generated.** The sibling list comes from the same\n  `publishedEntries(…, INCLUDE_DRAFTS)` call `getStaticPaths` already makes, so the section can\n  never link to a 404: on the public build drafts are absent from both the routes and the\n  suggestions, and on the review track both include them.\n- **Reuse `VolunteerProjectCard`, don't invent a compact variant.** The suggestions are the same\n  objects as the grid and should look it. A second card component is a second thing to keep in\n  sync the next time the card changes.\n- **Render nothing when there is nothing.** Zero related projects means no section and no heading\n  — which is the state the site is in today with one project, so this is the common case, not the\n  edge case.\n\n## Implementation\n\n### 1. Content schema\n\n**File**: `src/content/config.ts`\n\nAdd to the `projects` schema, after `commitment`:\n\n```ts\nstartDate: z.coerce.date().optional(),\nendDate: z.coerce.date().optional(),\n```\n\nBoth optional — every existing entry stays valid, and an organizer can post a project before\nknowing either date. Add a short comment noting these are display-only and that `active` alone\ncontrols whether a project appears, so the next reader does not add date filtering on the\nassumption it was forgotten.\n\n### 2. CMS fields\n\n**File**: `src/data/collections.json`\n\nAdd two fields to the `projects` entry, placed after `commitment` so the framing details sit\ntogether:\n\n```json\n{\n  \"name\": \"startDate\",\n  \"label\": \"Start date\",\n  \"type\": \"date\",\n  \"optional\": true,\n  \"hint\": \"When the project begins. Shown on the card and project page; does not hide the project.\"\n},\n{\n  \"name\": \"endDate\",\n  \"label\": \"End date\",\n  \"type\": \"date\",\n  \"optional\": true,\n  \"hint\": \"When the project wraps up. Use the Active toggle to take a finished project off the page.\"\n}\n```\n\nThe hints carry the display-only rule to the person it actually affects — the editor — so nobody\nwaits for a project to retire itself.\n\n### 3. Date and related-project helpers\n\n**File**: `src/lib/projects.ts`\n\nTwo pure additions, in the module's existing style:\n\n- `formatProjectDates(start?: string | Date, end?: string | Date): string | null`\n  - both → `\"September 1 – December 15, 2026\"`, collapsing the repeated year when the two dates\n    share one, and `\"December 1, 2026 – March 3, 2027\"` when they do not\n  - start only → `\"Starts September 1, 2026\"`\n  - end only → `\"Through December 15, 2026\"`\n  - neither → `null`\n  - delegates each date to `formatEventDate`; accepts `string | Date` the way `toEventDate` does,\n    because frontmatter reaches components as either\n- `relatedProjects<T>(all: readonly T[], currentSlug: string, limit = 3): T[]`\n  - runs `all` through `openProjects`, drops the entry whose slug matches `currentSlug`, and takes\n    up to `limit` starting at the position after the current project, wrapping to the front\n  - returns `[]` when there is no other open project, or when `currentSlug` matches nothing\n  - non-mutating, like `openProjects`\n\nExtend `ProjectLike` (or add a narrow local interface) with the optional `slug` the wrap-around\nneeds. `VolunteerProjectLike` in `VolunteerProjects.astro` already carries `slug?`.\n\n**File**: `src/lib/projects.test.ts`\n\nAdd a `describe` per helper alongside the existing `openProjects` / `projectPath` / `projectCta`\nblocks. Cases worth pinning: same-year collapse, cross-year full form, start-only, end-only,\nneither, an inverted range formatting without throwing; and for `relatedProjects` — wrap-around\nfrom the last project, a retired project never suggested, the current project never suggesting\nitself, fewer than three available, and exactly zero others.\n\n### 4. Dates on the card\n\n**File**: `src/components/volunteer/VolunteerProjectCard.astro`\n\nAccept `startDate` / `endDate`, compute the string via `formatProjectDates`, and render it beside\nthe existing `commitment` chip — same treatment, so a card with both reads as two framing details\nrather than a paragraph. Absent dates render nothing, preserving the \"no holes\" contract the\ncomponent's header comment already states.\n\n**File**: `src/components/volunteer/VolunteerProjects.astro`\n\nAdd `startDate` / `endDate` to `VolunteerProjectLike` and pass both down to each card.\n\n### 5. Dates on the detail page\n\n**File**: `src/components/volunteer/VolunteerProjectHeader.astro`\n\nAccept `startDate` / `endDate` and render the formatted range next to the commitment chip, same\nas the card, so the two surfaces agree.\n\n**File**: `src/components/volunteer/VolunteerProjectPage.astro`\n\nThread `startDate` / `endDate` through to the header, and accept a `related` prop (see below).\nProps-only, as today.\n\n### 6. The related-projects section\n\n**New file**: `src/components/volunteer/VolunteerRelatedProjects.astro` *(new)*\n\nProps: `projects: VolunteerProjectLike[]`, `title = 'You may also be interested in'`. Returns\nnothing at all when `projects` is empty — no heading, no empty section. Otherwise a heading and a\ngrid of `VolunteerProjectCard`s, at most three across, reusing the `/volunteer` grid's responsive\nbreakpoints (3 → 2 at 900px → 1 at 720px).\n\n**File**: `src/components/volunteer/VolunteerProjectPage.astro`\n\nRender it after `VolunteerProjectCta`. Place it outside the `.s-narrow` prose column so three\ncards get the page's full width rather than being squeezed into a reading measure — the CTA ends\nthe prose, and the suggestions are a new movement.\n\n**File**: `src/pages/volunteer/projects/[slug].astro`\n\n`getStaticPaths` already loads every published project; add that list to each route's `props`\n(alongside the existing `project`). In the page frontmatter, map it to the plain shape\n`VolunteerProjectCard` needs — `{ slug: p.id, title, blurb, image, applyUrl, commitment,\nstartDate, endDate, order, active }` — call `relatedProjects(siblings, project.id)`, and pass the\nresult to `VolunteerProjectPage`. Also destructure `startDate` / `endDate` from `project.data` and\npass them through.\n\n### 7. Seed the one real project\n\n**File**: `src/content/projects/social-media-marketing-specialist-events.md`\n\nAdd a `startDate` (and an `endDate` if the role has one) so the dates are visible on the live\nentry rather than only in scenarios. Note this entry is `draft: true` today, so it renders on the\nreview track and in dev, not on the public build.\n\n## Reused existing code\n\n- `openProjects` and `projectPath` from `src/lib/projects.ts` (glossary entries: `openProjects`,\n  `projectPath`; tested in `src/lib/projects.test.ts`) — the suggestion list is filtered through\n  `openProjects` rather than re-deciding what \"open\" means, and the cards link via `projectPath`.\n- `formatEventDate` / `toEventDate` from `src/lib/events.ts` (glossary entry:\n  `unmatchedChapterTags` is the registered one in this module; the date helpers live alongside it,\n  tested in `src/lib/events.test.ts`) — the site's single \"Month D, YYYY\" format and its\n  `string | Date` coercion.\n- `z.coerce.date()` on the `events` collection in `src/content/config.ts` — the precedent for a\n  date field that survives both CMS-written ISO strings and hand-authored frontmatter.\n- `VolunteerProjectCard` and the `/volunteer` grid breakpoints in `VolunteerProjects.astro` — the\n  suggestions reuse the card wholesale and match the grid's responsive columns.\n- `publishedEntries` (`src/lib/drafts.ts`) + `INCLUDE_DRAFTS` (`src/lib/draftVisibility.ts`)\n  (glossary entries: `publishedEntries`, `INCLUDE_DRAFTS`) — already called in `getStaticPaths`;\n  the sibling list reuses that same call so suggestions and generated routes cannot disagree.\n- `withBase` from `src/lib/url.ts` (glossary entry: `withBase`) — applied inside\n  `VolunteerProjectCard` already; the new section inherits it by reusing the card.\n- The `date` field type in the CMS registry (`CUSTOM_FIELD_TYPES` in\n  `node_modules/@codeyam/cms/src/lib/collectionRegistry.ts`) — no package change needed; `date` is\n  already a supported field type.\n\n**Existing-implementation survey.** The `projects` schema has **no** date field of any kind today\n(`title`, `blurb`, `image`, `applyUrl`, `commitment`, `order`, `active`, `draft`), and\n`collections.json` declares the same seven for the CMS — so `startDate` / `endDate` are genuinely\nnew rather than duplicating an existing field. There is no related/similar/recommended-items\nhelper anywhere in `src/lib/`, and no date-range formatter: `events.ts` formats a single date and\nsplits upcoming from past, but nothing composes two dates into one string. And there is no tag,\ncategory, or topic field on `projects` to key a semantic \"related\" off, which is why the rule is\neditor-order proximity — recorded here so it reads as a constraint that was checked, not a\nshortcut.\n\n**Constrained-file pre-check.** `classify-constrained-files` over the full file list returns\n`{\"constrained\": []}` — no lean-limited SKILL.md and no agent-config files in scope.\n\n## Scenarios to Demonstrate\n\n- A project detail page with both dates and three suggestions — the full feature.\n- The same page with one other open project — one card, heading still reads naturally.\n- A project with no other open projects (today's real state, one entry in the collection) — no\n  section, no heading, page ends at the CTA.\n- The last project in editor order — suggestions wrap to the front rather than coming up empty.\n- A retired project (`active: false`) that still has a detail page — never appears as a\n  suggestion, and its own page still renders.\n- A project with a start date only — card and header read \"Starts September 1, 2026\".\n- A project with an end date only — \"Through December 15, 2026\".\n- A project with both dates in the same year — the collapsed form, one year shown.\n- A project spanning a year boundary — both years shown.\n- A project with neither date — card and header identical to today, no empty chip.\n- The `/volunteer` grid showing dated and undated cards side by side, geometry unchanged.\n- Mobile: the suggestions grid at one column, dates wrapping under the commitment chip.",
+  "description": "Volunteer projects can now carry a start and an end date, and a project's detail page ends by offering up to three other open projects.\n\nThe dates are DISPLAY ONLY. They format into one string beside the time commitment on both the grid card and the detail-page header - a same-year range writes the year once (\"September 1 - December 15, 2026\"), a range across a boundary shows both, a start alone reads \"Starts ...\", an end alone \"Through ...\", and a project with neither renders no chip at all. Visibility stays governed solely by the existing Active toggle. Date-gated visibility on a static site is a trap: the page only changes when a build runs, so a project would linger past its end date until the next deploy and then vanish without anyone touching the CMS. Both CMS field hints carry that rule to the person it affects. An inverted range formats in the order authored rather than being silently swapped, because a visibly wrong range gets reported and a quietly reordered one becomes a mystery.\n\n\"Related\" means ADJACENT IN EDITOR ORDER, wrapping past the end - not semantically similar. The projects collection has no tag, category, or topic field, so there is nothing to compute similarity from; of the honest alternatives, the editor's own ordering is the only one reflecting a human decision, and wrapping means the last project still gets suggestions instead of none. The list is filtered through openProjects so a retired project is never advertised at the bottom of an open one - the detail route generates a page for every published entry regardless of Active, so without that filter a closed project would be offered to someone who can no longer sign up. Suggestions come from the same publishedEntries call getStaticPaths already makes, so a suggestion can never link to a page that was not generated. With one project in the collection today the section renders nothing at all - no heading, no empty shell - which is the common case right now rather than an edge case.\n\nThree pure helpers in src/lib/projects.ts carry the logic: formatProjectDates (delegating to formatEventDate so a project date and an event date cannot drift into two formats), relatedProjects, and projectCardData (the collection-entry projection, moved out of the route because a new schema field not added there would silently never reach a suggestion card). VolunteerProjectMeta was extracted so the card and the detail header cannot show one project's dates two different ways - that agreement was previously maintained by hand in two files. Its wrapper in the header is display:flex rather than a plain block: a block wrapper introduced an anonymous line box that shifted an undated header by a few pixels, and an undated project must render exactly as it did before this feature.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--volunteer-project-dates-and-related-projects.md\t.codeyam/plans/completed/ns--volunteer-project-dates-and-related-projects.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-page-settings-momentum-fund-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-rewritten-from-the-cms--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-rewritten-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteer-page-open-projects.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteer-project-detail-full-description-no-photo.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteer-project-detail-photo-and-own-sign-up-link.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/d0e263d5ef13f4668047f68b6755381121692f9f615a723a923305d3a81ef7c3.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/f8889aadcb2cc143c2e7e0dbd6649d529ca4cc2179ad6c84ed1aa4e0c29b16dd.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectHeader.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjects.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/projects/social-media-marketing-specialist-events.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/projects.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/projects.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectHeader.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/volunteer/projects/[slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-volunteer-volunteerprojectmeta-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-volunteer-volunteerprojectpage-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-volunteer-volunteerprojects-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-volunteer-volunteerrelatedprojects-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-pages-volunteer-projects-slug-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-retired-projects-never-suggested--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-retired-projects-never-suggested--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerprojectmeta-every-date-shape--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerrelatedprojects-one-other-project--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerrelatedprojects-three-suggestions--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteer-project-detail-retired-projects-never-suggested.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerprojectmeta-every-date-shape.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerrelatedprojects-one-other-project.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/volunteerrelatedprojects-three-suggestions.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/60a929c9f0384ab51e6955728c0a71a17b12e40c18f384b906a0f96d33842cdb.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/a4bbbf754158ef9271a69a4d9d187c8ba31416f903bed1a2a18e9a80bdcb618f.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/f9e6ba2e584f18fdc534e377f605da37ed3ad40f50692ec0088e743c006f9c6a.json",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerProjectMeta.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/volunteer/VolunteerRelatedProjects.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerProjectMeta.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerRelatedProjects-Single.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/VolunteerRelatedProjects.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "VolunteerProjectMeta - Every Date Shape",
+      "screenshotPath": "volunteerprojectmeta-every-date-shape--desktop.png"
+    },
+    {
+      "name": "VolunteerRelatedProjects - Three Suggestions",
+      "screenshotPath": "volunteerrelatedprojects-three-suggestions--desktop.png"
+    },
+    {
+      "name": "VolunteerRelatedProjects - One Other Project",
+      "screenshotPath": "volunteerrelatedprojects-one-other-project--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Retired Projects Never Suggested",
+      "screenshotPath": "volunteer-project-detail-retired-projects-never-suggested--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Rewritten From The CMS",
+      "screenshotPath": "volunteer-page-rewritten-from-the-cms--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 741,
+    "passed": 741,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 741,
+        "passed": 741
+      }
+    ]
+  }
+}

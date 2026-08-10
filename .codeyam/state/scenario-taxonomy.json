@@ -389,6 +389,34 @@
         "reason": "The only action on this page is the giving CTA, which hands off to an external mail client (donateUrl is still empty) rather than changing any in-app state, so there is no post-interaction frame to capture. Reordering, the feature's real interaction, happens in the CMS at /admin, not on this page."
       }
     },
+    "VolunteerProjectPage": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "covered"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Prerendered static page. Astro builds it from validated frontmatter at build time with no client fetch, so there is no pending state to render - the HTML arrives complete or not at all."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "No failure branch on this view. getStaticPaths enumerates a route per published entry, so an unknown slug is a 404 from the router rather than an error state of this page, and the frontmatter is schema-validated at build - an invalid entry fails the build instead of rendering."
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
     "public/cutover-runbook.html": {
       "empty": {
         "status": "n-a",
@@ -697,15 +725,13 @@
         "reason": "A project page is built from one entry that must exist for the route to be generated at all; there is no zero-state. The nearest thing, a project with every optional field blank, is the edge archetype rather than an empty one"
       },
       "single": {
-        "status": "n-a",
-        "reason": "The page renders exactly one project by construction; there is no list whose one-versus-many boundary could differ"
+        "status": "covered"
       },
       "typical": {
         "status": "added"
       },
       "many": {
-        "status": "n-a",
-        "reason": "No list on this page grows unbounded; the markdown body is prose in a fixed-measure column with no overflow or truncation treatment to demonstrate"
+        "status": "covered"
       },
       "loading": {
         "status": "n-a",
@@ -719,8 +745,7 @@
         "reason": "Static prerendered route; an unknown project slug is a build-time 404 rather than an in-page error state"
       },
       "key-interaction": {
-        "status": "n-a",
-        "reason": "The key action is following the sign-up link or the back link, both plain navigations with no in-page interactive state; the arrival on this page from a card click is captured as the demo flow"
+        "status": "covered"
       }
     }
   }

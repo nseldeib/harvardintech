@@ -13,23 +13,38 @@ import { volunteerPage } from '../../../lib/site';
 import { loadVolunteerCopy } from '../../../lib/volunteerPageContent';
 import { publishedEntries } from '../../../lib/drafts';
 import { INCLUDE_DRAFTS } from '../../../lib/draftVisibility';
+import { projectCardData, relatedProjects } from '../../../lib/projects';
 
 // Drafts get no page of their own on the public site — a project held back from
 // the grid but still live at its own URL would be public anyway. In dev and on
 // the review track the page IS generated, so an unannounced project can be read
 // and approved before it goes live. Same rule as /chapters/<slug>.
+//
+// Every route also carries the FULL published list, because the page suggests
+// other projects at the bottom. Sourcing the suggestions from the same
+// `publishedEntries` call that decides the routes means the two can never
+// disagree: on the public build drafts are absent from both, on the review track
+// both include them, so a suggestion can never link to a page that was not
+// generated.
 export async function getStaticPaths() {
   const projects = publishedEntries(await getCollection('projects'), INCLUDE_DRAFTS);
   return projects.map((project) => ({
     params: { slug: project.id },
-    props: { project },
+    props: { project, siblings: projects },
   }));
 }
 
-type Props = { project: CollectionEntry<'projects'> };
-const { project } = Astro.props as Props;
+type Props = {
+  project: CollectionEntry<'projects'>;
+  siblings: CollectionEntry<'projects'>[];
+};
+const { project, siblings } = Astro.props as Props;
 const { Content } = await render(project);
-const { title, blurb, image, commitment, applyUrl } = project.data;
+const { title, blurb, image, commitment, startDate, endDate, applyUrl } = project.data;
+
+// Flattened to the plain shape the card renders, so `relatedProjects` — and the
+// component below it — stay free of any `astro:content` type.
+const related = relatedProjects(projectCardData(siblings), project.id);
 
 // The sign-up CTA and the fallback description come from the same editable copy
 // the /volunteer page uses, so an editor who changes the button there changes it
@@ -43,9 +58,12 @@ const copy = await loadVolunteerCopy(volunteerPage);
     blurb={blurb}
     image={image}
     commitment={commitment}
+    startDate={startDate}
+    endDate={endDate}
     applyUrl={applyUrl}
     ctaLabel={copy.ctaLabel}
     ctaUrl={copy.ctaUrl}
+    related={related}
   >
     <Content />
   </VolunteerProjectPage>

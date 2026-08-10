@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerProjectMeta - Every Date Shape",
+  "id": "e257b2f1-bffc-44ce-9bb2-a2b14bbcf6d2",
+  "url": "/isolated-components/VolunteerProjectMeta",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerProjectMeta",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerProjectMeta.astro",
+  "description": "All six visible shapes the framing-detail row can take, boxed at the 340px inner width of a card in the three-column /volunteer grid because the only interesting layout question is where a long range wraps. Top to bottom: a commitment with a same-year range that writes the year once, a range crossing a year boundary that shows both, a start with no announced end, a deadline with no announced start, dates with no commitment, and a commitment alone - the state every project was in before dates existed. The seventh state, neither, renders nothing at all and has no pixels to capture; the collapse it triggers is visible in the VolunteerProjectHeader scenario instead. One component rather than two copies, because the card and the detail header have to show a project the same way and before this that agreement was maintained by hand in two files."
+}

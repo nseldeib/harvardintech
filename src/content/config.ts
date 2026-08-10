@@ -228,6 +228,14 @@ const projects = defineCollection({
     image: z.string().optional(),
     applyUrl: z.string().optional(),
     commitment: z.string().optional(),
+    // DISPLAY ONLY. These format into a range on the card and the detail page
+    // header; they never decide whether a project appears. Do not add date
+    // filtering here on the assumption it was forgotten: this is a static
+    // build, so a date-expired project would linger until the next deploy and
+    // then vanish without anyone touching the CMS. `active` is the one toggle
+    // that retires a project, and it takes effect on publish.
+    startDate: z.coerce.date().optional(),
+    endDate: z.coerce.date().optional(),
     order: z.number().optional(),
     active: z.boolean().optional(),
     draft: z.boolean().optional(),

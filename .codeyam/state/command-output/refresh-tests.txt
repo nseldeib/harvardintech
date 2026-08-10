@@ -1,16 +1,35 @@
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786157987,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":430110}
-⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786157987,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":430110}
-[refresh-tests --changed] scope: 13 changed path(s) (15 untracked included)
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786373673,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2250408}
+[refresh-tests --changed] scope: 14 changed path(s) (9 untracked included)
 [refresh-tests --changed]   matched runner(s): tests
+{
+Analyzed 12 files, found 34 import edges, graph has 330 nodes
+  "analyzed": 12,
+  "entityCount": 408,
+  "graphSize": 330,
+  "totalImports": 34
+}
+
+note: dependency graph was stale — auto-refreshed 12 changed file(s) so --changed maps them this run:
+  src/components/volunteer/VolunteerProjectCard.astro
+  src/components/volunteer/VolunteerProjectHeader.astro
+  src/components/volunteer/VolunteerProjectMeta.astro
+  src/components/volunteer/VolunteerProjectPage.astro
+  src/components/volunteer/VolunteerProjects.astro
+  src/components/volunteer/VolunteerRelatedProjects.astro
+  src/content/config.ts
+  src/lib/projects.test.ts
+  src/lib/projects.ts
+  src/pages/isolated-components/VolunteerProjectHeader.astro
+  src/pages/isolated-components/VolunteerRelatedProjects.astro
+  src/pages/volunteer/projects/[slug].astro
+note: the change→test mapping is now current; no analyze-imports or raw-runner fallback is needed.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
-[   6s] Tests completed.
-{"failed":0,"passed":78,"skipped":0,"success":true,"total":78}
-All 78 tests passed.
+[   4s] Tests completed.
+{"failed":0,"passed":39,"skipped":0,"success":true,"total":39}
+All 39 tests passed.
 
 Partial run — partition caches WERE updated; the full-suite test-cache.json was
 NOT (full-suite hash invariant). If a stale-partition bail sent you here, that

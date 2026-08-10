@@ -1748,6 +1748,69 @@
       "runner": "tests"
     },
     {
+      "description": "Frontmatter reaches a component as a Date once `z.coerce.date` has run, while scenarios and tests hand in ISO strings — both must format the same.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › accepts Date objects as well as ISO strings",
+      "line": 195,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The common case: a project that starts and ends inside one year writes that year once, so the row reads as one span rather than two full dates.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › collapses the repeated year when both dates share one",
+      "line": 161,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An end before a start formats in the order authored rather than being silently swapped: a visibly wrong range gets reported, a reordered one does not. It must not throw.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › formats an inverted range as authored instead of reordering it",
+      "line": 189,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Across a year boundary both years are needed, or the range is ambiguous.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › keeps both years when the range crosses a year boundary",
+      "line": 166,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The mirror case: a deadline with no announced start.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › reads as a deadline when only the end date is set",
+      "line": 176,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An organizer who knows when the work starts but not when it ends.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › reads as a start when only the start date is set",
+      "line": 171,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Null, not an empty string — the callers render nothing at all rather than an empty chip, which is the state every project was in before this feature.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › returns null when the project has neither date",
+      "line": 182,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "The state the wall is in on day one.",
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
@@ -3417,7 +3480,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › does not mutate the input array",
-      "line": 69,
+      "line": 76,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3426,7 +3489,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › filters and orders together",
-      "line": 43,
+      "line": 50,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3435,7 +3498,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › keeps a project explicitly marked active",
-      "line": 14,
+      "line": 21,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3444,7 +3507,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › keeps a project whose active flag is absent",
-      "line": 7,
+      "line": 14,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3453,7 +3516,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › orders open projects by their order field",
-      "line": 24,
+      "line": 31,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3462,7 +3525,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › places unordered projects after ordered ones",
-      "line": 34,
+      "line": 41,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3471,7 +3534,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › removes a project explicitly marked inactive",
-      "line": 19,
+      "line": 26,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3480,7 +3543,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › returns an empty array for no projects",
-      "line": 64,
+      "line": 71,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3489,7 +3552,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › returns an empty array when every project is closed",
-      "line": 54,
+      "line": 61,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -3980,11 +4043,56 @@
       "runner": "tests"
     },
     {
+      "description": "Every field the card renders has to survive the projection — a field dropped here silently never reaches a suggestion card, with no type error to catch it.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › carries every card field through from the entry frontmatter",
+      "line": 212,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A sparse entry stays sparse: absent optional fields come out undefined, not as empty strings that would render as holes on the card.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › leaves absent optional fields undefined",
+      "line": 248,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Order is preserved so the caller — not this projection — decides sorting.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › preserves the order the entries arrived in",
+      "line": 256,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The entry id becomes the slug, which is what projectPath and the relatedProjects wrap-around both key on.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › promotes the entry id to a slug",
+      "line": 205,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The real state of the collection today: one entry, and soon after, none.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › returns an empty list for no entries",
+      "line": 265,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "The fallback that matters: Nicole's project has no applyUrl, so without this her page would end after the description with no way to sign up.",
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › falls back to the page-level volunteer CTA when the project has no apply link",
-      "line": 107,
+      "line": 114,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -3993,7 +4101,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › names the fallback button when the page-level label is missing",
-      "line": 129,
+      "line": 136,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4002,7 +4110,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › returns null when both links are empty strings",
-      "line": 146,
+      "line": 153,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4011,7 +4119,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › returns null when neither the project nor the page has a link",
-      "line": 115,
+      "line": 122,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4020,7 +4128,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › treats an empty apply link as absent",
-      "line": 138,
+      "line": 145,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4029,7 +4137,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › uses the project apply link even with no page-level fallback configured",
-      "line": 120,
+      "line": 127,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4038,7 +4146,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › uses the project own apply link when it has one",
-      "line": 98,
+      "line": 105,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4047,7 +4155,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectPath › builds the detail path for a slug",
-      "line": 83,
+      "line": 90,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4056,7 +4164,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectPath › returns a site-root-relative path for the caller to base-prefix",
-      "line": 91,
+      "line": 98,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4229,6 +4337,87 @@
       "key": "readSingleton › throws when the singleton is not valid JSON",
       "line": 109,
       "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Non-mutating, like openProjects — the caller's array is untouched.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › does not mutate the list it was given",
+      "line": 323,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The default is three; a caller can ask for fewer.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › honours a lower limit",
+      "line": 318,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The route generates a page for every published entry regardless of `active`, so without this filter a retired project would be advertised on an open one.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › never suggests a retired project",
+      "line": 296,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A page never advertises itself, wrap-around included.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › never suggests the project the reader is already on",
+      "line": 290,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A slug that matches nothing open cannot be positioned in the list.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › returns an empty list when the current slug matches nothing open",
+      "line": 313,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Today's real state: one project in the collection, so every detail page ends at the CTA with no section at all.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › returns an empty list when there is no other open project",
+      "line": 308,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Fewer than three others available — show what there is, not padding.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › returns only what is available when fewer than the limit exist",
+      "line": 302,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The straightforward case: the three that follow in editor order.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › suggests the projects that follow the current one in editor order",
+      "line": 279,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason the rule wraps: without it the last project in the list would end its page with no suggestions at all.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › wraps past the end of the list rather than coming up empty",
+      "line": 285,
+      "registeredAt": "2026-08-10T14:54:59Z",
       "runner": "tests"
     },
     {

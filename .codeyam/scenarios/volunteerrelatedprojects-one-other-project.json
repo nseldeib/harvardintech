@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerRelatedProjects - One Other Project",
+  "id": "955e12a7-5226-4a22-923c-5568fd4fcec6",
+  "url": "/isolated-components/VolunteerRelatedProjects-Single",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerRelatedProjects",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerRelatedProjects.astro",
+  "description": "The state the site reaches first. The projects collection holds one entry today, so the moment a second is posted every detail page has exactly one other project to offer - this is what the section looks like before there is enough to fill a row. Two things it checks that the three-card capture cannot: the heading still reads naturally in the singular, which is why You may also be interested in was chosen over a phrasing that claims a count, and a lone card holds one-third width at the left of the grid rather than stretching across it."
+}

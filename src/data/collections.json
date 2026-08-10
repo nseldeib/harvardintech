@@ -351,6 +351,20 @@
           "optional": true
         },
         {
+          "name": "startDate",
+          "label": "Start date",
+          "type": "date",
+          "optional": true,
+          "hint": "When the project begins. Shown on the card and project page; does not hide the project."
+        },
+        {
+          "name": "endDate",
+          "label": "End date",
+          "type": "date",
+          "optional": true,
+          "hint": "When the project wraps up. Use the Active toggle to take a finished project off the page."
+        },
+        {
           "name": "order",
           "label": "Order",
           "type": "number",
