@@ -503,6 +503,11 @@
         "required": false
       },
       {
+        "name": "heroVideo",
+        "type": "string",
+        "required": false
+      },
+      {
         "name": "stats",
         "type": "array",
         "required": false

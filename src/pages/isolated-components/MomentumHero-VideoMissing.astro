@@ -1,0 +1,45 @@
+---
+import Component from "../../../src/components/donate/MomentumHero.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for a Hero video path that resolves to nothing — an editor
+// typed a filename that was never committed, or the file was later removed.
+//
+// The assertion is that this is INDISTINGUISHABLE from the ordinary hero: the
+// photo, the headline in place, no gap, no black band, no broken-media icon.
+// That is structural rather than lucky. `heroImage` is still the section's CSS
+// background and still the video's poster, so the element covering it simply has
+// nothing to paint and the photo shows through. Nothing detects the failure and
+// nothing recovers from it, which is why there is no JavaScript here and no
+// state in which a visitor sees the page mid-repair.
+//
+// Rendered for a PUBLIC visitor — no `previewName`, so the headline is the
+// generic one. That is who actually meets this state: the broken path affects
+// everyone, while the personalized headline only reaches people arriving from
+// the campaign email. It also keeps this capture distinct from
+// MomentumHero-Video, which pins the personalized headline; two frames that
+// differ only in a way no screenshot can show (one video plays, one 404s) would
+// otherwise be identical images asserting different things.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: MomentumHero - Video Missing</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        headlineNamed="{name}, let's go further together"
+        headlineGeneric="Let's go further together"
+        subhead="Help sustain the Harvard Alumni in Tech community and the connections, opportunities, and support that move us forward."
+        image="/images/bg/hero-bg.jpg"
+        video="/videos/not-committed-yet.mp4"
+        ctaLabel="Make a Gift"
+        email="ben@harvardintech.com"
+        campaignName="The Momentum Fund"
+      />
+    </div>
+  </body>
+</html>

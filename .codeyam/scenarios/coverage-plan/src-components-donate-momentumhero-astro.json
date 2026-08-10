@@ -1,0 +1,12 @@
+{
+  "surface": "src/components/donate/MomentumHero.astro",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "branches",
+      "value": "branch-1",
+      "rationale": "source-derived state branches=branch-1",
+      "status": "covered"
+    }
+  ]
+}

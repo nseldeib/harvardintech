@@ -572,7 +572,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for every built-in extra",
-      "line": 315,
+      "line": 362,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -581,7 +581,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for every custom collection",
-      "line": 282,
+      "line": 289,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -590,8 +590,17 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares the chapters list rows the schema expects",
-      "line": 305,
+      "line": 312,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The hero video field's SHAPE, which the drift guard above cannot see: that check proves `heroVideo` exists in both the registry and the schema, but a field of the wrong type would satisfy it and still be unusable. `text` is the load-bearing part. The obvious choice is the `image` type used by `heroImage` beside it, and it would be wrong: the media library uploader is images-only (`accept=\"image/*\"`), so an image-typed field renders a picker that can never list a video — an editor would be handed",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › declares the hero video as an optional text field with guidance",
+      "line": 337,
+      "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
     {
@@ -599,8 +608,17 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses",
-      "line": 359,
+      "line": 406,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "It has to sit with the hero, not at the end of the form. The fields are rendered in declaration order, and a video control separated from the photo it falls back to reads as unrelated to it.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › places the hero video directly after the hero image",
+      "line": 353,
+      "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
     {
@@ -608,7 +626,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › renders an editor input for every schema key of every collection",
-      "line": 336,
+      "line": 383,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -743,7 +761,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › excludes the sub-fields of a repeatable list",
-      "line": 163,
+      "line": 170,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -752,7 +770,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › returns an empty list for no fields",
-      "line": 178,
+      "line": 185,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -761,7 +779,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › returns each top-level field name in declaration order",
-      "line": 153,
+      "line": 160,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -2909,12 +2927,30 @@
       "runner": "tests"
     },
     {
+      "description": "THE point of leaving `heroVideo` out of `donatePage.json`. Every other frame field falls back to the committed JSON when the box is blank, which is right for copy that must never be empty — but applied here it would make the video impossible to REMOVE from /admin, because clearing the box would resurrect the JSON value. An editor has to be able to take the video off unaided.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › clears the video when the editor empties the box",
+      "line": 376,
+      "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "The personalized headline is what the whole email campaign is built around, so a cleared one has to fall back rather than ship a hero with no headline.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › keeps both committed headlines when the editor cleared them",
       "line": 331,
       "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The production state: no video has ever been set. The key is present and undefined rather than absent, so spreading the frame cannot resurrect a stale value, and the hero renders exactly as it does today.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › leaves the video undefined when the entry carries no heroVideo",
+      "line": 384,
+      "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
     {
@@ -2945,6 +2981,15 @@
       "runner": "tests"
     },
     {
+      "description": "Adding the field must not have disturbed its neighbour: the photo is the video's poster and its fallback, so a change that broke `heroImage` would take the fallback with it.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › still carries the hero image alongside a video",
+      "line": 394,
+      "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "The migration working for the frame: the hero and closing ask are now copy an editor owns rather than values in a file only a developer opens.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
@@ -2954,11 +2999,20 @@
       "runner": "tests"
     },
     {
+      "description": "The hero's optional moving backdrop, joining the frame rather than getting a path of its own — which is what makes it arrive at the component for free, since `loadDonateFrame` spreads whatever this returns.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › takes the hero video path the editor pasted",
+      "line": 365,
+      "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "The invisible failure this guards: a site that silently stopped measuring.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
-      "line": 376,
+      "line": 419,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2967,7 +3021,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
-      "line": 371,
+      "line": 414,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2976,7 +3030,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
-      "line": 405,
+      "line": 448,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2985,7 +3039,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
-      "line": 414,
+      "line": 457,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2994,7 +3048,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed analytics id",
-      "line": 383,
+      "line": 426,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -3003,7 +3057,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes custom head and body HTML the editor added",
-      "line": 391,
+      "line": 434,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -3192,7 +3246,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › ignores an exempted key",
-      "line": 228,
+      "line": 235,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -3201,7 +3255,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › names a key that drifted out of the editor",
-      "line": 223,
+      "line": 230,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -3210,7 +3264,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › reports nothing when the editor renders an input for every key",
-      "line": 217,
+      "line": 224,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -3219,7 +3273,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › reports nothing when the schema has no keys",
-      "line": 238,
+      "line": 245,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -3228,7 +3282,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › treats every key as missing when the editor renders nothing",
-      "line": 233,
+      "line": 240,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4749,7 +4803,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › extracts the top-level schema keys of a collection",
-      "line": 245,
+      "line": 252,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -4758,7 +4812,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › ignores nested row keys and commented-out keys",
-      "line": 255,
+      "line": 262,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -4767,7 +4821,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › returns an empty list for a collection that is not declared",
-      "line": 263,
+      "line": 270,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -5937,7 +5991,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › names a field that drifted out of the schema",
-      "line": 195,
+      "line": 202,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -5946,7 +6000,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › reports nothing when every declared field exists in the schema",
-      "line": 185,
+      "line": 192,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -5955,7 +6009,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › reports nothing when no fields are declared",
-      "line": 210,
+      "line": 217,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -5964,7 +6018,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › treats every field as unknown when the schema has no keys",
-      "line": 204,
+      "line": 211,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },

@@ -731,6 +731,13 @@
           "hint": "Full-bleed photo behind the headline."
         },
         {
+          "name": "heroVideo",
+          "label": "Hero video",
+          "type": "text",
+          "optional": true,
+          "hint": "Optional moving backdrop. Paste a path like /videos/momentum.mp4 for a video file committed under public/videos/. It plays silently on a loop with no controls, the hero image above is used as its first frame and as the fallback if it cannot play, and clearing this box brings the photo back. Keep it to a few megabytes \u2014 every visitor downloads it."
+        },
+        {
           "name": "ctaTitle",
           "label": "Closing heading",
           "type": "text",

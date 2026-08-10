@@ -1,0 +1,16 @@
+{
+  "name": "MomentumHero - Video Backdrop",
+  "id": "3f48b302-15e5-4c8a-9ba8-f3f350a94ac0",
+  "url": "/isolated-components/MomentumHero-Video",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumHero",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumHero.astro",
+  "demonstratesState": {
+    "branches": "branch-1"
+  },
+  "description": "The hero with the Hero video field set to a real committed file. READ THE CAPTURE CAREFULLY: it shows the hero PHOTO, not a frame of video, and that is correct rather than a failure. A video element displays its poster until playback starts, the poster here IS the hero image, and playback does not start in the headless capture browser (confirmed: a VP9 WebM behaves identically, so it is not a codec gap). So this frame is the poster path — the same pixels a visitor sees for the instant before the video starts, and the same pixels they keep if it never does. What it proves is the layout claim: the headline, subhead and Give button are exactly where they are without a video, because the hero gained a backdrop rather than becoming a player."
+}

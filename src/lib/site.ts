@@ -119,6 +119,13 @@ export interface DonatePageCopy {
   heroSubhead?: string;
   /** Full-bleed background photo behind the hero. */
   heroImage?: string;
+  /** Optional moving backdrop for the hero — a path to a video committed under
+   *  `public/videos/`. Blank leaves the hero as `heroImage` renders it. When set,
+   *  `heroImage` does not step aside: it becomes the video's poster and remains
+   *  the section background, so a 404, a blocked autoplay, or reduced-motion all
+   *  fall back to the photo. Deliberately absent from `donatePage.json` — see
+   *  `mergeDonateFrame`, which is what lets an editor clear it. */
+  heroVideo?: string;
   /** Figures for the stats band. Not seeded as a section today — the campaign
    *  review removed the band from under the hero — but the renderer and this
    *  copy stay, so re-adding a `stats` section in the CMS brings it back with no

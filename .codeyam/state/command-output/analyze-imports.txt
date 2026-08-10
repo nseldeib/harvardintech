@@ -1,10 +1,12 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1e3968f4-d648-4e10-96a7-4ac0e3be8109/tasks/b9njx22he.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786150356,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":319195}
-analyze-imports: scoped to 23 changed / 2 deleted file(s) since HEAD
+⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786155933,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":399439}
+> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786155933,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":399439}
+analyze-imports: scoped to 101 changed / 3 deleted file(s) since HEAD
+Analyzed 9 files, found 26 import edges, graph has 327 nodes
 {
   "analyzed": 9,
-  "entityCount": 401,
-  "graphSize": 322,
-  "totalImports": 7
+  "entityCount": 394,
+  "graphSize": 327,
+  "totalImports": 26
 }
-Analyzed 9 files, found 7 import edges, graph has 322 nodes

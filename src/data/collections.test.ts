@@ -31,6 +31,13 @@ interface RegistryField {
   name: string;
   type: string;
   fields?: RegistryField[];
+  // The presentation half of a field definition. The drift checks do not need it
+  // — they compare names against the Zod schema — but the hero-video case below
+  // asserts it directly, because the label an editor reads and the hint telling
+  // her the file has to be committed by the team are that field's usability.
+  label?: string;
+  optional?: boolean;
+  hint?: string;
 }
 
 /** The top-level frontmatter keys a registry field list declares. Sub-fields of a
@@ -308,6 +315,46 @@ describe('committed CMS registry vs content schema', () => {
 
     expect(declaredFieldNames(byName('leads')!.fields ?? [])).toEqual(['name', 'role']);
     expect(declaredFieldNames(byName('links')!.fields ?? [])).toEqual(['label', 'url']);
+  });
+
+  // The hero video field's SHAPE, which the drift guard above cannot see: that
+  // check proves `heroVideo` exists in both the registry and the schema, but a
+  // field of the wrong type would satisfy it and still be unusable.
+  //
+  // `text` is the load-bearing part. The obvious choice is the `image` type used
+  // by `heroImage` beside it, and it would be wrong: the media library uploader
+  // is images-only (`accept="image/*"`), so an image-typed field renders a picker
+  // that can never list a video — an editor would be handed a control that looks
+  // right and cannot work. A plain box she pastes a path into is the honest
+  // control for a file only the team can add.
+  //
+  // Optional matters too: this is the only hero field that is genuinely absent in
+  // production, and a required one would block saving the entry at all.
+  //
+  // The hint is asserted because it is the only place an editor is told the file
+  // has to be committed by the team, that the video is silent and looping, and
+  // that the photo is its fallback. The field is unusable without it.
+  it('declares the hero video as an optional text field with guidance', () => {
+    const pageCopy = REGISTRY.collections.find((c) => c.id === 'pageCopy')!;
+    const heroVideo = pageCopy.fields.find((f) => f.name === 'heroVideo');
+
+    expect(heroVideo).toBeDefined();
+    expect({ type: heroVideo!.type, optional: heroVideo!.optional }).toEqual({
+      type: 'text',
+      optional: true,
+    });
+    expect(heroVideo!.label).toBe('Hero video');
+    expect(heroVideo!.hint ?? '').not.toBe('');
+  });
+
+  // It has to sit with the hero, not at the end of the form. The fields are
+  // rendered in declaration order, and a video control separated from the photo
+  // it falls back to reads as unrelated to it.
+  it('places the hero video directly after the hero image', () => {
+    const pageCopy = REGISTRY.collections.find((c) => c.id === 'pageCopy')!;
+    const names = pageCopy.fields.map((f) => f.name);
+
+    expect(names.indexOf('heroVideo')).toBe(names.indexOf('heroImage') + 1);
   });
 
   // Consumer extras appended to a built-in are the same drift risk as a custom

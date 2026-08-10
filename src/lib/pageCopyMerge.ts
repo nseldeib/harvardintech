@@ -208,6 +208,7 @@ export interface DonateFrameEntry {
   heroHeadlineGeneric?: string;
   heroSubhead?: string;
   heroImage?: string;
+  heroVideo?: string;
   ctaTitle?: string;
   ctaBody?: string;
   ctaLabel?: string;
@@ -240,6 +241,14 @@ export function mergeDonateFrame(
       fallback.heroHeadlineGeneric,
     heroSubhead: preferText(entry.heroSubhead, fallback.heroSubhead),
     heroImage: preferText(entry.heroImage, fallback.heroImage),
+    // The one frame field whose fallback is expected to be `undefined`:
+    // `donatePage.json` deliberately carries no `heroVideo`. Every other field
+    // here falls back to the JSON when the CMS box is blank, which is right for
+    // copy that must never be empty — but applied to this one it would make the
+    // video impossible to remove from /admin, since clearing the box would just
+    // resurrect the JSON value. The inverse of `inquiryFormUrl` in
+    // `mergeSponsorCopy`, and the reason the key is absent from the JSON.
+    heroVideo: preferText(entry.heroVideo, fallback.heroVideo),
     ctaTitle: preferText(entry.ctaTitle, fallback.ctaTitle),
     ctaBody: preferText(entry.ctaBody, fallback.ctaBody),
     ctaLabel: preferText(entry.ctaLabel, fallback.ctaLabel),

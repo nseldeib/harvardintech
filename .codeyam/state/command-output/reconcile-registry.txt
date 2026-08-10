@@ -1,20 +1,158 @@
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786150267,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":317992}
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786155166,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":385834}
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786150267,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":317992}
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786155166,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":385834}
 ## Stale test cache — 1 partition(s) drifted from source since the last refresh-tests: all. The runner output reconcile reads back is OUT OF DATE for these, so a renamed test can be missed (the cache still emits its old name) and a still-present test can look like an orphan. Run this first, then re-run reconcile-registry:
-{
-  "summary": {
   codeyam-editor editor refresh-tests --partition all
 This clears the PARTITION caches, which is what this check reads — that is the whole recovery. The run will also warn that the full-suite `test-cache.json` was not updated; that is expected and does not concern this check. Do NOT reach for `refresh-tests --force` — the narrow scope above is enough.
+auto-apply: 15 action(s) applied; 0 add(s) skipped.
+{
+  "summary": {
     "realOrphans": 0,
     "stalePhantoms": 0,
     "adds": 0,
     "renames": 0,
-    "updateLines": 0,
+    "updateLines": 15,
     "gateUpdates": 0
   },
-  "actions": [],
+  "actions": [
+    {
+      "kind": "updateLine",
+      "key": "committed CMS registry vs content schema › declares only real schema keys for every built-in extra",
+      "file": "src/data/collections.test.ts",
+      "runner": "tests",
+      "old_line": 315,
+      "new_line": 355,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "committed CMS registry vs content schema › declares the hero video as an optional text field with guidance",
+      "file": "src/data/collections.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 330,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses",
+      "file": "src/data/collections.test.ts",
+      "runner": "tests",
+      "old_line": 359,
+      "new_line": 399,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "committed CMS registry vs content schema › places the hero video directly after the hero image",
+      "file": "src/data/collections.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 346,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "committed CMS registry vs content schema › renders an editor input for every schema key of every collection",
+      "file": "src/data/collections.test.ts",
+      "runner": "tests",
+      "old_line": 336,
+      "new_line": 376,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › clears the video when the editor empties the box",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 376,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › leaves the video undefined when the entry carries no heroVideo",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 384,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › still carries the hero image alongside a video",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 394,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › takes the hero video path the editor pasted",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 365,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 376,
+      "new_line": 419,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 371,
+      "new_line": 414,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 405,
+      "new_line": 448,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 414,
+      "new_line": 457,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › takes a re-pointed analytics id",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 383,
+      "new_line": 426,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › takes custom head and body HTML the editor added",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 391,
+      "new_line": 434,
+      "classification": "change-introduced"
+    }
+  ],
   "platform_gated_absences": [],
   "runner_gated_absences": []
 }
+  backfilled 6 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.

@@ -466,6 +466,16 @@ const pageCopy = defineCollection({
     heroHeadlineGeneric: z.string().optional(),
     heroSubhead: z.string().optional(),
     heroImage: z.string().optional(),
+    // The hero's optional MOVING backdrop: a path like `/videos/momentum.mp4`
+    // for a file committed under `public/videos/`. Blank leaves the hero exactly
+    // as `heroImage` renders it today.
+    //
+    // `heroImage` does not step aside when this is set — it becomes the video's
+    // poster frame AND stays as the section's CSS background. That is what makes
+    // every way the video can fail to play (a 404, a browser refusing autoplay,
+    // a visitor on `prefers-reduced-motion`) degrade to the current page instead
+    // of a black rectangle, with no JavaScript on any of those paths.
+    heroVideo: z.string().optional(),
     // The closing ask at the bottom of the page.
     ctaTitle: z.string().optional(),
     ctaBody: z.string().optional(),
