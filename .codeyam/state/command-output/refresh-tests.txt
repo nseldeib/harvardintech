@@ -1,39 +1,34 @@
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786373673,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2250408}
-[refresh-tests --changed] scope: 14 changed path(s) (9 untracked included)
-[refresh-tests --changed]   matched runner(s): tests
-{
-Analyzed 12 files, found 34 import edges, graph has 330 nodes
-  "analyzed": 12,
-  "entityCount": 408,
-  "graphSize": 330,
-  "totalImports": 34
-}
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1e3968f4-d648-4e10-96a7-4ac0e3be8109/tasks/bwmv40mht.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786395875,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2465316}
+════════════════════════════════════════════════════════════════════
+WARNING: refresh-tests --force is running the ENTIRE test suite.
+════════════════════════════════════════════════════════════════════
+You're at ui step 12: ui-extract-tdd. The full suite is reserved
+for the `finalize` step, where `session-finalize` runs it
+automatically. Running it here is slow and almost always avoidable.
 
-note: dependency graph was stale — auto-refreshed 12 changed file(s) so --changed maps them this run:
-  src/components/volunteer/VolunteerProjectCard.astro
-  src/components/volunteer/VolunteerProjectHeader.astro
-  src/components/volunteer/VolunteerProjectMeta.astro
-  src/components/volunteer/VolunteerProjectPage.astro
-  src/components/volunteer/VolunteerProjects.astro
-  src/components/volunteer/VolunteerRelatedProjects.astro
-  src/content/config.ts
-  src/lib/projects.test.ts
-  src/lib/projects.ts
-  src/pages/isolated-components/VolunteerProjectHeader.astro
-  src/pages/isolated-components/VolunteerRelatedProjects.astro
-  src/pages/volunteer/projects/[slug].astro
-note: the change→test mapping is now current; no analyze-imports or raw-runner fallback is needed.
+To update the cache for a NEW or RENAMED test, use:
+  codeyam-editor editor refresh-tests --test <name>
+  codeyam-editor editor refresh-tests --changed
+  codeyam-editor editor refresh-tests --runner <name>
+
+If the audit just bailed reporting cache staleness, the documented
+recovery is flag-free `refresh-tests` (no `--force`). See
+`reconcile.txt` for the full guidance.
+
+Proceeding with the full suite anyway.
+════════════════════════════════════════════════════════════════════
+
+warning: about to run the FULL test suite (~767 tests) — this can take many minutes.
+warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
+note: full re-run requested; merkle-hash optimization skipped
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
-[   4s] Tests completed.
-{"failed":0,"passed":39,"skipped":0,"success":true,"total":39}
-All 39 tests passed.
-
-Partial run — partition caches WERE updated; the full-suite test-cache.json was
-NOT (full-suite hash invariant). If a stale-partition bail sent you here, that
-recovery has landed — re-run the command that bailed.
-Audit gates read the full-suite cache. Flag-free `refresh-tests` updates it but
-is gated until `finalize`. To update the full-suite cache now (e.g. for
-brand-new tests), run: codeyam-editor editor refresh-tests --force
+{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786395885,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2465316}
+[  12s] Still running: tests
+{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786395895,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2465316}
+[  22s] Tests completed.
+{"failed":0,"passed":767,"skipped":0,"success":true,"total":767}
+All 767 tests passed.

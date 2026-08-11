@@ -1,0 +1,43 @@
+{
+  "name": "CMS Momentum Sections - A Section Still In Draft",
+  "id": "2425e256-62cd-44d4-b791-7ead60403f53",
+  "url": "/admin/momentumSections",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The donor recognition wall, promoted to the top of the page by an Order edit.",
+        "kind": "donors",
+        "order": 1,
+        "slug": "donors"
+      },
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\n",
+        "draft": true,
+        "image": "/images/gallery/event-04.jpg",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 2,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "body": "The track-record band.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      },
+      {
+        "body": "The 'What Your Gift Powers' cards.",
+        "kind": "pillars",
+        "order": 4,
+        "slug": "pillars"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "description": "An ordered collection holding a drafted section. The draft sits in sequence with a Draft chip on its own row rather than being lifted into a separate group, because in a list that exists to show order, hoisting a row out of its place would misreport where the section actually sits on the page. The chip is required, not decorative: the group heading used to be the only thing saying an entry was a draft."
+}

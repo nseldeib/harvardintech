@@ -29,6 +29,38 @@ only, so wherever `/admin` is deployed, every draft's full source is publicly
 fetchable. Keeping it on the gated review origin is what makes draft-phasing
 mean anything.
 
+### The patch on top of the package
+
+`patches/@codeyam+cms+0.4.0.patch` is applied by `patch-package` from
+`postinstall`, so it lands on every install including CI. It is still true that
+no admin code is hand-written here — the patch edits the dependency, it does not
+add admin pages to this repo. It currently carries two things:
+
+- **Reorder arrows on ordered collection lists.** Any collection declaring a
+  numeric `order` field — 13 of them today, including Momentum Fund sections and
+  home sections — renders as one ordered sequence with ↑ / ↓ arrows on each row
+  instead of a Drafts-then-Published split, and a move stages ordinary pending
+  changes that ride the normal publish review. The draft state moves onto the row
+  as a chip, since those lists no longer have a "Drafts" heading to carry it.
+- **The publish deploy watch.** Already merged upstream and awaiting a 0.4.1
+  release; that half of the patch disappears on its own at the next bump, because
+  it will be in the base.
+
+**Both halves are meant to be temporary.** The lifecycle, which this repo has run
+once already for the media guard in `@codeyam+cms+0.2.2.patch` (deleted by
+`abc5872` once 0.4.0 shipped it), is: file the change upstream against
+`codeyam-ai/codeyam-cms`, and delete the patch on the release that carries it.
+
+The risk that makes writing this down worth it: `patch-package` matches a patch
+to a version **by filename**, so the next `@codeyam/cms` bump silently drops
+whatever this patch still holds. Nothing would fail — the arrows would just stop
+being on the page, and the first person to notice would be an editor trying to
+reorder the donate page. `src/lib/cmsOrderControls.test.ts` exists to make that a
+CI failure instead, and it survives the patch being deleted: once the change is
+released upstream it stops guarding a patch and starts holding the dependency to
+its contract, which is when it matters most, because by then nobody is thinking
+about this feature.
+
 Two committed JSON files configure it:
 
 - **`src/data/cms.json`** — which repo commits land in (`nseldeib/harvardintech`,

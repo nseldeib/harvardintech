@@ -187,6 +187,17 @@
     ]
   },
   {
+    "description": "The up/down pair that moves one row of an ordered collection in the CMS entry list. Purely presentational: it reports intent and renders the disabled state it is told about, while the sequence rules live in entryList's pure helpers. Deliberately not RowControls, which always renders a remove button an entry row does not want. Ships via patches/@codeyam+cms+0.4.0.patch until the change lands upstream, which is why src/lib/cmsOrderControls.test.ts holds the dependency to this contract.",
+    "filePath": "node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx",
+    "name": "OrderArrows",
+    "scenarios": [
+      "orderarrows-middle-row",
+      "orderarrows-top-row",
+      "orderarrows-bottom-row",
+      "orderarrows-the-only-row"
+    ]
+  },
+  {
     "description": "Landing Our Chapters section: a row of photo cards with a crimson gradient wash linking to each chapter page, sorted by order; shows a quiet prompt when empty.",
     "filePath": "src/components/landing/OurChapters.astro",
     "name": "OurChapters",

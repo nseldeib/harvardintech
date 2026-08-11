@@ -1,3 +1,18 @@
 {
-  "entries": []
+  "entries": [
+    {
+      "method": "GET",
+      "pathPattern": "/videos/not-committed-yet.mp4",
+      "isFullUrl": false,
+      "variants": [
+        "GET /videos/not-committed-yet.mp4"
+      ],
+      "scenarios": [
+        "momentumhero-video-path-that-resolves-to-nothing"
+      ],
+      "inDefault": false,
+      "observedCount": 0,
+      "autoAdded": false
+    }
+  ]
 }

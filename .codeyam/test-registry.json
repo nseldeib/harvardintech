@@ -190,6 +190,42 @@
       "runner": "tests"
     },
     {
+      "description": "An entry the sequence has never seen must not vanish from the list — it keeps its file-derived place instead.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "applySequence › keeps an entry the sequence does not mention",
+      "line": 244,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason this exists: a move stages a change but does not rewrite the markdown, so the files still hold the old numbers and only this remembered sequence keeps the row where the editor put it.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "applySequence › reorders to follow the session sequence",
+      "line": 237,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "With no session sequence the file-derived order stands.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "applySequence › returns the incoming order when there is no sequence",
+      "line": 230,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A slug in the sequence that no longer exists is skipped rather than producing a hole in the list.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "applySequence › skips a slug that is no longer in the collection",
+      "line": 252,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "A step added to the runbook after this file was committed still has to be tickable, or adding a step would silently make it unrecordable.",
       "file": "src/lib/cutoverTicks.test.ts",
       "format": "vitest",
@@ -367,6 +403,42 @@
       "key": "buildMailto › includes both subject and body when supplied",
       "line": 23,
       "registeredAt": "2026-06-13T15:32:37.162204395+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The baseline is the file normalized through parse-then-serialize, so the diff an editor reviews is the one order line and nothing else.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "buildOrderChange › diffs as only the order line",
+      "line": 301,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Everything else survives. A reorder that quietly dropped a section's kind or rewrote its body would be far worse than the numbering it replaced.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "buildOrderChange › leaves the other frontmatter keys and the body intact",
+      "line": 280,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Staged as an ordinary edit, which is what puts a reorder in the same publish review as every other pending change instead of a path of its own.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "buildOrderChange › stages as an ordinary edit against the entry file",
+      "line": 291,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The one field a reorder is allowed to touch.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "buildOrderChange › writes the new order into the frontmatter",
+      "line": 273,
+      "registeredAt": "2026-08-10T21:05:09Z",
       "runner": "tests"
     },
     {
@@ -1414,6 +1486,33 @@
       "runner": "tests"
     },
     {
+      "description": "The ordinary case: the number an editor typed into the Order box.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "entryOrder › reads the order out of the frontmatter",
+      "line": 100,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank is a real state — most entries start with no order at all.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "entryOrder › returns undefined when the entry has no order",
+      "line": 105,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Frontmatter is hand-editable, so junk has to read as unnumbered rather than NaN, which would poison every comparison it reached.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "entryOrder › treats an unparseable order as unnumbered",
+      "line": 111,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "Null placement resolves to null rather than to a plausible-looking URL.",
       "file": "src/lib/collectionPlacement.test.ts",
       "format": "vitest",
@@ -2240,6 +2339,42 @@
       "key": "groupVisible › shows every band under the all-donors chip",
       "line": 52,
       "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A same-named field of another type is not an order. Guards against a consumer declaring a text `order` and getting arrows that write strings.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "hasOrderField › ignores an order field that is not a number",
+      "line": 93,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other side of the split, and the regression guard for it: a collection with no order has no sequence to arrange, and must keep its Drafts / Published grouping exactly as it reads today.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "hasOrderField › is false for a collection with no order field",
+      "line": 75,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Scoped by capability rather than by name, so every ordered collection on this site gets the arrows without the package naming any of them.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "hasOrderField › is true for every collection this site declares an order on",
+      "line": 82,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The capability that switches the whole feature on. If this reads false for momentumSections the arrows are gone from the page an editor uses.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "hasOrderField › is true for the Momentum Fund sections",
+      "line": 68,
+      "registeredAt": "2026-08-10T21:05:09Z",
       "runner": "tests"
     },
     {
@@ -3350,6 +3485,42 @@
       "runner": "tests"
     },
     {
+      "description": "Non-mutating, like every other rule here.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "moveEntry › does not mutate the source list",
+      "line": 186,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "And down, symmetrically.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "moveEntry › moves an entry down by one",
+      "line": 165,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "One row up, which is the whole interaction.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "moveEntry › moves an entry up by one",
+      "line": 153,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ends. The UI disables these arrows, but the rule lives here so the component may stay presentational and a stale click cannot corrupt an order.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "moveEntry › returns the list unchanged at the top and bottom",
+      "line": 178,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "Punctuation is deliberately KEPT, so a suffix does not silently merge two people. Father and son share a name; an importer that collapses them deletes one supporter without telling anyone.",
       "file": "src/lib/donorImport.test.ts",
       "format": "vitest",
@@ -4418,6 +4589,33 @@
       "key": "relatedProjects › wraps past the end of the list rather than coming up empty",
       "line": 285,
       "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank, duplicate and gapped numbers all converge on a clean 1..N at the first click, rather than persisting as a puzzle for the editor to solve.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "renumberEntries › renumbers a blank, duplicated and gapped list to a clean sequence",
+      "line": 217,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A list already in sequence stages nothing, so opening the page and clicking nothing can never produce a pending change.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "renumberEntries › reports nothing when the list is already numbered in sequence",
+      "line": 211,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The economy of a move, and the reason a publish review stays readable: one click stages TWO files, not the whole collection.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "renumberEntries › reports only the rows whose number changed",
+      "line": 202,
+      "registeredAt": "2026-08-10T21:05:09Z",
       "runner": "tests"
     },
     {
@@ -5534,6 +5732,42 @@
       "key": "sortBoardMembers › treats a missing order as zero",
       "line": 52,
       "registeredAt": "2026-06-14T15:43:56Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The tiebreak is what makes turning this on safe for a collection nobody has ordered yet: it sorts by label, exactly as the list does today.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "sortByEntryOrder › breaks ties by label",
+      "line": 138,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Non-mutating, so the caller's array is safe to reuse.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "sortByEntryOrder › leaves the source array untouched",
+      "line": 144,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An entry nobody numbered must not jump to the front, which is what a `undefined ?? 0` would do — it sorts after everything explicitly placed.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "sortByEntryOrder › puts an unnumbered entry last",
+      "line": 131,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The admin list must agree with what /donate renders, which is this repo's own rule in src/lib/order.ts: ascending, unnumbered last.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "sortByEntryOrder › sorts ascending by order",
+      "line": 119,
+      "registeredAt": "2026-08-10T21:05:09Z",
       "runner": "tests"
     },
     {

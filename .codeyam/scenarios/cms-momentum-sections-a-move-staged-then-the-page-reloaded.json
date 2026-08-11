@@ -1,0 +1,47 @@
+{
+  "name": "CMS Momentum Sections - A Move Staged Then The Page Reloaded",
+  "id": "90bb4fa1-33b7-44c2-bc34-8ea5851c7bcc",
+  "url": "/admin/momentumSections",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "browserState": {
+    "localStorage": {
+      "codeyam-cms:pending-changes": "[{\"collection\": \"momentumSections\", \"slug\": \"accomplishments\", \"path\": \"src/content/momentumSections/accomplishments.md\", \"title\": \"accomplishments\", \"original\": \"---\\nkind: accomplishments\\norder: 3\\n---\\n\\nThe track-record band.\", \"updated\": \"---\\nkind: accomplishments\\norder: 2\\n---\\n\\nThe track-record band.\", \"kind\": \"edit\"}, {\"collection\": \"momentumSections\", \"slug\": \"why\", \"path\": \"src/content/momentumSections/why.md\", \"title\": \"Why Support Harvard in Tech?\", \"original\": \"---\\nkind: narrative\\nlayout: image-right\\nimage: /images/gallery/event-04.jpg\\norder: 2\\ntitle: Why Support Harvard in Tech?\\n---\\n\\n### Harvard in Tech is at an important turning point\\n\\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\\n\", \"updated\": \"---\\nkind: narrative\\nlayout: image-right\\nimage: /images/gallery/event-04.jpg\\norder: 3\\ntitle: Why Support Harvard in Tech?\\n---\\n\\n### Harvard in Tech is at an important turning point\\n\\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\\n\", \"kind\": \"edit\"}]"
+    }
+  },
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The donor recognition wall, promoted to the top of the page by an Order edit.",
+        "kind": "donors",
+        "order": 1,
+        "slug": "donors"
+      },
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\n",
+        "image": "/images/gallery/event-04.jpg",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 2,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "body": "The track-record band.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      },
+      {
+        "body": "The 'What Your Gift Powers' cards.",
+        "kind": "pillars",
+        "order": 4,
+        "slug": "pillars"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "description": "What an editor sees if she moves a section and then reloads before publishing. The two staged changes survive the reload — the publish bar reads '2 changes ready to publish across momentumSections' — but the moved order does not, because the arrangement lives in the page's own state while the markdown still holds the old numbers until publish. So the list reads in its ORIGINAL order while the bar says two changes are pending: the one state where the list and the pending changes disagree about the order. Publishing still lands the move. Note the rows carry no staged marker here even though the changes are real, which is a second, smaller disagreement on the same screen."
+}

@@ -463,7 +463,7 @@
           "label": "Order",
           "type": "number",
           "optional": true,
-          "hint": "Lower numbers appear higher on the page. Change this to move a section up or down. Blank puts the section last."
+          "hint": "Lower numbers appear higher on the page. To reorder, use the ↑ and ↓ arrows on the sections list — this box is for setting an exact position. Blank puts the section last."
         },
         {
           "name": "comingSoon",
@@ -512,7 +512,7 @@
           "label": "Order",
           "type": "number",
           "optional": true,
-          "hint": "Lower numbers appear higher on the page. Change this to move a section up or down. Blank puts it last."
+          "hint": "Lower numbers appear higher on the page. To reorder, use the ↑ and ↓ arrows on the sections list — this box is for setting an exact position. Blank puts it last."
         },
         {
           "name": "comingSoon",
