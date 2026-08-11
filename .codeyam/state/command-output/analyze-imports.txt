@@ -1,10 +1,10 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1e3968f4-d648-4e10-96a7-4ac0e3be8109/tasks/b71tjjsee.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786396049,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2469585}
-analyze-imports: scoped to 15 changed / 3 deleted file(s) since HEAD
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1e3968f4-d648-4e10-96a7-4ac0e3be8109/tasks/b89j71olg.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786462170,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3014284}
+analyze-imports: scoped to 13 changed / 2 deleted file(s) since HEAD
 {
-Analyzed 1 files, found 1 import edges, graph has 334 nodes
-  "analyzed": 1,
-  "entityCount": 416,
-  "graphSize": 334,
-  "totalImports": 1
+Analyzed 2 files, found 5 import edges, graph has 339 nodes
+  "analyzed": 2,
+  "entityCount": 420,
+  "graphSize": 339,
+  "totalImports": 5
 }

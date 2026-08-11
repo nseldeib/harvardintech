@@ -811,6 +811,177 @@
       "runner": "tests"
     },
     {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › boston-cambridge.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › boston-cambridge.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › boston-cambridge.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › dc-dmv.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › dc-dmv.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › dc-dmv.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "sanity: the chapter content exists, so an empty glob cannot make every per-file assertion below pass vacuously",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › finds the chapter content files",
+      "line": 53,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › london.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › london.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › london.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › nyc.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › nyc.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › nyc.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › seattle.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › seattle.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › seattle.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › sf-bay-area.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › sf-bay-area.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › sf-bay-area.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
       "description": "a production build (no override) reads the committed data dir",
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",

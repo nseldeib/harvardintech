@@ -1,30 +1,30 @@
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786462002,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3011434}
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786395949,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2467065}
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786395949,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2467065}
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786462002,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3011434}
 ## Stale test cache — 1 partition(s) drifted from source since the last refresh-tests: all. The runner output reconcile reads back is OUT OF DATE for these, so a renamed test can be missed (the cache still emits its old name) and a still-present test can look like an orphan. Run this first, then re-run reconcile-registry:
   codeyam-editor editor refresh-tests --partition all
 This clears the PARTITION caches, which is what this check reads — that is the whole recovery. The run will also warn that the full-suite `test-cache.json` was not updated; that is expected and does not concern this check. Do NOT reach for `refresh-tests --force` — the narrow scope above is enough.
-## Inherited registry drift (26) — 26 line updates referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). Held out of the `actions` array; `summary` above still counts the whole diff, and nothing about how these rows are applied changed. See them in full with `codeyam-editor editor reconcile-registry --include-inherited`.
+## Inherited registry drift (19) — 19 line updates referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). Held out of the `actions` array; `summary` above still counts the whole diff, and nothing about how these rows are applied changed. See them in full with `codeyam-editor editor reconcile-registry --include-inherited`.
 {
-auto-apply: 26 action(s) applied; 0 add(s) skipped.
   "summary": {
     "realOrphans": 0,
+auto-apply: 19 action(s) applied; 0 add(s) skipped.
     "stalePhantoms": 0,
     "adds": 0,
     "renames": 0,
-    "updateLines": 26,
+    "updateLines": 19,
     "gateUpdates": 0
   },
   "actions": [],
   "inherited": {
-    "total": 26,
+    "total": 19,
     "counts": {
       "realOrphans": 0,
       "stalePhantoms": 0,
       "adds": 0,
       "renames": 0,
-      "updateLines": 26,
+      "updateLines": 19,
       "gateUpdates": 0
     },
     "includedInActions": false,
@@ -33,4 +33,4 @@ auto-apply: 26 action(s) applied; 0 add(s) skipped.
   "platform_gated_absences": [],
   "runner_gated_absences": []
 }
-  backfilled 26 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.
+  backfilled 19 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.

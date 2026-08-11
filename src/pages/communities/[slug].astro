@@ -29,6 +29,14 @@ export async function getStaticPaths() {
 type Props = { community: CollectionEntry<'communities'> };
 const { community } = Astro.props as Props;
 const { Content } = await render(community);
+// `photos` is DELIBERATELY absent from this destructure and from the ChapterPage
+// call below. A chapter curates its own gallery in /admin and passes it through;
+// a community is scoped out of that feature on purpose, so it keeps the shared
+// 40-photo event wall every page showed before per-chapter galleries existed.
+// The boundary is enforced twice over: the `communities` schema declares no
+// `photos` field (src/content/config.ts), so there is nothing on
+// `community.data` to forward even if this call site grew the prop.
+// `showGallery: false` still hides the section outright, as it does for a chapter.
 const { name, blurb, heroImage, tagline, showGallery, contactEmail, leads, links } =
   community.data;
 

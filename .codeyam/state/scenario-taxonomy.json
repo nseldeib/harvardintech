@@ -565,8 +565,7 @@
         "reason": "Static prerendered route; an unknown chapter slug is a build-time 404, not an in-page error state"
       },
       "key-interaction": {
-        "status": "n-a",
-        "reason": "Presentational page; all actions are external-link and mailto navigations with no in-page interactive state"
+        "status": "covered"
       }
     },
     "src/pages/communities/[slug].astro": {

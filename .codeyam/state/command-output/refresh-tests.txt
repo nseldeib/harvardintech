@@ -1,5 +1,7 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/1e3968f4-d648-4e10-96a7-4ac0e3be8109/tasks/bwmv40mht.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786395875,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2465316}
+⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786461924,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3009748}
+> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786461924,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3009748}
 ════════════════════════════════════════════════════════════════════
 WARNING: refresh-tests --force is running the ENTIRE test suite.
 ════════════════════════════════════════════════════════════════════
@@ -19,16 +21,18 @@ recovery is flag-free `refresh-tests` (no `--force`). See
 Proceeding with the full suite anyway.
 ════════════════════════════════════════════════════════════════════
 
-warning: about to run the FULL test suite (~767 tests) — this can take many minutes.
+warning: about to run the FULL test suite (~786 tests) — this can take many minutes.
 warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
 note: full re-run requested; merkle-hash optimization skipped
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
-{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786395885,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2465316}
+{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786461934,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3009748}
+{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786461934,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3009748}
 [  12s] Still running: tests
-{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786395895,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2465316}
+{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786461944,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3009748}
+{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786461944,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3009748}
 [  22s] Tests completed.
-{"failed":0,"passed":767,"skipped":0,"success":true,"total":767}
-All 767 tests passed.
+{"failed":0,"passed":786,"skipped":0,"success":true,"total":786}
+All 786 tests passed.
