@@ -1,4 +1,4 @@
-# Harvard in Tech — Review Handoff (for Nicole)
+# Harvard Alumni in Tech — Review Handoff (for Nicole)
 
 Internal reference for the external review. Keep the links and the password
 internal.
@@ -38,7 +38,7 @@ HTML is fetchable by anyone who has the address.
 
 ## Ready-to-send note
 
-> Hi Nicole — here's the Harvard in Tech site preview to review. Everything
+> Hi Nicole — here's the Harvard Alumni in Tech site preview to review. Everything
 > except the content editor uses the password **crimson2026**:
 >
 > • **Website:** https://nseldeib.github.io/harvardintech/

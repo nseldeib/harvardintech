@@ -215,11 +215,11 @@ describe('pageSeo', () => {
       pageSeo({
         title: 'About',
         description: 'Visible lede',
-        metaTitle: 'About Harvard in Tech',
+        metaTitle: 'About Harvard Alumni in Tech',
         metaDescription: 'Search description',
       }),
     ).toEqual({
-      title: 'About Harvard in Tech',
+      title: 'About Harvard Alumni in Tech',
       description: 'Search description',
       image: undefined,
     });

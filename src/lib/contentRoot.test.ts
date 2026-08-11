@@ -73,8 +73,8 @@ describe('readSingleton', () => {
 
   // The ordinary case: a singleton parses into the shape its caller expects.
   it('parses a singleton from the resolved data root', () => {
-    sandbox({ 'thing.json': '{"siteTitle":"Harvard in Tech","socials":[]}' });
-    expect(readSingleton<{ siteTitle: string }>('thing.json').siteTitle).toBe('Harvard in Tech');
+    sandbox({ 'thing.json': '{"siteTitle":"Harvard Alumni in Tech","socials":[]}' });
+    expect(readSingleton<{ siteTitle: string }>('thing.json').siteTitle).toBe('Harvard Alumni in Tech');
   });
 
   // The reason this function exists at all, and the reason it must not be a

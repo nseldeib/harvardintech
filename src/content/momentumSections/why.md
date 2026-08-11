@@ -1,12 +1,12 @@
 ---
 kind: narrative
-title: Why Support Harvard in Tech?
+title: Why Support Harvard Alumni in Tech?
 layout: image-right
 image: /images/gallery/event-04.jpg
 order: 1
 ---
 
-### Harvard in Tech is at an important turning point
+### Harvard Alumni in Tech is at an important turning point
 
 We are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals who are building, mentoring, launching, and opening doors for one another.
 
@@ -16,7 +16,7 @@ To meet this moment, we need the infrastructure to support the momentum we are a
 
 ### This is why your support matters
 
-It gives Harvard in Tech the ability to plan ahead, invest more intentionally, and create a stronger, more sustainable alumni-powered ecosystem.
+It gives Harvard Alumni in Tech the ability to plan ahead, invest more intentionally, and create a stronger, more sustainable alumni-powered ecosystem.
 
 Now is the time to move from informal support to intentional investment.
 

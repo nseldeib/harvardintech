@@ -1,6 +1,6 @@
 // Where a "give" button points.
 //
-// Harvard in Tech has no donation platform yet, so every giving CTA opens a
+// Harvard Alumni in Tech has no donation platform yet, so every giving CTA opens a
 // pre-addressed inquiry email instead. When a platform is chosen, setting
 // `donateUrl` in the CMS switches every button over with no code change — which
 // is the whole reason this is one function rather than an inline ternary

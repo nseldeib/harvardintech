@@ -58,7 +58,7 @@ next" band at the bottom.
 There are two kinds of entry, and the difference matters:
 
 **Sections you write here.** An entry whose *Section type* is `narrative` — "Why
-Support Harvard in Tech?" and "And Every Number Represents a Story" — holds its
+Support Harvard Alumni in Tech?" and "And Every Number Represents a Story" — holds its
 own heading, photo, layout, and text. Open it, edit it, save it. The words in the
 big text box at the bottom are the words on the page.
 
@@ -120,7 +120,7 @@ Today the page is ordered:
 
 | Order | Section |
 |---|---|
-| 1 | Why Support Harvard in Tech? |
+| 1 | Why Support Harvard Alumni in Tech? |
 | 2 | What we've accomplished so far |
 | 3 | And Every Number Represents a Story |
 | 4 | What Your Gift Powers |

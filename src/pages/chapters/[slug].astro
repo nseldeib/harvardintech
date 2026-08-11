@@ -59,7 +59,7 @@ const events = publishedEntries(await getCollection('events'), INCLUDE_DRAFTS);
 const { upcoming } = splitEvents(eventsTaggedTo(events, chapter.id));
 ---
 
-<BaseLayout title={city} description={blurb ?? `Harvard in Tech ${city} chapter.`}>
+<BaseLayout title={city} description={blurb ?? `Harvard Alumni in Tech ${city} chapter.`}>
   <ChapterPage
     name={city}
     region={region}

@@ -30,7 +30,7 @@ const { title, layout, image, tinted = false } = Astro.props as Props;
 // image falls back to full-width prose regardless of what the editor chose.
 const resolved = resolveLayout(layout);
 const mode = image ? resolved : 'text-only';
-const alt = image ? altFor(image, title ?? 'Harvard in Tech') : '';
+const alt = image ? altFor(image, title ?? 'Harvard Alumni in Tech') : '';
 ---
 
 <section class:list={['narrative', { tinted }]}>

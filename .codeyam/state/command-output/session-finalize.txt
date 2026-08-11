@@ -1,17 +1,69 @@
-{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786465387,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3044257}
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786476359,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786465387,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3044257}
-session-finalize started: 2026-08-11T16:23:07Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 3044257)
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786476359,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+session-finalize started: 2026-08-11T19:25:59Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 3155664)
 The final workflow step ('Finalize', step 25) was interrupted before it completed — most likely an OOM/SIGKILL (exit 137) or SIGTERM (143) on this memory-constrained VM, not a logic failure. Your work is committed up to ab937ed. A commit-queue head was held; `feature-complete` will release it as the terminal backstop on the resumed completion.
 
 Re-run the final step to resume: `codeyam-editor editor advance` (or `codeyam-editor editor feature-complete` if advance reports the terminal step).
 Finalizing session — running flag-free test suite + strict audit. This is the only full-suite run for this feature.
 Coverage thresholds … skipped (no runner declares a coverage_path)
 Phase 0/5: session-cleanup …
-Phase 1/5: skipped (--start-from-phase 4)
-Phase 2/5: skipped (--start-from-phase 4)
-Phase 3/5: skipped (--start-from-phase 4)
+Phase 1/5: refresh-tests (no filters) — source Merkle hash changed for partition 'all'
+
+warning: about to run the FULL test suite (~786 tests) — this can take many minutes.
+warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
+Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
+  tests  ::  npx vitest run --reporter=json
+note: full re-run requested; merkle-hash optimization skipped
+Test refresh triggered. Waiting for results...
+[   2s] Running runner: tests
+{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786476369,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":10,"emitted_at_unix":1786476369,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+[  12s] Still running: tests
+{"command":"session-finalize","elapsed_secs":20,"emitted_at_unix":1786476379,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":20,"emitted_at_unix":1786476379,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+[  22s] Tests completed.
+{"failed":0,"passed":786,"skipped":0,"success":true,"total":786}
+All 786 tests passed.
+Phase 2/5: audit (--gate-mode strict, comprehensive) …
+[   0s] audit: running static checks
+{"command":"session-finalize","elapsed_secs":30,"emitted_at_unix":1786476389,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":30,"emitted_at_unix":1786476389,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":40,"emitted_at_unix":1786476399,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":40,"emitted_at_unix":1786476399,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+[  21s] audit: rebuilding dependency graph (can take a few minutes on a large project)
+{"command":"session-finalize","elapsed_secs":50,"emitted_at_unix":1786476409,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":50,"emitted_at_unix":1786476409,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{
+  "analyzed": 323,
+  "entityCount": 420,
+  "graphSize": 339,
+  "totalImports": 586
+}
+Analyzed 323 files, found 586 import edges, graph has 339 nodes
+{"command":"session-finalize","elapsed_secs":60,"emitted_at_unix":1786476419,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":60,"emitted_at_unix":1786476419,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":70,"emitted_at_unix":1786476429,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":70,"emitted_at_unix":1786476429,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":80,"emitted_at_unix":1786476439,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":80,"emitted_at_unix":1786476439,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":90,"emitted_at_unix":1786476449,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":90,"emitted_at_unix":1786476449,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":100,"emitted_at_unix":1786476459,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":100,"emitted_at_unix":1786476459,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+[  80s] audit: running registry invariant checks
+[  81s] audit: gather complete
+Phase 3/5: analyze-imports …
+{"command":"session-finalize","elapsed_secs":110,"emitted_at_unix":1786476469,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{"command":"session-finalize","elapsed_secs":110,"emitted_at_unix":1786476469,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155664}
+{
+  "analyzed": 323,
+  "entityCount": 420,
+  "graphSize": 339,
+  "totalImports": 586
+Analyzed 323 files, found 586 import edges, graph has 339 nodes
+}
 Phase 3.5/5: screenshot coverage …
 Phase 3.5/5: screenshot coverage … 3 stale, 0 missing
-session-finalize finished: status=failed, phase1=skipped, phase2=skipped, phase3=skipped, phase4=pending, phase5=pending, elapsed=1.9s
+session-finalize finished: status=failed, phase1=passed, phase2=passed, phase3=passed, phase4=pending, phase5=pending, elapsed=114.7s

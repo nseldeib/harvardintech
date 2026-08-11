@@ -89,7 +89,7 @@
    */
   function reviewOutline(directions) {
     var lines = [
-      'Harvard in Tech — supporter recognition review',
+      'Harvard Alumni in Tech — supporter recognition review',
       'Reviewer:                     Date:',
       '',
       'THE BIG ONE — which direction, and what is it called?',

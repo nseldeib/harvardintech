@@ -3,7 +3,7 @@ title: Volunteer page
 kicker: Get involved
 heroImage: /images/bg/get-involved-bg.jpg
 headline: Join the Harvard Alumni in Tech Volunteer Team
-intro: Harvard in Tech is 100% volunteer-run. Our volunteers are the heart of HIT's mission, connecting and empowering the Harvard tech community and beyond.
+intro: Harvard Alumni in Tech is 100% volunteer-run. Our volunteers are the heart of our mission, connecting and empowering the Harvard tech community and beyond.
 benefitsTitle: Why Volunteer with Harvard Alumni in Tech?
 benefits:
   - title: Gain Valuable Experience
@@ -11,7 +11,7 @@ benefits:
   - title: Expand Your Network
     body: Connect with Harvard alumni and tech professionals for mentorship, collaboration, and career opportunities.
   - title: Make a Difference
-    body: Be a part of something bigger and contribute your time and talent to initiatives that drive innovation, foster community engagement, and support the responsible growth of technology. Your impact will be felt not only within the Harvard in Tech ecosystem but also across broader communities where technology can create positive change.
+    body: Be a part of something bigger and contribute your time and talent to initiatives that drive innovation, foster community engagement, and support the responsible growth of technology. Your impact will be felt not only within the Harvard Alumni in Tech ecosystem but also across broader communities where technology can create positive change.
   - title: Other Benefits
     body: Discounts on select Harvard University online courses.
 projectsTitle: Projects open for volunteers

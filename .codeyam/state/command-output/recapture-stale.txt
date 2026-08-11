@@ -1,23 +1,27 @@
-{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786465319,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
+{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786475858,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786465319,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-  ▶ Pass 1/3: 2 scenario(s) to recapture (budget 300s)
+{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786475858,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+  ▶ 3 scenario(s) to recapture (budget 300s)
   → Warming dev server at http://127.0.0.1:4321/
   → Capturing: cms-momentum-sections-a-move-staged-then-the-page-reloaded
   ⟲ Unchanged: cms-momentum-sections-a-move-staged-then-the-page-reloaded — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: cms-momentum-sections-a-section-still-in-draft
+{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786475868,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786475868,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+  ⟲ Unchanged: cms-momentum-sections-a-section-still-in-draft — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
   → Capturing: cms-momentum-sections-in-order-with-arrows
-{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786465329,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786465329,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
+{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786475878,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786475878,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
   ⟲ Unchanged: cms-momentum-sections-in-order-with-arrows — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
-{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786465339,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786465339,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786465349,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786465349,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786465359,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786465359,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786465369,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786465369,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786465379,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786465379,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3043448}
-{"attempts":1,"budget_expired":false,"collision_isolation":{"collisions_after":0,"collisions_before":0,"isolated":[]},"content_blocked":[],"emptied_by_cross_target":false,"errors":[],"recaptured":0,"resolution_changes":[],"restored_identical":2,"seed_ignored":null,"sidecars_cleaned":0,"skipped":[],"skipped_clean":false,"skipped_count":0,"skipped_cross_target":[],"total":2,"unrecapturable":[],"visual_diffs":[]}
+{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786475888,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786475888,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786475898,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786475898,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786475908,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786475908,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786475918,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786475918,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1786475928,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1786475928,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3149582}
+{"attempts":1,"budget_expired":false,"collision_isolation":{"collisions_after":0,"collisions_before":0,"isolated":[]},"content_blocked":[],"emptied_by_cross_target":false,"errors":[],"recaptured":0,"resolution_changes":[],"restored_identical":3,"seed_ignored":null,"sidecars_cleaned":0,"skipped":[],"skipped_clean":false,"skipped_count":0,"skipped_cross_target":[],"total":3,"unrecapturable":[],"visual_diffs":[]}

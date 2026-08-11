@@ -18,7 +18,7 @@ interface Props {
   tagline?: string;
 }
 const { name, region, blurb, heroImage, tagline } = Astro.props;
-const title = `Harvard in Tech ${name}`;
+const title = `Harvard Alumni in Tech ${name}`;
 ---
 
 {
@@ -57,10 +57,17 @@ const title = `Harvard in Tech ${name}`;
     align-items: center;
     justify-content: center;
   }
+  /* Wider than the old flat 918px because the TITLE lives here and is the one
+     thing that legitimately wants more room: under the previous `nowrap` it
+     simply overflowed this box and used the viewport, which is why 918px never
+     appeared to constrain anything. Now that the title can wrap, that box is
+     load-bearing — left at 918px it breaks "… NEW / YORK CITY" mid-phrase. The
+     tagline below re-applies 918px for itself, so it keeps a reading measure
+     rather than stretching to this width. */
   .chapter-hero-inner {
     position: relative;
     z-index: 2;
-    max-width: 918px;
+    width: min(1280px, 94vw);
     margin: 0 auto;
     color: #fff;
     text-align: center;
@@ -70,12 +77,20 @@ const title = `Harvard in Tech ${name}`;
     font-family: var(--font-title);
     font-weight: 400;
     color: #fff;
-    font-size: 58px;
+    /* Fluid rather than a flat 58px, and allowed to WRAP. The title is
+       "<org name> <city>", so its length is content-driven, not viewport-driven:
+       "Harvard Alumni in Tech Seattle / Pacific Northwest" is 49 uppercase
+       characters and ran off BOTH edges of a 1440px viewport under the previous
+       `font-size: 58px` + `white-space: nowrap`. nowrap had nothing to give — it
+       is what forced the overflow rather than a second line. The org name got
+       longer when it was corrected, which is what surfaced this, but the rule was
+       already one long city away from clipping. */
+    font-size: clamp(34px, 3.4vw + 1rem, 58px);
     line-height: 1.2;
     letter-spacing: normal;
-    white-space: nowrap;
     margin: 0;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
   }
@@ -95,7 +110,10 @@ const title = `Harvard in Tech ${name}`;
     font-weight: 400;
     line-height: 29px;
     color: #fff;
-    margin: 1.5rem 0 0;
+    /* Keeps the old 918px measure now that the wrapper is wider — a one-line
+       tagline stretched to 1280px reads as a stray sentence, not a subtitle. */
+    max-width: 918px;
+    margin: 1.5rem auto 0;
   }
 
   /* Mobile: the title scales down, wraps left-aligned, and the flanking rules

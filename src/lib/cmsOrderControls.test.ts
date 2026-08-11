@@ -55,7 +55,7 @@ function entry(slug: string, label: string, order?: number, body = 'Body text.')
 /** The six Momentum Fund sections, in the sequence /donate renders them. */
 const SECTIONS: EntryListItem[] = [
   entry('donors', 'donors', 1),
-  entry('why', 'Why Support Harvard in Tech?', 2),
+  entry('why', 'Why Support Harvard Alumni in Tech?', 2),
   entry('accomplishments', 'accomplishments', 3),
   entry('pillars', 'pillars', 4),
   entry('stats', 'stats', 5),
@@ -260,10 +260,10 @@ describe('buildOrderChange', () => {
     '---',
     'kind: narrative',
     'order: 2',
-    'title: Why Support Harvard in Tech?',
+    'title: Why Support Harvard Alumni in Tech?',
     '---',
     '',
-    '### Harvard in Tech is at a turning point',
+    '### Harvard Alumni in Tech is at a turning point',
     '',
     'We are a volunteer-led alumni community.',
     '',
@@ -281,8 +281,8 @@ describe('buildOrderChange', () => {
     const change = buildOrderChange('momentumSections', 'why', raw, 5);
     const { data, body } = parseEntry(change.updated);
     expect(data.kind).toBe('narrative');
-    expect(data.title).toBe('Why Support Harvard in Tech?');
-    expect(body).toContain('Harvard in Tech is at a turning point');
+    expect(data.title).toBe('Why Support Harvard Alumni in Tech?');
+    expect(body).toContain('Harvard Alumni in Tech is at a turning point');
     expect(body).toContain('volunteer-led alumni community');
   });
 

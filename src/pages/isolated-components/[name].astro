@@ -69,12 +69,12 @@ const islands = {
 const embedFormStates = {
   Configured: {
     action: 'https://harvardintech.us1.list-manage.com/subscribe/post?u=abc123&id=def456',
-    title: 'Join the Harvard in Tech newsletter',
+    title: 'Join the Harvard Alumni in Tech newsletter',
     buttonLabel: 'Subscribe',
   },
   Embedded: {
     embedUrl: 'https://docs.google.com/forms/d/e/EXAMPLE_FORM_ID/viewform?embedded=true',
-    title: 'RSVP: Harvard in Tech Summit 2026',
+    title: 'RSVP: Harvard Alumni in Tech Summit 2026',
   },
   Unconfigured: {
     title: 'Subscribe',
@@ -85,7 +85,7 @@ const embedFormStates = {
 // regardless of the build date. The Empty state proves the no-events fallback.
 const SAMPLE_EVENTS = [
   {
-    title: 'Harvard in Tech Summit 2026',
+    title: 'Harvard Alumni in Tech Summit 2026',
     date: '2026-09-24',
     location: 'New York, NY',
     description: 'Our flagship annual gathering of Harvard founders, operators, and investors.',
@@ -121,9 +121,9 @@ const chapterPageStates = {
   Default: {
     name: 'New York City',
     region: 'New York, NY',
-    blurb: 'Our founding chapter and largest community, hosting monthly mixers, founder dinners, and the annual Harvard in Tech Summit.',
+    blurb: 'Our founding chapter and largest community, hosting monthly mixers, founder dinners, and the annual Harvard Alumni in Tech Summit.',
     heroImage: '/images/chapters/nyc.jpg',
-    tagline: 'We are the New York Chapter of Harvard in Tech.',
+    tagline: 'We are the New York Chapter of Harvard Alumni in Tech.',
     showGallery: true,
     leads: [
       { name: 'Jessica Li', role: 'Chapter Lead' },
@@ -147,7 +147,7 @@ const chapterHeroStates = {
     name: 'New York City',
     region: 'New York, NY',
     heroImage: '/images/chapters/nyc.jpg',
-    tagline: 'We are the New York Chapter of Harvard in Tech.',
+    tagline: 'We are the New York Chapter of Harvard Alumni in Tech.',
   },
   Fallback: {
     name: 'Japan',
@@ -259,9 +259,9 @@ const SAMPLE_BOARD = [
 // content would be worse than leaving the field blank. They exist to size the
 // layout.
 const BOARD_BIOS = [
-  'Founded Harvard in Tech in 2013 and has guided it from a single Boston meetup to a global network of six chapters.',
+  'Founded Harvard Alumni in Tech in 2013 and has guided it from a single Boston meetup to a global network of six chapters.',
   'Backs early-stage founders and helped start the community that became the New York chapter.',
-  'Runs the organization day to day — the programming calendar, the chapter leads, and the volunteer team that makes both work. Before Harvard in Tech she spent a decade building community programs in the nonprofit sector, which is where the six-chapter structure the group uses today came from.',
+  'Runs the organization day to day — the programming calendar, the chapter leads, and the volunteer team that makes both work. Before Harvard Alumni in Tech she spent a decade building community programs in the nonprofit sector, which is where the six-chapter structure the group uses today came from.',
   'Works on the content side, from the newsletter to the Content Hub.',
   'Leads growth, building the programs and partnerships that bring alumni into the community and keep them there.',
 ];
@@ -369,7 +369,7 @@ const utilityBarStates = {
 // "latest from the blog" list; Empty omits posts (channels only).
 const SAMPLE_POSTS = [
   { slug: 'welcome', title: 'Welcome to the new Harvard Alumni in Tech', date: '2026-06-01', summary: 'A fresh home for our community, events, and chapters.' },
-  { slug: 'summit-recap', title: 'Recap: Harvard in Tech Summit 2026', date: '2026-05-12', summary: 'Highlights from a day of talks, panels, and networking.' },
+  { slug: 'summit-recap', title: 'Recap: Harvard Alumni in Tech Summit 2026', date: '2026-05-12', summary: 'Highlights from a day of talks, panels, and networking.' },
   { slug: 'new-chapters', title: 'Announcing our London and Seattle chapters', date: '2026-04-20', summary: 'The network keeps growing across the map.' },
 ];
 const contentHubStates = {
@@ -525,7 +525,7 @@ const narrativeStates = {
     tinted: true,
   },
   ImageRight: {
-    title: 'Why Support Harvard in Tech?',
+    title: 'Why Support Harvard Alumni in Tech?',
     layout: 'image-right',
     image: '/images/gallery/event-04.jpg',
   },

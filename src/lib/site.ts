@@ -137,7 +137,7 @@ export interface DonatePageCopy {
   accomplishmentsTitle?: string;
   accomplishments?: { value: string; label: string; body?: string }[];
   // The narrative sections ("And Every Number Represents a Story", "Why Support
-  // Harvard in Tech?") are NOT here — their heading, photo, layout, and prose
+  // Harvard Alumni in Tech?") are NOT here — their heading, photo, layout, and prose
   // live in the `momentumSections` collection so an editor can rewrite and
   // reorder them from the CMS. What remains below is the card data for the
   // bespoke bands, which those sections merely position.

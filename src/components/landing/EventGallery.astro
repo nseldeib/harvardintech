@@ -1,5 +1,5 @@
 ---
-// "Photos from Latest Harvard in Tech Events" — a dense grid of real event
+// "Photos from Latest Harvard Alumni in Tech Events" — a dense grid of real event
 // photos that fade + rise into view as they scroll, matching harvardintech.com.
 // Defaults to the locally-hosted 40-photo set under /public/images/gallery.
 //
@@ -85,7 +85,7 @@ const media = readMediaManifest();
           <GalleryTile
             src={photo.src}
             caption={photo.caption}
-            alt={altFor(photo.src, `Harvard in Tech event photo ${i + 1}`, media)}
+            alt={altFor(photo.src, `Harvard Alumni in Tech event photo ${i + 1}`, media)}
             overflow={i >= shown.length}
             delayMs={galleryStaggerDelay(i, columns)}
           />

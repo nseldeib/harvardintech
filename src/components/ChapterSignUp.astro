@@ -1,6 +1,6 @@
 ---
 // The teal "Sign Up" band from the live chapter pages: a light blue section
-// with a flanking-rule "Sign Up" heading, a "Join the Harvard in Tech
+// with a flanking-rule "Sign Up" heading, a "Join the Harvard Alumni in Tech
 // Community" line, and a Subscribe pill. Defaults to the same MailChimp signup
 // the landing Hero uses; accepts an optional `subscribeUrl` for future
 // per-chapter overrides.
@@ -14,7 +14,7 @@ const { subscribeUrl = 'https://mailchi.mp/0222623e1169/fbrj32e9wb' } = Astro.pr
   <div class="s-narrow" style="text-align: center;">
     <h2 class="s-title">Sign Up</h2>
     <p style="font-size: 1.15rem; color: var(--color-fg); margin: 0 0 var(--space-lg);">
-      Join the Harvard in Tech Community
+      Join the Harvard Alumni in Tech Community
     </p>
     <a class="s-btn" href={subscribeUrl} rel="noopener">Subscribe</a>
   </div>

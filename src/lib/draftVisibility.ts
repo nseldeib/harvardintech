@@ -6,8 +6,8 @@
 //   - Public track (`main` → harvardintech.com): a production build with
 //     INCLUDE_DRAFTS unset → drafts hidden, exactly as before.
 //   - Review track (`staging` → review.harvardintech.com): also a production
-//     build, but with INCLUDE_DRAFTS=1 → drafts visible, so the HIT team can
-//     read in-flight work before it is promoted.
+//     build, but with INCLUDE_DRAFTS=1 → drafts visible, so the Harvard Alumni
+//     in Tech team can read in-flight work before it is promoted.
 //   - `astro dev` (codeyam preview + every scenario capture): not a production
 //     build → drafts visible, so an author previewing their work sees it.
 //

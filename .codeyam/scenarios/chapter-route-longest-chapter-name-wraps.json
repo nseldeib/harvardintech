@@ -1,0 +1,12 @@
+{
+  "name": "Chapter Route - Longest Chapter Name Wraps",
+  "id": "27dede1f-3f1f-427b-880b-e5de3f17276c",
+  "url": "/chapters/seattle",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/chapters/[slug].astro",
+  "description": "The chapter whose name is longest once the organisation is called Harvard Alumni in Tech. The hero title is the org name plus the city, so its length is content-driven rather than viewport-driven, and this is the entry that proves the title stays inside the viewport: it wraps onto a second line at a natural break instead of running off both edges the way a fixed size with nowrap did. Every other chapter fits on one line with the rules flanking it, so this is the boundary case for that treatment, not a duplicate of them."
+}
