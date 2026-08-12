@@ -1,6 +1,6 @@
 {
   "name": "OrderArrows - Bottom Row",
-  "id": "365e618c-3f24-440e-a010-d78cc0bd93f6",
+  "id": "006b086c-58c9-465c-8e5f-35ac2f3c0d52",
   "url": "/isolated-components/OrderArrows-BottomRow",
   "dimensions": [
     "Desktop"
@@ -8,5 +8,6 @@
   "mocks": {},
   "componentName": "OrderArrows",
   "scenarioType": "component",
+  "pageFilePath": "node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx",
   "description": "The last row, the mirror of the top. Both ends are captured rather than one because they are separate props rather than a single is-an-end flag, so a bug that disabled the wrong direction would still look correct in whichever end happened to be the only captured one."
 }

@@ -1,15 +1,15 @@
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-{"command":"audit","elapsed_secs":0,"emitted_at_unix":1786476288,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
+{"command":"audit","elapsed_secs":0,"emitted_at_unix":1786557631,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"audit","elapsed_secs":0,"emitted_at_unix":1786476288,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":10,"emitted_at_unix":1786476298,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":10,"emitted_at_unix":1786476298,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":20,"emitted_at_unix":1786476308,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":20,"emitted_at_unix":1786476308,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":30,"emitted_at_unix":1786476318,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":30,"emitted_at_unix":1786476318,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":40,"emitted_at_unix":1786476328,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":40,"emitted_at_unix":1786476328,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":50,"emitted_at_unix":1786476338,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"command":"audit","elapsed_secs":50,"emitted_at_unix":1786476338,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3155065}
-{"byInvariant":[{"branchDriftCount":0,"headCount":0,"id":"DEPENDENCY_STALE_SCREENSHOTS","preExistingCount":0,"staleCache":false,"total":3}],"passed":false,"summary":"audit failed: 1 invariant id(s), 3 total finding(s).","totalFindings":3,"uniqueInvariantIds":1}
+{"command":"audit","elapsed_secs":0,"emitted_at_unix":1786557631,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":10,"emitted_at_unix":1786557641,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":10,"emitted_at_unix":1786557641,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":20,"emitted_at_unix":1786557651,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":20,"emitted_at_unix":1786557651,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":30,"emitted_at_unix":1786557661,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":30,"emitted_at_unix":1786557661,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":40,"emitted_at_unix":1786557671,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":40,"emitted_at_unix":1786557671,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":50,"emitted_at_unix":1786557681,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"command":"audit","elapsed_secs":50,"emitted_at_unix":1786557681,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3769288}
+{"byInvariant":[],"passed":true,"summary":"audit passed: 0 finding(s).","totalFindings":0,"uniqueInvariantIds":0}

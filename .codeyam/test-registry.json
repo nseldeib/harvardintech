@@ -2252,6 +2252,60 @@
       "runner": "tests"
     },
     {
+      "description": "the exemption: a preview page is reached by an unguessable URL instead",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › exempts a preview page in any routed collection",
+      "line": 27,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the deploy serves under /harvardintech today and a bare domain after the cutover, so the rule must not depend on which one it is",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › exempts a preview under a base path",
+      "line": 41,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Astro emits directory-style URLs, so the same page arrives both ways",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › exempts a preview with a trailing slash",
+      "line": 47,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the shareable list is exempt for the same reason as the pages it links to — gating the index while exempting its targets would be the worst of both",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › exempts the shareable previews index",
+      "line": 35,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the ordinary case — every real page on the review origin stays behind the passphrase, which is the whole point of the review track",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › gates ordinary site pages",
+      "line": 19,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the dangerous near-miss: a REAL page whose slug merely contains the word preview must stay gated. Exempting it would silently un-gate ordinary content, which is the failure mode with no visible symptom.",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › still gates a real page whose slug merely contains \"preview\"",
+      "line": 54,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
       "description": "These have no single shared page to group under, so they share a heading that states the thing worth knowing: adding an entry adds a page.",
       "file": "src/lib/dashboardGrouping.test.ts",
       "format": "vitest",
@@ -3023,6 +3077,33 @@
       "key": "isDecisionAnswered › treats a decision absent from the file as unanswered",
       "line": 228,
       "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "an ordinary page is never locked, whatever its draft state",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "isLocked › is false for a page that is not a preview at all",
+      "line": 172,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the distinction the blog route branches on: an unlocked preview renders its markdown, a locked one holds ciphertext that must never reach <Content />",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "isLocked › separates a password-protected preview from an ordinary one",
+      "line": 164,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`previewOf` is the ONLY marker — a slug that merely looks like one is not enough",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "isPreview › is true only for an entry carrying previewOf",
+      "line": 154,
+      "registeredAt": "2026-08-12T16:58:34Z",
       "runner": "tests"
     },
     {
@@ -4515,7 +4596,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › does not mutate the input array",
-      "line": 58,
+      "line": 77,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -4524,7 +4605,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › hides an entry only when draft is exactly true",
-      "line": 68,
+      "line": 87,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -4533,7 +4614,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › keeps draft entries when includeDrafts is true",
-      "line": 23,
+      "line": 42,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -4542,8 +4623,17 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › omits draft entries from the blog listing in production",
-      "line": 14,
+      "line": 33,
       "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE preview-link invariant on the listing side. A preview page exists to be reachable ONLY by the token URL someone was handed, so a listing that showed it would publish the very thing the token protects.",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › omits preview pages from a listing",
+      "line": 95,
+      "registeredAt": "2026-08-12T16:58:34Z",
       "runner": "tests"
     },
     {
@@ -4551,7 +4641,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › preserves the order of the surviving entries",
-      "line": 52,
+      "line": 71,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -4560,7 +4650,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › returns an empty array for an empty collection",
-      "line": 46,
+      "line": 65,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -4569,8 +4659,17 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › returns an empty array when every entry is a draft",
-      "line": 40,
+      "line": 59,
       "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "includeDrafts governs the DRAFT flag only. A preview is hidden for a different reason, so the review track — which shows drafts — still must not list previews.",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › still omits previews when includeDrafts is true",
+      "line": 103,
+      "registeredAt": "2026-08-12T16:58:34Z",
       "runner": "tests"
     },
     {
@@ -4578,7 +4677,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › treats a missing draft key as published",
-      "line": 29,
+      "line": 48,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -4587,7 +4686,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › treats an explicit draft false as published",
-      "line": 35,
+      "line": 54,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -5237,6 +5336,51 @@
       "key": "rollup › takes its totals from the runbook rather than the state file",
       "line": 189,
       "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the mirror image of the listing rule, and the reason preview links resolve at all: the page must be BUILT even though nothing links to it",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › builds a page for a preview that no listing shows",
+      "line": 112,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a preview clone carries its source's draft flag; hiding it was never the point, so it stays routable even in a production build that drops drafts",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › builds a preview even when it also carries draft true",
+      "line": 120,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "routes and listings must agree about ordinary drafts, or the review track links to pages the public build never generated",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › follows the draft rule for everything that is not a preview",
+      "line": 127,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a collection with no previews behaves exactly as publishedEntries does, so adopting this in a getStaticPaths changes nothing until a link is minted",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › matches publishedEntries when the collection has no previews",
+      "line": 144,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "input order survives, so a route file can sort before or after",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › preserves input order and does not mutate the input",
+      "line": 134,
+      "registeredAt": "2026-08-12T16:58:34Z",
       "runner": "tests"
     },
     {

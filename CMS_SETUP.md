@@ -31,10 +31,10 @@ mean anything.
 
 ### The patch on top of the package
 
-`patches/@codeyam+cms+0.4.0.patch` is applied by `patch-package` from
+`patches/@codeyam+cms+0.5.0.patch` is applied by `patch-package` from
 `postinstall`, so it lands on every install including CI. It is still true that
 no admin code is hand-written here — the patch edits the dependency, it does not
-add admin pages to this repo. It currently carries two things:
+add admin pages to this repo. It now carries **one** thing:
 
 - **Reorder arrows on ordered collection lists.** Any collection declaring a
   numeric `order` field — 13 of them today, including Momentum Fund sections and
@@ -42,14 +42,33 @@ add admin pages to this repo. It currently carries two things:
   instead of a Drafts-then-Published split, and a move stages ordinary pending
   changes that ride the normal publish review. The draft state moves onto the row
   as a chip, since those lists no longer have a "Drafts" heading to carry it.
-- **The publish deploy watch.** Already merged upstream and awaiting a 0.4.1
-  release; that half of the patch disappears on its own at the next bump, because
-  it will be in the base.
 
-**Both halves are meant to be temporary.** The lifecycle, which this repo has run
-once already for the media guard in `@codeyam+cms+0.2.2.patch` (deleted by
-`abc5872` once 0.4.0 shipped it), is: file the change upstream against
-`codeyam-ai/codeyam-cms`, and delete the patch on the release that carries it.
+**The publish deploy watch used to be the second half, and 0.5.0 released it.**
+That is the lifecycle described below running to completion for the second time:
+the upstream base now ships `deployWatch.ts`, `deployWatchStore.ts` and
+`DeployChip.tsx`, so the patch dropped them and `deployWatch.test.ts` /
+`deployStage.test.ts` / `deployMarker.test.ts` went from guarding a patch to
+holding the released dependency to its contract. The patch shrank from 1,859
+lines to ~530 in the process.
+
+The arrows did NOT land upstream in 0.5.0, so they were **re-derived** against
+its sources rather than replayed onto them — 0.5.0 rewrote `EntryRow` to add
+preview actions (334 diff lines) and gave `entryList` a third group. Two
+decisions in that rebase are worth knowing, because a future one has to make
+them again: the ordered sequence is built from listed entries only, so a preview
+clone never gets an `order` written onto it; and the Preview links group renders
+above the sequence in an ordered collection exactly as it does elsewhere.
+
+**The remaining half is still meant to be temporary.** The lifecycle, which this
+repo has now run twice — the media guard in `@codeyam+cms+0.2.2.patch` (deleted
+by `abc5872` once 0.4.0 shipped it) and the deploy watch above — is: file the
+change upstream against `codeyam-ai/codeyam-cms`, and delete the patch on the
+release that carries it.
+
+**Pin the dependency EXACTLY** (`"@codeyam/cms": "0.5.0"`, no caret). `npm
+install @codeyam/cms@x` rewrites it to `^x` on its own, and a caret is what makes
+the filename-matching failure below happen silently on a patch release nobody ran
+deliberately.
 
 The risk that makes writing this down worth it: `patch-package` matches a patch
 to a version **by filename**, so the next `@codeyam/cms` bump silently drops
@@ -69,6 +88,86 @@ Two committed JSON files configure it:
   to deploy).
 - **`src/data/collections.json`** — the editor's view of this site's content
   schema. See **How collections.json relates to src/content/config.ts** below.
+
+## Preview links: sharing a draft before it goes live
+
+**Preview link** on any entry row clones that entry to
+`src/content/<collection>/preview-<token>.md`, which the site's own per-entry
+route builds into a real page at an unguessable URL. Hand that URL to a reviewer
+and they read the page in the real layout with no GitHub account, no CMS access,
+and no passphrase. The link goes live at the next publish, like any other edit.
+
+Five collections have a per-entry route and therefore support it: **pages, blog,
+chapters, communities, volunteer projects**. A collection that renders as a
+section of someone else's page (`stats`, `pillars`, `heroSlides`) has nowhere for
+a link to point, so it has no Preview link action. Adding a route is what would
+make one eligible — not adding the fields.
+
+### What holds it together
+
+Four pieces, each load-bearing in a way that fails quietly if dropped:
+
+- **`...previewFields` in the five schemas** (`src/content/config.ts`). Zod strips
+  unknown keys, so without it `previewOf` never reaches `entry.data` and every
+  filter below sees an ordinary page — an unlisted draft rendered as a live one.
+- **`routableEntries` in those five `getStaticPaths`** (`src/lib/drafts.ts`).
+  Listings keep `publishedEntries`, which excludes previews; routes use
+  `routableEntries`, which adds them back. Build without list. Use
+  `publishedEntries` in a `getStaticPaths` and every preview link 404s.
+- **`noindex` from `SEO.astro`.** It used to come from `PreviewGate`, but that is
+  off on the public track, so a preview merged to `main` would be indexable.
+- **`sitemap({ filter: (page) => !isPreviewUrl(page) })`** in `astro.config.mjs`.
+  `sitemap.xml` is public; a preview left in it publishes the token, and unlike
+  an indexed page no `noindex` walks that back.
+
+### Password-protected previews
+
+A preview link can carry a password, and on a static site that can only honestly
+mean **the content is encrypted at rest** — a prompt that merely compares a
+password ships the content in the document it guards. The dashboard encrypts the
+title and body in the editor's browser (AES-GCM, PBKDF2-SHA-256) and commits only
+ciphertext.
+
+**A locked entry needs render-side handling, and this is the part the package
+README does not spell out.** Its stored body is base64, so a route that renders
+it as markdown shows the reader a wall of ciphertext — which is what this site
+did on the first attempt. All five routes therefore branch on `isLocked(entry)`
+and render `src/components/LockedPreviewBody.astro` in place of the article; that
+wrapper mounts the package's public unlock island, which swaps itself for the
+decrypted content.
+
+**The password is stored nowhere** — not in the repo, not in `localStorage`, not
+in the dashboard. Lose it and the only way forward is a new preview. And
+**rotating a password does not erase the old ciphertext from git history**: if
+one leaks, treat the content it protected as leaked.
+
+### Two unrelated things called a "preview gate"
+
+`src/components/PreviewGate.astro` is the review site's `crimson2026` passphrase
+overlay. The package's `PreviewGate` is the per-page decryption prompt above.
+They are not variations on one idea — the passphrase is a deterrent that ships in
+the client bundle, while the other cannot be bypassed because the bytes are
+genuinely encrypted.
+
+**Preview URLs are exempt from the passphrase** (`gateAppliesTo` in
+`src/lib/previewGate.ts`). Gating them would mean sending a reviewer the link and
+the site passphrase together, handing them the whole unreleased site to read one
+page. The URL is the access mechanism instead — the same trade this repo already
+made for `public/design-review-4ece6c14/`. It is a real trade: anyone forwarded
+the link can read the page, which is what password protection is for.
+
+### The shareable list link
+
+`/admin/previews` gathers every preview page in one place, and from there an
+editor can mint one `/previews/<token>` URL serving that whole list as a public
+page. It stays current on its own — a preview created later appears without
+re-sharing anything. The token lives in `src/data/settings.json` as
+`previewIndexToken`; **rotating it is the revoke**, and it takes effect on the
+next deploy. No token means the page is not emitted at all.
+
+Unguessable is not secret. The token is committed, so anyone with repo read
+access can find it, and anyone holding the URL can read every preview listed on
+it. What it buys is "not linked, not indexed, not enumerable".
 
 ## Choosing an editing path
 

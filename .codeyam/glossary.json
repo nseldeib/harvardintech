@@ -187,17 +187,6 @@
     ]
   },
   {
-    "description": "The up/down pair that moves one row of an ordered collection in the CMS entry list. Purely presentational: it reports intent and renders the disabled state it is told about, while the sequence rules live in entryList's pure helpers. Deliberately not RowControls, which always renders a remove button an entry row does not want. Ships via patches/@codeyam+cms+0.4.0.patch until the change lands upstream, which is why src/lib/cmsOrderControls.test.ts holds the dependency to this contract.",
-    "filePath": "node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx",
-    "name": "OrderArrows",
-    "scenarios": [
-      "orderarrows-middle-row",
-      "orderarrows-top-row",
-      "orderarrows-bottom-row",
-      "orderarrows-the-only-row"
-    ]
-  },
-  {
     "description": "Landing Our Chapters section: a row of photo cards with a crimson gradient wash linking to each chapter page, sorted by order; shows a quiet prompt when empty.",
     "filePath": "src/components/landing/OurChapters.astro",
     "name": "OurChapters",
@@ -484,6 +473,12 @@
     "testFile": "src/lib/gallery.test.ts"
   },
   {
+    "description": "Whether the review track's crimson2026 passphrase overlay covers a given path. Everything is gated except the CMS preview surface — preview pages and the shareable previews index — because those exist to be handed to an outside reviewer who has no account; gating them would mean sending the link and the site passphrase together, handing that reviewer the whole unreleased site to read one page. The unguessable URL is the access mechanism instead, the same trade the repo already made for the design-review directory. A real page whose slug merely contains the word preview stays gated.",
+    "filePath": "src/lib/previewGate.ts",
+    "name": "gateAppliesTo",
+    "testFile": "src/lib/previewGate.test.ts"
+  },
+  {
     "description": "Enumerates a route per publishable page entry for the static build, dropping any whose slug an existing route already answers for and warning about them. The routing decision itself lives in pageRouteEntries so it can be tested — getStaticPaths only runs inside a real Astro build.",
     "filePath": "src/pages/[slug].astro",
     "name": "getStaticPaths",
@@ -644,6 +639,18 @@
     "filePath": "src/lib/cutoverProgress.ts",
     "name": "isDecisionAnswered",
     "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
+    "description": "Whether a preview is password-protected, meaning its title and body are encrypted at rest and the stored body is base64 ciphertext rather than markdown. BlogPostBody branches on this: rendering a locked entry through the ordinary markdown path shows the reader a wall of base64, which is exactly what happened on the first attempt at the feature.",
+    "filePath": "src/lib/drafts.ts",
+    "name": "isLocked",
+    "testFile": "src/lib/drafts.test.ts"
+  },
+  {
+    "description": "Whether an entry is an unlisted preview page. previewOf is the only marker — a slug that merely looks like a preview does not count. Routes pass this to SEO's noindex prop so a preview leaked to the public track stays out of search results, which the review track's passphrase gate cannot do because that gate is off on the public build.",
+    "filePath": "src/lib/drafts.ts",
+    "name": "isPreview",
+    "testFile": "src/lib/drafts.test.ts"
   },
   {
     "description": "Whether one slug is safe to publish at the site root — the single-slug form of shadowedPageSlugs, for a caller checking as it goes.",
@@ -1055,6 +1062,12 @@
     "filePath": "src/lib/cutoverProgress.ts",
     "name": "rollup",
     "testFile": "src/lib/cutoverProgress.test.ts"
+  },
+  {
+    "description": "The entries a collection's getStaticPaths should BUILD: everything publishedEntries returns, plus every preview page. The deliberate mirror image of the listing rule — a preview is kept out of every index so nothing links to it, but its page must still be generated or the token URL handed to a reviewer 404s. A preview stays routable even when it also carries draft:true, since hiding it from the site was never the point. Keeps the positional includeDrafts signature the fifteen existing call sites use rather than the package's options-object form, which would silently degrade to the package's own environment guess and break the two-track draft rule.",
+    "filePath": "src/lib/drafts.ts",
+    "name": "routableEntries",
+    "testFile": "src/lib/drafts.test.ts"
   },
   {
     "description": "Everything wrong with, or undecidable about, one upload row, each carrying a severity. Blocking means the row cannot become a supporter without a human — no name at all, an anonymity request sitting in the name column, or a re-import that would unmask someone already anonymous. Review means it can land but a decision was deferred, which is where an ordinary duplicate and a missing school or class year sit. Nothing is auto-corrected: that is the contract, because each wrong guess costs a misstated giving level, an unearned badge, or a published name, and only the last is beyond repair by a later edit.",

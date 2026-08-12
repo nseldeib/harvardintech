@@ -1,0 +1,40 @@
+{
+  "name": "Blog Preview Link - Shared Draft",
+  "id": "5c110535-0ac7-43bb-a10c-7f1234d7d2de",
+  "url": "/blog/preview-7fk3q9wc2mbn5xr8dt4vha6j0e",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "blog": [
+      {
+        "body": "We are a global community of Harvard alumni working in technology.",
+        "date": "2026-01-15",
+        "slug": "welcome",
+        "summary": "Why we built this community and where we are headed.",
+        "title": "Welcome to Harvard in Tech"
+      },
+      {
+        "body": "Transcript pending review by the subject before publication.",
+        "date": "2026-07-24",
+        "draft": true,
+        "slug": "founder-spotlight-hana-reyes",
+        "summary": "An unfinished interview with the Harvard C'14 founder of a grid-storage startup.",
+        "title": "Founder Spotlight: Hana Reyes on Building in Climate Hardware"
+      },
+      {
+        "body": "Hana Reyes (Harvard C'14) spent four years inside a utility before deciding the grid's storage problem was a hardware problem nobody wanted to own.\n\n\"Everyone wants to build the software layer,\" she says. \"The software layer is fine. The cells are the thing.\"\n\nHer company now ships iron-air cells to three regional operators, and she is candid that the first eighteen months were spent failing to convince anyone that duration mattered more than density.\n\n*Transcript pending review by the subject before publication.*",
+        "date": "2026-07-24",
+        "previewCreatedAt": "2026-08-12T09:14:00.000Z",
+        "previewOf": "founder-spotlight-hana-reyes",
+        "slug": "preview-7fk3q9wc2mbn5xr8dt4vha6j0e",
+        "summary": "An unfinished interview with the Harvard C'14 founder of a grid-storage startup.",
+        "title": "Founder Spotlight: Hana Reyes on Building in Climate Hardware"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/blog/[slug].astro",
+  "description": "The page a reviewer actually lands on. An unpublished post, cloned to an unguessable URL and rendered in the site's real layout — no sign-in, no CMS account, no passphrase. The post it stands in for is still a draft and appears in no listing; this URL is the only way to reach it. Proves the load-bearing half of preview links: routableEntries built a page that publishedEntries deliberately excludes from every index."
+}

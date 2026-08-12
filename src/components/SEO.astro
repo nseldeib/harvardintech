@@ -11,9 +11,20 @@ interface Props {
   description?: string;
   image?: string;
   canonical?: string;
+  /**
+   * Keep this page out of search results. Set by preview pages, whose whole
+   * premise is an unlisted URL — an indexed preview publishes the token it
+   * exists to hide.
+   *
+   * This cannot be left to `PreviewGate`, which also emits `noindex`: the gate
+   * is OFF on the public track by design, so a preview that reached `main`
+   * would be indexable with nothing to stop it. The gate covers the review
+   * ORIGIN; this covers the PAGE, on whichever track it is built.
+   */
+  noindex?: boolean;
 }
 
-const { title, description, image, canonical } = Astro.props;
+const { title, description, image, canonical, noindex } = Astro.props;
 
 // A page title becomes "Page · Site"; the bare site title is the home/default.
 const pageTitle = title ? `${title} · ${settings.siteTitle}` : settings.siteTitle;
@@ -24,6 +35,7 @@ const canonicalUrl = canonical ?? Astro.url.href;
 <title>{pageTitle}</title>
 <meta name="description" content={metaDescription} />
 <link rel="canonical" href={canonicalUrl} />
+{noindex ? <meta name="robots" content="noindex, nofollow" /> : null}
 
 <meta property="og:type" content="website" />
 <meta property="og:title" content={pageTitle} />

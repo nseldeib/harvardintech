@@ -1,0 +1,13 @@
+{
+  "name": "BlogPostBody - Nothing Encrypted, Article Renders",
+  "id": "97ea17e4-9327-4f58-afcc-66c7304223aa",
+  "url": "/isolated-components/BlogPostBody",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BlogPostBody",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/BlogPostBody.astro",
+  "description": "The unlocked branch of the one decision this component exists to make. With no previewLock on the entry, BlogPostBody gets out of the way and the article renders normally. An unlocked PREVIEW takes this same branch: being unlisted changes where a page is linked from, not how it reads once you arrive."
+}

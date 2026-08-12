@@ -5,6 +5,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import codeyamCms from '@codeyam/cms';
+import { isPreviewUrl } from '@codeyam/cms/lib/previewPages';
 import { includeCmsIntegration, includeSitemapIntegration } from './src/lib/publishTrack';
 
 // --- codeyam content sandbox ---------------------------------------------
@@ -200,7 +201,14 @@ const isDev = process.argv.includes('dev');
 const integrations = [react()];
 if (isDev) integrations.push(codeyamContentRefresh());
 if (includeCmsIntegration(isDev, isReviewTrack)) integrations.unshift(codeyamCms());
-if (includeSitemapIntegration(isReviewTrack)) integrations.push(sitemap());
+// A preview page is built (its link has to resolve) but must never be ADVERTISED.
+// `sitemap.xml` is a public, machine-read file, so a preview left in it publishes
+// the exact URL the token exists to hide — and unlike an indexed page, no
+// `noindex` can walk that disclosure back. The filter runs on the public track,
+// which is the only track that emits a sitemap at all.
+if (includeSitemapIntegration(isReviewTrack)) {
+  integrations.push(sitemap({ filter: (page) => !isPreviewUrl(page) }));
+}
 
 export default defineConfig({
   output: 'static',

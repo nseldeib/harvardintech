@@ -4,10 +4,10 @@ import '../../styles/tokens.css';
 import { withBase } from '../../lib/url';
 import SEO from '../../components/SEO.astro';
 import HeadExtras from '../../components/HeadExtras.astro';
-import Embed from '../../components/Embed.astro';
 import { settings } from '../../lib/site';
 import { loadIntegrations } from '../../lib/integrationsContent';
-import { publishedEntries } from '../../lib/drafts';
+import BlogPostBody from '../../components/BlogPostBody.astro';
+import { isPreview, routableEntries } from '../../lib/drafts';
 import { INCLUDE_DRAFTS } from '../../lib/draftVisibility';
 
 // Static output needs every dynamic route enumerated at build time.
@@ -18,8 +18,14 @@ import { INCLUDE_DRAFTS } from '../../lib/draftVisibility';
 // the index but still reachable at its own URL is public either way, which is
 // worse than not supporting drafts at all. In dev and on the review track the
 // page is still generated so the post can be read before it is promoted.
+//
+// `routableEntries` rather than `publishedEntries` because of preview links: a
+// preview is deliberately absent from every listing, so this is the ONLY place
+// that can build its page, and an unbuilt preview means the URL handed to a
+// reviewer 404s. The listing pages keep `publishedEntries` and stay unaware of
+// it — see `src/lib/drafts.ts` for why the two rules are separate.
 export async function getStaticPaths() {
-  const posts = publishedEntries(await getCollection('blog'), INCLUDE_DRAFTS);
+  const posts = routableEntries(await getCollection('blog'), INCLUDE_DRAFTS);
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -47,22 +53,20 @@ const { customBodyHtml } = await loadIntegrations(settings);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <SEO title={seoTitle} description={seoDescription} image={seoImage} />
+    <SEO
+      title={seoTitle}
+      description={seoDescription}
+      image={seoImage}
+      noindex={isPreview(post)}
+    />
     <HeadExtras />
   </head>
   <body>
     <main style="max-width: var(--content-width); margin: 0 auto; padding: var(--space-lg);">
       <a href={withBase('/')}>&larr; All posts</a>
-      <article style="margin-top: var(--space-lg);">
-        <h1 style="margin-bottom: var(--space-sm);">{post.data.title}</h1>
-        <time style="color: var(--color-muted);" datetime={post.data.date.toISOString()}>
-          {post.data.date.toLocaleDateString()}
-        </time>
-        <div style="margin-top: var(--space-lg);">
-          <Content />
-        </div>
-        <Embed embedUrl={post.data.embedUrl} embedHtml={post.data.embedHtml} title={post.data.title} />
-      </article>
+      <BlogPostBody post={post}>
+        <Content />
+      </BlogPostBody>
     </main>
 
     {customBodyHtml ? <Fragment set:html={customBodyHtml} /> : null}

@@ -1,0 +1,33 @@
+---
+// The reader-facing half of a password-protected preview: a password field where
+// the article would be, which becomes the article once the password opens it.
+//
+// The island is the package's (`@codeyam/cms/components/PreviewGate.tsx`) — this
+// wrapper exists so the five routed collections share ONE call site instead of
+// five copies of the same three props, and so the naming collision has exactly
+// one place to be explained. Two unrelated things in this repo are called a
+// "preview gate": `src/components/PreviewGate.astro` is the review site's
+// `crimson2026` passphrase overlay, and the package's `PreviewGate` is this
+// per-page decryption prompt. They are not variations on one idea — the
+// passphrase is a deterrent that ships in the bundle, while this one cannot be
+// bypassed because the bytes it guards are genuinely encrypted. A preview page
+// is exempt from the first (see `gateAppliesTo`) and may carry the second.
+//
+// It replaces the route's whole article rather than sitting inside it: the
+// island renders its own heading, and the entry's stored title is the
+// placeholder `Protected preview` — the real one is inside the ciphertext, so
+// there is no title for the route to render alongside this anyway.
+import PreviewGate from '@codeyam/cms/components/PreviewGate.tsx';
+
+interface Props {
+  /** The entry's stored body — base64 AES-GCM ciphertext on a locked preview. */
+  ciphertext: string;
+  /** The `previewLock` frontmatter string: version, iterations, salt and IV.
+   * None of it is secret; only the password is, and it is stored nowhere. */
+  lock: string;
+}
+
+const { ciphertext, lock } = Astro.props as Props;
+---
+
+<PreviewGate client:load ciphertext={ciphertext} lock={lock} />

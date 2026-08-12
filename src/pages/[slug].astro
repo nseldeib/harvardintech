@@ -18,7 +18,8 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SitePage from '../components/SitePage.astro';
 import Embed from '../components/Embed.astro';
-import { publishedEntries } from '../lib/drafts';
+import LockedPreviewBody from '../components/LockedPreviewBody.astro';
+import { isLocked, isPreview, routableEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { pageRouteEntries, pageSeo } from '../lib/sitePages';
 
@@ -26,8 +27,11 @@ import { pageRouteEntries, pageSeo } from '../lib/sitePages';
 // menu but still live at its own URL is public either way. In dev and on the
 // review track the page is generated so it can be read before it is promoted,
 // the same rule `blog/[slug]` and `chapters/[slug]` already apply.
+// `routableEntries` builds preview pages alongside the published ones; the nav
+// and every index keep `publishedEntries`, so a preview is reachable only by its
+// token URL. See `src/lib/drafts.ts`.
 export async function getStaticPaths() {
-  const pages = publishedEntries(await getCollection('pages'), INCLUDE_DRAFTS);
+  const pages = routableEntries(await getCollection('pages'), INCLUDE_DRAFTS);
   const { routable, warning } = pageRouteEntries(pages);
 
   if (warning) console.warn(warning);
@@ -47,14 +51,25 @@ const { Content } = await render(page);
 const seo = pageSeo(page.data);
 ---
 
-<BaseLayout title={seo.title} description={seo.description} image={seo.image}>
-  <SitePage title={page.data.title} description={page.data.description}>
-    <Content />
-    <Embed
-      slot="embed"
-      embedUrl={page.data.embedUrl}
-      embedHtml={page.data.embedHtml}
-      title={page.data.title}
-    />
-  </SitePage>
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  image={seo.image}
+  noindex={isPreview(page)}
+>
+  {
+    isLocked(page) ? (
+      <LockedPreviewBody ciphertext={page.body ?? ''} lock={page.data.previewLock ?? ''} />
+    ) : (
+      <SitePage title={page.data.title} description={page.data.description}>
+        <Content />
+        <Embed
+          slot="embed"
+          embedUrl={page.data.embedUrl}
+          embedHtml={page.data.embedHtml}
+          title={page.data.title}
+        />
+      </SitePage>
+    )
+  }
 </BaseLayout>

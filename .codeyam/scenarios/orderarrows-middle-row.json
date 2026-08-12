@@ -1,6 +1,6 @@
 {
   "name": "OrderArrows - Middle Row",
-  "id": "a3900d7c-6289-4218-ab8e-7ac79a889f18",
+  "id": "267283f4-855e-4da6-bc67-c0bb3a366f72",
   "url": "/isolated-components/OrderArrows-MiddleRow",
   "dimensions": [
     "Desktop"
@@ -8,5 +8,6 @@
   "mocks": {},
   "componentName": "OrderArrows",
   "scenarioType": "component",
+  "pageFilePath": "node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx",
   "description": "Both arrows live, which is the state almost every row is in and the one the whole feature exists for: rearranging the Momentum Fund page becomes a click instead of a trip into each section to type a number while remembering what the other five are numbered. The row's own label is threaded into each button's accessible name, so six rows of arrows do not read as twelve identical 'Move up' buttons."
 }

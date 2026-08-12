@@ -8,14 +8,18 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterPage from '../../components/ChapterPage.astro';
 import { splitEvents, eventsTaggedTo } from '../../lib/events';
-import { publishedEntries } from '../../lib/drafts';
+import LockedPreviewBody from '../../components/LockedPreviewBody.astro';
+import { isLocked, isPreview, publishedEntries, routableEntries } from '../../lib/drafts';
 import { INCLUDE_DRAFTS } from '../../lib/draftVisibility';
 
 // Drafts get no page on the public site — a community dropped from the nav but
 // still live at /communities/<slug> would be public anyway. In dev and on the
 // review track the page is generated so it can be read before it is announced.
+//
+// `routableEntries` also builds preview pages, which the nav never lists. See
+// `src/lib/drafts.ts` for why building and listing are separate questions.
 export async function getStaticPaths() {
-  const communities = publishedEntries(
+  const communities = routableEntries(
     await getCollection('communities'),
     INCLUDE_DRAFTS,
   );
@@ -50,21 +54,31 @@ const { upcoming } = splitEvents(eventsTaggedTo(events, community.id));
 <BaseLayout
   title={name}
   description={blurb ?? `The Harvard Alumni in Tech ${name} community.`}
+  noindex={isPreview(community)}
 >
-  <ChapterPage
-    name={name}
-    blurb={blurb}
-    heroImage={heroImage}
-    tagline={tagline}
-    showGallery={showGallery}
-    events={upcoming}
-    eventsHeading={`Upcoming ${name} Events`}
-    contactEmail={contactEmail}
-    leads={leads}
-    links={links}
-    backHref="/#community"
-    backLabel="← All communities"
-  >
-    <Content />
-  </ChapterPage>
+  {
+    isLocked(community) ? (
+      <LockedPreviewBody
+        ciphertext={community.body ?? ''}
+        lock={community.data.previewLock ?? ''}
+      />
+    ) : (
+      <ChapterPage
+        name={name}
+        blurb={blurb}
+        heroImage={heroImage}
+        tagline={tagline}
+        showGallery={showGallery}
+        events={upcoming}
+        eventsHeading={`Upcoming ${name} Events`}
+        contactEmail={contactEmail}
+        leads={leads}
+        links={links}
+        backHref="/#community"
+        backLabel="← All communities"
+      >
+        <Content />
+      </ChapterPage>
+    )
+  }
 </BaseLayout>

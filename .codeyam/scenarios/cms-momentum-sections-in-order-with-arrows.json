@@ -1,6 +1,6 @@
 {
   "name": "CMS Momentum Sections - In Order With Arrows",
-  "id": "9d638202-3e66-4371-b321-402e4536a8fd",
+  "id": "b797145e-2d21-4a67-94eb-4c8246ec3b85",
   "url": "/admin/momentumSections",
   "dimensions": [
     "Desktop"
@@ -38,5 +38,6 @@
     ]
   },
   "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
   "description": "The sections list as an editor lands on it: one sequence reading the way the donate page reads, numbered 1 to 4, with up and down arrows on every row. This replaces the Drafts-then-Published split for a collection whose whole point is order, and it replaces the old way of rearranging the page, which was to open each section and type a number into an Order box while working out what the other five are numbered."
 }

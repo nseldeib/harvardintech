@@ -1,11 +1,10 @@
-⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786474681,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3128503}
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786474681,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3128503}
-{
-  "summary": {
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786554042,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3723371}
 ## Stale test cache — 1 partition(s) drifted from source since the last refresh-tests: all. The runner output reconcile reads back is OUT OF DATE for these, so a renamed test can be missed (the cache still emits its old name) and a still-present test can look like an orphan. Run this first, then re-run reconcile-registry:
   codeyam-editor editor refresh-tests --partition all
+This clears the PARTITION caches, which is what this check reads — that is the whole recovery. The run will also warn that the full-suite `test-cache.json` was not updated; that is expected and does not concern this check. Do NOT reach for `refresh-tests --force` — the narrow scope above is enough.
+auto-apply: 0 action(s) applied; 0 add(s) skipped.
+{
+  "summary": {
     "realOrphans": 0,
     "stalePhantoms": 0,
     "adds": 0,
@@ -14,8 +13,6 @@
     "gateUpdates": 0
   },
   "actions": [],
-This clears the PARTITION caches, which is what this check reads — that is the whole recovery. The run will also warn that the full-suite `test-cache.json` was not updated; that is expected and does not concern this check. Do NOT reach for `refresh-tests --force` — the narrow scope above is enough.
   "platform_gated_absences": [],
-auto-apply: 0 action(s) applied; 0 add(s) skipped.
   "runner_gated_absences": []
 }

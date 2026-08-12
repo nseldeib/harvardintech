@@ -539,6 +539,36 @@
         "reason": "The page is prose with no in-page interactive state; its links are plain navigations. The editor-facing action that produces it happens in /admin, which has its own scenarios."
       }
     },
+    "src/pages/blog/[slug].astro": {
+      "empty": {
+        "status": "n-a",
+        "reason": "An empty post cannot be routed to: getStaticPaths only emits a page for an entry that exists, so the zero-state is a 404 rather than a rendered view"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "A post page is built from one entry that must exist for the route to be generated at all; there is no one-versus-many axis on the page itself, which renders exactly one post by construction"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The page renders a single post's body with no list, grid or pagination; a long body is the edge archetype rather than an overflow one"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "The page is statically prerendered, so nothing on it resolves asynchronously. The one transient state the feature introduces is inside the package's unlock island while PBKDF2 derives the key — it lasts under a second, cannot be held deterministically for a capture, and belongs to the dependency rather than this route"
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
     "src/pages/chapters/[slug].astro": {
       "empty": {
         "status": "covered"

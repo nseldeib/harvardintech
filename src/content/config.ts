@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import { defineCollection, z } from 'astro:content';
+import { previewFields } from '@codeyam/cms/content';
 import { glob } from 'astro/loaders';
 import type { Loader } from 'astro/loaders';
 import { contentRoot } from '../lib/contentRoot';
@@ -63,6 +64,19 @@ function collectionGlob(collection: string): Loader {
 // survive validation at all — a zod object silently strips keys it does not
 // know about, which is why ticking Draft used to do nothing. Routes, not this
 // schema, decide visibility: see `publishedEntries` in `src/lib/drafts.ts`.
+//
+// The five collections with a PER-ENTRY ROUTE additionally spread
+// `...previewFields` (`previewOf`, `previewCreatedAt`, `previewLock`), which is
+// what lets the CMS mint a preview link for them. The same zod-strips-unknown-
+// keys rule applies: without the spread the marker never reaches `entry.data`,
+// every preview filter sees an ordinary page, and the feature fails silently in
+// the worst possible direction — an unlisted draft rendered as a live page.
+//
+// Only those five, and that is a real boundary rather than an oversight. A
+// preview link works by building the cloned entry at its own URL, so a
+// collection with no per-entry route (`stats`, `pillars`, `heroSlides` — they
+// render as sections of a page someone else owns) has nowhere for the link to
+// point. Adding a route is what would make one eligible, not adding the fields.
 
 // Blog posts. `coverImage`/`summary` are optional so a minimal post renders.
 // `metaTitle`/`metaDescription`/`ogImage` are per-page SEO overrides (fall back
@@ -82,6 +96,7 @@ const blog = defineCollection({
     embedUrl: z.string().optional(),
     embedHtml: z.string().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -101,6 +116,7 @@ const pages = defineCollection({
     embedUrl: z.string().optional(),
     embedHtml: z.string().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -182,6 +198,7 @@ const chapters = defineCollection({
       .optional(),
     order: z.number().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -213,6 +230,7 @@ const communities = defineCollection({
       .optional(),
     order: z.number().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -239,6 +257,7 @@ const projects = defineCollection({
     order: z.number().optional(),
     active: z.boolean().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 

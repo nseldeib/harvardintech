@@ -1,6 +1,6 @@
 {
   "name": "CMS Momentum Sections - A Section Still In Draft",
-  "id": "2425e256-62cd-44d4-b791-7ead60403f53",
+  "id": "0846b6fd-1e6b-4f57-b496-55810939771e",
   "url": "/admin/momentumSections",
   "dimensions": [
     "Desktop"
@@ -39,5 +39,6 @@
     ]
   },
   "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
   "description": "An ordered collection holding a drafted section. The draft sits in sequence with a Draft chip on its own row rather than being lifted into a separate group, because in a list that exists to show order, hoisting a row out of its place would misreport where the section actually sits on the page. The chip is required, not decorative: the group heading used to be the only thing saying an entry was a draft."
 }

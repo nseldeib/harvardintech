@@ -1,0 +1,13 @@
+{
+  "name": "BlogPostArticle - An Ordinary Post",
+  "id": "fd5f9623-2fc9-4989-9d67-bb8b2a55e327",
+  "url": "/isolated-components/BlogPostArticle",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BlogPostArticle",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/BlogPostArticle.astro",
+  "description": "A blog post as any reader meets it: title, date, body, and room for the optional embed that follows. Extracted from the blog route, which was the last of the five routed collections still holding raw section markup in the page file. This frame is the control for the whole preview-link feature — an ordinary post is supposed to look exactly as it always did, so a change here is a regression rather than a feature."
+}

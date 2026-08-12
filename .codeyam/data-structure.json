@@ -143,6 +143,26 @@
         "name": "body",
         "type": "string",
         "required": false
+      },
+      {
+        "name": "draft",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "previewOf",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewCreatedAt",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewLock",
+        "type": "string",
+        "required": false
       }
     ]
   },
@@ -207,6 +227,26 @@
         "name": "body",
         "type": "string",
         "required": false
+      },
+      {
+        "name": "draft",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "previewOf",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewCreatedAt",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewLock",
+        "type": "string",
+        "required": false
       }
     ]
   },
@@ -260,7 +300,7 @@
   },
   {
     "name": "Nav",
-    "description": "Editable navigation menu singleton (`src/data/nav.json`) with nested dropdowns, edited from /admin → Settings. Loaded by the base layout, which injects a Chapters group derived from the chapters collection — so the Chapters menu is not stored here.",
+    "description": "Editable navigation menu singleton (`src/data/nav.json`) with nested dropdowns, edited from /admin \u2192 Settings. Loaded by the base layout, which injects a Chapters group derived from the chapters collection \u2014 so the Chapters menu is not stored here.",
     "category": "datastore",
     "order": 6,
     "fields": [
@@ -317,12 +357,32 @@
         "name": "body",
         "type": "string",
         "required": false
+      },
+      {
+        "name": "draft",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "previewOf",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewCreatedAt",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewLock",
+        "type": "string",
+        "required": false
       }
     ]
   },
   {
     "name": "VolunteerProject",
-    "description": "An open volunteer project shown in the grid on /volunteer. Stored as a markdown file in the `projects` content collection and edited in the CMS, so organizers can open and close projects without a code change. `image` is the project thumbnail; `applyUrl` is where an interested volunteer goes. `active: false` retires a project without deleting its record. `startDate` / `endDate` are DISPLAY-ONLY — they format into a range on the card and detail header but never gate visibility, because on a static build a date-expired project would linger until the next deploy and then vanish without anyone touching the CMS; `active` alone decides what appears.",
+    "description": "An open volunteer project shown in the grid on /volunteer. Stored as a markdown file in the `projects` content collection and edited in the CMS, so organizers can open and close projects without a code change. `image` is the project thumbnail; `applyUrl` is where an interested volunteer goes. `active: false` retires a project without deleting its record. `startDate` / `endDate` are DISPLAY-ONLY \u2014 they format into a range on the card and detail header but never gate visibility, because on a static build a date-expired project would linger until the next deploy and then vanish without anyone touching the CMS; `active` alone decides what appears.",
     "category": "datastore",
     "order": 8,
     "fields": [
@@ -381,12 +441,32 @@
         "name": "body",
         "type": "string",
         "required": false
+      },
+      {
+        "name": "draft",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "previewOf",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewCreatedAt",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewLock",
+        "type": "string",
+        "required": false
       }
     ]
   },
   {
     "name": "Testimonial",
-    "description": "A member quote shown in the testimonials band on the /donate Momentum Fund campaign page. Stored in the `testimonials` content collection. Production starts with none — the band hides itself entirely when the collection is empty, so the page reads as finished before any quotes are collected.",
+    "description": "A member quote shown in the testimonials band on the /donate Momentum Fund campaign page. Stored in the `testimonials` content collection. Production starts with none \u2014 the band hides itself entirely when the collection is empty, so the page reads as finished before any quotes are collected.",
     "category": "datastore",
     "order": 9,
     "fields": [
@@ -430,7 +510,7 @@
   },
   {
     "name": "VolunteerPageCopy",
-    "description": "Editable copy for /volunteer: headline, intro, the four \"Why Volunteer\" benefit blocks, and the projects-section framing including the empty-state message. Now a single-entry markdown collection (`volunteerPage`) so it renders as a real screen in /admin — it used to be `src/data/volunteerPage.json`, read through the same readSingleton path as settings/nav, which the CMS models no editor for. That file survives as the FALLBACK: the collection entry wins when present, and deleting it leaves the page rendering the committed copy rather than a blank hero, because the editor has no notion of a required singleton and lets the last entry go.",
+    "description": "Editable copy for /volunteer: headline, intro, the four \"Why Volunteer\" benefit blocks, and the projects-section framing including the empty-state message. Now a single-entry markdown collection (`volunteerPage`) so it renders as a real screen in /admin \u2014 it used to be `src/data/volunteerPage.json`, read through the same readSingleton path as settings/nav, which the CMS models no editor for. That file survives as the FALLBACK: the collection entry wins when present, and deleting it leaves the page rendering the committed copy rather than a blank hero, because the editor has no notion of a required singleton and lets the last entry go.",
     "category": "datastore",
     "order": 10,
     "fields": [
@@ -483,7 +563,7 @@
   },
   {
     "name": "DonatePageCopy",
-    "description": "The page s FRAME fields — hero headline named/generic, subhead, photo, and the closing ask — now live on the `donate` PageCopy entry so an editor can rewrite them; `donatePage.json` is the fallback. `accomplishments`, `pillars`, and `donateUrl` already migrated to their own collections in the launch-ready-editing cycle. What remains below describes the singleton s full shape, which is still what the route grafts its content-sourced values onto. Editable copy for the /donate Momentum Fund campaign page, held in the `donatePage.json` singleton under the data root. `accomplishments` is the campaign's track record — the concrete things the community has already done (community size, reach, events, new chapters) — shown between the stats band and the story, because the campaign doc asks a reader to fund momentum that is already visible rather than a promise. `stats` are the headline figures the story title (\"And Every Number Represents a Story\") refers back to. `donateUrl` stays empty until a donation platform is chosen, at which point the CTA stops falling back to a giving-inquiry mailto. `donorTiers` are the giving levels the Donor Recognition wall groups by; each carries the `id` a Donor's `tier` matches on, mirroring `levels` in `sponsorPage.json`, and renaming a tier is a copy edit while its `id` stays the stable key.",
+    "description": "The page s FRAME fields \u2014 hero headline named/generic, subhead, photo, and the closing ask \u2014 now live on the `donate` PageCopy entry so an editor can rewrite them; `donatePage.json` is the fallback. `accomplishments`, `pillars`, and `donateUrl` already migrated to their own collections in the launch-ready-editing cycle. What remains below describes the singleton s full shape, which is still what the route grafts its content-sourced values onto. Editable copy for the /donate Momentum Fund campaign page, held in the `donatePage.json` singleton under the data root. `accomplishments` is the campaign's track record \u2014 the concrete things the community has already done (community size, reach, events, new chapters) \u2014 shown between the stats band and the story, because the campaign doc asks a reader to fund momentum that is already visible rather than a promise. `stats` are the headline figures the story title (\"And Every Number Represents a Story\") refers back to. `donateUrl` stays empty until a donation platform is chosen, at which point the CTA stops falling back to a giving-inquiry mailto. `donorTiers` are the giving levels the Donor Recognition wall groups by; each carries the `id` a Donor's `tier` matches on, mirroring `levels` in `sponsorPage.json`, and renaming a tier is a copy edit while its `id` stays the stable key.",
     "category": "datastore",
     "order": 11,
     "fields": [
@@ -621,7 +701,7 @@
   },
   {
     "name": "MediaAsset",
-    "description": "One image in the media library. Records live in the `{ assets: [] }` manifest singleton at `src/data/media.json` (the package's MEDIA_MANIFEST_PATH), which the CMS media library writes. Disk decides which assets exist — the `public/images` scan — while this record decides what is KNOWN about one, above all its alt text. `filename` is the identity: a path WITHIN `public/images`, so it may contain `/` for a nested asset (`gallery/event-05.jpg`). An explicit empty `alt` is a deliberate \"this image is decorative\", not a missing value.",
+    "description": "One image in the media library. Records live in the `{ assets: [] }` manifest singleton at `src/data/media.json` (the package's MEDIA_MANIFEST_PATH), which the CMS media library writes. Disk decides which assets exist \u2014 the `public/images` scan \u2014 while this record decides what is KNOWN about one, above all its alt text. `filename` is the identity: a path WITHIN `public/images`, so it may contain `/` for a nested asset (`gallery/event-05.jpg`). An explicit empty `alt` is a deliberate \"this image is decorative\", not a missing value.",
     "category": "datastore",
     "order": 12,
     "fields": [
@@ -670,7 +750,7 @@
   },
   {
     "name": "Community",
-    "description": "A non-geographic Harvard in Tech community (Founders, AI) — the interest-based counterpart to a Chapter. Stored as a markdown file in the `communities` content collection; rendered on per-community routes at /communities/<slug>, and the source the base layout derives the nav Communities entries from (alongside the hand-authored WhatsApp link in nav.json). Shares the Chapter shape so both render through the same page components; `name` replaces `city` because a community has no location. Events join a community through the same `chapter` tag they use for chapters, so editors learn no second field.",
+    "description": "A non-geographic Harvard in Tech community (Founders, AI) \u2014 the interest-based counterpart to a Chapter. Stored as a markdown file in the `communities` content collection; rendered on per-community routes at /communities/<slug>, and the source the base layout derives the nav Communities entries from (alongside the hand-authored WhatsApp link in nav.json). Shares the Chapter shape so both render through the same page components; `name` replaces `city` because a community has no location. Events join a community through the same `chapter` tag they use for chapters, so editors learn no second field.",
     "category": "datastore",
     "order": 13,
     "fields": [
@@ -734,12 +814,27 @@
         "name": "body",
         "type": "string",
         "required": false
+      },
+      {
+        "name": "previewOf",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewCreatedAt",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "previewLock",
+        "type": "string",
+        "required": false
       }
     ]
   },
   {
     "name": "Sponsor",
-    "description": "One organization supporting Harvard Alumni in Tech, shown on the /sponsor wall. Stored as a markdown file in the `sponsors` content collection. `tier` groups the wall by partnership level and must match a level id in `sponsorPage.json` — an unmatched tier is reported rather than silently dropping the sponsor. `placeholder: true` marks an ILLUSTRATIVE entry: the wall then renders an explicit 'example, not actual sponsors' notice, so a page seeded with sample logos can never be mistaken for a live sponsor list. Real sponsors omit the flag. The collection starts empty in production, where the wall renders nothing at all.",
+    "description": "One organization supporting Harvard Alumni in Tech, shown on the /sponsor wall. Stored as a markdown file in the `sponsors` content collection. `tier` groups the wall by partnership level and must match a level id in `sponsorPage.json` \u2014 an unmatched tier is reported rather than silently dropping the sponsor. `placeholder: true` marks an ILLUSTRATIVE entry: the wall then renders an explicit 'example, not actual sponsors' notice, so a page seeded with sample logos can never be mistaken for a live sponsor list. Real sponsors omit the flag. The collection starts empty in production, where the wall renders nothing at all.",
     "category": "datastore",
     "order": 14,
     "fields": [
@@ -793,7 +888,7 @@
   },
   {
     "name": "SponsorPageCopy",
-    "description": "Now a single-entry markdown collection (`sponsorPage`) with `src/data/sponsorPage.json` as the fallback, so the pitch is editable in /admin instead of being a code change. Its `levels` array moved out to the separate SponsorLevel collection — a benefits list inside a list of levels is not expressible in the editor. Editable copy for /sponsor, held in the `sponsorPage.json` singleton under the data root — the same model as VolunteerPageCopy and DonatePageCopy, so the pitch, the partnership levels, and the legal line are all CMS edits rather than code changes. `levels` are the partnership tiers a sponsor chooses between; each carries the `id` a Sponsor's `tier` matches on. `disclaimer` carries the Harvard Alumni Association requirement that a shared-interest group state contributions go to the group and not to Harvard University, so it is copy the team can revise without a deploy.",
+    "description": "Now a single-entry markdown collection (`sponsorPage`) with `src/data/sponsorPage.json` as the fallback, so the pitch is editable in /admin instead of being a code change. Its `levels` array moved out to the separate SponsorLevel collection \u2014 a benefits list inside a list of levels is not expressible in the editor. Editable copy for /sponsor, held in the `sponsorPage.json` singleton under the data root \u2014 the same model as VolunteerPageCopy and DonatePageCopy, so the pitch, the partnership levels, and the legal line are all CMS edits rather than code changes. `levels` are the partnership tiers a sponsor chooses between; each carries the `id` a Sponsor's `tier` matches on. `disclaimer` carries the Harvard Alumni Association requirement that a shared-interest group state contributions go to the group and not to Harvard University, so it is copy the team can revise without a deploy.",
     "category": "datastore",
     "order": 15,
     "fields": [
@@ -920,7 +1015,7 @@
   },
   {
     "name": "Donor",
-    "description": "One person or household who gave to the Momentum Fund, listed on the /donate recognition wall. Stored as a markdown file in the `donors` content collection and added from the CMS. `tier` groups the wall by giving level and must match a tier id in `donatePage.json` — an unmatched or untagged donor collects in a trailing group rather than vanishing, the same tolerance the sponsor wall has. `founding` is a badge, not a tier: it renders the Founding Donor mark on whichever giving level the donor sits in. `anonymous` renders 'Anonymous donor' on the site while the entry keeps the real name for the team's records, and suppresses the outbound `url` link so an anonymous donor cannot be identified through it. `note` is the short line revealed on the card; the body is an optional longer thank-you. `draft` holds an entry back until the gift clears. The collection starts empty in production, where the wall renders its invitation state.",
+    "description": "One person or household who gave to the Momentum Fund, listed on the /donate recognition wall. Stored as a markdown file in the `donors` content collection and added from the CMS. `tier` groups the wall by giving level and must match a tier id in `donatePage.json` \u2014 an unmatched or untagged donor collects in a trailing group rather than vanishing, the same tolerance the sponsor wall has. `founding` is a badge, not a tier: it renders the Founding Donor mark on whichever giving level the donor sits in. `anonymous` renders 'Anonymous donor' on the site while the entry keeps the real name for the team's records, and suppresses the outbound `url` link so an anonymous donor cannot be identified through it. `note` is the short line revealed on the card; the body is an optional longer thank-you. `draft` holds an entry back until the gift clears. The collection starts empty in production, where the wall renders its invitation state.",
     "category": "datastore",
     "order": 17,
     "fields": [
@@ -984,7 +1079,7 @@
   },
   {
     "name": "HomeSection",
-    "description": "One band of the homepage, stored as a markdown file in the `homeSections` content collection and editable from the CMS — the homepage counterpart to MomentumSection. `kind` selects which component renders (`hero`, `stats`, `events`, `chapters`, `focus`, `content-hub`, `board`, `get-involved`, `giving`, `whatsapp`, `support`, `gallery`, `contact`) and an unknown value drops that one band with a warning rather than failing the build. `order` moves a band up or down (lower appears higher). Visibility is two toggles rather than one typed value, because the CMS has no select control: `comingSoon` renders the placeholder band, and `draft` removes the band and its nav item together.",
+    "description": "One band of the homepage, stored as a markdown file in the `homeSections` content collection and editable from the CMS \u2014 the homepage counterpart to MomentumSection. `kind` selects which component renders (`hero`, `stats`, `events`, `chapters`, `focus`, `content-hub`, `board`, `get-involved`, `giving`, `whatsapp`, `support`, `gallery`, `contact`) and an unknown value drops that one band with a warning rather than failing the build. `order` moves a band up or down (lower appears higher). Visibility is two toggles rather than one typed value, because the CMS has no select control: `comingSoon` renders the placeholder band, and `draft` removes the band and its nav item together.",
     "category": "datastore",
     "order": 18,
     "fields": [
@@ -1077,7 +1172,7 @@
   },
   {
     "name": "HomeStat",
-    "description": "One figure in the homepage stat strip under the hero, stored in the `stats` content collection. Migrated out of `homeStats` on settings.json, which held real values but had no input in the CMS — the package renders only five scalar settings fields and round-trips everything else untouched. `draft` hides one figure without disturbing the others.",
+    "description": "One figure in the homepage stat strip under the hero, stored in the `stats` content collection. Migrated out of `homeStats` on settings.json, which held real values but had no input in the CMS \u2014 the package renders only five scalar settings fields and round-trips everything else untouched. `draft` hides one figure without disturbing the others.",
     "category": "datastore",
     "order": 20,
     "fields": [
@@ -1150,7 +1245,7 @@
   },
   {
     "name": "Pillar",
-    "description": "One card in the Momentum Fund's 'What Your Gift Powers' band, stored in the `pillars` content collection. Migrated out of donatePage.json. `icon` names one of the three inline SVG glyphs (people, book, globe) as free text validated in a lib — the same treatment `kind` and `layout` get — so an unrecognized value falls back rather than failing the build. `linkLabel`/`linkUrl` are optional; a card without them renders as plain copy.",
+    "description": "One card in the Momentum Fund's 'What Your Gift Powers' band, stored in the `pillars` content collection. Migrated out of donatePage.json. `icon` names one of the three inline SVG glyphs (people, book, globe) as free text validated in a lib \u2014 the same treatment `kind` and `layout` get \u2014 so an unrecognized value falls back rather than failing the build. `linkLabel`/`linkUrl` are optional; a card without them renders as plain copy.",
     "category": "datastore",
     "order": 22,
     "fields": [
@@ -1199,7 +1294,7 @@
   },
   {
     "name": "SponsorLevel",
-    "description": "One partnership level on /sponsor, as a markdown entry in the `sponsorLevels` content collection. Migrated out of the `levels` array inside `sponsorPage.json`, which the CMS could not render an input for: a level carries a `benefits` string list INSIDE a list of levels, and the editor supports a repeatable list of scalars at top level only. One entry per level makes `benefits` a top-level list and matches the shape `pillars` and `accomplishments` already use. The ENTRY FILENAME is the stable key a Sponsor s `tier` matches on — there is deliberately no `id` frontmatter field. Two reasons point the same way: an editable id text box silently re-homes every sponsor filed under the level when retyped, and the codeyam seed adapter strips `id` (like `slug`) as a filename key, which made the collection literally unseedable while the field existed — every scenario s levels failed validation and fell back to the committed JSON with nothing visibly wrong. `chapters` and `communities` key off the filename the same way. Ordering is the site-wide `order` pin so the wall reads top-down from the biggest commitment.",
+    "description": "One partnership level on /sponsor, as a markdown entry in the `sponsorLevels` content collection. Migrated out of the `levels` array inside `sponsorPage.json`, which the CMS could not render an input for: a level carries a `benefits` string list INSIDE a list of levels, and the editor supports a repeatable list of scalars at top level only. One entry per level makes `benefits` a top-level list and matches the shape `pillars` and `accomplishments` already use. The ENTRY FILENAME is the stable key a Sponsor s `tier` matches on \u2014 there is deliberately no `id` frontmatter field. Two reasons point the same way: an editable id text box silently re-homes every sponsor filed under the level when retyped, and the codeyam seed adapter strips `id` (like `slug`) as a filename key, which made the collection literally unseedable while the field existed \u2014 every scenario s levels failed validation and fell back to the committed JSON with nothing visibly wrong. `chapters` and `communities` key off the filename the same way. Ordering is the site-wide `order` pin so the wall reads top-down from the biggest commitment.",
     "category": "datastore",
     "order": 23,
     "fields": [
@@ -1238,7 +1333,7 @@
   },
   {
     "name": "SiteIntegrations",
-    "description": "The site-wide integration keys — GA4 measurement id and the raw custom `<head>` / `<body>` HTML escape hatches — as a single-entry markdown collection. These have always been real editable data on the `settings.json` singleton, but the CMS settings screen renders inputs for five scalar keys plus socials and round-trips the rest untouched, so they were data with nowhere to edit them. Deliberately its own collection rather than extra fields on `pageCopy`: the editor renders every declared field for every entry, so sharing would put an analytics box on the Momentum Fund page s screen. `settings.json` remains the fallback, so deleting this entry cannot silently unhook analytics from every page.",
+    "description": "The site-wide integration keys \u2014 GA4 measurement id and the raw custom `<head>` / `<body>` HTML escape hatches \u2014 as a single-entry markdown collection. These have always been real editable data on the `settings.json` singleton, but the CMS settings screen renders inputs for five scalar keys plus socials and round-trips the rest untouched, so they were data with nowhere to edit them. Deliberately its own collection rather than extra fields on `pageCopy`: the editor renders every declared field for every entry, so sharing would put an analytics box on the Momentum Fund page s screen. `settings.json` remains the fallback, so deleting this entry cannot silently unhook analytics from every page.",
     "category": "datastore",
     "order": 24,
     "fields": [
@@ -1272,7 +1367,7 @@
   },
   {
     "name": "PageCopy",
-    "description": "Per-page settings an editor changes from /admin, one markdown entry per page in the `pageCopy` collection. Today it holds the single `donate` entry: the Momentum Fund page s donation-platform URL (blank keeps every giving button on the giving-inquiry mailto) plus the page s FIXED FRAME — the hero headline in its named and generic forms, the hero subhead and photo, and the closing ask s title, body, and button label. The frame is deliberately not part of the reorderable `momentumSections` middle: a page whose hero could be dragged to the bottom is a page an editor can break. Making its copy editable does not make it draggable. `donatePage.json` remains the fallback for every field.",
+    "description": "Per-page settings an editor changes from /admin, one markdown entry per page in the `pageCopy` collection. Today it holds the single `donate` entry: the Momentum Fund page s donation-platform URL (blank keeps every giving button on the giving-inquiry mailto) plus the page s FIXED FRAME \u2014 the hero headline in its named and generic forms, the hero subhead and photo, and the closing ask s title, body, and button label. The frame is deliberately not part of the reorderable `momentumSections` middle: a page whose hero could be dragged to the bottom is a page an editor can break. Making its copy editable does not make it draggable. `donatePage.json` remains the fallback for every field.",
     "category": "datastore",
     "order": 22,
     "fields": [
@@ -1331,7 +1426,7 @@
   },
   {
     "name": "CutoverProgress",
-    "description": "Shared progress on the domain cutover, as the singleton `src/data/cutoverProgress.json`. One record per runbook step (S1–S9) and per open decision (D1–D5), each carrying whether it is done/answered plus the GitHub login that set it and when. Ships with everything open, which is the true state of the migration — nothing has been performed. Written from the runbook page itself via the CMS's GitHub commit path (an editor's own token, committed to the `staging` branch named in `src/data/cms.json`), so a tick is attributed to a real GitHub identity and every reader loads the same state rather than a browser-local copy. Read through `src/lib/cutoverProgress.ts`, which uses `readSingleton` so the codeyam sandbox redirect is honored and each scenario can seed a different state.",
+    "description": "Shared progress on the domain cutover, as the singleton `src/data/cutoverProgress.json`. One record per runbook step (S1\u2013S9) and per open decision (D1\u2013D5), each carrying whether it is done/answered plus the GitHub login that set it and when. Ships with everything open, which is the true state of the migration \u2014 nothing has been performed. Written from the runbook page itself via the CMS's GitHub commit path (an editor's own token, committed to the `staging` branch named in `src/data/cms.json`), so a tick is attributed to a real GitHub identity and every reader loads the same state rather than a browser-local copy. Read through `src/lib/cutoverProgress.ts`, which uses `readSingleton` so the codeyam sandbox redirect is honored and each scenario can seed a different state.",
     "category": "datastore",
     "order": 25,
     "fields": [

@@ -1,0 +1,39 @@
+---
+// One blog post's article body: title, date, the rendered markdown, and the
+// optional third-party embed that follows it.
+//
+// Extracted out of `src/pages/blog/[slug].astro`, which renders its own `<html>`
+// shell and was the last of the five routed collections still holding raw
+// section markup in the page file. The rendered markdown arrives as the default
+// slot rather than as a prop, because `<Content />` is the component
+// `render(entry)` hands back — it has to be composed by the caller that awaited
+// it, not reconstructed here.
+//
+// Deliberately knows nothing about previews. Whether an entry is a locked
+// preview decides WHICH body renders, and that decision belongs to
+// `BlogPostBody` above it — this component's job is that one entry renders the
+// same way whatever route reached it.
+import Embed from './Embed.astro';
+
+interface Props {
+  title: string;
+  /** Published date. Formatted here so every post agrees on the format. */
+  date: Date;
+  /** Optional embed after the body — a video, a form, a third-party widget. */
+  embedUrl?: string;
+  embedHtml?: string;
+}
+
+const { title, date, embedUrl, embedHtml } = Astro.props as Props;
+---
+
+<article style="margin-top: var(--space-lg);">
+  <h1 style="margin-bottom: var(--space-sm);">{title}</h1>
+  <time style="color: var(--color-muted);" datetime={date.toISOString()}>
+    {date.toLocaleDateString()}
+  </time>
+  <div style="margin-top: var(--space-lg);">
+    <slot />
+  </div>
+  <Embed embedUrl={embedUrl} embedHtml={embedHtml} title={title} />
+</article>

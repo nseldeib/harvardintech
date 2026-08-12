@@ -1,0 +1,13 @@
+{
+  "name": "BlogPostBody - Locked, Prompt Replaces The Article",
+  "id": "c85b0702-c53e-47e1-8ea4-23060fc2fc38",
+  "url": "/isolated-components/BlogPostBody-Locked",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "BlogPostBody",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/BlogPostBody.astro",
+  "description": "The locked branch, and the one worth guarding. The entry's body is real ciphertext and the slot holds ordinary markdown; a correct render shows neither, because the unlock prompt replaces the article entirely. The first attempt at this feature rendered the ciphertext as a paragraph — a wall of base64 where the writing should be — which is exactly what this frame exists to catch if it ever returns."
+}

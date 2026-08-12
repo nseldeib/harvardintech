@@ -1,0 +1,49 @@
+{
+  "name": "Previews Index - The Shareable List Link",
+  "id": "50770c05-d6f4-4f7d-92a6-1ea4c2430b49",
+  "url": "/previews/qsrwe18v5cm4ccas8pffxktt4c",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "blog": [
+      {
+        "body": "Transcript pending review by the subject before publication.",
+        "date": "2026-07-24",
+        "draft": true,
+        "slug": "founder-spotlight-hana-reyes",
+        "summary": "An unfinished interview with the Harvard C'14 founder of a grid-storage startup.",
+        "title": "Founder Spotlight: Hana Reyes on Building in Climate Hardware"
+      },
+      {
+        "body": "This is an in-progress guide for new chapter leads.",
+        "date": "2026-07-20",
+        "draft": true,
+        "slug": "chapter-leader-playbook",
+        "summary": "A working draft of how we run a chapter.",
+        "title": "The Chapter Leader Playbook"
+      },
+      {
+        "body": "Hana Reyes (Harvard C'14) spent four years inside a utility before deciding the grid's storage problem was a hardware problem nobody wanted to own.",
+        "date": "2026-07-24",
+        "previewCreatedAt": "2026-08-12T09:14:00.000Z",
+        "previewOf": "founder-spotlight-hana-reyes",
+        "slug": "preview-7fk3q9wc2mbn5xr8dt4vha6j0e",
+        "title": "Founder Spotlight: Hana Reyes on Building in Climate Hardware"
+      },
+      {
+        "body": "wK2v5F2viq/YqVNpVWab8znMgoXXp/8r8hnaCAXNgTUHVZVrE9pt+Jhw+Dl6jnEfBXC5/7JjLZP4yh/DiSY+3C09hb+lpiuI5trJN1SR8libGlcDMBLUow7SVD4IYA8NRHWDrhainYPLjtDrS4kCzr4lg9P05E2y3PEgUg0Is8FT1jj/oNL3nQShPnfZJIbf3i+wZniF9GSx5Oj7jqchKSWjzRm99blXNdKCZfvNV3MSfBHyFr7OaY4f9rJsbLOx6XbhEGHva7Zg7SQg1Qpf/FmwXyh1kgxGD6XhgPZSnbLrbKbqDA3Q+FoU32I0gDdlaA+ipo7VRn03HIpJfkBWIDsuHyMGKJtDO0CmaIx0BRfmxocSRVMWc7feayxVSD2JCQRTGHs6siw2UYFXA+Pe5RxZ3BMlFlUNr3KuiyL1FG6RSJknYy5FzwZIgrkonrVN+rbGbv7TawtCmFBdDo9nNnf69TFKMWbfdO/Fcs16V/MBoGCiXgOccsDHHtvUf7hUs9Os2qNl2uEhIDT/Bsae0Y6REWKPsZ61VNA9GhH6Wp+TDJRnuo+JtIXie1DO+JAHPSEdTHjjOeukP3y6MjgxuGyrZEsT403mx7KC4X5g0qFZKNDcN2t+k+WJ0MMTzCCfU/SI/wNj/2fViV/rlgo3STHWJmV4BS7Z6aBZoFKbHbEpYI0BvjEUsq5gUWwZ5B/itfv5BytEPcXByy+PPVBs+YZo9pHoS9QXLmC8EGsSPChxcOcTvCGzm0XrAWFdPKSTLGRRbbXY4V1LcyE2mxGBr6bfOGAv94s5eprvGcWA7jB/86i2vLuR0CDvZyV3PcXZ+SHJqQ==",
+        "date": "2026-08-10",
+        "previewCreatedAt": "2026-08-10T16:02:00.000Z",
+        "previewLock": "v1.600000.ZXbRkPBr9p3V9M5tDvOAwg==.BKILCRibdNdsD+Cq",
+        "previewOf": "chapter-leader-playbook",
+        "slug": "preview-j2x9m5w7qd3fb8kn0rvt6chsa1",
+        "title": "Protected preview"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/previews/[token].astro",
+  "description": "One link that stands in for all of them. A reviewer with no GitHub account and no CMS access lands here and sees every current preview, grouped by collection — and it stays current by construction, since a preview minted after the link was shared appears without re-sharing anything. Opt-in: the page exists only because settings.json carries a previewIndexToken, and rotating that token is the revoke. Unguessable is not secret — anyone holding this URL can read every preview on it."
+}

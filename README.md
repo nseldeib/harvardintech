@@ -113,13 +113,17 @@ States captured as runnable scenarios with codeyam-editor:
 
 <img src=".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png" alt="Cutover Runbook - The Records On A Phone" width="280">
 
+### Blog Preview Link - Shared Draft
+
+<img src=".codeyam/scenarios/screenshots/blog-preview-link-shared-draft--desktop.png" alt="Blog Preview Link - Shared Draft" width="280">
+
 ### CMS Analytics And Embeds
 
 <img src=".codeyam/scenarios/screenshots/cms-analytics-and-embeds--desktop.png" alt="CMS Analytics And Embeds" width="280">
 
-### CMS Blog List - Drafts And Published
+### CMS Blog List - A Preview Link And A Locked One
 
-<img src=".codeyam/scenarios/screenshots/cms-blog-list-drafts-and-published--desktop.png" alt="CMS Blog List - Drafts And Published" width="280">
+<img src=".codeyam/scenarios/screenshots/cms-blog-list-a-preview-link-and-a-locked-one--desktop.png" alt="CMS Blog List - A Preview Link And A Locked One" width="280">
 
 ### CMS Chapter Editor - Marked As Draft
 
@@ -132,8 +136,4 @@ States captured as runnable scenarios with codeyam-editor:
 ### CMS Entry Editor - Change Staged For Review
 
 <img src=".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png" alt="CMS Entry Editor - Change Staged For Review" width="280">
-
-### CMS Media Library - Adopted Images
-
-<img src=".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png" alt="CMS Media Library - Adopted Images" width="280">
 <!-- codeyam:scenario-gallery:end -->

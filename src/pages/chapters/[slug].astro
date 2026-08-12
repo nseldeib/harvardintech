@@ -6,14 +6,20 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ChapterPage from '../../components/ChapterPage.astro';
 import { splitEvents, unmatchedChapterTags, eventsTaggedTo } from '../../lib/events';
-import { publishedEntries } from '../../lib/drafts';
+import LockedPreviewBody from '../../components/LockedPreviewBody.astro';
+import { isLocked, isPreview, publishedEntries, routableEntries } from '../../lib/drafts';
 import { INCLUDE_DRAFTS } from '../../lib/draftVisibility';
 
 // Drafts get no page of their own on the public site — a chapter dropped from
 // the nav but still live at /chapters/<slug> would be public anyway. In dev and
 // on the review track the page is generated so an unannounced chapter can be read.
 export async function getStaticPaths() {
-  const chapters = publishedEntries(await getCollection('chapters'), INCLUDE_DRAFTS);
+  const allChapters = await getCollection('chapters');
+  const chapters = publishedEntries(allChapters, INCLUDE_DRAFTS);
+  // Listed chapters only. A preview clone shares its subject's `chapter` tag, so
+  // counting preview ids here would let a stray tag find a "match" on a page
+  // nothing links to — the warning would go quiet on exactly the typo it exists
+  // to report.
   const chapterIds = chapters.map((chapter) => chapter.id);
 
   // The one place holding every list an event tag can legitimately match, so the
@@ -41,7 +47,9 @@ export async function getStaticPaths() {
     );
   }
 
-  return chapters.map((chapter) => ({
+  // Routes come from the ROUTABLE list, which adds preview pages on top of the
+  // listed ones — a preview link 404s unless its page is built here.
+  return routableEntries(allChapters, INCLUDE_DRAFTS).map((chapter) => ({
     params: { slug: chapter.id },
     props: { chapter },
   }));
@@ -59,20 +67,30 @@ const events = publishedEntries(await getCollection('events'), INCLUDE_DRAFTS);
 const { upcoming } = splitEvents(eventsTaggedTo(events, chapter.id));
 ---
 
-<BaseLayout title={city} description={blurb ?? `Harvard Alumni in Tech ${city} chapter.`}>
-  <ChapterPage
-    name={city}
-    region={region}
-    blurb={blurb}
-    heroImage={heroImage}
-    tagline={tagline}
-    showGallery={showGallery}
-    photos={photos}
-    events={upcoming}
-    contactEmail={contactEmail}
-    leads={leads}
-    links={links}
-  >
-    <Content />
-  </ChapterPage>
+<BaseLayout
+  title={city}
+  description={blurb ?? `Harvard Alumni in Tech ${city} chapter.`}
+  noindex={isPreview(chapter)}
+>
+  {
+    isLocked(chapter) ? (
+      <LockedPreviewBody ciphertext={chapter.body ?? ''} lock={chapter.data.previewLock ?? ''} />
+    ) : (
+      <ChapterPage
+        name={city}
+        region={region}
+        blurb={blurb}
+        heroImage={heroImage}
+        tagline={tagline}
+        showGallery={showGallery}
+        photos={photos}
+        events={upcoming}
+        contactEmail={contactEmail}
+        leads={leads}
+        links={links}
+      >
+        <Content />
+      </ChapterPage>
+    )
+  }
 </BaseLayout>

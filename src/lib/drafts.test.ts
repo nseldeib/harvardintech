@@ -1,12 +1,31 @@
 import { describe, it, expect } from 'vitest';
-import { publishedEntries, type DraftableEntry } from './drafts';
+import { isLocked, isPreview, publishedEntries, routableEntries, type DraftableEntry } from './drafts';
 
 /** Minimal stand-in for a content-collection entry: an id plus a `data` bag. */
-type Entry = DraftableEntry & { id: string; data: { title?: string; draft?: boolean } };
+type Entry = DraftableEntry & {
+  id: string;
+  data: { title?: string; draft?: boolean; previewOf?: string; previewLock?: string };
+};
 
 const entry = (id: string, draft?: boolean): Entry => ({
   id,
   data: draft === undefined ? { title: id } : { title: id, draft },
+});
+
+/** A preview clone of `previewOf`, optionally password-protected and optionally
+ * carrying its source's draft flag (which a real clone does). */
+const preview = (
+  id: string,
+  previewOf: string,
+  opts: { draft?: boolean; lock?: string } = {},
+): Entry => ({
+  id,
+  data: {
+    title: id,
+    previewOf,
+    ...(opts.draft === undefined ? {} : { draft: opts.draft }),
+    ...(opts.lock === undefined ? {} : { previewLock: opts.lock }),
+  },
 });
 
 describe('publishedEntries', () => {
@@ -68,5 +87,90 @@ describe('publishedEntries', () => {
   it('hides an entry only when draft is exactly true', () => {
     const entries = [{ id: 'stringy', data: { draft: 'true' as unknown as boolean } }];
     expect(publishedEntries(entries).map((e) => e.id)).toEqual(['stringy']);
+  });
+
+  // THE preview-link invariant on the listing side. A preview page exists to be
+  // reachable ONLY by the token URL someone was handed, so a listing that showed
+  // it would publish the very thing the token protects.
+  it('omits preview pages from a listing', () => {
+    const entries = [entry('welcome'), preview('preview-abc', 'welcome')];
+    expect(publishedEntries(entries).map((e) => e.id)).toEqual(['welcome']);
+  });
+
+  // includeDrafts governs the DRAFT flag only. A preview is hidden for a
+  // different reason, so the review track — which shows drafts — still must not
+  // list previews.
+  it('still omits previews when includeDrafts is true', () => {
+    const entries = [entry('welcome'), entry('wip', true), preview('preview-abc', 'welcome')];
+    expect(publishedEntries(entries, true).map((e) => e.id)).toEqual(['welcome', 'wip']);
+  });
+});
+
+describe('routableEntries', () => {
+  // the mirror image of the listing rule, and the reason preview links resolve
+  // at all: the page must be BUILT even though nothing links to it
+  it('builds a page for a preview that no listing shows', () => {
+    const entries = [entry('welcome'), preview('preview-abc', 'welcome')];
+    expect(publishedEntries(entries).map((e) => e.id)).toEqual(['welcome']);
+    expect(routableEntries(entries).map((e) => e.id)).toEqual(['welcome', 'preview-abc']);
+  });
+
+  // a preview clone carries its source's draft flag; hiding it was never the
+  // point, so it stays routable even in a production build that drops drafts
+  it('builds a preview even when it also carries draft true', () => {
+    const entries = [entry('welcome'), preview('preview-abc', 'welcome', { draft: true })];
+    expect(routableEntries(entries).map((e) => e.id)).toEqual(['welcome', 'preview-abc']);
+  });
+
+  // routes and listings must agree about ordinary drafts, or the review track
+  // links to pages the public build never generated
+  it('follows the draft rule for everything that is not a preview', () => {
+    const entries = [entry('live'), entry('wip', true)];
+    expect(routableEntries(entries).map((e) => e.id)).toEqual(['live']);
+    expect(routableEntries(entries, true).map((e) => e.id)).toEqual(['live', 'wip']);
+  });
+
+  // input order survives, so a route file can sort before or after
+  it('preserves input order and does not mutate the input', () => {
+    const entries = [entry('a'), preview('preview-x', 'a'), entry('b')];
+    const routed = routableEntries(entries);
+    expect(routed.map((e) => e.id)).toEqual(['a', 'preview-x', 'b']);
+    expect(routed).not.toBe(entries);
+    expect(entries).toHaveLength(3);
+  });
+
+  // a collection with no previews behaves exactly as publishedEntries does, so
+  // adopting this in a getStaticPaths changes nothing until a link is minted
+  it('matches publishedEntries when the collection has no previews', () => {
+    const entries = [entry('a'), entry('b', true), entry('c')];
+    expect(routableEntries(entries).map((e) => e.id)).toEqual(
+      publishedEntries(entries).map((e) => e.id),
+    );
+  });
+});
+
+describe('isPreview', () => {
+  // `previewOf` is the ONLY marker — a slug that merely looks like one is not enough
+  it('is true only for an entry carrying previewOf', () => {
+    expect(isPreview(preview('preview-abc', 'welcome'))).toBe(true);
+    expect(isPreview(entry('welcome'))).toBe(false);
+    expect(isPreview(entry('welcome', true))).toBe(false);
+  });
+});
+
+describe('isLocked', () => {
+  // the distinction the blog route branches on: an unlocked preview renders its
+  // markdown, a locked one holds ciphertext that must never reach <Content />
+  it('separates a password-protected preview from an ordinary one', () => {
+    expect(isLocked(preview('preview-locked', 'welcome', { lock: 'v1.600000.c2FsdA==.aXY=' }))).toBe(
+      true,
+    );
+    expect(isLocked(preview('preview-open', 'welcome'))).toBe(false);
+  });
+
+  // an ordinary page is never locked, whatever its draft state
+  it('is false for a page that is not a preview at all', () => {
+    expect(isLocked(entry('welcome'))).toBe(false);
+    expect(isLocked(entry('wip', true))).toBe(false);
   });
 });
