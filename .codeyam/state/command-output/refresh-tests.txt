@@ -1,20 +1,20 @@
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786553986,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3722027}
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786553986,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3722027}
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786560589,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3803554}
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786560589,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3803554}
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
-{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786553996,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3722027}
-{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786553996,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3722027}
+{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786560599,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3803554}
+{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786560599,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3803554}
 [  12s] Still running: tests
-{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786554006,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3722027}
-{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786554006,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3722027}
+{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786560609,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3803554}
+{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786560609,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3803554}
 [  22s] Still running: tests
 [  24s] Tests completed.
-All 802 tests passed.
-{"failed":0,"passed":802,"skipped":0,"success":true,"total":802}
+{"failed":0,"passed":4,"skipped":798,"success":true,"total":4}
+All 4 tests passed.
 
 Partial run — partition caches WERE updated; the full-suite test-cache.json was
 NOT (full-suite hash invariant). If a stale-partition bail sent you here, that

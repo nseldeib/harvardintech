@@ -31,7 +31,8 @@
         "**/*.test.jsx"
       ],
       "sourceFilePatterns": [
-        "**/*.{ts,tsx,js,jsx}"
+        "**/*.{ts,tsx,js,jsx}",
+        "src/data/**/*.json"
       ],
       "excludePatterns": [
         "**/node_modules/**",
@@ -44,7 +45,9 @@
     }
   ],
   "testPartitions": [],
-  "testCacheIgnorePatterns": [],
+  "testCacheIgnorePatterns": [
+    "**/*.md"
+  ],
   "staticChecks": [
     {
       "name": "tsc",

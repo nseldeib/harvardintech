@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-08-12T18:59:33Z",
+  "title": "Preview Links Point Where The Commit Actually Lands",
+  "type": "feature",
+  "userRequest": "fix the siteUrl so preview links point at staging - also make sure that changes will be reflected appropriately for nicole based on the links she has.",
+  "description": "Pointed settings.siteUrl at the staging site, so every URL the CMS hands an editor — preview links, View on site, the social-card preview — resolves on the site its commits land on. It previously named the reviewed site while the CMS committed to `staging`, so a freshly minted preview link 404'd until somebody promoted.\n\nNothing the site RENDERS reads that field, which is what makes the change safe: canonical URLs, Open Graph tags, sitemap.xml and robots.txt all come from Astro's own `site`, set per track by the deploy workflow. An earlier note in this session claimed settings.siteUrl also drove canonical SEO URLs — it does not, and CMS_SETUP.md now records the real consumer list along with the fact that the field is editable from Settings → Public URL, which is the first place to look if preview links ever point at the reviewed site again.\n\nThe wider problem this surfaced is that the same misrouting applies to every CMS edit, not just previews. Nicole's handoff links all name the reviewed site, her edits commit to staging, and the note she was sent promised her change would appear 'a minute or two' after saving — true of staging, false of the link she has. Evidence: one content edit, the volunteer page's 'Marketing projects open for volunteers' heading, had been sitting unpromoted since 6 August. (Two sibling commits from the same session cancelled each other out, so that heading was the whole of the drift.)\n\ndocs/nicole-review.md now tells the truth: the false line is gone, the staging URL joins her link table labelled as where her edits appear first, and the two-site table no longer calls staging 'not for sharing' — the reasoning behind that label held for reviewing, not for editing, and an editor who cannot see her own change has no way to tell a save that worked from one that did not. The doc also records that preview links are deliberately exempt from the crimson2026 passphrase, so a preview URL is the one surface anyone holding the link can read, and points at the per-preview password as the answer for anything sensitive.\n\nOne test-infrastructure fix rode along. `refresh-tests --changed` refused to run, reporting that the changed files matched no runner. That refusal was correct rather than an obstacle: seoEndpoints.test.ts imports settings from lib/site, which reads settings.json, so the file genuinely can change a test result and must not be silently ignored. src/data/**/*.json now belongs to the runner, and only markdown is added to testCacheIgnorePatterns.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/editor.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-blog-list-a-preview-link-and-a-locked-one--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/4bb52150513451adbf0c0054bd9f3d1abaf0d4c7e9dbde90838bcd3d97cce199.json",
+      "status": "deleted"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/settings.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/211f58b3802f5fe9177b888733c3b976ccc9eb1700dccab72ada021e134fae61.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/7d498a50e250179a5c639361571f2cf2aa10bfdb6e9cd5d3980b4017e4786fab.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/db9d376a43e23383b19b65b3526186c5c483e3576bf0c232880f55e64dd2a2e7.json",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 802,
+    "passed": 802,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 802,
+        "passed": 802
+      }
+    ]
+  }
+}

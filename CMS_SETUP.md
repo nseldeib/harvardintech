@@ -89,6 +89,40 @@ Two committed JSON files configure it:
 - **`src/data/collections.json`** — the editor's view of this site's content
   schema. See **How collections.json relates to src/content/config.ts** below.
 
+### `settings.siteUrl` points at STAGING, on purpose
+
+`src/data/settings.json` carries `siteUrl:
+https://nseldeib.github.io/harvardintech-staging` — the working site, not the
+reviewed one the team bookmarks. That looks wrong at a glance and is not.
+
+Nothing the site RENDERS reads this field. Canonical URLs, Open Graph tags,
+`sitemap.xml` and `robots.txt` all come from Astro's own `site`, which the deploy
+workflow sets per track. `settings.siteUrl` is consumed only by the CMS, to build
+the links it hands an editor: **View on site**, the social-card preview, and the
+URL a **Preview link** row tells you to copy.
+
+Every one of those links has to point where the commit actually LANDS. The CMS
+commits to `staging` (`cms.json`), so a preview clone materialises on the staging
+site — and only there, until someone promotes. Pointing this field at the
+reviewed site would hand an editor a URL that 404s for as long as it takes
+somebody to notice, which is exactly what it did before this was corrected.
+
+**The two URLs are answering different questions and are meant to differ:**
+
+| Field | Value | Answers |
+|---|---|---|
+| `cms.json` → `siteUrl` | `…/harvardintech-staging` | Which site's `deploy-status.json` the publish watch reads |
+| `settings.json` → `siteUrl` | `…/harvardintech-staging` | Which site the editor's links point at |
+
+They agree today because both describe where `staging` deploys. **At the
+Strikingly cutover they still should** — the CMS keeps committing to the review
+track, so both keep naming whatever that track's origin becomes
+(`review.harvardintech.com`), NOT the public domain.
+
+**This field is editable from the CMS** (Settings → Public URL), so an editor can
+change it without touching the repo. If preview links ever start pointing at the
+reviewed site again, that is the first place to look.
+
 ## Preview links: sharing a draft before it goes live
 
 **Preview link** on any entry row clones that entry to
