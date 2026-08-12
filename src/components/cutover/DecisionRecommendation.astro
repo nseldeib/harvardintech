@@ -1,0 +1,24 @@
+---
+// What we'd suggest, and why, on one decision.
+//
+// The substantive addition to this page. The version before it laid out three
+// options per decision and picked none, which reads as even-handed and is
+// really a transfer of the whole cost of deciding onto the reader — and D1 had
+// been open since 2026-07-02 under exactly that arrangement.
+//
+// Visually distinct from the options above it because it is ours rather than one
+// of the choices. It does not remove the choice; it gives the team something to
+// react to, which resolves far faster than a blank page.
+import type { DecisionDef } from '../../lib/cutoverProgress';
+
+interface Props {
+  decision: DecisionDef;
+}
+const { decision } = Astro.props;
+---
+
+<div class="rec">
+  <span class="k">What we'd suggest</span>
+  <p class="rec-what">{decision.recommendation}</p>
+  <p class="rec-why">{decision.because}</p>
+</div>

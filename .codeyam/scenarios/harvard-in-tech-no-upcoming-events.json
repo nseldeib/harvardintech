@@ -1,6 +1,6 @@
 {
   "name": "Harvard in Tech - No Upcoming Events",
-  "id": "94b2185d-4ee3-4c7b-9b60-c586e67059d3",
+  "id": "826f1b72-ca5c-4277-ae3b-58e92b5f7e56",
   "url": "/#events",
   "dimensions": [
     "Desktop"
@@ -47,5 +47,12 @@
     ]
   },
   "scenarioType": "application",
-  "pageFilePath": "src/pages/index.astro"
+  "pageFilePath": "src/pages/index.astro",
+  "description": "The homepage events band with nothing upcoming — captured at /#events so the band is actually in frame rather than below the fold. This is the state the live site is in today: the collection holds eight events and every one has passed, so the band renders its invitation instead of a list, offering the Luma calendar and the mailing list as the two ways to hear about the next one. It seeds zero events, which exercises the empty branch but cannot tell whether the page FILTERS — a page handing the band every event would render identically here. The past-and-future scenario beside it is the one that proves the filter.",
+  "interactions": [
+    {
+      "action": "hover",
+      "selector": "#events"
+    }
+  ]
 }

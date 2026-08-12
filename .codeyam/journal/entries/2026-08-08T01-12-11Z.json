@@ -1,0 +1,411 @@
+{
+  "timestamp": "2026-08-08T01:12:11Z",
+  "title": "Keep Editing While The Site Publishes",
+  "type": "fix",
+  "userRequest": "for codeyam-cms nicole made a change but it's taking a while to update and she's not able to make another change while a commit is processing; I'd like for her to be able to continously make changes. Can you investigate?",
+  "description": "Publishing from the CMS used to lock the whole admin. The deploy watch polled the marker on nseldeib.github.io/harvardintech, but cms.json commits to the staging branch, which deploys to the separate harvardintech-staging site — so it waited on a marker that commit would never change, ran out of budget, and returned a non-terminal stage. DeployStatus only enables its close button on a terminal stage and sits in a fixed full-screen scrim, so the scrim never lifted and the only way back to editing was a page reload, after every single publish.\n\nFour changes. The deploy target is now explicit (a siteUrl on the CMS config, set to the staging site) so the watch reads the right marker and \"View live site\" points at the right place. pollDeploy always resolves to a terminal stage, reporting a new 'unconfirmed' outcome — \"Published — the site is still updating\", with Check again and View live site — rather than parking on an in-flight stage nothing could move off. The panel is dismissible at every stage, its close button reading \"Keep editing\" mid-deploy, and closing demotes it to a compact chip rather than ending the watch. And the watch is no longer a phase of publishing: it lives in its own state beside the publish flow, persisted per tab, so a second publish mid-deploy is ordinary rather than blocked and the status re-attaches on whatever admin page loads next — which is what lets an editor publish, carry on working elsewhere, and still be told her change went live.\n\nThe fix lands in @codeyam/cms via patch-package (11 files) since the bug is in the dependency, not this repo; the same fix should go upstream so the patch drops at 0.4.1. PublishPage stopped drawing its own deploy status entirely — StagingBar is mounted in AdminLayout and therefore already on that page, so both would have followed the same deploy and drawn it twice; the store is now the single source and the bar the single renderer. 31 new tests cover the record's expiry/identity/construction rules and the stage rules behind the lockout, verified red-on-revert; 714 pass in total.\n\nThe deploy itself still takes 1-3 minutes — that is the GitHub Actions build and no CMS change shortens it. What changed is that nobody waits on it.\n\nThe Demo gate is recorded as a structural skip: this container's editor binds non-loopback, so its control API requires a token the capture browser cannot present and every preview-interact / preview-flow / raw-path preview returns 401. Recoverable paths were exhausted (tab reloads, retries, an editor restart onto a fresh binary). All 13 scenarios were still captured via the register path, which hits the app port directly.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-nothing-to-publish--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-nothing-to-publish--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-plain-language-change-summary--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-plain-language-change-summary--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-what-the-edit-actually-did--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-what-the-edit-actually-did--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-a-tick-that-could-not-be-saved--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-a-tick-that-could-not-be-saved--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-complete--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-complete--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-cutover-day--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-cutover-day--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-decisions-answered-nothing-begun--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-decisions-answered-nothing-begun--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-nothing-started--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-nothing-started--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-partway-through--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-partway-through--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-waiting-on-one-answer--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-waiting-on-one-answer--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/2df8f036aa7d3bc31359ba7a119dc8994b88a09982077271e838958817ccf986.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/487cd0170adf697e025054326ee7dba92a8e7d467236715b232ae378158c999e.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/cms.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/node-modules-codeyam-cms-src-components-admin-deploychip-tsx.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/node-modules-codeyam-cms-src-components-admin-deploystatus-tsx.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/node-modules-codeyam-cms-src-components-admin-stagingbar-tsx.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploychip-change-is-live.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploychip-published-still-updating.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploychip-publishing.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-build-failed.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-live.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-published-still-updating.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-publishing-dismissible.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/deploystatus-waiting-for-the-site.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploychip-change-is-live--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploychip-change-is-live--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploychip-published-still-updating--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploychip-published-still-updating--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploychip-publishing--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploychip-publishing--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-build-failed--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-build-failed--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-live--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-live--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-published-still-updating--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-published-still-updating--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-publishing-dismissible--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-publishing-dismissible--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-waiting-for-the-site--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/deploystatus-waiting-for-the-site--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stagingbar-publish-again-while-deploying--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stagingbar-publish-again-while-deploying--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stagingbar-reviewing-before-publish--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stagingbar-reviewing-before-publish--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/stagingbar-publish-again-while-deploying.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/stagingbar-reviewing-before-publish.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/2928532f3f6103aa64b10af6b3154d83cde2412d45c7802437b28a2de5a8ae80.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/6ebf1d5c3dc19a180c5846c1f25ce6cdb7b2d6e741f0567c5f0c382a7791d7a3.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/bad6a42fc10cd012726df2305a87b4efe57dbc90ead6a4b0d0c66350a0bbe7d9.json",
+      "status": "added"
+    },
+    {
+      "path": "patches/@codeyam+cms+0.4.0.patch",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/deployStage.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/deployWatch.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DeployChip-Live.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DeployChip-Publishing.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DeployChip-StillUpdating.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DeployStatus-Failed.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DeployStatus-Live.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DeployStatus-Publishing.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DeployStatus-StillUpdating.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DeployStatus-Verifying.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/StagingBar-PublishAgainWhileDeploying.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/StagingBar-Reviewing.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Cutover Runbook - A Tick That Could Not Be Saved",
+      "screenshotPath": "cutover-runbook-a-tick-that-could-not-be-saved--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Complete",
+      "screenshotPath": "cutover-runbook-complete--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Cutover Day",
+      "screenshotPath": "cutover-runbook-cutover-day--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Decisions Answered Nothing Begun",
+      "screenshotPath": "cutover-runbook-decisions-answered-nothing-begun--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Nothing Started",
+      "screenshotPath": "cutover-runbook-nothing-started--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Partway Through",
+      "screenshotPath": "cutover-runbook-partway-through--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - The Records On A Phone",
+      "screenshotPath": "cutover-runbook-the-records-on-a-phone--mobile.png"
+    },
+    {
+      "name": "Cutover Runbook - Waiting On One Answer",
+      "screenshotPath": "cutover-runbook-waiting-on-one-answer--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 714,
+    "passed": 714,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 714,
+        "passed": 714
+      }
+    ]
+  }
+}

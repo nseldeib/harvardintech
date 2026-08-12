@@ -80,6 +80,20 @@ describe('splitEvents', () => {
     expect(past).toHaveLength(0);
   });
 
+  // The mirror of the case above, and the state the real site is in whenever
+  // the calendar has not been topped up: every entered event has passed, so
+  // `upcoming` is empty even though the collection is full. The homepage relies
+  // on exactly this — it renders the "no upcoming events, subscribe on Luma"
+  // band off an empty `upcoming`, and before it called splitEvents at all it
+  // showed all four of these under a heading that said "Upcoming events".
+  it('returns no upcoming events when every event has passed', () => {
+    const { upcoming, past } = splitEvents(events, '2026-12-31T00:00:00Z');
+    expect(upcoming).toHaveLength(0);
+    expect(past).toHaveLength(4);
+    // Most recent first, so a "past events" list leads with the freshest.
+    expect(past[0].title).toBe('Summit');
+  });
+
   // The original input array is not mutated by sorting.
   it('does not mutate the input array order', () => {
     const input = [...events];

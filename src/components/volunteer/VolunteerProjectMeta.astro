@@ -1,0 +1,62 @@
+---
+// A project's framing details — how much time it asks for and when it runs — as
+// one row of mono uppercase chips.
+//
+// Extracted because the grid card and the detail-page header have to show these
+// the same way, and before this component that agreement was maintained by hand
+// in two files: identical markup, identical rules, and two copies of the
+// `formatProjectDates` call. The next change to the row would have had to be
+// made twice, and the two surfaces would disagree the first time it wasn't.
+//
+// Owns the whole decision, not just the markup: it formats the dates and renders
+// NOTHING at all when a project has neither a commitment nor a date, preserving
+// the "no holes" contract both call sites already state.
+//
+// Deliberately owns no outer spacing. Vertical rhythm belongs to whatever
+// composes this — the card sits in a flex column with its own gap, the header
+// needs a top margin — so a spacing prop here would just move the parent's
+// layout into the child.
+import { formatProjectDates } from '../../lib/projects';
+
+interface Props {
+  commitment?: string;
+  startDate?: string | Date;
+  endDate?: string | Date;
+}
+const { commitment, startDate, endDate } = Astro.props as Props;
+
+const dates = formatProjectDates(startDate, endDate);
+---
+
+{
+  commitment || dates ? (
+    <div class="meta">
+      {commitment ? <span class="commit">{commitment}</span> : null}
+      {dates ? <span class="dates">{dates}</span> : null}
+    </div>
+  ) : null
+}
+
+<style>
+  /* Commitment and dates are the same kind of thing — one line of framing
+     detail — so they share a row and wrap onto two lines in a narrow card
+     rather than stacking as separate blocks. */
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+  }
+  .commit,
+  .dates {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--crimson);
+  }
+  /* The date range is the quieter of the two: same treatment, less weight, so
+     the commitment still reads first. */
+  .dates {
+    color: var(--ink-2);
+  }
+</style>

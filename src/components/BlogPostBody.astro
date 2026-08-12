@@ -1,0 +1,53 @@
+---
+// Which body a blog post renders: the ordinary article, or the unlock prompt
+// when the entry is a password-protected preview.
+//
+// This exists as its own component because the branch is a CORRECTNESS rule, not
+// a layout preference. A locked preview's stored body is base64 ciphertext, so
+// rendering it as markdown shows the reader a wall of unreadable text — which is
+// exactly what this site did on the first attempt at the feature. Putting the
+// decision in one component means the rule is stated once, next to the reason,
+// rather than repeated in each route that can serve a preview.
+//
+// The rendered markdown comes in as the default slot. On the locked path it is
+// simply never rendered — the ciphertext stays in `entry.body`, is handed to the
+// island as an opaque string, and only becomes content inside the reader's
+// browser after a correct password.
+import BlogPostArticle from './BlogPostArticle.astro';
+import LockedPreviewBody from './LockedPreviewBody.astro';
+import { isLocked } from '../lib/drafts';
+
+interface Props {
+  /** The post, as `getCollection('blog')` yields it: frontmatter in `data`, raw
+   * markdown (or ciphertext) in `body`. */
+  post: {
+    body?: string;
+    data: {
+      title: string;
+      date: Date;
+      previewOf?: string;
+      previewLock?: string;
+      embedUrl?: string;
+      embedHtml?: string;
+    };
+  };
+}
+
+const { post } = Astro.props as Props;
+const locked = isLocked(post);
+---
+
+{
+  locked ? (
+    <LockedPreviewBody ciphertext={post.body ?? ''} lock={post.data.previewLock ?? ''} />
+  ) : (
+    <BlogPostArticle
+      title={post.data.title}
+      date={post.data.date}
+      embedUrl={post.data.embedUrl}
+      embedHtml={post.data.embedHtml}
+    >
+      <slot />
+    </BlogPostArticle>
+  )
+}

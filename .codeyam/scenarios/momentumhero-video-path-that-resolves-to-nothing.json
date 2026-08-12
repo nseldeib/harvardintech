@@ -1,0 +1,20 @@
+{
+  "name": "MomentumHero - Video Path That Resolves To Nothing",
+  "id": "d543b412-49bd-4575-81b4-3843735ea26c",
+  "url": "/isolated-components/MomentumHero-VideoMissing",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {
+    "http": {
+      "GET /videos/not-committed-yet.mp4": {
+        "status": 404,
+        "body": ""
+      }
+    }
+  },
+  "componentName": "MomentumHero",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumHero.astro",
+  "description": "A public visitor meets a hero whose video path was never committed — a typo, or a file the team has not added yet. The 404 is declared as a mock because it IS the scenario. The assertion is that the frame is indistinguishable from an ordinary photo hero: no gap, no black band, no broken-media icon. That is structural rather than lucky — heroImage is still the section's CSS background and still the video's poster, so the covering element simply has nothing to paint, and no JavaScript is involved in detecting or recovering from the failure. Rendered without previewName, so the headline is the generic one every non-personalised visitor sees; that is both who actually meets this state and what keeps this capture distinct from the working-video scenario, whose real difference (one plays, one 404s) no screenshot can show."
+}

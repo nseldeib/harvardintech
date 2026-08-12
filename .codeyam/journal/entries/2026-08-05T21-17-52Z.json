@@ -1,0 +1,159 @@
+{
+  "timestamp": "2026-08-05T21:17:52Z",
+  "title": "Site Review Cleanup And Content Completeness Audit",
+  "type": "feature",
+  "userRequest": "can we review the HIT site and propose cleanup? be mindful of things actively shared with Nicole. I also want an audit of what's content complete and what isn't (has coming soon, placeholders, or stubbing).",
+  "description": "Jared asked for a review of the site with a cleanup proposal, an audit of what is and is not content-complete, and care around anything actively shared with Nicole. The audit found one real bug, three false statements on the page Nicole reads for decisions, and a heading defect — plus four content gaps that are his call rather than mine.\n\nThe bug is the one worth the cycle. `/events` had always split its list with `splitEvents`; the homepage never did. It handed the band every event in the collection, so the section headed \"Upcoming events\" with a badge reading \"08 scheduled\" was listing events that had all already happened — the newest a month gone, the oldest from October 2024. A visitor reading the homepage would conclude the community had stopped meeting, while the Luma calendar one page over correctly showed a real event on 14 August. The fix is one import and one destructure, because the rule was already extracted and tested; only the caller was missing. With nothing upcoming the band now renders its designed invitation, offering the Luma calendar and the mailing list, which is a better page than a confident list of things that are over.\n\nNeither existing homepage scenario could have caught that. `harvard-in-tech-no-upcoming-events` seeds zero events, so it renders identically whether or not the page filters, and the board scenario that does hold a past/future mix only discriminates by accident and below the fold, where a viewport capture never sees it. So a scenario was added that seeds events on both sides of today and hovers `#events` to bring the band into frame — the bare `/#events` fragment does not scroll a capture, which is why the existing one was framing the hero. It shows two future events and \"02 SCHEDULED\" with the two past ones absent; revert the filter and it shows four. The same hover fix was applied to the empty-state scenario, whose capture had the same problem, and its description now says plainly what it does and does not prove. `splitEvents` also gained the all-past case, the mirror of an all-upcoming test that already existed and the exact state the live site is in.\n\nThe `/review` page had drifted from the repo it describes. Three of its eight content rows were false: it claimed no events were entered when eight are, that the Luma embed was not turned on when it is and is showing the next real event, and that there are five chapters when there are six and the stats band itself says six. Its snapshot line still read \"last updated 2026-07-30 · 276 tests green\" against a suite of 590. Two genuine gaps were missing from a section whose whole job is listing them — the three placeholder sponsors and the drafted volunteer project. All corrected, and the supporter-recognition card rewritten after Jared flagged it: roughly a hundred and fifty words stranded in a 320px auto-fill track became a two-line summary plus three scannable points at a readable measure, with a `cards--wide` modifier for sections holding a single card.\n\nThe homepage also emitted an `h1` per hero slide — two today, one more with every slide an editor adds — where every other route emits exactly one. A page with several `h1`s has no single answer to what it is about, which costs the search legibility this rebuild exists to gain. Only the first slide is an `h1` now, with `h1` and `h2` sharing one style rule so the document outline changed and not a pixel.\n\nOne proposal was withdrawn on evidence. The plan approved gating `public/design-review-4ece6c14/` — 20MB, fourteen files, `noindex` but no passphrase, and shipped wholesale to harvardintech.com at the cutover. The commit that created it reads \"publish board design-review gallery at obscure noindex path\": it is a deliberate share for the board, and the unguessable URL IS the access mechanism, so gating it would break an active link. The cutover exposure is real but already logged against the Strikingly migration plan. Left alone, and raised as a decision instead.\n\nFour gaps stay open because they are content or judgement, not code: the three example sponsors rendering as real partners on /sponsor, five board members with no bios, a volunteer project still in Draft so its grid renders empty, and an empty `donateUrl` that sends every Give button to a mailto. Donors and testimonials read as empty but are not gaps — both components are documented as deliberately rendering nothing until there is something real, and testimonials renders no heading at all so the page reads finished rather than half-built.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-no-upcoming-events.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/hero-carousel--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-gate-refused--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "public/review/index.html",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/HeroCarousel.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/events.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-upcoming-events-excludes-past-ones.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png.hash",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Homepage Phased For Launch",
+      "screenshotPath": "harvard-in-tech-homepage-phased-for-launch--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Upcoming Events Excludes Past Ones",
+      "screenshotPath": "harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png"
+    },
+    {
+      "name": "Project Review - Gate Refused",
+      "screenshotPath": "project-review-gate-refused--desktop.png"
+    },
+    {
+      "name": "Project Review - Unlocked Status",
+      "screenshotPath": "project-review-unlocked-status--desktop.png"
+    },
+    {
+      "name": "Hero Carousel",
+      "screenshotPath": "hero-carousel--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 25,
+    "passed": 25,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 25,
+        "passed": 25
+      }
+    ]
+  }
+}

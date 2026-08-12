@@ -1,0 +1,27 @@
+{
+  "name": "Supporter Recognition - The Wall As It Stands",
+  "id": "51819b4f-db9c-492f-9490-8f1ec8c47aeb",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "The section that closes the gap this whole page was built to close: the donor wall that is already shipped, which the review previously never pointed at. Nine alternative directions cannot be judged against nothing, so W1-W5 name what the wall does today — giving levels as the structure, the Founding Donor badge cutting across them, the anonymity contract, the filter chips, the designed empty state — beside a capture of the real component rather than a redrawing of it. The capture is inlined by build.py from the committed donor-wall scenarios, so a wall that changes cannot leave this section describing a page that no longer exists.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    },
+    {
+      "action": "click",
+      "selector": "a[href=\"#wall\"]"
+    }
+  ]
+}

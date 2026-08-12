@@ -1,0 +1,13 @@
+{
+  "name": "OrderArrows - Top Row",
+  "id": "d94d2737-906c-4f81-8eed-83731e1dae70",
+  "url": "/isolated-components/OrderArrows-TopRow",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "OrderArrows",
+  "scenarioType": "component",
+  "pageFilePath": "node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx",
+  "description": "The first row, with nothing to move up into. The disabled arrow stays visible rather than being dropped: if it vanished, the remaining button would slide under the cursor of someone clicking down a list, and the first row would lay out differently from every other row for no reason a reader could see."
+}

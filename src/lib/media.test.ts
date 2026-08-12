@@ -50,7 +50,7 @@ describe('altFor', () => {
   // The core of the feature: alt authored in the media library must reach the
   // render site, replacing the positional string the gallery invents.
   it('returns the authored alt for a known image', () => {
-    expect(altFor('/images/gallery/event-07.jpg', 'Harvard in Tech event photo 7', fixture)).toBe(
+    expect(altFor('/images/gallery/event-07.jpg', 'Harvard Alumni in Tech event photo 7', fixture)).toBe(
       'Panelists on stage',
     );
   });
@@ -72,8 +72,8 @@ describe('altFor', () => {
   // An image the manifest has never heard of keeps whatever the component
   // already emitted, so adopting altFor can never make alt worse than today.
   it('falls back when there is no record at all', () => {
-    expect(altFor('/images/gallery/event-99.jpg', 'Harvard in Tech event photo 99', fixture)).toBe(
-      'Harvard in Tech event photo 99',
+    expect(altFor('/images/gallery/event-99.jpg', 'Harvard Alumni in Tech event photo 99', fixture)).toBe(
+      'Harvard Alumni in Tech event photo 99',
     );
   });
 

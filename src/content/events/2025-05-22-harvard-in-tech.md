@@ -1,5 +1,5 @@
 ---
-title: "Harvard in Tech"
+title: "Harvard Alumni in Tech"
 date: 2025-05-22
 link: "https://luma.com/xk5vyfvv"
 ---

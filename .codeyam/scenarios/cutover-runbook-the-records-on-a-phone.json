@@ -1,0 +1,90 @@
+{
+  "name": "Cutover Runbook - The Records On A Phone",
+  "id": "9ebc62a8-8f2c-47a7-90f5-dbb995ea575e",
+  "url": "/cutover-runbook",
+  "dimensions": [
+    "Mobile"
+  ],
+  "mocks": {},
+  "seed": {
+    "command": "bash .codeyam/seed-cutover-progress.sh",
+    "data": {
+      "cutoverDecisions": [
+        {
+          "answer": "Nadia has the GoDaddy login and will make the record edits herself with Jared on a call.",
+          "answered": true,
+          "at": "2026-08-10T16:12:00Z",
+          "by": "nseldeib",
+          "id": "D1"
+        },
+        {
+          "answered": false,
+          "id": "D2"
+        },
+        {
+          "answered": false,
+          "id": "D3"
+        },
+        {
+          "answered": false,
+          "id": "D4"
+        },
+        {
+          "answered": false,
+          "id": "D5"
+        }
+      ],
+      "cutoverSteps": [
+        {
+          "at": "2026-08-11T14:20:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S1"
+        },
+        {
+          "at": "2026-08-12T09:05:00Z",
+          "by": "nseldeib",
+          "done": true,
+          "id": "S2"
+        },
+        {
+          "done": false,
+          "id": "S3"
+        },
+        {
+          "done": false,
+          "id": "S4"
+        },
+        {
+          "done": false,
+          "id": "S5"
+        },
+        {
+          "done": false,
+          "id": "S6"
+        },
+        {
+          "done": false,
+          "id": "S7"
+        },
+        {
+          "done": false,
+          "id": "S8"
+        },
+        {
+          "done": false,
+          "id": "S9"
+        }
+      ]
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/cutover-runbook/[...path].astro",
+  "description": "The DNS record table at 390px, brought into frame by driving the page rather than by a URL fragment — a bare anchor does not scroll a capture, so a fragment-only scenario silently frames the hero and proves nothing. This capture is the reason the table stacks here instead of scrolling. The first build let it scroll horizontally inside its own box, which kept the page body from widening and looked correct; what the capture showed was that values like the Strikingly CNAME pushed the third column entirely off-screen, and the third column is where the 'Do not touch' badges on the Email and SPF rows live. The single most important instruction on the page was invisible on the device someone is most likely to be holding while standing in the registrar console, with nothing on screen suggesting more existed. It survived the move from a standalone file to a real route, which is what this scenario re-proves.",
+  "interactions": [
+    {
+      "action": "click",
+      "text": "The discovery table, from 2026-07-02"
+    }
+  ]
+}

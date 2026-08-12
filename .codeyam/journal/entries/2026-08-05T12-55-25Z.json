@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-08-05T12:55:25Z",
+  "title": "Close Out Board Bios Tracking",
+  "type": "feature",
+  "userRequest": "Project context: We need to modernize the https://www.harvardintech.com/ website from the outside. The site was built with a no-code product so we need to faithfully reproduce it using modern technologies and host it as a GitHub pages website. It also needs a CRM that can be run locally or, ideally also in the cloud via GitHub pages as well (protected with a password and/or GitHub OAuth). Can we dig into this?",
+  "description": "The user asked to \"fill in the missing board member photos and bios.\" Investigation found neither was actually missing work. All 5 board members already have a photo on disk and referenced from their team collection entry. Bios were empty for all 5, but the live harvardintech.com board section is a single flat image with no bio text under it, so there is nothing to reproduce — confirmed by fetching the live site, and independently corroborated by docs/nicole-review.md and docs/scoping/README.md, both of which already recorded that the client must supply this content. The display path was also already complete from a prior session: the bio field is in the content schema at src/content/config.ts, it is editable in /admin, BoardMemberTile.astro renders it when present, and three scenarios already cover the empty, partially-filled, and fully-filled states.\n\nThe user's instruction was to source bios from the live site and, failing that, ship without them. That resolved to a close-out rather than a build, so this session changed documentation only, in four places. Item 13 of the scoping report is struck as Resolved-with-a-caveat and now states the finding: photo + name + role is faithful reproduction, not a shortfall, and bios are a client-supplied enhancement with no code dependency. Item 10 drops board photos from the pending data-entry list and reframes bios as net-new writing. Decision #5 is narrowed to the three items that genuinely still need an owner, and deliberately left un-struck. The client-facing review doc now states bios are optional, not a launch blocker, and can be added one at a time.\n\nNo source file was touched, so no test was written — reverting Markdown cannot turn any test red, and no test runner reads docs/. The behavior the new wording asserts is covered independently by src/lib/team.test.ts and the three board-of-directors scenarios, which is what makes the claims safe to make.\n\nThe motivation is durable: the old \"largest content gap\" framing read as pending engineering work, which is precisely what caused this session to re-investigate the question from scratch. The docs now carry the answer so the next reader does not repeat it.\n\nOne pre-existing audit advisory was reviewed and deliberately not acted on: COMPLETED_PLAN_NEVER_LANDED_ADVISORY flagged the legacy plan ne--discarding-a-staged-image-orphans-its-manifest-record-codeyam-cms as never landed, because its archiving commit 41f5084 was a pure rename touching zero source files. The implementation did land — that plan fixes a bug upstream in the @codeyam/cms package, so its deliverable necessarily shipped as patches/@codeyam+cms+0.2.2.patch in commit 117bdee rather than as repo source. The advisory's suggested fix would have un-archived a completed plan and re-queued shipped work, so it was left alone.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "docs/scoping/README.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/session-narrative.json",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 520,
+    "passed": 520,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 520,
+        "passed": 520
+      }
+    ]
+  }
+}

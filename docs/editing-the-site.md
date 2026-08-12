@@ -58,7 +58,7 @@ next" band at the bottom.
 There are two kinds of entry, and the difference matters:
 
 **Sections you write here.** An entry whose *Section type* is `narrative` — "Why
-Support Harvard in Tech?" and "And Every Number Represents a Story" — holds its
+Support Harvard Alumni in Tech?" and "And Every Number Represents a Story" — holds its
 own heading, photo, layout, and text. Open it, edit it, save it. The words in the
 big text box at the bottom are the words on the page.
 
@@ -75,6 +75,42 @@ Where their content actually lives:
 | The numbers band (`stats`) | the same |
 | The member quotes | the **Testimonials** collection in the sidebar |
 
+## "Can the big photo at the top of the Momentum Fund page be a video?"
+
+Yes. **Page settings → Momentum Fund page → Hero video.**
+
+Leave it blank and the page looks exactly as it does today — the photo. Put a
+path in it, like `/videos/momentum.mp4`, and that video plays behind the
+headline instead.
+
+**Getting the file there is the one part you cannot do yourself.** The media
+library only accepts images, so a video has to be added to the site by the team.
+Send it to them, they will add it, and they will tell you the path to paste into
+the box. After that it is yours — you can swap it, or clear the box to go back to
+the photo, without asking anyone.
+
+What to expect once it is set:
+
+- **It is a backdrop, not a video player.** No play button, no progress bar, and
+  **no sound, ever** — it plays silently on a loop. The headline, the text under
+  it, and the **Make a Gift** button stay exactly where they sit now.
+- **The hero image is still doing work — do not clear it.** It is the first frame
+  shown while the video loads, and it is what appears if the video cannot play.
+  Clearing the photo would leave those moments blank.
+- **Some visitors will see the photo instead, by design.** Anyone whose device is
+  set to reduce motion — a common accessibility setting — gets the still photo.
+  Nothing is broken and nothing needs fixing; they are simply not shown moving
+  backgrounds. Expect the photo to carry the page for those readers.
+- **If the path is wrong, the page still looks right.** A typo, or a file that was
+  never added, shows the photo. There is no broken-video icon and no black gap.
+  That is deliberate, but it means a mistake here is *quiet* — so check the video
+  by looking at the page, not by trusting that the field saved.
+
+**Keep it small.** Every visitor to the page downloads the whole file, so a heavy
+video makes the page slow to appear for exactly the people you most want to
+reach. A few megabytes is fine. Ask the team for something silent, no larger than
+1080p, and a few megabytes at most.
+
 ## "Can I move sections up or down?"
 
 Yes. Every section has an **Order** field. **Lower numbers appear higher on the
@@ -84,7 +120,7 @@ Today the page is ordered:
 
 | Order | Section |
 |---|---|
-| 1 | Why Support Harvard in Tech? |
+| 1 | Why Support Harvard Alumni in Tech? |
 | 2 | What we've accomplished so far |
 | 3 | And Every Number Represents a Story |
 | 4 | What Your Gift Powers |
@@ -126,14 +162,21 @@ On a `narrative` section:
 
 These are not in the CMS. Ask the team to change them:
 
-- The **photo header** at the top of the Momentum Fund page and the **"Help power
-  what comes next"** band at the bottom. These are deliberately fixed — they are
-  the frame the reorderable sections sit inside.
+- **Video files.** The media library only accepts images, so a hero video has to
+  be added by the team before you can point the **Hero video** field at it. Once
+  it is there, setting, swapping and clearing it are yours.
 - The **Google Analytics ID**, and the custom `<head>` / `<body>` HTML boxes
   (verification tags, pixels). These live in the site's settings file but the
   editor renders no input for them yet.
 - The **sponsorship** and **volunteer** page copy.
 - Anything about the site's colors, fonts, or layout.
+
+**The photo header and the closing band are no longer on this list.** Their
+*words and images* are yours, in **Page settings → Momentum Fund page**: the two
+headlines, the text beneath them, the hero image, the hero video, and the
+"Help power what comes next" heading, body and button label. What stays fixed is
+their **position** — unlike the sections between them, they cannot be reordered
+or hidden, because they are the frame those sections sit inside.
 
 The accomplishment cards, the gift-pillar cards, the homepage hero and the
 homepage figures used to be on this list. They are now collections in /admin —

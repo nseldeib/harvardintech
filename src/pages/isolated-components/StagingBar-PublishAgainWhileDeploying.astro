@@ -1,0 +1,56 @@
+---
+import Component from "@codeyam/cms/components/admin/StagingBar.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for the state that used to be impossible: a deploy in flight
+// AND a fresh change ready to publish, at the same time.
+//
+// Both pills are the assertion. The chip on top is the first publish still
+// deploying; the bar below it is a second edit staged since, with its "Review &
+// publish" live rather than blocked. Publishing was previously a PHASE the
+// component sat in until GitHub Pages finished, so the second publish had to
+// wait out the first — which, on a 1-3 minute Actions build, is most of an
+// editing session spent waiting.
+//
+// The deploy watch now lives in its own state beside the publish flow, so the
+// two are simply independent: the commit lands, the flow returns to idle, and
+// the watch follows the newer deploy when she publishes again.
+//
+// `initialChanges` and `initialDeploy` are the scenario seams — with both seeded
+// the component never touches browser storage or GitHub, so this captures
+// identically on every run.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const COMMIT_URL = 'https://github.com/nseldeib/harvardintech/commit/a0dec62273d5ec475ae0825ed31184a84447c6f1';
+const SITE_URL = 'https://nseldeib.github.io/harvardintech-staging';
+
+const STAGED = [
+  {
+    collection: 'chapters',
+    slug: 'boston',
+    path: 'src/content/chapters/boston.md',
+    title: 'Boston',
+    original: '---\ntitle: Boston\n---\n\nOur Boston chapter.\n',
+    updated: '---\ntitle: Boston\n---\n\nOur Boston chapter meets monthly at the Cambridge Innovation Center.\n',
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: StagingBar - Publish Again While Deploying</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component
+        client:load
+        repo={TARGET}
+        siteUrl={SITE_URL}
+        authEndpoint="/auth"
+        initialChanges={STAGED}
+        initialDeploy={{ commitUrl: COMMIT_URL, state: { stage: 'building' }, panelOpen: false }}
+      />
+    </div>
+  </body>
+</html>

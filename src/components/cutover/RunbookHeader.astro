@@ -1,0 +1,28 @@
+---
+// The page's masthead: the internal-only utility strip, the way back to the
+// status page, and the title block.
+//
+// The back link is `withBase`d rather than relative. The page it replaced was a
+// raw public/ file that could not read Astro's BASE_URL and had to hand-write
+// `./review/index.html`; as a real route that constraint is gone, and a
+// base-aware link is what keeps it working under the review track's subpath.
+import { withBase } from '../../lib/url';
+---
+
+<div class="util">Internal · the plan for moving the domain, and where we've got to</div>
+
+<header class="page">
+  <div class="wrap">
+    <div class="back"><a href={withBase('/review/index.html')}>← Project status &amp; decisions</a></div>
+    <div class="kick">Domain Cutover Runbook</div>
+    <h1>Moving harvardintech.com to the new site</h1>
+    <p>
+      What it takes to point the real domain at the site we've built, in the
+      order it has to happen, with the exact values for whoever sits in the
+      GoDaddy console — and what we need from you before anyone can start.
+    </p>
+    <div class="meta">
+      DNS discovery 2026-07-02 · steps S1–S9 · decisions D1–D5 · checks V1–V6 · rollback R1–R3
+    </div>
+  </div>
+</header>

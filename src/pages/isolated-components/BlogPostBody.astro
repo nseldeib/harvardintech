@@ -1,0 +1,45 @@
+---
+import Component from "../../../src/components/BlogPostBody.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for BlogPostBody on an ORDINARY post — the unlocked branch.
+//
+// BlogPostBody exists to make one decision: ciphertext must never reach the
+// markdown renderer. This page is the half of that decision where nothing is
+// encrypted, so the component gets out of the way and the article renders. Its
+// pair is `BlogPostBody-Locked`, which takes the other branch.
+//
+// The entry carries no `previewLock`, which is what "ordinary" means here — an
+// unlocked PREVIEW takes this same branch, because being unlisted changes where
+// a page is linked from, not how it reads once you arrive.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: BlogPostBody</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 100%; max-width: var(--content-width);">
+      <Component
+        post={{
+          body: 'Unused on this branch — the markdown arrives as the slot below.',
+          data: {
+            title: 'Founder Spotlight: Hana Reyes on Building in Climate Hardware',
+            date: new Date('2026-07-24'),
+          },
+        }}
+      >
+        <p>
+          Hana Reyes (Harvard C'14) spent four years inside a utility before deciding the grid's
+          storage problem was a hardware problem nobody wanted to own.
+        </p>
+        <p>
+          "Everyone wants to build the software layer," she says. "The software layer is fine. The
+          cells are the thing."
+        </p>
+      </Component>
+    </div>
+  </body>
+</html>

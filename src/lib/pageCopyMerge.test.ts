@@ -17,7 +17,7 @@ const VOLUNTEER: VolunteerPageCopy = {
   kicker: 'Get involved',
   heroImage: '/images/bg/get-involved-bg.jpg',
   headline: 'Join the Harvard Alumni in Tech Volunteer Team',
-  intro: 'Harvard in Tech is 100% volunteer-run.',
+  intro: 'Harvard Alumni in Tech is 100% volunteer-run.',
   benefitsTitle: 'Why Volunteer with Harvard Alumni in Tech?',
   benefits: [{ title: 'Gain Valuable Experience', body: 'Work on impactful projects.' }],
   projectsEmptyMessage: "We're lining up the next round of volunteer projects.",
@@ -90,11 +90,11 @@ describe('mergeVolunteerCopy', () => {
   // The point of the whole migration: what an editor types is what the page shows.
   it('takes each field the editor filled in', () => {
     const merged = mergeVolunteerCopy(VOLUNTEER, {
-      headline: 'Help us run Harvard in Tech',
+      headline: 'Help us run Harvard Alumni in Tech',
       ctaLabel: 'Join the team',
     });
 
-    expect(merged.headline).toBe('Help us run Harvard in Tech');
+    expect(merged.headline).toBe('Help us run Harvard Alumni in Tech');
     expect(merged.ctaLabel).toBe('Join the team');
   });
 
@@ -355,7 +355,50 @@ describe('mergeDonateFrame', () => {
       'heroHeadlineNamed',
       'heroImage',
       'heroSubhead',
+      'heroVideo',
     ]);
+  });
+
+  // The hero's optional moving backdrop, joining the frame rather than getting a
+  // path of its own — which is what makes it arrive at the component for free,
+  // since `loadDonateFrame` spreads whatever this returns.
+  it('takes the hero video path the editor pasted', () => {
+    expect(mergeDonateFrame(DONATE, { heroVideo: '/videos/momentum.mp4' }).heroVideo).toBe(
+      '/videos/momentum.mp4',
+    );
+  });
+
+  // THE point of leaving `heroVideo` out of `donatePage.json`. Every other frame
+  // field falls back to the committed JSON when the box is blank, which is right
+  // for copy that must never be empty — but applied here it would make the video
+  // impossible to REMOVE from /admin, because clearing the box would resurrect
+  // the JSON value. An editor has to be able to take the video off unaided.
+  it('clears the video when the editor empties the box', () => {
+    expect(mergeDonateFrame(DONATE, { heroVideo: '' }).heroVideo).toBeUndefined();
+    expect(mergeDonateFrame(DONATE, { heroVideo: '   ' }).heroVideo).toBeUndefined();
+  });
+
+  // The production state: no video has ever been set. The key is present and
+  // undefined rather than absent, so spreading the frame cannot resurrect a
+  // stale value, and the hero renders exactly as it does today.
+  it('leaves the video undefined when the entry carries no heroVideo', () => {
+    const merged = mergeDonateFrame(DONATE, { ctaTitle: 'Give' });
+
+    expect(merged.heroVideo).toBeUndefined();
+    expect(merged.heroImage).toBe(DONATE.heroImage);
+  });
+
+  // Adding the field must not have disturbed its neighbour: the photo is the
+  // video's poster and its fallback, so a change that broke `heroImage` would
+  // take the fallback with it.
+  it('still carries the hero image alongside a video', () => {
+    const merged = mergeDonateFrame(DONATE, {
+      heroImage: '/images/bg/campaign.jpg',
+      heroVideo: '/videos/momentum.mp4',
+    });
+
+    expect(merged.heroImage).toBe('/images/bg/campaign.jpg');
+    expect(merged.heroVideo).toBe('/videos/momentum.mp4');
   });
 });
 

@@ -1,0 +1,12 @@
+{
+  "name": "Decision Tick - Open",
+  "id": "bcde2b16-4d87-4578-afae-021b91ebe161",
+  "url": "/isolated-components/DecisionTick",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DecisionTick",
+  "scenarioType": "component",
+  "description": "An unanswered decision with somewhere to write the answer down. Deliberately not a checkbox: a step is done or it isn't, but a decision has a CONTENT, and recording only that D3 is 'answered' would strand the actual answer in whichever meeting produced it. That is not hypothetical — D1 has been open since the 2026-07-02 discovery precisely because its answer was never written anywhere durable, so a control that recorded only a flag would repeat the fault it exists to fix."
+}

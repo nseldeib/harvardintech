@@ -12,17 +12,25 @@ import VolunteerProjectPhoto from './VolunteerProjectPhoto.astro';
 import VolunteerProjectHeader from './VolunteerProjectHeader.astro';
 import VolunteerProjectBody from './VolunteerProjectBody.astro';
 import VolunteerProjectCta from './VolunteerProjectCta.astro';
+import VolunteerRelatedProjects from './VolunteerRelatedProjects.astro';
+import type { VolunteerProjectLike } from './VolunteerProjects.astro';
 
 interface Props {
   title: string;
   blurb?: string;
   image?: string;
   commitment?: string;
+  startDate?: string | Date;
+  endDate?: string | Date;
   applyUrl?: string;
   /** Page-level volunteer CTA, used when the project has no `applyUrl` of its
    *  own — see `projectCta` in `src/lib/projects.ts` for the rule. */
   ctaLabel?: string;
   ctaUrl?: string;
+  /** Other open projects to suggest below the CTA. Already chosen by
+   *  `relatedProjects` — the page renders the list, it does not pick it. Empty
+   *  (or absent) means the page simply ends at the CTA. */
+  related?: VolunteerProjectLike[];
   backHref?: string;
   backLabel?: string;
 }
@@ -31,9 +39,12 @@ const {
   blurb,
   image,
   commitment,
+  startDate,
+  endDate,
   applyUrl,
   ctaLabel,
   ctaUrl,
+  related = [],
   backHref,
   backLabel,
 } = Astro.props as Props;
@@ -47,6 +58,8 @@ const {
       title={title}
       blurb={blurb}
       commitment={commitment}
+      startDate={startDate}
+      endDate={endDate}
       backHref={backHref}
       backLabel={backLabel}
     />
@@ -57,6 +70,10 @@ const {
 
     <VolunteerProjectCta applyUrl={applyUrl} ctaLabel={ctaLabel} ctaUrl={ctaUrl} />
   </div>
+
+  {/* Outside `.s-narrow` on purpose: the CTA ends the prose, and three cards
+      squeezed into a reading measure would stack into a column. */}
+  <VolunteerRelatedProjects projects={related} />
 </article>
 
 <style>

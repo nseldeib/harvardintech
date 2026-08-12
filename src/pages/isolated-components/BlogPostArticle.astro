@@ -1,0 +1,36 @@
+---
+import Component from "../../../src/components/BlogPostArticle.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for BlogPostArticle — a post as a reader meets it.
+//
+// This is the body a blog page renders when nothing unusual is going on, and it
+// is here as the CONTROL for the preview work: the whole preview-link feature is
+// supposed to leave an ordinary post looking exactly as it always did, so a
+// change to this frame is a regression rather than a feature.
+//
+// The width matches the real container (`--content-width` on the route's
+// `<main>`), because the article's line length is most of what it looks like.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: BlogPostArticle</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 100%; max-width: var(--content-width);">
+      <Component title="What We Heard at the 2026 Alumni Summit" date={new Date('2026-05-02')}>
+        <p>
+          The third annual summit brought together founders, operators, and investors across nine
+          chapters.
+        </p>
+        <p>
+          The strongest signal from the day was that alumni want fewer, better-matched
+          introductions rather than a larger directory.
+        </p>
+      </Component>
+    </div>
+  </body>
+</html>

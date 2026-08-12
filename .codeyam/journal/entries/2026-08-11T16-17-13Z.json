@@ -1,0 +1,143 @@
+{
+  "timestamp": "2026-08-11T16:17:13Z",
+  "title": "NYC's Own Chapter Gallery, and the Communities Scope Boundary in Writing",
+  "type": "feature",
+  "userRequest": "Project context: We need to modernize the https://www.harvardintech.com/ website from the outside. The site was built with a no-code product so we need to faithfully reproduce it using modern technologies and host it as a GitHub pages website. It also needs a CRM that can be run locally or, ideally also in the cloud via GitHub pages as well (protected with a password and/or GitHub OAuth). Can we dig into this?",
+  "description": "Closes the two steps the per-chapter photo galleries plan left unimplemented. `src/content/chapters/nyc.md` now carries a `photos` list of 14 images, so /chapters/nyc renders its own gallery under a 'Photos from New York City' heading instead of the shared 40-photo event wall — five columns, twelve shown, the remaining two behind a 'Show all 14 photos' control that reflows the set into one continuous 5/5/4 grid. The photos are deliberately uncaptioned: the repo holds no NYC-specific photography and no true caption facts, so the committed entry asserts nothing it cannot support, and Nicole adds real captions from /admin where the lightbox already renders them. `src/pages/communities/[slug].astro` gained a frontmatter comment recording that `photos` is never passed on purpose — the boundary is enforced twice over, since the communities schema declares no such field — placed in frontmatter rather than markup so it stays out of the served HTML. A new guard, `src/lib/chapter.photos.test.ts`, holds every chapter's declared photo paths to being non-blank, root-absolute (a relative path would resolve against the route once `withBase` runs) and present under public/; it was verified red by typo'ing a path, and it deliberately does not assert that any chapter declares photos at all, since clearing a gallery from the CMS is an ordinary editorial act rather than a CI failure. Two things surfaced worth carrying forward: a content-only edit is invisible to the screenshot freshness math, which tracks source imports rather than content collections, so /chapters/nyc's capture had to be forced; and the dev server reads content from a sandbox snapshot that wins over src/content, which silently masked the change through two restarts.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/78dfae65d339aa18b8ee54aabd8ec41e152de91f2a12f2d3d9a1758d1260d8fd.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/ce0b2f8c2461c746d6784747c9e89f5ce784952af4a17791205fbab10ba649e9.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/chapters/nyc.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/communities/[slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/offer-declined",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/chapterpage.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/5f5ddf8a89e33cffe9773d96bbeb84a1ebdcf9ebb98d3e8fbc29d790252144c0.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/7d148f9cbe1c263830f96c11796a1a255294dde8bd9b1ea5477f9f43cc158b0a.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/b30ea759bfc89ebf7910049bb4f29c665adbc7f95f7d3289f40d4c263a0f2518.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/chapter.photos.test.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 786,
+    "passed": 786,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 786,
+        "passed": 786
+      }
+    ]
+  }
+}

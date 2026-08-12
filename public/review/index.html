@@ -110,6 +110,14 @@
 
       /* Item cards */
       .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+      /* For a section holding ONE card. The auto-fill track above is right for a
+         grid of short status cards, but it strands a single card in a 320px
+         column and turns any real explanation into a tall ribbon of text. This
+         caps the measure at a readable width instead. */
+      .cards--wide { grid-template-columns: minmax(0, 760px); }
+      .card .pts { margin: 0 0 10px; padding-left: 18px; }
+      .card .pts li { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin-bottom: 6px; }
+      .card .pts li b { color: var(--ink); }
       .card { background: #fff; border: 1px solid var(--line); border-radius: 5px; padding: 18px 18px 16px; }
       .card .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
       .card h3 { margin: 0; font-size: 16px; }
@@ -148,9 +156,76 @@
             Where the new site (a modern rebuild of the current Strikingly site, hosted on
             GitHub Pages) stands today, and the decisions we need your input on before launch.
           </p>
-          <div class="meta">Living snapshot · last updated 2026-07-30 · 276 tests green, build clean · new since the last update: Sponsorship page, Momentum Fund donate refresh, chapters roster refresh, Founders &amp; AI communities · this private preview is now live (you are reading it)</div>
+          <div class="meta">Living snapshot · last updated 2026-08-05 · 589 tests green, build clean · new since the last update: the domain cutover runbook (the move mapped out in full, none of it performed) and the supporter recognition review (the donor wall as built, nine directions, and the spreadsheet import) · this private preview is now live (you are reading it)</div>
         </div>
       </header>
+
+      <!-- ALSO UNDER REVIEW -->
+      <!-- One internal link reaches everything under review, rather than a set of
+           raw URLs pasted into separate emails. Each artifact listed here carries
+           its own passphrase gate — they are standalone files in public/, so none
+           of them inherit the site's PreviewGate. -->
+      <section>
+        <div class="wrap">
+          <h2>Also under review</h2>
+          <div class="lede">Work that is not part of the live site yet, shared for comment.</div>
+          <!-- Prose-heavy cards, so they get the wide single-column grid and stack
+               rather than being stranded in a 320px auto-fill track as very tall
+               columns of text beside empty ones. -->
+          <div class="cards cards--wide">
+            <div class="card">
+              <div class="top"><h3>Supporter recognition</h3><span class="badge b-partial">Your call</span></div>
+              <p class="desc">
+                One page, three parts: the donor wall <em>as built today</em>, nine
+                directions for replacing it, and a walkthrough of the bi-weekly
+                spreadsheet import. The 200 supporters shown are illustrative — there
+                is no real donor list yet.
+              </p>
+              <ul class="pts">
+                <li><b>Pick a direction, and a name.</b> Each of the nine carries a different candidate name, so they can be judged in place.</li>
+                <li><b>The import needs three answers.</b> The spreadsheet has no dollar amounts, no founding column and no anonymity column — so giving level, Founding Donor and “please don't name me” can't be filled from it at all.</li>
+                <li><b>Feedback goes in a doc.</b> The page collects nothing; it ends with an outline to paste. Everything is numbered (W1–W5, 01–09, I1–I4, Q1–Q4) so a one-line reaction lands exactly where you meant it.</li>
+              </ul>
+              <!-- RELATIVE, deliberately. Both tracks deploy under a base path
+                   (/harvardintech, /harvardintech-staging), so a root-absolute
+                   href would resolve to nseldeib.github.io/donor-network.html and
+                   404. A raw public/ file cannot read Astro's BASE_URL, so
+                   ../ is the only form that survives every base — and a file://
+                   open of this page as well. -->
+              <div class="row"><span class="k">Link</span> <a href="../donor-network.html">Open the supporter recognition review</a> — same passphrase as this page.</div>
+              <!-- The live wall itself, on the gated site build. Relative for the
+                   same base-path reason as the link above: this file is copied
+                   verbatim into dist/ and cannot read Astro's BASE_URL. -->
+              <div class="row"><span class="k">The wall, live</span> <a href="../donate#donors">See it on the Momentum Fund page</a> — it is empty today, which is the point of W5.</div>
+            </div>
+
+            <div class="card">
+              <div class="top"><h3>Domain cutover runbook</h3><span class="badge b-partial">Your call</span></div>
+              <p class="desc">
+                What it takes to move <code>harvardintech.com</code> off Strikingly and onto
+                the new site — written out in full so it can be reviewed <em>before</em> it is
+                run. <b>None of it has been done.</b> No DNS record has been read or changed,
+                and the live site is untouched.
+              </p>
+              <ul class="pts">
+                <li><b>Email is the thing that must not break.</b> <code>@harvardintech.com</code> mail runs separately from the website but through the same registrar screen, so the plan changes two settings and leaves the mail records strictly alone — and proves mail still flows before calling the move done.</li>
+                <li><b>Five questions are yours, not ours.</b> Who holds the GoDaddy login (that one blocks everything), whether the content is ready to be public, what happens to two internal pages that would otherwise ship to the public domain, and when to cut over.</li>
+                <li><b>Two layers.</b> The top reads plainly; the exact records, commands and rollback values are one click down for whoever runs it.</li>
+              </ul>
+              <!-- Relative for the same base-path reason as the links above: both
+                   tracks deploy under a base path and a raw public/ file cannot
+                   read Astro's BASE_URL. -->
+              <!-- Trailing slash, not `.html`: the runbook stopped being a raw
+                   public/ file and became a real route, so its output is
+                   cutover-runbook/index.html. Without the slash a relative link
+                   from this directory would resolve to a sibling FILE that no
+                   longer exists. -->
+              <div class="row"><span class="k">Link</span> <a href="../cutover-runbook/">Open the domain cutover runbook</a> — same passphrase as this page, and it now records what has been done.</div>
+              <div class="row decide"><span class="k">Decision</span> D1 (who holds the domain login) is the one that blocks the rest — it has been open since 2026-07-02.</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- STATUS AT A GLANCE -->
       <section>
@@ -171,8 +246,9 @@
               <tr><td>Member login / Harvard Key SSO</td><td><span class="badge b-missing">Not built</span></td><td class="hide-sm">Hard, externally-gated — needs a decision</td></tr>
               <tr><td>Sponsorship page</td><td><span class="badge b-built">Built</span></td><td class="hide-sm">New: a sponsor wall + inquiry section. Needs real sponsor names and logos</td></tr>
               <tr><td>Donate / Momentum Fund</td><td><span class="badge b-partial">Built, needs a link</span></td><td class="hide-sm">Page refreshed; the button still opens an email because there is no donation platform yet (see decision 5)</td></tr>
-              <tr><td>Domain transfer from Strikingly</td><td><span class="badge b-missing">Not started</span></td><td class="hide-sm">Low effort; needs registrar/DNS access. The migration is now planned in detail: DNS stays at GoDaddy, e-mail is untouched, and the old site stays up as rollback</td></tr>
+              <tr><td>Domain transfer from Strikingly</td><td><span class="badge b-missing">Not started</span></td><td class="hide-sm">Low effort; needs registrar/DNS access. Now mapped out step by step in the <a href="../cutover-runbook/">domain cutover runbook</a>, which the team ticks off as it goes: DNS stays at GoDaddy, e-mail is untouched, and the old site stays up as rollback</td></tr>
               <tr><td>Content population</td><td><span class="badge b-partial">In progress</span></td><td class="hide-sm">CMS data entry (chapters, board, events)</td></tr>
+              <tr><td>Sharing a draft for review</td><td><span class="badge b-built">Built</span></td><td class="hide-sm">New: <strong>Preview link</strong> on any page, post, chapter, community or volunteer project puts that draft at a private URL you can send to one person — no login and no passphrase needed at their end. Optionally password-protect it, which genuinely encrypts the content rather than just hiding it. <strong>Previews</strong> in the editor lists them all and can mint a single link covering every one</td></tr>
               <tr><td>Private shareable preview</td><td><span class="badge b-built">Live</span></td><td class="hide-sm">Done — this page is it. Password-protected and hidden from search engines. Nothing here is public, and harvardintech.com is untouched</td></tr>
             </tbody>
           </table>
@@ -253,6 +329,7 @@
             <li><b>Chapter content</b> — committee members + events for Boston, NYC, London, DC/DMV, Seattle.</li>
             <li><b>Board of Directors</b> — final roster, bios, and photos.</li>
             <li><b>Domain access</b> — GoDaddy DNS (for the eventual launch cutover; email stays untouched).</li>
+            <li><b>Medium publication name</b> — the site now says "Harvard Alumni in Tech" everywhere, but the Medium publication is still titled "Harvard in Tech" at <code>medium.com/harvard-in-tech</code>, so the site's prose and the publication no longer match. Renaming the publication in Medium's settings lines them up. We deliberately did <i>not</i> touch the URLs: changing the handle breaks every existing link to the eight AI Edition articles the blog points at, so that trade-off is your call rather than something to do quietly.</li>
           </ul>
         </div>
       </section>
@@ -272,16 +349,24 @@
               <p class="desc">Same as Podcasts — no Webinars content yet, so the menu item was removed. Re-add the item (and a section) once there's real content.</p>
             </div>
             <div class="card">
-              <div class="top"><h3>Events calendar (Luma)</h3><span class="badge b-partial">Fill</span></div>
-              <p class="desc">The events page is wired to Luma, but the inline calendar embed isn't turned on yet — it shows a "subscribe on Luma" button instead of the embedded calendar. Provide the Luma embed link to show it inline.</p>
+              <div class="top"><h3>Events calendar (Luma)</h3><span class="badge b-built">Done</span></div>
+              <p class="desc">The inline Luma calendar is live on the events page — it renders the real calendar, currently showing the next Alumni Founders Co-working Day. Nothing further needed here; new events added in Luma appear automatically.</p>
             </div>
             <div class="card">
               <div class="top"><h3>Events list</h3><span class="badge b-partial">Fill</span></div>
-              <p class="desc">No individual events are entered yet (homepage "Upcoming Events" + event gallery). Add events, or rely on the Luma calendar for the live list.</p>
+              <p class="desc">Eight events are entered, but every one has now passed — the most recent was in July. The homepage "Upcoming events" band therefore shows its empty state, pointing visitors at the Luma calendar instead. Either add the upcoming events to the site, or treat Luma as the single source of truth and let the band stay an invitation to subscribe.</p>
             </div>
             <div class="card">
               <div class="top"><h3>Stats numbers</h3><span class="badge b-partial">Verify</span></div>
-              <p class="desc">The homepage shows "8,000+ alumni technologists · 5 global chapters · 100+ events · Est. 2013." These are now editable in the CMS (Site Settings → Homepage stats band). Confirm they're the real, current numbers.</p>
+              <p class="desc">The homepage shows "8,000+ alumni technologists · 6 global chapters · 100+ events · Est. 2013." These are editable in the CMS (Site Settings → Homepage stats band). Confirm they're the real, current numbers.</p>
+            </div>
+            <div class="card">
+              <div class="top"><h3>Sponsors</h3><span class="badge b-missing">Decide</span></div>
+              <p class="desc">The sponsors page currently lists three example partners — "Example Presenting Partner", "Example Chapter Partner", "Example Event Partner" — which read as real placements to anyone who doesn't know better. Replace them with real partners, or remove them and let the page show its designed "partners coming soon" state.</p>
+            </div>
+            <div class="card">
+              <div class="top"><h3>Volunteer projects</h3><span class="badge b-partial">Fill</span></div>
+              <p class="desc">One project has been written but is still marked Draft, so the volunteer projects grid renders empty on the public site. Publish it — or add the rest of the open roles — to turn that section on.</p>
             </div>
             <div class="card">
               <div class="top"><h3>Board of Directors</h3><span class="badge b-partial">Fill</span></div>

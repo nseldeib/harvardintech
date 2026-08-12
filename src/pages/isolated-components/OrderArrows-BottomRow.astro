@@ -1,0 +1,30 @@
+---
+import Component from "@codeyam/cms/components/admin/OrderArrows.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for OrderArrows on the last row — the mirror of the top.
+//
+// Both ends are captured rather than one, because they are separate props
+// rather than one "is an end" flag: a bug that disabled the wrong direction
+// would still look correct in whichever end happened to be the captured one.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: OrderArrows - Bottom Row</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="padding: 2rem;">
+      <Component
+        client:load
+        canUp={true}
+        canDown={false}
+        onUp={() => {}}
+        onDown={() => {}}
+        label="pillars"
+      />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "Step Tick - Commit Refused",
+  "id": "a32decfb-601b-41ee-916b-7c5a09f9a074",
+  "url": "/isolated-components/StepTick-Done",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "StepTick",
+  "scenarioType": "component",
+  "description": "What happens when a tick cannot be saved. The isolation page pins a signed-in session but holds no GitHub token, so the commit is refused — which makes this the honest capture of the failure path rather than a mocked approximation of it. The box shows the change optimistically, the commit fails, and the box goes BACK, with the reason stated. That revert is the behaviour worth pinning down: a checkbox that stays ticked after a failed commit is a lie the next reader has no way to detect, and on a page whose entire value is that what it shows is what everyone else sees, a silent local-only tick would be worse than no checkbox at all.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "input[aria-label=\"Mark S2 done\"]"
+    }
+  ]
+}

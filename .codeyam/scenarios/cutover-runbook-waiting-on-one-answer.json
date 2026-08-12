@@ -1,0 +1,89 @@
+{
+  "name": "Cutover Runbook - Waiting On One Answer",
+  "id": "097f260a-a26f-4125-abd2-eb752a17a115",
+  "url": "/cutover-runbook",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "command": "bash .codeyam/seed-cutover-progress.sh",
+    "data": {
+      "cutoverDecisions": [
+        {
+          "answer": "Nadia has the GoDaddy login and will make the record edits herself with Jared on a call; we never hold the credentials.",
+          "answered": true,
+          "at": "2026-08-10T16:12:00Z",
+          "by": "nseldeib",
+          "id": "D1"
+        },
+        {
+          "answer": "Split it — the example sponsors come down before cutover; board bios and the donation platform can be filled in live.",
+          "answered": true,
+          "at": "2026-08-11T11:30:00Z",
+          "by": "nseldeib",
+          "id": "D2"
+        },
+        {
+          "answer": "Gate the design gallery behind the same passphrase as the review site, so the board's link keeps working.",
+          "answered": true,
+          "at": "2026-08-11T11:44:00Z",
+          "by": "nseldeib",
+          "id": "D3"
+        },
+        {
+          "answer": "Status page moves to the review site only. Neither it nor this runbook belongs on the public domain.",
+          "answered": true,
+          "at": "2026-08-11T15:02:00Z",
+          "by": "jaredcosulich",
+          "id": "D4"
+        },
+        {
+          "answered": false,
+          "id": "D5"
+        }
+      ],
+      "cutoverSteps": [
+        {
+          "done": false,
+          "id": "S1"
+        },
+        {
+          "done": false,
+          "id": "S2"
+        },
+        {
+          "done": false,
+          "id": "S3"
+        },
+        {
+          "done": false,
+          "id": "S4"
+        },
+        {
+          "done": false,
+          "id": "S5"
+        },
+        {
+          "done": false,
+          "id": "S6"
+        },
+        {
+          "done": false,
+          "id": "S7"
+        },
+        {
+          "done": false,
+          "id": "S8"
+        },
+        {
+          "done": false,
+          "id": "S9"
+        }
+      ]
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/cutover-runbook/[...path].astro",
+  "description": "Everything decided except the date — one unanswered question, one blocked step, and the wording in the singular. Two reasons this earns a scenario rather than being a data variation of the others. It is the singular boundary of the summary sentence, which is the case a hand-written count gets wrong because nobody seeds exactly one blocked step while looking at the page. And it is the shape this migration actually stalls in: the work is ready, one answer is outstanding, and the page has to make that legible enough that the answer gets given rather than deferred again."
+}

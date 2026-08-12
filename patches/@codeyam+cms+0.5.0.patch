@@ -1,0 +1,534 @@
+diff --git a/node_modules/@codeyam/cms/src/components/admin/EntryListSearch.tsx b/node_modules/@codeyam/cms/src/components/admin/EntryListSearch.tsx
+index 386cfe3..45a2f94 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/EntryListSearch.tsx
++++ b/node_modules/@codeyam/cms/src/components/admin/EntryListSearch.tsx
+@@ -4,12 +4,20 @@
+ // the shared `searchEntries` matcher (title + body); an empty box shows every
+ // entry. This island replaces the page's static sections so the whole list —
+ // filtering, grouping, and the row islands — lives under one hydration root.
+-import { useState } from 'react';
++import { useMemo, useState } from 'react';
+ import SearchBox from './SearchBox';
+ import SearchEmpty from './SearchEmpty';
+ import EntryListSection from './EntryListSection';
+ import EntryListEmpty from './EntryListEmpty';
+-import { groupByDraft } from '../../lib/entryList';
++import {
++  applySequence,
++  groupByDraft,
++  moveEntry,
++  renumberEntries,
++  sortByEntryOrder,
++} from '../../lib/entryList';
++import { buildOrderChange } from '../../lib/entryActions';
++import { stageChange } from '../../lib/pendingChangesStore';
+ import { searchEntries, type SearchableEntry } from '../../lib/entrySearch';
+ import type { CollectionName } from '../../lib/adminDashboard';
+ 
+@@ -44,6 +52,9 @@ interface Props {
+   /** The configured public base URL (`settings.siteUrl`), forwarded to each row
+    * so a preview link renders as an absolute, copyable URL. */
+   siteUrl?: string;
++  /** True when this collection declares a numeric `order` — render it as one
++   * sequence with reorder arrows instead of the Drafts / Published split. */
++  ordered?: boolean;
+ }
+ 
+ export default function EntryListSearch({
+@@ -53,12 +64,53 @@ export default function EntryListSearch({
+   initialQuery = '',
+   keyOrder,
+   siteUrl,
++  ordered = false,
+ }: Props) {
+   const [query, setQuery] = useState(initialQuery);
++
++  // The sequence as the editor has arranged it THIS session.
++  //
++  // A move stages a pending change; it does not rewrite the markdown, which only
++  // happens at publish. So the file on disk still holds the old numbers and
++  // re-deriving the order from `items` would snap every row back the instant it
++  // moved. This state is the moved order, seeded from the files and owned here
++  // until the page reloads.
++  const [sequence, setSequence] = useState<string[] | null>(null);
++
++  const searching = query.trim() !== '';
+   const matches = searchEntries(items, query);
+   const { previews, drafts, published } = groupByDraft(matches);
+   const rawFor = rawBySlug(items);
+ 
++  // Arrows are for the whole list, so they only appear when the whole list is on
++  // screen. Moving row 2 above row 1 of a FILTERED view has no honest meaning —
++  // the rows between them are hidden, so "up" would move the entry past entries
++  // the editor cannot see.
++  const showOrdered = ordered && !searching;
++
++  // The sequence is built from the LISTED entries only. A preview clone is an
++  // unlisted copy of one of them, not a position in the page — renumbering one
++  // would write an `order` onto a file no page reads, and moving it would ask
++  // the editor to arrange rows that do not appear on the site at all. Previews
++  // keep their own section above, in ordered collections exactly as elsewhere.
++  const sequenceSource = useMemo(() => [...drafts, ...published], [drafts, published]);
++
++  const orderedItems = useMemo(
++    () => (showOrdered ? applySequence(sortByEntryOrder(sequenceSource), sequence) : []),
++    [showOrdered, sequenceSource, sequence],
++  );
++
++  const move = (index: number, delta: number) => {
++    const next = moveEntry(orderedItems, index, delta);
++    setSequence(next.map((i) => i.slug));
++    // Stage only the rows whose number actually changed — a one-place move is
++    // two files, not the whole collection.
++    for (const { slug, order } of renumberEntries(next)) {
++      const item = next.find((i) => i.slug === slug);
++      if (item) stageChange(buildOrderChange(collection, slug, item.raw, order, keyOrder));
++    }
++  };
++
+   return (
+     <div>
+       <SearchBox
+@@ -85,7 +137,18 @@ export default function EntryListSearch({
+           rawBySlug={rawFor}
+         />
+       )}
+-      {drafts.length > 0 && (
++      {showOrdered && orderedItems.length > 0 && (
++        <EntryListSection
++          heading="In order"
++          collection={collection}
++          entries={orderedItems}
++          keyOrder={keyOrder}
++          siteUrl={siteUrl}
++          onMove={move}
++        />
++      )}
++
++      {!showOrdered && drafts.length > 0 && (
+         <EntryListSection
+           heading="Drafts"
+           collection={collection}
+@@ -94,7 +157,7 @@ export default function EntryListSearch({
+           siteUrl={siteUrl}
+         />
+       )}
+-      {published.length > 0 && (
++      {!showOrdered && published.length > 0 && (
+         <EntryListSection
+           heading="Published"
+           collection={collection}
+diff --git a/node_modules/@codeyam/cms/src/components/admin/EntryListSection.tsx b/node_modules/@codeyam/cms/src/components/admin/EntryListSection.tsx
+index 1d87bc5..9143e3d 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/EntryListSection.tsx
++++ b/node_modules/@codeyam/cms/src/components/admin/EntryListSection.tsx
+@@ -48,6 +48,10 @@ interface Props {
+    * entry its `previewOf` names — the baseline a promote writes against. Only
+    * the Preview links group needs it; omitted elsewhere. */
+   rawBySlug?: ReadonlyMap<string, string>;
++  /** Present when this section IS the sequence of an ordered collection: each
++   * row gets arrows, and the draft state moves onto the row because there is no
++   * longer a "Drafts" heading to carry it. Absent → today's grouped list. */
++  onMove?: (index: number, delta: number) => void;
+ }
+ 
+ export default function EntryListSection({
+@@ -58,6 +62,7 @@ export default function EntryListSection({
+   keyOrder,
+   siteUrl,
+   rawBySlug,
++  onMove,
+ }: Props) {
+   return (
+     <section style={{ marginBottom: 'var(--space-lg)' }}>
+@@ -66,7 +71,7 @@ export default function EntryListSection({
+       </h2>
+       {blurb && <p style={blurbStyle}>{blurb}</p>}
+       <ul style={listStyle}>
+-        {entries.map((entry) => (
++        {entries.map((entry, index) => (
+           <li key={entry.slug}>
+             <EntryRow
+               collection={collection}
+@@ -79,6 +84,11 @@ export default function EntryListSection({
+               raw={entry.raw}
+               keyOrder={keyOrder}
+               siteUrl={siteUrl}
++              showDraftChip={onMove !== undefined}
++              canUp={onMove ? index > 0 : undefined}
++              canDown={onMove ? index < entries.length - 1 : undefined}
++              onUp={onMove ? () => onMove(index, -1) : undefined}
++              onDown={onMove ? () => onMove(index, 1) : undefined}
+             />
+           </li>
+         ))}
+diff --git a/node_modules/@codeyam/cms/src/components/admin/EntryRow.tsx b/node_modules/@codeyam/cms/src/components/admin/EntryRow.tsx
+index f25e3c5..154e5ee 100644
+--- a/node_modules/@codeyam/cms/src/components/admin/EntryRow.tsx
++++ b/node_modules/@codeyam/cms/src/components/admin/EntryRow.tsx
+@@ -35,6 +35,7 @@ import type { ChangeKind } from '../../lib/pendingChanges';
+ import { loadChanges, stageChange, discardChange, subscribe } from '../../lib/pendingChangesStore';
+ import EntryRowActions, { type RowAction } from './EntryRowActions';
+ import EntryRowLabel from './EntryRowLabel';
++import OrderArrows from './OrderArrows';
+ import PreviewLinkNotice from './PreviewLinkNotice';
+ import PreviewPasswordForm from './PreviewPasswordForm';
+ 
+@@ -62,8 +63,29 @@ interface Props {
+   siteUrl?: string;
+   /** This collection's declared page placement, for building the preview URL. */
+   pagePathTemplate?: PagePathTemplate;
++  /** Reorder arrows, present only for an ordered collection rendered unfiltered.
++   * All four arrive together or not at all. */
++  canUp?: boolean;
++  canDown?: boolean;
++  onUp?: () => void;
++  onDown?: () => void;
++  /** True when this row is in an ordered (ungrouped) list. The list's own
++   * "Drafts" heading is the ONLY thing marking an entry as a draft today, so a
++   * row that no longer sits under one has to carry that signal itself. */
++  showDraftChip?: boolean;
+ }
+ 
++const draftChipStyle: React.CSSProperties = {
++  fontSize: '0.7rem',
++  textTransform: 'uppercase',
++  letterSpacing: '0.05em',
++  padding: '0.1rem 0.4rem',
++  borderRadius: 'var(--radius)',
++  border: '1px solid var(--color-border)',
++  color: 'var(--color-muted)',
++  whiteSpace: 'nowrap',
++};
++
+ const rowStyle: React.CSSProperties = {
+   display: 'flex',
+   alignItems: 'center',
+@@ -87,7 +109,13 @@ export default function EntryRow({
+   keyOrder,
+   siteUrl = '',
+   pagePathTemplate,
++  canUp,
++  canDown,
++  onUp,
++  onDown,
++  showDraftChip = false,
+ }: Props) {
++  const ordered = onUp !== undefined && onDown !== undefined;
+   const path = entryContentPath(collection, slug);
+   const isPreviewRow = typeof previewOf === 'string' && previewOf.trim() !== '';
+   const promote = isPreviewRow ? promoteStatus({ previewRaw: raw, targetExists: targetRaw !== undefined }) : null;
+@@ -262,14 +290,26 @@ export default function EntryRow({
+   return (
+     <div style={{ ...rowStyle, flexDirection: 'column', alignItems: 'stretch' }}>
+       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--space-sm)' }}>
+-        <EntryRowLabel
+-          href={href}
+-          label={label}
+-          draft={draft}
+-          preview={isPreviewRow}
+-          stagedKind={stagedKind}
+-          promoted={promoted}
+-        />
++        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', minWidth: 0 }}>
++          {ordered && (
++            <OrderArrows
++              canUp={canUp ?? false}
++              canDown={canDown ?? false}
++              onUp={() => onUp?.()}
++              onDown={() => onDown?.()}
++              label={label}
++            />
++          )}
++          <EntryRowLabel
++            href={href}
++            label={label}
++            draft={draft}
++            preview={isPreviewRow}
++            stagedKind={stagedKind}
++            promoted={promoted}
++          />
++          {showDraftChip && draft && <span style={draftChipStyle}>Draft</span>}
++        </div>
+ 
+         <EntryRowActions
+           href={href}
+diff --git a/node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx b/node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx
+new file mode 100644
+index 0000000..8898b0b
+--- /dev/null
++++ b/node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx
+@@ -0,0 +1,72 @@
++// The ↑ / ↓ pair that moves one row of an ordered collection.
++//
++// Deliberately NOT `RowControls`, which is the ↑ / ↓ / ✕ cluster the nav and
++// social-link editors use: that component always renders its remove button, and
++// an entry row already has its own Archive / Delete actions with an inline
++// confirm step. Bending `RowControls` to an optional remove would have made a
++// shared component conditional to serve one caller; this reuses the styling it
++// reuses (`iconBtnStyle`) and stays two buttons that do one thing.
++//
++// Purely presentational — it reports intent and renders the disabled state it is
++// told about. The sequence, and what a move implies for the underlying files,
++// belong to `entryList`'s pure helpers, which keeps every ordering rule in one
++// unit-testable place rather than half of it living in a click handler.
++import type { CSSProperties } from 'react';
++import { iconBtnStyle } from './configEditorStyles';
++
++const groupStyle: CSSProperties = {
++  display: 'inline-flex',
++  gap: '0.25rem',
++};
++
++/** A disabled arrow stays VISIBLE rather than being dropped from the row.
++ * Removing it would shift the remaining button under the reader's cursor
++ * exactly when they are clicking down a list, and the top and bottom rows would
++ * lay out differently from every other row for no reason they could see. */
++function arrowStyle(disabled: boolean): CSSProperties {
++  return {
++    ...iconBtnStyle,
++    cursor: disabled ? 'default' : 'pointer',
++    opacity: disabled ? 0.35 : 1,
++  };
++}
++
++interface Props {
++  /** False on the first row — nothing to move up into. */
++  canUp: boolean;
++  /** False on the last row. */
++  canDown: boolean;
++  onUp: () => void;
++  onDown: () => void;
++  /** Names the row in the button's accessible label, so a screen reader hears
++   * "Move Why Support Harvard in Tech? up" rather than six identical "Move up"
++   * buttons with no way to tell which row each belongs to. */
++  label: string;
++}
++
++export default function OrderArrows({ canUp, canDown, onUp, onDown, label }: Props) {
++  return (
++    <div style={groupStyle}>
++      <button
++        type="button"
++        onClick={onUp}
++        disabled={!canUp}
++        aria-label={`Move ${label} up`}
++        title="Move up"
++        style={arrowStyle(!canUp)}
++      >
++        ↑
++      </button>
++      <button
++        type="button"
++        onClick={onDown}
++        disabled={!canDown}
++        aria-label={`Move ${label} down`}
++        title="Move down"
++        style={arrowStyle(!canDown)}
++      >
++        ↓
++      </button>
++    </div>
++  );
++}
+diff --git a/node_modules/@codeyam/cms/src/lib/entryActions.ts b/node_modules/@codeyam/cms/src/lib/entryActions.ts
+index b454b43..a4589ee 100644
+--- a/node_modules/@codeyam/cms/src/lib/entryActions.ts
++++ b/node_modules/@codeyam/cms/src/lib/entryActions.ts
+@@ -102,6 +102,38 @@ export function buildUnarchiveChange(
+   };
+ }
+ 
++/**
++ * Reorder: write a new `order` onto the entry.
++ *
++ * A `kind: 'edit'` rather than an action of its own, because that is what it is
++ * — one frontmatter field changing value, exactly as if an editor had opened the
++ * entry and typed the number. That keeps a reorder inside the machinery a normal
++ * edit already flows through: it shows in the publish review as a field change
++ * an editor can read, it batches with everything else pending, and it stays
++ * undoable until commit. A bespoke kind would have earned its own case in every
++ * one of those places for no gain.
++ *
++ * Passing `keyOrder` matters more here than for archive: a reorder is the one
++ * action an editor may perform on many entries in a row, so a serializer that
++ * shuffled consumer-declared fields would turn a six-click rearrangement into
++ * six files of unrelated diff noise.
++ */
++export function buildOrderChange(
++  collection: CollectionName,
++  slug: string,
++  raw: string,
++  order: number,
++  keyOrder?: string[],
++): PendingChange {
++  const { data, body } = parseEntry(raw);
++  return {
++    ...base(collection, slug, raw),
++    original: serialize(collection, data, body, keyOrder),
++    updated: serialize(collection, { ...data, order }, body, keyOrder),
++    kind: 'edit',
++  };
++}
++
+ /**
+  * Delete: remove the entry's file. `updated` equals the normalized `original`
+  * (nothing is rewritten); the commit layer emits a blob removal for a `delete`.
+diff --git a/node_modules/@codeyam/cms/src/lib/entryList.ts b/node_modules/@codeyam/cms/src/lib/entryList.ts
+index e330ee9..95dc882 100644
+--- a/node_modules/@codeyam/cms/src/lib/entryList.ts
++++ b/node_modules/@codeyam/cms/src/lib/entryList.ts
+@@ -1,4 +1,4 @@
+-// Pure grouping for a collection's entry list.
++// Pure grouping and ordering for a collection's entry list.
+ //
+ // The list view puts unfinished work first: a "Preview links" group, then
+ // "Drafts", then "Published". This is the framework-free split the
+@@ -6,6 +6,11 @@
+ // ordering rule is unit-tested rather than baked into markup. Within each group
+ // the incoming order is preserved (the page sorts before grouping), so the
+ // caller controls sort while this controls the split.
++//
++// A collection whose entries carry a numeric `order` is rendered as one ordered
++// sequence instead — see the ordered-collection helpers below.
++
++import { parseEntry } from './frontmatter';
+ 
+ export interface EntryListItem {
+   slug: string;
+@@ -58,3 +63,116 @@ export function groupByDraft<T extends EntryListItem>(items: T[]): GroupedEntrie
+     published: rest.filter((i) => !i.draft),
+   };
+ }
++
++// ---------------------------------------------------------------------------
++// Ordered collections
++//
++// Some collections exist to be a SEQUENCE — the sections of a campaign page, the
++// slides of a hero, the tiers of a sponsor wall. Their entries carry a numeric
++// `order`, and until now the only way to rearrange one was to open each entry
++// and type a new number into a box, which means holding the other entries'
++// numbers in your head while you do it.
++//
++// These helpers are the pure half of moving a row with an arrow instead. They
++// take no DOM and no store, so the rules below — what "first" means, what a move
++// does, which files a move actually has to touch — are decided here and merely
++// rendered elsewhere.
++
++/** A collection is ordered when its resolved fields declare a numeric `order`.
++ *
++ * Capability, not identity: any collection that models a sequence gets the
++ * arrows, and one that does not is untouched. Naming collections here instead
++ * would make every future ordered collection ask for this again. */
++export function hasOrderField(fields: ReadonlyArray<{ name: string; type: string }>): boolean {
++  return fields.some((f) => f.name === 'order' && f.type === 'number');
++}
++
++/** An entry's `order` as a number, or `undefined` when absent or unparseable.
++ *
++ * Frontmatter is hand-editable, so `order` can arrive as a number, as a string
++ * that looks like one, or as junk. Junk reads as "unnumbered" rather than `NaN`,
++ * which would poison every comparison it touched. */
++export function entryOrder(raw: string): number | undefined {
++  const { data } = parseEntry(raw);
++  const value = data.order;
++  if (typeof value === 'number') return Number.isFinite(value) ? value : undefined;
++  if (typeof value === 'string' && value.trim() !== '') {
++    const parsed = Number(value);
++    return Number.isFinite(parsed) ? parsed : undefined;
++  }
++  return undefined;
++}
++
++/** Sort entries the way the SITE renders them: `order` ascending, unnumbered
++ * last, label as the tiebreak.
++ *
++ * The first two rules are the consumer's own rule (`byOrder` in a site's
++ * `lib/order.ts`) restated here so the admin list and the page agree about what
++ * "first" means — an admin that disagreed with the page about its own order
++ * would be worse than no arrows at all. The label tiebreak is what makes a
++ * collection nobody has numbered yet sort exactly as the list does today, so
++ * turning this on never scrambles an existing list. */
++export function sortByEntryOrder<T extends EntryListItem>(items: readonly T[]): T[] {
++  return [...items].sort((a, b) => {
++    const av = entryOrder(a.raw) ?? Number.MAX_SAFE_INTEGER;
++    const bv = entryOrder(b.raw) ?? Number.MAX_SAFE_INTEGER;
++    return av === bv ? a.label.localeCompare(b.label) : av - bv;
++  });
++}
++
++/** The sequence after moving `index` by `delta`. Out-of-range moves return the
++ * input unchanged, so the caller may hand this an end-of-list click without
++ * guarding first. Non-mutating. */
++export function moveEntry<T>(items: readonly T[], index: number, delta: number): T[] {
++  const target = index + delta;
++  if (index < 0 || index >= items.length || target < 0 || target >= items.length) {
++    return [...items];
++  }
++  const next = [...items];
++  const [moved] = next.splice(index, 1);
++  next.splice(target, 0, moved);
++  return next;
++}
++
++/** Reorder `items` to follow `sequence` (a list of slugs), keeping anything the
++ * sequence does not mention in its incoming position at the end.
++ *
++ * A move stages a pending change; it does not rewrite the markdown, which only
++ * happens at publish. So the files still hold the OLD numbers, and re-deriving
++ * the order from them would snap every row back the instant it moved — the
++ * session's arrangement has to be remembered separately and re-applied.
++ *
++ * The unknown-slug rule is what keeps that from losing content: an entry
++ * created since the sequence was captured — or one that arrived from another
++ * tab — is not in it, and dropping it would make a row silently vanish from the
++ * list after an unrelated move. It keeps its file-derived place instead. */
++export function applySequence<T extends EntryListItem>(
++  items: readonly T[],
++  sequence: readonly string[] | null,
++): T[] {
++  if (!sequence) return [...items];
++  const bySlug = new Map(items.map((i) => [i.slug, i]));
++  const known = sequence.map((slug) => bySlug.get(slug)).filter((i): i is T => i !== undefined);
++  const knownSlugs = new Set(known.map((i) => i.slug));
++  return [...known, ...items.filter((i) => !knownSlugs.has(i.slug))];
++}
++
++/** The `{ slug, order }` pairs a sequence implies, for the rows whose number
++ * ACTUALLY changed.
++ *
++ * Two decisions live here. The list is renumbered 1..N wholesale rather than
++ * swapping two values, so blank, duplicate, and gapped numbers all converge on a
++ * clean sequence at the first click instead of persisting as a puzzle. And only
++ * the rows whose number moved are returned, so an ordinary one-place move stages
++ * two files rather than rewriting the whole collection — the difference between
++ * a publish review an editor can read and one they scroll past. */
++export function renumberEntries<T extends EntryListItem>(
++  items: readonly T[],
++): Array<{ slug: string; order: number }> {
++  const changed: Array<{ slug: string; order: number }> = [];
++  items.forEach((item, i) => {
++    const order = i + 1;
++    if (entryOrder(item.raw) !== order) changed.push({ slug: item.slug, order });
++  });
++  return changed;
++}
+diff --git a/node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro b/node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro
+index 2a2aa60..1f76261 100644
+--- a/node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro
++++ b/node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro
+@@ -15,6 +15,7 @@ import type { CollectionName } from '../../../lib/adminDashboard';
+ import { listEntrySources } from '../../../lib/entrySource';
+ import { labelFieldName, fieldOrder } from '../../../lib/entryEditor';
+ import { entryToSearchable } from '../../../lib/entrySearch';
++import { hasOrderField } from '../../../lib/entryList';
+ import { resolveCollections, resolveCollection } from '../../../lib/collectionRegistry';
+ import { readCollectionsRegistry, readSettings } from '../../../lib/site';
+ import { withBase } from '../../../lib/adminUrl';
+@@ -63,5 +64,6 @@ const items: EntryListSearchItem[] = listEntrySources(collection)
+     items={items}
+     keyOrder={keyOrder}
+     siteUrl={siteUrl}
++    ordered={hasOrderField(def.fields)}
+   />
+ </AdminLayout>

@@ -1,0 +1,137 @@
+{
+  "timestamp": "2026-08-07T12:50:09Z",
+  "title": "Add The Cutover Runbook To The Nicole Handoff And Correct Stale Claims",
+  "type": "fix",
+  "userRequest": "## Summary\n\nAdd the domain cutover runbook to the Nicole handoff doc, and correct the two\nclaims in it that drifted out of date.\n\n`docs/nicole-review.md` is the ready-to-send briefing for an external reviewer.\nIt listed four links; the runbook has been live since the stuck Pages deploy\ndrained, and a briefing that omits it hands her an incomplete picture of what\nshe is being asked to look at.\n\n## What was stale\n\nChecked every factual claim in the doc against committed content rather than\ntrusting it. Two were wrong:\n\n- **Board bios.** The doc said the live site \"has none to reproduce\" and listed\n  bios as wholly outstanding. Two of the five are now written (Ben Wei, Nadia\n  Eldeib). Telling her nothing is written invites her to redo work already done.\n- **Chapter count.** The doc said \"the 5 cities\"; there are six committed\n  chapters — Boston/Cambridge, DC-DMV, London, NYC, Seattle, SF Bay Area.\n\nOne claim I expected to be stale was not. The doc says her volunteer project\nstill has no photo; a first check suggested otherwise, but that check was a\nfaulty grep — with a single file `grep -c` omits the filename, so the filter\nnever applied. The committed entry has no `image:` field and is `draft: true`,\nexactly as the doc describes. Left alone.\n\nEverything else verified accurate: three sponsors all flagged as examples, donors\nand testimonials both empty, `donateUrl` blank so the Give button still opens an\nemail, the CMS committing to `staging`, the promote workflow present, and all\nfour referenced files existing. All five links return 200.\n\n## Key Decisions\n\n- **Lead the runbook entry with what we need back, not with what it is.** The\n  page's reason for existing, from her side, is that five decisions are hers and\n  D1 blocks the other four steps. The note names the GoDaddy login question\n  directly rather than inviting her to go and find it.\n\n- **Say that the first step changes nothing.** \"Nothing can start until you\n  answer\" reads as pressure; pairing it with the fact that step one only reads\n  the current settings makes the ask concrete and small.\n\n- **Correct the password line.** It said \"the site and the todos page use\n  crimson2026\" — true when there were two gated surfaces, misleading now there\n  are four. It now says everything except the content editor.\n\n- **Record that the runbook is excluded from the public build**, not merely\n  gated. It names where the domain's records live, so the distinction between\n  \"hidden\" and \"not built\" is worth stating where someone deciding what to share\n  will read it.\n\n## Out of scope\n\n- Sending anything to Nicole. This prepares the note; the send is a human call.\n- The domain cutover itself, and the three unwritten bios.",
+  "description": "Added the domain cutover runbook to the external-review handoff, corrected the two claims in it that had drifted out of date, and cleared the staleness the audit surfaced on the way through.\n\ndocs/nicole-review.md is the ready-to-send briefing for Nicole. It listed four links; the runbook has been live since the stuck Pages deploy drained, and a briefing that omits it hands her an incomplete picture of what she is being asked to look at. The note now leads that entry with what we need back rather than with what the page is: five decisions are hers, and D1 — who holds the GoDaddy login — blocks the other four steps. It pairs that with the fact that step one only reads the current settings and changes nothing, because 'nothing can start until you answer' reads as pressure while 'the first step is harmless' makes the ask concrete.\n\nEvery factual claim in the doc was checked against committed content rather than trusted. Two were wrong. The doc said the live site has no board bios to reproduce and listed them as wholly outstanding — two of the five are now written, and telling her none are invites her to redo work already done. And it said 'the 5 cities' where six chapters are committed. Both corrected, with the event and blog counts added so the remaining content ask is concrete.\n\nOne claim I expected to be stale was not, and the first check said so wrongly: a grep suggested the volunteer project now had a photo, but with a single file `grep -c` omits the filename, so the filter never applied. The committed entry has no image field and is still draft, exactly as the doc describes. Left alone. The password line did need a fix that only appeared because of the addition — it said 'the site and the todos page', true when two surfaces were gated and misleading now there are four.\n\nThe audit then blocked the commit on two invariants, neither caused by this edit but both real. Eight registry entries had empty descriptions: they come from two `it.each` blocks in selectOptions.test.ts, which generate keys with no source line, so `backfill-descriptions` could not resolve them and each needed setting directly. Worth noting that media.test.ts already carries a comment explaining it avoided `it.each` for exactly this reason.\n\nThe second was date drift, and it had already done damage. Five scenario fixtures hardcoded absolute event dates, and events-route-upcoming-and-past had rotted so far that all eight of its events were in the past — a scenario named for showing both states was demonstrating one. The dates are now relative tokens (`@today+21d`, `@today-63d`) which the editor expands per seed run, so they cannot rot again; the two most recent events were promoted back to upcoming to restore the split the scenario was authored to show. Verified by reading the expanded dates out of the seeded sandbox rather than trusting the tokens: 2026-08-28 and 2026-09-21 upcoming, the rest past.\n\nMid-run the editor server went down — every port including the capture proxy stopped answering while the dev-server process stayed alive — and was recovered with an in-place `restart-server --force-in-container`. That is why the Live Preview tab needs a reload.\n\nAll five links in the doc return 200. 650 tests pass and the audit reports zero findings.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/editor.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/add-the-cutover-runbook-to-the-nicole-handoff-and-correct-stale-claims.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/community-route-founders-with-leads-and-events.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/events-route-upcoming-and-past.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-board-of-directors.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/harvard-in-tech-upcoming-events-excludes-past-ones.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/merge-drivers-version",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/21e8c28666417158bfa742aaa6797b8d7ee2052158b0519b7e0b2d8e76099cf2.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/4685d9de5fd8d6dd7c038a534aee55c9eb2ce7a02f1a7708adedd87219f5a7db.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/c0a592e4b7cd719aa28bdb5981532b9b94a930890def426abddebd15a9adcf79.json",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 650,
+    "passed": 650,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 650,
+        "passed": 650
+      }
+    ]
+  }
+}

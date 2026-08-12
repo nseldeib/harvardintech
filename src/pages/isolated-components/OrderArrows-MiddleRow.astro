@@ -1,0 +1,35 @@
+---
+import Component from "@codeyam/cms/components/admin/OrderArrows.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for OrderArrows on an ordinary row — both directions open.
+//
+// This is the state almost every row is in, and the one the whole feature
+// exists for: rearranging the Momentum Fund page is now a click, not a trip
+// into each section to type a number while remembering what the other five are
+// numbered.
+//
+// The label is threaded into the accessible name rather than left generic, so
+// six rows of arrows do not read as twelve identical "Move up" buttons to
+// anyone navigating by screen reader.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: OrderArrows - Middle Row</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="padding: 2rem;">
+      <Component
+        client:load
+        canUp={true}
+        canDown={true}
+        onUp={() => {}}
+        onDown={() => {}}
+        label="Why Support Harvard Alumni in Tech?"
+      />
+    </div>
+  </body>
+</html>

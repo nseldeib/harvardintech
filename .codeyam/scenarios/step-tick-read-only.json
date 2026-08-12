@@ -1,0 +1,12 @@
+{
+  "name": "Step Tick - Read Only",
+  "id": "c4565b16-6851-4c88-87df-517ad16f692d",
+  "url": "/isolated-components/StepTick",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "StepTick",
+  "scenarioType": "component",
+  "description": "A step nobody has started, seen by someone WITHOUT repo write — the state this control spends most of its life in, and the one most of the team sees. The box renders and shows what the branch says, disabled, with the reason stated beside it rather than left to be inferred from a dead checkbox. That split is the access model made visible: everyone can read the checklist, only repo-write holders can change it, and a reader who cannot tick still sees exactly the same state as everyone else. The session is pinned through the `initialSession` seam rather than left to the live store, so this captures identically on every run and does not drift into whatever session the preview happens to hold."
+}

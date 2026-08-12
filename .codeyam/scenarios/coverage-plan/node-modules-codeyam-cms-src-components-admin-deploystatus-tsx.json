@@ -1,0 +1,72 @@
+{
+  "surface": "node_modules/@codeyam/cms/src/components/admin/DeployStatus.tsx",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "stage",
+      "value": "unconfirmed",
+      "rationale": "source-derived state stage=unconfirmed",
+      "status": "covered"
+    },
+    {
+      "dimension": "stage",
+      "value": "live",
+      "rationale": "source-derived state stage=live",
+      "status": "covered"
+    },
+    {
+      "dimension": "stage",
+      "value": "failed",
+      "rationale": "source-derived state stage=failed",
+      "status": "covered"
+    },
+    {
+      "dimension": "terminal",
+      "value": "true",
+      "rationale": "source-derived state terminal=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "terminal",
+      "value": "false",
+      "rationale": "source-derived state terminal=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "failed",
+      "value": "true",
+      "rationale": "source-derived state failed=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "failed",
+      "value": "false",
+      "rationale": "source-derived state failed=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "live",
+      "value": "true",
+      "rationale": "source-derived state live=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "live",
+      "value": "false",
+      "rationale": "source-derived state live=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "unconfirmed",
+      "value": "true",
+      "rationale": "source-derived state unconfirmed=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "unconfirmed",
+      "value": "false",
+      "rationale": "source-derived state unconfirmed=false",
+      "status": "covered"
+    }
+  ]
+}

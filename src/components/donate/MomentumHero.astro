@@ -8,6 +8,18 @@
 // the visitor arrived from the email with `?name=`. Generic-first (rather than
 // blank) means the majority with no name in the link see no flash, and a
 // visitor with JS disabled still gets a complete headline.
+//
+// THE OPTIONAL VIDEO is a backdrop, not a player: muted, looping, controlless,
+// `aria-hidden`, with the headline and Give button unchanged on top of it. A
+// hero that became a player would push the campaign's one call to action below
+// the fold and put a sound control in front of it.
+//
+// `image` does not step aside when `video` is set. It stays as the section's
+// CSS background AND becomes the video's poster, which is what makes every
+// failure path land on the current page rather than a black rectangle: a video
+// that 404s, a browser that refuses to autoplay, and a visitor on
+// `prefers-reduced-motion` all reveal the photo, and none of those three needs
+// any JavaScript to do it.
 import { withBase } from '../../lib/url';
 import GiveButton from './GiveButton.astro';
 
@@ -17,6 +29,9 @@ interface Props {
   headlineGeneric: string;
   subhead?: string;
   image?: string;
+  /** Optional moving backdrop — a path under `public/videos/`. Blank renders
+   *  today's photo hero. `image` remains its poster and its fallback. */
+  video?: string;
   ctaLabel?: string;
   donateUrl?: string;
   email: string;
@@ -30,6 +45,7 @@ const {
   headlineGeneric,
   subhead,
   image,
+  video,
   ctaLabel,
   donateUrl,
   email,
@@ -43,9 +59,27 @@ const initialHeadline =
     : headlineGeneric;
 
 const heroImage = image ? withBase(image) : null;
+// Through the same `withBase` as the photo, so the src survives the project
+// subpath the GitHub Pages deploy is served under.
+const heroVideo = video ? withBase(video) : null;
 ---
 
 <section class="hero" style={heroImage ? `--hero-img:url('${heroImage}')` : undefined}>
+  {
+    heroVideo ? (
+      <video
+        class="hero-video"
+        src={heroVideo}
+        poster={heroImage ?? undefined}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        aria-hidden="true"
+      />
+    ) : null
+  }
   <div class="hero-in">
     <h1
       class="headline"
@@ -89,18 +123,43 @@ const heroImage = image ? withBase(image) : null;
     padding: 120px 24px 104px;
     text-align: center;
   }
+  /* The video covers the photo rather than replacing it: the background image
+     above is still painted underneath, so a src that 404s or a browser that
+     declines to autoplay simply shows the photo, with no gap and no black band.
+     `z-index: 0` puts it under the scrim — tree order alone would not, because
+     `::before` is generated before it. */
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
   /* Scrim: the headline sits over a photo of a crowded room, so it needs a
-     guaranteed contrast floor regardless of which photo is used. */
+     guaranteed contrast floor regardless of which photo is used — and the same
+     floor over an arbitrary FRAME of an arbitrary video, which is why the video
+     goes beneath it rather than above. */
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, rgba(24, 20, 21, 0.72), rgba(24, 20, 21, 0.62));
+    z-index: 1;
   }
   .hero-in {
     position: relative;
     max-width: 900px;
     margin: 0 auto;
+    z-index: 2;
+  }
+  /* Reduced motion: hide the video entirely, revealing the background photo
+     that was underneath it all along. A media query rather than a script, so it
+     holds on a static page with JavaScript disabled. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video {
+      display: none;
+    }
   }
   /* Matches the homepage hero type scale (HeroCarousel .intro h1). */
   .headline {

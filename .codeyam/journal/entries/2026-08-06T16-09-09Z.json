@@ -1,0 +1,871 @@
+{
+  "timestamp": "2026-08-06T16:09:09Z",
+  "title": "Shared Cutover Runbook Checklist",
+  "type": "feature",
+  "userRequest": "## Summary\n\nTurn the domain cutover runbook from a document the team *reads* into a checklist\nthe team *works through together*. Today `public/cutover-runbook.html` lays out\nnine steps, five decisions, six checks and three rollback values, and records\nnothing. This plan gives it shared, repo-backed progress — a tick carries who and\nwhen, and everyone loads the same state — plus the four things the team asked for\nto understand what they are approving: per-step risk, a timeline, ownership, and\na recommendation on each open decision.\n\n**Still perform none of the migration.** No DNS record is read or written, no\n`public/CNAME` is added, no redirect map is built, no `deploy.yml` track flag is\nflipped. `harvardintech.com` stays on Strikingly and the review site stays gated.\nThe page continues to describe a move that has not happened; it just stops being\nunable to record one.\n\nThe blocking fact does not change either: **D1 — who holds the GoDaddy login —\nhas been open since the 2026-07-02 discovery, and it gates S1, which gates\neverything.** The page should say that louder after this plan, not quieter.\n\n## Key Decisions\n\n- **Reverse the no-checkbox decision, because its reasoning no longer applies.**\n  The previous cycle deliberately shipped no checkboxes: *\"a half-ticked checklist\n  in one person's browser is worse than no checklist, because it reads as progress\n  that nobody else can see.\"* That objection is about **browser-local** state, and\n  it is correct. This plan does not add browser-local state — it adds state\n  committed to the repo, so every reader loads the same ticks with real attribution.\n  The old decision is superseded on its own terms, not overruled.\n\n- **Attribution is GitHub identity, not a self-reported name.** A tick commits\n  under the ticker's own GitHub account (the CMS's existing token model), so\n  \"Nadia ticked S2 on Aug 8\" is recorded by the same mechanism that already\n  proves who edited content. No name field to fill in, nothing to fake by\n  accident.\n\n- **The page moves out of `public/` and into the site proper.** This is the\n  substantive architectural change and it has real costs, listed under\n  *Trade-offs* below. It is what makes everything else possible: a raw `public/`\n  file is copied verbatim into `dist/` and no Astro component ever renders it, so\n  it can read no content, run no tests, and share no state.\n\n- **Review-track only — which answers D4 for this page.** `PreviewGate` un-gates\n  on the public track by design, so a plain `src/pages/` route would be *fully\n  public* the moment the domain cuts over — strictly worse than today. Instead the\n  runbook follows `/admin`: a `publishTrack.ts` predicate keeps it out of the\n  public build entirely, so it is never reachable on `harvardintech.com`. D4 asked\n  where this page should live after cutover; this settles it as \"not on the public\n  domain, ever\" rather than leaving it for a decision at the riskiest moment.\n  D4 remains open for the status page and the design gallery.\n\n- **Optimistic tick, honest latency.** A tick is a commit, then a rebuild — up to\n  a minute or two before anyone else sees it. The tick appears immediately for the\n  person who made it and the page says plainly that others will see it shortly.\n  Silently pretending it is instant is how a shared checklist loses trust the\n  first time two people compare screens.\n\n- **Concurrent ticks merge rather than refuse.** `commitAll` already throws\n  `StaleBaselineError` when a path moved underneath you — correct for a batch of\n  content edits reviewed as a unit, wrong for a single boolean. On conflict the\n  page re-reads current state, reapplies only the field being toggled, and commits\n  again. Two people ticking different steps never collide; two people ticking the\n  same step converge on the same answer.\n\n- **Nothing is ticked to begin with.** Production starts empty in the CodeYam\n  model and that is exactly right here: day one is nine open steps and five\n  unanswered decisions, because that is the true state of this migration. The\n  populated states are scenarios, not seed data.\n\n- **Recommendations, not neutrality, on D1–D5.** Each decision keeps its\n  trade-offs and gains a stated suggestion with reasoning. A team reacting to a\n  proposal resolves it far faster than a team starting from a blank page. They\n  remain the team's decisions; the page stops pretending it has no view.\n\n## Trade-offs accepted\n\nThree properties are lost by moving the page into the site. Recording them so the\nloss is a decision rather than a discovery:\n\n1. **No more `file://` open.** `src/lib/reviewGate.js` states the constraint\n   outright — a review artifact \"has to work from a `file://` open\". An Astro\n   route cannot. Accepted: this page's job is to be the *live* status of a\n   migration, which a downloaded copy actively undermines — a stale runbook opened\n   from someone's Downloads folder showing week-old ticks is the failure mode this\n   plan exists to prevent. The standalone artifacts that genuinely need `file://`\n   (the donor deck, the design gallery) are untouched.\n\n2. **No more independent revocation.** The runbook has its own `sessionStorage`\n   key today, so unlocking the status page does not unlock it — each artifact is\n   shared and revoked separately. Under the site's `PreviewGate` there is one key\n   for the whole review site: one passphrase opens everything. Accepted: the two\n   pages already share a passphrase and are already linked to each other in both\n   directions, so the separation was nominal.\n\n3. **Astro's `public/` directory-index constraint stops applying.** The prior plan\n   chose a flat `public/cutover-runbook.html` because `/cutover-runbook/` 404s in\n   the dev server for static files. As a route this no longer binds — but the URL\n   changes from `/cutover-runbook.html` to `/cutover-runbook`, so both `/review`\n   links and all four existing scenarios must be updated in the same change.\n\n## Implementation\n\n### 1. Progress state — a seedable singleton\n\n**New file**: `src/data/cutoverProgress.json`\n\nFollows the established singleton pattern (`nav.json`, `settings.json`,\n`volunteerPage.json`). Shape: one record per step `S1`–`S9` and per decision\n`D1`–`D5`, each holding `done`/`answered`, the GitHub login that set it, and an\nISO timestamp. Ships with everything open.\n\n**New file**: `src/lib/cutoverProgress.ts` — reader + pure helpers, built on\n`readSingleton` (`src/lib/site.ts`) so it honours the codeyam sandbox redirect via\n`dataRoot()`. Pure functions carry the logic worth testing: which steps are\nunblocked given which decisions are answered, the roll-up counts, and the\ntimeline bucketing.\n\nThe seed adapter (v5) writes an object-valued seed key verbatim to\n`src/data/<key>.json`, so every tick-state scenario is one seed object with no\nextra machinery.\n\n### 2. The page\n\n**New**: `src/pages/cutover-runbook/[...path].astro` (dynamic so `getStaticPaths`\ncan return `[]` on the public track), rendering a `CutoverRunbook` component tree\nunder `BaseLayout`. The 50KB of authored prose in `public/cutover-runbook.html`\nports across substantially intact — this is a re-housing, not a rewrite. The\nhand-rolled gate script is dropped; `PreviewGate` covers it.\n\n**Delete**: `public/cutover-runbook.html` once the route is verified.\n\n**Modify**: `src/lib/publishTrack.ts` — add `includeCutoverRunbook(isDev,\nisReviewTrack)` mirroring `includeCmsIntegration`, with its rationale beside the\nexisting two and a case in `publishTrack.test.ts`.\n\n**Modify**: `public/review/index.html` lines 218 and 244 — both links repoint to\n`/cutover-runbook`.\n\n### 3. Ticking\n\n**New**: a React island for the checkbox rows, using the CMS's existing client\nlibs — `authSession` for identity (`getSession`, `signInWithToken`),\n`githubAuth.cachedToken()` for the token, `commitAll` from `githubCommit` to write\n`src/data/cutoverProgress.json` to the `staging` branch named in\n`src/data/cms.json`.\n\nRead-only for signed-out visitors: everyone sees current state, only repo-write\nholders can tick. The sign-in affordance reuses the CMS `AuthGate` pattern rather\nthan inventing a second one.\n\n`isCodeyamPreviewHost()` already hands localhost and the fleet preview a demo\nsigned-in session, so scenario captures render the ticking UI without stubbing,\nwhile the real domain still requires a token.\n\n### 4. Content the team asked for\n\n- **Risk per step** — what a bad outcome looks like, how we would know, and how\n  fast. Six of the nine touch nothing live; saying that plainly is what makes S5\n  and S7 stand out.\n- **Timeline** — days-ahead / on-the-day / after, with rough durations, so the\n  calendar is visible rather than inferred from a flat list.\n- **Ownership** — every step tagged Jared / GoDaddy-login-holder / the team, so\n  it is obvious at a glance which steps the team must act on.\n- **Recommendations on D1–D5** — a stated suggestion and reasoning per decision.\n\n### 5. Scenarios\n\nSix application scenarios, each a one-object seed:\n\n| Scenario | State |\n| --- | --- |\n| Nothing started | The production default: nine open steps, D1 unanswered and visibly blocking every one |\n| Decisions answered | D1–D5 resolved, steps unblocked — what \"ready to go\" looks like |\n| Partway through | Several steps ticked by different people on different days — shared state working |\n| Cutover day | Through S7, checks outstanding |\n| Complete | All nine done including S9 |\n| The records on a phone | The DNS table at 390px, re-verified after the port — the prior cycle's mobile capture found the \"Do not touch\" badges scrolled off-screen |\n\nPlus the gate states, re-registered against `PreviewGate` instead of the removed\nhand-rolled script.\n\n**Re-register**: all four existing `cutover-runbook-*` scenarios. Their `url`\nchanges to `/cutover-runbook`, their `pageFilePath` to the new route, and the\nunlocked/refused scenarios' `#pass` / `#enter` interactions must retarget\n`PreviewGate`'s markup.\n\n## Out of scope\n\nExplicitly not in this cycle, so the boundary stays checkable:\n\n- Any DNS read or write. No `dig` against the live domain, no GoDaddy access.\n- `public/CNAME`, redirect map, `src/lib/redirects.ts`, `404.astro` changes.\n- Any `deploy.yml` change, including removing `PREVIEW_GATE` or `DEPLOY_BASE_PATH`.\n- Resolving D1–D5. The page recommends; the team decides.\n- D3/D4 for the design gallery and the status page — this plan removes only the\n  runbook itself from the public-track exposure list.\n- Migrating `public/donor-network.html` or `public/review/index.html` off their\n  hand-rolled gates. The triplication stays; one page moves, two do not.",
+  "description": "The domain cutover runbook stopped being a document and became a checklist the team works through together. Ticks and answers commit to the repository under each person's own GitHub identity, so everyone loads the same state, and the page gained the four things the team asked for: what could go wrong on each step, a calendar, who is on the hook, and a stated recommendation on each of the five open decisions.\n\nThe previous cycle deliberately shipped no checkboxes, on the reasoning that a half-ticked list in one person's browser reads as progress nobody else can see. That objection is answered rather than overruled: it is about BROWSER-LOCAL state, and this is not that. A tick re-reads the state file from the branch, applies itself, and commits — read-modify-write rather than commitAll's staged-change drift check, because that check refuses the whole commit when a path moved underneath the editor, which is right for a batch of content edits reviewed as a unit and wrong for a single boolean. Two people ticking different steps both survive; two people ticking the same step converge. The latency is stated on the page rather than hidden — a tick is a commit and then a rebuild, so 'saved' and 'everyone can see it' are a minute apart — and a failed commit puts the box back, because a tick that looks saved but was not is worse than an error on a page whose whole claim is that what it shows is what everyone else sees.\n\nMoving the page out of public/ and into the site is what made any of that possible: a raw public/ file is copied verbatim into dist/ and no component ever renders it, so it could read no content and hold no state. Three properties were given up knowingly and recorded in the plan — the file:// open (src/lib/reviewGate.js states that constraint outright), independent revocation, and the .html URL. The file:// loss is the only real one, and the argument against it is that a runbook downloaded to a laptop showing week-old ticks is precisely the failure this exists to prevent.\n\nThe load-bearing consequence was not in the plan and had to be caught: PreviewGate un-gates on the public track BY DESIGN, so a plain src/pages route would have published the page naming where the domain's records live, ungated, on harvardintech.com at cutover — strictly worse than the standalone file it replaced. A dynamic route exists purely so getStaticPaths can return an empty list on the public build, gated by includeCutoverRunbook alongside /admin. Both builds were verified: the public track contains no runbook in any form, the review track has it behind the passphrase. That settles the runbook's own decision D4 for this page in code rather than leaving it open until the riskiest day, and D4's prose and S6's operator detail were rewritten to say so — the status page and the design gallery are still exposed and still need the answer. public/cutover-runbook.html was deleted in the same change; leaving it would have shipped the old copy publicly and defeated the exclusion entirely.\n\nTwo bugs surfaced during extraction, neither reported by anyone. The 'waiting on' line joined ids with ' and ', rendering 'D1 and D2 and D3' for three — invisible because no step needs three decisions today, which is exactly why it earned a function with a test that goes red on revert. And S7's 'never replace all records' note was briefly lost: the steps carried two kinds of note in one container, and deriving the conditional kind from `needs` took the standing kind with it. That was the single most important instruction on the page, gone because it shared an element with something that disappears. Standing notes are their own field now, with the reason recorded next to it.\n\nreadSingleton was de-duplicated in passing. site.ts had a private copy and cutoverProgress.ts grew a second identical one; two implementations of 'respect the codeyam sandbox' is how one of them ends up not respecting it, so both now use one in contentRoot.ts — which also gained the tests the moved entry claimed, rather than the claim being quietly downgraded.\n\nThe honest limit worth stating: ticking requires a GitHub token with repo write. Anyone can read the page and see current state, but a reader without repo access cannot record anything, and the page says so where the control would be. If the people who need to tick are not the people with repo access, that is a different design.\n\nFifteen scenarios. Eight application states walk the page from the production default — nothing ticked, nothing answered, which is the true state of this migration — through decisions-answered, partway, waiting-on-one-answer, cutover day and complete, plus the DNS table at 390px and a refused tick shown in place. The 390px capture re-proves a defect the last cycle fixed: the long record values used to push the third column off-screen, and the third column is where the 'Do not touch' badges on the Email and SPF rows live. Seven component scenarios cover both tick controls across read-only, done, open, decided, the answer editor, and a commit that was refused. The four scenarios pointing at the deleted .html page were retired rather than repointed — the hand-rolled gate they asserted no longer exists on this page, and the status page's scenarios still cover that gate pattern.\n\n650 tests pass, 51 of them new. Nothing about the migration itself was performed: no DNS record read or written, no public/CNAME, no redirect map, no deploy.yml change. harvardintech.com is still served by Strikingly, and D1 — who holds the GoDaddy login — has been open since 2026-07-02 and still blocks S1, which blocks everything.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/shared-cutover-runbook-checklist.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-gate-locked.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-gate-refused.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-the-records-on-a-phone.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-unlocked.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/boardmembercard-with-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-gate-locked--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-gate-locked--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-gate-refused--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-gate-refused--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-unlocked--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-unlocked--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-unlocked--mobile.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/our-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-communities-derived--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-gate-refused--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-a-page-written-in-the-cms--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-a-page-written-in-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-long-title-and-no-description--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-rewritten-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "modified"
+    },
+    {
+      "path": "public/cutover-runbook.html",
+      "status": "deleted"
+    },
+    {
+      "path": "public/review/index.html",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/contentRoot.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/contentRoot.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/publishTrack.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/publishTrack.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-a-tick-that-could-not-be-saved.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-complete.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-cutover-day.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-decisions-answered-nothing-begun.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-nothing-started.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-partway-through.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cutover-runbook-waiting-on-one-answer.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/decision-tick-decided-read-only.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/decision-tick-decided.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/decision-tick-open.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/decision-tick-writing-the-answer.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-a-tick-that-could-not-be-saved--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-a-tick-that-could-not-be-saved--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-complete--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-complete--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-cutover-day--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-cutover-day--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-decisions-answered-nothing-begun--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-decisions-answered-nothing-begun--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-nothing-started--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-nothing-started--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-partway-through--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-partway-through--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-waiting-on-one-answer--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-waiting-on-one-answer--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/decision-tick-decided--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/decision-tick-decided--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/decision-tick-decided-read-only--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/decision-tick-decided-read-only--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/decision-tick-open--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/decision-tick-open--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/decision-tick-writing-the-answer--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/decision-tick-writing-the-answer--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/step-tick-commit-refused--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/step-tick-commit-refused--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/step-tick-done-with-attribution--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/step-tick-done-with-attribution--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/step-tick-read-only--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/step-tick-read-only--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/step-tick-commit-refused.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/step-tick-done-with-attribution.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/step-tick-read-only.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/seed-cutover-progress.sh",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/DecisionCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/DecisionDetail.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/DecisionRecommendation.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/DecisionTick.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/EmailRule.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/NumberedLine.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/OperatorDetail.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RecordRow.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookChecks.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookDecisions.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookFooter.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookHeader.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookOnTheDay.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookRecords.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookRollback.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookSteps.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookSummary.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookTimeline.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/RunbookWhatThisIs.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/StandingBanner.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/StepCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/StepFacts.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/StepRisk.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/StepTick.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/TimelinePhase.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/cutover/useAuthSession.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/data/cutoverProgress.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/cutoverFormat.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/cutoverFormat.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/cutoverProgress.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/cutoverProgress.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/cutoverTicks.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/cutoverTicks.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/cutover-runbook/[...path].astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DecisionTick-Decided.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DecisionTick-ReadOnly.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/DecisionTick.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/StepTick-Done.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/StepTick.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/styles/cutover-runbook.css",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - A Tick That Could Not Be Saved",
+      "screenshotPath": "cutover-runbook-a-tick-that-could-not-be-saved--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Complete",
+      "screenshotPath": "cutover-runbook-complete--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Cutover Day",
+      "screenshotPath": "cutover-runbook-cutover-day--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Decisions Answered Nothing Begun",
+      "screenshotPath": "cutover-runbook-decisions-answered-nothing-begun--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Nothing Started",
+      "screenshotPath": "cutover-runbook-nothing-started--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Partway Through",
+      "screenshotPath": "cutover-runbook-partway-through--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - The Records On A Phone",
+      "screenshotPath": "cutover-runbook-the-records-on-a-phone--mobile.png"
+    },
+    {
+      "name": "Cutover Runbook - Waiting On One Answer",
+      "screenshotPath": "cutover-runbook-waiting-on-one-answer--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Homepage Phased For Launch",
+      "screenshotPath": "harvard-in-tech-homepage-phased-for-launch--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Upcoming Events Excludes Past Ones",
+      "screenshotPath": "harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Giving Platform Is Chosen",
+      "screenshotPath": "momentum-fund-a-giving-platform-is-chosen--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Filtering The Donor Wall",
+      "screenshotPath": "momentum-fund-filtering-the-donor-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Donor Wall Moved To The Top",
+      "screenshotPath": "momentum-fund-the-donor-wall-moved-to-the-top--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The First Donor On The Wall",
+      "screenshotPath": "momentum-fund-the-first-donor-on-the-wall--desktop.png"
+    },
+    {
+      "name": "Project Review - Gate Refused",
+      "screenshotPath": "project-review-gate-refused--desktop.png"
+    },
+    {
+      "name": "Project Review - Unlocked Status",
+      "screenshotPath": "project-review-unlocked-status--desktop.png"
+    },
+    {
+      "name": "Site Page - A Page Written In The CMS",
+      "screenshotPath": "site-page-a-page-written-in-the-cms--desktop.png"
+    },
+    {
+      "name": "Site Page - Long Title And No Description",
+      "screenshotPath": "site-page-long-title-and-no-description--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Rewritten From The CMS",
+      "screenshotPath": "volunteer-page-rewritten-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "BoardMemberCard - With Photo",
+      "screenshotPath": "boardmembercard-with-photo--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "Decision Tick - Decided",
+      "screenshotPath": "decision-tick-decided--desktop.png"
+    },
+    {
+      "name": "Decision Tick - Decided Read Only",
+      "screenshotPath": "decision-tick-decided-read-only--desktop.png"
+    },
+    {
+      "name": "Decision Tick - Open",
+      "screenshotPath": "decision-tick-open--desktop.png"
+    },
+    {
+      "name": "Decision Tick - Writing The Answer",
+      "screenshotPath": "decision-tick-writing-the-answer--desktop.png"
+    },
+    {
+      "name": "Our Chapters",
+      "screenshotPath": "our-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Communities Derived",
+      "screenshotPath": "primarynav-communities-derived--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    },
+    {
+      "name": "Step Tick - Commit Refused",
+      "screenshotPath": "step-tick-commit-refused--desktop.png"
+    },
+    {
+      "name": "Step Tick - Done With Attribution",
+      "screenshotPath": "step-tick-done-with-attribution--desktop.png"
+    },
+    {
+      "name": "Step Tick - Read Only",
+      "screenshotPath": "step-tick-read-only--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 650,
+    "passed": 650,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 650,
+        "passed": 650
+      }
+    ]
+  }
+}

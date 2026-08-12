@@ -63,7 +63,10 @@ entry, mostly non-technical).
    Cloudflare Pages behind Cloudflare Access buys real per-person
    authentication — see [DEPLOY_SETUP.md](../../DEPLOY_SETUP.md).
 5. **Content ownership** — Who supplies chapter committees, per-chapter events,
-   board bios/photos, and podcast/blog entries?
+   and podcast/blog entries? *Board photos are no longer part of this question —
+   all 5 are in place. Board bios are, but they are optional and post-launch: the
+   live site has none to copy, and the board renders correctly without them (see
+   item 13).*
 
 ---
 
@@ -105,8 +108,13 @@ first, then cut over the apex with zero downtime.
 
 ### 10. Content population — 🟡 framework ready
 The biggest *volume* of remaining work, but it's CMS data entry a non-technical
-editor can do: chapter committee members, per-chapter events, real board
-bios/photos, blog + podcast entries. Needs the client to provide the content.
+editor can do: chapter committee members, per-chapter events, blog + podcast
+entries. Needs the client to provide the content.
+
+Board **photos** are done — all 5 are in place. Board **bios** are the one item
+on this list the live site cannot supply (it has none — see item 13), so they are
+net-new writing rather than data entry, and optional: the board renders correctly
+without them.
 
 ### 11. Publishing / shareable preview — ✅ two-track publishing
 Two sites are built from this one repo. **Today neither is public** —
@@ -166,8 +174,17 @@ The 2026-07-02 list is largely closed. Current state:
   now the `stats` collection, so an editor can correct them.
 - **Events calendar** — Luma embed URL still blank; shows the "subscribe on Luma"
   fallback → provide the embed URL, or set the events band to *coming soon*.
-- **Board** — all 5 members have photos; **none has a bio**. Still the largest
-  content gap and the most visible one.
+- ~~**Board**~~ — **Resolved, with a caveat.** All 5 members have photos, and
+  **there are no bios to reproduce**: the live Strikingly board is a single flat
+  image with no bio text under it, re-confirmed 2026-08-04. So the board ships
+  as photo + name + role, which is exactly what harvardintech.com shows today —
+  this is fidelity, not a gap. Bios are a *client-supplied enhancement* with no
+  code dependency: the `bio` field is already in the schema
+  (`src/content/config.ts`), already editable in /admin, and already rendered by
+  `BoardMemberTile.astro` the moment it is filled in. The
+  `board-of-directors-two-of-five-bios-written` scenario shows the partially-filled
+  state, so trickling bios in one at a time is a supported end state, not a
+  broken intermediate one. **Nothing here blocks cutover.**
 - **Testimonials / Donors** — both collections are empty. The donor wall renders
   its invitation state by design; the testimonials band renders nothing.
 - **Sponsors** — all 3 entries are marked *Example entry*, so the wall carries its

@@ -1,0 +1,12 @@
+{
+  "name": "Step Tick - Done With Attribution",
+  "id": "715194a9-e31e-4e96-8b97-9e171b3e57e9",
+  "url": "/isolated-components/StepTick-Done",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "StepTick",
+  "scenarioType": "component",
+  "description": "A step recorded done, seen by a signed-in editor. This is the state that carries the whole argument for committing ticks to the repository instead of keeping them in a browser: the tick names who made it and when, so progress is something the team shares rather than something each person sees their own version of. The previous cycle deliberately shipped no checkboxes on the reasoning that a half-ticked list in one person's browser reads as progress nobody else can see — that objection is answered here, not overruled, and this scenario is what answering it looks like."
+}

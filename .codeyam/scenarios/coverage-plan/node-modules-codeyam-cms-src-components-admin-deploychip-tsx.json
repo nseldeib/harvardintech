@@ -1,0 +1,12 @@
+{
+  "surface": "node_modules/@codeyam/cms/src/components/admin/DeployChip.tsx",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "default",
+      "value": "default",
+      "rationale": "source-derived state default=default",
+      "status": "covered"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+---
+import Component from "@codeyam/cms/components/admin/DeployChip.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for DeployChip mid-deploy — what a deploy looks like once it
+// stops being the only thing on screen.
+//
+// This is the whole point of the feature in one component. The same deploy that
+// used to hold a full-screen scrim over the admin is now a line in the corner:
+// it is still watching, still says so, and takes nothing away from the editor.
+// She gets here by dismissing the panel, or simply by opening another entry —
+// the watch is recorded per tab and re-attached by the StagingBar on whatever
+// admin page loads next.
+//
+// "Details" reopens the full panel; "✕" stops showing the deploy (it cannot stop
+// the deploy, and does not pretend to).
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DeployChip - Publishing</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component client:load state={{ stage: 'building' }} />
+    </div>
+  </body>
+</html>

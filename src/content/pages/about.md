@@ -4,4 +4,4 @@ description: About Harvard Alumni in Tech.
 order: 1
 ---
 
-Harvard in Tech connects alumni building and investing in technology.
+Harvard Alumni in Tech connects alumni building and investing in technology.

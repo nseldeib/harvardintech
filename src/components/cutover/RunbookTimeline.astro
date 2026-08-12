@@ -1,0 +1,49 @@
+---
+// The nine steps as a calendar rather than a list.
+//
+// The flat sequence answers "what happens"; this answers "when, and what does it
+// cost us" — which is the question a team being asked to approve the move
+// actually has. A list of nine reads as nine equal-weight things, when in truth
+// most of the work is beforehand, the switch itself is minutes, and the last
+// step is deliberately days later.
+import type { CutoverProgress, Phase } from '../../lib/cutoverProgress';
+import TimelinePhase from './TimelinePhase.astro';
+
+interface Props {
+  progress: CutoverProgress;
+}
+const { progress } = Astro.props;
+
+const PHASES: { phase: Phase; blurb: string }[] = [
+  {
+    phase: 'before',
+    blurb:
+      'Everything reversible. The live site is untouched throughout — at any point here we can simply stop, and nothing has changed for anyone.',
+  },
+  {
+    phase: 'day',
+    blurb:
+      'The switch and its checks. Best done on a weekday morning, so there are working hours left to notice anything and reverse it.',
+  },
+  {
+    phase: 'after',
+    blurb:
+      'Several days later, not the same afternoon. While Strikingly is still paid for, going back is a two-minute change.',
+  },
+];
+---
+
+<section id="timeline">
+  <div class="wrap">
+    <h2>What this looks like on a calendar</h2>
+    <div class="lede">Most of it happens before the day. The switch itself is minutes.</div>
+
+    <div class="timeline">
+      {
+        PHASES.map(({ phase, blurb }) => (
+          <TimelinePhase phase={phase} blurb={blurb} progress={progress} />
+        ))
+      }
+    </div>
+  </div>
+</section>

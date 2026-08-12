@@ -6,11 +6,16 @@
 // schema — an organizer can post a project the moment it opens and fill in the
 // commitment and blurb later, and the header must not leave holes when they do.
 import { withBase } from '../../lib/url';
+import VolunteerProjectMeta from './VolunteerProjectMeta.astro';
 
 interface Props {
   title: string;
   blurb?: string;
   commitment?: string;
+  /** When the project runs. Rendered by the same `VolunteerProjectMeta` the card
+   *  uses, so the two surfaces cannot show one project's dates two ways. */
+  startDate?: string | Date;
+  endDate?: string | Date;
   backHref?: string;
   backLabel?: string;
 }
@@ -18,6 +23,8 @@ const {
   title,
   blurb,
   commitment,
+  startDate,
+  endDate,
   backHref = '/volunteer#projects',
   backLabel = '← All volunteer projects',
 } = Astro.props as Props;
@@ -26,7 +33,9 @@ const {
 <a class="back" href={withBase(backHref)}>{backLabel}</a>
 
 <h1>{title}</h1>
-{commitment ? <span class="commit">{commitment}</span> : null}
+<div class="meta-row">
+  <VolunteerProjectMeta commitment={commitment} startDate={startDate} endDate={endDate} />
+</div>
 {blurb ? <p class="lede">{blurb}</p> : null}
 
 <style>
@@ -51,14 +60,26 @@ const {
     /* Long CMS-written titles wrap instead of overflowing the column. */
     overflow-wrap: anywhere;
   }
-  .commit {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--crimson);
+  /* The framing-detail row itself is VolunteerProjectMeta's; this wrapper only
+     says where it sits. The header is a flow context with no gap, so the space
+     below the title has to come from somewhere, and it belongs to the
+     composition rather than to the chip row (the card places the same component
+     with no margin at all).
+
+     `:not(:has(*))` collapses the wrapper when the component rendered nothing —
+     a project with neither a commitment nor a date must leave no 12px hole under
+     its title, which is the same "no holes" contract the header has always had. */
+  .meta-row {
+    /* `flex`, not the default `block`: a block wrapper puts the component's
+       output next to the whitespace text nodes around it, and the resulting
+       anonymous line box adds a few stray pixels under the row. A flex
+       container drops whitespace-only children, so an undated project's header
+       stays pixel-identical to what it rendered before dates existed. */
+    display: flex;
     margin-top: 12px;
+  }
+  .meta-row:not(:has(*)) {
+    display: none;
   }
   .lede {
     font-family: var(--font-serif);

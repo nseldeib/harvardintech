@@ -1,0 +1,18 @@
+{
+  "name": "Decision Tick - Writing The Answer",
+  "id": "ad4e5a01-9a96-4920-8bf4-d1be331659df",
+  "url": "/isolated-components/DecisionTick",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DecisionTick",
+  "scenarioType": "component",
+  "description": "The answer editor open, which is reachable only by driving the component — a resting capture shows the button and nothing about what pressing it offers. Worth its own scenario because the size of the box is an argument: a single-line input would quietly train people to record the flag here and keep the substance in a thread somewhere, which is the exact failure this control exists to fix. The placeholder asks for the answer rather than the reasoning, and 'Record it' stays disabled while the box is empty, so a decision cannot be marked answered with nothing recorded against it.",
+  "interactions": [
+    {
+      "action": "click",
+      "text": "Record an answer"
+    }
+  ]
+}

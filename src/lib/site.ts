@@ -14,14 +14,7 @@
 // to a sandbox copy and seeding never overwrites the committed production JSON.
 // Server-only module — imported from `.astro` frontmatter, never a client
 // island, so `fs`/`process.env` are always available here.
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { dataRoot } from './contentRoot';
-
-function readSingleton<T>(name: string): T {
-  const file = path.resolve(dataRoot(), name);
-  return JSON.parse(fs.readFileSync(file, 'utf-8')) as T;
-}
+import { readSingleton } from './contentRoot';
 
 export interface SocialLink {
   label: string;
@@ -126,6 +119,13 @@ export interface DonatePageCopy {
   heroSubhead?: string;
   /** Full-bleed background photo behind the hero. */
   heroImage?: string;
+  /** Optional moving backdrop for the hero — a path to a video committed under
+   *  `public/videos/`. Blank leaves the hero as `heroImage` renders it. When set,
+   *  `heroImage` does not step aside: it becomes the video's poster and remains
+   *  the section background, so a 404, a blocked autoplay, or reduced-motion all
+   *  fall back to the photo. Deliberately absent from `donatePage.json` — see
+   *  `mergeDonateFrame`, which is what lets an editor clear it. */
+  heroVideo?: string;
   /** Figures for the stats band. Not seeded as a section today — the campaign
    *  review removed the band from under the hero — but the renderer and this
    *  copy stay, so re-adding a `stats` section in the CMS brings it back with no
@@ -137,7 +137,7 @@ export interface DonatePageCopy {
   accomplishmentsTitle?: string;
   accomplishments?: { value: string; label: string; body?: string }[];
   // The narrative sections ("And Every Number Represents a Story", "Why Support
-  // Harvard in Tech?") are NOT here — their heading, photo, layout, and prose
+  // Harvard Alumni in Tech?") are NOT here — their heading, photo, layout, and prose
   // live in the `momentumSections` collection so an editor can rewrite and
   // reorder them from the CMS. What remains below is the card data for the
   // bespoke bands, which those sections merely position.

@@ -3,8 +3,8 @@
 
    ATLAS DIRECTION (board-selected redesign): a Harvard-crimson editorial
    system — crimson accent on near-black "ink", warm paper backgrounds,
-   Helvetica Neue display type, a Times serif for ledes/captions, and a
-   JetBrains Mono for the uppercase "kicker" eyebrow labels. The semantic
+   Crimson Pro display type, Inter for body and UI, and JetBrains Mono for the
+   uppercase "kicker" eyebrow labels. The semantic
    `--color-*` / `--font-*` tokens keep their NAMES (so every existing section
    re-skins without per-component edits) but their VALUES now point at the
    Atlas palette. New sections use the Atlas component classes at the bottom. */
@@ -36,9 +36,21 @@
   --color-bg-blue: var(--paper-2);
   --color-link: var(--crimson);
 
-  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-title: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-serif: 'Times New Roman', Times, Georgia, serif;
+  /* TYPOGRAPHY — Harvard-character, open-licensed.
+     Crimson Pro is an old-style serif in the Garamond lineage; it carries the
+     academic, serif-forward register of Harvard's identity WITHOUT being one of
+     Harvard's licensed identity faces, which are not distributable and are not
+     obviously ours to use. Swap these two @font-face families in place if
+     licensed files ever arrive — every consumer reads the token, not the name.
+
+     `--font-serif` used to be Times, which made the Luma embeds, the volunteer
+     hero and the volunteer project headings render in a THIRD typeface nobody
+     chose. Pointing it at the same serif as `--font-title` is what turns those
+     surfaces from an accident into a decision; they stay distinguishable from
+     display type by size and weight rather than by family. */
+  --font-sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-title: 'Crimson Pro', 'Times New Roman', Times, Georgia, serif;
+  --font-serif: 'Crimson Pro', 'Times New Roman', Times, Georgia, serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   --space-sm: 0.5rem;

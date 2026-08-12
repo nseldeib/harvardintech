@@ -1,0 +1,17 @@
+{
+  "name": "CMS Publish Review - Plain Language Change Summary",
+  "id": "b639302b-ce8c-4f19-b0ac-e6ae7f4818ef",
+  "url": "/admin/publish",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "browserState": {
+    "localStorage": {
+      "codeyam-cms:pending-changes": "[{\"collection\": \"chapters\", \"slug\": \"nyc\", \"path\": \"src/content/chapters/nyc.md\", \"title\": \"New York City\", \"original\": \"---\\ncity: New York City\\nregion: New York, NY\\nblurb: Our founding chapter and largest community.\\n---\\n\", \"updated\": \"---\\ncity: New York City\\nregion: New York, NY\\nblurb: Our founding chapter and largest community - now hosting monthly founder dinners.\\n---\\n\", \"kind\": \"edit\"}]"
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/publish.astro",
+  "description": "The publish review as an editor meets it on @codeyam/cms 0.4.0. This screen used to lead with a raw +/- diff of markdown and YAML — code, shown to a non-technical editor at the moment she decides whether to publish. It now says what the change did in words and keeps the diff behind a disclosure for whoever wants it. Worth its own scenario because it is the screen the upgrade actually changes for Nicole, and because a summary that misdescribes an edit is worse than a diff that merely looks technical."
+}

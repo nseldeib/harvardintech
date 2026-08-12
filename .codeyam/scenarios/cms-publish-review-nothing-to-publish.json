@@ -1,0 +1,17 @@
+{
+  "name": "CMS Publish Review - Nothing To Publish",
+  "id": "3cb81486-ba72-4a4c-b15a-802a4ceda24e",
+  "url": "/admin/publish",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "browserState": {
+    "localStorage": {
+      "codeyam-cms:pending-changes": "[]"
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/publish.astro",
+  "description": "The publish screen with nothing staged — where an editor lands most times she opens it, and the state she should see after a successful publish. It names the repository and branch her edits go to rather than just saying 'done', because 'published' on a gated review site and 'published' on the live domain are different claims and this site is deliberately still the former."
+}

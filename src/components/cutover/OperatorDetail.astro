@@ -1,0 +1,189 @@
+---
+// The operator half of each step: the exact values, commands and file changes,
+// ported verbatim from the standalone public/cutover-runbook.html this route
+// replaces.
+//
+// It lives in markup rather than in `cutoverProgress.ts` on purpose. The lib
+// holds what the page reasons ABOUT a step — who owns it, when it happens, what
+// blocks it, what goes wrong — because those drive layout and roll-ups. This is
+// authored prose with inline <code> and nested lists that nothing computes over,
+// and forcing it through a data structure would only make it harder to edit.
+//
+// Keyed by step id so it stays on the same page as the plain-language summary:
+// a separate operator document drifts from the summary describing it, and the
+// operator is the one who then reads the stale summary.
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+{
+  id === 'S1' ? (
+    <details class="op">
+      <summary>Operator detail</summary>
+      <div class="body">
+<p>Confirm against the discovery table below, and capture current values verbatim so they can be diffed after the cutover:</p>
+                <ol>
+                  <li>Apex <code>harvardintech.com</code> still <code>A → 54.183.102.22</code> (Strikingly).</li>
+                  <li><code>www</code> still <code>CNAME → www.harvardintech.com.s.strikinglydns.com</code>.</li>
+                  <li><b>Capture <code>MX</code> and every <code>TXT</code> exactly as they read.</b> These are the records we must be able to prove we didn't change.</li>
+                  <li>Confirm nameservers are still GoDaddy (<code>ns05/ns06.domaincontrol.com</code>). If they've moved, DNS is being managed elsewhere and this whole plan retargets.</li>
+                </ol>
+                <p><code>dig harvardintech.com A +short</code>, <code>dig harvardintech.com MX +short</code>, <code>dig harvardintech.com TXT +short</code>, <code>dig www.harvardintech.com CNAME +short</code> — read them live rather than trusting the table.</p>
+      </div>
+    </details>
+  ) : null
+}
+{
+  id === 'S2' ? (
+    <details class="op">
+      <summary>Operator detail</summary>
+      <div class="body">
+<p>
+                  This is a simplification over the original 2026-07-02 runbook, which proposed a
+                  throwaway <code>new.harvardintech.com</code>. The two-track publishing work has
+                  since stood up a permanent gated track, and it is the natural staging target —
+                  one subdomain instead of two, and the one we keep afterwards.
+                </p>
+                <ol>
+                  <li>Add a single record at GoDaddy: <code>CNAME review → nseldeib.github.io</code>. Nothing about the live site or email is involved.</li>
+                  <li>Set the review repo's Pages custom domain to <code>review.harvardintech.com</code>.</li>
+                  <li>Wait for propagation and GitHub's certificate, then review on the real domain with the team.</li>
+                </ol>
+      </div>
+    </details>
+  ) : null
+}
+{
+  id === 'S3' ? (
+    <details class="op">
+      <summary>Operator detail</summary>
+      <div class="body">
+<p>
+                  Crawl the live Strikingly site and build an old-path → new-path table in a new
+                  <code>src/lib/redirects.ts</code>, with a pure lookup function so the map is
+                  unit-testable and reviewable as data. <code>scripts/extract.mjs</code> already
+                  drives Playwright against <code>https://www.harvardintech.com/</code> and can be
+                  adapted to dump the link graph rather than screenshot sections. Paths that map
+                  1:1 (<code>/</code>, <code>/events</code>, <code>/blog</code>) need no entry.
+                </p>
+                <p>
+                  <code>src/pages/404.astro</code> then looks up <code>location.pathname</code> and
+                  redirects on a hit, keeping its existing "go back home" markup for misses.
+                </p>
+                <p>
+                  <b>The accepted loss:</b> GitHub Pages cannot serve a server-side 301, so this is
+                  a soft redirect — a 200 page that then moves the browser. Humans following an old
+                  link land correctly; search engines treat it far more weakly than a 301, so some
+                  ranking on changed paths is lost. The alternative is putting Cloudflare in front
+                  purely for redirect rules, which is a permanent moving part for a one-time
+                  problem. Worth revisiting only if the crawl turns up genuinely high-traffic paths
+                  that changed.
+                </p>
+      </div>
+    </details>
+  ) : null
+}
+{
+  id === 'S4' ? (
+    <details class="op">
+      <summary>Operator detail</summary>
+      <div class="body">
+<p>
+                  New file <code>public/CNAME</code> containing <code>harvardintech.com</code> — the
+                  mechanism <code>DEPLOY_SETUP.md</code> "Path A: Custom Domain" already documents.
+                </p>
+                <p>
+                  One ordering trap: it also gets copied into the review track's output. That's
+                  harmless <em>provided</em> the review publish step writes its own
+                  <code>CNAME</code> (<code>review.harvardintech.com</code>) <b>after</b> the copy,
+                  not before. Reversed, the review site would claim the apex domain and the two
+                  tracks would fight over it.
+                </p>
+      </div>
+    </details>
+  ) : null
+}
+{
+  id === 'S5' ? (
+    <details class="op">
+      <summary>Operator detail</summary>
+      <div class="body">
+<p>In <code>.github/workflows/deploy.yml</code>, public track build step only:</p>
+                <ul>
+                  <li>Drop <code>DEPLOY_BASE_PATH</code> so <code>base</code> → <code>/</code>.</li>
+                  <li>Set <code>PAGES_SITE: https://harvardintech.com</code>.</li>
+                  <li>Drop <code>PREVIEW_GATE</code>.</li>
+                </ul>
+                <p>
+                  <code>astro.config.mjs</code> needs no change — both values are already env-driven
+                  and were written for exactly this switch.
+                </p>
+                <p>Three things follow with no extra work:</p>
+                <ul>
+                  <li><code>robots.txt</code> flips from <code>Disallow: /</code> to <code>Allow: /</code> with a correct absolute <code>Sitemap:</code> line, built from the configured site.</li>
+                  <li><code>sitemap-index.xml</code> and <code>llms.txt</code> start emitting the real domain.</li>
+                  <li>With <code>base</code> back at <code>/</code>, the CMS admin's root-absolute links resolve correctly again — they're currently broken on the <code>/harvardintech</code> subpath deploy. A real bug fixed as a side effect.</li>
+                </ul>
+      </div>
+    </details>
+  ) : null
+}
+{
+  id === 'S6' ? (
+    <details class="op">
+      <summary>Operator detail</summary>
+      <div class="body">
+<ul>
+                  <li><code>public/design-review-4ece6c14/</code> — 20MB, thirteen files, <code>noindex</code>, no passphrase. Deliberately published at an obscure path for the board; the URL is the access mechanism, so deleting it breaks a live link (D3).</li>
+                  <li><code>public/review/index.html</code> — the status page, still a raw <code>public/</code> file carrying <code>crimson2026</code> in client-side JavaScript, and still reachable on the public domain once the gate comes off (D4).</li>
+                  <li><b>This page is no longer on that list.</b> It used to be <code>public/cutover-runbook.html</code>, with the same exposure. It is now a route excluded from the public build by <code>includeCutoverRunbook</code>, so it does not exist on <code>harvardintech.com</code> at all — nothing to clear out here, and nothing that can leak by a configuration mistake.</li>
+                </ul>
+                <p>
+                  Also worth a sweep while here: <code>public/images/</code> for assets pulled from
+                  <code>custom-images.strikinglycdn.com</code> by
+                  <code>scripts/download-assets.mjs</code> that the site no longer references. Dead
+                  weight rather than a risk.
+                </p>
+      </div>
+    </details>
+  ) : null
+}
+{
+  id === 'S7' ? (
+    <details class="op">
+      <summary>Operator detail</summary>
+      <div class="body">
+<ol>
+                  <li><b>A day ahead:</b> lower TTL on the apex <code>A</code> records and the <code>www</code> <code>CNAME</code> to <code>300</code>. Nothing else changes; this only shortens how long the old answer is remembered.</li>
+                  <li>Repo <b>Settings → Pages</b>: set the custom domain to <code>harvardintech.com</code>.</li>
+                  <li>At GoDaddy, replace the apex <code>A</code> records with GitHub's four:
+                    <code>185.199.108.153</code>, <code>185.199.109.153</code>,
+                    <code>185.199.110.153</code>, <code>185.199.111.153</code>.
+                    Optionally add the matching <code>AAAA</code> records.
+                    Repoint <code>CNAME www → nseldeib.github.io</code>.
+                    <b>Leave <code>MX</code>, the <code>mail.</code> host record, and every <code>TXT</code> untouched.</b>
+                  </li>
+                  <li>Wait for GitHub to issue the certificate, <em>then</em> enable <b>Enforce HTTPS</b>. Enabling it early is what produces a browser warning.</li>
+                  <li>Run <b>V5</b> — send a test email both ways — before calling the cutover done.</li>
+                </ol>
+      </div>
+    </details>
+  ) : null
+}
+{
+  id === 'S9' ? (
+    <details class="op">
+      <summary>Operator detail</summary>
+      <div class="body">
+<p>
+                  Before cancelling, record the rollback values (R1–R3) somewhere the team can
+                  reach <b>without this repository</b> — a shared doc, not a file in the codebase.
+                  A rollback procedure only reachable by someone with a working checkout is not a
+                  rollback procedure.
+                </p>
+      </div>
+    </details>
+  ) : null
+}

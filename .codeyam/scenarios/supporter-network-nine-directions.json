@@ -1,0 +1,24 @@
+{
+  "name": "Supporter Network - Nine Directions",
+  "id": "be7f9ead-2a59-4b08-860c-c7278b35ef6a",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop",
+    "Mobile"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "The review deck Nicole opens once she is past the passphrase, which this scenario types rather than bypasses — so what is captured is the page as it actually ships, not a screenshot-only code path. Nine directions: seven network readings plus two off-brief controls that drop the graph entirely. Every card is the real renderer at card size rather than a screenshot, so a thumbnail cannot drift from the direction it opens. The cards carry no rating slider or comment box: reactions come back in a doc, so the deck asks for nothing and gets out of the way of the designs. Captured on Mobile as well as Desktop because the deck is shared as a link and a reviewer is as likely to open it on a phone — where the three-column grid has to collapse without the miniatures becoming unreadable. No seed: the page is fully self-contained, since a published artifact runs under a CSP that blocks every external host, so the 200 illustrative supporters are inlined rather than fetched.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    }
+  ]
+}

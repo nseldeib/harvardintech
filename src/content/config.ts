@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import { defineCollection, z } from 'astro:content';
+import { previewFields } from '@codeyam/cms/content';
 import { glob } from 'astro/loaders';
 import type { Loader } from 'astro/loaders';
 import { contentRoot } from '../lib/contentRoot';
@@ -63,6 +64,19 @@ function collectionGlob(collection: string): Loader {
 // survive validation at all — a zod object silently strips keys it does not
 // know about, which is why ticking Draft used to do nothing. Routes, not this
 // schema, decide visibility: see `publishedEntries` in `src/lib/drafts.ts`.
+//
+// The five collections with a PER-ENTRY ROUTE additionally spread
+// `...previewFields` (`previewOf`, `previewCreatedAt`, `previewLock`), which is
+// what lets the CMS mint a preview link for them. The same zod-strips-unknown-
+// keys rule applies: without the spread the marker never reaches `entry.data`,
+// every preview filter sees an ordinary page, and the feature fails silently in
+// the worst possible direction — an unlisted draft rendered as a live page.
+//
+// Only those five, and that is a real boundary rather than an oversight. A
+// preview link works by building the cloned entry at its own URL, so a
+// collection with no per-entry route (`stats`, `pillars`, `heroSlides` — they
+// render as sections of a page someone else owns) has nowhere for the link to
+// point. Adding a route is what would make one eligible, not adding the fields.
 
 // Blog posts. `coverImage`/`summary` are optional so a minimal post renders.
 // `metaTitle`/`metaDescription`/`ogImage` are per-page SEO overrides (fall back
@@ -82,6 +96,7 @@ const blog = defineCollection({
     embedUrl: z.string().optional(),
     embedHtml: z.string().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -101,6 +116,7 @@ const pages = defineCollection({
     embedUrl: z.string().optional(),
     embedHtml: z.string().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -152,13 +168,25 @@ const chapters = defineCollection({
     blurb: z.string().optional(),
     // Full-bleed city header (mirrors the live harvardintech.com chapter pages):
     // `heroImage` is the background photo, `tagline` the subtitle beneath the
-    // "HARVARD IN TECH <CITY>" title. `showGallery` toggles the shared event
-    // photo gallery; absent → shown (the live site shows it on every chapter),
-    // set `false` to opt out. All optional → a chapter without them falls back
+    // "HARVARD IN TECH <CITY>" title. `showGallery` toggles the event photo
+    // gallery; absent → shown (the live site shows it on every chapter), set
+    // `false` to opt out. All optional → a chapter without them falls back
     // to the centered header.
     heroImage: z.string().optional(),
     tagline: z.string().optional(),
     showGallery: z.boolean().optional(),
+    // This chapter's OWN event photos, curated in /admin. Absent or empty →
+    // the page falls back to the shared 40-photo landing-page gallery, which
+    // is what every chapter showed before this field existed — so adding the
+    // field changed nothing until someone curates a chapter.
+    //
+    // `caption` is editorial ("Spring mixer at Cornell Tech") and is what makes
+    // the lightbox worth opening. Alt text deliberately does NOT live here:
+    // `altFor` resolves it from `media.json`, which is the site's single source
+    // for alt, and a second field would be a competing one that drifts.
+    photos: z
+      .array(z.object({ image: z.string(), caption: z.string().optional() }))
+      .optional(),
     // Per-chapter "Connect With Us" email; absent → fall back to the global
     // settings contact email.
     contactEmail: z.string().optional(),
@@ -170,6 +198,7 @@ const chapters = defineCollection({
       .optional(),
     order: z.number().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -201,6 +230,7 @@ const communities = defineCollection({
       .optional(),
     order: z.number().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -216,9 +246,18 @@ const projects = defineCollection({
     image: z.string().optional(),
     applyUrl: z.string().optional(),
     commitment: z.string().optional(),
+    // DISPLAY ONLY. These format into a range on the card and the detail page
+    // header; they never decide whether a project appears. Do not add date
+    // filtering here on the assumption it was forgotten: this is a static
+    // build, so a date-expired project would linger until the next deploy and
+    // then vanish without anyone touching the CMS. `active` is the one toggle
+    // that retires a project, and it takes effect on publish.
+    startDate: z.coerce.date().optional(),
+    endDate: z.coerce.date().optional(),
     order: z.number().optional(),
     active: z.boolean().optional(),
     draft: z.boolean().optional(),
+    ...previewFields,
   }),
 });
 
@@ -454,6 +493,16 @@ const pageCopy = defineCollection({
     heroHeadlineGeneric: z.string().optional(),
     heroSubhead: z.string().optional(),
     heroImage: z.string().optional(),
+    // The hero's optional MOVING backdrop: a path like `/videos/momentum.mp4`
+    // for a file committed under `public/videos/`. Blank leaves the hero exactly
+    // as `heroImage` renders it today.
+    //
+    // `heroImage` does not step aside when this is set — it becomes the video's
+    // poster frame AND stays as the section's CSS background. That is what makes
+    // every way the video can fail to play (a 404, a browser refusing autoplay,
+    // a visitor on `prefers-reduced-motion`) degrade to the current page instead
+    // of a black rectangle, with no JavaScript on any of those paths.
+    heroVideo: z.string().optional(),
     // The closing ask at the bottom of the page.
     ctaTitle: z.string().optional(),
     ctaBody: z.string().optional(),

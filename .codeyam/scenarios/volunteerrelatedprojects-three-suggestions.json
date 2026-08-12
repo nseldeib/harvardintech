@@ -1,0 +1,13 @@
+{
+  "name": "VolunteerRelatedProjects - Three Suggestions",
+  "id": "79c1a13f-544c-4300-b8e1-cc8085b200f2",
+  "url": "/isolated-components/VolunteerRelatedProjects",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "VolunteerRelatedProjects",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/volunteer/VolunteerRelatedProjects.astro",
+  "description": "The suggestion row at the tail of a project detail page, below the sign-up CTA. Three other open projects rendered as the same cards the /volunteer grid uses, carrying three different date shapes so the row shows how a range, a start-only, and an end-only read at card width. Which projects land here is relatedProjects decision — adjacent in editor order, wrapping — not this component. The empty branch renders nothing at all: no heading, no section."
+}

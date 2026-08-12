@@ -1,4 +1,4 @@
-# Harvard in Tech — Review Handoff (for Nicole)
+# Harvard Alumni in Tech — Review Handoff (for Nicole)
 
 Internal reference for the external review. Keep the links and the password
 internal.
@@ -14,12 +14,39 @@ until the Strikingly migration.
 |---|---|---|
 | **Website** | https://nseldeib.github.io/harvardintech/ | `crimson2026` |
 | **Todos / project status** | https://nseldeib.github.io/harvardintech/review | `crimson2026` |
+| **Supporter recognition review** | https://nseldeib.github.io/harvardintech/donor-network.html | `crimson2026` |
+| **Domain cutover runbook** | https://nseldeib.github.io/harvardintech/cutover-runbook/ | `crimson2026` |
 | **CMS / admin dashboard** | https://nseldeib.github.io/harvardintech/admin | *(GitHub token — see below)* |
+| **Working site** *(where her edits appear first)* | https://nseldeib.github.io/harvardintech-staging/ | `crimson2026` |
 
-The site and the todos page share one passphrase. It is a **deterrent, not
-authentication** — it ships in the client bundle — so it keeps the preview out of
-search results and away from casual visitors, and that is all. Every page also
-carries `noindex`.
+The trailing slash on the runbook link matters — it is a directory route, and
+without it the link 404s.
+
+The last row is the one that is new, and it exists because the first five all
+point at the **reviewed** site while her CMS edits commit to the **working** one.
+See *Two sites, and which one to send* below.
+
+The site, the todos page and the runbook share one passphrase. It is a
+**deterrent, not authentication** — it ships in the client bundle — so it keeps
+the preview out of search results and away from casual visitors, and that is
+all. Every page also carries `noindex`.
+
+The runbook is additionally **never built for the public site**: it is excluded
+from the public track in code rather than merely gated, so it cannot appear on
+`harvardintech.com` even by a configuration mistake at cutover. That matters
+because it names where the domain's records live.
+
+**CMS preview links are deliberately NOT behind the passphrase.** A preview link
+exists to be handed to one outside reviewer, and gating it would mean sending
+them the link and `crimson2026` together — which hands them the whole unreleased
+site to read one page. The unguessable URL is the access mechanism instead, the
+same trade already made for `public/design-review-4ece6c14/`.
+
+So a preview link is the one surface here that anyone holding the URL can read.
+The editor offers a per-preview password for exactly that gap — it encrypts the
+title and body at rest rather than prompting, so the bytes are unreadable without
+it. That option is not mentioned in the note to Nicole (kept deliberately short);
+point her at it if she ever needs to share something sensitive.
 
 The **CMS is not behind the passphrase.** It is behind a GitHub token sign-in
 instead, and the dashboard is `noindex, nofollow`. Treat its URL as
@@ -28,20 +55,49 @@ HTML is fetchable by anyone who has the address.
 
 ## Ready-to-send note
 
-> Hi Nicole — here's the Harvard in Tech site preview to review. The site and
-> the todos page use the password **crimson2026**:
+> Hi Nicole — here's the Harvard Alumni in Tech site preview to review. Everything
+> except the content editor uses the password **crimson2026**:
 >
 > • **Website:** https://nseldeib.github.io/harvardintech/
 > • **What's done / what's open (todos):** https://nseldeib.github.io/harvardintech/review
+> • **Supporter recognition:** https://nseldeib.github.io/harvardintech/donor-network.html
+> • **Moving the domain over:** https://nseldeib.github.io/harvardintech/cutover-runbook/
 > • **Content editor (CMS):** https://nseldeib.github.io/harvardintech/admin
 >
 > The todos page walks through what's built and the decisions we need from you.
+>
+> The domain link is the one with something we need back from you. The site is
+> finished — moving harvardintech.com onto it is just a handful of settings at
+> the registrar, and that page lays out every step in the order it has to happen,
+> including how we keep your email working throughout. Nothing has been done yet;
+> it's written so the move can be reviewed before it's run.
+>
+> Five questions on that page are yours rather than ours, and the first one
+> blocks all the others: **who has the GoDaddy login?** We've never had access,
+> and until that's answered nothing can start — not even the first step, which
+> only reads the current settings and changes nothing. Each question has what
+> we'd suggest, so there's something to react to rather than a blank page.
+>
+> The supporter recognition link is the one I'd most like your reaction to. It
+> shows the donor wall as it's built today, then nine directions for replacing
+> it, then what actually happens when the bi-weekly spreadsheet meets either —
+> which turns out to be the interesting problem. Nothing on that page records
+> anything; at the bottom there's an outline to paste into a doc. Everything is
+> numbered (W1–W5, 01–09, I1–I4, Q1–Q4) so a one-line reaction lands exactly
+> where you meant it.
+>
 > Please keep the links and password internal for now. The editor needs a
 > separate access token, which I'll send you privately if you'd like to make
 > edits directly.
 >
-> One thing if you do edit: after you save, the site takes a minute or two to
-> rebuild before your change shows up. The editor will tell you when it's live.
+> One thing if you do edit: your change goes to the **working site** first, not
+> the link above. It shows up there a minute or two after you save, and the
+> editor tells you when it has landed:
+>
+> • **Working site (see your edit right away):** https://nseldeib.github.io/harvardintech-staging/
+>
+> The reviewed link at the top only moves when we promote, which is deliberate —
+> it means nothing shifts under you mid-review. Say the word and we'll promote.
 >
 > (The real harvardintech.com is unchanged — this is a private preview.)
 
@@ -161,25 +217,43 @@ One thing worth knowing: an upload has to be **published from the media library*
 before it appears on the site. Selecting a file stages it; it is not live until
 the publish commits.
 
-The underlying upload bug is in the `@codeyam/cms` package, not this site. The
-guard ships here as `patches/@codeyam+cms+0.2.2.patch` (applied automatically on
-`npm install`) and should be filed upstream so the patch can eventually be
-dropped.
+The underlying upload bug was in the `@codeyam/cms` package, not this site. The
+guard shipped here as a local patch at first; it is now **fixed upstream and
+released in `@codeyam/cms` 0.4.0**, which this site depends on, so the patch has
+been deleted. Every site using the package gets the fix, not just this one.
+
+`src/lib/mediaCommitGuard.test.ts` stays as a check on that dependency: if a
+future release reworks or drops the guard, it fails in CI rather than at an
+editor's next upload. That matters because the bug is invisible at publish time
+— the CMS truthfully says the upload succeeded — so nothing else would catch it.
 
 ## Still open (team todos, not code)
 
-- Real **board bios** (the live site has none to reproduce).
+- Real **board bios** — **2 of the 5 are now written** (Ben Wei and Nadia
+  Eldeib); three are still blank. *Optional, and not a launch blocker* — a
+  member without one renders as photo + name + role, which is exactly what
+  harvardintech.com shows today. Add the rest in /admin whenever they are
+  written, one at a time if that is easier; a half-filled board is a supported
+  state, not a broken one.
 - A **donation-platform URL** (the Donate button currently opens an email).
-- **Chapter + event content** for the 5 cities.
+- **Chapter + event content** for the 6 chapters (Boston/Cambridge, DC-DMV,
+  London, NYC, Seattle, SF Bay Area). 8 events and 11 blog posts are in.
 
 ## Two sites, and which one to send
 
-There are now two gated sites. **Only the first is for Nicole:**
+There are two gated sites, and **Nicole now has both** — with different jobs:
 
 | | URL | What it is |
 |---|---|---|
-| **Reviewed** | `nseldeib.github.io/harvardintech` | The link above. Moves only when someone promotes, so it never changes under her mid-review. |
-| **Staging** | `nseldeib.github.io/harvardintech-staging` | Ours. Takes every commit. Not for sharing. |
+| **Reviewed** | `nseldeib.github.io/harvardintech` | Her main link. Moves only when someone promotes, so it never changes under her mid-review. |
+| **Working** | `nseldeib.github.io/harvardintech-staging` | Takes every commit, including hers. Where her own edits — and any preview link she mints — appear first. |
+
+Staging used to be marked "not for sharing", on the reasoning that a site which
+changes under you is no good to review against. That reasoning still holds for
+*reviewing*, which is why the reviewed link stays her default. It does not hold
+for *editing*: an editor who cannot see her own change has no way to tell a save
+that worked from one that did not, and the note she was sent told her the change
+would appear on a link where it never does.
 
 Neither is public — `harvardintech.com` is still Strikingly's.
 

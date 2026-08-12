@@ -1,0 +1,43 @@
+{
+  "name": "CMS Momentum Sections - A Move Staged Then The Page Reloaded",
+  "id": "7893745a-272b-4f01-9cb9-5b44fe3cd3cb",
+  "url": "/admin/momentumSections",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The donor recognition wall, promoted to the top of the page by an Order edit.",
+        "kind": "donors",
+        "order": 1,
+        "slug": "donors"
+      },
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\n",
+        "image": "/images/gallery/event-04.jpg",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 2,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "body": "The track-record band.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      },
+      {
+        "body": "The 'What Your Gift Powers' cards.",
+        "kind": "pillars",
+        "order": 4,
+        "slug": "pillars"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
+  "description": "What an editor sees if she moves a section and then reloads before publishing. The two staged changes survive the reload — the publish bar reads '2 changes ready to publish across momentumSections' — but the moved order does not, because the arrangement lives in the page's own state while the markdown still holds the old numbers until publish. So the list reads in its ORIGINAL order while the bar says two changes are pending: the one state where the list and the pending changes disagree about the order. Publishing still lands the move. Note the rows carry no staged marker here even though the changes are real, which is a second, smaller disagreement on the same screen."
+}

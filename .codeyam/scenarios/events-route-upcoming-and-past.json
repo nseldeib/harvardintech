@@ -10,7 +10,7 @@
     "events": [
       {
         "chapter": "london",
-        "date": "2026-07-10",
+        "date": "@today+21d",
         "link": "https://luma.com/gbdbyx3j",
         "location": "London, United Kingdom",
         "slug": "2026-07-10-alumni-founders-co-working-day-july",
@@ -18,7 +18,7 @@
       },
       {
         "chapter": "london",
-        "date": "2026-06-12",
+        "date": "@today+45d",
         "link": "https://luma.com/9mdlwirj",
         "location": "London, United Kingdom",
         "slug": "2026-06-12-alumni-founders-co-working-day-june",
@@ -26,7 +26,7 @@
       },
       {
         "chapter": "boston-cambridge",
-        "date": "2026-06-05",
+        "date": "@today-63d",
         "link": "https://luma.com/d93hloxh",
         "location": "Cambridge, MA",
         "slug": "2026-06-05-harvard-alumni-in-tech-alumni-day-meetup-in-cambridge-ma",
@@ -34,34 +34,34 @@
       },
       {
         "chapter": "london",
-        "date": "2026-05-15",
+        "date": "@today-84d",
         "link": "https://luma.com/5cwrbr8c",
         "location": "London, United Kingdom",
         "slug": "2026-05-15-alumni-founders-co-working-day",
         "title": "Alumni Founders Co-working Day"
       },
       {
-        "date": "2026-04-30",
+        "date": "@today-99d",
         "link": "https://luma.com/fk6yuo82",
         "location": "San Francisco, California",
         "slug": "2026-04-30-harvard-alumni-in-tech-leaders-in-engineering-panel",
         "title": "Harvard Alumni in Tech Leaders in Engineering Panel"
       },
       {
-        "date": "2026-04-24",
+        "date": "@today-105d",
         "link": "https://luma.com/h0ba0q6w",
         "location": "Denver, Colorado",
         "slug": "2026-04-24-harvard-alumni-in-tech-colorado-co-working-afternoon",
         "title": "Harvard Alumni in Tech Colorado Co-Working Afternoon"
       },
       {
-        "date": "2025-05-22",
+        "date": "@today-442d",
         "link": "https://luma.com/xk5vyfvv",
         "slug": "2025-05-22-harvard-in-tech",
         "title": "Harvard in Tech"
       },
       {
-        "date": "2024-10-10",
+        "date": "@today-666d",
         "link": "https://luma.com/yi4it0ao",
         "slug": "2024-10-10-harvard-in-tech",
         "title": "Harvard in Tech"

@@ -1,0 +1,447 @@
+{
+  "timestamp": "2026-08-07T20:39:12Z",
+  "title": "Per-Chapter Photo Galleries: Curated, Clickable, and Sized to Fit",
+  "type": "feature",
+  "userRequest": "## Summary\n\nEvery city chapter page shows the same photos. `ChapterPage.astro:99` renders `<EventGallery />`\nwith no props, so all six chapters — boston-cambridge, dc-dmv, london, nyc, seattle,\nsf-bay-area — display the identical 40-photo landing-page wall from\n`/images/gallery/event-01..40.jpg`. The component already accepts an `images` override; nothing\npasses one, and the `chapters` schema has no field to pass.\n\nThis plan gives each chapter its own gallery, curated in the CMS, clickable, and laid out for\nthe number of photos it actually has. Four changes, one component:\n\n1. **Per-chapter photos** — a `photos` list field on the `chapters` collection.\n2. **CMS-editable** — declared in `collections.json` so Nicole picks photos from the media\n   library in /admin, exactly as she already does for `leads` and `links`.\n3. **Click to enlarge** — a native `<dialog>` lightbox with keyboard nav, progressively\n   enhanced.\n4. **Layout and count** — the column count adapts to the photo count, and a gallery longer\n   than 12 photos collapses behind a \"Show all N photos\" button.\n\n**Scope: chapter pages only.** `/communities/<slug>` renders the same `ChapterPage` component\nand has an identical schema, but is deliberately left on the shared gallery — it simply never\npasses the new prop, and the fallback below keeps its current behaviour byte-for-byte. The\nlanding page is likewise untouched: `<EventGallery />` with no props must keep rendering all 40\nphotos uncapped, so the cap and the adaptive columns are opt-in per call site, not new defaults.\n\n**Nothing regresses on day one.** A chapter with no `photos` falls back to the shared 40-photo\nset, so the site looks exactly as it does today until someone curates a chapter. `showGallery:\nfalse` still hides the section outright.\n\n## Key Decisions\n\n- **A `list` field, not a bare image array.** `leads` and `links` on this same collection are\n  already `list` fields with scalar sub-fields, and the CMS renders them with add/remove/reorder\n  rows for free. A `photos` list of `{ image, caption? }` follows that precedent exactly, and the\n  caption sub-field is what makes a lightbox worth opening. Nested lists are unsupported by the\n  registry, but this is one level, so it fits.\n- **Captions live on the entry, alt text stays in the media library.** `altFor` already resolves\n  alt from `media.json` and is the site's single source for it — a second alt field on the\n  chapter would be a competing source that drifts. A caption is editorial (\"Spring mixer at\n  Cornell Tech\"), alt is accessibility; they are different jobs and should not share a field.\n- **Normalize at the boundary with a pure helper.** `EventGallery`'s existing `images?: string[]`\n  prop is used by the landing page and by the captured `event-gallery` scenario. Rather than\n  change its type and break both, add `toGalleryPhotos(input)` in `src/lib/gallery.ts` that\n  accepts `string[]` *or* the chapter's `{ image, caption? }` rows and returns a uniform\n  `GalleryPhoto[]`. One code path renders the grid; both call shapes keep working.\n- **Native `<dialog>`, not a hand-rolled modal.** `showModal()` gives focus trapping, Esc-to-close,\n  inert background, and the top layer for free — all the parts a hand-rolled lightbox gets wrong.\n  There is no existing modal anywhere in `src/` to reuse, so this is new either way; native is the\n  smaller and more correct new thing.\n- **Progressive enhancement, no framework.** The site ships no client framework and the existing\n  interactive components (`HeroCarousel.astro`, `EventGallery.astro`) are dependency-free\n  `<script>` blocks over `data-*` hooks, with the decision logic extracted into unit-tested pure\n  helpers in `src/lib/`. The lightbox follows that shape. Without JS — or without\n  `HTMLDialogElement` — the tiles stay plain images and the gallery is fully usable; the\n  enhancement is additive.\n- **A button, not a link, opens a photo.** There is no URL to navigate to, so `<button>` is the\n  honest element and is keyboard-operable with no `tabindex`/`role` patching.\n- **The cap is a prop, not a default.** Defaulting to 12 everywhere would silently truncate the\n  homepage's 40-photo wall. Chapters pass the cap; the landing page does not.\n- **Reveal-on-scroll survives the cap.** The existing `initGalleryReveal()` queries\n  `#gallery .gallery-item` once on load. Photos revealed by \"Show all\" mount after that, so the\n  wiring has to be re-runnable — it already unobserves as it goes, but it must also pick up tiles\n  that appeared since. Making it idempotent-and-re-callable is a small change to an existing\n  function, not a rewrite.\n- **One `id=\"gallery\"` per page.** The reveal helper and the section anchor both key off it. A\n  chapter page renders one gallery, so this holds — but it is a real constraint on ever putting\n  two on a page, and worth a comment rather than a surprise later.\n\n## Implementation\n\n### 1. Content schema\n\n**File**: `src/content/config.ts`\n\nAdd to the `chapters` schema, alongside `heroImage` / `showGallery`:\n\n```ts\nphotos: z\n  .array(z.object({ image: z.string(), caption: z.string().optional() }))\n  .optional(),\n```\n\nOptional, so every existing chapter file stays valid. Extend the block comment that already\nexplains `heroImage` / `showGallery` to say what `photos` does and that absent means \"fall back\nto the shared event gallery\". Leave the `communities` schema alone — that is the scope boundary.\n\n### 2. CMS field\n\n**File**: `src/data/collections.json`\n\nAdd a `photos` field to the `chapters` entry, modelled on the existing `leads` / `links` list\nfields:\n\n```json\n{\n  \"name\": \"photos\",\n  \"label\": \"Chapter photos\",\n  \"type\": \"list\",\n  \"optional\": true,\n  \"hint\": \"This chapter's own event photos. Leave empty to show the shared event gallery.\",\n  \"fields\": [\n    { \"name\": \"image\", \"label\": \"Photo\", \"type\": \"image\" },\n    { \"name\": \"caption\", \"label\": \"Caption\", \"type\": \"text\", \"optional\": true }\n  ]\n}\n```\n\nPlace it after `showGallery` so the two gallery controls sit together in the editor. The `image`\nsub-field type gives Nicole the media-library picker; `list` gives her add / remove / reorder.\n\n### 3. Gallery helpers\n\n**File**: `src/lib/gallery.ts`\n\nFour additions, all pure and unit-testable, in the module's existing \"data in, data out\" style:\n\n- `export interface GalleryPhoto { src: string; caption?: string }`\n- `toGalleryPhotos(input: (string | { image: string; caption?: string })[]): GalleryPhoto[]` —\n  normalizes either shape, dropping rows with a blank/missing `image` so a half-filled CMS row\n  cannot render an empty tile.\n- `galleryColumns(count: number, max = 5): number` — `Math.min(count, max)`, floored at 1, so a\n  three-photo chapter renders three columns instead of five with two holes.\n- `visibleGalleryPhotos(photos, { expanded, cap })` — the first `cap` when collapsed, all when\n  expanded or when `cap` is absent. Callers with no cap get every photo, which is what keeps the\n  landing page uncapped.\n\nAlso make `initGalleryReveal()` safe to call again after \"Show all\" mounts new tiles: it already\nno-ops on an empty query and unobserves each tile as it reveals, so the change is to skip tiles\nalready marked `in-view` and to export the re-run rather than assuming a single call at load.\n\n**File**: `src/lib/gallery.test.ts` — cases for each new helper: mixed string/object input,\nblank-image rows dropped, columns clamped both directions (1 photo → 1, 40 photos → 5),\ncollapsed vs expanded vs uncapped.\n\n### 4. Lightbox\n\n**New file**: `src/lib/lightbox.ts` *(new)*\n\nMirrors the `gallery.ts` / `parallax.ts` split — pure helpers plus thin idempotent wiring:\n\n- `lightboxKeyAction(key: string): 'close' | 'next' | 'prev' | null` — maps `Escape`,\n  `ArrowRight`, `ArrowLeft`; everything else `null`. (`<dialog>` handles Esc natively too; mapping\n  it keeps the close path single.)\n- `nextPhotoIndex(current: number, count: number, delta: number): number` — wraps at both ends.\n- `initLightbox(): void` — no-op under SSR/vitest (no `window`/`document`) and when\n  `HTMLDialogElement` is unavailable; otherwise binds the open buttons, the dialog's prev / next /\n  close controls, and the keydown handler. Idempotent, guarded by a `data-` flag so a second call\n  does not double-bind.\n\n**New file**: `src/lib/lightbox.test.ts` *(new)* — the two pure helpers, including wrap-around in\nboth directions and the unmapped-key case.\n\n### 5. The gallery component\n\n**File**: `src/components/landing/EventGallery.astro`\n\n- Props become `photos?: (string | { image: string; caption?: string })[]`, `cap?: number`,\n  `heading?: string`, `kicker?: string`, all optional. Keep `images?: string[]` as an alias for\n  `photos` so the captured `event-gallery` scenario and any existing call keep working, and note\n  in the comment that it is retained for that reason.\n- Normalize through `toGalleryPhotos`, compute `columns` via `galleryColumns`, and render\n  `visibleGalleryPhotos(...)`. Pass the real `columns` into the existing\n  `galleryStaggerDelay(i, columns)` so the ripple matches the grid actually rendered rather than\n  always assuming five.\n- Drive the grid off a `--gallery-cols` custom property set inline from `columns`; keep the\n  existing 900px → 4 and 600px → 3 breakpoints as ceilings via `min()` so a small gallery never\n  gains columns on a narrow screen.\n- Wrap each tile's `<img>` in `<button type=\"button\" data-lightbox-open data-index={i}>`, carrying\n  the full-size src and caption as data attributes. Style the button to be visually\n  indistinguishable from today's tile — no border, no background, inheriting the existing\n  `aspect-ratio: 1/1` crop — with a visible `:focus-visible` ring.\n- Render one `<dialog data-lightbox>` per gallery holding the large `<img>`, a `<figcaption>`, a\n  close button, and prev / next buttons. Hidden until `showModal()`.\n- Below the grid, when `cap` is set and there are more photos than the cap, a\n  `<button data-gallery-expand>` reading \"Show all N photos\". Its click handler removes the cap\n  class and re-runs `initGalleryReveal()`.\n- Heading/kicker default to today's \"Community\" / \"From our events\" so the landing page is\n  unchanged.\n- Extend the `<script>` block to call `initLightbox()` alongside the existing\n  `initGalleryReveal()`.\n\n### 6. Wiring the chapter page\n\n**File**: `src/components/ChapterPage.astro`\n\nAccept `photos?: { image: string; caption?: string }[]` and pass it down, with the fallback that\npreserves today's behaviour:\n\n```astro\n{showGallery\n  ? <EventGallery\n      photos={photos?.length ? photos : undefined}\n      cap={photos?.length ? 12 : undefined}\n      heading={photos?.length ? `Photos from ${name}` : undefined}\n    />\n  : null}\n```\n\nA chapter with no curated photos passes nothing and gets the shared 40-photo wall, uncapped, with\nthe original heading — exactly what renders today. Update the component's header comment, which\ncurrently describes the gallery as shared.\n\n**File**: `src/pages/chapters/[slug].astro`\n\nDestructure `photos` from `chapter.data` (line ~53) and pass it to `ChapterPage` (line ~68).\n\n**Not changed**: `src/pages/communities/[slug].astro`. It never passes `photos`, so communities\nkeep the shared gallery. Say so in a comment there, so the omission reads as a decision rather\nthan an oversight.\n\n### 7. Seed one real chapter\n\n**File**: `src/content/chapters/nyc.md`\n\nAdd a `photos` list with a handful of real entries so the feature is visible without CMS work and\nthe scenarios have honest data. Only `/images/gallery/event-*.jpg` and\n`/images/chapters/nyc.jpg` are known to exist — confirm any path against `public/images` before\ncommitting it, since a record naming a file that is not there renders a broken tile.\n\n## Reused existing code\n\n- `galleryStaggerDelay`, `galleryRevealImmediately`, `initGalleryReveal` from `src/lib/gallery.ts`\n  (glossary entries: `galleryStaggerDelay`, `galleryRevealImmediately`, `initGalleryReveal`;\n  tested in `src/lib/gallery.test.ts`) — the stagger and reveal keep working; the new helpers join\n  the same module.\n- `altFor` + `readMediaManifest` from `src/lib/media.ts` (glossary entries: `altFor`,\n  `readMediaManifest`) — already how `EventGallery` resolves alt text; the lightbox's large image\n  reuses the same resolved alt rather than inventing one.\n- `withBase` from `src/lib/url.ts` (glossary entry: `withBase`) — mandatory on every image src;\n  the preview deploys under the `/harvardintech` base path, and `landing-images.test.ts` exists\n  specifically because this was missed once before.\n- `ChapterPage` (glossary entry: `ChapterPage`) and `ChapterRoute` /\n  `getStaticPaths` (`src/pages/chapters/[slug].astro`, glossary entries: `ChapterPage`,\n  `ChapterRoute`, `getStaticPaths`) — the prop-drilling seam already exists for `heroImage` and\n  `showGallery`; `photos` follows the identical path.\n- The `leads` / `links` `list` fields in `src/data/collections.json` — the exact precedent for a\n  repeatable CMS field on this collection, including how sub-fields are declared.\n- The dependency-free `<script>` + `data-*` hook pattern from\n  `src/components/landing/HeroCarousel.astro`, and the pure-helpers-plus-thin-wiring split from\n  `src/lib/parallax.ts` (tested in `src/lib/parallax.test.ts`).\n\n**Existing-implementation survey.** Grepped `src/` for `dialog`, `modal`, and `lightbox`\n(case-insensitive, excluding tests): **no** existing modal, dialog, or lightbox anywhere in the\nsite, so `src/lib/lightbox.ts` is genuinely new rather than a duplicate. On the data side, the\n`chapters` collection has no photo-list field today — `heroImage` is a single image and\n`showGallery` is a boolean toggle over the shared set — and no helper anywhere normalizes gallery\ninput or computes a column count; `galleryStaggerDelay` takes a `columns` argument but every\ncaller relies on its default of 5. So all four helpers are additions.\n\n**Constrained-file pre-check.** `classify-constrained-files` over the full file list returns\n`{\"constrained\": []}` — nothing here is a lean-limited SKILL.md or an agent-config file.\n\n## Scenarios to Demonstrate\n\n- NYC with a curated 8-photo gallery — its own photos, its own heading, 5 columns.\n- A chapter with 3 photos — 3 columns, no empty grid cells (the layout bug the current fixed\n  5-column grid would produce).\n- A chapter with 20 photos — 12 shown, \"Show all 20 photos\" button, then the full set with the\n  reveal animation firing on the newly mounted tiles.\n- A chapter with no `photos` (dc-dmv, london, seattle as they stand today) — the shared 40-photo\n  wall, uncapped, original heading. The no-regression case.\n- `showGallery: false` — no gallery section at all, unchanged.\n- Lightbox open on a photo with a caption, and on one without.\n- Lightbox keyboard nav: arrow keys wrapping past both ends, Esc closing, focus returning to the\n  tile that opened it.\n- A community page — still the shared gallery, proving the scope boundary holds.\n- The landing page — all 40 photos, no cap, no heading change.\n- Mobile: 3 columns, the lightbox filling the viewport, the expand button at natural width.\n- Reduced motion: tiles revealed immediately, no transform, lightbox still operable.\n- A `photos` row saved with a blank image in the CMS — dropped, no empty tile.",
+  "description": "Chapters can now carry their own curated photos with captions, edited through the CMS via a new `photos` list on the chapters collection. The gallery scales to the photo count rather than assuming forty: one photo stays one tile instead of stretching across the section, three make three columns rather than five with two holes, and a large set fills the five-column wall. A chapter gallery caps at twelve behind a \"Show all N photos\" control that unhides the rest in place, so the revealed photos flow into the same continuous grid instead of starting a second short run. Any tile opens full-size in a native `<dialog>` lightbox with its caption, arrow navigation, Esc, and a backdrop click. The decisions live in tested helpers — `toGalleryPhotos` / `galleryColumns` / `visibleGalleryPhotos` in `src/lib/gallery.ts` and a new `src/lib/lightbox.ts` — and `EventGallery.astro` was reduced to normalization plus composition of three extracted components (GalleryTile, GalleryLightbox, GalleryExpand). A chapter with no curated photos, the landing page, and community pages render exactly as before; that fallback was verified in the HTML on all three and is the reason the site looks unchanged until someone curates a chapter.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--per-chapter-photo-galleries-curated-clickable-and-sized-to-fit.md\t.codeyam/plans/completed/ns--per-chapter-photo-galleries-curated-clickable-and-sized-to-fit.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/4685d9de5fd8d6dd7c038a534aee55c9eb2ce7a02f1a7708adedd87219f5a7db.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/6b1cee457279a6f637a6afc98ccf8885419c16de30fcfb2bb4ce789e41b70ff0.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/ChapterPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/landing/EventGallery.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/gallery.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/gallery.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/chapters/[slug].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-gallery-a-single-photo.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-gallery-curated-and-capped.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-gallery-photo-enlarged.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-gallery-show-all-revealed.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/chapter-gallery-three-photos-three-columns.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-chapterpage-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-landing-eventgallery-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-landing-galleryexpand-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-landing-gallerylightbox-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-landing-gallerytile-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/galleryexpand-fourteen-photos.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/gallerylightbox-no-caption.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/gallerylightbox-photo-open.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/gallerytile-captioned-photo.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/gallerytile-keyboard-focus.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-a-single-photo--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-a-single-photo--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-curated-and-capped--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-curated-and-capped--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-photo-enlarged--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-photo-enlarged--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-show-all-revealed--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-show-all-revealed--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-three-photos-three-columns--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-three-photos-three-columns--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/galleryexpand-fourteen-photos--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/gallerylightbox-no-caption--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/gallerylightbox-photo-open--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/gallerytile-captioned-photo--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/gallerytile-keyboard-focus--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/03ae7752ed18b13e96f550a8069c14b25b48ad6063905d9e957480dc3b45267e.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/9fead756c767a8e2a85c319c09e8b2e9c47ea33af6b3758fac061a0c8d2400e7.json",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/GalleryExpand.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/GalleryLightbox.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/landing/GalleryTile.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/lightbox.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/lightbox.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GalleryExpand.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GalleryLightbox.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GalleryLightboxUncaptioned.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GalleryTile.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Chapter Gallery - A Single Photo",
+      "screenshotPath": "chapter-gallery-a-single-photo--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Three Photos, Three Columns",
+      "screenshotPath": "chapter-gallery-three-photos-three-columns--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Curated and Capped",
+      "screenshotPath": "chapter-gallery-curated-and-capped--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Show All Revealed",
+      "screenshotPath": "chapter-gallery-show-all-revealed--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Photo Enlarged",
+      "screenshotPath": "chapter-gallery-photo-enlarged--desktop.png"
+    },
+    {
+      "name": "GalleryTile - Captioned Photo",
+      "screenshotPath": "gallerytile-captioned-photo--desktop.png"
+    },
+    {
+      "name": "GalleryTile - Keyboard Focus",
+      "screenshotPath": "gallerytile-keyboard-focus--desktop.png"
+    },
+    {
+      "name": "GalleryLightbox - Photo Open",
+      "screenshotPath": "gallerylightbox-photo-open--desktop.png"
+    },
+    {
+      "name": "GalleryLightbox - No Caption",
+      "screenshotPath": "gallerylightbox-no-caption--desktop.png"
+    },
+    {
+      "name": "GalleryExpand - Fourteen Photos",
+      "screenshotPath": "galleryexpand-fourteen-photos--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 45,
+    "passed": 45,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 45,
+        "passed": 45
+      }
+    ]
+  }
+}

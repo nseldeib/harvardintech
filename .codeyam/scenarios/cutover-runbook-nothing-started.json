@@ -1,0 +1,77 @@
+{
+  "name": "Cutover Runbook - Nothing Started",
+  "id": "3c92e153-648d-4472-9f40-900b6ccda71d",
+  "url": "/cutover-runbook",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "command": "bash .codeyam/seed-cutover-progress.sh",
+    "data": {
+      "cutoverDecisions": [
+        {
+          "answered": false,
+          "id": "D1"
+        },
+        {
+          "answered": false,
+          "id": "D2"
+        },
+        {
+          "answered": false,
+          "id": "D3"
+        },
+        {
+          "answered": false,
+          "id": "D4"
+        },
+        {
+          "answered": false,
+          "id": "D5"
+        }
+      ],
+      "cutoverSteps": [
+        {
+          "done": false,
+          "id": "S1"
+        },
+        {
+          "done": false,
+          "id": "S2"
+        },
+        {
+          "done": false,
+          "id": "S3"
+        },
+        {
+          "done": false,
+          "id": "S4"
+        },
+        {
+          "done": false,
+          "id": "S5"
+        },
+        {
+          "done": false,
+          "id": "S6"
+        },
+        {
+          "done": false,
+          "id": "S7"
+        },
+        {
+          "done": false,
+          "id": "S8"
+        },
+        {
+          "done": false,
+          "id": "S9"
+        }
+      ]
+    }
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/cutover-runbook/[...path].astro",
+  "description": "The production default, and the true state of this migration: nothing ticked, nothing answered, and the banner saying so in as many words. This is the state the page ships in and the one that matters most to get right, because 'some of this has already been done' was the single most likely misreading of the document this replaced — and being able to record progress makes that misreading easier to arrive at, not harder. Every step below the banner is blocked or ready off the same file, so D1 being unanswered visibly stops S1, S2 and S7 rather than leaving the reader to work it out."
+}

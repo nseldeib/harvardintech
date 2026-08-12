@@ -1,0 +1,12 @@
+{
+  "name": "Decision Tick - Decided",
+  "id": "5d710b03-4cdf-486d-a61f-9bbc89b19155",
+  "url": "/isolated-components/DecisionTick-Decided",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DecisionTick",
+  "scenarioType": "component",
+  "description": "A decision with its answer recorded, in the team's own words, attributed and dated, with the outs to change it or reopen it. The long answer is the point rather than an accident of the fixture: real answers to these questions carry conditions ('she'll make the edits herself with Jared on a call'), and a control that only comfortably fits a sentence would quietly push people back to recording the flag and keeping the substance elsewhere."
+}

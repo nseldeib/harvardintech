@@ -6,13 +6,23 @@
 // shell). Renders nothing in dev or on the public build, so codeyam previews,
 // scenario captures, and harvardintech.com are all unaffected. Deterrent-level
 // privacy — see previewGate.ts.
-import { PREVIEW_GATE_ENABLED, PREVIEW_GATE_PASSPHRASE } from '../lib/previewGate';
+//
+// CMS preview pages are exempt (`gateAppliesTo`), and the exemption is decided
+// HERE at build time rather than in the client script: an exempt page then ships
+// without the overlay markup and without the passphrase, instead of shipping
+// both and asking the browser not to use them.
+import {
+  PREVIEW_GATE_ENABLED,
+  PREVIEW_GATE_PASSPHRASE,
+  gateAppliesTo,
+} from '../lib/previewGate';
 
 const pass = PREVIEW_GATE_PASSPHRASE;
+const gated = PREVIEW_GATE_ENABLED && gateAppliesTo(Astro.url.pathname);
 ---
 
 {
-  PREVIEW_GATE_ENABLED ? (
+  gated ? (
     <Fragment>
       <meta name="robots" content="noindex, nofollow" />
       <script is:inline define:vars={{ pass }}>

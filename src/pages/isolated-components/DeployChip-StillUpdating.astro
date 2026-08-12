@@ -1,0 +1,26 @@
+---
+import Component from "@codeyam/cms/components/admin/DeployChip.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for DeployChip at `unconfirmed` — the parked outcome in its
+// compact form.
+//
+// This is the chip's third colour, and the one that has to be readable WITHOUT
+// the colour: amber sits between the green of "live" and the red of "failed",
+// so if the dot were the only signal an editor would have to know a convention
+// nobody taught her. The label says "Published — still updating" in words, and
+// this capture is what keeps that true.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DeployChip - Still Updating</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component client:load state={{ stage: 'unconfirmed' }} />
+    </div>
+  </body>
+</html>

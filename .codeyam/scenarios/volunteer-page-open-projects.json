@@ -14,26 +14,29 @@
         "commitment": "25 hours",
         "order": 1,
         "slug": "social-media-marketing-specialist-events",
-        "title": "Social Media Marketing Specialist- Events"
+        "title": "Social Media Marketing Specialist- Events",
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-15"
       },
       {
         "applyUrl": "https://hi.switchy.io/wEYK",
         "blurb": "Help stand up our next city chapter: find a venue, rally the first 30 alumni, and run the launch mixer.",
-        "body": "Toronto has more than 400 Harvard alumni working in technology and no chapter to bring them together. This project takes the city from a mailing list to a first real event.\n\n## What you'll do\n\n- Scout and book a venue for a 30\u201350 person evening mixer, working with our events budget.\n- Draft the invitation and work with the newsletter editor to reach Toronto-area alumni.\n- Recruit two or three co-organizers who will keep the chapter running after launch.\n- Run the launch mixer itself, including a short welcome and a round of introductions.\n- Write a short handover note so the standing chapter team inherits your contacts and vendor list.\n\n## What we're looking for\n\nYou don't need event-management experience \u2014 you need to be organized, comfortable emailing strangers, and based in or near Toronto. We'll pair you with an organizer from the NYC chapter who has done this twice.",
+        "body": "Toronto has more than 400 Harvard alumni working in technology and no chapter to bring them together. This project takes the city from a mailing list to a first real event.\n\n## What you'll do\n\n- Scout and book a venue for a 30–50 person evening mixer, working with our events budget.\n- Draft the invitation and work with the newsletter editor to reach Toronto-area alumni.\n- Recruit two or three co-organizers who will keep the chapter running after launch.\n- Run the launch mixer itself, including a short welcome and a round of introductions.\n- Write a short handover note so the standing chapter team inherits your contacts and vendor list.\n\n## What we're looking for\n\nYou don't need event-management experience — you need to be organized, comfortable emailing strangers, and based in or near Toronto. We'll pair you with an organizer from the NYC chapter who has done this twice.",
         "commitment": "~3 hrs / week",
         "image": "/images/volunteers.webp",
         "order": 2,
         "slug": "chapter-launch-team-toronto",
-        "title": "Chapter launch team \u2014 Toronto"
+        "title": "Chapter launch team — Toronto"
       },
       {
         "blurb": "Curate the monthly roundup of member news, events, and opportunities that goes out to the full network.",
-        "body": "The monthly newsletter is how most of our members hear from us at all. It goes out on the first Tuesday of each month to the full network.\n\nThe editor collects submissions from chapter leads, picks the three or four items worth leading with, writes the intro, and schedules the send. Everything is drafted in the CMS \u2014 no HTML required.\n\nThis is a good fit if you like writing short, and you'd rather own one clearly-scoped thing every month than be on call.",
+        "body": "The monthly newsletter is how most of our members hear from us at all. It goes out on the first Tuesday of each month to the full network.\n\nThe editor collects submissions from chapter leads, picks the three or four items worth leading with, writes the intro, and schedules the send. Everything is drafted in the CMS — no HTML required.\n\nThis is a good fit if you like writing short, and you'd rather own one clearly-scoped thing every month than be on call.",
         "commitment": "~2 hrs / month",
         "image": "/images/sections/board.png",
         "order": 3,
         "slug": "newsletter-editor",
-        "title": "Newsletter editor"
+        "title": "Newsletter editor",
+        "startDate": "2026-10-05"
       },
       {
         "applyUrl": "https://hi.switchy.io/wEYK",
@@ -48,11 +51,11 @@
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/volunteer.astro",
-  "description": "The /volunteer page once organizers have posted work in the CMS \u2014 the state the production empty page grows into. Every card links through to its own detail page, and the mix is deliberate: projects with a photo and a sign-up form, with a photo but no form yet, and with neither. The cards stay the same height regardless, which is what keeps the grid aligned. The scenario hovers a card's 'Read the full description' link, which scrolls the grid into frame: a full-page shot from the top is all hero and benefit copy, and the grid this feature changed sits two screens down.",
+  "description": "The /volunteer page once organizers have posted work in the CMS - the state the projects section was built for, and now the state that proves dated and undated cards sit in one grid without disturbing it. Two of the four carry dates and two do not, alternating across the row: a same-year range on the first card, a start-only on the third, and nothing at all on the second and fourth, which must look exactly as every card did before dates existed. The date chip shares a row with the time commitment rather than stacking under it, so a dated card is the same height as an undated one and the grid stays aligned.",
   "interactions": [
     {
       "action": "hover",
-      "text": "Read the full description \u2192"
+      "text": "Read the full description →"
     }
   ]
 }

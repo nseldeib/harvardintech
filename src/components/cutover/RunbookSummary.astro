@@ -1,0 +1,55 @@
+---
+// Where the migration has actually got to.
+//
+// The page this replaced said one thing here — "nothing has happened yet" —
+// because nothing could be recorded. Now that ticks are real, a fixed line
+// claiming nothing has happened would sit directly under a count saying four
+// steps are done, so the banner is derived: one statement of where we are,
+// from the file, rather than two that can disagree.
+//
+// The untouched case is still the loudest and stays first. It is the production
+// default, and "some of this has already been done" was the single most likely
+// misreading of the original page — being able to record progress does not make
+// that misreading less costly, it makes it easier to arrive at.
+//
+// Deliberately no progress bar. A bar implies the nine steps are equal-sized and
+// that seven-ninths means something; they are not and it does not. Six of the
+// nine touch nothing live, and the two that matter are S5 and S7.
+import { summaryLine, type Rollup } from '../../lib/cutoverProgress';
+import StandingBanner from './StandingBanner.astro';
+
+interface Props {
+  counts: Rollup;
+}
+const { counts } = Astro.props;
+---
+
+<section class="summary">
+  <div class="wrap">
+    {
+      counts.untouched ? (
+        <StandingBanner tone="open" title="Nothing here has happened yet.">
+          No DNS record has been read or changed, the site is still gated behind its
+          passphrase, and <code>harvardintech.com</code> still shows the Strikingly site
+          exactly as it did yesterday. Every step below is written in the future tense on
+          purpose. This page exists so the move can be reviewed before it is run, rather
+          than reconstructed afterwards.
+        </StandingBanner>
+      ) : counts.complete ? (
+        <StandingBanner tone="done" title="The move is done.">
+          All nine steps are recorded complete, including retiring Strikingly. Anything
+          still to verify lives in the checks below, and the rollback values are worth
+          keeping somewhere reachable without this repository for a while yet.
+        </StandingBanner>
+      ) : (
+        <StandingBanner
+          tone="part"
+          title={`${counts.stepsDone} of ${counts.stepsTotal} steps done · ${counts.decisionsAnswered} of ${counts.decisionsTotal} decisions answered`}
+        >
+          {summaryLine(counts)} Ticks are saved to the repository, so this is what everyone
+          sees, not just you.
+        </StandingBanner>
+      )
+    }
+  </div>
+</section>

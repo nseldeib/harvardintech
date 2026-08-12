@@ -1,0 +1,46 @@
+---
+import Component from "../../../src/components/donate/MomentumHero.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for MomentumHero with a video backdrop set — the state the
+// Hero video field produces.
+//
+// The thing to check is that nothing about the foreground changed: the
+// headline, the subhead and the Give button sit on the video exactly as they
+// sat on the photo, because the scrim that guarantees their contrast floor is
+// still between them and the backdrop. A hero that became a video PLAYER would
+// have pushed the Give button down the page; this one did not move it.
+//
+// `sample-backdrop.mp4` is a flat gradient rather than campaign footage, and
+// every one of its frames is identical — so this capture is the same image on
+// every run instead of depending on when the screenshot fired. That is the
+// capture-stability problem the plan flagged, solved in the asset rather than
+// with a scenario-only prop.
+//
+// A separate page per state rather than one `?s=`-switched page: this is a
+// prerendered static build, so query params are empty at build time and a single
+// page would capture its default frame for every state.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: MomentumHero - Video</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        headlineNamed="{name}, let's go further together"
+        headlineGeneric="Let's go further together"
+        subhead="Help sustain the Harvard Alumni in Tech community and the connections, opportunities, and support that move us forward."
+        image="/images/bg/hero-bg.jpg"
+        video="/videos/sample-backdrop.mp4"
+        ctaLabel="Make a Gift"
+        email="ben@harvardintech.com"
+        campaignName="The Momentum Fund"
+        previewName="Ben"
+      />
+    </div>
+  </body>
+</html>

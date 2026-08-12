@@ -14,6 +14,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { settings } from '../lib/site';
 import { publishedEntries } from '../lib/drafts';
+import { splitEvents } from '../lib/events';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { sortBoardMembers, filterActiveBoardMembers } from '../lib/team';
 import { loadHomeSections, loadHeroSlides, loadHomeStats } from '../lib/homeSectionsContent';
@@ -24,9 +25,27 @@ import HomeSections from '../components/landing/HomeSections.astro';
 // or reviewer still sees drafts while the published site never does.
 const showDrafts = INCLUDE_DRAFTS;
 
-const events = publishedEntries(await getCollection('events'), showDrafts)
-  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())
-  .map((e) => ({ slug: e.id, ...e.data }));
+// Only FUTURE events reach the "Upcoming events" band. This route used to hand
+// the section every event in the collection, so the heading and its "N
+// scheduled" badge described a list that was mostly — and by August 2026,
+// entirely — in the past: eight cards under "Upcoming events", the newest a
+// month gone and the oldest from October 2024. A visitor reading that learns
+// the community has stopped meeting, which is both false and the opposite of
+// what the band is for.
+//
+// `splitEvents` is the same helper `/events` has always used to divide its
+// Upcoming and Past sections (EventsPage.astro), so the two routes now agree on
+// what "upcoming" means instead of only one of them applying the rule.
+//
+// When nothing is upcoming the band renders its designed empty state — which
+// offers the Luma calendar and the mailing list — rather than a stale list. An
+// honest "no upcoming events just yet, subscribe to hear first" is a better
+// page than a confident list of things that already happened.
+const allEvents = publishedEntries(await getCollection('events'), showDrafts).map((e) => ({
+  slug: e.id,
+  ...e.data,
+}));
+const { upcoming: events } = splitEvents(allEvents);
 
 // Regional chapters for the "Our chapters" section, sorted in-component by `order`.
 const chapters = publishedEntries(await getCollection('chapters'), showDrafts).map((c) => ({

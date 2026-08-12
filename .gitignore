@@ -70,6 +70,7 @@ blob-report/
 # committed artifact — like a lockfile. Do not add it here.
 .codeyam/secrets.json
 .codeyam/setup-connections.json
+.codeyam/session-token
 test-results/
 playwright-report/
 blob-report/
@@ -127,4 +128,5 @@ blob-report/
 .codeyam/test-run-marker.json
 .claude/settings.local.json
 .claude/hooks/__pycache__/
+docker-compose.cloud.yml
 # codeyam-editor:end

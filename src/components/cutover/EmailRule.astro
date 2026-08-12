@@ -1,0 +1,32 @@
+---
+// The one rule, in its own component because it is stated at more than one
+// altitude on this page and must not drift between them: the summary here, the
+// standing note on S7, and the required check V5 all say the same thing.
+//
+// It is a component rather than prose in the section for a plainer reason too —
+// "replace all records" is the single action in this whole migration that would
+// do immediate, silent damage, and a distinct file is harder to edit past
+// without noticing than a paragraph in the middle of a longer section.
+---
+
+<div class="rule">
+  <div class="k">The one rule</div>
+  <h3>Email must not break.</h3>
+  <p>
+    <code>@harvardintech.com</code> email runs on HostGator, separately from the
+    website, and it is configured through the same registrar screen we'll be
+    editing. The one action that would do real damage is the tempting one:
+    <b>"replace all records."</b> That would take <code>nadia@harvardintech.com</code>
+    and every other mailbox offline, and mail sent during the outage may simply
+    bounce rather than queue.
+  </p>
+  <p>
+    Only two things change: the <b>apex <code>A</code> records</b> and the
+    <b><code>www</code> <code>CNAME</code></b>. The <code>MX</code> record, the
+    <code>mail.</code> host record, and the SPF <code>TXT</code> record are never
+    touched. Step <b>S7</b> spells out exactly which lines to edit, and
+    <b>V5</b> makes proving mail still flows a required step before the cutover
+    is called done — not a thing we check afterwards if someone complains.
+  </p>
+</div>
+

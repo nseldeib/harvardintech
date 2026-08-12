@@ -1,0 +1,67 @@
+---
+// The discovery table from 2026-07-02 — what the domain's records say today.
+//
+// The factual core of the whole page: it is what makes "email is hosted
+// separately, so leaving the mail records alone is workable" a checkable claim
+// rather than a hope. S1 re-confirms it before anyone trusts it.
+import RecordRow from './RecordRow.astro';
+---
+<section id="records">
+  <div class="wrap">
+    <h2>What's there today</h2>
+    <div class="lede">The discovery table, from 2026-07-02. Re-confirm in S1 before trusting it.</div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>What</th><th>Value today</th><th>Action</th></tr></thead>
+        <tbody>
+          <RecordRow label="Registrar" value="GoDaddy.com, LLC" action="keep" actionLabel="Keep">
+            no transfer needed
+          </RecordRow>
+          <RecordRow
+            label="DNS host"
+            value="GoDaddy — ns05/ns06.domaincontrol.com"
+            action="keep"
+            actionLabel="Keep"
+          >
+            edit records here
+          </RecordRow>
+          <RecordRow
+            label="Apex web (<code>harvardintech.com</code>)"
+            value="A → 54.183.102.22 (Strikingly)"
+            action="change"
+            actionLabel="Change"
+          >
+            → the four GitHub IPs
+          </RecordRow>
+          <RecordRow
+            label="<code>www</code>"
+            value="CNAME → www.harvardintech.com.s.strikinglydns.com"
+            action="change"
+            actionLabel="Change"
+          >
+            → nseldeib.github.io
+          </RecordRow>
+          <RecordRow
+            label="Email"
+            value="MX → mail.harvardintech.com (HostGator)"
+            action="danger"
+            actionLabel="Do not touch"
+          />
+          <RecordRow
+            label="SPF / TXT"
+            value="v=spf1 a mx include:websitewelcome.com ~all"
+            action="danger"
+            actionLabel="Do not touch"
+          />
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <b>Why this is easier than it might have been:</b> DNS lives at GoDaddy rather than
+      locked inside Strikingly, so there's no 5–7 day registrar transfer to sit through —
+      we edit records directly. And email is hosted separately from the website, which is
+      what makes "leave the mail records alone" a workable rule rather than wishful
+      thinking: the two genuinely don't depend on each other.
+    </div>
+  </div>
+</section>

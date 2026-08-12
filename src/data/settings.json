@@ -1,6 +1,6 @@
 {
   "siteTitle": "Harvard Alumni in Tech",
-  "siteUrl": "https://nseldeib.github.io/harvardintech",
+  "siteUrl": "https://nseldeib.github.io/harvardintech-staging",
   "description": "The official Harvard Alumni Group for technology, encouraging innovation and connecting technologists across the Harvard community.",
   "contactEmail": "ben@harvardintech.com",
   "footerText": "\u00a9 2026 Harvard Alumni in Tech. All rights reserved. \u00b7 Cookie Policy",
@@ -23,5 +23,6 @@
   ],
   "googleAnalyticsId": "G-GCBX577FFD",
   "customHeadHtml": "",
-  "customBodyHtml": ""
+  "customBodyHtml": "",
+  "previewIndexToken": "qsrwe18v5cm4ccas8pffxktt4c"
 }

@@ -1,0 +1,12 @@
+{
+  "name": "DeployStatus - Live",
+  "id": "d527de25-9d51-4237-8722-fcf78597d1b3",
+  "url": "/isolated-components/DeployStatus-Live",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component",
+  "description": "The happy ending, and a state this site could not reach before. 'Live' does not mean GitHub reported the build finished — the poll holds at 'Waiting for the site to update' until the site's own /deploy-status.json marker changes, so arriving here means the new bytes are genuinely served. That only works now that the watch reads the marker on the site the staging branch actually deploys to; it used to read the main site's marker, which a staging commit never changes."
+}

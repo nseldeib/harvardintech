@@ -1,0 +1,13 @@
+{
+  "name": "OrderArrows - The Only Row",
+  "id": "c2a020b7-99e4-4ac9-8700-52030b60ace6",
+  "url": "/isolated-components/OrderArrows-OnlyRow",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "OrderArrows",
+  "scenarioType": "component",
+  "pageFilePath": "node_modules/@codeyam/cms/src/components/admin/OrderArrows.tsx",
+  "description": "A collection holding exactly one entry, the only state where both arrows are dead at once. Real rather than contrived: a site adds its first hero slide or sponsor level before it has a second, and that collection is ordered from the moment it exists. The row still gets arrows because it is still a sequence. Captured separately because the top and bottom rows each prove only one direction disables, so a bug in the is-there-anywhere-to-move rule that got one end right would look correct in both and show only here."
+}

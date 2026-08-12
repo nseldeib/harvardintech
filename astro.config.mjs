@@ -5,6 +5,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import codeyamCms from '@codeyam/cms';
+import { isPreviewUrl } from '@codeyam/cms/lib/previewPages';
 import { includeCmsIntegration, includeSitemapIntegration } from './src/lib/publishTrack';
 
 // --- codeyam content sandbox ---------------------------------------------
@@ -200,13 +201,34 @@ const isDev = process.argv.includes('dev');
 const integrations = [react()];
 if (isDev) integrations.push(codeyamContentRefresh());
 if (includeCmsIntegration(isDev, isReviewTrack)) integrations.unshift(codeyamCms());
-if (includeSitemapIntegration(isReviewTrack)) integrations.push(sitemap());
+// A preview page is built (its link has to resolve) but must never be ADVERTISED.
+// `sitemap.xml` is a public, machine-read file, so a preview left in it publishes
+// the exact URL the token exists to hide — and unlike an indexed page, no
+// `noindex` can walk that disclosure back. The filter runs on the public track,
+// which is the only track that emits a sitemap at all.
+if (includeSitemapIntegration(isReviewTrack)) {
+  integrations.push(sitemap({ filter: (page) => !isPreviewUrl(page) }));
+}
 
 export default defineConfig({
   output: 'static',
   site,
   base,
   integrations,
+  // The Astro dev toolbar fires on load and calls Vite's HMR `.send()` before
+  // the HMR WebSocket has connected through the fleet editor proxy, throwing
+  // "Cannot read properties of undefined (reading 'send')" in the Live Preview.
+  //
+  // The throw is Vite's rough edge rather than ours: its client guards teardown
+  // with `ws?.close()` but leaves `send()` as a bare `ws.send(...)`, so any
+  // caller before a successful connect hits an undefined socket. And the
+  // connect cannot succeed here — served over HTTPS on the default port, the
+  // client derives its socket host as `${hostname}:${''}`, which is not a
+  // reachable URL.
+  //
+  // Disabling the toolbar removes the caller. It is a dev-only overlay that
+  // `output: 'static'` ships none of, so nothing about the built site changes.
+  devToolbar: { enabled: false },
   vite: {
     optimizeDeps: {
       // @codeyam/cms ships raw `.ts`/`.tsx` (its package exports point at
@@ -217,6 +239,20 @@ export default defineConfig({
       // 'default'". Naming the chain here forces Vite to pre-bundle it to ESM.
       // Dev-only concern — `astro build` bundles these correctly on its own.
       include: ['micromark', 'micromark-extension-gfm', 'debug'],
+      // The cutover runbook's tick controls are the first NON-admin islands to
+      // import @codeyam/cms client libs, and they import them from a page the
+      // dev server had already optimized for. Vite discovered them mid-session,
+      // began re-bundling, and served 504s for
+      // `.vite/deps/@codeyam_cms_lib_authSession.js` while it did — the page
+      // rendered but never hydrated, so every checkbox sat dead.
+      //
+      // `exclude` rather than `include` because the package exports raw `.ts`
+      // (its exports map points at `src/**`), so it is SOURCE: pre-bundling it
+      // is what fails, and leaving it to the normal transform pipeline is what
+      // the admin routes already do successfully. Its transitive CJS deps are
+      // still named in `include` above — that is the part that does need
+      // pre-bundling, and the two lists are not in conflict.
+      exclude: ['@codeyam/cms'],
     },
   },
 });

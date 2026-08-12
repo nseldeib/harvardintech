@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-08-07T03:04:39Z",
+  "title": "Disable The Astro Dev Toolbar In The Live Preview",
+  "type": "fix",
+  "userRequest": "## Summary\n\nDisable the Astro dev toolbar so the Live Preview stops throwing\n`TypeError: Cannot read properties of undefined (reading 'send')` on every page\nload.\n\nOne line in `astro.config.mjs` plus the reasoning behind it. Nothing about the\nbuilt site changes — `output: 'static'` ships none of the toolbar.\n\n## The failure\n\nThe reported stack bottoms out in Vite's own client:\n\n```js\nsend(data) {\n  ws.send(JSON.stringify(data));   // ws is undefined\n}\n```\n\nTwo conditions combine, and neither is in this repo's code:\n\n1. **The HMR socket cannot connect through the fleet proxy.** Served over HTTPS\n   on the default port, Vite's client derives its socket host as\n   `` `${hostname}:${''}` `` — not a reachable URL — so `ws` is never assigned.\n2. **Vite does not guard `send()`.** It guards teardown with `ws?.close()` but\n   leaves `send()` as a bare `ws.send(...)`, so any caller before a successful\n   connect hits an undefined socket.\n\nThe caller is the Astro dev toolbar, which fires on load. Confirmed\nempirically rather than inferred: `dev-toolbar` appears in the served HTML\nwithout the fix and is absent with it.\n\n## Key Decisions\n\n- **Remove the caller rather than chase the socket.** The toolbar is a dev-only\n  overlay this project never uses; the Live Preview is driven through explicit\n  editor commands. Disabling it costs nothing and stops the throw at its source.\n\n- **Do NOT port the sibling project's `hmr: { clientPort: 443, protocol: 'wss' }`\n  setting.** `codeyam-cms` hit this identical error and its config carries both\n  the toolbar fix and an HMR override — but its own comment records why the\n  override is double-edged: the headless capture harness loads the SAME dev\n  server from `http://localhost:<port>`, where that config makes the client\n  derive `wss://localhost:443` and nothing is listening. The failed connect\n  throws a console error and fails every scenario capture. Captures here work\n  today, so the override would trade a harmless console message for a broken\n  capture suite. The cost of leaving it out is that hot-reload still will not\n  fire in the preview tab, which the workflow does not rely on.\n\n- **Backend mode.** This changes dev-server behaviour only. The static build is\n  byte-identical, no component renders differently, and no scenario frame moves.\n\n## Implementation\n\n`astro.config.mjs` — add `devToolbar: { enabled: false }` to the config object,\nwith a comment recording the Vite rough edge, why the socket cannot connect\nhere, and that the built site is unaffected. A future reader who deletes the\nline should be able to see what comes back.\n\n## Verification\n\nAlready performed while diagnosing, and to be re-confirmed:\n\n- `dev-toolbar` absent from served HTML with the fix, present without it.\n- `astro check` — 0 errors.\n- `verify-build` passes.\n- `client-errors` clean.\n- `/admin/siteIntegrations/site` — the route the dev-server log showed\n  re-fetching every ~2s — captures successfully.\n\n## Out of scope\n\n- Vite's unguarded `send()`. Worth reporting upstream to Vite; not this change.\n- Making hot reload actually work through the fleet tunnel.\n- Anything touching `@codeyam/cms`, the runbook, or the domain migration.",
+  "description": "The Live Preview threw `TypeError: Cannot read properties of undefined (reading 'send')` on every page load. Disabling Astro's dev toolbar removes it. One config key; the built site is byte-identical, because `output: 'static'` ships none of the toolbar.\n\nThe reported stack bottomed out in Vite's own client rather than in anything here:\n\n    send(data) {\n      ws.send(JSON.stringify(data));   // ws is undefined\n    }\n\nTwo conditions combine. First, the HMR socket cannot connect through the fleet proxy: served over HTTPS on the default port, Vite's client derives its socket host as `${hostname}:${''}`, which is not a reachable URL, so `ws` is never assigned. Second, Vite does not guard `send()` — it guards teardown with `ws?.close()` but leaves the send path as a bare `ws.send(...)`, so any caller before a successful connect hits an undefined socket. The caller is the dev toolbar, which fires on load.\n\nConfirmed empirically rather than reasoned about: `dev-toolbar` appears in the served HTML with the config stashed and is absent with it restored. That mattered because a first attempt to check this grepped for the wrong marker and reported 0 in both states, which would have been a false all-clear.\n\nThe fix was not invented here. `codeyam-ai/codeyam-cms` — the same stack behind the same proxy — hit this identical error and its config carries the same one-line disable with the same diagnosis. What was NOT ported is its companion `hmr: { clientPort: 443, protocol: 'wss' }` override, and that omission is deliberate: that repo's own comment records the trap, which is that the headless capture harness loads the SAME dev server from `http://localhost:<port>`, where the override makes the client derive `wss://localhost:443` with nothing listening. The failed connect throws a console error and fails every scenario capture. Captures here work today, so taking the override would have traded a harmless console message for a broken capture suite. The cost of leaving it out is that hot reload still will not fire in the preview tab — which this workflow does not rely on, since it drives the preview through explicit commands.\n\nBackend mode: the change alters dev-server behaviour only. No component renders differently, no scenario frame moves, and the static build is unchanged. `astro check` reports 0 errors across 267 files, the 650-test suite passes, and the audit reports zero findings. Verified against `/admin/siteIntegrations/site` specifically — the route the dev-server log showed re-fetching every two seconds while the error was firing.\n\nUpstream, Vite's unguarded `send()` is worth reporting; it is the reason a failed HMR connection becomes a thrown TypeError rather than a quiet no-op. That is left out of scope here.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/disable-the-astro-dev-toolbar-in-the-live-preview.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 650,
+    "passed": 650,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 650,
+        "passed": 650
+      }
+    ]
+  }
+}

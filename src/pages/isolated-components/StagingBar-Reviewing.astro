@@ -1,0 +1,57 @@
+---
+import Component from "@codeyam/cms/components/admin/StagingBar.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for the review drawer — StagingBar at `phase: 'reviewing'`.
+//
+// Captured because this feature narrowed the phase enum. `phase` used to carry a
+// 'deploying' member and stay on it for the whole GitHub Pages build; the deploy
+// now lives in its own state beside the publish flow, so the enum is down to
+// idle / reviewing / committing / error. This is the state that proves the
+// remaining flow still works: staged changes still group by area, and
+// "Publish 1 change" is still reachable.
+//
+// Two changes across two areas rather than one, so the drawer shows its grouping
+// rather than a single row that would look the same either way.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+
+const STAGED = [
+  {
+    collection: 'chapters',
+    slug: 'boston',
+    path: 'src/content/chapters/boston.md',
+    title: 'Boston',
+    original: '---\ntitle: Boston\n---\n\nOur Boston chapter.\n',
+    updated: '---\ntitle: Boston\n---\n\nOur Boston chapter meets monthly at the Cambridge Innovation Center.\n',
+  },
+  {
+    collection: 'blog',
+    slug: 'spring-summit-recap',
+    path: 'src/content/blog/spring-summit-recap.md',
+    title: 'Spring Summit Recap',
+    original: '---\ntitle: Spring Summit Recap\n---\n\nNotes to come.\n',
+    updated:
+      '---\ntitle: Spring Summit Recap\n---\n\nOver 200 alumni joined us in Cambridge for a day of panels on AI, health tech and climate.\n',
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: StagingBar - Reviewing</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component
+        client:load
+        repo={TARGET}
+        siteUrl="https://nseldeib.github.io/harvardintech-staging"
+        authEndpoint="/auth"
+        initialChanges={STAGED}
+        initialPhase="reviewing"
+      />
+    </div>
+  </body>
+</html>

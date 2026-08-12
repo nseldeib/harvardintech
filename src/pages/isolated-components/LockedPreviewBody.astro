@@ -1,0 +1,34 @@
+---
+import Component from "../../../src/components/LockedPreviewBody.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for LockedPreviewBody — the unlock prompt on its own.
+//
+// The wrapper this repo puts around the package's public decryption island, and
+// the only component here that ships an interactive island to the PUBLIC site
+// rather than to /admin. Isolated so the resting state has a frame of its own:
+// what a reviewer sees before typing anything, which is the state most people
+// who follow a protected link will ever see.
+//
+// The lock string carries the KDF parameters (version, iterations, salt, IV) and
+// none of them are secret — that is the point of the scheme. Only the password
+// is, and it is stored nowhere, including here, so this page cannot be driven
+// past the prompt. The unlocked half is exercised end-to-end at the application
+// level instead, where a real password decrypts real ciphertext.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: LockedPreviewBody</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 100%; max-width: var(--content-width);">
+      <Component
+        ciphertext="wK2v5F2viq/YqVNpVWab8znMgoXXp/8r8hnaCAXNgTUHVZVrE9pt+Jhw+Dl6jnEfBXC5/7JjLZP4yh/DiSY+"
+        lock="v1.600000.ZXbRkPBr9p3V9M5tDvOAwg==.BKILCRibdNdsD+Cq"
+      />
+    </div>
+  </body>
+</html>

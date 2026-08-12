@@ -1,0 +1,31 @@
+{
+  "name": "Supporter Recognition - Import Step Four The Wall It Would Produce",
+  "id": "ecc0d4d1-12f7-467a-91c5-f889148e4d87",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "What importing anyway actually yields, stated as consequences rather than warnings. Every supporter arrives with a name and nothing else, so all of them fall into the trailing Other supporters group; with one group the level headings have nothing to show and the filter chips do not render at all, since they only appear when there is more than one band to move between. Nobody carries a Founding Donor badge, and the three directions that group by school and class year lose their axis. Each claim is read off the shipped grouping rules in donors.ts, so this is the state that makes the earlier steps concrete instead of cautionary.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    },
+    {
+      "action": "click",
+      "selector": "a[href=\"#import\"]"
+    },
+    {
+      "action": "click",
+      "selector": ".steprail[data-step=\"3\"]"
+    }
+  ]
+}

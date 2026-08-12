@@ -1,0 +1,42 @@
+---
+import Component from "../../../src/components/BlogPostBody.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for BlogPostBody on a PASSWORD-PROTECTED preview — the locked
+// branch, and the one worth guarding.
+//
+// The `body` below is real AES-GCM ciphertext and the slot holds ordinary
+// markdown. A correct render shows NEITHER: the unlock prompt replaces the
+// article entirely, so the base64 is never shown as text and the slot is never
+// rendered. Both halves of that matter — the first attempt at this feature
+// rendered the ciphertext as a paragraph, which is what this page exists to
+// catch if it ever comes back.
+//
+// The slot content is deliberately recognisable prose rather than a placeholder,
+// so a frame that leaks it is obviously wrong at a glance.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: BlogPostBody - Locked</title>
+  </head>
+  <body style="margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div id="codeyam-capture" style="padding: var(--space-lg); width: 100%; max-width: var(--content-width);">
+      <Component
+        post={{
+          body: 'wK2v5F2viq/YqVNpVWab8znMgoXXp/8r8hnaCAXNgTUHVZVrE9pt+Jhw+Dl6jnEfBXC5/7JjLZP4yh/DiSY+',
+          data: {
+            title: 'Protected preview',
+            date: new Date('2026-08-10'),
+            previewOf: 'chapter-leader-playbook',
+            previewLock: 'v1.600000.ZXbRkPBr9p3V9M5tDvOAwg==.BKILCRibdNdsD+Cq',
+          },
+        }}
+      >
+        <p>THIS SLOT MUST NOT RENDER — a locked preview shows the password prompt instead.</p>
+      </Component>
+    </div>
+  </body>
+</html>

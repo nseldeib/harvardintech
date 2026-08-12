@@ -1,0 +1,27 @@
+{
+  "name": "Supporter Network - A Direction Full-Screen",
+  "id": "7dec2649-1f2c-4132-9e45-3543d875cfff",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "The key action on this view: opening a direction full-screen, which is where Nicole actually judges it rather than at thumbnail size. The overlay mounts the direction fresh at the full campaign target so the artwork is seen at the density it was composed for, with the name search, the milestone controls and the growth animation all live. Reached by typing the real passphrase and clicking a card, so the capture proves the whole path from a locked link to a judgeable design.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    },
+    {
+      "action": "click",
+      "selector": ".thumb"
+    }
+  ]
+}

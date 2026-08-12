@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { galleryRevealImmediately, galleryStaggerDelay } from './gallery';
+import {
+  galleryColumns,
+  galleryRevealImmediately,
+  galleryStaggerDelay,
+  toGalleryPhotos,
+  visibleGalleryPhotos,
+} from './gallery';
 
 describe('galleryRevealImmediately', () => {
   // Capable browser, no reduced-motion preference: animate the tiles in.
@@ -126,5 +132,112 @@ describe('initGalleryReveal', () => {
     document.body.innerHTML = '<section id="gallery"></section>';
     const { initGalleryReveal } = await import('./gallery');
     expect(() => initGalleryReveal()).not.toThrow();
+  });
+});
+
+describe('toGalleryPhotos', () => {
+  // The landing page's shape: plain srcs, no captions.
+  it('normalizes a list of plain srcs', () => {
+    expect(toGalleryPhotos(['/images/a.jpg', '/images/b.jpg'])).toEqual([
+      { src: '/images/a.jpg' },
+      { src: '/images/b.jpg' },
+    ]);
+  });
+
+  // The CMS shape: an image plus the editorial caption the lightbox shows.
+  it('normalizes CMS rows and keeps the caption', () => {
+    expect(toGalleryPhotos([{ image: '/images/a.jpg', caption: 'Spring mixer' }])).toEqual([
+      { src: '/images/a.jpg', caption: 'Spring mixer' },
+    ]);
+  });
+
+  // Both shapes reach the same prop, so both must survive one pass.
+  it('accepts a mixed list', () => {
+    expect(toGalleryPhotos(['/images/a.jpg', { image: '/images/b.jpg' }])).toEqual([
+      { src: '/images/a.jpg' },
+      { src: '/images/b.jpg' },
+    ]);
+  });
+
+  // The case this filter exists for: the CMS list control adds a row before a
+  // photo is picked. Rendering it gives a tile with no image — and a lightbox
+  // that opens onto nothing.
+  it('drops rows with a missing or blank image', () => {
+    expect(
+      toGalleryPhotos([{ image: '' }, { image: '   ' }, {}, { image: '/images/a.jpg' }]),
+    ).toEqual([{ src: '/images/a.jpg' }]);
+  });
+
+  // A whitespace-only caption is no caption; it would render an empty
+  // figcaption that still takes space under the photo.
+  it('treats a blank caption as absent', () => {
+    expect(toGalleryPhotos([{ image: '/images/a.jpg', caption: '   ' }])).toEqual([
+      { src: '/images/a.jpg', caption: undefined },
+    ]);
+  });
+
+  // An empty gallery is a real state — a chapter mid-curation.
+  it('returns nothing for an empty list', () => {
+    expect(toGalleryPhotos([])).toEqual([]);
+  });
+});
+
+describe('galleryColumns', () => {
+  // A small chapter gallery should fill its row rather than leave holes.
+  it('uses one column per photo below the maximum', () => {
+    expect(galleryColumns(3)).toBe(3);
+  });
+
+  // The shared 40-photo wall stays on the full-width grid.
+  it('clamps to the maximum for a large gallery', () => {
+    expect(galleryColumns(40)).toBe(5);
+  });
+
+  // Exactly at the boundary.
+  it('returns the maximum when the count equals it', () => {
+    expect(galleryColumns(5)).toBe(5);
+  });
+
+  // A zero-column grid is not a thing — an empty list must not produce an
+  // invalid grid-template.
+  it('floors at one column', () => {
+    expect(galleryColumns(0)).toBe(1);
+    expect(galleryColumns(-3)).toBe(1);
+  });
+
+  // The ceiling is a parameter so a caller can ask for a narrower grid.
+  it('honours a custom maximum', () => {
+    expect(galleryColumns(10, 3)).toBe(3);
+  });
+});
+
+describe('visibleGalleryPhotos', () => {
+  const photos = toGalleryPhotos(['/1.jpg', '/2.jpg', '/3.jpg', '/4.jpg']);
+
+  // The load state for a capped gallery.
+  it('returns the first cap photos when collapsed', () => {
+    expect(visibleGalleryPhotos(photos, { cap: 2 })).toHaveLength(2);
+  });
+
+  // After "Show all N photos".
+  it('returns everything when expanded', () => {
+    expect(visibleGalleryPhotos(photos, { cap: 2, expanded: true })).toHaveLength(4);
+  });
+
+  // The landing page passes no cap and must keep rendering all 40. This is the
+  // case that stops the cap from becoming a silent default.
+  it('returns everything when no cap is given', () => {
+    expect(visibleGalleryPhotos(photos)).toHaveLength(4);
+  });
+
+  // A cap larger than the gallery is not an error, just uncapped in practice.
+  it('returns everything when the cap exceeds the count', () => {
+    expect(visibleGalleryPhotos(photos, { cap: 99 })).toHaveLength(4);
+  });
+
+  // Pure: the caller renders from this and must not have its source mutated.
+  it('does not mutate the input', () => {
+    visibleGalleryPhotos(photos, { cap: 1 });
+    expect(photos).toHaveLength(4);
   });
 });

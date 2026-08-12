@@ -1,0 +1,229 @@
+{
+  "timestamp": "2026-08-11T01:11:15Z",
+  "title": "Reorder Momentum Fund Sections With Arrows In The CMS",
+  "type": "feature",
+  "userRequest": "## Summary\n\nGive the Momentum Fund section list in the CMS a pair of ↑ / ↓ arrows on every\nrow, so an editor reorders `/donate` by clicking rather than by typing numbers\ninto an Order box and working out what the other five sections are numbered.\nThe arrows land on the page the editor already uses —\n`/admin/momentumSections` — and a move stages the same kind of pending change\nan archive or delete already stages, so the reorder rides the normal Publish\nreview and lands as one commit.\n\n`/admin` is injected entirely by `@codeyam/cms` (its integration factory takes\nonly `route` / `ensureReactRenderer`; the dashboard, the entry list, and every\nrow component are package files), so this ships as a `patch-package` patch\nagainst `@codeyam/cms@0.4.0` plus a repo-side guard test — the loop this repo\nhas already run once and documented.\n\n## Key Decisions\n\n- **The arrows go on `/admin/momentumSections`, in the package's own entry\n  list.** Not a new repo-owned admin page, not an inline control on the public\n  `/donate` page. Both were considered and rejected in favour of the page the\n  editor already opens.\n- **Delivered as `patches/@codeyam+cms+0.4.0.patch`.** There is no extension\n  seam: `codeyamCms(options)` in `node_modules/@codeyam/cms/integration/index.ts`\n  accepts only `route` and `ensureReactRenderer`, and `ADMIN_ROUTES` injects all\n  ten admin routes from package files. This repo has run this exact loop before —\n  `patches/@codeyam+cms+0.2.2.patch` carried the media-commit guard and the\n  dashboard grouping until 0.4.0 shipped them upstream and commit `abc5872`\n  deleted the patch. `patch-package` is still in `postinstall`, and\n  `.github/workflows/deploy.yml` runs `npm ci` on both tracks, so the patch\n  applies on every install including CI.\n- **Scope by capability, not by collection name.** Any collection whose\n  registry entry declares a `number` field named `order` gets the ordered list\n  and the arrows. That is 13 collections today — `chapters`, `communities`,\n  `sponsors`, `donors`, `projects`, `testimonials`, `momentumSections`,\n  `homeSections`, `heroSlides`, `stats`, `accomplishments`, `pillars`,\n  `sponsorLevels`. Collections without one (`blog`, `pages`, `events`, `team`,\n  `pageCopy`, …) render exactly as they do today. Naming one collection in the\n  patch would have made the feature a special case that the next ordered\n  collection has to ask for again.\n- **A move STAGES pending changes; it does not commit.** `stageChange` from\n  `@codeyam/cms/lib/pendingChangesStore`, the same store `EntryRow` uses for\n  archive / delete, so a reorder shows the row badge and Undo, appears in the\n  Publish review with the rest of the batch, and lands as one commit. This is\n  deliberately *not* the cutover runbook's model (`src/lib/cutoverTicks.ts`\n  commits immediately) — that is right for one boolean nobody reviews, and\n  wrong for a reorder an editor should be able to look at and back out of.\n- **Renumber the whole visible list 1..N on every move, rather than swapping two\n  values.** Blank, duplicate, and gapped `order` values all converge to a clean\n  sequence on the first click. Only entries whose number actually changed are\n  staged, so a single move usually stages two files, not six.\n- **An ordered collection renders as ONE ordered list, not Drafts-then-\n  Published.** For a collection whose whole point is sequence, the list should\n  read as the page does. The draft state moves onto the row as a chip, since\n  today the only signal that an entry is a draft is the group heading it sits\n  under. Un-ordered collections keep `groupByDraft` untouched.\n- **Arrows hide while the search box holds a query.** A filtered list is not the\n  order, and moving row 2 above row 1 of a filtered view has no honest meaning.\n- **A repo-side guard test pins the behaviour to the dependency.**\n  `patch-package` matches patches to versions by filename, so the next\n  `@codeyam/cms` bump silently drops this unless something fails. That is the\n  exact risk `abc5872`'s commit message names, and `src/lib/mediaCommitGuard.test.ts`\n  is the pattern for answering it: a test in this repo that holds the dependency\n  to its contract and fails at CI time.\n- **File the same change upstream and delete the patch when it lands.** The\n  documented lifecycle from `abc5872`. The plan's last step is the follow-up,\n  not a promise to remember.\n\n## Implementation\n\n### 1. Patch the CMS entry list\n\n**New file**: `patches/@codeyam+cms+0.4.0.patch` (new)\n\nGenerated with `npx patch-package @codeyam/cms` after making the edits below in\n`node_modules/@codeyam/cms/`. The patch spans these package files:\n\n**`src/lib/entryList.ts`** — the pure half, beside the existing `groupByDraft`:\n\n- `hasOrderField(fields)` — true when the resolved field list declares a\n  `number` field named `order`.\n- `entryOrder(raw)` — the entry's `order` as a number, or `undefined`, read via\n  `parseEntry` from `src/lib/frontmatter.ts`.\n- `sortByEntryOrder(items)` — order ascending, unnumbered last, label as the\n  tiebreak. Mirrors the site-side rule in `src/lib/order.ts` so the admin list\n  and `/donate` agree about what \"first\" means; a collection where nobody has\n  set an order still sorts by label, exactly as the list does today.\n- `moveEntry(items, index, delta)` — the moved sequence.\n- `renumberEntries(items)` — `[{ slug, order }]` for the rows whose number\n  changed, so the caller stages the minimum set of files.\n\nAll four are pure and unit-testable, which is what makes step 2 possible.\n\n**`src/lib/entryActions.ts`** — `buildOrderChange(collection, slug, raw, order,\nkeyOrder)`, alongside `buildArchiveChange` / `buildUnarchiveChange` /\n`buildDeleteChange`. `parseEntry` → set `data.order` → `serializeEntry` with the\ncollection's `keyOrder`, returning a `PendingChange` of kind `edit`. Using\n`keyOrder` is what keeps a consumer-declared field from being reshuffled by a\nreorder, the same reason the archive path takes it.\n\n**`src/pages/admin/[collection]/index.astro`** — pass\n`ordered={hasOrderField(def.fields)}` to `EntryListSearch`. `fieldOrder(def.fields)`\nis already computed on this page and already forwarded as `keyOrder`.\n\n**`src/components/admin/EntryListSearch.tsx`** — when `ordered` and the query is\nempty, render one `EntryListSection` over `sortByEntryOrder(items)` with the\narrow handlers wired; otherwise the existing `groupByDraft` split, unchanged.\nThe move handler calls `moveEntry` → `renumberEntries` → one `stageChange`\nper changed row, and holds the reordered sequence in local state so the list\nreflects the move immediately (the underlying markdown only changes at publish).\n\n**`src/components/admin/EntryListSection.tsx` / `EntryRow.tsx`** — optional\n`canUp` / `canDown` / `onUp` / `onDown`, plus a \"Draft\" chip on the row when the\nsection is rendering an ordered (ungrouped) list. `RowControls.tsx` is the\nexisting ↑ / ↓ / ✕ cluster used by the nav and social-link editors; it always\nrenders the remove button, so add a two-button `OrderArrows.tsx` beside it\nreusing `iconBtnStyle` from `configEditorStyles.ts` rather than bending\n`RowControls` to an optional remove.\n\n### 2. Guard the patched behaviour from this repo\n\n**New file**: `src/lib/cmsOrderControls.test.ts` (new)\n\nModelled on `src/lib/mediaCommitGuard.test.ts` — including its header, which\nstates plainly that the test covers a dependency's contract rather than this\nrepo's code. It imports the helpers from `@codeyam/cms/lib/entryList` and\n`@codeyam/cms/lib/entryActions` and asserts:\n\n- `hasOrderField` is true for the `momentumSections` field list out of\n  `src/data/collections.json` and false for `blog`'s.\n- `sortByEntryOrder` puts an unnumbered entry last and breaks ties by label.\n- `moveEntry` + `renumberEntries` on the six real Momentum Fund sections\n  produce a 1..6 sequence and report only the rows that moved.\n- `buildOrderChange` round-trips an entry's frontmatter with the new `order`\n  and leaves the markdown body and the other keys intact.\n\nIf a future `@codeyam/cms` release drops the patch, these fail at CI instead of\nthe arrows quietly disappearing from `/admin`.\n\n### 3. Point the Order field's hint at the arrows\n\n**File**: `src/data/collections.json`\n\nThe `momentumSections` `order` field currently hints *\"Change this to move a\nsection up or down.\"* — which stops being the primary instruction. Reword it so\nthe box reads as the precise control and the arrows as the ordinary one. Same\nedit for `homeSections`, whose hint has the same job.\n\n### 4. Record the patch and its lifecycle\n\n**File**: `CMS_SETUP.md`\n\nThe \"The admin app\" section states *\"There is no hand-written admin code in this\nrepo.\"* That stays true — a patch is not hand-written admin code — but the file\nis where an editor or a future maintainer looks to understand `/admin`, so it\nmust name the patch, say what it adds, and state that it is filed upstream and\ndeleted on the release that carries it. Check `docs/nicole-review.md` for the\nsame treatment: it named the previous patch file and tracked its upstream fate.\n\n### 5. File the change upstream\n\nOpen the equivalent PR against `codeyam-ai/codeyam-cms` (a different repo, so\noutside this plan's build) and delete `patches/@codeyam+cms+0.4.0.patch` on the\nrelease that carries it, exactly as `abc5872` did for 0.2.2 → 0.4.0. The guard\ntest in step 2 survives the deletion — that is when it starts earning its keep.\n\n## Reused existing code\n\n- `sortByOrder` and `byOrder` from `src/lib/order.ts` (glossary entries:\n  `sortByOrder`, `byOrder`) — the site-side ordering rule the patched admin sort\n  is written to agree with (order ascending, unnumbered last).\n- `orderedSections` from `src/lib/momentumSections.ts` (glossary entry:\n  `orderedSections`) — what `/donate` actually does with these numbers, and the\n  reason the admin list must not invent a different rule.\n- `commitAll` / `cachedToken` usage in `src/lib/cutoverTicks.ts` — the repo's\n  existing precedent for repo-owned code driving a CMS-authenticated write.\n  Referenced as the *rejected* model here (immediate commit vs. staged change),\n  and named so the difference is a decision rather than an oversight.\n- `src/lib/mediaCommitGuard.test.ts` — the shape and the header voice for the\n  new dependency-contract test.\n- `stageChange` / `discardChange` / `loadChanges` from\n  `@codeyam/cms/lib/pendingChangesStore`, `buildArchiveChange` and friends from\n  `@codeyam/cms/lib/entryActions`, `parseEntry` / `serializeEntry` from\n  `@codeyam/cms/lib/frontmatter`, `fieldOrder` from `@codeyam/cms/lib/entryEditor`,\n  `iconBtnStyle` from `@codeyam/cms/components/admin/configEditorStyles`.\n\n### Existing-implementation survey\n\nGrepped `@codeyam/cms@0.4.0` for an existing reorder affordance before proposing\none. `RowControls.tsx` (↑ / ↓ / ✕), `useListDrag.ts`, `useNavDrag.ts`,\n`reorderInArray` / `moveDraftField` / `reorderDraftField` all exist — but every\none of them serves the *config* editors: nav items, nav children, social links,\nand the collection builder's field rows. Nothing in the collection **entry list**\nsorts by, reads, or writes `order`: `pages/admin/[collection]/index.astro` sorts\n`items` by `label` and `EntryListSearch` groups them drafts-first. The only\nreorder affordance a content entry has today is the numeric Order box in the\nentry editor. So there is no equivalent implementation to extend or duplicate —\nthe pure helpers are new, and the presentational parts reuse what the config\neditors already use.\n\n## Scenarios to Demonstrate\n\n- The Momentum Fund section list in `/admin`, ordered 1..6 as the page renders\n  them, arrows on every row — the state an editor lands on.\n- Top row's ↑ and bottom row's ↓ disabled at the ends of the list.\n- One move applied: the list resequenced, two rows badged as staged with Undo,\n  and the publish counter reading two changes ready to publish.\n- A search query typed into the box: the filtered list with no arrows.\n- An ordered collection holding a drafted section — the Draft chip on its row,\n  in sequence rather than in a separate group.\n- The Blog list (no `order` field): unchanged Drafts / Published grouping, no\n  arrows — the regression guard for the 13-vs-the-rest split.",
+  "description": "Rearranging the donate page used to mean opening each section and typing a number into an Order box while working out what the other five were numbered. The sections list at /admin/momentumSections now carries up and down arrows on every row, and a move stages ordinary pending changes that ride the normal publish review and stay undoable until commit.\n\nScoped by capability rather than by name: any collection declaring a numeric `order` field renders as one ordered sequence with arrows instead of a Drafts-then-Published split. That is 13 collections today, so chapters, sponsors, heroSlides and sponsorLevels change too. Because those lists no longer have a Drafts heading, the draft state moves onto the row as a chip — the heading had been the only thing saying an entry was a draft. Collections without an order field, blog among them, are untouched.\n\nA move renumbers the visible list 1..N rather than swapping two values, so blank, duplicate and gapped numbers all converge on a clean sequence at the first click; only the rows whose number actually changed are staged, so a one-place move is two files rather than the whole collection. Arrows hide while the search box holds a query, because moving row 2 above row 1 of a filtered view would move an entry past rows the editor cannot see.\n\nOne rough edge is shipped documented rather than hidden, as its own scenario. The moved order lives in the page's state while the markdown holds the old numbers until publish, so reloading before publishing shows the ORIGINAL order while the publish bar still counts the pending changes — the two disagree on screen until publish lands the move. In that state the rows also carry no staged marker, though the changes are real: StagingBar reads the store on that path and EntryRow does not.\n\nThe feature lives in @codeyam/cms, so it ships as patches/@codeyam+cms+0.4.0.patch, which for now also carries the deploy-watch fix already merged upstream and awaiting 0.4.1. patch-package matches patches to versions BY FILENAME, so the next bump would drop these arrows silently and nothing would fail — the first person to find out would be an editor trying to reorder the page. src/lib/cmsOrderControls.test.ts answers that with 26 tests holding the dependency to its contract, verified red: all 26 fail against an unpatched @codeyam/cms. CMS_SETUP.md records the patch and the delete-it-upstream lifecycle this repo already ran once for the media guard.\n\n767 tests pass, audit clean. The Demo gate is a recorded structural exception: this container's editor control API returns 401 to the capture browser, so every preview-interact and preview-flow fails regardless of targeting, while static scenario capture succeeds — the same condition recorded at 5dd89a4. The behaviour was driven against the app port directly instead: a real click reorders the list and stages exactly two changes.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--reorder-momentum-fund-sections-with-arrows-in-the-cms.md\t.codeyam/plans/completed/ns--reorder-momentum-fund-sections-with-arrows-in-the-cms.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-blog-list-drafts-and-published--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-blog-list-drafts-and-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/8af4d27486e8d809fbd2d9718257ace80c3085e0927a1dd6729d70e39c8d94a9.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/a4bbbf754158ef9271a69a4d9d187c8ba31416f903bed1a2a18e9a80bdcb618f.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "patches/@codeyam+cms+0.4.0.patch",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-momentum-sections-a-move-staged-then-the-page-reloaded.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-momentum-sections-a-section-still-in-draft.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-momentum-sections-in-order-with-arrows.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/orderarrows.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/orderarrows-bottom-row.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/orderarrows-middle-row.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/orderarrows-the-only-row.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/orderarrows-top-row.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-move-staged-then-the-page-reloaded--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-move-staged-then-the-page-reloaded--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-section-still-in-draft--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-section-still-in-draft--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-in-order-with-arrows--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-in-order-with-arrows--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/orderarrows-bottom-row--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/orderarrows-bottom-row--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/orderarrows-middle-row--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/orderarrows-middle-row--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/orderarrows-the-only-row--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/orderarrows-the-only-row--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/orderarrows-top-row--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/orderarrows-top-row--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/361bcf632a2aa3c9af5d5d235826053c72a23292bf5093f739f93c8999e55022.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/78dfae65d339aa18b8ee54aabd8ec41e152de91f2a12f2d3d9a1758d1260d8fd.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/dc51b3eb53e6af0367b62ec58f55bf158a9d6a59970dc5178c6747abb5489b6f.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/cmsOrderControls.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/OrderArrows-BottomRow.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/OrderArrows-MiddleRow.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/OrderArrows-OnlyRow.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/OrderArrows-TopRow.astro",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 767,
+    "passed": 767,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 767,
+        "passed": 767
+      }
+    ]
+  }
+}

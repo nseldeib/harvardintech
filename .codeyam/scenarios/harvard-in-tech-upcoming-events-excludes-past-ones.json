@@ -1,0 +1,54 @@
+{
+  "name": "Harvard in Tech - Upcoming Events Excludes Past Ones",
+  "id": "032848c5-5a65-4c6e-8db4-019f50125020",
+  "url": "/#events",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "events": [
+      {
+        "city": "London",
+        "date": "@today-56d",
+        "slug": "alumni-founders-co-working-day-past",
+        "summary": "A working afternoon for alumni building companies — laptops open, introductions made over coffee.",
+        "title": "Alumni Founders Co-working Day",
+        "url": "https://lu.ma/harvardintech"
+      },
+      {
+        "city": "New York City",
+        "date": "@today-99d",
+        "slug": "leaders-in-engineering-panel-past",
+        "summary": "Four engineering leaders on what changes when you stop writing code all day.",
+        "title": "Harvard Alumni in Tech: Leaders in Engineering Panel",
+        "url": "https://lu.ma/harvardintech"
+      },
+      {
+        "city": "Boston & Cambridge",
+        "date": "@today+42d",
+        "slug": "cambridge-alumni-day-meetup-upcoming",
+        "summary": "The autumn gathering back on campus, with a walk to the river afterwards for anyone who wants it.",
+        "title": "Alumni Day Meetup in Cambridge",
+        "url": "https://lu.ma/harvardintech"
+      },
+      {
+        "city": "Seattle / Pacific Northwest",
+        "date": "@today+56d",
+        "slug": "seattle-founders-dinner-upcoming",
+        "summary": "A long table, twenty founders, and no panel — the format the Seattle chapter keeps asking to repeat.",
+        "title": "Pacific Northwest Founders Dinner",
+        "url": "https://lu.ma/harvardintech"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/index.astro",
+  "description": "The homepage events band seeded with events on BOTH sides of today, so it is the one capture that proves the page filters rather than merely listing. The band shows only the events still to come; the ones that have already happened are absent, and the count beside the heading agrees. This is the scenario the empty-seed one beside it cannot be: a page handing the band every event renders identically when the collection is empty, so only a mixed seed can tell the two behaviours apart. It exists because the homepage did NOT filter — it passed the whole collection to a section headed Upcoming events, so by the time every entered event had passed the band was advertising a community that appeared to have stopped meeting.",
+  "interactions": [
+    {
+      "action": "hover",
+      "selector": "#events"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+---
+// The full-screen photo viewer a gallery tile opens into. Rendered once per
+// gallery, hidden until `src/lib/lightbox.ts` calls showModal() on it.
+//
+// A native `<dialog>` rather than a hand-rolled overlay: focus trapping,
+// Esc-to-close, an inert background and the top layer all come for free — which
+// is precisely the set a hand-rolled modal gets wrong. There was no existing
+// modal in `src/` to reuse, so this is new either way; native is the smaller
+// new thing.
+//
+// No props. Every value is written in by the lightbox module at click time, so
+// this file is pure chrome — see GalleryTile.astro for the data contract.
+---
+
+<dialog class="lightbox" data-lightbox aria-label="Photo viewer">
+  <div class="lightbox-inner">
+    <img data-lightbox-image src="" alt="" />
+    <figcaption data-lightbox-caption hidden></figcaption>
+    <button type="button" class="lb-btn lb-close" data-lightbox-close aria-label="Close">×</button>
+    <button type="button" class="lb-btn lb-prev" data-lightbox-prev aria-label="Previous photo">‹</button>
+    <button type="button" class="lb-btn lb-next" data-lightbox-next aria-label="Next photo">›</button>
+  </div>
+</dialog>
+
+<style>
+  .lightbox {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    max-width: 92vw;
+    max-height: 92vh;
+  }
+  .lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.82);
+  }
+  .lightbox-inner {
+    position: relative;
+    margin: 0;
+  }
+  /* CEILINGS, not sizes. Today's gallery assets were scraped off Strikingly at
+     200-400px square, so a photo opens at its own resolution and only the big
+     ones grow to fill the viewport. Do NOT "fix" the small ones by forcing a
+     width — that upscales a 200px thumbnail 5x into a blurry blob, which is
+     worse than a modest sharp photo. The real fix is re-exporting the source
+     images at full size; the lightbox then grows into them with no change here. */
+  .lightbox img {
+    display: block;
+    max-width: 92vw;
+    max-height: 82vh;
+    object-fit: contain;
+  }
+  .lightbox figcaption {
+    color: #fff;
+    font-size: 0.95rem;
+    padding: 0.6rem 0.2rem 0;
+    text-align: center;
+  }
+  .lb-btn {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    border: 0;
+    cursor: pointer;
+    font-size: 1.6rem;
+    line-height: 1;
+    padding: 0.35rem 0.7rem;
+    border-radius: 4px;
+  }
+  .lb-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  .lb-close {
+    top: 8px;
+    right: 8px;
+  }
+  .lb-prev {
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lb-next {
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+</style>

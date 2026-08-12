@@ -1,0 +1,42 @@
+---
+// One bucket of the calendar — beforehand, on the day, or afterwards.
+//
+// Each step prints its title and duration on two lines rather than one. The
+// first build put them on a single row with the duration right-aligned, which
+// reads fine at full width and collapses in a 260px column: "Minutes to set up,
+// then wait for the certificate" wrapped and ran into the title beside it, so
+// the two longest steps became the two hardest to read. Stacking costs a line
+// each and nothing collides.
+import { byPhase, isStepDone, PHASE_LABELS, type CutoverProgress, type Phase } from '../../lib/cutoverProgress';
+
+interface Props {
+  phase: Phase;
+  /** Why this bucket looks the way it does, in the team's terms. */
+  blurb: string;
+  progress: CutoverProgress;
+}
+const { phase, blurb, progress } = Astro.props;
+
+const steps = byPhase(phase);
+---
+
+<div class="phase">
+  <div class="phase-head">
+    <span class="phase-name">{PHASE_LABELS[phase]}</span>
+    <span class="phase-count">
+      {steps.length} {steps.length === 1 ? 'step' : 'steps'}
+    </span>
+  </div>
+  <p class="phase-blurb">{blurb}</p>
+  <ul class="phase-steps">
+    {
+      steps.map((step) => (
+        <li class:list={[isStepDone(progress, step.id) && 'done']}>
+          <span class="id sm">{step.id}</span>
+          <span class="phase-step-title">{step.title}</span>
+          <span class="phase-step-dur">{step.duration}</span>
+        </li>
+      ))
+    }
+  </ul>
+</div>

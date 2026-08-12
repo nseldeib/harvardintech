@@ -1,0 +1,131 @@
+{
+  "name": "Chapter Gallery - Curated and Capped",
+  "id": "6dfdb2b5-f586-4af1-bdf5-a3c762ff1d27",
+  "url": "/chapters/nyc",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "chapters": [
+      {
+        "blurb": "Our founding chapter and largest community.",
+        "body": "Regular founder dinners, panels, and community gatherings across the city.",
+        "city": "New York City",
+        "contactEmail": "info@harvardintech.com",
+        "heroImage": "/images/chapters/nyc.jpg",
+        "photos": [
+          {
+            "caption": "Founder dinner in SoHo, March 2026",
+            "image": "/images/gallery/event-01.jpg"
+          },
+          {
+            "caption": "Alumni panel on AI infrastructure at Cornell Tech",
+            "image": "/images/gallery/event-03.jpg"
+          },
+          {
+            "image": "/images/gallery/event-07.jpg"
+          },
+          {
+            "caption": "Fireside chat with a Harvard alum operating in fintech",
+            "image": "/images/gallery/event-09.jpg"
+          },
+          {
+            "caption": "Winter mixer, Flatiron",
+            "image": "/images/gallery/event-11.jpg"
+          },
+          {
+            "image": "/images/gallery/event-14.jpg"
+          },
+          {
+            "caption": "Small-group breakfast for first-time founders",
+            "image": "/images/gallery/event-16.jpg"
+          },
+          {
+            "caption": "Rooftop social closing out the summer season",
+            "image": "/images/gallery/event-19.jpg"
+          },
+          {
+            "image": "/images/gallery/event-22.jpg"
+          },
+          {
+            "caption": "Investor office hours at a member's Midtown office",
+            "image": "/images/gallery/event-25.jpg"
+          },
+          {
+            "caption": "Product leaders roundtable, Brooklyn",
+            "image": "/images/gallery/event-28.jpg"
+          },
+          {
+            "image": "/images/gallery/event-31.jpg"
+          },
+          {
+            "caption": "Holiday gathering with the Boston chapter visiting",
+            "image": "/images/gallery/event-34.jpg"
+          },
+          {
+            "caption": "Kickoff for the 2026 mentorship cohort",
+            "image": "/images/gallery/event-37.jpg"
+          }
+        ],
+        "region": "New York, NY",
+        "slug": "nyc",
+        "tagline": "We are the New York Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "Home of Harvard, our Cambridge and Boston community.",
+        "body": "Founder dinners, campus meetups, and panels with Harvard faculty and alumni operators, steps from the Yard.",
+        "city": "Boston & Cambridge",
+        "heroImage": "/images/bg/hero-bg.jpg",
+        "region": "Boston & Cambridge, MA",
+        "slug": "boston-cambridge",
+        "tagline": "We are the Boston & Cambridge Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "Our West Coast chapter across San Francisco and Silicon Valley.",
+        "body": "Founder dinners, investor mixers, and small-group conversations with Harvard alumni building across San Francisco, the Peninsula, and Silicon Valley.",
+        "city": "SF & Bay Area",
+        "heroImage": "/images/chapters/san-francisco.jpg",
+        "region": "San Francisco Bay Area, CA",
+        "slug": "sf-bay-area",
+        "tagline": "We are the SF & Bay Area Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "Our European hub across the London tech scene.",
+        "body": "Evening socials and founder roundtables connecting Harvard alumni across the UK and Europe.",
+        "city": "London",
+        "heroImage": "/images/gallery/event-05.jpg",
+        "region": "London, UK",
+        "slug": "london",
+        "tagline": "We are the London Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "The Pacific Northwest chapter.",
+        "body": "Meetups with alumni across cloud, devtools, and consumer tech in the Pacific Northwest.",
+        "city": "Seattle / Pacific Northwest",
+        "heroImage": "/images/gallery/event-27.jpg",
+        "region": "Seattle, WA",
+        "slug": "seattle",
+        "tagline": "We are the Seattle / Pacific Northwest Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "The DC, Maryland & Virginia community.",
+        "body": "Policy-meets-tech happy hours and gatherings across the Washington metro area.",
+        "city": "DC and DMV Area",
+        "heroImage": "/images/gallery/event-18.jpg",
+        "region": "Washington, DC",
+        "slug": "dc-dmv",
+        "tagline": "We are the DC and DMV Chapter of Harvard Alumni in Tech."
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/chapters/[slug].astro",
+  "description": "New York has curated 14 of its own event photos, so the chapter shows those instead of the shared 40-photo wall. Twelve render immediately and the rest sit behind \"Show all 14 photos\"; any tile opens in the lightbox, where a caption appears only for the photos that were given one.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "#gallery h2"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+---
+import Component from "../../../src/components/volunteer/VolunteerRelatedProjects.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for VolunteerRelatedProjects — codeyam screenshots the
+// #codeyam-capture wrapper by navigating to /isolated-components/VolunteerRelatedProjects.
+//
+// A full three-card suggestion row, because the section's whole job is to give a
+// reader who just finished one project somewhere else to go. The three carry
+// three different date shapes (a same-year range, a start-only, an end-only) so
+// the row shows how `formatProjectDates` reads at card width rather than pinning
+// one format.
+//
+// The empty branch (no other open projects → no heading, no section) is
+// deliberately absent: it has no pixels to capture. It is today's real state,
+// covered by the /volunteer/projects detail-page scenario instead.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: VolunteerRelatedProjects</title>
+  </head>
+  <body style="margin: 0;">
+    <div id="codeyam-capture" style="padding: var(--space-lg) 0;">
+      <Component
+        projects={[
+          {
+            slug: "newsletter-editor",
+            title: "Newsletter editor",
+            blurb:
+              "Curate the monthly roundup of member news, events, and opportunities that goes out to the full network.",
+            image: "/images/sections/board.png",
+            commitment: "~2 hrs / month",
+            startDate: "2026-10-05",
+          },
+          {
+            slug: "speaker-outreach",
+            title: "Speaker outreach",
+            blurb:
+              "Line up founders, operators, and investors for panels and roundtables across all five chapters.",
+            commitment: "~2 hrs / week",
+            endDate: "2026-11-20",
+          },
+          {
+            slug: "social-media-marketing-specialist-events",
+            title: "Social Media Marketing Specialist- Events",
+            blurb:
+              "Help promote Harvard Alumni in Tech events from start to finish by creating and scheduling engaging social media content before, during, and after each event.",
+            applyUrl: "https://hi.switchy.io/wEYK",
+            commitment: "25 hours",
+            startDate: "2026-09-01",
+            endDate: "2026-12-15",
+          },
+        ]}
+      />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+---
+// One step of the sequence.
+//
+// Composes its parts rather than laying them out inline, because the card has
+// four distinct jobs — identify the step, say what blocks it, state the facts,
+// state the risk — plus the interactive tick and the operator detail. The two
+// note lines below are the piece worth reading carefully.
+import {
+  blockedLabel,
+  blockingDecisions,
+  isStepDone,
+  type CutoverProgress,
+  type StepDef,
+} from '../../lib/cutoverProgress';
+import type { RepoTarget } from '@codeyam/cms/lib/githubCommit';
+import OperatorDetail from './OperatorDetail.astro';
+import StepFacts from './StepFacts.astro';
+import StepRisk from './StepRisk.astro';
+import StepTick from './StepTick.tsx';
+
+interface Props {
+  step: StepDef;
+  progress: CutoverProgress;
+  target: RepoTarget;
+}
+const { step, progress, target } = Astro.props;
+
+const state = progress.steps.find((s) => s.id === step.id);
+const done = isStepDone(progress, step.id);
+const blocked = blockingDecisions(progress, step);
+---
+
+<div class:list={['step', done && 'is-done', blocked.length > 0 && 'is-blocked']}>
+  <div class="top">
+    <span class="id">{step.id}</span>
+    <h3>{step.title}</h3>
+    <StepTick
+      client:load
+      id={step.id}
+      initialDone={done}
+      initialBy={state?.by}
+      initialAt={state?.at}
+      target={target}
+    />
+  </div>
+
+  <p class="plain">{step.summary}</p>
+
+  {
+    /* Two kinds of note, deliberately separate. This one is DERIVED — it appears
+       while a prerequisite decision is open and disappears the moment it is
+       answered, and it names the ids so the reader knows what to go and resolve
+       rather than only that they are stuck. */
+    blocked.length > 0 ? (
+      <div class="who blocked">
+        <span class="k">Waiting on</span>
+        {blockedLabel(blocked)} — unanswered, so this step can't start.
+      </div>
+    ) : null
+  }
+
+  {
+    /* This one is STANDING — true regardless of state. They shared a container
+       once, and deriving the first kind briefly took S7's "never replace all
+       records" with it: the most important instruction on the page, lost because
+       it sat in something conditional. Separate elements, separate lifetimes. */
+    step.note ? (
+      <div class="who">
+        <span class="k">{step.note.label}</span>
+        <Fragment set:html={step.note.html} />
+      </div>
+    ) : null
+  }
+
+  <StepFacts step={step} />
+  <StepRisk step={step} />
+  <OperatorDetail id={step.id} />
+</div>

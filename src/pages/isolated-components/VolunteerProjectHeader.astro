@@ -9,6 +9,17 @@ import "../../../src/styles/tokens.css";
 // carries her "Specialist- Events" spacing and the blurb runs long, so this
 // capture is where the wrap behaviour is actually visible. Wrapped in `.s-narrow`
 // to match the column the header sits in on the real page.
+//
+// Three headers, because the framing-detail row under the title has three states
+// and only the middle one was ever captured: a commitment and a date range
+// together, a commitment alone (the state every project was in before dates
+// existed), and a bare header with neither — which must leave NO gap under the
+// title rather than an empty 12px hole. That last one is the case the row's
+// collapse rule exists for, and it is invisible in any capture that omits it.
+//
+// Only the first carries the long blurb; the other two are trimmed to a title so
+// all three states fit one viewport. Losing the wrap coverage to show only two of
+// three states would be the worse trade.
 ---
 
 <html lang="en">
@@ -22,9 +33,13 @@ import "../../../src/styles/tokens.css";
       <div class="s-narrow">
         <Component
           title="Social Media Marketing Specialist- Events"
-          blurb="Help promote HIT events from start to finish by creating and scheduling engaging social media content before, during, and after each event. This project is ideal for a volunteer who enjoys event marketing, storytelling, and turning event recordings into reusable content."
+          blurb="Help promote Harvard Alumni in Tech events from start to finish by creating and scheduling engaging social media content before, during, and after each event. This project is ideal for a volunteer who enjoys event marketing, storytelling, and turning event recordings into reusable content."
           commitment="25 hours"
+          startDate="2026-09-01"
+          endDate="2026-12-15"
         />
+        <Component title="Newsletter editor" commitment="~2 hrs / month" />
+        <Component title="Speaker outreach" />
       </div>
     </div>
   </body>

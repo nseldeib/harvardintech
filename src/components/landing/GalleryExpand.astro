@@ -1,0 +1,40 @@
+---
+// "Show all N photos" — the control under a capped gallery.
+//
+// Rendered only when photos are actually hidden; EventGallery decides that, so
+// this component never renders a button that would reveal nothing. The photos
+// it reveals already shipped in the HTML as hidden tiles, so the click is
+// instant and needs no refetch.
+interface Props {
+  /** The full photo count, including the hidden ones — the number in the label. */
+  total: number;
+}
+
+const { total } = Astro.props;
+---
+
+<div class="gallery-more">
+  <button type="button" class="gallery-expand" data-gallery-expand>
+    Show all {total} photos
+  </button>
+</div>
+
+<style>
+  .gallery-more {
+    text-align: center;
+    margin-top: 16px;
+  }
+  .gallery-expand {
+    font: inherit;
+    font-weight: 600;
+    padding: 0.55rem 1.2rem;
+    border: 1px solid var(--color-border, rgba(30, 26, 27, 0.14));
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .gallery-expand:hover {
+    border-color: var(--color-accent, #a41034);
+    color: var(--color-accent, #a41034);
+  }
+</style>

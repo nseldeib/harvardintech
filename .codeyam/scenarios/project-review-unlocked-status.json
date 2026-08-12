@@ -1,6 +1,6 @@
 {
   "name": "Project Review - Unlocked Status",
-  "id": "05d10a78-e413-4eca-a579-b9acc6acec74",
+  "id": "d8e0d881-83ff-4a68-b436-17ed3f9f5772",
   "url": "/review/index.html",
   "dimensions": [
     "Desktop"
@@ -8,6 +8,7 @@
   "mocks": {},
   "scenarioType": "application",
   "pageFilePath": "public/review/index.html",
+  "description": "The internal status-and-decisions page past its passphrase, which this scenario types rather than bypasses. Its \"Also under review\" section now holds two cards rather than one — supporter recognition, and the domain cutover runbook — which is why the section's lede no longer says \"design work\": the runbook is not design work, and a section header that misdescribes half its contents is how a reader learns to skim it. The runbook card leads with the fact the page itself leads with, that none of the migration has been performed, because a card promising a cutover plan is otherwise read as a cutover in progress. The status table's \"Domain transfer from Strikingly\" row now links to it, so the row and the detail behind it are reachable in both directions instead of the detail existing only for whoever was told about it. Every link here is relative rather than root-absolute: each track deploys under a base path and a raw public/ file cannot read Astro's BASE_URL, so /cutover-runbook.html would 404 on the real deploy.",
   "interactions": [
     {
       "action": "fill",

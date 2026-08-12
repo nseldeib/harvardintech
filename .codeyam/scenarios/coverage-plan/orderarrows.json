@@ -1,0 +1,18 @@
+{
+  "surface": "OrderArrows",
+  "surface_kind": "component",
+  "states": [
+    {
+      "dimension": "disabled",
+      "value": "true",
+      "rationale": "source-derived state disabled=true",
+      "status": "planned"
+    },
+    {
+      "dimension": "disabled",
+      "value": "false",
+      "rationale": "source-derived state disabled=false",
+      "status": "covered"
+    }
+  ]
+}

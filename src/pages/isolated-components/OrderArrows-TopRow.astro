@@ -1,0 +1,34 @@
+---
+import Component from "@codeyam/cms/components/admin/OrderArrows.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for OrderArrows on the first row — nothing to move up into.
+//
+// The disabled arrow stays VISIBLE rather than being dropped from the row. If
+// it vanished, the remaining button would slide under the cursor of someone
+// clicking down a list, and the first row would lay out differently from every
+// other row for no reason a reader could see.
+//
+// So the end of the list is shown by a dimmed control that does not respond,
+// not by an absent one.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: OrderArrows - Top Row</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="padding: 2rem;">
+      <Component
+        client:load
+        canUp={false}
+        canDown={true}
+        onUp={() => {}}
+        onDown={() => {}}
+        label="donors"
+      />
+    </div>
+  </body>
+</html>

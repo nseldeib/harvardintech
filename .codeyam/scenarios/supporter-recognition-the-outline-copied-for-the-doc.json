@@ -1,0 +1,31 @@
+{
+  "name": "Supporter Recognition - The Outline Copied For The Doc",
+  "id": "1e4f3d1d-d3cc-4400-bff5-b9e9c21b7fe7",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "The feedback mechanism in its used state, after the copy button has been pressed and reported success. The page deliberately collects nothing — a published artifact cannot post anywhere, and a review that needs a backend stops working once the link outlives the server — so this outline is the actual interface between the page and the reviewer's notes. It is generated from the live directions list rather than transcribed from it, and the capture drives the real button rather than assuming it works, because the copy path falls back to selecting the text wherever the clipboard is refused.",
+  "interactions": [
+    {
+      "action": "fill",
+      "selector": "#pass",
+      "value": "crimson2026"
+    },
+    {
+      "action": "click",
+      "selector": "#enter"
+    },
+    {
+      "action": "click",
+      "selector": "a[href=\"#outline\"]"
+    },
+    {
+      "action": "click",
+      "selector": "#copyOutline"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+---
+import Component from "@codeyam/cms/components/admin/OrderArrows.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for OrderArrows on a collection holding exactly ONE entry —
+// the only state where both arrows are dead at once.
+//
+// It is a real state, not a contrived one: a site adds its first hero slide or
+// its first sponsor level before it has a second, and that collection is
+// ordered from the moment it exists. The row still gets arrows, because the
+// collection is still a sequence and the controls should not appear only once a
+// second entry arrives.
+//
+// Kept as its own capture because the top and bottom rows each prove only ONE
+// direction disables. A bug in the "is there anywhere to move" rule that
+// happened to get one end right would still look correct in both of those, and
+// would only show here.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: OrderArrows - Only Row</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="padding: 2rem;">
+      <Component
+        client:load
+        canUp={false}
+        canDown={false}
+        onUp={() => {}}
+        onDown={() => {}}
+        label="donors"
+      />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,311 @@
+{
+  "timestamp": "2026-08-05T20:04:08Z",
+  "title": "One Supporter Recognition Review Page For Nicole",
+  "type": "feature",
+  "userRequest": "Project context: We need to modernize the https://www.harvardintech.com/ website from the outside. The site was built with a no-code product so we need to faithfully reproduce it using modern technologies and host it as a GitHub pages website. It also needs a CRM that can be run locally or, ideally also in the cloud via GitHub pages as well (protected with a password and/or GitHub OAuth). Can we dig into this?",
+  "description": "Jared asked where the supporter wall and the import stood, such that he could send Nicole one link and take her feedback back through a doc. Most of it already existed: the wall is shipped on /donate, the nine directions deck was built and gated two commits ago, and doc-based feedback was already the deliberate design — the per-card sliders were deleted precisely because she sends reactions in a doc. Three things were actually missing, and this closes them.\n\nThe wall was not in the review path. /review contained exactly one link in the entire page, to the directions deck, so the one part of supporter recognition that is genuinely built was the one part Nicole could not find — and nine alternatives were being judged against nothing. The deck now opens with it: W1-W5 naming what the wall does today, shown through the committed donor-wall scenario captures that build.py inlines, rather than a redrawing. A hand-copied wall diverges from the shipped one on the first fix, and the copy that diverges is always the one already sent to the reviewer; build.py fails loudly if either scenario is renamed rather than emitting a broken img.\n\nThe import existed only as prose. Two sentences in the closing questions said the upload carries no dollar amounts and that school and gradYear are the only structure it offers. Diffing the file against src/content/config.ts made that concrete: the two shapes overlap on exactly one field. tier has no input at all, founding needs its own column or a rule about when a gift counts, anonymous needs a column that does not exist — so the request arrives inside the name field instead — while school and gradYear are carried by the file and are not fields on the donors collection, which three of the nine directions are built on. I1-I4 walk that as a flow that stops, because four sentences read as a caveat while a step that stops and asks reads as a decision. I4 states the consequence off the shipped grouping rules rather than as a warning: every supporter arrives untagged, so groupDonorsByTier collects them all under the trailing Other supporters band, shouldShowTierChips returns false at one group so the filter chips stop rendering entirely, and nobody carries the badge Nicole specifically asked for.\n\nThe rules live in src/lib/donorImport.js with 30 tests, UMD-wrapped so build.py inlines it and vitest reaches it — the donorNetwork.js arrangement, for the same reason. What it really enforces is that an import may not GUESS: tier, founding and anonymous come back unresolved on every run because they are properties of the file's SHAPE, not of any row, so a spreadsheet where every line is spotless still stops in the same place. A summary that hid them on a clean file would report success for a job it did a third of. Re-importing someone anonymous on the wall is the one duplicate that BLOCKS rather than asks, because the upload carries their real name and no anonymity column, and a published name is the only mistake here an edit cannot take back.\n\nFeedback got a quotable vocabulary. Every reviewable item now carries an id whose families cannot collide in a doc — W for what is built, bare numbers for the directions, I for the import, Q for the questions — and the open questions were renumbered Q1-Q4 because they rendered as a bare 1.-4. list that collided with direction 03 the moment anyone wrote \"3\". The page still collects nothing; it closes with an outline mirroring every id, generated from the LIVE directions list rather than transcribed from it, since a renamed direction would otherwise leave the outline lying in the one place the lie lands in Nicole's notes.\n\nTwo things caught in passing. The card badges rendered 1-9 while the contents, the questions, the README and the outline all said 01-09 — variations.js carries num as a number — so directionLabel now feeds the badge, the full-screen bar and the outline from one tested rule; an id scheme whose whole point is that \"3\" means one thing cannot label the card differently from the line you type under. And the copy button moved off navigator.clipboard to execCommand on a selection: the async Clipboard API is gated by permissions policy, so in an iframe it does not merely fail, it logs a violation that fails scenario captures, and the fallback still leaves the outline selected.\n\nStatusing the taxonomy for /review surfaced that its gate-refused state was real but uncaptured, so it earned a scenario rather than a false covered claim. Two limits stated plainly: this stays deterrent-level privacy — the page is readable in source to anyone who opens dev tools, acceptable only because the 200 supporters are fabricated and no real donor list exists yet — and inlining the two wall captures took the page from 152KB to ~803KB, which is what keeps the wall section honest and is a real cost on a link opened over a phone connection.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/README.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/artifact-body.html",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/build.py",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/src/shell.html",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/src/shell.js",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/project-review-unlocked-status.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-unlocked-status--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-a-direction-full-screen--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-a-direction-full-screen--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-day-one-empty-network--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-day-one-empty-network--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-locked--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-locked--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-locked--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-refused--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-gate-refused--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-nine-directions--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-nine-directions--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-network-nine-directions--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "docs/nicole-review.md",
+      "status": "modified"
+    },
+    {
+      "path": "public/donor-network.html",
+      "status": "modified"
+    },
+    {
+      "path": "public/review/index.html",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/design/donor-network/src/import.js",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/donor-network/src/review.css",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/design/donor-network/upload-sample.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/project-review-gate-refused.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-gate-refused--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/project-review-gate-refused--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-import-step-four-the-wall-it-would-produce--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-import-step-four-the-wall-it-would-produce--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-import-step-one-the-file--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-import-step-one-the-file--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-import-step-three-what-the-file-cannot-answer--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-import-step-three-what-the-file-cannot-answer--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-import-step-two-rows-needing-a-person--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-import-step-two-rows-needing-a-person--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-the-outline-copied-for-the-doc--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-the-outline-copied-for-the-doc--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-the-wall-as-it-stands--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/supporter-recognition-the-wall-as-it-stands--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-recognition-import-step-four-the-wall-it-would-produce.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-recognition-import-step-one-the-file.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-recognition-import-step-three-what-the-file-cannot-answer.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-recognition-import-step-two-rows-needing-a-person.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-recognition-the-outline-copied-for-the-doc.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/supporter-recognition-the-wall-as-it-stands.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/donorImport.js",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/donorImport.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/reviewOutline.js",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/reviewOutline.test.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Project Review - Gate Refused",
+      "screenshotPath": "project-review-gate-refused--desktop.png"
+    },
+    {
+      "name": "Project Review - Unlocked Status",
+      "screenshotPath": "project-review-unlocked-status--desktop.png"
+    },
+    {
+      "name": "Supporter Network - A Direction Full-Screen",
+      "screenshotPath": "supporter-network-a-direction-full-screen--desktop.png"
+    },
+    {
+      "name": "Supporter Network - Day One Empty Network",
+      "screenshotPath": "supporter-network-day-one-empty-network--desktop.png"
+    },
+    {
+      "name": "Supporter Network - Gate Locked",
+      "screenshotPath": "supporter-network-gate-locked--desktop.png"
+    },
+    {
+      "name": "Supporter Network - Gate Refused",
+      "screenshotPath": "supporter-network-gate-refused--desktop.png"
+    },
+    {
+      "name": "Supporter Network - Nine Directions",
+      "screenshotPath": "supporter-network-nine-directions--desktop.png"
+    },
+    {
+      "name": "Supporter Recognition - Import Step Four The Wall It Would Produce",
+      "screenshotPath": "supporter-recognition-import-step-four-the-wall-it-would-produce--desktop.png"
+    },
+    {
+      "name": "Supporter Recognition - Import Step One The File",
+      "screenshotPath": "supporter-recognition-import-step-one-the-file--desktop.png"
+    },
+    {
+      "name": "Supporter Recognition - Import Step Three What The File Cannot Answer",
+      "screenshotPath": "supporter-recognition-import-step-three-what-the-file-cannot-answer--desktop.png"
+    },
+    {
+      "name": "Supporter Recognition - Import Step Two Rows Needing A Person",
+      "screenshotPath": "supporter-recognition-import-step-two-rows-needing-a-person--desktop.png"
+    },
+    {
+      "name": "Supporter Recognition - The Outline Copied For The Doc",
+      "screenshotPath": "supporter-recognition-the-outline-copied-for-the-doc--desktop.png"
+    },
+    {
+      "name": "Supporter Recognition - The Wall As It Stands",
+      "screenshotPath": "supporter-recognition-the-wall-as-it-stands--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 40,
+    "passed": 40,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 40,
+        "passed": 40
+      }
+    ]
+  }
+}

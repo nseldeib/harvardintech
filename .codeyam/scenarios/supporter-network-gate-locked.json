@@ -1,0 +1,13 @@
+{
+  "name": "Supporter Network - Gate Locked",
+  "id": "851c90fb-5e1b-4c27-bfea-8ebaaf751564",
+  "url": "/donor-network.html",
+  "dimensions": [
+    "Desktop",
+    "Mobile"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "public/donor-network.html",
+  "description": "What a stranger with the URL sees: the passphrase prompt, opaque over the whole viewport, with nothing of the nine directions legible behind it. This is the state the feature exists to produce — the deck was deployed publicly and ungated before it, readable by anyone who had the link. Captured with no interactions, which is the only difference from the unlocked scenario beside it. The gate is deliberately always-on rather than driven by PREVIEW_GATE: that flag is unset on the public track, so an inherited gate would un-gate this deck at the Strikingly cutover, exactly when it must stay private. Mobile as well as Desktop, since a forwarded link is as likely to be opened on a phone as a laptop."
+}

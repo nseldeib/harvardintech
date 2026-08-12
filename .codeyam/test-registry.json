@@ -127,6 +127,240 @@
       "runner": "tests"
     },
     {
+      "description": "The check must not fire on a real name that merely contains a marker word, or it would strip the identity of someone who wanted to be listed.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "anonymity arriving in the name column › does not mistake a real name for an anonymity request",
+      "line": 113,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The file has no anonymity column, so the request turns up in the only free text field there is. Imported literally it becomes a card reading \"Anonymous\" as though that were a person's name.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "anonymity arriving in the name column › recognizes the ways a supporter writes \"do not name me\"",
+      "line": 104,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A decision absent from the file is appended rather than dropped.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › appends a decision the file does not yet know about",
+      "line": 108,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pure: the caller holds an optimistic copy of the old state to revert to when the commit fails, so mutating the input would corrupt that rollback.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › does not mutate the progress it was given",
+      "line": 66,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Reopening drops the text. A decision back in the open column must not still display the conclusion it no longer holds.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › drops the answer text when a decision is reopened",
+      "line": 96,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same non-interference rule as steps.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › leaves every other decision untouched",
+      "line": 102,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A decision has content, not just a flag. Recording only \"answered\" is what left D1's actual answer stranded in whichever meeting produced it.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyDecisionAnswer › records the answer text alongside the flag",
+      "line": 76,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An entry the sequence has never seen must not vanish from the list — it keeps its file-derived place instead.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "applySequence › keeps an entry the sequence does not mention",
+      "line": 244,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason this exists: a move stages a change but does not rewrite the markdown, so the files still hold the old numbers and only this remembered sequence keeps the row where the editor put it.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "applySequence › reorders to follow the session sequence",
+      "line": 237,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "With no session sequence the file-derived order stands.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "applySequence › returns the incoming order when there is no sequence",
+      "line": 230,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A slug in the sequence that no longer exists is skipped rather than producing a hole in the list.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "applySequence › skips a slug that is no longer in the collection",
+      "line": 252,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A step added to the runbook after this file was committed still has to be tickable, or adding a step would silently make it unrecordable.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › appends a step the file does not yet know about",
+      "line": 58,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Un-ticking drops the attribution with it. A step recorded as not done but still carrying \"nseldeib · 11 Aug\" would read as a step someone finished and then someone else quietly reversed, which is not what happened.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › clears the attribution when a step is un-ticked",
+      "line": 36,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pure: the caller holds an optimistic copy of the old state to revert to when the commit fails, so mutating the input would corrupt that rollback.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › does not mutate the progress it was given",
+      "line": 66,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The concurrency rule. Two people ticking DIFFERENT steps are not in conflict, and both ticks must survive — this is why the commit path re-reads and re-applies rather than refusing on drift.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › leaves every other step untouched",
+      "line": 44,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ticking records who and when. That attribution is the entire argument for committing this file instead of keeping ticks in a browser, so it is the first thing worth pinning down.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › records the login and timestamp when a step is ticked",
+      "line": 22,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Two people ticking the SAME step converge rather than duplicating it.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "applyStepTick › replaces rather than duplicates an existing step",
+      "line": 50,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "S6 today — the only two-decision step.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockedLabel › joins two decisions with and",
+      "line": 39,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The common case on this page: one decision holding a step up.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockedLabel › names a single decision on its own",
+      "line": 34,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A step with nothing outstanding renders no waiting line at all, so the empty case must produce nothing rather than a stray separator.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockedLabel › returns an empty string when nothing is blocking",
+      "line": 51,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The case the inline `join(' and ')` got wrong. No step needs three decisions today, which is exactly why this was invisible and worth pinning down.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockedLabel › uses a comma before the final and for three or more",
+      "line": 45,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Partially answered: only the outstanding one is named.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › drops decisions that have been answered",
+      "line": 123,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "S6 waits on two, and both must be reported — reporting only the first would tell the team they are one decision away when they are two.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › names every outstanding decision, not just the first",
+      "line": 117,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "S1 needs D1. With nothing answered, D1 is what is holding it up — and the page prints this list, so it has to be the ids rather than a boolean.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › names the unanswered decisions a step needs",
+      "line": 104,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A step with no prerequisites is never blocked.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › returns nothing for a step that needs no decisions",
+      "line": 129,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Once answered, nothing blocks it.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "blockingDecisions › returns nothing once the decisions are answered",
+      "line": 110,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
       "description": "A subject is appended as a query parameter.",
       "file": "src/lib/mailto.test.ts",
       "format": "vitest",
@@ -172,6 +406,42 @@
       "runner": "tests"
     },
     {
+      "description": "The baseline is the file normalized through parse-then-serialize, so the diff an editor reviews is the one order line and nothing else.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "buildOrderChange › diffs as only the order line",
+      "line": 301,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Everything else survives. A reorder that quietly dropped a section's kind or rewrote its body would be far worse than the numbering it replaced.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "buildOrderChange › leaves the other frontmatter keys and the body intact",
+      "line": 280,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Staged as an ordinary edit, which is what puts a reorder in the same publish review as every other pending change instead of a path of its own.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "buildOrderChange › stages as an ordinary edit against the entry file",
+      "line": 291,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The one field a reorder is allowed to touch.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "buildOrderChange › writes the new order into the frontmatter",
+      "line": 273,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "Negative order values still sort numerically, below the positives.",
       "file": "src/lib/order.test.ts",
       "format": "vitest",
@@ -205,6 +475,33 @@
       "key": "byOrder › treats order 0 as ordered, not as missing",
       "line": 21,
       "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The timeline's three buckets must between them hold every step — a step missing from the calendar is work nobody has scheduled.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "byPhase › accounts for every step across the three phases",
+      "line": 199,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Retiring Strikingly is deliberately afterwards — doing it on the day is the mistake the runbook exists to prevent, so its phase is load-bearing.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "byPhase › leaves retiring the old site until afterwards",
+      "line": 211,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The switch and its checks are the on-the-day work.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "byPhase › puts the switch itself on the day",
+      "line": 205,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -250,6 +547,33 @@
       "key": "chipPressed › marks only the selected chip as pressed",
       "line": 31,
       "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The apostrophe form is how people actually write a class year, and a spreadsheet preserves it as text.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "class year › accepts the apostrophe form a spreadsheet produces",
+      "line": 153,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case, from both a text cell and a numeric one — a spreadsheet export gives either depending on how the column was typed.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "class year › accepts the four-digit form",
+      "line": 146,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A wrong year is worse than a missing one: it places a supporter in the wrong cohort in three of the nine directions, where it looks like data rather than like an error.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "class year › refuses to guess at anything else",
+      "line": 162,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -311,7 +635,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "commitAll media guard › refuses to publish a record with no bytes, before touching GitHub",
-      "line": 113,
+      "line": 120,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -320,7 +644,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for every built-in extra",
-      "line": 315,
+      "line": 362,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -329,7 +653,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for every custom collection",
-      "line": 282,
+      "line": 289,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -338,8 +662,17 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares the chapters list rows the schema expects",
-      "line": 305,
+      "line": 312,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The hero video field's SHAPE, which the drift guard above cannot see: that check proves `heroVideo` exists in both the registry and the schema, but a field of the wrong type would satisfy it and still be unusable. `text` is the load-bearing part. The obvious choice is the `image` type used by `heroImage` beside it, and it would be wrong: the media library uploader is images-only (`accept=\"image/*\"`), so an image-typed field renders a picker that can never list a video — an editor would be handed",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › declares the hero video as an optional text field with guidance",
+      "line": 337,
+      "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
     {
@@ -347,8 +680,17 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses",
-      "line": 359,
+      "line": 406,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "It has to sit with the hero, not at the end of the form. The fields are rendered in declaration order, and a video control separated from the photo it falls back to reads as unrelated to it.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed CMS registry vs content schema › places the hero video directly after the hero image",
+      "line": 353,
+      "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
     {
@@ -356,7 +698,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › renders an editor input for every schema key of every collection",
-      "line": 336,
+      "line": 383,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -455,7 +797,7 @@
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
       "key": "contentRoot › defaults to src/content when the override is unset",
-      "line": 24,
+      "line": 27,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -464,8 +806,179 @@
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
       "key": "contentRoot › returns CODEYAM_CONTENT_ROOT when it is set",
-      "line": 18,
+      "line": 21,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › boston-cambridge.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › boston-cambridge.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › boston-cambridge.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › dc-dmv.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › dc-dmv.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › dc-dmv.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "sanity: the chapter content exists, so an empty glob cannot make every per-file assertion below pass vacuously",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › finds the chapter content files",
+      "line": 53,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › london.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › london.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › london.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › nyc.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › nyc.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › nyc.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › seattle.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › seattle.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › seattle.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a row whose image is blank is dropped by `toGalleryPhotos`, so it renders nothing rather than a broken tile — but it is still an editor's half-finished row committed to the repo, which is worth failing on",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › sf-bay-area.md › declares no blank photo rows",
+      "line": 63,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "every path must be root-absolute: `withBase` prefixes the deploy's base path onto it, and a relative path silently resolves against the current route instead — /chapters/nyc/images/... rather than /images/...",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › sf-bay-area.md › declares only root-absolute photo paths",
+      "line": 71,
+      "registeredAt": "2026-08-11T15:26:00Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the referenced image must actually exist under public/, catching a typo'd or deleted photo before it renders as a dead tile in production",
+      "file": "src/lib/chapter.photos.test.ts",
+      "format": "vitest",
+      "key": "curated chapter galleries › sf-bay-area.md › points only at images that exist under public/",
+      "line": 78,
+      "registeredAt": "2026-08-11T15:26:00Z",
       "runner": "tests"
     },
     {
@@ -473,7 +986,7 @@
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
       "key": "dataRoot › defaults to src/data when the override is unset",
-      "line": 44,
+      "line": 47,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -482,7 +995,7 @@
       "file": "src/lib/contentRoot.test.ts",
       "format": "vitest",
       "key": "dataRoot › returns CODEYAM_DATA_ROOT when it is set",
-      "line": 38,
+      "line": 41,
       "registeredAt": "2026-06-17T11:03:18.675832+00:00",
       "runner": "tests"
     },
@@ -491,7 +1004,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › excludes the sub-fields of a repeatable list",
-      "line": 163,
+      "line": 170,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -500,7 +1013,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › returns an empty list for no fields",
-      "line": 178,
+      "line": 185,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -509,7 +1022,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › returns each top-level field name in declaration order",
-      "line": 153,
+      "line": 160,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -586,12 +1099,165 @@
       "runner": "tests"
     },
     {
+      "description": "Each outcome reads differently in the compact chip, so the colour dot is never the only thing carrying the result.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployChipLabel › gives each terminal outcome its own wording",
+      "line": 120,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "In-flight stages say which step they are on, so a long build still looks like progress rather than a stall.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployChipLabel › names the current step while publishing",
+      "line": 128,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Green, red and amber have to differ or the chip's one glanceable signal collapses.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployDotColor › gives live, failed and unconfirmed distinct colours",
+      "line": 138,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every in-flight stage shares one colour: the chip reports that work is happening, not which step it reached.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployDotColor › shares one colour across the in-flight stages",
+      "line": 146,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An errored build keeps GitHub's own message, which is the only thing that says why.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployStateFromBuild › carries the build error message through on failure",
+      "line": 163,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`unconfirmed` is produced only by the poll giving up — never by a build record, which always says something definite.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deployStateFromBuild › never derives unconfirmed from a build status",
+      "line": 155,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Success completes every row, including Live.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › marks every row done when live",
+      "line": 86,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`unconfirmed` is the literal truth of the state: everything up to and including the wait is done, and only \"Live\" is unproven.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › marks everything before Live done and leaves Live pending when unconfirmed",
+      "line": 63,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The stepper must not change shape between stages — a row appearing or vanishing mid-deploy reads as something having gone wrong.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › renders one row per pipeline stage for every stage",
+      "line": 55,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "It must not borrow the failure marker. Nothing failed — the deploy was simply never observed finishing — and a red step would say otherwise.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › shows no failed step when unconfirmed",
+      "line": 74,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A real failure still reads as one, pinned to the step where a build works.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySteps › still marks the building row failed on a failed build",
+      "line": 79,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The unconfirmed copy must not be the generic in-flight line, which claims GitHub Pages is actively rebuilding — by then nothing is watching.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySubhead › does not reuse the in-flight rebuilding copy",
+      "line": 103,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Success names where it published, which on a two-track repo is the part an editor actually needs to know.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySubhead › names the repo and branch on success",
+      "line": 109,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "States the commit as fact and the deploy as unknown — it promises nothing and blames nothing.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › deploySubhead › says the change is committed and the site is still updating",
+      "line": 94,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two original terminal stages keep their meaning.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › isTerminalStage › keeps live and failed terminal",
+      "line": 37,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "In-flight stages must stay non-terminal, or the poll would stop early and report a deploy as finished while it is still building.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › isTerminalStage › leaves every in-flight stage non-terminal",
+      "line": 44,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole bug in one assertion. If `unconfirmed` is not terminal, the panel's close button never enables and the admin is unusable after a publish that could not be verified.",
+      "file": "src/lib/deployStage.test.ts",
+      "format": "vitest",
+      "key": "deploy stages › isTerminalStage › treats unconfirmed as terminal so the status view can rest",
+      "line": 32,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
       "description": "The reviewed track is served from a subpath of this repo's own Pages site, so the same rule applies even though it publishes by artifact upload.",
       "file": "src/lib/deployTracks.test.ts",
       "format": "vitest",
       "key": "deploy.yml track coherence › builds the reviewed track with a base matching this repo",
       "line": 112,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -600,7 +1266,7 @@
       "format": "vitest",
       "key": "deploy.yml track coherence › builds the staging track with a base matching the repo it publishes to",
       "line": 102,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -609,7 +1275,7 @@
       "format": "vitest",
       "key": "deploy.yml track coherence › gates both tracks while neither is meant to be public",
       "line": 130,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -618,7 +1284,169 @@
       "format": "vitest",
       "key": "deploy.yml track coherence › writes no CNAME on the staging track",
       "line": 122,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Both publish surfaces build their record here so the watch behaves identically wherever Publish was pressed.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › buildDeployRecord › carries the commit url, marker url and sampled baseline",
+      "line": 35,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A null baseline is a real answer, not a missing one: the site served no marker before the commit, so propagation cannot be verified and the poll must be told that rather than left to guess.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › buildDeployRecord › preserves a null marker baseline rather than dropping the field",
+      "line": 55,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A new record always starts at the moment the commit landed — nothing has been observed about the deploy yet.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › buildDeployRecord › starts at the committed stage stamped with the supplied clock",
+      "line": 45,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The key drives the poll effect. Two different commits are two different watches — publishing again mid-deploy must move the watch to the new one.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › deployWatchKey › distinguishes two different commits",
+      "line": 66,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "This is what makes \"Check again\" work. It re-watches the SAME commit with a fresh start time, and unless that reads as a new watch the poll effect never re-runs and the button does nothing.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › deployWatchKey › distinguishes two watches of the same commit started at different times",
+      "line": 76,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Re-reading the same stored record across a navigation must not look like a new watch, or every page load would restart the poll from scratch.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › deployWatchKey › is stable for the same commit and start time",
+      "line": 85,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The happy path: what the store round-trips through JSON.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isDeployRecord › accepts a record built by buildDeployRecord",
+      "line": 140,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Storage is a string under a key anything on the origin can write, so a half-written or hand-edited value must not resurrect as a watch that polls a garbage URL for ten minutes.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isDeployRecord › rejects a record missing the fields the poll depends on",
+      "line": 149,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Null and primitives reach here whenever JSON.parse succeeds on junk.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isDeployRecord › rejects null and non-object values",
+      "line": 156,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A record left behind by a tab closed yesterday must not resurrect.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isWatchExpired › expires a watch left over from a much earlier session",
+      "line": 131,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An exhausted record is dropped rather than resumed: restarting a watch with no budget would report \"still updating\" instantly and read as a fresh failure of a deploy that finished long ago.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isWatchExpired › expires a watch whose budget is exactly spent",
+      "line": 124,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A fresh record is resumable — this is the ordinary re-attach after the editor opens another entry mid-deploy.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › isWatchExpired › treats a just-started watch as resumable",
+      "line": 115,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Budget runs from when the deploy STARTED, not from when the current page mounted — otherwise an editor moving between entries would keep renewing a hopeless watch indefinitely.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › remainingWatchMs › counts down from the start time rather than from now",
+      "line": 96,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Never negative: the value is handed straight to a poll timeout, and a negative budget would be a nonsense argument.",
+      "file": "src/lib/deployWatch.test.ts",
+      "format": "vitest",
+      "key": "deployWatch › remainingWatchMs › floors at zero once the budget is spent",
+      "line": 105,
+      "registeredAt": "2026-08-08T00:50:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The page hands it whatever the data carries; a numeric string is the likely shape if the fixture is ever authored by hand.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "directionLabel › accepts a numeric string",
+      "line": 30,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Padding must not corrupt an id that is already two digits, which is what a tenth direction would be.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "directionLabel › leaves a two-digit id alone",
+      "line": 23,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The bug this function exists for: variations.js carries `num` as a number, so the card badge rendered \"3\" while everything else on the page said \"03\".",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "directionLabel › pads a single digit so the card matches what the reviewer types",
+      "line": 16,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A wrong id is worse than a missing one — it points a reviewer's comment at the wrong design.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "directionLabel › returns nothing for a value that is not a number",
+      "line": 36,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -829,6 +1657,33 @@
       "runner": "tests"
     },
     {
+      "description": "The ordinary case: the number an editor typed into the Order box.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "entryOrder › reads the order out of the frontmatter",
+      "line": 100,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank is a real state — most entries start with no order at all.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "entryOrder › returns undefined when the entry has no order",
+      "line": 105,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Frontmatter is hand-editable, so junk has to read as unnumbered rather than NaN, which would poison every comparison it reached.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "entryOrder › treats an unparseable order as unnumbered",
+      "line": 111,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "Null placement resolves to null rather than to a plausible-looking URL.",
       "file": "src/lib/collectionPlacement.test.ts",
       "format": "vitest",
@@ -883,35 +1738,35 @@
       "runner": "tests"
     },
     {
-      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "description": "Asserts the CMS renders homeSections.kind as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "enum-shaped fields are dropdowns, not text boxes › homeSections.kind is a select",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "description": "Asserts the CMS renders momentumSections.kind as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "enum-shaped fields are dropdowns, not text boxes › momentumSections.kind is a select",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "description": "Asserts the CMS renders momentumSections.layout as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "enum-shaped fields are dropdowns, not text boxes › momentumSections.layout is a select",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts the field is declared as a select in collections.json rather than a text box — the change that replaced typing an exact magic string with picking from a menu.",
+      "description": "Asserts the CMS renders pillars.icon as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "enum-shaped fields are dropdowns, not text boxes › pillars.icon is a select",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
@@ -982,7 +1837,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › carries the optional fields the event cards render",
-      "line": 180,
+      "line": 194,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -991,7 +1846,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › does not match a tag that only looks like the owner id",
-      "line": 201,
+      "line": 215,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1000,7 +1855,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › excludes events with no tag at all",
-      "line": 209,
+      "line": 223,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1009,7 +1864,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › matches a community id through the same chapter tag",
-      "line": 172,
+      "line": 186,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1018,7 +1873,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › returns nothing when no event is tagged to the owner",
-      "line": 216,
+      "line": 230,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1027,7 +1882,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "eventsTaggedTo › returns only the events tagged to the given owner",
-      "line": 164,
+      "line": 178,
       "registeredAt": "2026-07-30T13:54:13Z",
       "runner": "tests"
     },
@@ -1050,35 +1905,35 @@
       "runner": "tests"
     },
     {
-      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "description": "Checks every homeSections.kind value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed homeSections.kind value is offered",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "description": "Checks every momentumSections.kind value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed momentumSections.kind value is offered",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "description": "Checks every momentumSections.layout value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed momentumSections.layout value is offered",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
-      "description": "Asserts every value already committed in content is offered by the dropdown, so converting the field to a select cannot strand an existing entry on an out-of-list value.",
+      "description": "Checks every pillars.icon value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed pillars.icon value is offered",
-      "registeredAt": "2026-08-04T18:59:29Z",
+      "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
     {
@@ -1163,6 +2018,69 @@
       "runner": "tests"
     },
     {
+      "description": "Frontmatter reaches a component as a Date once `z.coerce.date` has run, while scenarios and tests hand in ISO strings — both must format the same.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › accepts Date objects as well as ISO strings",
+      "line": 195,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The common case: a project that starts and ends inside one year writes that year once, so the row reads as one span rather than two full dates.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › collapses the repeated year when both dates share one",
+      "line": 161,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An end before a start formats in the order authored rather than being silently swapped: a visibly wrong range gets reported, a reordered one does not. It must not throw.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › formats an inverted range as authored instead of reordering it",
+      "line": 189,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Across a year boundary both years are needed, or the range is ambiguous.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › keeps both years when the range crosses a year boundary",
+      "line": 166,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The mirror case: a deadline with no announced start.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › reads as a deadline when only the end date is set",
+      "line": 176,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An organizer who knows when the work starts but not when it ends.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › reads as a start when only the start date is set",
+      "line": 171,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Null, not an empty string — the callers render nothing at all rather than an empty chip, which is the state every project was in before this feature.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "formatProjectDates › returns null when the project has neither date",
+      "line": 182,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "The state the wall is in on day one.",
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
@@ -1217,11 +2135,56 @@
       "runner": "tests"
     },
     {
+      "description": "The shared 40-photo wall stays on the full-width grid.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › clamps to the maximum for a large gallery",
+      "line": 192,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A zero-column grid is not a thing — an empty list must not produce an invalid grid-template.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › floors at one column",
+      "line": 203,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ceiling is a parameter so a caller can ask for a narrower grid.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › honours a custom maximum",
+      "line": 209,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Exactly at the boundary.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › returns the maximum when the count equals it",
+      "line": 197,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A small chapter gallery should fill its row rather than leave holes.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "galleryColumns › uses one column per photo below the maximum",
+      "line": 187,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
       "description": "Capable browser, no reduced-motion preference: animate the tiles in.",
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryRevealImmediately › animates when IntersectionObserver exists and motion is allowed",
-      "line": 6,
+      "line": 12,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1230,7 +2193,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryRevealImmediately › reveals immediately when IntersectionObserver is unavailable",
-      "line": 21,
+      "line": 27,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1239,7 +2202,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryRevealImmediately › reveals immediately when both reduced motion and no observer",
-      "line": 28,
+      "line": 34,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1248,7 +2211,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryRevealImmediately › reveals immediately when the user prefers reduced motion",
-      "line": 13,
+      "line": 19,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1257,7 +2220,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryStaggerDelay › respects a custom column count",
-      "line": 55,
+      "line": 61,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1266,7 +2229,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryStaggerDelay › returns zero for the first column",
-      "line": 37,
+      "line": 43,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1275,7 +2238,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryStaggerDelay › staggers later columns by 60ms each",
-      "line": 43,
+      "line": 49,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1284,8 +2247,62 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "galleryStaggerDelay › wraps the delay per row of five columns",
-      "line": 49,
+      "line": 55,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "the exemption: a preview page is reached by an unguessable URL instead",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › exempts a preview page in any routed collection",
+      "line": 27,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the deploy serves under /harvardintech today and a bare domain after the cutover, so the rule must not depend on which one it is",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › exempts a preview under a base path",
+      "line": 41,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Astro emits directory-style URLs, so the same page arrives both ways",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › exempts a preview with a trailing slash",
+      "line": 47,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the shareable list is exempt for the same reason as the pages it links to — gating the index while exempting its targets would be the worst of both",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › exempts the shareable previews index",
+      "line": 35,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the ordinary case — every real page on the review origin stays behind the passphrase, which is the whole point of the review track",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › gates ordinary site pages",
+      "line": 19,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the dangerous near-miss: a REAL page whose slug merely contains the word preview must stay gated. Exempting it would silently un-gate ordinary content, which is the failure mode with no visible symptom.",
+      "file": "src/lib/previewGate.test.ts",
+      "format": "vitest",
+      "key": "gateAppliesTo › still gates a real page whose slug merely contains \"preview\"",
+      "line": 54,
+      "registeredAt": "2026-08-12T16:58:34Z",
       "runner": "tests"
     },
     {
@@ -1550,6 +2567,42 @@
       "runner": "tests"
     },
     {
+      "description": "A same-named field of another type is not an order. Guards against a consumer declaring a text `order` and getting arrows that write strings.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "hasOrderField › ignores an order field that is not a number",
+      "line": 93,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other side of the split, and the regression guard for it: a collection with no order has no sequence to arrange, and must keep its Drafts / Published grouping exactly as it reads today.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "hasOrderField › is false for a collection with no order field",
+      "line": 75,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Scoped by capability rather than by name, so every ordered collection on this site gets the arrows without the package naming any of them.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "hasOrderField › is true for every collection this site declares an order on",
+      "line": 82,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The capability that switches the whole feature on. If this reads false for momentumSections the arrows are gone from the page an editor uses.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "hasOrderField › is true for the Momentum Fund sections",
+      "line": 68,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "An empty wall shows its empty message, which is not a claim about anyone.",
       "file": "src/lib/sponsors.test.ts",
       "format": "vitest",
@@ -1671,7 +2724,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeCmsIntegration › excludes the CMS from the public build",
-      "line": 11,
+      "line": 15,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1680,7 +2733,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeCmsIntegration › includes the CMS on the review track",
-      "line": 16,
+      "line": 20,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1689,7 +2742,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeCmsIntegration › includes the CMS under astro dev",
-      "line": 22,
+      "line": 26,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1698,8 +2751,44 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeCmsIntegration › includes the CMS when both dev and review track are set",
-      "line": 28,
+      "line": 32,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The load-bearing case. PreviewGate un-gates on the public track, so if this ever returns true here the runbook is not merely visible — it is visible WITHOUT a passphrase, on the domain, naming the project's soft spots. This is the assertion that keeps the page's answer to its own decision D4 true.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCutoverRunbook › excludes the runbook from the public build",
+      "line": 56,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The gated review origin is where the team reads it — the same place /admin lives, and for the same reason.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCutoverRunbook › includes the runbook on the review track",
+      "line": 62,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Dev keeps it, or the codeyam scenarios that capture the checklist have no route to capture.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCutoverRunbook › includes the runbook under astro dev",
+      "line": 68,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Not a real deploy shape; must not resolve to excluded by accident.",
+      "file": "src/lib/publishTrack.test.ts",
+      "format": "vitest",
+      "key": "includeCutoverRunbook › includes the runbook when both dev and review track are set",
+      "line": 73,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -1707,7 +2796,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeSitemapIntegration › omits the sitemap on the review track",
-      "line": 42,
+      "line": 46,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1716,7 +2805,7 @@
       "file": "src/lib/publishTrack.test.ts",
       "format": "vitest",
       "key": "includeSitemapIntegration › publishes a sitemap on the public track",
-      "line": 35,
+      "line": 39,
       "registeredAt": "2026-07-30T17:08:52.711894037+00:00",
       "runner": "tests"
     },
@@ -1770,7 +2859,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "initGalleryReveal › is a no-op when there are no gallery tiles",
-      "line": 124,
+      "line": 130,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1779,7 +2868,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "initGalleryReveal › observes tiles instead of revealing them when animation is enabled",
-      "line": 108,
+      "line": 114,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1788,7 +2877,7 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "initGalleryReveal › reveals every tile immediately under reduced motion",
-      "line": 87,
+      "line": 93,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
       "runner": "tests"
     },
@@ -1797,8 +2886,71 @@
       "file": "src/lib/gallery.test.ts",
       "format": "vitest",
       "key": "initGalleryReveal › reveals every tile immediately when IntersectionObserver is missing",
-      "line": 96,
+      "line": 102,
       "registeredAt": "2026-06-15T11:47:49.192519914+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The regression the visible-button filter exists for: with two over-cap tiles still hidden, arrowing off the last VISIBLE photo wraps to the first rather than stepping onto a photo that isn't in the grid.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › arrows only through the visible photos while the rest are hidden",
+      "line": 146,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Re-running the wiring is how \"Show all\" picks up the revealed tiles, so a second call must not double-bind the tiles that were already bound.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › does not rebind a tile on a second call",
+      "line": 188,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "After \"Show all\" unhides the rest, the ALREADY-BOUND tiles must arrow through the full set. This is why the button list is resolved at click time instead of captured when initLightbox first ran.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › extends the arrow range once the hidden photos are revealed",
+      "line": 165,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An uncaptioned photo hides the figcaption rather than rendering an empty one, which would still take space under the image. Astro drops `data-caption=\"\"` entirely, so this is the undefined-dataset path.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › hides the caption for a photo that has none",
+      "line": 130,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A page with no gallery is the common case — every route that isn't a chapter or the landing page. It must be a clean no-op, not a throw.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › is a no-op when there is no gallery on the page",
+      "line": 203,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A gallery scope with no tiles yet leaves the dialog unbound rather than wiring arrows that would index into nothing.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › leaves an empty gallery unbound",
+      "line": 211,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Clicking a tile loads that photo and its caption into the dialog.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "initLightbox › opens the clicked photo with its caption",
+      "line": 110,
+      "registeredAt": "2026-08-07T19:09:04Z",
       "runner": "tests"
     },
     {
@@ -1901,12 +3053,120 @@
       "runner": "tests"
     },
     {
+      "description": "An answered decision reads as answered.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isDecisionAnswered › reports an answered decision",
+      "line": 218,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "D1 has been open since 2026-07-02 and the page must keep saying so.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isDecisionAnswered › reports an open decision as unanswered",
+      "line": 223,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same hand-edited-file tolerance as the step lookup.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isDecisionAnswered › treats a decision absent from the file as unanswered",
+      "line": 228,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "an ordinary page is never locked, whatever its draft state",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "isLocked › is false for a page that is not a preview at all",
+      "line": 172,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the distinction the blog route branches on: an unlocked preview renders its markdown, a locked one holds ciphertext that must never reach <Content />",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "isLocked › separates a password-protected preview from an ordinary one",
+      "line": 164,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "`previewOf` is the ONLY marker — a slug that merely looks like one is not enough",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "isPreview › is true only for an entry carrying previewOf",
+      "line": 154,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
       "description": "The single-slug form must agree with the list form.",
       "file": "src/lib/sitePages.test.ts",
       "format": "vitest",
       "key": "isReservedPageSlug › is true for a taken slug and false for a free one",
       "line": 116,
       "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A recorded tick reads as done.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepDone › reports a ticked step as done",
+      "line": 84,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An untouched step does not.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepDone › reports an untouched step as not done",
+      "line": 89,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A state file predating a step — or naming one that no longer exists — must not throw or report done. The file is committed and hand-editable, so this is reachable rather than theoretical.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepDone › treats a step absent from the file as not done",
+      "line": 96,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Already done is not \"ready to start\" — otherwise the banner's \"could be started today\" count would keep counting finished work.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepReady › reports a completed step as not ready",
+      "line": 150,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A blocked step is not ready however much anyone wants it to be.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepReady › reports a step waiting on a decision as not ready",
+      "line": 143,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ready means startable now: prerequisites met and not already done.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "isStepReady › reports an unblocked, unticked step as ready",
+      "line": 137,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -1937,6 +3197,42 @@
       "runner": "tests"
     },
     {
+      "description": "Key names are case-sensitive in the DOM; a lowercase spelling is not a KeyboardEvent.key value and must not match.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "lightboxKeyAction › does not match a lowercased key name",
+      "line": 28,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Anything else is ignored rather than swallowed — the handler calls preventDefault only on a mapped key, so Tab still moves focus inside the dialog and the browser's own shortcuts keep working.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "lightboxKeyAction › ignores unrelated keys",
+      "line": 20,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Escape closes. `<dialog>` also cancels on Escape by itself; mapping it here keeps ONE close path so the native cancel and our handler can't drift.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "lightboxKeyAction › maps Escape to close",
+      "line": 7,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two arrows move through the gallery.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "lightboxKeyAction › maps the arrow keys to next and prev",
+      "line": 12,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
       "description": "Leads with the org name as an H1 and the description as a blockquote.",
       "file": "src/lib/seoEndpoints.test.ts",
       "format": "vitest",
@@ -1961,6 +3257,51 @@
       "key": "llms.txt GET › surfaces contact email and socials",
       "line": 62,
       "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A column the collection has nowhere to put is dropped rather than carried, since carrying it would imply the wall can show it.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › drops a column the site has no field for",
+      "line": 37,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The seam this exists for: every rule below reads `row.gradYear`, while the file arrives with human headings. Get the mapping wrong and normalizeGradYear returns null for every row — the import then reports \"no usable class year\" fourteen times while looking like it worked.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › keys a row by the field names the rules read",
+      "line": 19,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The upload arrives as `{rows: [...]}`; a file that failed to parse gives undefined, and an empty walkthrough beats a thrown error on a review page.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › maps a whole upload, and survives one that carries no rows",
+      "line": 59,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A missing column must stay missing rather than becoming an empty string — the difference between \"not supplied\" and \"supplied as blank\".",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › omits a heading the file does not carry",
+      "line": 44,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The page hands it whatever is in the JSON. A malformed entry should cost one row, not the whole import.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "mapping the spreadsheet columns › returns an empty object for a non-row rather than throwing",
+      "line": 52,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -2000,12 +3341,66 @@
       "runner": "tests"
     },
     {
+      "description": "Each of these is a real way one supporter arrives twice, and each is invisible to the eye scanning the file.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "matching against the wall › finds an exact match through padding, case and a dropped accent",
+      "line": 173,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The specific path by which a withheld name reaches the public site: the upload carries the real name and no anonymity column, so a blind overwrite republishes it.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "matching against the wall › flags when the matched supporter is anonymous",
+      "line": 195,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The middle outcome is the point of the function: it neither duplicates a supporter nor merges two of them, it asks.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "matching against the wall › reports a suffix difference as possible rather than deciding it",
+      "line": 180,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The baseline: most of a bi-weekly upload is genuinely new people, and they must not be flagged as anything.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "matching against the wall › reports an unknown name as new",
+      "line": 188,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE point of leaving `heroVideo` out of `donatePage.json`. Every other frame field falls back to the committed JSON when the box is blank, which is right for copy that must never be empty — but applied here it would make the video impossible to REMOVE from /admin, because clearing the box would resurrect the JSON value. An editor has to be able to take the video off unaided.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › clears the video when the editor empties the box",
+      "line": 376,
+      "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "The personalized headline is what the whole email campaign is built around, so a cleared one has to fall back rather than ship a hero with no headline.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › keeps both committed headlines when the editor cleared them",
       "line": 331,
       "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The production state: no video has ever been set. The key is present and undefined rather than absent, so spreading the frame cannot resurrect a stale value, and the hero renders exactly as it does today.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › leaves the video undefined when the entry carries no heroVideo",
+      "line": 384,
+      "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
     {
@@ -2036,6 +3431,15 @@
       "runner": "tests"
     },
     {
+      "description": "Adding the field must not have disturbed its neighbour: the photo is the video's poster and its fallback, so a change that broke `heroImage` would take the fallback with it.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › still carries the hero image alongside a video",
+      "line": 394,
+      "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "The migration working for the frame: the hero and closing ask are now copy an editor owns rather than values in a file only a developer opens.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
@@ -2045,11 +3449,20 @@
       "runner": "tests"
     },
     {
+      "description": "The hero's optional moving backdrop, joining the frame rather than getting a path of its own — which is what makes it arrive at the component for free, since `loadDonateFrame` spreads whatever this returns.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › takes the hero video path the editor pasted",
+      "line": 365,
+      "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "The invisible failure this guards: a site that silently stopped measuring.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
-      "line": 376,
+      "line": 419,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2058,7 +3471,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
-      "line": 371,
+      "line": 414,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2067,7 +3480,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
-      "line": 405,
+      "line": 448,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2076,7 +3489,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
-      "line": 414,
+      "line": 457,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2085,7 +3498,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed analytics id",
-      "line": 383,
+      "line": 426,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2094,7 +3507,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes custom head and body HTML the editor added",
-      "line": 391,
+      "line": 434,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -2234,11 +3647,56 @@
       "runner": "tests"
     },
     {
+      "description": "A milestone already behind the count must not re-fire, or the animation would celebrate 50 again on every subsequent frame.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › does not re-report a milestone already behind the count",
+      "line": 76,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The regression this exists for: the growth step accelerates with the count, so an equality check fired only when the arithmetic happened to land exactly on a milestone. In practice 50/100/150 never showed.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › reports a milestone that was stepped over, not just landed on",
+      "line": 50,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Most frames cross nothing; returning a milestone on those would fire the celebration continuously through the whole animation.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › reports nothing when the step stays between milestones",
+      "line": 63,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A jump from 40 to 160 passes three milestones. Announcing 150 would skip two moments the campaign wants to mark, so the earliest wins and the caller snaps the count back to it.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › reports the lowest milestone when a single step clears several",
+      "line": 70,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The exact-landing case still has to work — it is the one the old equality check got right, and it must not regress in the other direction.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "milestoneCrossed › still reports an exact landing",
+      "line": 57,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
       "description": "An exempted key is absent from the editor on purpose and must stay quiet.",
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › ignores an exempted key",
-      "line": 228,
+      "line": 235,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -2247,7 +3705,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › names a key that drifted out of the editor",
-      "line": 223,
+      "line": 230,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -2256,7 +3714,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › reports nothing when the editor renders an input for every key",
-      "line": 217,
+      "line": 224,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -2265,7 +3723,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › reports nothing when the schema has no keys",
-      "line": 238,
+      "line": 245,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -2274,8 +3732,80 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "missingFields › treats every key as missing when the editor renders nothing",
-      "line": 233,
+      "line": 240,
       "registeredAt": "2026-07-28T20:55:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Non-mutating, like every other rule here.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "moveEntry › does not mutate the source list",
+      "line": 186,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "And down, symmetrically.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "moveEntry › moves an entry down by one",
+      "line": 165,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "One row up, which is the whole interaction.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "moveEntry › moves an entry up by one",
+      "line": 153,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ends. The UI disables these arrows, but the rule lives here so the component may stay presentational and a stale click cannot corrupt an order.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "moveEntry › returns the list unchanged at the top and bottom",
+      "line": 178,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Punctuation is deliberately KEPT, so a suffix does not silently merge two people. Father and son share a name; an importer that collapses them deletes one supporter without telling anyone.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "name normalization — the ways one person arrives twice › does not collapse a suffix into the bare name",
+      "line": 86,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The accent is dropped constantly in exports and re-entry. Treating \"Tomas\" as a new supporter is the single most likely duplicate this file produces.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "name normalization — the ways one person arrives twice › reads a dropped accent as the same person",
+      "line": 79,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A spreadsheet export pads cells and a web form uppercases. Neither is a different human, but a bare === treats both as new supporters and puts a second card on the wall.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "name normalization — the ways one person arrives twice › reads padding and case as the same person",
+      "line": 71,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A blank cell reaches here as undefined from the column mapping, so the normalizer is on the path for every missing name in the file.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "name normalization — the ways one person arrives twice › returns an empty string for a non-string, rather than throwing",
+      "line": 94,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -2315,11 +3845,65 @@
       "runner": "tests"
     },
     {
+      "description": "A delta larger than the gallery still lands in range — the modulo runs once, so this is the guard against a multi-step jump escaping the list.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › keeps a delta larger than the gallery in range",
+      "line": 67,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty gallery must not yield an index the caller would index into.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › returns zero for an empty gallery",
+      "line": 60,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A single-photo gallery has nowhere to go; both arrows stay put rather than producing an out-of-range index.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › stays put in a one-photo gallery",
+      "line": 54,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary forward and backward steps.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › steps forward and backward within range",
+      "line": 35,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "And the same in reverse, which is where a naive `%` returns a negative index and the caller reads `undefined`.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › wraps backward past the first photo",
+      "line": 48,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Arrowing past the last photo reaches the first. A lightbox is a carousel, not a list — a disabled arrow at the end is a dead control.",
+      "file": "src/lib/lightbox.test.ts",
+      "format": "vitest",
+      "key": "nextPhotoIndex › wraps forward past the last photo",
+      "line": 42,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
       "description": "Selection is non-mutating, so the caller's collection is untouched.",
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › does not mutate the input array",
-      "line": 69,
+      "line": 76,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2328,7 +3912,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › filters and orders together",
-      "line": 43,
+      "line": 50,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2337,7 +3921,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › keeps a project explicitly marked active",
-      "line": 14,
+      "line": 21,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2346,7 +3930,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › keeps a project whose active flag is absent",
-      "line": 7,
+      "line": 14,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2355,7 +3939,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › orders open projects by their order field",
-      "line": 24,
+      "line": 31,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2364,7 +3948,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › places unordered projects after ordered ones",
-      "line": 34,
+      "line": 41,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2373,7 +3957,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › removes a project explicitly marked inactive",
-      "line": 19,
+      "line": 26,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2382,7 +3966,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › returns an empty array for no projects",
-      "line": 64,
+      "line": 71,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2391,7 +3975,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "openProjects › returns an empty array when every project is closed",
-      "line": 54,
+      "line": 61,
       "registeredAt": "2026-07-22T20:43:59Z",
       "runner": "tests"
     },
@@ -2635,7 +4219,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › handles the reviewed track repo too",
       "line": 39,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2644,7 +4228,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › returns the repo name as a rooted path",
       "line": 34,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2653,7 +4237,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › throws on an empty repo name rather than returning a bare slash",
       "line": 56,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2662,7 +4246,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › tolerates surrounding slashes rather than doubling them",
       "line": 44,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2671,7 +4255,7 @@
       "format": "vitest",
       "key": "pagesBasePathFor › trims surrounding whitespace",
       "line": 49,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2738,6 +4322,96 @@
       "runner": "tests"
     },
     {
+      "description": "The ordinary case: the passphrase the reviewer was given opens the page.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › accepts the exact passphrase",
+      "line": 10,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Fail closed rather than forgiving: if the build ever substituted a passphrase carrying its own stray whitespace, nobody gets in and the reviewer reports a passphrase that does not work — louder, and safer, than silently trimming the expected value and letting a malformed config look healthy.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › fails closed when the expected passphrase carries stray whitespace",
+      "line": 86,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The passphrase is shared out of band and arrives pasted out of an email or a chat message, which carries surrounding whitespace more often than not. Refusing that would read to the reviewer as a wrong passphrase.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › forgives whitespace around a pasted passphrase",
+      "line": 17,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A missing input element yields null rather than a string. Reading .value off it would already have thrown, but the rule must not be the thing that turns a missing element into an open page.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses a non-string input",
+      "line": 74,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Neither half of a partial match counts: the comparison is whole-string, so a prefix, a suffix and a superstring are all refused.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses a partial or padded match",
+      "line": 39,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole point of the gate.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses a wrong passphrase",
+      "line": 24,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty box never opens the gate, which is unremarkable on its own.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses an empty input against a real passphrase",
+      "line": 46,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE case this function exists for. Trimming an empty string still equals an empty string, so the bare comparison this replaced would have opened the page for anyone who simply clicked the button, had the build ever substituted an empty passphrase. build.py refuses to emit one; this is the same guard at the point the decision is actually made, because a published page outlives its build.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses an empty input even when the expected passphrase is empty",
+      "line": 57,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same hole one step along: a whitespace-only expected value is as absent as an empty one, and must not be satisfiable by typing whitespace.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › refuses everything when the expected passphrase is only whitespace",
+      "line": 65,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Case-insensitivity would make the passphrase materially weaker, and nothing about pasting a shared string makes case a likely transcription error — so this strictness is deliberate rather than incidental.",
+      "file": "src/lib/reviewGate.test.ts",
+      "format": "vitest",
+      "key": "passphraseAccepted › stays case-sensitive",
+      "line": 32,
+      "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
       "description": "An editor cleared the box cleanly. Blank copy must never reach the page.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
@@ -2792,11 +4466,56 @@
       "runner": "tests"
     },
     {
+      "description": "Every field the card renders has to survive the projection — a field dropped here silently never reaches a suggestion card, with no type error to catch it.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › carries every card field through from the entry frontmatter",
+      "line": 212,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A sparse entry stays sparse: absent optional fields come out undefined, not as empty strings that would render as holes on the card.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › leaves absent optional fields undefined",
+      "line": 248,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Order is preserved so the caller — not this projection — decides sorting.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › preserves the order the entries arrived in",
+      "line": 256,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The entry id becomes the slug, which is what projectPath and the relatedProjects wrap-around both key on.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › promotes the entry id to a slug",
+      "line": 205,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The real state of the collection today: one entry, and soon after, none.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "projectCardData › returns an empty list for no entries",
+      "line": 265,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
       "description": "The fallback that matters: Nicole's project has no applyUrl, so without this her page would end after the description with no way to sign up.",
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › falls back to the page-level volunteer CTA when the project has no apply link",
-      "line": 107,
+      "line": 114,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2805,7 +4524,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › names the fallback button when the page-level label is missing",
-      "line": 129,
+      "line": 136,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2814,7 +4533,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › returns null when both links are empty strings",
-      "line": 146,
+      "line": 153,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2823,7 +4542,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › returns null when neither the project nor the page has a link",
-      "line": 115,
+      "line": 122,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2832,7 +4551,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › treats an empty apply link as absent",
-      "line": 138,
+      "line": 145,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2841,7 +4560,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › uses the project apply link even with no page-level fallback configured",
-      "line": 120,
+      "line": 127,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2850,7 +4569,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectCta › uses the project own apply link when it has one",
-      "line": 98,
+      "line": 105,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2859,7 +4578,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectPath › builds the detail path for a slug",
-      "line": 83,
+      "line": 90,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2868,7 +4587,7 @@
       "file": "src/lib/projects.test.ts",
       "format": "vitest",
       "key": "projectPath › returns a site-root-relative path for the caller to base-prefix",
-      "line": 91,
+      "line": 98,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -2877,7 +4596,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › does not mutate the input array",
-      "line": 58,
+      "line": 77,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -2886,7 +4605,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › hides an entry only when draft is exactly true",
-      "line": 68,
+      "line": 87,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -2895,7 +4614,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › keeps draft entries when includeDrafts is true",
-      "line": 23,
+      "line": 42,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -2904,8 +4623,17 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › omits draft entries from the blog listing in production",
-      "line": 14,
+      "line": 33,
       "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE preview-link invariant on the listing side. A preview page exists to be reachable ONLY by the token URL someone was handed, so a listing that showed it would publish the very thing the token protects.",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › omits preview pages from a listing",
+      "line": 95,
+      "registeredAt": "2026-08-12T16:58:34Z",
       "runner": "tests"
     },
     {
@@ -2913,7 +4641,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › preserves the order of the surviving entries",
-      "line": 52,
+      "line": 71,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -2922,7 +4650,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › returns an empty array for an empty collection",
-      "line": 46,
+      "line": 65,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -2931,8 +4659,17 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › returns an empty array when every entry is a draft",
-      "line": 40,
+      "line": 59,
       "registeredAt": "2026-07-27T19:47:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "includeDrafts governs the DRAFT flag only. A preview is hidden for a different reason, so the review track — which shows drafts — still must not list previews.",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "publishedEntries › still omits previews when includeDrafts is true",
+      "line": 103,
+      "registeredAt": "2026-08-12T16:58:34Z",
       "runner": "tests"
     },
     {
@@ -2940,7 +4677,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › treats a missing draft key as published",
-      "line": 29,
+      "line": 48,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -2949,7 +4686,7 @@
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
       "key": "publishedEntries › treats an explicit draft false as published",
-      "line": 35,
+      "line": 54,
       "registeredAt": "2026-07-27T19:47:27Z",
       "runner": "tests"
     },
@@ -2959,7 +4696,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › reads the repo out of an HTTPS remote",
       "line": 78,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2968,7 +4705,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › reads the repo out of an SSH push command",
       "line": 64,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2977,7 +4714,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › reads the repo when the .git suffix is absent",
       "line": 71,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2986,7 +4723,7 @@
       "format": "vitest",
       "key": "pushTargetRepo › returns the repo, not the owner",
       "line": 85,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -2995,7 +4732,160 @@
       "format": "vitest",
       "key": "pushTargetRepo › returns undefined when the command contains no remote",
       "line": 91,
-      "registeredAt": "2026-08-03T18:10:23Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason this function exists at all, and the reason it must not be a bare readFileSync('src/data/…'): every read has to follow the sandbox redirect, or a seeded scenario silently renders committed production content instead of its own.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › follows the sandbox redirect rather than reading src/data",
+      "line": 84,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: a singleton parses into the shape its caller expects.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › parses a singleton from the resolved data root",
+      "line": 75,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Two callers de-duplicated onto this function; both read more than one singleton, so resolving the name per call rather than caching a path is part of the contract.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › resolves each name independently within one data root",
+      "line": 93,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A missing singleton throws rather than yielding an empty object. Silently returning a blank would render the site's settings, nav, or the cutover checklist as empty and look like real content.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › throws when the singleton is absent",
+      "line": 102,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Malformed JSON throws for the same reason — a half-written data file should fail the build, not render as nothing.",
+      "file": "src/lib/contentRoot.test.ts",
+      "format": "vitest",
+      "key": "readSingleton › throws when the singleton is not valid JSON",
+      "line": 109,
+      "registeredAt": "2026-08-06T15:32:50.953557895+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Non-mutating, like openProjects — the caller's array is untouched.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › does not mutate the list it was given",
+      "line": 323,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The default is three; a caller can ask for fewer.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › honours a lower limit",
+      "line": 318,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The route generates a page for every published entry regardless of `active`, so without this filter a retired project would be advertised on an open one.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › never suggests a retired project",
+      "line": 296,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A page never advertises itself, wrap-around included.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › never suggests the project the reader is already on",
+      "line": 290,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A slug that matches nothing open cannot be positioned in the list.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › returns an empty list when the current slug matches nothing open",
+      "line": 313,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Today's real state: one project in the collection, so every detail page ends at the CTA with no section at all.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › returns an empty list when there is no other open project",
+      "line": 308,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Fewer than three others available — show what there is, not padding.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › returns only what is available when fewer than the limit exist",
+      "line": 302,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The straightforward case: the three that follow in editor order.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › suggests the projects that follow the current one in editor order",
+      "line": 279,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason the rule wraps: without it the last project in the list would end its page with no suggestions at all.",
+      "file": "src/lib/projects.test.ts",
+      "format": "vitest",
+      "key": "relatedProjects › wraps past the end of the list rather than coming up empty",
+      "line": 285,
+      "registeredAt": "2026-08-10T14:54:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank, duplicate and gapped numbers all converge on a clean 1..N at the first click, rather than persisting as a puzzle for the editor to solve.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "renumberEntries › renumbers a blank, duplicated and gapped list to a clean sequence",
+      "line": 217,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A list already in sequence stages nothing, so opening the page and clicking nothing can never produce a pending change.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "renumberEntries › reports nothing when the list is already numbered in sequence",
+      "line": 211,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The economy of a move, and the reason a publish review stays readable: one click stages TWO files, not the whole collection.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "renumberEntries › reports only the rows whose number changed",
+      "line": 202,
+      "registeredAt": "2026-08-10T21:05:09Z",
       "runner": "tests"
     },
     {
@@ -3233,6 +5123,87 @@
       "runner": "tests"
     },
     {
+      "description": "The reviewer pastes this into a document, where trailing spaces survive as invisible junk that shows up when they select a line.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › leaves no trailing whitespace on any line",
+      "line": 81,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two controls exist to test the network metaphor rather than to compete with it, so a reviewer has to be able to tell them apart from the seven.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › marks the off-brief controls as controls",
+      "line": 73,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same requirement as the wall items: an id on the page with no line in the outline is a reaction with nowhere to go.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › names every open question and every import step",
+      "line": 55,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The load-bearing property. The outline IS the feedback interface, so an id shown on the page but absent here is a reaction that has nowhere to land.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › names every wall behaviour the page shows",
+      "line": 46,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Degrades to a usable outline rather than throwing, so a page that failed to load its variations still gives the reviewer the wall and the questions.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › still produces the fixed sections when given no directions",
+      "line": 90,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Built from the live list rather than a hand-copied one: rename a direction in variations.js and the outline follows, instead of quietly asking the reviewer about a design by a name it no longer has.",
+      "file": "src/lib/reviewOutline.test.ts",
+      "format": "vitest",
+      "key": "reviewOutline › takes the direction names from the list it is given",
+      "line": 65,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Each direction seeds its own layout, so different seeds must actually diverge or every direction would scatter its nodes identically.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "rng › gives different sequences for different seeds",
+      "line": 123,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Determinism is the point: a network that reshuffles between renders reads as a different design, so a reviewer would be rating noise and a screenshot they already commented on would stop matching the page.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "rng › gives the same sequence for the same seed",
+      "line": 115,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Layouts multiply this by canvas dimensions, so a value outside the unit range would place a supporter off-canvas.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "rng › stays at or above zero and below one",
+      "line": 129,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
       "description": "Emits the standard allow-all directives.",
       "file": "src/lib/seoEndpoints.test.ts",
       "format": "vitest",
@@ -3320,6 +5291,123 @@
       "key": "robotsTxtBody review track › omits the Sitemap line entirely when gated",
       "line": 37,
       "registeredAt": "2026-07-30T17:03:44Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every step done is the end state, and drives a different banner.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › reports complete when every step is done",
+      "line": 174,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The production default. `untouched` drives the \"nothing has happened yet\" banner, which is the loudest and most important state this page has.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › reports the default state as untouched",
+      "line": 159,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ready and blocked partition the unfinished steps: every step that is not done is either startable or waiting, never both and never neither.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › splits unfinished steps into ready and blocked with none left over",
+      "line": 182,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An answered decision alone means work has started, even with no step ticked — so the banner must stop claiming nothing has happened.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › stops reporting untouched once a decision is answered",
+      "line": 169,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The totals come from the authored runbook, not the state file, so a state file missing entries cannot shrink the denominator the banner prints.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "rollup › takes its totals from the runbook rather than the state file",
+      "line": 189,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "the mirror image of the listing rule, and the reason preview links resolve at all: the page must be BUILT even though nothing links to it",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › builds a page for a preview that no listing shows",
+      "line": 112,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a preview clone carries its source's draft flag; hiding it was never the point, so it stays routable even in a production build that drops drafts",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › builds a preview even when it also carries draft true",
+      "line": 120,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "routes and listings must agree about ordinary drafts, or the review track links to pages the public build never generated",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › follows the draft rule for everything that is not a preview",
+      "line": 127,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "a collection with no previews behaves exactly as publishedEntries does, so adopting this in a getStaticPaths changes nothing until a link is minted",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › matches publishedEntries when the collection has no previews",
+      "line": 144,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "input order survives, so a route file can sort before or after",
+      "file": "src/lib/drafts.test.ts",
+      "format": "vitest",
+      "key": "routableEntries › preserves input order and does not mutate the input",
+      "line": 134,
+      "registeredAt": "2026-08-12T16:58:34Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every `needs` entry must name a decision that exists, or a step is blocked forever by something the page never renders and nobody can answer.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "runbook structure › only blocks steps on decisions that exist",
+      "line": 236,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "And the reverse: a decision claiming to block a step that does not exist would print a promise the sequence never keeps.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "runbook structure › only claims to block steps that exist",
+      "line": 245,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reversible-first ordering is the plan's central safety property: the two steps that change what the public can see must not come before steps that touch nothing, or the runbook stops being safe to abandon partway.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "runbook structure › puts every step that touches nothing live before the last live one",
+      "line": 255,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -3417,7 +5505,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › extracts the top-level schema keys of a collection",
-      "line": 245,
+      "line": 252,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -3426,7 +5514,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › ignores nested row keys and commented-out keys",
-      "line": 255,
+      "line": 262,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -3435,8 +5523,35 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › returns an empty list for a collection that is not declared",
-      "line": 263,
+      "line": 270,
       "registeredAt": "2026-07-27T18:48:12Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An unrecognized school is a mapping to confirm, not a value to discard — dropping it would quietly empty that supporter out of three directions.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "school mapping › keeps an unrecognized school rather than discarding it",
+      "line": 130,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Someone filling a form writes the school out in full; the site stores a short form. Without the alias map an ordinary correct answer arrives as an unknown value.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "school mapping › maps a written-out school onto the spelling the site uses",
+      "line": 123,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Null and empty string mean different things downstream: null is \"the file did not say\", which is what rowIssues reports on.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "school mapping › reports an empty cell as nothing, not as an empty school",
+      "line": 136,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {
@@ -3481,7 +5596,7 @@
       "format": "vitest",
       "key": "seeded team headshots › ben-wei.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3490,7 +5605,7 @@
       "format": "vitest",
       "key": "seeded team headshots › ben-wei.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3508,7 +5623,7 @@
       "format": "vitest",
       "key": "seeded team headshots › jessica-li.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3517,7 +5632,7 @@
       "format": "vitest",
       "key": "seeded team headshots › jessica-li.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3526,7 +5641,7 @@
       "format": "vitest",
       "key": "seeded team headshots › krysia-lenzo.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3535,7 +5650,7 @@
       "format": "vitest",
       "key": "seeded team headshots › krysia-lenzo.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3544,7 +5659,7 @@
       "format": "vitest",
       "key": "seeded team headshots › nadia-eldeib.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3553,7 +5668,7 @@
       "format": "vitest",
       "key": "seeded team headshots › nadia-eldeib.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3562,7 +5677,7 @@
       "format": "vitest",
       "key": "seeded team headshots › peter-boyce.md › declares a non-empty photo",
       "line": 37,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3571,7 +5686,7 @@
       "format": "vitest",
       "key": "seeded team headshots › peter-boyce.md › points at an image that exists under public/",
       "line": 43,
-      "registeredAt": "2026-06-15T12:22:55Z",
+      "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
       "runner": "tests"
     },
     {
@@ -3707,6 +5822,69 @@
       "key": "shadowedSlugWarning › says nothing when nothing is shadowed",
       "line": 124,
       "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A date-only string (no time) is still a legitimate ISO value someone might type by hand into the JSON; it must format rather than fall through.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › accepts a date without a time component",
+      "line": 36,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The year is deliberately omitted — the whole migration happens inside one window, so a year only costs width in a cramped row.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › omits the year",
+      "line": 17,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: a tick's stored timestamp becomes the caption beside the GitHub login. Asserted on parts rather than one literal string because the separator and order are locale-dependent and the test must not encode the runner's locale as the requirement.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › renders a stored timestamp as a day and month",
+      "line": 9,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same policy for an absent value. A record written before the field existed parses to NaN the same way, and must not render either.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › returns an empty string for an empty value",
+      "line": 30,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The case the function exists for. `cutoverProgress.json` is committed and hand-editable, so a mangled timestamp is reachable — and it must cost the reader a missing date, not an \"Invalid Date\" string sitting on the page.",
+      "file": "src/lib/cutoverFormat.test.ts",
+      "format": "vitest",
+      "key": "shortDate › returns an empty string for an unparseable value",
+      "line": 24,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An editor typo, or a school nobody has mapped yet, must still reach the page — a blank label loses the supporter's affiliation silently.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "shortSchool › passes an unrecognized school through rather than dropping it",
+      "line": 148,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The full school names do not fit the labels the layouts have room for.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "shortSchool › shortens the schools the upload uses",
+      "line": 141,
+      "registeredAt": "2026-08-05T15:59:21Z",
       "runner": "tests"
     },
     {
@@ -3872,6 +6050,42 @@
       "runner": "tests"
     },
     {
+      "description": "The tiebreak is what makes turning this on safe for a collection nobody has ordered yet: it sorts by label, exactly as the list does today.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "sortByEntryOrder › breaks ties by label",
+      "line": 138,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Non-mutating, so the caller's array is safe to reuse.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "sortByEntryOrder › leaves the source array untouched",
+      "line": 144,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An entry nobody numbered must not jump to the front, which is what a `undefined ?? 0` would do — it sorts after everything explicitly placed.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "sortByEntryOrder › puts an unnumbered entry last",
+      "line": 131,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The admin list must agree with what /donate renders, which is this repo's own rule in src/lib/order.ts: ascending, unnumbered last.",
+      "file": "src/lib/cmsOrderControls.test.ts",
+      "format": "vitest",
+      "key": "sortByEntryOrder › sorts ascending by order",
+      "line": 119,
+      "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
       "description": "A tie on order preserves input order, so equal-ranked entries stay put.",
       "file": "src/lib/order.test.ts",
       "format": "vitest",
@@ -3912,7 +6126,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "splitEvents › does not mutate the input array order",
-      "line": 84,
+      "line": 98,
       "registeredAt": "2026-06-13T17:26:10Z",
       "runner": "tests"
     },
@@ -3932,6 +6146,15 @@
       "key": "splitEvents › returns no past events when all are upcoming",
       "line": 77,
       "registeredAt": "2026-06-13T17:26:10Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The mirror of the all-upcoming case, and the state the real site is in whenever the calendar has not been topped up: every entered event has passed, so upcoming is empty even though the collection is full. The homepage renders its subscribe-on-Luma band off exactly this, and before it called splitEvents it showed those past events under a heading reading Upcoming events.",
+      "file": "src/lib/events.test.ts",
+      "format": "vitest",
+      "key": "splitEvents › returns no upcoming events when every event has passed",
+      "line": 89,
+      "registeredAt": "2026-08-05T20:56:12Z",
       "runner": "tests"
     },
     {
@@ -4052,6 +6275,87 @@
       "runner": "tests"
     },
     {
+      "description": "With nothing blocked the sentence changes meaning, not just number — it tells the team the decisions are in and the ball is no longer theirs.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "summaryLine › reports readiness rather than blockage when nothing is waiting",
+      "line": 70,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Singular is the case that reveals a hand-written sentence: nobody seeds exactly one blocked step while looking at the banner.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "summaryLine › says step is for exactly one blocked step",
+      "line": 59,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Singular again on the unblocked branch.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "summaryLine › says step is for exactly one ready step",
+      "line": 77,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Plural for more than one.",
+      "file": "src/lib/cutoverProgress.test.ts",
+      "format": "vitest",
+      "key": "summaryLine › says steps are for several blocked steps",
+      "line": 64,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Initials leak the withheld name: \"RKW\" beside \"Anonymous supporter\" names them to anyone who knows them, so the anonymous case gets a mark that identifies nobody.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › does not leak the withheld name through initials",
+      "line": 26,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A search box is a new way to undo anonymity that the old donor wall never had: typing a withheld name must not find its owner, even though their node is on the page and counted.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › keeps an anonymous supporter out of search results",
+      "line": 18,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The live donor wall withholds an anonymous donor's name, photo, link and initials together. Search and a shareable card are both new ways to undo that, so these three are the arms of the same guarantee.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › prints the standing label instead of a withheld name",
+      "line": 10,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Capped at two letters — an avatar that expanded to every initial would spell out a long name rather than abbreviate it.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › takes at most two initials, so a long name cannot spell itself out",
+      "line": 33,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Names arrive from a bi-weekly spreadsheet upload, where padding and double spaces are normal; they must not produce a blank or malformed monogram.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "the anonymity contract › tolerates the extra whitespace a spreadsheet upload arrives with",
+      "line": 39,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
       "description": "`url` is derived from the identity, and the package looks assets up BY url (findAssetByUrl), so a hand-edited mismatch would silently orphan a record.",
       "file": "src/lib/media.test.ts",
       "format": "vitest",
@@ -4106,6 +6410,69 @@
       "runner": "tests"
     },
     {
+      "description": "The numbers the walkthrough puts on screen at I2, so they are worth pinning rather than trusting to a render.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "the summary of a whole upload › counts what can land against what needs a decision",
+      "line": 262,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The load-bearing assertion of this file. tier, founding and anonymous are properties of the FILE FORMAT, not of any row — a spreadsheet where every row is spotless still cannot say who gave at what level, who is a founding donor, or who asked to stay anonymous. A summary that hid them on a clean file would report success for a job it did a third of.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "the summary of a whole upload › reports the unanswerable fields even when every row is clean",
+      "line": 276,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A zero-row file still has a shape, and its shape still cannot answer tier, founding or anonymous.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "the summary of a whole upload › survives an empty upload",
+      "line": 289,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Returns a copy: the sampled point list is reused across re-renders, and a caller mutating it would corrupt every later layout.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "thin › copies rather than aliasing, so a caller cannot mutate the source",
+      "line": 104,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Early on there are fewer supporters than sample points; everyone must still be placed rather than the list being truncated.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "thin › returns everything when asked for more than it has",
+      "line": 92,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Production starts empty and stays empty until the first upload, so a zero count is the state the page ships in, not an edge case.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "thin › returns nothing for the day-one empty state",
+      "line": 98,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Taking the first four would fill the top of one letterform and leave the rest of the word empty, because the glyph sampler emits points in scan order rather than spread across the glyphs.",
+      "file": "src/lib/donorNetwork.test.ts",
+      "format": "vitest",
+      "key": "thin › spreads the selection across the whole input",
+      "line": 85,
+      "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
       "description": "team is declared as /#board — an anchor on the homepage rather than a page of its own. It must group WITH the homepage, or an editor looking at the front page finds three of its four collections and guesses about the fourth.",
       "file": "src/lib/dashboardGrouping.test.ts",
       "format": "vitest",
@@ -4139,6 +6506,24 @@
       "key": "this site’s dashboard grouping › opens on the homepage and closes on site-wide settings",
       "line": 155,
       "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Un-ticking is a distinct event and must not read as completion.",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "tickCommitMessage › distinguishes reopening from completing",
+      "line": 129,
+      "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The repo history is a second, permanent record of this checklist, so a tick should read as progress there rather than as \"Update cutoverProgress.json\".",
+      "file": "src/lib/cutoverTicks.test.ts",
+      "format": "vitest",
+      "key": "tickCommitMessage › names the step and what happened to it",
+      "line": 124,
+      "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
     },
     {
@@ -4214,6 +6599,60 @@
       "runner": "tests"
     },
     {
+      "description": "Both shapes reach the same prop, so both must survive one pass.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › accepts a mixed list",
+      "line": 155,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The case this filter exists for: the CMS list control adds a row before a photo is picked. Rendering it gives a tile with no image — and a lightbox that opens onto nothing.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › drops rows with a missing or blank image",
+      "line": 165,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The CMS shape: an image plus the editorial caption the lightbox shows.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › normalizes CMS rows and keeps the caption",
+      "line": 148,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The landing page's shape: plain srcs, no captions.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › normalizes a list of plain srcs",
+      "line": 140,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty gallery is a real state — a chapter mid-curation.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › returns nothing for an empty list",
+      "line": 180,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A whitespace-only caption is no caption; it would render an empty figcaption that still takes space under the photo.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "toGalleryPhotos › treats a blank caption as absent",
+      "line": 173,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
       "description": "The editor's repeatable list writes rows of fields; there is no plain-string list control. This is the seam between that storage shape and the `string[]` the page renders.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
@@ -4254,7 +6693,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "unbackedManifestRecords › ignores a manifest edit that adds no records",
-      "line": 85,
+      "line": 92,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4263,7 +6702,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "unbackedManifestRecords › ignores a staging set that does not touch the manifest",
-      "line": 95,
+      "line": 102,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4272,7 +6711,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "unbackedManifestRecords › passes an upload whose bytes are staged alongside its record",
-      "line": 70,
+      "line": 77,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4281,7 +6720,7 @@
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
       "key": "unbackedManifestRecords › reports records the commit adds without their image bytes",
-      "line": 63,
+      "line": 70,
       "registeredAt": "2026-07-31T23:04:44Z",
       "runner": "tests"
     },
@@ -4290,7 +6729,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › names a field that drifted out of the schema",
-      "line": 195,
+      "line": 202,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -4299,7 +6738,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › reports nothing when every declared field exists in the schema",
-      "line": 185,
+      "line": 192,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -4308,7 +6747,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › reports nothing when no fields are declared",
-      "line": 210,
+      "line": 217,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -4317,7 +6756,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "unknownFields › treats every field as unknown when the schema has no keys",
-      "line": 204,
+      "line": 211,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -4371,7 +6810,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › catches a tag that differs only by whitespace",
-      "line": 115,
+      "line": 129,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4389,7 +6828,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › names a chapter tag that matches no chapter",
-      "line": 94,
+      "line": 108,
       "registeredAt": "2026-07-28T20:50:40Z",
       "runner": "tests"
     },
@@ -4398,7 +6837,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports each distinct tag once, in first-seen order",
-      "line": 122,
+      "line": 136,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4407,7 +6846,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports every tag when there are no chapters at all",
-      "line": 149,
+      "line": 163,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4416,7 +6855,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › reports nothing when every tag matches a chapter",
-      "line": 105,
+      "line": 119,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4425,7 +6864,7 @@
       "file": "src/lib/events.test.ts",
       "format": "vitest",
       "key": "unmatchedChapterTags › treats a blank tag as untagged",
-      "line": 133,
+      "line": 147,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -4463,6 +6902,105 @@
       "key": "unresolvedNavUrls › resolves a fragment against its page",
       "line": 332,
       "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pure: the caller renders from this and must not have its source mutated.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › does not mutate the input",
+      "line": 239,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "After \"Show all N photos\".",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › returns everything when expanded",
+      "line": 223,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The landing page passes no cap and must keep rendering all 40. This is the case that stops the cap from becoming a silent default.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › returns everything when no cap is given",
+      "line": 229,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A cap larger than the gallery is not an error, just uncapped in practice.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › returns everything when the cap exceeds the count",
+      "line": 234,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The load state for a capped gallery.",
+      "file": "src/lib/gallery.test.ts",
+      "format": "vitest",
+      "key": "visibleGalleryPhotos › returns the first cap photos when collapsed",
+      "line": 218,
+      "registeredAt": "2026-08-07T19:09:04Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A duplicate is a correctable mistake, so it asks rather than blocks — unless it is the unmasking case above.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › asks about an ordinary duplicate rather than blocking it",
+      "line": 225,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Name is the one field the wall genuinely requires, so a blank one cannot be resolved by any later edit to the tier or badge.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › blocks a row with no name at all",
+      "line": 204,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blocking rather than asking: imported literally this publishes a card that reads \"Anonymous\" as if it were a person's name.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › blocks an anonymity request sitting in the name column",
+      "line": 211,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The harm here is one-way. Every other issue can be corrected after the fact; a published name that was meant to be withheld cannot.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › blocks re-importing someone who is anonymous on the wall",
+      "line": 218,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The negative case that keeps the others honest: if everything raised an issue, the issue list would carry no information.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › finds nothing to raise on a clean, new row",
+      "line": 242,
+      "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Not blocking — the supporter can still land — but directions 01, 03 and 09 group by these, so the gap decides which designs stay viable.",
+      "file": "src/lib/donorImport.test.ts",
+      "format": "vitest",
+      "key": "what a row still needs a human for › notes a missing school and a missing class year",
+      "line": 234,
+      "registeredAt": "2026-08-05T19:34:11Z",
       "runner": "tests"
     },
     {

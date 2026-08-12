@@ -1,0 +1,12 @@
+{
+  "name": "DeployStatus - Published, Still Updating",
+  "id": "a4a57056-8c51-4f9c-9f0e-3d17459c5fef",
+  "url": "/isolated-components/DeployStatus-StillUpdating",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "DeployStatus",
+  "scenarioType": "component",
+  "description": "How a watch that runs out of budget now ends. pollDeploy used to return whichever in-flight stage it was sitting on — a non-terminal value nothing could move off — which is what left the panel unclosable. It resolves to 'unconfirmed' instead: the commit is stated as fact, the deploy is not claimed, and there are three ways out (Check again, View live site, Done). Captured because the wording carries it — this has to read as a slow deploy, not a failure."
+}

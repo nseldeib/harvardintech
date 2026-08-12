@@ -1,0 +1,28 @@
+---
+import Component from "@codeyam/cms/components/admin/DeployChip.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for DeployChip at `live` — the payoff of persisting the watch
+// across page loads.
+//
+// Reaching this state means the editor published, carried on working through
+// two or three other entries, and was told her change went live anyway. Without
+// the per-tab record the watch would have died at the first navigation and she
+// would simply never have found out.
+//
+// The dot is the only colour in the chip and it is never the only signal: the
+// label says "Your change is live" in words beside it.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DeployChip - Live</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component client:load state={{ stage: 'live' }} />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+---
+import Component from "@codeyam/cms/components/admin/DeployStatus.tsx";
+import "../../styles/tokens.css";
+
+// Isolation page for DeployStatus at `failed` — a build that errored.
+//
+// Included because it is the state most easily broken by the change that made
+// this panel always-dismissible: a failure still has to READ as a failure, keep
+// its error message, and keep both ways to act on it (the build log and Retry).
+// The close button says "Done" rather than "Keep editing" here, because the
+// deploy is over — there is nothing left to keep an eye on.
+const TARGET = { owner: 'nseldeib', repo: 'harvardintech', branch: 'staging' };
+const COMMIT_URL = 'https://github.com/nseldeib/harvardintech/commit/a0dec62273d5ec475ae0825ed31184a84447c6f1';
+const SITE_URL = 'https://nseldeib.github.io/harvardintech-staging';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: DeployStatus - Failed</title>
+  </head>
+  <body style="margin: 0; background: var(--color-bg, #fff);">
+    <div id="codeyam-capture" style="min-height: 100vh;">
+      <Component
+        client:load
+        repo={TARGET}
+        siteUrl={SITE_URL}
+        commitUrl={COMMIT_URL}
+        state={{ stage: 'failed', error: 'Build failed: could not resolve image /images/chapters/miami-hero.jpg' }}
+      />
+    </div>
+  </body>
+</html>

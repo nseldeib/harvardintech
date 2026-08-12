@@ -1,5 +1,5 @@
-// The manifest-record/image-bytes invariant, tested against the patched
-// @codeyam/cms commit path (see patches/@codeyam+cms+0.2.2.patch).
+// The manifest-record/image-bytes invariant, tested against the @codeyam/cms
+// commit path we depend on.
 //
 // This is the regression Nicole hit: she uploaded a volunteer photo from /admin,
 // the publish landed `dd73c8c` — "Update 2 content entries via CodeYam CMS" —
@@ -9,9 +9,16 @@
 // losing the blob published a record naming a file that does not exist. The site
 // then renders a broken `<img>` the editor cannot fix from the UI.
 //
-// Tested here rather than upstream because the fix ships as a patch this repo
-// applies on install: if a future @codeyam/cms drops or reworks the guard, these
-// fail and we find out at CI time instead of at Nicole's next upload.
+// The fix now lives upstream, released in @codeyam/cms 0.4.0 — it shipped here
+// as a patch-package patch until then, and the patch is gone. These tests stay,
+// and their job changed: they no longer cover our own code, they hold a
+// DEPENDENCY to its contract. If a future @codeyam/cms reworks or drops the
+// guard, they fail at CI time rather than at Nicole's next upload.
+//
+// That is worth more now than it was when the code was ours, not less. The bug
+// is invisible at publish time — the CMS truthfully reports the upload
+// succeeded — so nothing else in this repo would notice the guard going missing
+// until an editor found a broken image she could not fix from the UI.
 import { describe, it, expect } from 'vitest';
 import { unbackedManifestRecords } from '@codeyam/cms/lib/mediaLibrary';
 import { commitAll, isUnbackedMediaError } from '@codeyam/cms/lib/githubCommit';

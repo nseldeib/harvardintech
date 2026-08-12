@@ -1,0 +1,20 @@
+{
+  "name": "GalleryTile - Keyboard Focus",
+  "id": "8db7e8ad-100c-45af-a1e7-3ae5d5d75075",
+  "url": "/isolated-components/GalleryTile",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GalleryTile",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/landing/GalleryTile.astro",
+  "description": "The tile reached by Tab rather than by mouse. The crimson focus ring is inset so it reads against any photo, and it is the only chrome the button ever shows — this state is invisible in a resting capture, which is the point of registering it.",
+  "interactions": [
+    {
+      "action": "press",
+      "selector": "body",
+      "value": "Tab"
+    }
+  ]
+}

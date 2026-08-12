@@ -148,6 +148,34 @@
         "reason": "The dashboard itself is a launchpad: its actions navigate into a collection or entry route. The in-page interactive state now lives on the entry editor and is captured there by cms-entry-editor-change-staged-for-review."
       }
     },
+    "ChapterPage": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "added"
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "added"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "the page is statically prerendered — photos ship in the HTML with no fetch, so there is no pending state to render"
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "photos come from the content collection through a schema-validated field; a malformed row fails the build rather than reaching this view, and a blank image row is dropped by toGalleryPhotos before render"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
     "ChapterRoute": {
       "empty": {
         "status": "covered"
@@ -208,6 +236,63 @@
       },
       "key-interaction": {
         "status": "added"
+      }
+    },
+    "CmsPublishReview": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The screen groups changes by collection and each group is a scrollable list with no truncation or overflow treatment, so a large staged set differs from a small one only in length"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "The staged set is read synchronously from localStorage on mount, so there is no pending state; the only async work is the deploy-status check, whose transient Checking the last deploy line is a sub-second network artifact rather than a state of this view"
+      },
+      "edge": {
+        "status": "n-a",
+        "reason": "The summary lines are generated from field names and change kinds rather than authored copy, so there is no long-text or missing-optional-field variant to exercise here; the underlying parser edge cases are covered by upstream changeSummary tests"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Publish failures need a real refused GitHub commit, which this preview cannot produce without a token; the two failure paths that matter are asserted as unit tests instead — the media guard in mediaCommitGuard.test.ts and the drift refusal upstream in githubCommit.test.ts"
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
+    "CutoverRunbook": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "added"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "covered"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "The route is prerendered and fetches nothing at runtime — every value is server-rendered from the committed progress file, so there is no pending state. The tick's in-flight Saving caption is a sub-second transient of the component, not a state of this view, and is not deterministically capturable."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "covered"
       }
     },
     "EventsRoute": {
@@ -304,6 +389,124 @@
         "reason": "The only action on this page is the giving CTA, which hands off to an external mail client (donateUrl is still empty) rather than changing any in-app state, so there is no post-interaction frame to capture. Reordering, the feature's real interaction, happens in the CMS at /admin, not on this page."
       }
     },
+    "VolunteerProjectPage": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "covered"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Prerendered static page. Astro builds it from validated frontmatter at build time with no client fetch, so there is no pending state to render - the HTML arrives complete or not at all."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "No failure branch on this view. getStaticPaths enumerates a route per published entry, so an unknown slug is a 404 from the router rather than an error state of this page, and the frontmatter is schema-validated at build - an invalid entry fails the build instead of rendering."
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
+    "public/cutover-runbook.html": {
+      "empty": {
+        "status": "n-a",
+        "reason": "The page is hand-authored HTML rather than rendered from data, so there is no zero-state to put it into. Its nearest analogue is the locked gate, which is a covered access state, not an empty one."
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "No list here is generated from a collection. The nine steps, five decisions and six checks are each written into the file individually, so no one-versus-many boundary exists."
+      },
+      "typical": {
+        "status": "added"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "Nothing on this page grows unbounded. It is a fixed authored sequence with no pagination, truncation or overflow treatment to demonstrate."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "A raw public/ file copied verbatim into dist/. Nothing resolves asynchronously, so there is no pending state."
+      },
+      "edge": {
+        "status": "added"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
+    "public/donor-network.html": {
+      "empty": {
+        "status": "added"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "The deck's growth control steps through day one, a handful, a crowd and the campaign target; there is no one-supporter step. A single node also has no edges, so the network readings would have nothing to draw. The sparse handful is the real low-count state this view can be put into, and it is a data quantity rather than a distinct visual treatment."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The campaign target is the ceiling every direction is composed for, not an overflow condition. There is no pagination, truncation or overflow treatment to demonstrate, and the page cannot be driven past that count, so a denser state does not exist here."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "Nothing on this page resolves asynchronously. The supporters, the CSS and the rules module are all inlined at build time, deliberately, because a review artifact has to render from a file:// open and under an artifact CSP that blocks every external host. There is no pending state."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
+    "public/review/index.html": {
+      "empty": {
+        "status": "n-a",
+        "reason": "The page's content is hand-authored HTML rather than rendered from data, so there is no zero-state it can be put into. A page with nothing on it would be an empty file, not an empty state."
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "No list here is generated from a collection, so no one-versus-many boundary exists. The cards and decision rows are written into the file individually."
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "Nothing on this page grows unbounded. It is a fixed authored roadmap with no pagination, truncation or overflow treatment to demonstrate."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "A raw public/ file copied verbatim into dist/. Nothing resolves asynchronously, so there is no pending state."
+      },
+      "edge": {
+        "status": "n-a",
+        "reason": "Every string on the page is authored prose set at a fixed measure. There are no variable-length or optional data fields whose extremes could produce a distinct visual treatment."
+      },
+      "error": {
+        "status": "covered"
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
     "src/pages/[slug].astro": {
       "empty": {
         "status": "n-a",
@@ -336,6 +539,36 @@
         "reason": "The page is prose with no in-page interactive state; its links are plain navigations. The editor-facing action that produces it happens in /admin, which has its own scenarios."
       }
     },
+    "src/pages/blog/[slug].astro": {
+      "empty": {
+        "status": "n-a",
+        "reason": "An empty post cannot be routed to: getStaticPaths only emits a page for an entry that exists, so the zero-state is a 404 rather than a rendered view"
+      },
+      "single": {
+        "status": "n-a",
+        "reason": "A post page is built from one entry that must exist for the route to be generated at all; there is no one-versus-many axis on the page itself, which renders exactly one post by construction"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The page renders a single post's body with no list, grid or pagination; a long body is the edge archetype rather than an overflow one"
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "The page is statically prerendered, so nothing on it resolves asynchronously. The one transient state the feature introduces is inside the package's unlock island while PBKDF2 derives the key — it lasts under a second, cannot be held deterministically for a capture, and belongs to the dependency rather than this route"
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "added"
+      },
+      "key-interaction": {
+        "status": "added"
+      }
+    },
     "src/pages/chapters/[slug].astro": {
       "empty": {
         "status": "covered"
@@ -362,8 +595,7 @@
         "reason": "Static prerendered route; an unknown chapter slug is a build-time 404, not an in-page error state"
       },
       "key-interaction": {
-        "status": "n-a",
-        "reason": "Presentational page; all actions are external-link and mailto navigations with no in-page interactive state"
+        "status": "covered"
       }
     },
     "src/pages/communities/[slug].astro": {
@@ -522,15 +754,13 @@
         "reason": "A project page is built from one entry that must exist for the route to be generated at all; there is no zero-state. The nearest thing, a project with every optional field blank, is the edge archetype rather than an empty one"
       },
       "single": {
-        "status": "n-a",
-        "reason": "The page renders exactly one project by construction; there is no list whose one-versus-many boundary could differ"
+        "status": "covered"
       },
       "typical": {
         "status": "added"
       },
       "many": {
-        "status": "n-a",
-        "reason": "No list on this page grows unbounded; the markdown body is prose in a fixed-measure column with no overflow or truncation treatment to demonstrate"
+        "status": "covered"
       },
       "loading": {
         "status": "n-a",
@@ -544,8 +774,7 @@
         "reason": "Static prerendered route; an unknown project slug is a build-time 404 rather than an in-page error state"
       },
       "key-interaction": {
-        "status": "n-a",
-        "reason": "The key action is following the sign-up link or the back link, both plain navigations with no in-page interactive state; the arrival on this page from a card click is captured as the demo flow"
+        "status": "covered"
       }
     }
   }

@@ -1,0 +1,488 @@
+/* Chrome shared by all eight directions. Everything here is driven by CSS
+   variables the variation sets on its own root, so a direction restyles itself
+   by declaring a palette rather than by shipping its own stylesheet. */
+
+.viz {
+  --bg: #1e1a1b;
+  --fg: #ffffff;
+  --muted: rgba(255, 255, 255, 0.62);
+  --line: rgba(255, 255, 255, 0.16);
+  --accent: #a41034;
+  --node: #ffffff;
+  --edge: rgba(255, 255, 255, 0.22);
+  --font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-serif: 'Times New Roman', Times, Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
+
+  position: relative;
+  background-color: var(--bg);
+  /* Atmosphere. A flat fill reads as a slide; a shaped light source gives the
+     network somewhere to sit. Each direction supplies its own. */
+  background-image: var(--bg-image, none);
+  color: var(--fg);
+  font-family: var(--font-display);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Oversized direction numeral, bled off the right edge. */
+.viz-ghost {
+  position: absolute;
+  right: -0.06em;
+  bottom: -0.3em;
+  z-index: 0;
+  font-size: clamp(200px, 34vw, 560px);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+  color: var(--fg);
+  opacity: 0.045;
+  pointer-events: none;
+  font-variant-numeric: tabular-nums;
+}
+.viz--preview .viz-ghost { display: none; }
+
+/* The artwork is the page. Type floats on it rather than sitting in a caption
+   block above it, which is the difference between a composed spread and a
+   chart with a title. */
+.viz--full { min-height: 100%; }
+.viz--full .viz-stage { position: absolute; inset: 0; }
+.viz--full > .viz-custom {
+  position: absolute;
+  inset: clamp(58px, 9vh, 96px) clamp(18px, 4vw, 54px) clamp(64px, 9vh, 92px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Kicker as a vertical rail up the left edge. */
+.viz-rail {
+  position: absolute;
+  left: 14px;
+  bottom: 84px;
+  z-index: 3;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  pointer-events: none;
+}
+.viz--preview .viz-rail { display: none; }
+
+.viz--full .viz-head {
+  position: absolute;
+  z-index: 3;
+  max-width: min(46ch, 44vw);
+  pointer-events: none;
+}
+/* A soft scrim under the type. The overlap onto the artwork is deliberate —
+   it's what makes the page read as layered rather than stacked — but without
+   this the letterforms fight the dots underneath and both lose. */
+.viz--full .viz-head::before {
+  content: '';
+  position: absolute;
+  inset: -34px -52px -28px -44px;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    68% 62% at 42% 48%,
+    color-mix(in srgb, var(--bg) 92%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 62%, transparent) 46%,
+    transparent 78%
+  );
+}
+.is-type-tl .viz-head { top: clamp(26px, 5vh, 54px); left: clamp(44px, 6vw, 84px); }
+.is-type-bl .viz-head { bottom: clamp(74px, 12vh, 116px); left: clamp(44px, 6vw, 84px); }
+.is-type-tr .viz-head {
+  top: clamp(26px, 5vh, 54px);
+  right: clamp(30px, 5vw, 64px);
+  text-align: right;
+}
+.is-type-br .viz-head {
+  bottom: clamp(74px, 12vh, 116px);
+  right: clamp(30px, 5vw, 64px);
+  text-align: right;
+}
+
+/* Grain overlay — one inline turbulence, no external asset (the artifact CSP
+   blocks every remote host). */
+.viz-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.viz--preview .viz-grain { display: none; }
+
+.viz--preview {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── Head ─────────────────────────────────────────────────────────────── */
+.viz-head { flex: none; max-width: 62ch; }
+.viz-kick {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.viz-title {
+  font-size: clamp(32px, 4.6vw, 68px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+  margin: 0;
+  color: var(--fg);
+  text-wrap: balance;
+}
+.viz-title em { font-style: italic; color: var(--accent); }
+.viz-sub {
+  margin: 12px 0 0;
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ── Bar: search + count + state chips ────────────────────────────────── */
+/* Demoted to a utility strip along the bottom. It was taking the top third of
+   every direction, which put a form control where the composition should be. */
+.viz--full .viz-bar {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px clamp(18px, 4vw, 54px);
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.viz-search { position: relative; flex: 1 1 240px; max-width: 340px; }
+.viz-input {
+  width: 100%;
+  font: 500 14px/1.2 var(--font-display);
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 12px 18px;
+  outline: none;
+}
+.viz-input::placeholder { color: var(--muted); }
+.viz-input:focus { border-color: var(--accent); }
+.viz-results {
+  display: none;
+  position: absolute;
+  z-index: 30;
+  /* Opens upward — the search now lives on the bottom strip, so a dropdown
+     below it would render off the viewport. */
+  bottom: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+}
+.viz-results.open { display: block; }
+.viz-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--fg);
+  font: 600 14px var(--font-display);
+  padding: 11px 16px;
+  cursor: pointer;
+}
+.viz-result:last-child { border-bottom: 0; }
+.viz-result:hover { background: var(--accent); color: #fff; }
+.viz-result em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.viz-result:hover em { color: rgba(255, 255, 255, 0.8); }
+.viz-result--none { color: var(--muted); font-weight: 500; cursor: default; }
+.viz-result--none:hover { background: none; color: var(--muted); }
+
+.viz-meter { display: flex; align-items: baseline; gap: 8px; margin-left: auto; }
+.viz-count {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.viz-count-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.viz-ctrls { display: flex; gap: 7px; flex-wrap: wrap; }
+.viz-chip {
+  font: 700 11px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 13px;
+  cursor: pointer;
+}
+.viz-chip:hover { color: var(--fg); border-color: var(--fg); }
+.viz-chip--play { color: #fff; background: var(--accent); border-color: var(--accent); }
+.viz-chip--play:hover { color: #fff; filter: brightness(1.12); }
+
+/* ── Stage ────────────────────────────────────────────────────────────── */
+.viz-stage { position: relative; flex: 1 1 auto; min-height: 320px; }
+.viz-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+.edge {
+  fill: none;
+  stroke: var(--edge);
+  stroke-width: 1;
+  transition: stroke 0.25s ease, opacity 0.25s ease, stroke-width 0.25s ease;
+}
+.node-dot { fill: var(--node); transition: fill 0.25s ease, r 0.25s ease; }
+.node-halo { fill: var(--accent); opacity: 0; transition: opacity 0.25s ease; }
+.node.is-founding .node-dot { fill: var(--accent); }
+.node.is-anon .node-dot { fill: none; stroke: var(--node); stroke-width: 1.2; opacity: 0.6; }
+.node { transition: opacity 0.3s ease; }
+
+/* Staggered entrance. The network assembles itself rather than appearing all at
+   once, which is the difference between a chart loading and a thing arriving.
+   Capped stagger so the last node is never more than a beat behind the first. */
+.g-nodes.is-entering .node {
+  animation: nodeIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 6ms);
+}
+.g-nodes.is-entering .node > * { transform-box: fill-box; transform-origin: center; }
+@keyframes nodeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.g-edges { animation: edgesIn 1.1s ease both 0.12s; }
+@keyframes edgesIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Ambient life. The brightness drift is per-node and slow enough to read as a
+   living field rather than a blink — a still network looks like a screenshot
+   of itself. Positional drift is deliberately avoided: the <g> already carries
+   a transform, and animating it would fight the layout. */
+.node-dot { animation: breathe calc(var(--tw, 3) * 1s) ease-in-out infinite alternate; }
+.node-dot { animation-delay: calc(var(--i, 0) * -37ms); }
+@keyframes breathe {
+  from { opacity: 0.68; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .node-dot { animation: none; }
+  .g-nodes.is-entering .node,
+  .g-edges { animation: none; }
+}
+
+/* Focus: the rest of the network recedes rather than disappearing, so the
+   person can still see the size of the thing they are part of. */
+.viz.is-focused .g-nodes .node:not(.is-focus) { opacity: 0.14; }
+.viz.is-focused .g-edges .edge:not(.is-lit) { opacity: 0.07; }
+.viz.is-focused .g-decor { opacity: 0.25; }
+.g-decor { transition: opacity 0.3s ease; }
+/* The camera move. Slow enough to read as travelling to someone rather than
+   cutting to them — the difference between "moves into focus" and a jump. */
+.g-cam { transition: transform 0.85s cubic-bezier(0.32, 0, 0.16, 1); }
+@media (prefers-reduced-motion: reduce) { .g-cam { transition: none; } }
+
+.node.is-focus .node-halo { opacity: 0.28; }
+.node.is-focus .node-dot { fill: var(--accent); }
+.node.is-focus { filter: drop-shadow(0 0 10px var(--accent)); }
+/* "The connecting lines glow" is the phrase from the brief, so the lit edge
+   gets an actual glow rather than just a colour change — at one-pixel widths a
+   recolour alone barely registers against a dimmed network. */
+.edge.is-lit {
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  opacity: 1;
+  filter: drop-shadow(0 0 5px var(--accent));
+}
+
+.viz.is-milestone .g-nodes { animation: vizPulse 0.8s ease; }
+@keyframes vizPulse {
+  0% { opacity: 1; }
+  30% { opacity: 0.55; }
+  100% { opacity: 1; }
+}
+
+/* ── Milestone flash ──────────────────────────────────────────────────── */
+.viz-flash {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 20;
+}
+.viz-flash.on { opacity: 1; }
+.viz-flash-in { text-align: center; }
+.viz-flash-in strong {
+  display: block;
+  font-size: clamp(80px, 16vw, 200px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.viz-flash-in span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────── */
+.viz-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  z-index: 15;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+}
+.viz-empty-in { max-width: 44ch; padding: 0 24px; }
+.viz-empty-in p {
+  font-family: var(--font-serif);
+  font-size: clamp(19px, 2.2vw, 26px);
+  line-height: 1.45;
+  color: var(--fg);
+  margin: 12px 0 22px;
+}
+.viz-empty-cta {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font: 700 13px var(--font-display);
+  padding: 13px 22px;
+  border-radius: 3px;
+}
+
+/* ── Profile panel ────────────────────────────────────────────────────── */
+.viz-profile {
+  position: absolute;
+  right: clamp(18px, 4vw, 54px);
+  bottom: 74px;
+  width: min(340px, calc(100% - 36px));
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+  z-index: 25;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+.viz-profile.open { opacity: 1; transform: none; pointer-events: auto; }
+.viz-profile-x {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.viz-profile-x:hover { color: var(--fg); }
+.viz-card { display: flex; gap: 14px; align-items: flex-start; }
+.viz-card-av {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: #fff;
+  font: 700 15px var(--font-display);
+  letter-spacing: 0.02em;
+}
+.viz-card-name { font-size: 19px; font-weight: 800; letter-spacing: -0.02em; }
+.viz-card-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.viz-card-badge {
+  display: inline-block;
+  margin-top: 9px;
+  font: 700 10px var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 4px 9px;
+}
+.viz-card-note {
+  margin: 11px 0 0;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.viz-card-actions { display: flex; gap: 8px; margin-top: 16px; }
+.viz-card-btn {
+  flex: 1;
+  font: 700 12px var(--font-display);
+  color: #fff;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  padding: 11px 12px;
+  cursor: pointer;
+}
+.viz-card-btn--ghost { flex: 0 0 auto; background: transparent; color: var(--fg); border-color: var(--line); }
+.viz-card-btn:hover { filter: brightness(1.1); }
+
+@media (max-width: 720px) {
+  .viz-meter { margin-left: 0; }
+  .viz-profile { right: 12px; left: 12px; width: auto; }
+}
