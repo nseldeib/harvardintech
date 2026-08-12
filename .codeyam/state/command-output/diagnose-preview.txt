@@ -1,12 +1,19 @@
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786460318,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2992722}
+{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786566188,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3874946}
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786460318,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2992722}
-{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786460328,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2992722}
-{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786460328,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":2992722}
-━━━ Preview Diagnostic: / ━━━
+{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786566188,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3874946}
+{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786566198,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3874946}
+{"command":"diagnose-preview","elapsed_secs":10,"emitted_at_unix":1786566198,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3874946}
+{"command":"diagnose-preview","elapsed_secs":20,"emitted_at_unix":1786566208,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3874946}
+{"command":"diagnose-preview","elapsed_secs":20,"emitted_at_unix":1786566208,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3874946}
+{"command":"diagnose-preview","elapsed_secs":30,"emitted_at_unix":1786566218,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3874946}
+{"command":"diagnose-preview","elapsed_secs":30,"emitted_at_unix":1786566218,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3874946}
+━━━ Preview Diagnostic: /admin/momentumSections ━━━
 
-  proxy port 4321 — ERROR: error sending request for url (http://127.0.0.1:4321/)
-  direct port 4322 — ERROR: error sending request for url (http://127.0.0.1:4322/)
+  proxy port 4321 — HTTP 200, no Transfer-Encoding, Content-Length: 52826
+  direct port 4322 — HTTP 200, Transfer-Encoding: chunked, no Content-Length
 
-Most likely cause: proxy is not reachable on port 4321 — editor server may not be running. Try `editor restart-server`.
+Script tags — proxy: 8, direct: 4
+  No script delta between proxy and direct.
+
+Most likely cause: no HTTP-level anomaly detected between proxy and direct dev port. If the page still won't hydrate, run `editor client-errors` to check for console errors or JavaScript exceptions.

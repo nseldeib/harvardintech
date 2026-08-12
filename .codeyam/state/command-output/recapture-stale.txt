@@ -1,30 +1,32 @@
-{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786560822,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
 ⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
 > liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786560822,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-  ↳ forced capture of already-fresh target cms-blog-list-a-preview-link-and-a-locked-one
-  ↳ forced capture of already-fresh target cms-site-settings
-  ↳ forced capture of already-fresh target previews-index-the-shareable-list-link
-  ▶ 3 scenario(s) to recapture (budget 300s)
+{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786566698,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":0,"emitted_at_unix":1786566698,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+  ▶ 5 scenario(s) to recapture (budget 300s)
   → Warming dev server at http://127.0.0.1:4321/
-  → Capturing: cms-blog-list-a-preview-link-and-a-locked-one
-  ✓ Recaptured: cms-blog-list-a-preview-link-and-a-locked-one
-  → Capturing: cms-site-settings
-{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786560832,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786560832,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-  ✓ Recaptured: cms-site-settings
-  → Capturing: previews-index-the-shareable-list-link
-  ⟲ Unchanged: previews-index-the-shareable-list-link — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
-{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786560842,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786560842,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786560852,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786560852,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786560862,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786560862,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786560872,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786560872,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786560882,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786560882,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1786560892,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1786560892,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3808024}
-{"attempts":1,"budget_expired":false,"collision_isolation":{"collisions_after":0,"collisions_before":0,"isolated":[]},"content_blocked":[],"emptied_by_cross_target":false,"errors":[],"recaptured":2,"resolution_changes":[],"restored_identical":1,"seed_ignored":null,"sidecars_cleaned":0,"skipped":[],"skipped_clean":false,"skipped_count":0,"skipped_cross_target":[],"total":3,"unrecapturable":[],"visual_diffs":[]}
+  → Capturing: sitepagebody-markdown-an-editor-can-write
+  ✓ Recaptured: sitepagebody-markdown-an-editor-can-write
+  → Capturing: sitepageheader-long-title-and-no-description
+  ⧉ Visual change: sitepageheader-long-title-and-no-description — 2% of pixels differ vs. the prior frame
+  ✓ Recaptured: sitepageheader-long-title-and-no-description
+  → Capturing: sitepageheader-title-and-lede
+{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786566708,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":10,"emitted_at_unix":1786566708,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+  ✓ Recaptured: sitepageheader-title-and-lede
+  → Capturing: volunteerprojectmeta-every-date-shape
+  ⟲ Unchanged: volunteerprojectmeta-every-date-shape — recapture pixel-identical to the committed frame; restored committed bytes (no churn)
+  → Capturing: volunteerrelatedprojects-one-other-project
+{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786566718,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":20,"emitted_at_unix":1786566718,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+  ✓ Recaptured: volunteerrelatedprojects-one-other-project
+{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786566728,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":30,"emitted_at_unix":1786566728,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786566738,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":40,"emitted_at_unix":1786566738,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786566748,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":50,"emitted_at_unix":1786566748,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786566758,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":60,"emitted_at_unix":1786566758,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1786566768,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"command":"recapture-stale","elapsed_secs":70,"emitted_at_unix":1786566768,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883224}
+{"attempts":1,"budget_expired":false,"collision_isolation":{"collisions_after":0,"collisions_before":0,"isolated":[]},"content_blocked":[],"emptied_by_cross_target":false,"errors":[],"recaptured":4,"resolution_changes":[],"restored_identical":1,"seed_ignored":null,"sidecars_cleaned":0,"skipped":[],"skipped_clean":false,"skipped_count":0,"skipped_cross_target":[],"total":5,"unrecapturable":[],"visual_diffs":[{"kind":"raster","magnitude":0.024729338134430727,"resolution_change":null,"screenshot":"sitepageheader-long-title-and-no-description--desktop.png","slug":"sitepageheader-long-title-and-no-description"}]}

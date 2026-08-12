@@ -1,8 +1,10 @@
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786560663,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3805126}
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786566606,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3880153}
 ## Stale test cache — 1 partition(s) drifted from source since the last refresh-tests: all. The runner output reconcile reads back is OUT OF DATE for these, so a renamed test can be missed (the cache still emits its old name) and a still-present test can look like an orphan. Run this first, then re-run reconcile-registry:
-{
-  "summary": {
   codeyam-editor editor refresh-tests --partition all
+{
+This clears the PARTITION caches, which is what this check reads — that is the whole recovery. The run will also warn that the full-suite `test-cache.json` was not updated; that is expected and does not concern this check. Do NOT reach for `refresh-tests --force` — the narrow scope above is enough.
+auto-apply: 0 action(s) applied; 0 add(s) skipped.
+  "summary": {
     "realOrphans": 0,
     "stalePhantoms": 0,
     "adds": 0,
@@ -14,5 +16,3 @@
   "platform_gated_absences": [],
   "runner_gated_absences": []
 }
-This clears the PARTITION caches, which is what this check reads — that is the whole recovery. The run will also warn that the full-suite `test-cache.json` was not updated; that is expected and does not concern this check. Do NOT reach for `refresh-tests --force` — the narrow scope above is enough.
-auto-apply: 0 action(s) applied; 0 add(s) skipped.

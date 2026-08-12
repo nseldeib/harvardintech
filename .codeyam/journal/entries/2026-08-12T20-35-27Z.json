@@ -1,0 +1,97 @@
+{
+  "timestamp": "2026-08-12T20:35:27Z",
+  "title": "Pin The Dev JSX Runtime So A Cached Chunk Cannot Break Hydration",
+  "type": "fix",
+  "userRequest": "I'm confused about why we are merging main into staging and not the other way around - can you explain this to me? but yes merge it",
+  "description": "Declared `react/jsx-dev-runtime` and `react/jsx-runtime` in `optimizeDeps.include`, fixing a `TypeError: jsxDEV is not a function` that killed every React island on /admin — StagingBar, EntryListSearch, AuthGate and AccountMenu all failed to hydrate.\n\nThe cause was not the code and not a stale tab, and the first two diagnoses were wrong. The dev server was healthy: NODE_ENV unset so the config's guard fired, the on-disk chunk bundled `react-jsx-dev-runtime.development.js` and assigned `exports.jsxDEV` unconditionally, it was served 200 as `text/javascript` through the browser's exact authenticated proxy path, and a cold headless browser hydrated and responded to a real click. Only one browser profile failed.\n\nThe answer was in the response headers: Vite serves optimized deps as `Cache-Control: max-age=31536000,immutable` under a `?v=<browserHash>` URL, and that hash is DETERMINISTIC. A browser had cached the chunk from a window when the deps were optimized under NODE_ENV=production — where `exports.jsxDEV = void 0` — and because re-optimizing reproduces the identical URL, nothing invalidates it. No reload revalidates an immutable subresource, which is why 'hard reload' was bad advice and why clearing `node_modules/.vite/deps` changed nothing: the rebuilt chunk was byte-identical and got the same hash.\n\n`browserHash` derives from `configHash`, so touching the include list is what moves the URL. It went 5110d5f7 → fab1913a, retiring every poisoned copy for everyone rather than asking each person to run a devtools ritual. Declaring the runtimes also buys the reason they are worth pinning on their own merits: both were previously DISCOVERED, so they were optimized part-way through a session under whatever NODE_ENV happened to hold at that instant — which is the window that poisons a cache in the first place. Declared entries are optimized once at startup under the already-corrected env. The comment in astro.config.mjs records the cache-bust lever so the next person hitting this does not have to re-derive it.\n\nA hydration mismatch was revealed underneath, and is deliberately NOT fixed here: the preview proxy rewrites `href=\"/admin/…\"` to `href=\"/__codeyam_preview/admin/…\"` in the rendered HTML, while `EntryListSection` calls `withBase()` at render time and re-computes the unprefixed URL client-side from `import.meta.env.BASE_URL`. The app is self-consistent; the proxy mutates output after render and the client cannot know. Fixing it here would mean teaching production URL-building about a dev tool's path prefix, which would break the deployed site's links. It is a codeyam-editor proxy issue, it affects any island computing URLs at render time, and it is harmless on this project — /admin ships only to dev and the gated review track, and hydration completes regardless.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitepagebody-markdown-an-editor-can-write--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitepageheader-long-title-and-no-description--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sitepageheader-title-and-lede--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteerrelatedprojects-one-other-project--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/974e14f71ee1ecf37f8588cfa144e542284bb19426c30413e3f3c2ea7d0f91a1.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/98dccea212706293132e036b8a2d80aacdd6bd31d1cdec638b8575ef4ace7bec.json",
+      "status": "deleted"
+    },
+    {
+      "path": "astro.config.mjs",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/601256931235233f0a068b83cfc488b1ffac18bcce07357995a19af805e66383.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/f9d57ea1f9a96490a764baa86a06a108403739ffcdd63e61070b2b72df7bc1f9.json",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 802,
+    "passed": 801,
+    "failed": 1,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 802,
+        "passed": 801
+      }
+    ]
+  }
+}
