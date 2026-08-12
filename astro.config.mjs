@@ -238,7 +238,38 @@ export default defineConfig({
       // the browser then fails hydration with "does not provide an export named
       // 'default'". Naming the chain here forces Vite to pre-bundle it to ESM.
       // Dev-only concern — `astro build` bundles these correctly on its own.
-      include: ['micromark', 'micromark-extension-gfm', 'debug'],
+      //
+      // `react/jsx-dev-runtime` and `react/jsx-runtime` are named here for a
+      // DIFFERENT reason, and it is not that they would otherwise go unbundled —
+      // Vite finds both on its own. Declaring them fixes two things discovery
+      // cannot.
+      //
+      // First, WHEN they are optimized. A discovered dep is optimized part-way
+      // through a session, so it inherits whatever `NODE_ENV` happens to be at
+      // that moment. If that moment lands in a production window, esbuild
+      // constant-folds `react/jsx-dev-runtime.js` down to
+      // `react-jsx-dev-runtime.production.js`, where `exports.jsxDEV = void 0`,
+      // and every React island dies on hydration with "jsxDEV is not a
+      // function". The `NODE_ENV` guard above is the primary defense; declaring
+      // these entries means they are optimized once at startup, under the
+      // already-corrected env, instead of at an arbitrary later instant.
+      //
+      // Second, RECOVERY. Vite serves optimized deps with
+      // `Cache-Control: max-age=31536000,immutable` under a `?v=<browserHash>`
+      // URL, and that hash is deterministic — so re-optimizing after a bad
+      // window reproduces the SAME url, and no reload (not even a hard one)
+      // revalidates an immutable subresource. A browser that cached the poisoned
+      // chunk keeps it for a year. `browserHash` derives from `configHash`, so
+      // touching this list is what changes the URL and retires those copies. If
+      // this crash ever reappears from a warm cache, add or reorder an entry
+      // here: that is the cache-bust lever.
+      include: [
+        'micromark',
+        'micromark-extension-gfm',
+        'debug',
+        'react/jsx-dev-runtime',
+        'react/jsx-runtime',
+      ],
       // The cutover runbook's tick controls are the first NON-admin islands to
       // import @codeyam/cms client libs, and they import them from a page the
       // dev server had already optimized for. Vite discovered them mid-session,

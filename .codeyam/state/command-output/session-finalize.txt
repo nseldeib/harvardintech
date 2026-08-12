@@ -74,3 +74,7 @@ Phase 4/5: verify-build …
 [SKIP] astro-check — no matching files
 CODEYAM_VERIFY_BUILD: PASS — 0 check(s) passed
 Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
+Committed finalize state as `chore: update codeyam state` (bd3ecfc) — HEAD is push-safe.
+Session finalize complete: ready to push.
+Presentability (open-source pass): 2 stale-doc candidate(s). Review with `codeyam-editor editor presentability-scan`, then refresh the README with `codeyam-editor editor readme-sync` before merge. Remove only what you are sure about — ask the user about anything uncertain.
+session-finalize finished: status=ok, phase1=passed, phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=98.2s
