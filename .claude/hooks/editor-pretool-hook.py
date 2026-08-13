@@ -39,8 +39,10 @@ Claude as feedback.
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
+import time
 
 # `_step_metadata` lives next to this file; add the hook directory to
 # `sys.path` so the import works regardless of the cwd the hook runner
@@ -121,8 +123,109 @@ def _slug_label(state, slug):
     return f"slug={slug}"
 
 
+_REFUSAL_LOG = os.path.join(".codeyam", "state", "refusal-fingerprints.json")
+
+# How long a refusal stays "recent" for repeat detection. Long enough to
+# span the retry loops seen in the transcripts (four blocks inside 65
+# seconds, two of them one second apart), short enough that a genuine
+# return to the same slug an hour later is not scolded as a repeat.
+_REPEAT_WINDOW_SEC = 600
+
+# Cap on retained fingerprints. This is a debounce hint, not durable
+# state — an unbounded file would grow for the life of the branch.
+_REFUSAL_LOG_MAX = 40
+
+
+def _record_refusal(project_dir, fingerprint, now=None):
+    """Record `fingerprint` and return how many times it has been refused
+    inside the window, INCLUDING this one. 1 means first refusal.
+
+    Best-effort by construction: this only decorates a message that is
+    being emitted anyway, so an unreadable or unwritable log must never
+    turn a clean refusal into a crash. Every failure path returns 1,
+    which renders exactly today's message.
+    """
+    now = time.time() if now is None else now
+    # The scripted-rewrite guard fires before the editor-mode short-circuit,
+    # so this runs in non-codeyam repos too. Never CREATE `.codeyam/` as a
+    # side effect of refusing something — no project state, no repeat log.
+    if not os.path.isdir(os.path.join(project_dir, ".codeyam")):
+        return 1
+    path = os.path.join(project_dir, _REFUSAL_LOG)
+    entries = []
+    try:
+        with open(path) as f:
+            loaded = json.load(f)
+        if isinstance(loaded, list):
+            entries = [
+                e
+                for e in loaded
+                if isinstance(e, dict)
+                and isinstance(e.get("at"), (int, float))
+                and now - e["at"] <= _REPEAT_WINDOW_SEC
+            ]
+    except Exception:
+        entries = []
+
+    count = sum(1 for e in entries if e.get("fingerprint") == fingerprint) + 1
+    entries.append({"fingerprint": fingerprint, "at": now})
+
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w") as f:
+            json.dump(entries[-_REFUSAL_LOG_MAX:], f)
+    except Exception:
+        pass
+    return count
+
+
+def _repeat_notice(count):
+    """The line that leads a repeated refusal, or "" on the first one.
+
+    Agents re-issued identical refused calls within seconds — four in a
+    row at `backend-journal`. A block that reads the same the second time
+    gives no signal that the state has not moved, so the retry looks as
+    reasonable as the first attempt. Saying so explicitly is the cheapest
+    thing that distinguishes them.
+    """
+    if count < 2:
+        return ""
+    return (
+        f"ALREADY REFUSED ({count}x in the last "
+        f"{_REPEAT_WINDOW_SEC // 60} minutes): this exact call was refused "
+        f"before and nothing has changed since. Re-issuing it will be "
+        f"refused again — take the next valid action below instead.\n"
+    )
+
+
+def block(project_dir, rule, reason, next_action, reference="", detail=""):
+    """Emit a phase-gate refusal on the two-line contract and exit 2.
+
+    Every refusal this hook emits goes through here, which is what makes
+    `BLOCKED:` / `Next valid action:` an enforced contract rather than a
+    documented convention — a new gate cannot ship without a recovery,
+    because there is no other way to refuse. `reference` carries material
+    the agent may want AFTER it knows what to do (the list of permitted
+    slugs, the rationale); it never substitutes for `next_action`.
+
+    `rule` plus the current slug is the repeat fingerprint; `detail`
+    narrows it when one rule fires for many targets, so refusals on two
+    different files are not conflated into a repeat.
+    """
+    count = _record_refusal(project_dir, f"{rule}\x00{detail}")
+    message = f"{_repeat_notice(count)}BLOCKED: {reason}\nNext valid action: {next_action}"
+    if reference:
+        message = f"{message}\n{reference}"
+    print(message, file=sys.stderr)
+    sys.exit(2)
+
+
 def _test_run_block_message(state, slug, info):
     """Word the test-run block for `slug` from its phase kind.
+
+    Returns a `(reason, next_action)` pair for `block`, which owns the
+    two-line rendering. Returning the parts rather than a finished string
+    is what keeps this gate on the same contract as every other one.
 
     `info` is the slug's `noTestSlugs` entry, or None when the cache
     predates that projection (or dropped the entry as malformed).
@@ -141,12 +244,12 @@ def _test_run_block_message(state, slug, info):
         # where it applies, and it is the status-quo degrade where the cache
         # cannot say.
         return (
-            f"BLOCKED: test runs are not allowed at {where} "
+            f"test runs are not allowed at {where} "
             f"(pre-Demo, test_scope: none). The Plan→Demo stretch is for building "
             f"fast and getting working functionality in front of the user — "
-            f"hardening (tests, extraction, glossary) starts at Deconstruct.\n"
-            f"Next valid action: keep building — run tests at "
-            f"`ui-extract-tdd` / `backend-extract-tdd`."
+            f"hardening (tests, extraction, glossary) starts at Deconstruct.",
+            "keep building — run tests at "
+            "`ui-extract-tdd` / `backend-extract-tdd`.",
         )
     next_slug = info.get("nextTestRunSlug")
     if next_slug:
@@ -160,11 +263,11 @@ def _test_run_block_message(state, slug, info):
             "nowhere left to re-run this."
         )
     return (
-        f"BLOCKED: test runs are not allowed at {where} "
+        f"test runs are not allowed at {where} "
         f"(test_scope: none). The hardening phases already ran the tests; this "
         f"step is a presentation / commit gate, where a test run is out of "
-        f"scope.\n"
-        f"Next valid action: {recovery}"
+        f"scope.",
+        recovery,
     )
 
 
@@ -188,20 +291,35 @@ def _preview_hint(mode, project_dir):
     return f'{cli} editor preview \'{{"dimension":"{default_dim}"}}\''
 
 
-# Stack-agnostic raw test runners, matched as word-boundary regexes so a
-# command that merely CONTAINS "test" (`cargo build`, `ls tests/`,
-# `git commit -m "add test"`) does NOT trip the gate. `refresh-tests` is
-# codeyam's own test command — the one the workflow actually uses — and is
-# always a test run.
-_TEST_RUN_PATTERNS = [
-    r"\brefresh-tests\b",
-    r"\bcargo\s+(?:test|nextest)\b",
-    r"\bnpx\s+vitest\b",
-    r"\bvitest\s+run\b",
-    r"\bjest\b",
-    r"\bpytest\b",
-    r"\bgo\s+test\b",
-]
+# Stack-agnostic raw test runners, matched by TOKEN SHAPE rather than by a
+# regex over the raw command string, so a runner NAME is only a test run when
+# it names the program actually being run. A runner name inside a quoted
+# argument is data: `editor change "Fix: missing pytest in the VM image"`,
+# `git commit -m "add pytest coverage"`, and `python3 -c "print('refresh-tests')"`
+# all mention a runner without invoking one, and a whole-string matcher refused
+# every one of them. This is the same command-position discipline
+# `_has_inplace_editor` and `_uses_pcre_grep` use — see `_in_command_position`
+# and `_split_commands`, defined with the scripted-rewrite guard below.
+#
+# Runners invoked by bare name: `pytest tests/`, `jest`, `vitest run`.
+_TEST_RUNNER_PROGRAMS = frozenset(("pytest", "jest", "vitest"))
+# Runners that are a program plus a subcommand — `cargo build` is not a test
+# run, `cargo test` is.
+_TEST_RUNNER_SUBCOMMANDS = {
+    "cargo": frozenset(("test", "nextest")),
+    "go": frozenset(("test",)),
+}
+# `python3 -m pytest` — the module names the runner, not the interpreter. Any
+# `python`/`python3`/`python3.12` spelling counts.
+_PYTHON_INTERPRETER = re.compile(r"^python[0-9.]*$")
+# `refresh-tests` is codeyam's own test command — the one the workflow actually
+# uses — and is always a test run when it is the CLI's VERB. As an argument to
+# some other verb it is a feature title or a search string, not a run.
+_CODEYAM_CLIS = frozenset(("codeyam-editor", "codeyam-editor-dev"))
+_CODEYAM_TEST_VERBS = frozenset(("refresh-tests",))
+# Shells that run a script named as their argument, so a configured test script
+# reached through one is still an invocation of it.
+_SCRIPT_INTERPRETERS = frozenset(("bash", "sh", "zsh", "ksh", "dash"))
 
 
 def _configured_test_scripts(project_dir):
@@ -212,7 +330,7 @@ def _configured_test_scripts(project_dir):
     the stack-agnostic runners above, so the gate is config-aware rather than a
     fixed hardcoded list. Only tokens that look like a script path (`scripts/…`
     or ending in `.sh`) are lifted — that deliberately skips a bare interpreter
-    like `python3` in `python3 -m pytest`, which the `pytest` regex already
+    like `python3` in `python3 -m pytest`, which `_invokes_test_runner` already
     covers and which would over-block if treated as a runner."""
     cfg_path = os.path.join(project_dir, ".codeyam", "editor.json")
     scripts = []
@@ -229,14 +347,127 @@ def _configured_test_scripts(project_dir):
     return scripts
 
 
-def is_test_run_command(command, project_dir):
-    """True iff `command` invokes a test run — `refresh-tests`, a common raw
-    runner, or the project's configured test script."""
-    for pat in _TEST_RUN_PATTERNS:
-        if re.search(pat, command):
+def _leading_operand(tokens):
+    """The first token that is a subcommand rather than an option — the `test`
+    in `cargo +nightly test -p codeyam-types`. None when there is none."""
+    for tok in tokens:
+        if tok.startswith("-") or tok.startswith("+"):
+            continue
+        return tok
+    return None
+
+
+def _module_target(tokens):
+    """The module an interpreter's `-m` flag runs — `pytest` in
+    `python3 -m pytest tests/`. None when there is no `-m`."""
+    for index, tok in enumerate(tokens):
+        if tok == "-m" and index + 1 < len(tokens):
+            return tokens[index + 1]
+    return None
+
+
+def _codeyam_verb(tokens):
+    """The subcommand verb of a codeyam CLI invocation, skipping options and the
+    `editor` subcommand group — `refresh-tests` in `codeyam-editor editor
+    refresh-tests --changed`, but `change` in `codeyam-editor editor change
+    "Fix: missing pytest in the VM image"`. None when there is no verb."""
+    for tok in tokens:
+        if tok.startswith("-") or tok == "editor":
+            continue
+        return tok
+    return None
+
+
+def _invokes_test_runner(tokens):
+    """True when the program in command position of one already-split command is
+    a test runner, in any of the shapes a runner is actually invoked through:
+    bare name, program + subcommand, interpreter + module, or codeyam CLI verb.
+
+    Blind to quoted text by construction — `shlex` has already collapsed each
+    quoted region into a single token, so a runner name inside a feature title,
+    a commit message, or a string literal can never be the program."""
+    for index, tok in enumerate(tokens):
+        if not _in_command_position(tokens, index):
+            continue
+        program = _program_name(tok)
+        rest = tokens[index + 1:]
+        if program in _TEST_RUNNER_PROGRAMS:
             return True
-    for script in _configured_test_scripts(project_dir):
-        if script in command:
+        if _leading_operand(rest) in _TEST_RUNNER_SUBCOMMANDS.get(program, ()):
+            return True
+        if _PYTHON_INTERPRETER.match(program) and _module_target(rest) in _TEST_RUNNER_PROGRAMS:
+            return True
+        if program in _CODEYAM_CLIS and _codeyam_verb(rest) in _CODEYAM_TEST_VERBS:
+            return True
+    return False
+
+
+def _shell_c_payload(tokens):
+    """The command string a shell is asked to run — `pytest tests/` in
+    `bash -c "pytest tests/"`. None when this is not a `-c` invocation.
+
+    Tokenizing alone would read that payload as one opaque argument and let a
+    real test run through, so the payload is re-scanned as a command in its own
+    right. This is the one place a quoted string IS an invocation."""
+    for index, tok in enumerate(tokens):
+        if _program_name(tok) not in _SCRIPT_INTERPRETERS:
+            continue
+        if not _in_command_position(tokens, index):
+            continue
+        rest = tokens[index + 1:]
+        for offset, arg in enumerate(rest):
+            if arg == "-c" and offset + 1 < len(rest):
+                return rest[offset + 1]
+    return None
+
+
+def _program_name(token):
+    """A token reduced to the name it is compared on, so a path-qualified
+    invocation matches its bare spelling — `/usr/bin/pytest` is `pytest`, and a
+    configured `scripts/run-shell-tests.sh` matches `./scripts/run-shell-tests.sh`."""
+    return token.rsplit("/", 1)[-1]
+
+
+def _invokes_configured_script(tokens, project_dir):
+    """True when one of the project's configured test scripts is what this
+    command runs — in command position (`./scripts/run-shell-tests.sh`) or as the
+    script argument of a shell (`bash scripts/run-shell-tests.sh`).
+
+    Comparing whole tokens is what keeps `git commit -m "fixes
+    scripts/run-shell-tests.sh"` allowed: a quoted message is one token, and one
+    token is never equal to the script path inside it."""
+    scripts = {_program_name(s) for s in _configured_test_scripts(project_dir)}
+    if not scripts:
+        return False
+    for index, tok in enumerate(tokens):
+        if _program_name(tok) not in scripts:
+            continue
+        if _in_command_position(tokens, index):
+            return True
+        if _program_name(tokens[index - 1]) in _SCRIPT_INTERPRETERS:
+            return True
+    return False
+
+
+def is_test_run_command(command, project_dir):
+    """True iff `command` invokes a test run — a common raw runner, codeyam's own
+    `refresh-tests`, or the project's configured test script.
+
+    Scoped to one command at a time, so a runner in one segment says nothing
+    about the next. Fails closed: a command that cannot be tokenized counts as a
+    test run, so a malformed quote is never an evasion path — the same contract
+    `_has_inplace_editor` and `_uses_pcre_grep` carry."""
+    for segment in _split_commands(command):
+        try:
+            tokens = shlex.split(segment, posix=True)
+        except ValueError:
+            return True
+        if _invokes_test_runner(tokens):
+            return True
+        if _invokes_configured_script(tokens, project_dir):
+            return True
+        payload = _shell_c_payload(tokens)
+        if payload is not None and is_test_run_command(payload, project_dir):
             return True
     return False
 
@@ -295,6 +526,69 @@ _PATHLIKE = re.compile(r"/?[A-Za-z0-9_][A-Za-z0-9_./*+-]*\.[A-Za-z0-9]+")
 # pre-`i` letter class excludes `e`/`E`/`I` so perl's `-Ilib` (a library path,
 # not an in-place edit) does not false-match.
 _INPLACE_FLAG = re.compile(r"^(?:--in-place(?:=.*)?|-[a-df-hj-zA-DF-HJ-Z0-9]*i.*)$")
+# Unquoted characters that end one command and begin another. `||` and `&&` are
+# runs of these, so splitting per-character yields an empty middle segment that
+# is simply dropped. `(`/`)`/backtick are boundaries too, so a subshell or a
+# command substitution is scanned as its own command rather than as an argument.
+_COMMAND_SEPARATORS = ";|&\n()`"
+# Tokens that may precede a program without changing which program runs, so an
+# in-place edit reached through one is still an in-place edit. `find … -exec sed
+# -i … {} \;` and `xargs sed -i …` are the most natural ways to rewrite a tree
+# in bulk; requiring `sed` to be literally first would have unblocked them.
+_COMMAND_PREFIXES = frozenset(
+    (
+        "sudo", "env", "xargs", "time", "nohup", "command", "exec", "nice",
+        "ionice", "stdbuf", "-exec", "-execdir", "then", "do", "else", "{",
+        # `npx vitest run` runs `vitest` — the launcher resolves the binary
+        # without changing which program it is.
+        "npx",
+    )
+)
+# `LC_ALL=C sed -i …` — a leading assignment is a prefix, not the program.
+_ASSIGNMENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=")
+# grep short options that consume the rest of their cluster as a value, so a
+# `P` following one is that value (`grep -eP` searches for the text "P") rather
+# than the PCRE flag.
+_GREP_VALUE_FLAGS = frozenset("efmABCDd")
+
+# The `codeyam-editor editor` subcommands that may not be piped into a filter.
+# Keep in sync with the CLAUDE.md "CLI error conventions" section, under "Do not
+# pipe gating or long-running `codeyam-editor` commands through `tail` / `grep`
+# / `head`".
+#
+# Deliberately NOT every subcommand. The rule's rationale is about the three
+# things a pipe destroys — a meaningful exit code, a liveness heartbeat, and a
+# tail-safe completion trailer — so it covers the commands that HAVE them: the
+# gates whose exit code is a verdict, and the long ones that heartbeat while
+# they run. Piping a small read-only query (`registry-query … | jq .`) loses
+# nothing, and refusing it would make the rule feel arbitrary rather than
+# earned.
+_GATING_SUBCOMMANDS = frozenset(
+    (
+        "advance",
+        "analyze-imports",
+        "audit",
+        "pre-commit-sync",
+        "push",
+        "reconcile-registry",
+        "refresh-tests",
+        "session-checkpoint",
+        "session-finalize",
+        "verify-build",
+        "verify-full-finalize",
+        "verify-test-cache",
+    )
+)
+# A `codeyam-editor editor <subcommand>` invocation with its subcommand
+# captured. Used only as the fail-closed fallback for a stage `shlex` cannot
+# tokenize; the tokenizing path in `_gating_subcommand` is position-aware and
+# is what runs normally.
+_GATING_INVOCATION = re.compile(
+    r"\bcodeyam-editor(?:-dev)?\s+editor\s+([a-z][a-z0-9-]*)"
+)
+# `--help` / `-h` as a standalone argument. A help text has no exit code to
+# lose, no heartbeat, and no completion trailer, so piping one is harmless.
+_HELP_FLAG = re.compile(r"(?:^|\s)(?:--help|-h)(?=\s|$)")
 
 
 def _string_literal(expr):
@@ -343,16 +637,308 @@ def _call_args(text, paren_index):
     return []
 
 
+def _is_redirection_ampersand(chars, index):
+    """True when the `&` at `chars[index]` is part of a REDIRECTION rather than
+    a command boundary — `2>&1`, `>&2`, `&>out`.
+
+    `&` is a separator character, so without this the single most common way to
+    capture a command's stderr splits it in two: `… --auto-apply 2>&1 | tail`
+    tokenizes as `… 2>` and `1 | tail`, putting the command and its filter in
+    different pipelines. That is exactly the shape of every observed violation
+    of the no-piping rule, so it is the shape the rule most has to see."""
+    if chars[index] != "&":
+        return False
+    if index > 0 and chars[index - 1] in "><":
+        return True
+    return index + 1 < len(chars) and chars[index + 1] == ">"
+
+
+def _split_commands_with_separators(command):
+    """`command` split at unquoted shell separators, as `(segment, separator)`
+    pairs — the separator being the character that ENDED the segment, or `""`
+    for the final one.
+
+    Quote-aware: a separator inside `'…'` or `"…"` is data — a grep pattern, not
+    a boundary — and a backslash escapes the next character outside single
+    quotes, so `find … {} \\;` does not split at its terminator. Every character
+    is preserved verbatim within its segment, including the quotes, so an
+    unterminated quote survives into the segment and is caught downstream.
+
+    Empty segments are KEPT here, unlike in `_split_commands`. `||` and `&&`
+    are runs of separator characters, so they yield an empty middle segment,
+    and that emptiness is exactly what distinguishes `a || b` from the pipe
+    `a | b` for `_pipelines`. Callers that only want the commands use
+    `_split_commands`, which drops them."""
+    pairs = []
+    current = []
+    quote = ""
+    escaped = False
+    chars = list(command)
+    for index, ch in enumerate(chars):
+        if escaped:
+            current.append(ch)
+            escaped = False
+        elif ch == "\\" and quote != "'":
+            current.append(ch)
+            escaped = True
+        elif quote:
+            current.append(ch)
+            if ch == quote:
+                quote = ""
+        elif ch in "'\"":
+            current.append(ch)
+            quote = ch
+        elif ch in _COMMAND_SEPARATORS and not _is_redirection_ampersand(chars, index):
+            pairs.append(("".join(current), ch))
+            current = []
+        else:
+            current.append(ch)
+    pairs.append(("".join(current), ""))
+    return pairs
+
+
+def _split_commands(command):
+    """`command` split into individual commands at unquoted shell separators.
+
+    The non-empty segments of `_split_commands_with_separators` — one scanner
+    serves both, so the quote handling that keeps `grep -rn "grep -P"` from
+    self-matching cannot drift between the two."""
+    return [segment for segment, _ in _split_commands_with_separators(command)
+            if segment.strip()]
+
+
+def _in_command_position(tokens, index):
+    """True when `tokens[index]` is the program a command runs rather than one
+    of its arguments — allowing for the wrappers and leading environment
+    assignments that still run it (`sudo sed`, `find … -exec sed`, `LC_ALL=C
+    sed`). This is what keeps `grep -rn sed -i crates/` — where `sed` is a
+    search term — from reading as an in-place edit."""
+    if index == 0:
+        return True
+    prior = tokens[index - 1]
+    return prior in _COMMAND_PREFIXES or bool(_ASSIGNMENT.match(prior))
+
+
 def _has_inplace_editor(command):
-    """True iff the command invokes `sed`/`perl` with an in-place flag."""
-    seen_editor = False
-    for tok in command.split():
-        base = tok.rsplit("/", 1)[-1]
-        if base in ("sed", "perl"):
-            seen_editor = True
-        elif seen_editor and _INPLACE_FLAG.match(tok):
+    """True iff `command` invokes `sed`/`perl` with an in-place flag.
+
+    Scoped to one command and blind to quoted text. A `sed` in one command says
+    nothing about a flag in the next, so the scan restarts at every separator;
+    and quoted regions collapse into single tokens, so a `-i` inside a grep
+    pattern is data. Fails closed: a command that cannot be tokenized counts as
+    an in-place edit, so a malformed quote is never an evasion path."""
+    for segment in _split_commands(command):
+        try:
+            tokens = shlex.split(segment, posix=True)
+        except ValueError:
             return True
+        for index, tok in enumerate(tokens):
+            if tok.rsplit("/", 1)[-1] not in ("sed", "perl"):
+                continue
+            if not _in_command_position(tokens, index):
+                continue
+            if any(_INPLACE_FLAG.match(t) for t in tokens[index + 1:]):
+                return True
     return False
+
+
+def _is_pcre_flag(token):
+    """True when `token` is grep's PCRE flag in any spelling GNU accepts: `-P`,
+    a short cluster containing it (`-Pn`, `-rP`, `-Pio`), or `--perl-regexp`
+    and the unambiguous abbreviations of it (`--perl`, `--perl-reg`). A cluster
+    stops at the first value-taking letter, so `-eP` is a search for "P"."""
+    if token.startswith("--"):
+        return len(token) >= len("--perl") and "--perl-regexp".startswith(token)
+    if not token.startswith("-") or token == "-":
+        return False
+    for ch in token[1:]:
+        if ch == "P":
+            return True
+        if ch in _GREP_VALUE_FLAGS:
+            return False
+    return False
+
+
+def _uses_pcre_grep(command):
+    """True iff `command` invokes `grep` with a PCRE flag.
+
+    Scoped to one command and blind to quoted text, for the same reason as
+    `_has_inplace_editor`: the flag is only a flag when it is an argument of an
+    actual `grep` invocation. That keeps `grep -rn "grep -P" .claude/` — where
+    the flag is the search term — and `echo 'do not use grep -P'` from reading
+    as PCRE use. `git grep -P` is excluded because `grep` is not in command
+    position there, and git's own PCRE support is portable across both hosts.
+    Fails closed: a command that cannot be tokenized counts as a match, so a
+    malformed quote is never an evasion path."""
+    for segment in _split_commands(command):
+        try:
+            tokens = shlex.split(segment, posix=True)
+        except ValueError:
+            return True
+        for index, tok in enumerate(tokens):
+            if tok.rsplit("/", 1)[-1] != "grep":
+                continue
+            if not _in_command_position(tokens, index):
+                continue
+            if any(_is_pcre_flag(t) for t in tokens[index + 1:]):
+                return True
+    return False
+
+
+def _pipelines(command):
+    """`command` grouped into pipelines — each a list of the stages joined by
+    unquoted `|`, in order.
+
+    A lone command is a one-stage pipeline, so `len(stages) > 1` is exactly the
+    "this was piped" test. `||` is NOT a pipe: it is two separator characters,
+    so it yields an empty middle segment, and an empty segment ends the current
+    pipeline rather than extending it. That empty-segment check is the whole
+    difference between `audit || echo failed` (allowed — two pipelines) and
+    `audit | tail` (one two-stage pipeline)."""
+    pipelines = []
+    current = []
+    pairs = _split_commands_with_separators(command)
+    for index, (segment, separator) in enumerate(pairs):
+        if not segment.strip():
+            if current:
+                pipelines.append(current)
+                current = []
+            continue
+        current.append(segment)
+        piped_into_next = (
+            separator == "|"
+            and index + 1 < len(pairs)
+            and pairs[index + 1][0].strip()
+        )
+        if not piped_into_next:
+            pipelines.append(current)
+            current = []
+    if current:
+        pipelines.append(current)
+    return pipelines
+
+
+def _gating_subcommand(stage):
+    """The gating `codeyam-editor editor <subcommand>` that `stage` RUNS, or
+    None.
+
+    Position-aware for the same reason `_uses_pcre_grep` is: the name is only
+    an invocation when it is the program the stage runs, so
+    `grep "codeyam-editor editor audit" notes.md | head` — where it is a search
+    term — does not trip the rule. Fails closed: a stage that cannot be
+    tokenized falls back to the position-blind regex, so a malformed quote is
+    never an evasion path."""
+    try:
+        tokens = shlex.split(stage, posix=True)
+    except ValueError:
+        match = _GATING_INVOCATION.search(stage)
+        return match.group(1) if match else None
+    for index, tok in enumerate(tokens):
+        if tok.rsplit("/", 1)[-1] not in ("codeyam-editor", "codeyam-editor-dev"):
+            continue
+        if not _in_command_position(tokens, index):
+            continue
+        rest = tokens[index + 1:]
+        if len(rest) >= 2 and rest[0] == "editor" and rest[1] in _GATING_SUBCOMMANDS:
+            return rest[1]
+    return None
+
+
+def _is_tee_stage(stage):
+    """True when `stage` is a `tee` — the one downstream stage that preserves
+    what a pipe would otherwise destroy. `tee` copies stdout to a file and
+    passes it through unchanged, and a pipeline ending in `tee` reports `tee`'s
+    status, which fails only on a write error. So the exit code, the heartbeat,
+    and the completion trailer all survive."""
+    try:
+        tokens = shlex.split(stage, posix=True)
+    except ValueError:
+        return False
+    return bool(tokens) and tokens[0].rsplit("/", 1)[-1] == "tee"
+
+
+def _exit_code_preserved(command):
+    """True when `command` already keeps the child's exit code across a pipe.
+
+    `set -o pipefail` makes the pipeline report its first failing stage, and a
+    `${PIPESTATUS[0]}` read recovers the first stage's status explicitly. Both
+    are named in the documentation as the sanctioned way to filter anyway, so
+    both have to be honoured — a rule that refused the escape it recommends
+    would just teach agents to route around it.
+
+    Whole-command scoped on purpose: `set -o pipefail` is usually a separate
+    statement ahead of the pipeline, and the `PIPESTATUS` read necessarily
+    comes after it. The `set` itself is still matched in COMMAND POSITION, so
+    `echo remember to set -o pipefail` does not count — otherwise any command
+    could opt out of the rule by mentioning the word."""
+    if "PIPESTATUS" in command:
+        return True
+    for segment in _split_commands(command):
+        try:
+            tokens = shlex.split(segment, posix=True)
+        except ValueError:
+            continue
+        for index, tok in enumerate(tokens):
+            if tok != "set" or not _in_command_position(tokens, index):
+                continue
+            if "pipefail" in tokens[index + 1:]:
+                return True
+    return False
+
+
+def piped_gating_command(command):
+    """The gating subcommand `command` pipes into a filter, or None.
+
+    This is the mechanical form of the CLAUDE.md "do not pipe gating or
+    long-running commands" rule. The rule is documented at length and violated
+    anyway, on the very commands it names — so it is enforced here rather than
+    left to prose.
+
+    Three properties of a wrapped gating command die at a pipe. The shell
+    reports the LAST stage's status, so `verify-build | tail` exits 0 when the
+    build failed — a false green that advances the workflow past a failing
+    gate. `tail`/`grep` block-buffer to EOF, so a still-running command's output
+    and its `CODEYAM_CMD_RUNNING` heartbeat never surface and the read looks
+    empty. And the tail-safe completion trailer — the `EXACT_TASK_TITLE`
+    hand-off and the `CODEYAM_CMD_COMPLETE` sentinel — gets sliced off.
+
+    The escapes the documentation itself endorses are honoured: `tee`,
+    `set -o pipefail`, and a `${PIPESTATUS[0]}` check each keep the child's
+    exit code, so none of them is refused. `--help` is exempt because a help
+    text has no exit code to lose, no heartbeat, and no trailer."""
+    if _exit_code_preserved(command):
+        return None
+    for stages in _pipelines(command):
+        for index, stage in enumerate(stages[:-1]):
+            subcommand = _gating_subcommand(stage)
+            if subcommand is None or _HELP_FLAG.search(stage):
+                continue
+            if all(_is_tee_stage(later) for later in stages[index + 1:]):
+                continue
+            return subcommand
+    return None
+
+
+def piped_gating_refusal(subcommand):
+    """The `(reason, next_action)` pair for a refused pipe. Names the three
+    sanctioned escapes, because wanting to shorten a long output is the reason
+    agents reach for `| tail` and the refusal has to answer it."""
+    return (
+        f"this pipes `{cli_command()} editor {subcommand}` into a filter. A "
+        f"pipeline's exit code is its LAST stage's, so the filter's success "
+        f"masks the command's failure — a false green on a gate that actually "
+        f"failed. `tail`/`grep` also block-buffer to EOF, hiding the "
+        f"`CODEYAM_CMD_RUNNING` heartbeat so a healthy long command reads as "
+        f"wedged, and they slice off the completion trailer carrying the "
+        f"hand-off and the `CODEYAM_CMD_COMPLETE` sentinel.",
+        f"run it BARE and read the verdict off its own terminal line "
+        f"(`CODEYAM_VERIFY_BUILD: PASS|FAIL`, the `CODEYAM_CMD_COMPLETE` "
+        f"`status`). Output too long is not a reason to pipe — the command "
+        f"prints a `CODEYAM_FULL_OUTPUT` line naming a file with the complete "
+        f"output. If you genuinely need a filter, keep the child's exit code: "
+        f"`| tee out.txt`, a leading `set -o pipefail`, or a "
+        f"`${{PIPESTATUS[0]}}` check.",
+    )
 
 
 def write_targets(command):
@@ -479,24 +1065,223 @@ def scripted_source_rewrite_target(command, project_dir):
     return tracked[0] if tracked else None
 
 
-def scripted_rewrite_refusal(path):
-    """The BLOCKED message for a refused scripted rewrite. Names the path that
-    matched and the three sanctioned alternatives — batching is the reason
-    agents reach for a script, so the refusal has to answer it."""
+# ── line-budget guard ──────────────────────────────────────────────────
+#
+# A codeyam-editor project caps `.claude/skills/codeyam-editor/SKILL.md` at a
+# line count enforced by a Rust test (`skill_md_is_lean`). Nothing used to say
+# so until that test went red — long after the content was written, and under
+# Fast Commit possibly not until finalize. One session appended three bullets to
+# a file already sitting at exactly 100 lines, discovered the wall from a red
+# full-suite run, reverted its own work, and re-authored it as a step-library
+# fragment. The content ended up in the right place; the detour was pure waste.
+#
+# These helpers mirror `commands::editor::line_budget`'s parsing so an edit that
+# would exceed the budget is refused BEFORE it lands. They mirror the *parsing*,
+# never the *number* — the cap is read from the test that declares it, so raising
+# or lowering it stays a one-line edit there.
+
+# Directories never worth walking for the contract test. Mirrors
+# `control-api`'s `ALWAYS_EXCLUDED_DIRS`.
+_BUDGET_SCAN_EXCLUDED_DIRS = frozenset(("node_modules", ".codeyam", ".git", "target"))
+
+# Upper bound on Rust files examined while looking for the contract. The real
+# marker sits in a test file near the top of the walk; the cap only stops a
+# pathological tree from making a PreToolUse hook slow.
+_BUDGET_SCAN_MAX_FILES = 4000
+
+# The "approaching the cap" gradient lives in `line_budget::WARN_MARGIN` and is
+# reported by `classify-constrained-files` at plan time. It is deliberately NOT
+# mirrored here: this hook can only speak by refusing (exit 2), and a refusal is
+# the wrong response to an edit that still fits. What this guard owes is the
+# hard stop, worded so the author never has to discover the wall by test.
+
+
+def _is_rust_comment(line):
+    """True for a Rust comment line. Comments DISCUSS the contract; they never
+    declare it. Load-bearing: `line_budget.rs`'s own doc comment names the parsed
+    construct, and a parser that read comments latched onto that placeholder and
+    reported a guarded path of `…SKILL.md` — a lookup matching no real file, which
+    silently disabled this guard."""
+    return line.lstrip().startswith("//")
+
+
+def read_rel_skill_path(line):
+    """The guarded SKILL.md argument of a `read_rel("…")` call, or None."""
+    if _is_rust_comment(line):
+        return None
+    parts = line.split('read_rel("')
+    if len(parts) < 2:
+        return None
+    literal = parts[1].split('"')[0]
+    return literal if literal.endswith("SKILL.md") else None
+
+
+def line_count_limit(line):
+    """The integer N from a `line_count <= N` assertion on `line`, or None."""
+    if _is_rust_comment(line):
+        return None
+    parts = line.split("line_count <=")
+    if len(parts) < 2:
+        return None
+    digits = ""
+    for ch in parts[1].lstrip():
+        if not ch.isdigit():
+            break
+        digits += ch
+    return int(digits) if digits else None
+
+
+def parse_lean_contract(test_src):
+    """`(guarded repo-relative path, max line count)` from the contract test
+    source, or None when either literal is absent."""
+    path = None
+    limit = None
+    for line in test_src.splitlines():
+        if path is None:
+            path = read_rel_skill_path(line)
+        if limit is None:
+            limit = line_count_limit(line)
+        if path is not None and limit is not None:
+            return (path, limit)
+    return None
+
+
+def _is_integration_test_path(path):
+    """True when `path` sits under a `tests/` directory.
+
+    The enforced contract is an integration test. A `src/` file carrying the
+    marker is documentation about the contract or a test *fixture* imitating it —
+    `line_budget.rs` and `classify_constrained_files.rs` both hold one — and
+    parsing a fixture yields a cap that belongs to nobody."""
+    return "tests" in path.replace("\\", "/").split("/")
+
+
+def discover_lean_contract(project_dir):
+    """Scan the project's Rust integration tests for the `skill_md_is_lean`
+    marker and parse the contract out of it. None when the project enforces no
+    cap — the correct degradation, and what makes this guard silent on every
+    project that is not codeyam-editor itself."""
+    examined = 0
+    for root, dirs, files in os.walk(project_dir):
+        dirs[:] = [d for d in dirs if d not in _BUDGET_SCAN_EXCLUDED_DIRS]
+        if not _is_integration_test_path(os.path.relpath(root, project_dir)):
+            continue
+        for name in files:
+            if not name.endswith(".rs"):
+                continue
+            examined += 1
+            if examined > _BUDGET_SCAN_MAX_FILES:
+                return None
+            try:
+                with open(os.path.join(root, name), "r", encoding="utf-8") as f:
+                    src = f.read()
+            except Exception:
+                continue
+            if "skill_md_is_lean" in src:
+                parsed = parse_lean_contract(src)
+                if parsed:
+                    return parsed
+    return None
+
+
+def projected_line_count(tool_name, tool_input, current_body):
+    """The line count `file_path` would have AFTER this Write/Edit, or None when
+    it cannot be determined.
+
+    Write replaces the whole file, so its `content` is the answer outright. Edit
+    is computed by performing the same substring replacement in memory — exact,
+    rather than a line-delta estimate that drifts on a multi-line old_string. An
+    Edit whose `old_string` is not present changes nothing, so it is left to the
+    Edit tool's own error rather than judged here."""
+    if tool_name == "Write":
+        content = tool_input.get("content")
+        return None if content is None else len(content.splitlines())
+    old = tool_input.get("old_string")
+    new = tool_input.get("new_string")
+    if current_body is None or old is None or new is None or old not in current_body:
+        return None
+    if tool_input.get("replace_all"):
+        return len(current_body.replace(old, new).splitlines())
+    return len(current_body.replace(old, new, 1).splitlines())
+
+
+def line_budget_refusal(rel_path, limit, current, projected):
+    """The `(reason, next_action)` pair for an edit that would break a file's
+    line budget.
+
+    The reason states the arithmetic — an author who sees `100/100, this edit
+    makes it 103` knows immediately that the target is wrong rather than that the
+    file is off limits. The next action names the whole fragment mechanism: the
+    command, the file it writes, the placeholder, the substitution site, and the
+    leak test. Naming only the destination ("move it into step .txt files") is
+    what left the four steps to be rediscovered by reading a sibling."""
     return (
-        f"BLOCKED: this command machine-rewrites the tracked source file `{path}`. "
+        f"`{rel_path}` is at its enforced line budget: {current}/{limit} lines, and "
+        f"this edit would make it {projected}. The `skill_md_is_lean` test would go "
+        f"red — possibly not until finalize, long after this content is written. The "
+        f"cap is not a bug to route around: hitting it is what moves operational "
+        f"guidance into the step library, where a step body re-reads it every step "
+        f"instead of once per session.",
+        f"author a step-library fragment instead. Run "
+        f"`{cli_command()} editor new-step-fragment <name> --slug <slug>`: it writes "
+        f"crates/codeyam-editor/src/commands/editor/steps/library/fragments/<name>_block.txt, "
+        f"adds the `include_str!` substitution for `{{<name>_block}}` in "
+        f"crates/codeyam-editor/src/commands/editor/step.rs, inserts the placeholder into "
+        f"each named slug's .txt, and prints the placeholder-leak test to add. Then put "
+        f"this guidance in that fragment. To check any file's remaining headroom first: "
+        f"`{cli_command()} editor classify-constrained-files {rel_path}`.",
+    )
+
+
+def line_budget_violation(tool_name, tool_input, project_dir):
+    """`(rel_path, limit, current, projected)` when this Write/Edit would push a
+    line-budgeted file past its cap, else None.
+
+    Cheap in the common case: the contract scan is skipped entirely unless the
+    target is named `SKILL.md`, so an ordinary source edit pays one basename
+    comparison."""
+    file_path = tool_input.get("file_path", "")
+    if os.path.basename(file_path) != "SKILL.md":
+        return None
+    rel = _repo_relative(file_path, project_dir)
+    if not rel:
+        return None
+    contract = discover_lean_contract(project_dir)
+    if not contract:
+        return None
+    guarded, limit = contract
+    if rel.replace("\\", "/") != guarded:
+        return None
+    try:
+        with open(os.path.join(project_dir, guarded), "r", encoding="utf-8") as f:
+            body = f.read()
+    except Exception:
+        body = None
+    projected = projected_line_count(tool_name, tool_input, body)
+    if projected is None or projected <= limit:
+        return None
+    current = len(body.splitlines()) if body is not None else 0
+    return (rel, limit, current, projected)
+
+
+def scripted_rewrite_refusal(path):
+    """The `(reason, next_action)` pair for a refused scripted rewrite. Names
+    the path that matched and the three sanctioned alternatives — batching is
+    the reason agents reach for a script, so the refusal has to answer it."""
+    return (
+        f"this command machine-rewrites the tracked source file `{path}`. "
         f"A scripted in-process rewrite (`open(p, 'w')`, `.write_text(`, `sed -i`, "
         f"`perl -pi`) computes its diff at runtime, so the change never appears in "
         f"the transcript a reviewer reads; it parses the language with the wrong "
         f"grammar and self-matches the code it just generated; and it bypasses the "
         f"file-state tracking that lets Edit refuse a file that changed underneath "
-        f"it.\n"
-        f"Next valid action: use the Edit tool. Batching is not a reason to script — "
+        f"it.",
+        f"use the Edit tool. Batching is not a reason to script — "
         f"several Edit calls in ONE message run in parallel. For a genuine "
         f"replace-every-occurrence pass use Edit with `replace_all: true`; to rename "
         f"an identifier across source + glossary + registry run "
         f"`{cli_command()} editor rename-symbol`. Writing to an untracked file, to "
-        f"/tmp, or to the scratchpad is unaffected."
+        f"/tmp, or to the scratchpad is unaffected.",
     )
 
 
@@ -676,8 +1461,25 @@ def main():
             tool_input.get("command", ""), project_dir
         )
         if rewrite_target:
-            print(scripted_rewrite_refusal(rewrite_target), file=sys.stderr)
-            sys.exit(2)
+            reason, next_action = scripted_rewrite_refusal(rewrite_target)
+            block(
+                project_dir,
+                "scripted-rewrite",
+                reason,
+                next_action,
+                detail=rewrite_target,
+            )
+
+    # Piped-gating-command guard. Neither step-scoped nor editor-mode-scoped,
+    # for the same reason as the guard above: the no-piping rule holds in every
+    # session. It also has to fire before the "always allow codeyam-editor
+    # editor" short-circuit further down, which would otherwise exit 0 on the
+    # very commands this refuses.
+    if tool_name == "Bash":
+        piped = piped_gating_command(tool_input.get("command", ""))
+        if piped:
+            reason, next_action = piped_gating_refusal(piped)
+            block(project_dir, "piped-gating-command", reason, next_action, detail=piped)
 
     # Every remaining rule is a workflow-step gate — only enforce in editor mode
     if not os.environ.get("CODEYAM_EDITOR_ACTIVE"):
@@ -736,11 +1538,10 @@ def main():
             and slug not in test_run_slugs
             and is_test_run_command(command, project_dir)
         ):
-            print(
-                _test_run_block_message(state, slug, no_test_slugs.get(slug)),
-                file=sys.stderr,
+            reason, next_action = _test_run_block_message(
+                state, slug, no_test_slugs.get(slug)
             )
-            sys.exit(2)
+            block(project_dir, "test-run", reason, next_action, detail=slug)
 
         # Inspector nudge. Emitted on stderr and then FALLEN THROUGH from
         # — never `sys.exit`ed on — so the command still runs and every
@@ -783,13 +1584,14 @@ def main():
 
             if not preview_ok:
                 hint = _preview_hint(mode, project_dir)
-                print(
-                    f"BLOCKED: This step ({_slug_label(state, slug)}) requires showing "
-                    f"the live preview before asking the user for confirmation.\n"
-                    f"Run `{hint}` first, then call AskUserQuestion.",
-                    file=sys.stderr,
+                block(
+                    project_dir,
+                    "preview-required",
+                    f"This step ({_slug_label(state, slug)}) requires showing "
+                    f"the live preview before asking the user for confirmation.",
+                    f"run `{hint}`, then call AskUserQuestion.",
+                    detail=slug,
                 )
-                sys.exit(2)
 
         sys.exit(0)
 
@@ -804,14 +1606,32 @@ def main():
         if file_path.endswith(".css"):
             content_str = tool_input.get("content", "") or tool_input.get("new_string", "")
             if "@import url" in content_str:
-                print(
-                    "BLOCKED: `@import url(...)` in CSS is render-blocking and "
-                    "hurts LCP. Load webfonts via next/font in layout.tsx (or "
-                    "a <link rel=\"preconnect\"> + <link href> pair) rather than "
-                    "from the stylesheet.",
-                    file=sys.stderr,
+                block(
+                    project_dir,
+                    "css-import-url",
+                    "`@import url(...)` in CSS is render-blocking and hurts LCP.",
+                    "load the webfont via next/font in layout.tsx (or a "
+                    "<link rel=\"preconnect\"> + <link href> pair), then re-apply "
+                    "this edit without the `@import url(...)` line.",
+                    detail=file_path,
                 )
-                sys.exit(2)
+
+        # A line-budgeted file is checked BEFORE the `.claude/` short-circuit
+        # below, for the same reason the CSS rule is: the guarded file lives
+        # under `.claude/`, so a gate placed after that short-circuit would never
+        # fire on the one file it exists for. This is not step-scoped either —
+        # the budget holds at every slug, editor mode or not.
+        violation = line_budget_violation(tool_name, tool_input, project_dir)
+        if violation:
+            rel, limit, current, projected = violation
+            reason, next_action = line_budget_refusal(rel, limit, current, projected)
+            block(
+                project_dir,
+                "line-budget",
+                reason,
+                next_action,
+                detail=rel,
+            )
 
         # Always allow .codeyam/ and .claude/ files (editor state)
         if "/.codeyam/" in file_path or "/.claude/" in file_path:
@@ -822,44 +1642,79 @@ def main():
         # predates the slug field; the next `editor step` invocation
         # will migrate it, so degrade to "allow" rather than block on
         # an unmatchable allowlist.
-        if slug and code_change_slugs and slug not in code_change_slugs:
+        # Resolving a conflict is not authoring a feature. `pre-commit-sync`
+        # starts a rebase and, on a genuine source conflict, prints a recovery
+        # that reads "resolve each file, `git add` it, then `git rebase
+        # --continue`" — which this gate then refused, wedging the very step
+        # that printed it, with no in-band way out. The `git add` half already
+        # carries exactly this escape (see merge_in_progress); the EDIT that
+        # must precede it did not, so only half the recovery was reachable.
+        # Scope is narrow: it opens only while a rebase/merge/cherry-pick is
+        # PAUSED mid-operation, and `git commit` stays gated by its own slug
+        # check regardless, so this cannot land a commit outside the commit
+        # slug — it only lets an in-flight integration be finished.
+        if (
+            slug
+            and code_change_slugs
+            and slug not in code_change_slugs
+            and not merge_in_progress(project_dir)
+        ):
             allowed = ", ".join(sorted(code_change_slugs))
-            print(
-                f"BLOCKED: This step ({_slug_label(state, slug)}) does not allow code changes. "
-                f"Code changes are only allowed at slugs: {allowed}. "
-                f"If you need to make changes after a final-presentation gate, run "
-                f"`{cli_command()} editor change` first.",
-                file=sys.stderr,
+            # The list of permitted slugs is REFERENCE, deliberately below
+            # both contract lines. Led with, it reads as a set to reason
+            # about — which is how this block came to be the most-retried
+            # one in the transcripts (four in a row at `backend-journal`).
+            # One named command reads as an instruction to follow.
+            block(
+                project_dir,
+                "code-change",
+                f"This step ({_slug_label(state, slug)}) does not allow code changes.",
+                f"run `{cli_command()} editor change` to reopen the build loop — "
+                f"it MOVES the workflow cursor back to the nearest earlier slug "
+                f"that permits edits and prints the command to return here — "
+                f"then make this edit.",
+                reference=f"Code changes are allowed at slugs: {allowed}.",
+                detail=f"{slug}\x00{file_path}",
             )
-            sys.exit(2)
 
     # Check Bash commands for git commit/push
     if tool_name == "Bash":
         command = tool_input.get("command", "")
 
-        # BSD grep on macOS lacks -P (PCRE). Fail loud so Claude switches to
-        # the Grep tool (ripgrep-backed, PCRE-compatible) instead of seeing
-        # a cryptic "grep: invalid option" at runtime.
-        if re.search(r"\bgrep\s+-[A-Za-z]*P\b", command):
-            print(
-                "BLOCKED: `grep -P` is unsupported on macOS (BSD grep). "
-                "Use the Grep tool instead — it wraps ripgrep and honors "
-                "PCRE syntax portably.",
-                file=sys.stderr,
+        # `-P` (PCRE) is a GNU extension; BSD grep on macOS has no such flag.
+        # This repo is developed on macOS laptops and run on Linux VMs, so the
+        # rule is about PORTABILITY, not about the current host — it fires on
+        # every platform, and the message must therefore stay true on every
+        # platform. Do not reintroduce a claim about which OS is running: the
+        # block previously asserted the host was macOS and fired inside Linux
+        # containers, which teaches an agent to distrust the hook's other
+        # explanations.
+        if _uses_pcre_grep(command):
+            block(
+                project_dir,
+                "grep-p",
+                "`grep -P` (PCRE) is not portable — BSD grep on macOS has no "
+                "`-P`, so a command written on a Linux VM fails on a "
+                "developer's laptop. The rule applies on every platform.",
+                "use the Grep tool instead — it wraps ripgrep and honors "
+                "PCRE syntax on both platforms.",
             )
-            sys.exit(2)
 
         if "git commit" in command:
             if slug and commit_slugs and slug not in commit_slugs and not staged_paths_are_plans_only(project_dir):
                 allowed = ", ".join(sorted(commit_slugs))
-                print(
-                    f"BLOCKED: git commit/add is only allowed at slug(s): {allowed}. "
-                    f"You are at {_slug_label(state, slug)}. "
-                    f"Plan-file commits (.codeyam/plans/*.md) are allowed at any step. "
-                    f"Follow the workflow — commits happen at the `commit` slug.",
-                    file=sys.stderr,
+                block(
+                    project_dir,
+                    "git-commit",
+                    f"git commit is only allowed at slug(s): {allowed}. "
+                    f"You are at {_slug_label(state, slug)}.",
+                    "keep following the workflow — `codeyam-editor editor advance` "
+                    "until the `commit` slug, which commits for you. To read what "
+                    "a later slug requires without moving the workflow pointer, run "
+                    "`codeyam-editor editor step --show --slug <slug>`.",
+                    reference="Plan-file commits (.codeyam/plans/*.md) are allowed at any step.",
+                    detail=slug,
                 )
-                sys.exit(2)
         elif "git add" in command:
             if (
                 slug
@@ -869,24 +1724,30 @@ def main():
                 and not merge_in_progress(project_dir)
             ):
                 allowed = ", ".join(sorted(commit_slugs))
-                print(
-                    f"BLOCKED: git commit/add is only allowed at slug(s): {allowed}. "
-                    f"You are at {_slug_label(state, slug)}. "
-                    f"Plan-file commits (.codeyam/plans/*.md) are allowed at any step. "
-                    f"Follow the workflow — commits happen at the `commit` slug.",
-                    file=sys.stderr,
+                block(
+                    project_dir,
+                    "git-add",
+                    f"git add is only allowed at slug(s): {allowed}. "
+                    f"You are at {_slug_label(state, slug)}.",
+                    "leave staging to the workflow — the `commit` slug runs "
+                    "`codeyam-editor editor stage-feature`, which stages this for you.",
+                    reference="Plan-file commits (.codeyam/plans/*.md) are allowed at any step, "
+                    "and `git add` is permitted while a rebase/merge is paused mid-operation.",
+                    detail=slug,
                 )
-                sys.exit(2)
 
         if "git push" in command:
             if slug and push_slugs and slug not in push_slugs:
                 allowed = ", ".join(sorted(push_slugs))
-                print(
-                    f"BLOCKED: git push is only allowed at slug(s): {allowed}. "
+                block(
+                    project_dir,
+                    "git-push",
+                    f"git push is only allowed at slug(s): {allowed}. "
                     f"You are at {_slug_label(state, slug)}.",
-                    file=sys.stderr,
+                    "keep advancing to the `push` slug, which runs "
+                    "`codeyam-editor editor push` with the queue held.",
+                    detail=slug,
                 )
-                sys.exit(2)
 
     # Allow everything else
     sys.exit(0)
