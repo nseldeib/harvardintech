@@ -12,3 +12,6 @@
 .codeyam/cache/step-metadata.json merge=ours
 .codeyam/per-test-evidence.json merge=codeyam-per-test-evidence linguist-generated
 .codeyam/editor.json merge=codeyam-editor-config
+.codeyam/state/red-proof.json merge=codeyam-keep-replayed
+crates/codeyam-editor/src/scaffold/hook_skip_list.json merge=codeyam-generated-artifact
+crates/codeyam-editor/skills.lock merge=codeyam-generated-artifact
