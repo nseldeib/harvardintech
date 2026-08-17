@@ -1,0 +1,38 @@
+{
+  "name": "CMS Momentum Sections - Two Bands Under Their Own Names",
+  "id": "e46ccb04-d8fc-48d0-8fdb-8d8ba102c388",
+  "url": "/admin/momentumSections",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The cards naming what a gift sustains today.",
+        "group": "powers",
+        "kind": "pillars",
+        "order": 1,
+        "slug": "pillars",
+        "title": "What Your Support Powers"
+      },
+      {
+        "body": "The duplicated band, renamed and pointed at its own group of cards.",
+        "group": "uses",
+        "kind": "pillars",
+        "order": 2,
+        "slug": "pillars-2",
+        "title": "How Your Support Will Be Used"
+      },
+      {
+        "body": "The track-record band, left unnamed — so the list still shows the slug fallback beside the two named rows.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
+  "description": "The sections list after a band was duplicated, and the reason the title half of this feature is not cosmetic. The two pillars sections read as 'What Your Support Powers' and 'How Your Support Will Be Used' — their own titles — where before this change both rows would have read 'pillars', because the CMS row label falls back to the slug and the slot bands ignored the title they could already carry. Two rows named after their filenames is not a list an editor can work in. Every row also now carries Duplicate beside Edit, which is what created the second band: it is an anchor to the create form rather than a staged action, so opening it and changing your mind leaves nothing to undo."
+}

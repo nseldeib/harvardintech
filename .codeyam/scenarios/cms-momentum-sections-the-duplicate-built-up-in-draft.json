@@ -1,0 +1,39 @@
+{
+  "name": "CMS Momentum Sections - The Duplicate Built Up In Draft",
+  "id": "7be07a8e-79a9-470d-8219-1d7dd8032898",
+  "url": "/admin/momentumSections",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The live band, published and unchanged.",
+        "group": "powers",
+        "kind": "pillars",
+        "order": 1,
+        "slug": "pillars",
+        "title": "What Your Support Powers"
+      },
+      {
+        "body": "The duplicate, renamed and pointed at its own group, still being filled in.",
+        "draft": true,
+        "group": "uses",
+        "kind": "pillars",
+        "order": 2,
+        "slug": "pillars-2",
+        "title": "How Your Support Will Be Used"
+      },
+      {
+        "body": "The track-record band, untouched by any of this.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
+  "description": "The safe way to use this feature, and the reason nothing about draft handling needed to change: an editor duplicates a band, renames it, points it at a new card group, and leaves Draft ON while they fill the cards in. The copy sits in the list with its Draft chip, in sequence, under its own name — while the live /donate page still shows only the original band, because publishedEntries drops a drafted section before it ever reaches the renderer. So a half-built duplicate is invisible to visitors without the editor having to think about it. The draft sits in place rather than being hoisted into a separate group, since in a list that exists to show order, moving a row out of its position would misreport where the section actually sits on the page."
+}

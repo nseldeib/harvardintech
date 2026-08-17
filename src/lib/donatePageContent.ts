@@ -17,6 +17,7 @@ import { INCLUDE_DRAFTS } from './draftVisibility';
 import { sortByOrder } from './order';
 import { resolvePillarIcon } from './pillars';
 import { mergeDonateFrame } from './pageCopyMerge';
+import { selectGroup } from './sectionGroups';
 import type { DonatePageCopy } from './site';
 
 type Accomplishment = NonNullable<DonatePageCopy['accomplishments']>[number];
@@ -31,16 +32,19 @@ type Pillar = NonNullable<DonatePageCopy['pillars']>[number];
  * frontmatter key had to differ from the prop name the card component already
  * used. This function is where the two names meet.
  */
-export async function loadAccomplishments(): Promise<Accomplishment[]> {
+export async function loadAccomplishments(group?: string): Promise<Accomplishment[]> {
   const entries = publishedEntries(await getCollection('accomplishments'), INCLUDE_DRAFTS).map(
     (entry) => entry.data,
   );
 
-  return sortByOrder(entries).map(({ value, label, description }) => ({
-    value,
-    label,
-    body: description,
-  }));
+  return sortByOrder(selectGroup(entries, group)).map(
+    ({ value, label, description, group: cardGroup }) => ({
+      value,
+      label,
+      body: description,
+      group: cardGroup,
+    }),
+  );
 }
 
 /**
@@ -50,18 +54,21 @@ export async function loadAccomplishments(): Promise<Accomplishment[]> {
  * no select control — so it passes through `resolvePillarIcon`, which turns
  * whatever an editor typed into one of the three glyphs the badge actually draws.
  */
-export async function loadPillars(): Promise<Pillar[]> {
+export async function loadPillars(group?: string): Promise<Pillar[]> {
   const entries = publishedEntries(await getCollection('pillars'), INCLUDE_DRAFTS).map(
     (entry) => entry.data,
   );
 
-  return sortByOrder(entries).map(({ title, description, icon, linkLabel, linkUrl }) => ({
-    title,
-    body: description,
-    icon: resolvePillarIcon(icon),
-    linkLabel,
-    linkUrl,
-  }));
+  return sortByOrder(selectGroup(entries, group)).map(
+    ({ title, description, icon, linkLabel, linkUrl, group: cardGroup }) => ({
+      title,
+      body: description,
+      icon: resolvePillarIcon(icon),
+      linkLabel,
+      linkUrl,
+      group: cardGroup,
+    }),
+  );
 }
 
 /**

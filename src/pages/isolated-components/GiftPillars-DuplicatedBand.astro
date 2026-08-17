@@ -1,0 +1,78 @@
+---
+import Component from "../../../src/components/donate/GiftPillars.astro";
+import { sectionHeading } from "../../lib/momentumSections";
+import { cardsInGroup } from "../../lib/sectionGroups";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for the DUPLICATED pillars band — the half of the two-band
+// outcome that the /donate application capture cannot frame, because the
+// campaign hero pushes the second band past a viewport-sized screenshot.
+//
+// It deliberately does NOT hardcode the three cards it renders, the way
+// `GiftPillars.astro` beside it does. Both the heading and the card list are
+// computed by the same two functions the real page calls, from the SAME six-card
+// set both bands draw on — so this frame shows the selection rule working, not a
+// list someone typed. Hardcoding the answer here would make the capture pass
+// even if `cardsInGroup` returned every card, which is precisely the bug the
+// group field exists to fix.
+const section = { kind: 'pillars', title: 'How Your Support Will Be Used', group: 'uses' };
+
+// The whole collection, both groups, exactly as `/donate` loads it once and
+// hands down.
+const allPillars = [
+  {
+    icon: 'people' as const,
+    title: 'Create Meaningful Connections',
+    body: 'Support events, roundtables, and gatherings that help alumni build valuable relationships and discover new opportunities.',
+    linkLabel: 'Check out our past events',
+    linkUrl: '/events',
+    group: 'powers',
+  },
+  {
+    icon: 'book' as const,
+    title: 'Expand Access to Knowledge',
+    body: 'Power practical content, mentorship, and conversations that help founders, innovators, and tech professionals grow.',
+    group: 'powers',
+  },
+  {
+    icon: 'globe' as const,
+    title: 'Strengthen the Network',
+    body: 'Build the infrastructure, volunteer resources, and city chapters needed to serve more alumni and sustain the community.',
+    group: 'powers',
+  },
+  {
+    icon: 'globe' as const,
+    title: 'Launch Four New City Chapters',
+    body: 'Seed funding for chapter leads in Austin, Toronto, Berlin, and Singapore — venue costs and the first three events, so a chapter can start before it can sustain itself.',
+    group: 'uses',
+  },
+  {
+    icon: 'people' as const,
+    title: 'Run the Mentorship Cohort Year-Round',
+    body: 'Two cohorts a year instead of one, with the coordination time it takes to match 200 alumni properly rather than alphabetically.',
+    group: 'uses',
+  },
+  {
+    icon: 'book' as const,
+    title: 'Record and Open the Sessions',
+    body: 'Production for the roundtables and founder talks, so alumni in the wrong timezone stop missing the thing they joined for.',
+    group: 'uses',
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiftPillars-DuplicatedBand</title>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        title={sectionHeading(section, 'What Your Gift Powers')}
+        pillars={cardsInGroup(allPillars, section.group)}
+      />
+    </div>
+  </body>
+</html>

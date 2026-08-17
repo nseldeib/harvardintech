@@ -4,6 +4,7 @@ import {
   goalMetersMissingWidgetId,
   orderedSections,
   resolveLayout,
+  sectionHeading,
   tintedFlags,
   unknownSectionKinds,
 } from './momentumSections';
@@ -252,5 +253,48 @@ describe('resolveLayout', () => {
   it('normalizes casing and surrounding whitespace', () => {
     expect(resolveLayout('  Image-Left ')).toBe('image-left');
     expect(resolveLayout('IMAGE-RIGHT')).toBe('image-right');
+  });
+});
+
+describe('sectionHeading', () => {
+  // The reason this exists: the slot bands took their heading from
+  // donatePage.json and ignored the title they could already carry, so two
+  // pillars sections were indistinguishable on the page AND in the CMS list,
+  // where the row label falls back to the slug. Letting a section use its own
+  // title is what names a duplicated band.
+  it('prefers the section title over the shared fallback heading', () => {
+    expect(
+      sectionHeading({ title: 'How Your Support Will Be Used' }, 'What Your Gift Powers'),
+    ).toBe('How Your Support Will Be Used');
+  });
+
+  // An untouched section renders exactly as it did before this change, which is
+  // what lets the feature ship with no content migration.
+  it('falls back to the shared heading when the section has no title', () => {
+    expect(sectionHeading({}, 'What Your Gift Powers')).toBe('What Your Gift Powers');
+    expect(sectionHeading({ title: undefined }, 'What Your Gift Powers')).toBe(
+      'What Your Gift Powers',
+    );
+  });
+
+  // Whitespace-only is the CMS's blank, matching every other free-text field on
+  // this page — an editor who cleared the box wants the standard heading back.
+  it('treats a blank or whitespace-only title as absent', () => {
+    expect(sectionHeading({ title: '' }, 'What Your Gift Powers')).toBe('What Your Gift Powers');
+    expect(sectionHeading({ title: '   ' }, 'What Your Gift Powers')).toBe('What Your Gift Powers');
+  });
+
+  // A real title is passed through as written rather than reformatted.
+  it('passes a titled heading through unchanged', () => {
+    expect(sectionHeading({ title: 'Why Support Harvard in Tech?' })).toBe(
+      'Why Support Harvard in Tech?',
+    );
+  });
+
+  // Nothing on either side yields undefined, not the string "undefined" — the
+  // band components already treat a missing heading as draw-no-heading.
+  it('yields undefined when there is neither a title nor a fallback', () => {
+    expect(sectionHeading({})).toBeUndefined();
+    expect(sectionHeading({ title: '  ' })).toBeUndefined();
   });
 });

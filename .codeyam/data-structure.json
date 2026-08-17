@@ -966,7 +966,7 @@
   },
   {
     "name": "MomentumSection",
-    "description": "One reorderable section in the middle of the /donate Momentum Fund campaign page, stored as a markdown file in the `momentumSections` content collection and editable from the CMS. `kind` selects the renderer: `narrative` uses the entry's own title/body/image, `goal-meter` renders a live Givebutter fundraising meter from its own `widgetId`, while `accomplishments`, `pillars`, `testimonials`, and `stats` are slots whose card data still comes from `donatePage.json`. `order` is how an editor moves a section up or down (lower appears higher); `draft` hides one without deleting it. The hero and closing CTA are a fixed frame and are not sections.",
+    "description": "One reorderable section in the middle of the /donate Momentum Fund campaign page, stored as a markdown file in the `momentumSections` content collection and editable from the CMS. `kind` selects the renderer: `narrative` uses the entry's own title/body/image, `goal-meter` renders a live Givebutter fundraising meter from its own `widgetId`, while `accomplishments`, `pillars`, `testimonials`, and `stats` are slots whose card data still comes from `donatePage.json`. `group` names which set of cards a slot band shows: a band with no group shows the cards with no group (the page as it renders today), so two `pillars` sections can be split into distinct bands by giving each its own group. `title` names the band both on the page and in the CMS list, falling back to the shared heading from `donatePage.json` when blank. `order` is how an editor moves a section up or down (lower appears higher); `draft` hides one without deleting it. The hero and closing CTA are a fixed frame and are not sections.",
     "category": "datastore",
     "order": 16,
     "fields": [
@@ -980,6 +980,11 @@
         "name": "kind",
         "type": "string",
         "required": true
+      },
+      {
+        "name": "group",
+        "type": "string",
+        "required": false
       },
       {
         "name": "title",
@@ -1216,7 +1221,7 @@
   },
   {
     "name": "Accomplishment",
-    "description": "One card in the Momentum Fund's 'What we've accomplished so far' band, stored in the `accomplishments` content collection. Migrated out of donatePage.json, which the CMS does not model at all. The `momentumSections` entry of kind `accomplishments` still positions the band; these entries are now its content.",
+    "description": "One card in the Momentum Fund's 'What we've accomplished so far' band, stored in the `accomplishments` content collection. Migrated out of donatePage.json, which the CMS does not model at all. The `momentumSections` entry of kind `accomplishments` still positions the band; these entries are now its content. `group` assigns the card to a band: cards with no group belong to the ungrouped band, and a card naming a group appears only in the section that names the same group.",
     "category": "datastore",
     "order": 21,
     "fields": [
@@ -1225,6 +1230,11 @@
         "type": "string",
         "isId": true,
         "required": true
+      },
+      {
+        "name": "group",
+        "type": "string",
+        "required": false
       },
       {
         "name": "value",
@@ -1255,7 +1265,7 @@
   },
   {
     "name": "Pillar",
-    "description": "One card in the Momentum Fund's 'What Your Gift Powers' band, stored in the `pillars` content collection. Migrated out of donatePage.json. `icon` names one of the three inline SVG glyphs (people, book, globe) as free text validated in a lib \u2014 the same treatment `kind` and `layout` get \u2014 so an unrecognized value falls back rather than failing the build. `linkLabel`/`linkUrl` are optional; a card without them renders as plain copy.",
+    "description": "One card in the Momentum Fund's 'What Your Gift Powers' band, stored in the `pillars` content collection. Migrated out of donatePage.json. `icon` names one of the three inline SVG glyphs (people, book, globe) as free text validated in a lib \u2014 the same treatment `kind` and `layout` get \u2014 so an unrecognized value falls back rather than failing the build. `linkLabel`/`linkUrl` are optional; a card without them renders as plain copy. `group` assigns the card to a band: cards with no group belong to the ungrouped band, and a card naming a group appears only in the section that names the same group.",
     "category": "datastore",
     "order": 22,
     "fields": [
@@ -1264,6 +1274,11 @@
         "type": "string",
         "isId": true,
         "required": true
+      },
+      {
+        "name": "group",
+        "type": "string",
+        "required": false
       },
       {
         "name": "icon",

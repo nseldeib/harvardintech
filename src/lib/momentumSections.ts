@@ -59,6 +59,10 @@ export interface SectionLike {
    *  kind-specific treatment `layout` and `image` get for narratives. Blank
    *  renders no band at all. */
   widgetId?: string;
+  /** Which set of cards a SLOT band shows. Blank matches the ungrouped cards,
+   *  which is the page as it renders today. The matching rule lives in
+   *  `./sectionGroups.ts` because both card loaders need the identical one. */
+  group?: string;
   order?: number;
   /** Renders the "coming soon" placeholder in place of this band. Classified by
    *  `resolveVisibility` in `./homeSections.ts`, shared with the homepage so both
@@ -144,6 +148,30 @@ export function tintedFlags(sections: readonly SectionLike[]): boolean[] {
     narrativeIndex += 1;
     return narrativeIndex % 2 === 0;
   });
+}
+
+/**
+ * What a band is called: the section's own `title` when it has one, otherwise the
+ * shared heading the page has always used for that kind.
+ *
+ * The slot bands took their heading from `donatePage.json` and ignored the
+ * `title` they could already carry, which is why two `pillars` sections were
+ * indistinguishable — both on the page and in the CMS list, where the row label
+ * falls back to the slug. Letting a section USE its title is what names a
+ * duplicated band, and it is deliberately ONE field rather than two: a separate
+ * CMS label and page heading could disagree, and an editor renaming a band means
+ * both.
+ *
+ * Whitespace-only counts as blank, matching every other free-text field on this
+ * page. With no title and no fallback the result is `undefined` rather than the
+ * string "undefined" — the components already treat a missing heading as "draw no
+ * heading", which is the correct floor.
+ */
+export function sectionHeading(
+  section: Pick<SectionLike, 'title'>,
+  fallback?: string,
+): string | undefined {
+  return section.title?.trim() || fallback;
 }
 
 /**

@@ -1,0 +1,755 @@
+{
+  "timestamp": "2026-08-17T19:47:27Z",
+  "title": "Duplicate A Section Into A Band With Its Own Name And Cards",
+  "type": "feature",
+  "userRequest": "## Summary\n\nLet an editor duplicate a Momentum Fund section in /admin and end up with a\ngenuinely distinct band — not a verbatim second copy. Three parts, one outcome:\na **Duplicate** action on every CMS entry row that opens the create form\nprefilled from the source entry (so renaming happens before the copy exists);\na per-section **heading** that names the band both in the CMS list and on the\npage, so two `pillars` rows are distinguishable at a glance; and a **group**\ntag on the card collections so each band shows its own cards. Without the third\npart the first two produce \"What Your Support Powers\" and \"How Your Support Will\nBe Used\" rendering the identical three cards — `loadPillars()` returns every\npillar entry to every `pillars` band today.\n\n## Key Decisions\n\n- **Duplicate opens the prefilled create form; it does not silently clone.**\n  The action is a link to `/admin/new/<collection>?from=<slug>` with every field,\n  the body, and a free slug (`pillars` → `pillars-2`) already filled in. That\n  answers \"rename a duplicated section\" directly — the rename happens in the\n  form, before the file exists, rather than as a second edit afterwards — and it\n  reuses the create form's existing slug-collision check, required-field gate,\n  and staging path instead of inventing a parallel one.\n- **Duplicate is offered on every collection, not just sections.** It lives in\n  the shared entry-row action cluster, so it works for pillar cards, blog posts,\n  and events too. Gating it to one collection would cost extra code to make the\n  feature smaller. Preview rows are the one exclusion: they already carry their\n  own action set, and copying a preview's `previewOf` marker would mint a second\n  unlisted clone.\n- **The CMS changes go through the existing `patch-package` patch.** `@codeyam/cms`\n  is an npm dependency, and this repo already carries a 534-line patch against it\n  for the reorder arrows — including one added file (`OrderArrows.tsx`). The\n  Duplicate action follows the same route, and its pure logic is unit-tested from\n  this repo by importing `@codeyam/cms/lib/…`, the convention\n  `src/lib/mediaCommitGuard.test.ts` and `src/lib/dashboardGrouping.test.ts`\n  already establish for pinning a dependency's contract.\n- **One field names the band in both places.** `momentumSections` already\n  declares `title`, and the CMS already uses it as the row label (falling back to\n  the slug — which is why the card bands read as bare \"pillars\" / \"accomplishments\"\n  in /admin today). So the fix is not a new field: it is letting the slot bands\n  USE the title they can already carry, as the row label and as the band's\n  on-page heading, falling back to the shared copy heading when blank. Two\n  fields — one for the CMS list, one for the page — would let them disagree.\n- **Cards are assigned to a band by a free-text group, matched blank-to-blank.**\n  A section with no group shows the cards with no group, which is exactly the\n  page as it renders today — so this ships with zero content migration and no\n  visual change until an editor deliberately splits the cards. A section naming a\n  group shows that group's cards.\n- **Group is free text, like `kind` and `layout` before it.** Groups are invented\n  by the editor as they split a band, so there is no fixed list a `select` could\n  offer. The site validates instead of the schema: a group matching no card\n  renders an empty band and logs a build-time advisory, the same treatment\n  `/donate` already gives an unrecognized `kind`.\n- **Sequenced behind the goal-meter plan.** Both plans edit\n  `src/lib/momentumSections.ts`, `src/content/config.ts`,\n  `src/data/collections.json`, and `src/components/MomentumFundPage.astro` in\n  adjacent places. The overlap is mechanical, not semantic, but running them in\n  order avoids a conflict for no cost — hence `dependsOn`.\n\n## Implementation\n\n### 1. The Duplicate action (CMS patch)\n\n**File**: `patches/@codeyam+cms+0.5.0.patch`\n\nEvery change below is made under `node_modules/@codeyam/cms/`, then captured\nwith `npx patch-package @codeyam/cms`, exactly as the reorder-arrows work was.\nThe patch touches the files below. They live inside the dependency, not in this\nrepo's own `src/` — edit them in place under `node_modules/`, then regenerate the\npatch:\n\n- **`node_modules/@codeyam/cms/src/lib/entryDuplicate.ts`** (new file, added by\n  the patch alongside the existing added `OrderArrows.tsx`). Pure helpers: `nextFreeSlug(slug, existingSlugs)`\n  producing `pillars-2`, then `pillars-3` (never colliding, never re-using a\n  slug already staged); `duplicateLabel(label)` appending a \"(copy)\" suffix the\n  editor is expected to replace; and `duplicateValues(fields, data)`, which\n  copies every field verbatim except the preview marker `previewOf`.\n- **`node_modules/@codeyam/cms/src/components/admin/EntryRowActions.tsx`** — a \"Duplicate\" control in the\n  DEFAULT action state, beside Edit. An anchor, not a staged action, for the\n  same reason Edit is one: it navigates to the create form and leaves no trace\n  in the pending-changes store. Absent on preview rows.\n- **`node_modules/@codeyam/cms/src/components/admin/EntryRow.tsx`** — builds the\n  Duplicate href from the row's collection and slug.\n- **the dynamic-collection route under\n  `node_modules/@codeyam/cms/src/pages/admin/new/`** (the bracketed `collection`\n  param) — reads `?from=<slug>`, loads that\n  entry's raw markdown, parses it with the existing `frontmatter` helpers, and\n  hands the values, body, and suggested slug to the editor island. An unknown or\n  missing `from` falls back to the ordinary blank create form rather than\n  erroring — a stale bookmark must not be a dead end.\n- **`node_modules/@codeyam/cms/src/components/admin/NewEntryEditor.tsx`** — accept optional\n  `initialValues` / `initialBody` / `initialSlug` props, defaulting to today's\n  `emptyFieldValues` behaviour. Note `hasAnyInput` already returns true for a\n  prefilled form, which is what makes the required-field errors show\n  immediately — correct here, since the form is not untouched.\n\nDuplicating an ordered entry copies its `order` verbatim; the list's existing\nlabel tiebreak keeps the pair stable, and the reorder arrows move the copy. That\nis deliberately simpler than guessing where the duplicate belongs.\n\n### 2. Name the band once, use it twice\n\n**File**: `src/lib/momentumSections.ts`\n\nAdd `sectionHeading(section, fallback)` — the section's own `title` when set,\notherwise the shared copy heading passed in. Pure and tested here rather than\ninlined in the component, like `tintedFlags` and `resolveLayout` beside it.\n\n**File**: `src/components/MomentumFundPage.astro`\n\nPass `sectionHeading(section, copy.pillarsTitle)` to `GiftPillars`, and the same\ntreatment for the accomplishments, testimonials, and donors bands. The shared\n`donatePage.json` headings stay as the fallback, so an existing section with no\ntitle renders exactly as it does now.\n\n**File**: `src/data/collections.json`\n\nRewrite the `momentumSections.title` hint: it currently says \"Narrative sections\nonly\", which is the instruction that stops an editor naming a duplicated band.\nIt should say the heading names the band on the page AND in this list, and that\nleaving it blank keeps the standard heading.\n\n### 3. Card groups\n\n**File**: `src/content/config.ts`\n\n- Add `group: z.string().optional()` to the `pillars` and `accomplishments`\n  schemas — which band this card belongs to.\n- Add `group: z.string().optional()` to `momentumSections` — which cards this\n  band shows.\n\n**File**: `src/data/collections.json`\n\nAdd the matching `group` field to all three collections: `text`, optional, with\nhints that say what to type and that blank means the default band.\n`src/data/collections.test.ts` enforces this parity in both directions, so a\nschema key with no editor input fails the build just as an editor input with no\nschema key does.\n\n**New file**: `src/lib/sectionGroups.ts`\n\n`cardsInGroup(cards, group)` — the matching rule, in one pure place because both\ncard loaders need it: trims both sides, and matches blank-to-blank so a band with\nno group shows the cards with no group. Also `emptyGroups(sections, cards)` for\nthe build advisory below.\n\n**File**: `src/lib/donatePageContent.ts`\n\n`loadPillars` and `loadAccomplishments` take an optional group and filter through\n`cardsInGroup` before sorting. Called with no group they behave exactly as today.\n\n**File**: `src/pages/donate.astro`\n\nThe card loaders currently run once at the route and are grafted onto `copy`.\nWith groups, each band needs its own list — load the full card sets once, then\nlet the page component select per section (passing the whole set plus the\nsection's group down, rather than re-reading the collection per band). Extend\nthe existing advisory `console.warn` with a line for any published section whose\ngroup matches no card, so a typo costs an empty band and a log line rather than a\nsilent gap.\n\n**File**: `src/components/MomentumFundPage.astro`\n\nThe `pillars` and `accomplishments` cases select their cards with `cardsInGroup`\nbefore rendering.\n\n### 4. Tests\n\n**New file**: `src/lib/sectionGroups.test.ts`\n\nThe matching rule: blank section group selects blank-group cards; a named group\nselects only its own; whitespace and case differences do not silently split a\ngroup; a group matching nothing yields an empty list rather than falling back to\nevery card (the fallback would make a typo look like it worked).\n\n**File**: `src/lib/momentumSections.test.ts`\n\n`sectionHeading`: the section's title wins; blank and whitespace-only fall back\nto the shared heading; no fallback and no title yields nothing rather than the\nstring \"undefined\".\n\n**New file**: `src/lib/entryDuplicate.test.ts`\n\nImports `@codeyam/cms/lib/entryDuplicate` and pins the patched contract, the way\n`src/lib/mediaCommitGuard.test.ts` pins `mediaLibrary`: `nextFreeSlug` skips\ntaken slugs and keeps counting; `duplicateValues` copies every field but drops\n`previewOf`. A header comment must say this covers a LOCAL PATCH, so a future\n`@codeyam/cms` upgrade that drops or reworks the module fails here loudly instead\nof silently removing the button.\n\n**File**: `src/data/collections.test.ts`\n\nNo new test needed — the existing both-directions drift guard covers the three\nnew `group` fields automatically. Confirm it passes.\n\n## Reused existing code\n\n- `src/lib/momentumSections.ts` (glossary entries: `orderedSections`,\n  `tintedFlags`, `resolveLayout`) — the pure-rules module the heading helper\n  joins; the duplicate is just another entry, so ordering and validation need no\n  change.\n- `loadPillars`, `loadAccomplishments` from `src/lib/donatePageContent.ts`\n  (glossary entries: `loadPillars`, `loadAccomplishments`) — the two loaders that\n  gain the optional group filter.\n- `sortByOrder` from `src/lib/order.ts` (glossary entry: `sortByOrder`) — card\n  ordering is unchanged; filtering happens before it.\n- `publishedEntries` from `src/lib/drafts.ts` (glossary entry:\n  `publishedEntries`) — draft filtering is unchanged, so a duplicated section can\n  be built up in Draft before it is shown.\n- `src/data/collections.test.ts` — the existing schema/registry drift guard that\n  will catch a `group` field added to one side only.\n- `src/lib/mediaCommitGuard.test.ts` and `src/lib/dashboardGrouping.test.ts` —\n  the established pattern for unit-testing CMS-package internals from this repo,\n  which the duplicate-helper test copies.\n- `patches/@codeyam+cms+0.5.0.patch` — the existing local patch (reorder arrows,\n  including one added component file) that this work extends rather than\n  starting a second patching mechanism.\n- Inside the CMS package (under node_modules, reached through the patch above):\n  the create-flow helpers in its lib/newEntry module — the blank-form builder,\n  the create-status gate, and the new-entry change builder — plus its frontmatter\n  parser and the entry-label helper in lib/entryEditor that already falls back to\n  the slug. The prefilled form is the existing create flow with different\n  starting values, not a new pipeline.\n\n**Existing-implementation survey.** Before writing this plan: `grep -rn\n\"duplicate\\|clone\" node_modules/@codeyam/cms/src` returns only preview-clone\nprose — there is no duplicate/copy action in the CMS today, so nothing here\nduplicates an existing feature. `momentumSections` already declares `title`\n(currently hinted \"Narrative sections only\" and ignored by every card band), so\nthe naming half of this plan REUSES an existing field rather than adding one; the\nonly genuinely new fields are `group` on `pillars`, `accomplishments`, and\n`momentumSections`, and no equivalent grouping, tag, or category field exists on\nany of the three. The CMS row label already falls back to the slug (see the\nentry-label helper in the package's lib/entryEditor), which is why duplicated\ncard bands would otherwise both read as their filenames.\n\n## Scenarios to Demonstrate\n\n- **Two pillar bands, different cards** — `/donate` with \"What Your Support\n  Powers\" and \"How Your Support Will Be Used\" as separate sections, each showing\n  its own group. The outcome the request describes.\n- **The CMS sections list with both rows** — the Momentum Fund sections list\n  showing the original and the duplicate under their own names rather than as two\n  \"pillars\" rows.\n- **The prefilled create form** — `/admin/new/momentumSections?from=pillars`\n  with every field carried over, a free slug suggested, and the title ready to be\n  renamed before anything is created.\n- **Duplicate on an ordinary collection** — the action on a blog post or pillar\n  card row, showing it is not a Momentum-Fund-only affordance.\n- **A duplicated band still in Draft** — the copy built up privately while the\n  live page is unchanged.\n- **A group that matches no card** — the band renders empty and the build logs\n  the advisory, instead of silently falling back to every card.\n- **Nothing grouped yet** — today's `/donate` rendering unchanged, proving the\n  blank-to-blank rule ships with no content migration.",
+  "description": "An editor can now duplicate a Momentum Fund section and end up with a genuinely distinct band rather than a verbatim second copy. Three parts made that true, and none of them works alone. A Duplicate action on every CMS entry row opens the ordinary create form prefilled from the source entry, so the rename happens BEFORE the copy exists rather than as a second edit afterwards — and because it is the existing create form, the slug-collision check, the required-field gate and the staging path are reused rather than reimplemented. A section's own title now names the band both on /donate and in the CMS list, which is what stops two pillars rows from both reading as their filename. And a free-text group on the card collections lets each band claim its own cards, because loadPillars previously returned every pillar entry to every pillars band — the actual reason a duplicated section rendered the same three cards twice.\n\nThe design decisions worth remembering: Duplicate is a link, not a staged action, so opening it and changing your mind leaves nothing to undo; it lives in the shared entry-row cluster so blog posts and pillar cards get it too, with preview rows the one exclusion since copying a previewOf marker would mint a second unlisted clone. Group is free text like kind and layout, validated in a lib rather than by the schema, and it matches blank-to-blank so this ships with ZERO content migration — /donate renders byte-identically until an editor deliberately splits a band. A group matching no card renders an empty band and logs a build-time advisory naming the section slug, rather than falling back to every card: the fallback would make a typo look like it worked, which is the one outcome an editor cannot diagnose from the page.\n\nThe CMS half went through the existing patch-package patch against @codeyam/cms (now 846 lines, up from 534), and its pure helpers are unit-tested from this repo the way mediaCommitGuard pins mediaLibrary — so a future dependency upgrade that drops the module fails loudly in CI instead of silently removing the button. 39 new tests, 860 passing overall.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/duplicate-a-section-into-a-band-with-its-own-name-and-cards.md\t.codeyam/plans/completed/duplicate-a-section-into-a-band-with-its-own-name-and-cards.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-momentum-sections-a-move-staged-then-the-page-reloaded.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-preview-link-shared-draft--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-a-single-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-curated-and-capped--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-photo-enlarged--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-show-all-revealed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-three-photos-three-columns--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-three-photos-three-columns--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-longest-chapter-name-wraps--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-longest-chapter-name-wraps--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-move-staged-then-the-page-reloaded--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-move-staged-then-the-page-reloaded--desktop.png.hash",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-a-tick-that-could-not-be-saved--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-complete--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-cutover-day--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-decisions-answered-nothing-begun--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-nothing-started--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-partway-through--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-waiting-on-one-answer--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-password-required--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-unlocked-with-the-password--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-wrong-password--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-communities-derived--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-a-page-written-in-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-long-title-and-no-description--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-rewritten-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-retired-projects-never-suggested--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/aaa152976a0c43f6ef6be754d32c6864cbd87e02872edc919221fc0b42f59694.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/d7940325eff8d703de6dca9d7cff2d9739f5e856e4c3be7fc5dae7142f25cfb5.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "patches/@codeyam+cms+0.5.0.patch",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/donatePageContent.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSections.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSections.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/donate.astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/pending-build-launch",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-blog-duplicate-is-not-momentum-fund-only.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-momentum-sections-a-move-staged-but-not-yet-published.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-momentum-sections-the-duplicate-built-up-in-draft.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-momentum-sections-two-bands-under-their-own-names.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-new-section-prefilled-by-duplicate.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-donate-giftpillars-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-momentumfundpage-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/giftpillars-the-duplicated-band-shows-its-own-cards.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-two-pillar-bands-with-their-own-cards.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-blog-duplicate-is-not-momentum-fund-only--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-blog-duplicate-is-not-momentum-fund-only--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-move-staged-but-not-yet-published--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-move-staged-but-not-yet-published--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-the-duplicate-built-up-in-draft--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-the-duplicate-built-up-in-draft--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-two-bands-under-their-own-names--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-two-bands-under-their-own-names--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-new-section-prefilled-by-duplicate--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-new-section-prefilled-by-duplicate--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giftpillars-the-duplicated-band-shows-its-own-cards--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/39131317120dd06660d9de8659c307665350090e1b2302c7a1839ecc77fb0732.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/801db319d584d2f3ec654f80da25949a53a7acfb1a746810837029c575af60de.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/c4dbee33ed4ddda8e5ca2413be3f68a68ac3575371803381841fdbb95ca5ee80.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/ebfab27b990e40fdc674747188af620f1e770885febed64fd3f6a3e94f33dc4b.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/entryDuplicate.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/sectionGroups.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/sectionGroups.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GiftPillars-DuplicatedBand.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Blog Preview Link - Shared Draft",
+      "screenshotPath": "blog-preview-link-shared-draft--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - A Single Photo",
+      "screenshotPath": "chapter-gallery-a-single-photo--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Curated and Capped",
+      "screenshotPath": "chapter-gallery-curated-and-capped--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Photo Enlarged",
+      "screenshotPath": "chapter-gallery-photo-enlarged--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Show All Revealed",
+      "screenshotPath": "chapter-gallery-show-all-revealed--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Three Photos, Three Columns",
+      "screenshotPath": "chapter-gallery-three-photos-three-columns--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Longest Chapter Name Wraps",
+      "screenshotPath": "chapter-route-longest-chapter-name-wraps--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - A Tick That Could Not Be Saved",
+      "screenshotPath": "cutover-runbook-a-tick-that-could-not-be-saved--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Complete",
+      "screenshotPath": "cutover-runbook-complete--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Cutover Day",
+      "screenshotPath": "cutover-runbook-cutover-day--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Decisions Answered Nothing Begun",
+      "screenshotPath": "cutover-runbook-decisions-answered-nothing-begun--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Nothing Started",
+      "screenshotPath": "cutover-runbook-nothing-started--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Partway Through",
+      "screenshotPath": "cutover-runbook-partway-through--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - The Records On A Phone",
+      "screenshotPath": "cutover-runbook-the-records-on-a-phone--mobile.png"
+    },
+    {
+      "name": "Cutover Runbook - Waiting On One Answer",
+      "screenshotPath": "cutover-runbook-waiting-on-one-answer--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Homepage Phased For Launch",
+      "screenshotPath": "harvard-in-tech-homepage-phased-for-launch--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Upcoming Events Excludes Past Ones",
+      "screenshotPath": "harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Password Required",
+      "screenshotPath": "locked-preview-password-required--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Unlocked With The Password",
+      "screenshotPath": "locked-preview-unlocked-with-the-password--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Wrong Password",
+      "screenshotPath": "locked-preview-wrong-password--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Giving Platform Is Chosen",
+      "screenshotPath": "momentum-fund-a-giving-platform-is-chosen--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Filtering The Donor Wall",
+      "screenshotPath": "momentum-fund-filtering-the-donor-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Donor Wall Moved To The Top",
+      "screenshotPath": "momentum-fund-the-donor-wall-moved-to-the-top--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The First Donor On The Wall",
+      "screenshotPath": "momentum-fund-the-first-donor-on-the-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Goal Meter Held As Coming Soon",
+      "screenshotPath": "momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Two Pillar Bands With Their Own Cards",
+      "screenshotPath": "momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png"
+    },
+    {
+      "name": "Site Page - A Page Written In The CMS",
+      "screenshotPath": "site-page-a-page-written-in-the-cms--desktop.png"
+    },
+    {
+      "name": "Site Page - Long Title And No Description",
+      "screenshotPath": "site-page-long-title-and-no-description--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Rewritten From The CMS",
+      "screenshotPath": "volunteer-page-rewritten-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Retired Projects Never Suggested",
+      "screenshotPath": "volunteer-project-detail-retired-projects-never-suggested--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Communities Derived",
+      "screenshotPath": "primarynav-communities-derived--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 117,
+    "passed": 117,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 117,
+        "passed": 117
+      }
+    ]
+  }
+}

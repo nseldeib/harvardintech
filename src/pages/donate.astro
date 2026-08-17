@@ -25,6 +25,7 @@ import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { loadMomentumSections } from '../lib/momentumSectionsContent';
 import { SECTION_KINDS, goalMetersMissingWidgetId } from '../lib/momentumSections';
+import { emptyGroups } from '../lib/sectionGroups';
 import { loadDonors } from '../lib/donorsContent';
 import {
   loadAccomplishments,
@@ -79,13 +80,36 @@ if (metersMissingId.length > 0) {
 // what made all three developer-only edits. They are grafted back onto the copy
 // singleton so `MomentumFundPage` and its children keep the exact props they
 // always took, leaving the migration invisible below this line.
+// Each card set is loaded ONCE, whole, and the page component selects the cards
+// for each band from it — rather than re-reading the collection per section.
+// Two `pillars` bands are now ordinary, so a per-band read would multiply
+// collection queries by however many bands an editor happens to create.
+const accomplishments = await loadAccomplishments();
+const pillars = await loadPillars();
+
 const copy = {
   ...donatePage,
   ...(await loadDonateFrame(donatePage)),
-  accomplishments: await loadAccomplishments(),
-  pillars: await loadPillars(),
+  accomplishments,
+  pillars,
   donateUrl: await loadDonateUrl(donatePage.donateUrl),
 };
+
+// The third advisory on this page, same shape as the two above: a published
+// section whose `group` matches no card renders an EMPTY band, which is
+// deliberate — falling back to every card would make a typo'd group look like it
+// worked — but silent, and therefore indistinguishable from a band an editor has
+// not filled in yet. The slug is what makes it diagnosable.
+const sectionsWithEmptyGroups = emptyGroups(sections, { accomplishments, pillars });
+if (sectionsWithEmptyGroups.length > 0) {
+  console.warn(
+    `[donate] ${sectionsWithEmptyGroups.length} Momentum Fund section(s) name a card group ` +
+      `that matches no card and will render an empty band: ` +
+      `${sectionsWithEmptyGroups.map((slug) => JSON.stringify(slug)).join(', ')}. ` +
+      `Check the Group field on the section against the Group on its cards, or clear it ` +
+      `to show the ungrouped cards.`,
+  );
+}
 ---
 
 <BaseLayout

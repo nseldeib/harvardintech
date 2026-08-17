@@ -1,0 +1,49 @@
+{
+  "name": "CMS Momentum Sections - A Move Staged But Not Yet Published",
+  "id": "52abc9e1-5332-4601-b2b0-a72d8de5d32f",
+  "url": "/admin/momentumSections",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The donor recognition wall.",
+        "kind": "donors",
+        "order": 1,
+        "slug": "donors"
+      },
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\n",
+        "image": "/images/gallery/event-04.jpg",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 2,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "body": "The track-record band.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      },
+      {
+        "body": "The 'What Your Gift Powers' cards.",
+        "kind": "pillars",
+        "order": 4,
+        "slug": "pillars"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
+  "description": "The list mid-edit: the bottom section has been moved up one place with the arrow, and the move is STAGED rather than saved. This scenario is DRIVEN — the capture clicks the row's Move up control rather than seeding a pre-moved order — because a staged change lives in the browser's pending-changes store, not in the markdown, and a scenario that only seeded a different order would prove nothing about staging. Its previous form seeded the same content as the plain in-order list and declared no interaction at all, so it was a byte-for-byte duplicate of that scenario whose description claimed a staged state its frame never actually showed; driving the click is what makes the two genuinely different. It is also the state that reveals the publish path: the markdown still holds the old numbers until Publish, so what changed here is the page's own state, and navigating away loses the arrangement while the pending change survives.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "[aria-label=\"Move pillars up\"]"
+    }
+  ]
+}

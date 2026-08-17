@@ -1,0 +1,34 @@
+{
+  "name": "CMS Blog - Duplicate Is Not Momentum-Fund-Only",
+  "id": "f15f99f5-9586-4ed0-9c0f-6781dc864444",
+  "url": "/admin/blog",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "blog": [
+      {
+        "date": "2026-05-14",
+        "slug": "spotlight-charlie-cheever",
+        "summary": "The Quora and Expo co-founder on what he looks for in a first engineering hire.",
+        "title": "Spotlight: Charlie Cheever"
+      },
+      {
+        "date": "2026-06-02",
+        "slug": "lessons-from-teaching-cs50",
+        "summary": "What changes when every student has a model that can finish the problem set.",
+        "title": "Lessons From Teaching CS50 in the Age of AI"
+      },
+      {
+        "date": "2026-07-19",
+        "slug": "ai-edition-amy-sun",
+        "summary": "On leaving a research lab to build infrastructure nobody sees.",
+        "title": "AI Edition: Amy Sun"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
+  "description": "The same Duplicate action on a collection that has nothing to do with the campaign page. It matters because the request that produced this feature was about duplicating a Momentum Fund section, and the easy build would have gated the action to that one collection — which would have been MORE code to make the feature smaller. Duplicate lives in the shared entry-row action cluster instead, so pillar cards, events and blog posts get it for free, and a blog post duplicated here carries its own title, date, summary and body into the create form exactly the way a section does. The one exclusion is a preview row, whose action set is different and whose previewOf marker would otherwise mint a second unlisted clone of the same target. This list also shows the ordinary case for the row label: blog posts carry real titles, so no row is falling back to its slug."
+}

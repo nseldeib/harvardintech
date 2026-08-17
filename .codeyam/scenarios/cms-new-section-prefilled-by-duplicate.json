@@ -1,0 +1,33 @@
+{
+  "name": "CMS New Section - Prefilled By Duplicate",
+  "id": "c385ee95-a5c6-4629-a022-ffca5ac2fb86",
+  "url": "/admin/new/momentumSections?from=why",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\n",
+        "image": "/images/gallery/event-04.jpg",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 1,
+        "slug": "why",
+        "title": "Why Support Harvard in Tech?"
+      },
+      {
+        "body": "The cards naming what a gift sustains today.",
+        "group": "powers",
+        "kind": "pillars",
+        "order": 2,
+        "slug": "pillars",
+        "title": "What Your Support Powers"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/new/[collection].astro",
+  "description": "What Duplicate actually opens: the ordinary create form with every field of the source entry already in it. Section type, Layout, the image, and the markdown body are carried over verbatim, and the heading arrives as 'Why Support Harvard in Tech? (copy)' — a prompt to rename, not a final name. That is the whole design decision behind this action: it does NOT silently clone a file, so the rename happens here, BEFORE the copy exists, rather than as a second edit afterwards. Because it is the create form, the slug-collision check, the required-field gate, and the staging path are the existing ones rather than a parallel implementation. The suggested slug (why-2, below the fold here) is the first free one, and an unknown or missing ?from= falls through to the ordinary blank form rather than erroring, so a stale bookmark is not a dead end."
+}

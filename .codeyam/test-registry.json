@@ -505,6 +505,87 @@
       "runner": "tests"
     },
     {
+      "description": "Every ordinary row offers it — gating the action to one collection would be extra code to make the feature smaller.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "canDuplicate › allows duplicating an ordinary entry",
+      "line": 141,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The one exclusion: a preview is a clone at an unguessable URL, and copying one would mint a second unlisted clone of the same target.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "canDuplicate › refuses to duplicate a preview row",
+      "line": 147,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An editor typing 'Capital Projects' on the section and 'capital projects' on the card meant one group; a rule that disagreed would hand them an empty band with no visible cause.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "cardsInGroup › ignores surrounding whitespace and letter case on both sides",
+      "line": 51,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank matches blank, which is what lets this ship with no content migration: today every card is ungrouped and every band is ungrouped, so the page is unchanged until an editor deliberately splits one.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "cardsInGroup › matches a section with no group to the cards with no group",
+      "line": 37,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Filtering happens before sorting, so input order must survive it.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "cardsInGroup › preserves input order",
+      "line": 70,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nothing in, nothing out — no throw on a collection an editor has not filled.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "cardsInGroup › returns an empty list for an empty card set",
+      "line": 64,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A named group selects only its own cards — the whole point of the field.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "cardsInGroup › selects only the cards naming the same group",
+      "line": 29,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An absent key and an empty string are the same state to an editor who cleared the box, so they must be the same state here.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "cardsInGroup › treats an absent group, an empty string and whitespace as the same blank",
+      "line": 43,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The load-bearing negative case. Falling back to every card here would make a typo indistinguishable from a working group.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "cardsInGroup › yields an empty list for a group matching nothing rather than every card",
+      "line": 59,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
       "description": "The label and the url come from different fields. Building the url from the city would 404 for every chapter whose display name is not its slug.",
       "file": "src/lib/nav.test.ts",
       "format": "vitest",
@@ -1657,6 +1738,150 @@
       "runner": "tests"
     },
     {
+      "description": "Slugs come from filenames, so an unusual character must survive the round trip rather than truncating the query.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateHref › encodes the source slug",
+      "line": 163,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A link to the create form, not a staged action — so opening it and changing your mind leaves nothing in the pending-changes store to undo.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateHref › points at the create form for the row collection",
+      "line": 155,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A blank label stays blank so the create form's own missing-title gate is what the editor meets, rather than a row named \"(copy)\" with nothing in front.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateLabel › leaves a blank or whitespace-only label blank",
+      "line": 77,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The suffix is a PROMPT to rename, not a final name — but an editor who duplicates and immediately saves still gets two rows they can tell apart.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateLabel › marks the copied label as a copy",
+      "line": 71,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Surrounding whitespace is trimmed before the suffix is appended.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateLabel › trims the source label before appending the suffix",
+      "line": 83,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Verbatim is the contract — including `order`, so the copy appears beside its source where the editor is already looking and the reorder arrows move it.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateValues › copies every declared field verbatim, order included",
+      "line": 93,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The preview markers identify the SOURCE file's role as a preview clone, not its content. Copying them would mint a second unlisted clone of the same target — which is the one thing this action must never do.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateValues › drops the preview markers rather than minting a second clone",
+      "line": 101,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Scoped to the registry's declared fields, so a stray key cannot be carried into a file the editor has no input for and therefore cannot change.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateValues › ignores keys the collection registry does not declare",
+      "line": 118,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A field the source never set stays unset rather than arriving as undefined, which would serialize an empty key into the new file's frontmatter.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateValues › omits fields the source entry does not carry",
+      "line": 125,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A boolean false is a real value, not an absent one — a drafted source must duplicate as published if that is what it says.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "duplicateValues › preserves falsy values that are genuinely set",
+      "line": 132,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A section with no slug still has to be nameable in the log line.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "emptyGroups › falls back to a placeholder when a section carries no slug",
+      "line": 159,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The advisory covers every card-backed kind, matched against its own set: the same group name can be populated for one kind and empty for another.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "emptyGroups › matches each section against the card set for its own kind",
+      "line": 150,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The advisory exists because the empty band is SILENT: a section pointing at a group nobody typed renders nothing, which looks exactly like a band an editor has not filled in yet. The slug is what makes it diagnosable.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "emptyGroups › names the slug of a section whose group matches no card",
+      "line": 118,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An ungrouped band drawing on an empty collection is the ordinary nothing-published-yet state, not a typo — reporting it would fire on every site that has not filled a card collection.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "emptyGroups › never reports a section that names no group",
+      "line": 133,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "narrative, goal-meter and donors draw on no card set, so they can carry a group without it meaning anything — they must not be reported.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "emptyGroups › skips section kinds that are not card-backed",
+      "line": 143,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A section whose group does match is working as intended and must stay quiet, or the advisory becomes noise an editor learns to ignore.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "emptyGroups › stays silent for a group that matches at least one card",
+      "line": 125,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
       "description": "The ordinary case: the number an editor typed into the Order box.",
       "file": "src/lib/cmsOrderControls.test.ts",
       "format": "vitest",
@@ -2373,7 +2598,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › falls back to a readable label when a section has no slug",
-      "line": 158,
+      "line": 159,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2382,7 +2607,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › ignores sections of every other kind",
-      "line": 130,
+      "line": 131,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2391,7 +2616,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › reports every offending meter on a page with more than one",
-      "line": 141,
+      "line": 142,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2400,7 +2625,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › reports nothing for an empty section list",
-      "line": 151,
+      "line": 152,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2409,7 +2634,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › reports nothing when the goal meter has a widget id",
-      "line": 112,
+      "line": 113,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2418,7 +2643,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › reports the slug of a goal meter carrying no widget id",
-      "line": 103,
+      "line": 104,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2427,7 +2652,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › treats an empty or whitespace-only widget id as missing",
-      "line": 120,
+      "line": 121,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4007,6 +4232,51 @@
       "runner": "tests"
     },
     {
+      "description": "The list the caller passes includes staged-but-unpublished slugs, so a suggestion cannot collide with a duplicate created moments earlier.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "nextFreeSlug › avoids a slug that exists only as a staged change",
+      "line": 57,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Duplicating a duplicate counts on from the base rather than growing a second suffix, so an editor never ends up with `pillars-2-2`.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "nextFreeSlug › counts on from the base when the source is itself numbered",
+      "line": 51,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nothing taken at all still numbers from two — the source's own slug being absent from the list does not make `-1` correct.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "nextFreeSlug › numbers from two even when no slug is taken",
+      "line": 63,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Keeps counting past every taken slug rather than stopping at the first gap, so duplicating twice in a row cannot suggest the same name twice.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "nextFreeSlug › skips slugs already taken and keeps counting",
+      "line": 44,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Counts from 2 because the SOURCE is the first one — a `-1` suffix would imply the original was numbered too.",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "format": "vitest",
+      "key": "nextFreeSlug › suggests the source slug numbered from two",
+      "line": 38,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
       "description": "A delta larger than the gallery still lands in range — the modulo runs once, so this is the guard against a multi-step jump escaping the list.",
       "file": "src/lib/lightbox.test.ts",
       "format": "vitest",
@@ -4191,7 +4461,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › drops sections whose kind matches no renderer",
-      "line": 45,
+      "line": 46,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4200,7 +4470,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › keeps every kind it declares support for",
-      "line": 56,
+      "line": 57,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4209,7 +4479,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › returns a new array and leaves the source untouched",
-      "line": 62,
+      "line": 63,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4218,7 +4488,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › returns an empty array unchanged",
-      "line": 74,
+      "line": 75,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4227,7 +4497,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › sorts a section with no order after every ordered section",
-      "line": 29,
+      "line": 30,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4236,7 +4506,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › sorts sections by their order field",
-      "line": 14,
+      "line": 15,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5172,7 +5442,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › falls back to text-only for an absent or blank value",
-      "line": 240,
+      "line": 241,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5181,7 +5451,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › falls back to text-only for an unrecognized value",
-      "line": 247,
+      "line": 248,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5190,7 +5460,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › normalizes casing and surrounding whitespace",
-      "line": 252,
+      "line": 253,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5199,7 +5469,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › passes through the image layouts",
-      "line": 233,
+      "line": 234,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5753,6 +6023,51 @@
       "runner": "tests"
     },
     {
+      "description": "An untouched section renders exactly as it did before this change, which is what lets the feature ship with no content migration.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "sectionHeading › falls back to the shared heading when the section has no title",
+      "line": 273,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A real title is passed through as written rather than reformatted.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "sectionHeading › passes a titled heading through unchanged",
+      "line": 288,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason this exists: the slot bands took their heading from donatePage.json and ignored the title they could already carry, so two pillars sections were indistinguishable on the page AND in the CMS list, where the row label falls back to the slug. Letting a section use its own title is what names a duplicated band.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "sectionHeading › prefers the section title over the shared fallback heading",
+      "line": 265,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Whitespace-only is the CMS's blank, matching every other free-text field on this page — an editor who cleared the box wants the standard heading back.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "sectionHeading › treats a blank or whitespace-only title as absent",
+      "line": 282,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nothing on either side yields undefined, not the string \"undefined\" — the band components already treat a missing heading as draw-no-heading.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "sectionHeading › yields undefined when there is neither a title nor a fallback",
+      "line": 296,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
       "description": "every seeded member must declare a non-empty photo — this is the exact contract that was silently broken on the live site",
       "file": "src/lib/team.photos.test.ts",
       "format": "vitest",
@@ -5849,6 +6164,42 @@
       "key": "seeded team headshots › peter-boyce.md › points at an image that exists under public/",
       "line": 43,
       "registeredAt": "2026-08-07T12:04:36.344243078+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "With a group it is `cardsInGroup`, unchanged.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "selectGroup › delegates to cardsInGroup for a named group",
+      "line": 99,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An explicitly blank group is a REQUEST for the ungrouped band, not an absent argument — so it filters where `undefined` does not.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "selectGroup › filters to the ungrouped band when given an explicit empty string",
+      "line": 94,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The no-argument path copies rather than aliasing, so a caller sorting the result in place cannot reorder the collection it was handed.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "selectGroup › returns a copy rather than the input array",
+      "line": 105,
+      "registeredAt": "2026-08-17T19:07:20Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The distinction the loaders depend on: NO ARGUMENT means no filtering, so a caller that just wants the collection gets all of it. `cardsInGroup` with the same undefined would return only the ungrouped cards, which would quietly hide every grouped card from /donate — the caller that loads each set once and selects per band downstream.",
+      "file": "src/lib/sectionGroups.test.ts",
+      "format": "vitest",
+      "key": "selectGroup › returns every card when no group argument is supplied",
+      "line": 82,
+      "registeredAt": "2026-08-17T19:07:20Z",
       "runner": "tests"
     },
     {
@@ -6693,7 +7044,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › alternates the tint across narrative sections",
-      "line": 166,
+      "line": 167,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6702,7 +7053,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › does not let a goal meter shift the narrative alternation",
-      "line": 203,
+      "line": 204,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -6711,7 +7062,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › does not let an interleaved band shift the narrative alternation",
-      "line": 189,
+      "line": 190,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6720,7 +7071,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › never tints a non-narrative section",
-      "line": 177,
+      "line": 178,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6729,7 +7080,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns an empty array unchanged",
-      "line": 74,
+      "line": 75,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6738,7 +7089,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns one flag per section",
-      "line": 220,
+      "line": 221,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6747,7 +7098,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns the same flags when called repeatedly on the same input",
-      "line": 214,
+      "line": 215,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6954,7 +7305,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › de-duplicates a repeated unknown kind",
-      "line": 88,
+      "line": 89,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6963,7 +7314,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › reports kinds that match no renderer",
-      "line": 82,
+      "line": 83,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6972,7 +7323,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › reports nothing when every kind is known",
-      "line": 94,
+      "line": 95,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },

@@ -438,7 +438,14 @@
           "label": "Heading",
           "type": "text",
           "optional": true,
-          "hint": "Narrative sections only. The heading shown above the text."
+          "hint": "The heading shown above this section on the page, and the name this section goes by in this list. Fill it in to tell two sections of the same type apart — two \"pillars\" bands, for example. Blank keeps the standard heading for the section type."
+        },
+        {
+          "name": "group",
+          "label": "Card group",
+          "type": "text",
+          "optional": true,
+          "hint": "Which cards this band shows. Type the same word here and in the Group box on each card that belongs to it. Blank shows the cards that have no group, which is how the page reads today — so leave it alone unless you are splitting a band in two."
         },
         {
           "name": "layout",
@@ -648,6 +655,13 @@
           "hint": "One or two sentences beneath the figure."
         },
         {
+          "name": "group",
+          "label": "Group",
+          "type": "text",
+          "optional": true,
+          "hint": "Which band shows this card. Type the same word here and in the Card group box on the section that should show it. Blank means the card belongs to the ungrouped band, which is where every card sits today."
+        },
+        {
           "name": "order",
           "label": "Order",
           "type": "number",
@@ -696,6 +710,13 @@
           "label": "Link URL",
           "type": "text",
           "optional": true
+        },
+        {
+          "name": "group",
+          "label": "Group",
+          "type": "text",
+          "optional": true,
+          "hint": "Which band shows this card. Type the same word here and in the Card group box on the section that should show it. Blank means the card belongs to the ungrouped band, which is where every card sits today."
         },
         {
           "name": "order",

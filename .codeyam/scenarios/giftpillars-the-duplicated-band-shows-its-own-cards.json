@@ -1,0 +1,13 @@
+{
+  "name": "GiftPillars - The Duplicated Band Shows Its Own Cards",
+  "id": "1736cb38-3f55-4ff8-8573-e3e1071662b3",
+  "url": "/isolated-components/GiftPillars-DuplicatedBand",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiftPillars",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/GiftPillars.astro",
+  "description": "The second half of the two-band outcome, framed on its own because the campaign hero pushes it past a viewport capture on /donate. This is the DUPLICATE of the pillars section: it carries its own title, 'How Your Support Will Be Used', and its own group, and it renders three cards none of which appear in the original band. What makes the frame worth trusting is that neither the heading nor the card list is hardcoded — the isolation page hands the same six-card set both bands draw on to cardsInGroup, and the heading comes from sectionHeading with the shared 'What Your Gift Powers' passed as the fallback it does not use. So the capture would look wrong if the selection rule regressed to returning every card, which is exactly the behaviour before this change: loadPillars returned all pillar entries to every pillars band, so a duplicated section rendered a verbatim second copy."
+}

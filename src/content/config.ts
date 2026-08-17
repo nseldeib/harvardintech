@@ -365,6 +365,14 @@ const momentumSections = defineCollection({
     // band that renders it: a page with no meter has no use for the field, and a
     // second meter needs no new singleton key.
     widgetId: z.string().optional(),
+    // Which set of cards a SLOT band shows. Free text for the same reason `kind`
+    // and `layout` are: groups are invented by an editor as they split a band, so
+    // there is no fixed list a select could offer. Blank matches the cards that
+    // are themselves ungrouped, which is the page exactly as it renders today —
+    // so this ships with no content migration. `src/lib/sectionGroups.ts`
+    // validates: a group matching no card renders an empty band and logs an
+    // advisory rather than failing the build or falling back to every card.
+    group: z.string().optional(),
     order: z.number().optional(),
     comingSoon: z.boolean().optional(),
     draft: z.boolean().optional(),
@@ -448,6 +456,10 @@ const accomplishments = defineCollection({
     value: z.string(),
     label: z.string(),
     description: z.string().optional(),
+    // Which band this card belongs to — the card side of the section's `group`.
+    // Blank belongs to the ungrouped band, so every card that predates this field
+    // keeps rendering where it always did.
+    group: z.string().optional(),
     order: z.number().optional(),
     draft: z.boolean().optional(),
   }),
@@ -466,6 +478,9 @@ const pillars = defineCollection({
     icon: z.string().optional(),
     linkLabel: z.string().optional(),
     linkUrl: z.string().optional(),
+    // Which band this card belongs to. See `accomplishments` above and
+    // `src/lib/sectionGroups.ts` for the matching rule.
+    group: z.string().optional(),
     order: z.number().optional(),
     draft: z.boolean().optional(),
   }),

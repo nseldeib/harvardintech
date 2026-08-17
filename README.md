@@ -121,6 +121,10 @@ States captured as runnable scenarios with codeyam-editor:
 
 <img src=".codeyam/scenarios/screenshots/cms-analytics-and-embeds--desktop.png" alt="CMS Analytics And Embeds" width="280">
 
+### CMS Blog - Duplicate Is Not Momentum-Fund-Only
+
+<img src=".codeyam/scenarios/screenshots/cms-blog-duplicate-is-not-momentum-fund-only--desktop.png" alt="CMS Blog - Duplicate Is Not Momentum-Fund-Only" width="280">
+
 ### CMS Blog List - A Preview Link And A Locked One
 
 <img src=".codeyam/scenarios/screenshots/cms-blog-list-a-preview-link-and-a-locked-one--desktop.png" alt="CMS Blog List - A Preview Link And A Locked One" width="280">
@@ -132,8 +136,4 @@ States captured as runnable scenarios with codeyam-editor:
 ### CMS Dashboard - Empty
 
 <img src=".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png" alt="CMS Dashboard - Empty" width="280">
-
-### CMS Entry Editor - Change Staged For Review
-
-<img src=".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png" alt="CMS Entry Editor - Change Staged For Review" width="280">
 <!-- codeyam:scenario-gallery:end -->

@@ -140,7 +140,7 @@ export interface DonatePageCopy {
    *  campaign asks a reader to fund momentum that is already visible, so the
    *  evidence comes before the ask. */
   accomplishmentsTitle?: string;
-  accomplishments?: { value: string; label: string; body?: string }[];
+  accomplishments?: { value: string; label: string; body?: string; group?: string }[];
   // The narrative sections ("And Every Number Represents a Story", "Why Support
   // Harvard Alumni in Tech?") are NOT here — their heading, photo, layout, and prose
   // live in the `momentumSections` collection so an editor can rewrite and
@@ -153,6 +153,9 @@ export interface DonatePageCopy {
     body: string;
     linkLabel?: string;
     linkUrl?: string;
+    /** Which band shows this card. Carried down to the page component, which
+     *  selects per section — see `src/lib/sectionGroups.ts`. */
+    group?: string;
   }[];
   testimonialsTitle?: string;
   /** Donor recognition wall. `donorTiers` are the giving levels the wall groups
