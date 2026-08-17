@@ -1,0 +1,337 @@
+{
+  "timestamp": "2026-08-17T21:38:06Z",
+  "title": "Upgrade The CMS To 0.7.1, And Get Back The Three Collections It Removed",
+  "type": "feature",
+  "userRequest": "Project context: We need to modernize the https://www.harvardintech.com/ website from the outside. The site was built with a no-code product so we need to faithfully reproduce it using modern technologies and host it as a GitHub pages website. It also needs a CRM that can be run locally or, ideally also in the cloud via GitHub pages as well (protected with a password and/or GitHub OAuth). Can we dig into this?",
+  "description": "Moved @codeyam/cms from 0.5.0 to 0.7.1 and re-derived the local admin patch against 0.7.1's sources, so from an editor's seat the CMS is unchanged: the reorder arrows, the Duplicate action, the search box and the real section titles all work exactly as before. Neither half of the patch landed upstream in 0.7.1, so this is the third run of the re-derivation lifecycle CMS_SETUP.md describes, and all nine files the patch edits had moved.\n\nRe-deriving rather than replaying is what made the upgrade safe, and this round proved why. 0.7.1 threads a `blockScalars` argument through entryActions' serialize and every upstream builder now passes it; buildOrderChange predates that signature. Replaying the old hunk would have compiled and shipped a real bug — reordering a section whose body fields are YAML block scalars would reformat every one of them alongside the single `order:` line, and a reorder is the one action an editor performs many times in a row, so they would have met that diff noise once per click. A replayed patch fails loudly when surrounding lines move and silently when a signature grows.\n\nThe upgrade also carried a breaking change that no test would have caught, because it removes routes rather than breaking them. 0.7.0 shrank the built-in collections to `pages` alone, and this site relied on blog, events and team being built in — so /admin/blog, /admin/events and /admin/team became 404s and 11 posts, 8 events and 5 board members quietly stopped being editable, with the public pages still rendering them perfectly. All three are now declared in src/data/collections.json with the field sets they used to inherit. They are hand-written rather than taken from the upstream COLLECTION_PRESETS, because the blog preset declares `cover-image` where this site's 11 posts carry `coverImage`; the preset's own comment explains it accepted that on the assumption a site declaring it has no existing frontmatter to match, which is false here. The registry's existing builtins.* extras re-attach on their own, so embedUrl, chapter and active survived.\n\nTwo scenarios were added for /admin/events and /admin/team, which had no coverage at all and are exactly the routes that broke. They also pin the collection-shape rule from both sides: team declares a numeric order so it renders as one arrow-driven sequence, events declares none so it keeps the Drafts/Published grouping.\n\nTwo process findings worth carrying. The 0.4.0 upgrade's lesson held and needed extending: node_modules is not in the dependency graph, and this time staleness flagged 15 CMS scenarios while reporting another 12 fresh that had all visibly changed — so '15 stale' is as untrustworthy as '0 stale', and the 12 were force-recaptured. And two scenarios captured an ENOENT error page instead of a frame after the content sandbox was cleared mid-session; they passed every structural check — captured, fresh, on-route, distinct from siblings — because nothing compares a capture to what it claims to show. Only opening the PNG caught it.\n\n0.7 also brings a content-sandbox publish guard that is wired in automatically, not opt-in. It refuses to publish from a codeyam-seeded session, which would otherwise write scenario content over real source files. It appears in every admin capture as a banner and never in production, where the CODEYAM_* roots are unset. The staged-preview and create-a-collection features that 0.6/0.7 also ship are left dormant for their own plans.\n\n860 tests pass, tsc and astro-check pass, and the audit reports zero findings. The two guard suites did the job their headers promise: on stock 0.7.1 the modules they import do not exist, so both go hard red without the patch — verified by restoring the unpatched tree, not assumed. One pre-existing issue is left untouched and unfixed: admin collection pages served through the /__codeyam_preview prefix hydrate with a withBase server/client mismatch, which blocks preview-interact on those routes. It reproduces on stock 0.5.0, so it predates this work and deserves its own plan. Nothing about the site's content or the domain migration changed — harvardintech.com is still served by Strikingly.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-analytics-and-embeds--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-analytics-and-embeds--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-blog-duplicate-is-not-momentum-fund-only--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-blog-list-a-preview-link-and-a-locked-one--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-blog-list-drafts-and-published--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-chapter-editor-marked-as-draft--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-chapter-editor-marked-as-draft--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-chapter-editor-new-york-city--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-chapter-editor-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-empty--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-dashboard-populated--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-change-staged-for-review--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-entry-editor-new-chapter-form--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-media-library-adopted-images--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-move-staged-but-not-yet-published--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-a-section-still-in-draft--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-in-order-with-arrows--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-the-duplicate-built-up-in-draft--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-momentum-sections-two-bands-under-their-own-names--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-new-section-prefilled-by-duplicate--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-new-section-prefilled-by-duplicate--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-page-settings-momentum-fund-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-page-settings-momentum-fund-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-nothing-to-publish--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-nothing-to-publish--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-plain-language-change-summary--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-plain-language-change-summary--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-what-the-edit-actually-did--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-publish-review-what-the-edit-actually-did--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-section-type-is-a-dropdown--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-section-type-is-a-dropdown--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-site-settings--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-sponsorship-level-editor--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-sponsorship-level-editor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-volunteer-page-editor--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-volunteer-page-editor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stagingbar-publish-again-while-deploying--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stagingbar-reviewing-before-publish--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/stagingbar-reviewing-before-publish--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/39131317120dd06660d9de8659c307665350090e1b2302c7a1839ecc77fb0732.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/801db319d584d2f3ec654f80da25949a53a7acfb1a746810837029c575af60de.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/c4dbee33ed4ddda8e5ca2413be3f68a68ac3575371803381841fdbb95ca5ee80.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/ebfab27b990e40fdc674747188af620f1e770885febed64fd3f6a3e94f33dc4b.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "CMS_SETUP.md",
+      "status": "modified"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "patches/@codeyam+cms+0.5.0.patch",
+      "status": "deleted"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/entryDuplicate.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--fix-the-stale-editing-notes-on-the-momentum-fund-section-entries.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-events-the-collection-0-7-removed.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-team-board-members-in-their-own-order.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-events-the-collection-0-7-removed--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-events-the-collection-0-7-removed--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-team-board-members-in-their-own-order--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-team-board-members-in-their-own-order--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/301692b7d141219c28aa4c961d23663ef83d992574e1c9b2ae6381814764ace4.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/51d7bd4f495f4717523abcb3648778510cece53ef1e79febd3873063dda149d0.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/649e525c1b1893d24a5e225bf366e63b32230669ac8aa68992c8e2f691346016.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/9e3d4e3fdcbcc9ee60eec3673f6678ed245bf593602bd6958ba3312bc133a4eb.json",
+      "status": "added"
+    },
+    {
+      "path": "patches/@codeyam+cms+0.7.1.patch",
+      "status": "added"
+    }
+  ],
+  "testResults": {
+    "total": 860,
+    "passed": 860,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 860,
+        "passed": 860
+      }
+    ]
+  }
+}

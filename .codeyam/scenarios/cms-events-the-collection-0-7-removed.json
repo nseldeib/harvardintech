@@ -1,0 +1,194 @@
+{
+  "name": "CMS Events - The Collection 0.7 Removed",
+  "id": "f2b997a4-e579-433d-b57a-da4d4a87d4f7",
+  "url": "/admin/events",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "blog": [
+      {
+        "body": "We are a global community of Harvard alumni working in technology.",
+        "date": "2026-01-15",
+        "slug": "welcome",
+        "summary": "Why we built this community and where we are headed.",
+        "title": "Welcome to Harvard in Tech"
+      },
+      {
+        "body": "The third annual summit brought together founders, operators, and investors across nine chapters.\n\nThe strongest signal from the day was that alumni want fewer, better-matched introductions rather than a larger directory.",
+        "date": "2026-05-02",
+        "draft": false,
+        "slug": "2026-summit-recap",
+        "summary": "Four hundred alumni, nine cities, and one recurring question: how do we keep the network useful as it grows?",
+        "title": "What We Heard at the 2026 Alumni Summit"
+      },
+      {
+        "body": "This is an in-progress guide for new chapter leads. Still gathering feedback from the NYC and London teams before this goes out.",
+        "date": "2026-07-20",
+        "draft": true,
+        "slug": "chapter-leader-playbook",
+        "summary": "A working draft of how we run a chapter — venues, cadence, budget, and the first six months.",
+        "title": "The Chapter Leader Playbook"
+      },
+      {
+        "body": "Transcript pending review by the subject before publication.",
+        "date": "2026-07-24",
+        "draft": true,
+        "slug": "founder-spotlight-hana-reyes",
+        "summary": "An unfinished interview with the Harvard C'14 founder of a grid-storage startup.",
+        "title": "Founder Spotlight: Hana Reyes on Building in Climate Hardware"
+      }
+    ],
+    "chapters": [
+      {
+        "blurb": "Home of Harvard — our Cambridge and Boston community.",
+        "body": "Founder dinners, campus meetups, and panels with Harvard faculty and alumni operators — steps from the Yard.",
+        "city": "Boston & Cambridge",
+        "heroImage": "/images/bg/hero-bg.jpg",
+        "order": 1,
+        "region": "Boston & Cambridge, MA",
+        "slug": "boston-cambridge",
+        "tagline": "We are the Boston & Cambridge Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "Our founding chapter and largest community.",
+        "body": "Regular founder dinners, panels, and community gatherings across the city.",
+        "city": "New York City",
+        "contactEmail": "info@harvardintech.com",
+        "draft": false,
+        "heroImage": "/images/chapters/nyc.jpg",
+        "order": 2,
+        "region": "New York, NY",
+        "slug": "nyc",
+        "tagline": "We are the New York Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "Our European hub across the London tech scene.",
+        "body": "Evening socials and founder roundtables connecting Harvard alumni across the UK and Europe.",
+        "city": "London",
+        "heroImage": "/images/gallery/event-05.jpg",
+        "order": 3,
+        "region": "London, UK",
+        "slug": "london",
+        "tagline": "We are the London Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "The DC, Maryland & Virginia community.",
+        "body": "Policy-meets-tech happy hours and gatherings across the Washington metro area.",
+        "city": "DC & DMV Area",
+        "heroImage": "/images/gallery/event-18.jpg",
+        "order": 4,
+        "region": "Washington, DC",
+        "slug": "dc-dmv",
+        "tagline": "We are the DC & DMV Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "The Pacific Northwest chapter.",
+        "body": "Meetups with alumni across cloud, devtools, and consumer tech in the Pacific Northwest.",
+        "city": "Seattle",
+        "heroImage": "/images/gallery/event-27.jpg",
+        "order": 5,
+        "region": "Seattle, WA",
+        "slug": "seattle",
+        "tagline": "We are the Seattle Chapter of Harvard Alumni in Tech."
+      },
+      {
+        "blurb": "A new chapter we are standing up for the Central Texas alumni base.",
+        "body": "Still recruiting chapter leads and confirming a venue partner before we announce this publicly.",
+        "city": "Austin",
+        "draft": true,
+        "heroImage": "/images/gallery/event-12.jpg",
+        "order": 6,
+        "region": "Austin, TX",
+        "slug": "austin",
+        "tagline": "We are the Austin Chapter of Harvard Alumni in Tech."
+      }
+    ],
+    "events": [
+      {
+        "body": "Keynotes and breakout sessions on AI, climate, and fintech.",
+        "chapter": "nyc",
+        "date": "2026-09-24",
+        "description": "Our flagship annual gathering of Harvard founders, operators, and investors.",
+        "link": "https://www.harvardintech.com/events/summit-2026",
+        "location": "New York, NY",
+        "slug": "harvard-in-tech-summit-2026",
+        "title": "Harvard in Tech Summit 2026"
+      },
+      {
+        "body": "Panelists share career and leadership lessons.",
+        "date": "2026-08-06",
+        "description": "A conversation with Harvard alumnae leading engineering, product, and venture teams.",
+        "link": "https://www.harvardintech.com/events/women-in-tech-panel",
+        "location": "Cambridge, MA",
+        "slug": "women-in-tech-panel",
+        "title": "Women in Tech Leadership Panel"
+      },
+      {
+        "body": "Venue and date still being confirmed with the founding chapter leads.",
+        "chapter": "austin",
+        "date": "2026-10-08",
+        "description": "An unannounced kickoff for the Central Texas alumni base, held back until the chapter goes live.",
+        "draft": true,
+        "location": "Austin, TX",
+        "slug": "austin-launch-happy-hour",
+        "title": "Austin Chapter Launch Happy Hour"
+      }
+    ],
+    "pages": [
+      {
+        "body": "Harvard in Tech connects alumni building and investing in technology.",
+        "description": "About Harvard in Tech.",
+        "order": 1,
+        "slug": "about",
+        "title": "About"
+      }
+    ],
+    "team": [
+      {
+        "body": "",
+        "name": "Ben Wei",
+        "order": 1,
+        "photo": "/images/team/ben-wei.png",
+        "role": "Founder · Harvard C'08",
+        "slug": "ben-wei"
+      },
+      {
+        "body": "",
+        "name": "Peter Boyce",
+        "order": 2,
+        "photo": "/images/team/peter-boyce.png",
+        "role": "Founder · Harvard C'13",
+        "slug": "peter-boyce"
+      },
+      {
+        "body": "",
+        "name": "Krysia Lenzo",
+        "order": 3,
+        "photo": "/images/team/krysia-lenzo.png",
+        "role": "Executive Director · Harvard C'12",
+        "slug": "krysia-lenzo"
+      },
+      {
+        "body": "",
+        "name": "Jessica Li",
+        "order": 4,
+        "photo": "/images/team/jessica-li.png",
+        "role": "Director of Operations · Harvard C'19",
+        "slug": "jessica-li"
+      },
+      {
+        "body": "",
+        "name": "Nadia Eldeib",
+        "order": 5,
+        "photo": "/images/team/nadia-eldeib.png",
+        "role": "Director of Growth · Harvard C'13",
+        "slug": "nadia-eldeib"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
+  "description": "The events collection, editable again. It is here because @codeyam/cms 0.7.0 shrank the built-in collections to `pages` alone, and this site relied on `events` being one of them — so the upgrade silently turned /admin/events into a 404 and took the events away from the person who edits them, with nothing failing to say so. The collection is now declared explicitly in src/data/collections.json with the field set it used to inherit, and this scenario is what makes the next such removal fail loudly here instead of quietly in the CMS. It shows a mix on purpose: a flagship event tagged to a chapter, one untagged, and one still being confirmed — the states an organiser actually holds at once."
+}

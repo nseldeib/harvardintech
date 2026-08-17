@@ -30,14 +30,18 @@ A fresh clone works with: `git clone` → `npm run setup` → `npm run dev`.
 
 `@codeyam/cms` is pinned to an exact version and carries a local patch in
 `patches/`, applied automatically by `patch-package` on `postinstall`. The patch
-makes the publish flow refuse to commit a media-library record whose image bytes
-went missing during staging — without it an upload can land a `media.json` entry
-pointing at a file that was never committed, which the site then renders as a
-broken image an editor cannot fix from `/admin`. The version is pinned exactly
-because the patch is version-stamped: a floating range would install a version
-the patch cannot apply to and break `npm install` for everyone. It is covered by
-`src/lib/mediaCommitGuard.test.ts`, so if a future release drops or reworks the
-guard, CI says so. The fix belongs upstream; drop the patch once it lands there.
+adds two admin controls the package does not ship: **reorder arrows** on any
+collection declaring a numeric `order`, and **Duplicate** on every entry row,
+which opens the ordinary create form prefilled from the source entry. Without
+them, rearranging the donate page means opening each section and typing a number
+while holding the other five in your head, and starting a section from an
+existing one means retyping it. The version is pinned exactly because the patch
+is version-stamped: a floating range would install a version the patch cannot
+apply to and break `npm install` for everyone. Both halves are covered from this
+repo — `src/lib/cmsOrderControls.test.ts` and `src/lib/entryDuplicate.test.ts` —
+so if a future release drops or reworks either, CI says so instead of an editor
+finding the buttons gone. The changes belong upstream; drop the patch once they
+land there. See `CMS_SETUP.md` for the upgrade procedure.
 
 ## Project shape
 

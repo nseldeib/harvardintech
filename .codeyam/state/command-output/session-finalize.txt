@@ -1,26 +1,26 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/buongjt90.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/buongjt90.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1786996107,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3583251}
-session-finalize started: 2026-08-17T19:48:27Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 3583251)
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/bf83anjly.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/bf83anjly.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"session-finalize","elapsed_secs":0,"emitted_at_unix":1787002733,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3683080}
+session-finalize started: 2026-08-17T21:38:53Z, output: /workspace/.codeyam/logs/session-finalize.log (PID 3683080)
 Finalizing session — running flag-free test suite + strict audit. This is the only full-suite run for this feature.
 Coverage thresholds … skipped (no runner declares a coverage_path)
 Phase 0/5: session-cleanup …
-Phase 1/5: reusing 1 green partition cache(s) from 2026-08-17T19:08:52.390144002+00:00; full re-run skipped (per-partition Merkle + registry digest match)
+Phase 1/5: reusing 1 green partition cache(s) from 2026-08-17T21:09:55.178767750+00:00; full re-run skipped (per-partition Merkle + registry digest match)
 Phase 2/5: audit (--gate-mode strict, comprehensive) …
 [   0s] audit: running static checks
-[  21s] audit: rebuilding dependency graph (can take a few minutes on a large project)
-Analyzed 341 files, found 622 import edges, graph has 357 nodes
+[  20s] audit: rebuilding dependency graph (can take a few minutes on a large project)
 {
   "analyzed": 341,
   "entityCount": 447,
   "graphSize": 357,
+Analyzed 341 files, found 622 import edges, graph has 357 nodes
   "totalImports": 622
 }
 [  91s] audit: running registry invariant checks
 [  92s] audit: gather complete
 Phase 3/5: analyze-imports …
 {
-  "analyzed": 341,
 Analyzed 341 files, found 622 import edges, graph has 357 nodes
+  "analyzed": 341,
   "entityCount": 447,
   "graphSize": 357,
   "totalImports": 622
@@ -29,10 +29,10 @@ Phase 3.5/5: screenshot coverage …
 Phase 3.5/5: screenshot coverage … 0 stale, 0 missing
 Phase 3.6/5: glossary reconciliation …
 Phase 4/5: verify-build …
-[PASS] tsc (5.11s)
-[PASS] astro-check (15.82s)
+[PASS] tsc (5.00s)
+[PASS] astro-check (15.62s)
 CODEYAM_VERIFY_BUILD: PASS — 2 check(s) passed
 Phase 5/5: finalize invariants (per-test-evidence + ignore-lists) …
 Session finalize complete: ready to push.
-Presentability (open-source pass): 9 stale-doc candidate(s). Review with `codeyam-editor editor presentability-scan`, then refresh the README with `codeyam-editor editor readme-sync` before merge. Remove only what you are sure about — ask the user about anything uncertain.
-session-finalize finished: status=ok, phase1=passed (reusing 1 green partition cache(s) from 2026-08-17T19:08:52.390144002+00:00), phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=126.1s
+Presentability (open-source pass): 19 stale-doc candidate(s). Review with `codeyam-editor editor presentability-scan`, then refresh the README with `codeyam-editor editor readme-sync` before merge. Remove only what you are sure about — ask the user about anything uncertain.
+session-finalize finished: status=ok, phase1=passed (reusing 1 green partition cache(s) from 2026-08-17T21:09:55.178767750+00:00), phase2=passed, phase3=passed, phase4=passed, phase5=passed, elapsed=123.9s

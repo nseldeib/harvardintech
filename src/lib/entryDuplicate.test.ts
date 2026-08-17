@@ -1,7 +1,7 @@
 // THIS COVERS A LOCAL PATCH, NOT OUR OWN CODE.
 //
 // `@codeyam/cms/lib/entryDuplicate` does not exist upstream. It is added by
-// `patches/@codeyam+cms+0.5.0.patch` in this repo — the same patch that carries
+// `patches/@codeyam+cms+0.7.1.patch` in this repo — the same patch that carries
 // the reorder arrows — so every symbol imported below lives inside a dependency
 // we are locally modifying.
 //
@@ -10,6 +10,10 @@
 // mode is SILENT: the Duplicate button simply stops appearing in /admin, with no
 // build error and nothing in this repo to notice. These tests turn that into a
 // loud CI failure instead of something an editor discovers months later.
+//
+// The 0.5.0 → 0.7.1 upgrade was that event, and they did their job: the module
+// had to be re-derived against sources that had all moved, and these tests are
+// what confirmed the rebuilt copy still behaves identically.
 //
 // The pattern is the one `mediaCommitGuard.test.ts` and `dashboardGrouping.test.ts`
 // already establish for pinning a dependency's contract from this repo.

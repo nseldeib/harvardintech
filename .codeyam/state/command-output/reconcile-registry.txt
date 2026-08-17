@@ -1,320 +1,170 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/b4jhxse9m.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/b4jhxse9m.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1786993647,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3549850}
-## Inherited registry drift (34) — 34 line updates referencing files this branch never touched (pre-existing base drift, cleared by a paydown pass, not this cycle). These rows were ALREADY APPLIED by this run under the same rules as every other row — `--include-inherited` only re-prints them in the `actions` array, so re-running with it registers nothing further and is not a follow-up step.
-auto-apply: 66 action(s) applied; 0 add(s) skipped.
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/buu7gde8e.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/buu7gde8e.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1787001059,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3655649}
 {
+auto-apply: 17 action(s) applied; 0 add(s) skipped.
   "summary": {
     "realOrphans": 0,
     "stalePhantoms": 0,
     "adds": 0,
     "renames": 0,
-    "updateLines": 66,
+    "updateLines": 17,
     "gateUpdates": 0
   },
   "actions": [
     {
       "kind": "updateLine",
-      "key": "goalMetersMissingWidgetId › falls back to a readable label when a section has no slug",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 158,
-      "new_line": 159,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "goalMetersMissingWidgetId › ignores sections of every other kind",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 130,
-      "new_line": 131,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "goalMetersMissingWidgetId › reports every offending meter on a page with more than one",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "canDuplicate › allows duplicating an ordinary entry",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
       "old_line": 141,
-      "new_line": 142,
+      "new_line": 145,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "goalMetersMissingWidgetId › reports nothing for an empty section list",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "canDuplicate › refuses to duplicate a preview row",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 151,
-      "new_line": 152,
+      "old_line": 147,
+      "new_line": 151,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "goalMetersMissingWidgetId › reports nothing when the goal meter has a widget id",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateHref › encodes the source slug",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 112,
-      "new_line": 113,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "goalMetersMissingWidgetId › reports the slug of a goal meter carrying no widget id",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 103,
-      "new_line": 104,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "goalMetersMissingWidgetId › treats an empty or whitespace-only widget id as missing",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 120,
-      "new_line": 121,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "orderedSections › drops sections whose kind matches no renderer",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 45,
-      "new_line": 46,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "orderedSections › keeps every kind it declares support for",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 56,
-      "new_line": 57,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "orderedSections › returns a new array and leaves the source untouched",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 62,
-      "new_line": 63,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "orderedSections › returns an empty array unchanged",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 74,
-      "new_line": 75,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "orderedSections › sorts a section with no order after every ordered section",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 29,
-      "new_line": 30,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "orderedSections › sorts sections by their order field",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 14,
-      "new_line": 15,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "resolveLayout › falls back to text-only for an absent or blank value",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 240,
-      "new_line": 241,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "resolveLayout › falls back to text-only for an unrecognized value",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 247,
-      "new_line": 248,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "resolveLayout › normalizes casing and surrounding whitespace",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 252,
-      "new_line": 253,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "resolveLayout › passes through the image layouts",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 233,
-      "new_line": 234,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "sectionHeading › falls back to the shared heading when the section has no title",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": null,
-      "new_line": 273,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "sectionHeading › passes a titled heading through unchanged",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": null,
-      "new_line": 288,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "sectionHeading › prefers the section title over the shared fallback heading",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": null,
-      "new_line": 265,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "sectionHeading › treats a blank or whitespace-only title as absent",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": null,
-      "new_line": 282,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "sectionHeading › yields undefined when there is neither a title nor a fallback",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": null,
-      "new_line": 296,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "tintedFlags › alternates the tint across narrative sections",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 166,
+      "old_line": 163,
       "new_line": 167,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "tintedFlags › does not let a goal meter shift the narrative alternation",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateHref › points at the create form for the row collection",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 203,
-      "new_line": 204,
+      "old_line": 155,
+      "new_line": 159,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "tintedFlags › does not let an interleaved band shift the narrative alternation",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateLabel › leaves a blank or whitespace-only label blank",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 189,
-      "new_line": 190,
+      "old_line": 77,
+      "new_line": 81,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "tintedFlags › never tints a non-narrative section",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateLabel › marks the copied label as a copy",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 177,
-      "new_line": 178,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "tintedFlags › returns an empty array unchanged",
-      "file": "src/lib/momentumSections.test.ts",
-      "runner": "tests",
-      "old_line": 74,
+      "old_line": 71,
       "new_line": 75,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "tintedFlags › returns one flag per section",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateLabel › trims the source label before appending the suffix",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 220,
-      "new_line": 221,
+      "old_line": 83,
+      "new_line": 87,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "tintedFlags › returns the same flags when called repeatedly on the same input",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateValues › copies every declared field verbatim, order included",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 214,
-      "new_line": 215,
+      "old_line": 93,
+      "new_line": 97,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "unknownSectionKinds › de-duplicates a repeated unknown kind",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateValues › drops the preview markers rather than minting a second clone",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 88,
-      "new_line": 89,
+      "old_line": 101,
+      "new_line": 105,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "unknownSectionKinds › reports kinds that match no renderer",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateValues › ignores keys the collection registry does not declare",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 82,
-      "new_line": 83,
+      "old_line": 118,
+      "new_line": 122,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "unknownSectionKinds › reports nothing when every kind is known",
-      "file": "src/lib/momentumSections.test.ts",
+      "key": "duplicateValues › omits fields the source entry does not carry",
+      "file": "src/lib/entryDuplicate.test.ts",
       "runner": "tests",
-      "old_line": 94,
-      "new_line": 95,
+      "old_line": 125,
+      "new_line": 129,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "duplicateValues › preserves falsy values that are genuinely set",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "runner": "tests",
+      "old_line": 132,
+      "new_line": 136,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "nextFreeSlug › avoids a slug that exists only as a staged change",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "runner": "tests",
+      "old_line": 57,
+      "new_line": 61,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "nextFreeSlug › counts on from the base when the source is itself numbered",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "runner": "tests",
+      "old_line": 51,
+      "new_line": 55,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "nextFreeSlug › numbers from two even when no slug is taken",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "runner": "tests",
+      "old_line": 63,
+      "new_line": 67,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "nextFreeSlug › skips slugs already taken and keeps counting",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "runner": "tests",
+      "old_line": 44,
+      "new_line": 48,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "nextFreeSlug › suggests the source slug numbered from two",
+      "file": "src/lib/entryDuplicate.test.ts",
+      "runner": "tests",
+      "old_line": 38,
+      "new_line": 42,
       "classification": "change-introduced"
     }
   ],
-  "inherited": {
-    "total": 34,
-    "counts": {
-      "realOrphans": 0,
-      "stalePhantoms": 0,
-      "adds": 0,
-      "renames": 0,
-      "updateLines": 34,
-      "gateUpdates": 0
-    },
-    "includedInActions": false,
-    "command": "codeyam-editor editor reconcile-registry --include-inherited"
-  },
   "platform_gated_absences": [],
   "runner_gated_absences": []
 }
-  backfilled 39 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.

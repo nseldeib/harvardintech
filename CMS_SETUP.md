@@ -31,10 +31,10 @@ mean anything.
 
 ### The patch on top of the package
 
-`patches/@codeyam+cms+0.5.0.patch` is applied by `patch-package` from
+`patches/@codeyam+cms+0.7.1.patch` is applied by `patch-package` from
 `postinstall`, so it lands on every install including CI. It is still true that
 no admin code is hand-written here — the patch edits the dependency, it does not
-add admin pages to this repo. It now carries **one** thing:
+add admin pages to this repo. It carries **two** things:
 
 - **Reorder arrows on ordered collection lists.** Any collection declaring a
   numeric `order` field — 13 of them today, including Momentum Fund sections and
@@ -42,6 +42,15 @@ add admin pages to this repo. It now carries **one** thing:
   instead of a Drafts-then-Published split, and a move stages ordinary pending
   changes that ride the normal publish review. The draft state moves onto the row
   as a chip, since those lists no longer have a "Drafts" heading to carry it.
+
+- **Duplicate on every entry row.** An anchor to the ordinary create form with
+  `?from=<slug>`, which prefills the form from the source entry so the copy is
+  renamed BEFORE it exists rather than as a second edit afterwards. It is a link
+  rather than a staged action, so opening it and changing your mind leaves
+  nothing to undo. Preview rows are the one exclusion — copying one would mint a
+  second unlisted clone of the same target. On the static build the prefill is
+  resolved from a `sources` map shipped with the page, since there is no server
+  to answer the query at request time.
 
 **The publish deploy watch used to be the second half, and 0.5.0 released it.**
 That is the lifecycle described below running to completion for the second time:
@@ -59,13 +68,26 @@ them again: the ordered sequence is built from listed entries only, so a preview
 clone never gets an `order` written onto it; and the Preview links group renders
 above the sequence in an ordered collection exactly as it does elsewhere.
 
+**Neither half landed upstream in 0.7.1 either, so the same re-derivation ran a
+third time** (0.5.0 → 0.7.1). All nine files the patch edits had moved. The one
+decision worth recording: 0.7.1 threads a `blockScalars` argument through
+`entryActions`' `serialize`, and every upstream builder now passes it.
+`buildOrderChange` predates that signature, so replaying the old hunk verbatim
+would have compiled and shipped a real bug — reordering a section whose body
+fields are YAML block scalars would reformat every one of them alongside the
+single `order:` line, and a reorder is the one action an editor performs many
+times in a row, so they would have met that diff noise once per click. It now
+passes `blockScalars` like its siblings. This is the concrete argument for
+re-deriving rather than replaying: a replayed patch fails loudly only when the
+surrounding lines move, and silently when a signature grows.
+
 **The remaining half is still meant to be temporary.** The lifecycle, which this
 repo has now run twice — the media guard in `@codeyam+cms+0.2.2.patch` (deleted
 by `abc5872` once 0.4.0 shipped it) and the deploy watch above — is: file the
 change upstream against `codeyam-ai/codeyam-cms`, and delete the patch on the
 release that carries it.
 
-**Pin the dependency EXACTLY** (`"@codeyam/cms": "0.5.0"`, no caret). `npm
+**Pin the dependency EXACTLY** (`"@codeyam/cms": "0.7.1"`, no caret). `npm
 install @codeyam/cms@x` rewrites it to `^x` on its own, and a caret is what makes
 the filename-matching failure below happen silently on a patch release nobody ran
 deliberately.

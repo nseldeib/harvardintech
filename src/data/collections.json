@@ -1,6 +1,105 @@
 {
   "collections": [
     {
+      "id": "blog",
+      "label": "Blog Posts",
+      "singular": "blog post",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "name": "date",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "name": "summary",
+          "label": "Summary",
+          "type": "textarea",
+          "optional": true
+        },
+        {
+          "name": "coverImage",
+          "label": "Cover image",
+          "type": "image",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "events",
+      "label": "Events",
+      "singular": "event",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "name": "date",
+          "label": "Date",
+          "type": "date"
+        },
+        {
+          "name": "location",
+          "label": "Location",
+          "type": "text",
+          "optional": true
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "optional": true
+        },
+        {
+          "name": "link",
+          "label": "Registration link",
+          "type": "text",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": "team",
+      "label": "Team",
+      "singular": "team member",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text"
+        },
+        {
+          "name": "role",
+          "label": "Role",
+          "type": "text"
+        },
+        {
+          "name": "photo",
+          "label": "Photo",
+          "type": "image",
+          "optional": true
+        },
+        {
+          "name": "bio",
+          "label": "Bio",
+          "type": "textarea",
+          "optional": true
+        },
+        {
+          "name": "order",
+          "label": "Order",
+          "type": "number",
+          "optional": true
+        }
+      ]
+    },
+    {
       "id": "chapters",
       "label": "Chapters",
       "singular": "Chapter",
