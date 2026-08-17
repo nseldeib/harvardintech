@@ -21,6 +21,7 @@
 // uses.
 import MomentumHero from './donate/MomentumHero.astro';
 import MomentumStats from './donate/MomentumStats.astro';
+import GoalMeter from './donate/GoalMeter.astro';
 import MomentumAccomplishments from './donate/MomentumAccomplishments.astro';
 import MomentumNarrative from './donate/MomentumNarrative.astro';
 import GiftPillars from './donate/GiftPillars.astro';
@@ -119,6 +120,11 @@ const tinted = tintedFlags(sections);
             {Body ? <Body /> : null}
           </MomentumNarrative>
         );
+      // The section's own `title` is the heading here, not a `donatePage.json`
+      // key: the meter has no card data of its own, which puts it closer to
+      // `narrative` than to the slot bands in that one respect.
+      case 'goal-meter':
+        return <GoalMeter title={section.title} widgetId={section.widgetId} />;
       case 'accomplishments':
         return (
           <MomentumAccomplishments

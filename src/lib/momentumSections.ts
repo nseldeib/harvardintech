@@ -7,12 +7,14 @@ import { sortByOrder } from './order';
 
 /**
  * The section kinds `MomentumFundPage` knows how to render. `narrative` uses the
- * entry's own title/body/image; the rest are slots whose card data still comes
- * from `donatePage.json` (and, for `testimonials` and `donors`, from their own
- * collections), so their entry carries only `kind` + `order`.
+ * entry's own title/body/image and `goal-meter` its own title + `widgetId`; the
+ * rest are slots whose card data still comes from `donatePage.json` (and, for
+ * `testimonials` and `donors`, from their own collections), so their entry
+ * carries only `kind` + `order`.
  */
 export const SECTION_KINDS = [
   'narrative',
+  'goal-meter',
   'accomplishments',
   'pillars',
   'testimonials',
@@ -34,6 +36,7 @@ export type SectionKind = (typeof SECTION_KINDS)[number];
  * is one testable fact per page instead of markup.
  */
 export const SECTION_LABELS: Partial<Record<SectionKind, string>> = {
+  'goal-meter': 'Our progress',
   accomplishments: 'What we have accomplished so far',
   pillars: 'What your gift powers',
   testimonials: 'From our community',
@@ -52,6 +55,10 @@ export interface SectionLike {
   title?: string;
   layout?: string;
   image?: string;
+  /** The Givebutter widget id. `goal-meter` sections only — the same
+   *  kind-specific treatment `layout` and `image` get for narratives. Blank
+   *  renders no band at all. */
+  widgetId?: string;
   order?: number;
   /** Renders the "coming soon" placeholder in place of this band. Classified by
    *  `resolveVisibility` in `./homeSections.ts`, shared with the homepage so both
@@ -82,9 +89,10 @@ export function orderedSections<T extends SectionLike>(sections: readonly T[]): 
  * order, for an advisory `console.warn` at build time.
  *
  * Advisory, never build-failing — the same treatment `chapters/[slug].astro`
- * gives an orphan event tag. `kind` is free text because the CMS has no select
- * control, so a typo is a normal editing mistake; it must cost that editor a
- * missing section and a build log line, not the whole deploy.
+ * gives an orphan event tag. The CMS renders `kind` as a select now, but the
+ * schema stays free text so a hand-edited file or a scenario seed cannot fail
+ * the build; a stray value must cost that editor a missing section and a log
+ * line, not the whole deploy.
  */
 export function unknownSectionKinds(sections: readonly SectionLike[]): string[] {
   const known = new Set<string>(SECTION_KINDS);
@@ -93,6 +101,27 @@ export function unknownSectionKinds(sections: readonly SectionLike[]): string[] 
     if (!known.has(section.kind)) seen.add(section.kind);
   }
   return [...seen];
+}
+
+/**
+ * The slugs of `goal-meter` sections carrying no widget id, for the same kind of
+ * advisory `console.warn` at build time.
+ *
+ * The goal meter's half-finished state needs naming precisely because it is
+ * SILENT: a meter section with no id renders nothing at all, which is the
+ * designed behaviour and also exactly what a section an editor forgot looks
+ * like. `unknownSectionKinds` covers the mistyped-kind case; this covers the
+ * right-kind-wrong-field one, and the slug is what makes it diagnosable.
+ *
+ * Blank and whitespace-only count as missing, matching the component: both
+ * render nothing, so both deserve the line.
+ */
+export function goalMetersMissingWidgetId(
+  sections: readonly (SectionLike & { slug?: string })[],
+): string[] {
+  return sections
+    .filter((section) => section.kind === 'goal-meter' && !section.widgetId?.trim())
+    .map((section) => section.slug ?? '(unnamed section)');
 }
 
 /**

@@ -1,0 +1,339 @@
+{
+  "timestamp": "2026-08-17T18:25:36Z",
+  "title": "A Live Fundraising Meter The Momentum Fund Page Can Ask For",
+  "type": "feature",
+  "userRequest": "Embed a live Givebutter goal meter on the Momentum Fund page (/donate) so visitors see real fundraising progress instead of only static copy — with the account key editable in the CMS rather than pasted as a script tag, and the meter placeable as a reorderable section.",
+  "description": "Ships the CAPABILITY, not a meter. /donate is byte-for-byte unchanged on deploy; an editor turns the meter on from /admin by adding a goal-meter section and pasting a widget ID. That scope was the user's call at the plan gate — the alternative was seeding a band nobody had a live campaign for yet.\n\nThree pieces. `givebutterScriptSrc` decides whether the site loads Givebutter's code at all and at what URL: blank or whitespace returns undefined, which is the DEFAULT and means no third-party request rather than an empty tag pointing at a CDN. The id is URL-encoded because it arrives by copy-paste, and a pasted `&` or `#` must not be able to add query parameters or truncate the ones already there. `GivebutterWidgets.astro` renders that script into every page's <head> via HeadExtras — the one partial every shell includes — so a meter dropped on the homepage later needs no second wiring step and no route can silently miss it. `GoalMeter.astro` is the band, styled to match MomentumStats so progress reads as part of the campaign page rather than a pasted-in third-party box.\n\nThe account id is a narrow CMS field, not the customHeadHtml escape hatch that could already carry the script verbatim. That box is the inject-anything door where a typo is a broken <head> on every page; a key box cannot break page structure. It is exactly the split Analytics.astro makes for the GA4 id, and it inherits the same fallback rule in mergeIntegrations: a cleared box falls back to the committed settings, so turning Givebutter off is deliberately a two-step edit. The failure it guards is quiet — not a broken page, just every meter on the site silently ceasing to render.\n\nTHE BAND COLLAPSES WHEN THE WIDGET CANNOT RENDER, which reverses the plan's written decision (reserve height plus a noscript line) on the user's explicit instruction at the confirm gate. It ships hidden and reveals itself only once customElements.whenDefined('givebutter-widget') resolves — a real did-their-code-arrive test rather than a timer, and independent of layout, because a display:none band gives its children no box a height check could measure. The consequence is deliberate and permanent: the meter is invisible to a no-JS visitor, a blocked CDN, and EVERY screenshot capture, all of which collapse to the same clean page. That is why no scenario here can show a filled meter, and why the collapse is a class rather than the `hidden` attribute — tooling that walks the DOM treats that attribute as not-rendered whatever the cascade says, which made the band unreviewable even on a harness page that deliberately showed it.\n\nTwo things the work caught that the code alone would not have. The demo screenshot showed the Givebutter account box MISSING from /admin: the field had reached the Zod schema and the settings singleton but not the CMS collection registry, which is what renders inputs — the exact 'data with nowhere to edit it' gap this feature exists to close. The repo's own drift guard would have caught it, but tests are blocked before the Demo step, so the picture caught it first. And the long-title scenario showed the heading running the full width of the band while the meter beneath it stopped at 720px; it is now bounded to the meter's width and centered over it.\n\n`goalMetersMissingWidgetId` was extracted out of the /donate route to sit beside `unknownSectionKinds`, its direct sibling: that one covers a mistyped kind, this one the right-kind-wrong-field case. Both are advisory and never build-failing. Naming the slug is the whole point, because a meter with no id renders nothing — indistinguishable from a section an editor forgot.\n\nTwo things surfaced at the audit gate that were not this feature's doing but had to be cleared, because the gate covers the branch rather than the diff. First, adding the account id to the site settings interface put a new field in a module nearly every page transitively imports — so the ENTIRE project's screenshots went dependency-stale at once and had to be recaptured. That is the honest price of putting the key where it belongs; the alternative was a second settings module existing purely to avoid invalidating captures. Second, the refresh exposed a latent collision the stale frames had been hiding: momentumhero-personalized and momentumhero-video-backdrop rendered pixel-identical frames, because a video element shows its poster and the poster IS the hero image, and the two isolation pages were otherwise identical down to the greeting name. Resolved by varying the name rather than by baselining the collision or deleting a scenario — and deliberately NOT by falling back to the generic headline, which is what the missing-video scenario renders and would have moved the collision rather than fixed it.\n\nWorth recording for whoever hits it next: the recapture pipeline posts a revalidate through the editor's reverse proxy on port 4321, and that listener died mid-run. Every capture then failed with one identical signature while the app itself stayed healthy on its internal port 4322 — routes, builds and tests all passed throughout, which is exactly what makes it confusing. `restart-server` fixes it; `restart-dev-server` cannot, because its health check routes back through the wedged proxy.",
+  "modifiedFiles": [
+    {
+      "path": "docs/editing-the-site.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/HeadExtras.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/siteIntegrations/site.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/settings.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSections.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSections.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/pageCopyMerge.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/pageCopyMerge.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/donate.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumHero-Video.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/GivebutterWidgets.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/GoalMeter.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/givebutter.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/givebutter.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GoalMeter-LongTitle.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GoalMeter.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Blog Preview Link - Shared Draft",
+      "screenshotPath": "blog-preview-link-shared-draft--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - A Single Photo",
+      "screenshotPath": "chapter-gallery-a-single-photo--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Curated and Capped",
+      "screenshotPath": "chapter-gallery-curated-and-capped--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Photo Enlarged",
+      "screenshotPath": "chapter-gallery-photo-enlarged--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Show All Revealed",
+      "screenshotPath": "chapter-gallery-show-all-revealed--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Three Photos, Three Columns",
+      "screenshotPath": "chapter-gallery-three-photos-three-columns--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Longest Chapter Name Wraps",
+      "screenshotPath": "chapter-route-longest-chapter-name-wraps--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - A Tick That Could Not Be Saved",
+      "screenshotPath": "cutover-runbook-a-tick-that-could-not-be-saved--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Complete",
+      "screenshotPath": "cutover-runbook-complete--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Cutover Day",
+      "screenshotPath": "cutover-runbook-cutover-day--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Decisions Answered Nothing Begun",
+      "screenshotPath": "cutover-runbook-decisions-answered-nothing-begun--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Nothing Started",
+      "screenshotPath": "cutover-runbook-nothing-started--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Partway Through",
+      "screenshotPath": "cutover-runbook-partway-through--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - The Records On A Phone",
+      "screenshotPath": "cutover-runbook-the-records-on-a-phone--mobile.png"
+    },
+    {
+      "name": "Cutover Runbook - Waiting On One Answer",
+      "screenshotPath": "cutover-runbook-waiting-on-one-answer--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Homepage Phased For Launch",
+      "screenshotPath": "harvard-in-tech-homepage-phased-for-launch--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Upcoming Events Excludes Past Ones",
+      "screenshotPath": "harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Password Required",
+      "screenshotPath": "locked-preview-password-required--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Unlocked With The Password",
+      "screenshotPath": "locked-preview-unlocked-with-the-password--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Wrong Password",
+      "screenshotPath": "locked-preview-wrong-password--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Giving Platform Is Chosen",
+      "screenshotPath": "momentum-fund-a-giving-platform-is-chosen--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Filtering The Donor Wall",
+      "screenshotPath": "momentum-fund-filtering-the-donor-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Donor Wall Moved To The Top",
+      "screenshotPath": "momentum-fund-the-donor-wall-moved-to-the-top--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The First Donor On The Wall",
+      "screenshotPath": "momentum-fund-the-first-donor-on-the-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Goal Meter Held As Coming Soon",
+      "screenshotPath": "momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png"
+    },
+    {
+      "name": "Site Page - A Page Written In The CMS",
+      "screenshotPath": "site-page-a-page-written-in-the-cms--desktop.png"
+    },
+    {
+      "name": "Site Page - Long Title And No Description",
+      "screenshotPath": "site-page-long-title-and-no-description--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Rewritten From The CMS",
+      "screenshotPath": "volunteer-page-rewritten-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Retired Projects Never Suggested",
+      "screenshotPath": "volunteer-project-detail-retired-projects-never-suggested--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Communities Derived",
+      "screenshotPath": "primarynav-communities-derived--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    },
+    {
+      "name": "GoalMeter - The Band Around Givebutter's Meter",
+      "screenshotPath": "goalmeter-the-band-around-givebutter-s-meter--desktop.png"
+    },
+    {
+      "name": "GoalMeter - A Campaign Name That Runs Long",
+      "screenshotPath": "goalmeter-a-campaign-name-that-runs-long--desktop.png"
+    },
+    {
+      "name": "CMS Analytics And Embeds",
+      "screenshotPath": "cms-analytics-and-embeds--desktop.png"
+    },
+    {
+      "name": "CMS Section Editor - Section Type Is A Dropdown",
+      "screenshotPath": "cms-section-editor-section-type-is-a-dropdown--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 821,
+    "passed": 821,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 821,
+        "passed": 821
+      }
+    ]
+  }
+}

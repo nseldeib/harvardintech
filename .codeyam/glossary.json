@@ -536,6 +536,18 @@
     ]
   },
   {
+    "description": "Where to load Givebutter's widget loader from, or undefined when no account id is configured. The undefined case is the DEFAULT and the shipping state for a site that has not chosen a giving platform, so it has to mean no third-party request at all rather than an empty tag pointing at a CDN; blank and whitespace-only are treated as absent so a cleared CMS box cannot produce acct=. The id is URL-encoded because it arrives by copy-paste from Givebutter's dashboard, and a pasted value carrying & or # must not be able to add query parameters or truncate the ones already there. Pure and framework-free, the same shape as resolveGiveHref in ./giving.ts.",
+    "filePath": "src/lib/givebutter.ts",
+    "name": "givebutterScriptSrc",
+    "testFile": "src/lib/givebutter.test.ts"
+  },
+  {
+    "description": "The slugs of goal-meter sections carrying no widget id, for an advisory console.warn at build time. This state needs naming precisely because it is SILENT: a meter section with no id renders nothing at all, which is the designed behaviour and also exactly what a section an editor forgot looks like. unknownSectionKinds covers the mistyped-kind case; this covers the right-kind-wrong-field one, and the slug is what makes it diagnosable. Blank and whitespace-only count as missing, matching the component, since both render nothing. Advisory and never build-failing, the same contract its sibling carries.",
+    "filePath": "src/lib/momentumSections.ts",
+    "name": "goalMetersMissingWidgetId",
+    "testFile": "src/lib/momentumSections.test.ts"
+  },
+  {
     "description": "Donors grouped into the recognition wall's bands, in the order the giving levels are declared, so the wall reads top-down from the largest commitment. Within a band the site-wide rule applies: the optional order pin first, then alphabetically by the DISPLAYED name — sorting by a withheld real name would break the alphabetical run at every anonymous card and hint at its first letter. A level with no donors is omitted rather than headed over nothing; a donor whose tier matches no declared level is not dropped but collects in a trailing 'Other supporters' group, so a renamed level or a typo costs an editor a visible mistake rather than a silently missing gift.",
     "filePath": "src/lib/donors.ts",
     "name": "groupDonorsByTier",
@@ -749,7 +761,7 @@
     ]
   },
   {
-    "description": "Reads the single siteIntegrations entry and merges the analytics id and custom head/body HTML over settings.json. Called from components rather than routes — Analytics, HeadExtras, and the two shells that inject body HTML — because these belong to every page, and threading them through every route's props would be the one arrangement where a new shell could silently ship without analytics.",
+    "description": "Reads the single siteIntegrations entry and merges the analytics id, the Givebutter account id, and the custom head/body HTML over settings.json. Called from components rather than routes — Analytics, GivebutterWidgets, HeadExtras, and the two shells that inject body HTML — because these belong to every page, and threading them through every route's props would be the one arrangement where a new shell could silently ship without analytics or without the widgets loader.",
     "filePath": "src/lib/integrationsContent.ts",
     "name": "loadIntegrations",
     "untestabilityReason": {
@@ -838,7 +850,7 @@
     "testFile": "src/lib/pageCopyMerge.test.ts"
   },
   {
-    "description": "The site-wide analytics id and custom head/body HTML over settings.json. The fallback matters more here than anywhere else in this migration: every other field degrades to slightly stale copy, while these degrade to a site with no analytics and no verification tags, on every page, with nothing visible to notice. So a deleted entry or a cleared box falls back to the committed settings rather than to off — and turning analytics off is consequently a two-step edit, the right trade against one mistake silently unhooking measurement from the whole site.",
+    "description": "The site-wide integration keys over settings.json: the analytics id, the Givebutter account id, and the custom head/body HTML. The fallback matters more here than anywhere else in this migration. Every other field degrades to slightly stale copy, while these degrade to a site with no analytics and no verification tags, or to every goal meter silently failing to render, on every page, with nothing visible to notice. So a deleted entry or a cleared box falls back to the committed settings rather than to off, and turning either integration off is consequently a two-step edit, the right trade against one mistake silently unhooking measurement or the meter from the whole site.",
     "filePath": "src/lib/pageCopyMerge.ts",
     "name": "mergeIntegrations",
     "testFile": "src/lib/pageCopyMerge.test.ts"
@@ -1226,7 +1238,7 @@
     "testFile": "src/lib/homeSections.test.ts"
   },
   {
-    "description": "The unrecognized kind values in a section list, de-duplicated and in first-seen order, so the /donate route can warn about sections it skipped. Advisory and never build-failing: kind is free text because the CMS has no select control, so a typo must cost one section and a log line, not the deploy.",
+    "description": "The unrecognized kind values in a section list, de-duplicated and in first-seen order, so the /donate route can warn about sections it skipped. Advisory and never build-failing: the CMS renders kind as a select now, but the Zod schema stays free text on purpose, so a value that predates an option, or arrives from a hand-edited file or a scenario seed, costs one section and a log line rather than the whole deploy. Its sibling goalMetersMissingWidgetId covers the other half of the same problem: a section of the RIGHT kind whose own field is unfilled.",
     "filePath": "src/lib/momentumSections.ts",
     "name": "unknownSectionKinds",
     "testFile": "src/lib/momentumSections.test.ts"

@@ -6,10 +6,12 @@
 // silently missing analytics because it rendered its own <html>.
 //
 // Order: analytics first (so the loader starts early), then JSON-LD, then the
-// raw custom-head escape hatch. Custom *body* HTML is injected separately in
-// each shell right before </body> (it can't live in <head>).
+// Givebutter widgets loader, then the raw custom-head escape hatch. Custom
+// *body* HTML is injected separately in each shell right before </body> (it
+// can't live in <head>).
 import Analytics from './Analytics.astro';
 import StructuredData from './StructuredData.astro';
+import GivebutterWidgets from './GivebutterWidgets.astro';
 import PreviewGate from './PreviewGate.astro';
 import { settings } from '../lib/site';
 import { loadIntegrations } from '../lib/integrationsContent';
@@ -20,4 +22,5 @@ const { customHeadHtml } = await loadIntegrations(settings);
 <PreviewGate />
 <Analytics />
 <StructuredData />
+<GivebutterWidgets />
 {customHeadHtml ? <Fragment set:html={customHeadHtml} /> : null}

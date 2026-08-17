@@ -49,12 +49,21 @@ the one-box `donateUrl` edit in /admin it already is.
   build.** Same treatment `/donate` already gives an unrecognized `kind`: an
   editing mistake costs one missing band and a build log line, never the deploy.
   `comingSoon` remains the way to hold the band visibly.
-- **The band reserves its own height and carries a `<noscript>` fallback.** The
+- **The band collapses entirely when the widget does not render.** *(Decided by
+  the user at the confirm gate, reversing this plan's original call — which was
+  to reserve the band's height and carry a `<noscript>` fallback line.)* The
   widget is third-party JavaScript from a CDN: it does not render for a no-JS
   visitor, and it will not render inside codeyam's capture environment either.
-  Reserving space plus a fallback line means the band is a heading and a
-  progress area in every one of those cases, not a blank gap where the meter
-  should be.
+  Rather than show a heading over an empty progress area in those cases, the
+  band shows nothing at all and the page reads continuously — the same end state
+  as a section with no widget id.
+
+  This cannot be decided server-side, so the band ships hidden and reveals
+  itself only once the widget has actually rendered. Two consequences to hold
+  onto: the meter is invisible in every captured scenario (so the isolated
+  component and the CMS screens carry the demo), and the reveal must be
+  resilient — a band that never un-hides on a slow CDN is indistinguishable
+  from one that is off.
 
 ## Implementation
 
@@ -147,20 +156,39 @@ only (mirroring how `layout`/`image` are narrative-only).
 - Add a `widgetId` field: `text`, optional, label "Goal meter widget ID", hint
   naming where to find it in Givebutter and that it is used by goal-meter
   sections only.
-- Update the `kind` field's hint so it mentions the new band.
+- Update the `kind` field's hint so it mentions the new band, and name the
+  recommended placement — **just above the closing ask**, so progress and the
+  final Give button read as one moment. Guidance in a hint rather than a seeded
+  section, because no goal-meter section ships (see below); an editor adding the
+  band should not have to guess where it belongs.
+
+**No goal-meter section is created.** *(User decision at the confirm gate.)*
+`/donate` is unchanged by this work: the capability ships, the page does not
+move until an editor adds the band and pastes a widget id in /admin. So no entry
+is added under `src/content/momentumSections/`, and the demo scenarios below
+supply their goal-meter sections as scenario seed data rather than committed
+content.
 
 ### 5. The band itself
 
 **New file**: `src/components/donate/GoalMeter.astro`
 
 Props: `title?`, `widgetId?`, `tinted?`. Renders nothing when `widgetId` is
-blank. Otherwise a `<section>` with the heading and a slot element
-`<givebutter-widget id={widgetId}></givebutter-widget>` inside a container with a
-`min-height` so the page does not jump (and so the band still reads as "the
-progress area" when the widget cannot load), plus a `<noscript>` line pointing at
-the giving CTA. Styling should follow `MomentumStats.astro` — the same paper-2
-band, the same section rhythm — so the meter reads as part of the campaign page
-rather than a pasted-in third-party box.
+blank. Otherwise a `<section>` with the heading and the slot element
+`<givebutter-widget id={widgetId}></givebutter-widget>`, styled to follow
+`MomentumStats.astro` — the same paper-2 band, the same section rhythm — so the
+meter reads as part of the campaign page rather than a pasted-in third-party
+box.
+
+Per the collapse decision above, the `<section>` ships hidden (a `hidden`
+attribute or a display-none class set in the markup, NOT a script-added one, so
+a no-JS visitor never sees it flash) and is revealed only once the widget has
+actually rendered content. A small inline script observes the custom element and
+un-hides the band when it upgrades; if it never upgrades, the band stays
+collapsed and the page reads exactly as it would with no meter at all. The
+reveal check should be a genuine "did this render" test rather than a fixed
+timer, so a slow CDN eventually shows the meter instead of silently swallowing
+it.
 
 If `astro check` objects to the bare custom element, fall back to
 `<div set:html={...}>` with the id escaped; prefer the direct element.
@@ -255,20 +283,56 @@ wrong container for a script-based custom element.
 
 ## Scenarios to Demonstrate
 
-- **The meter live under the hero** — `/donate` with a `goal-meter` section at
-  `order: 1` carrying a widget id, showing where the band sits in the campaign
-  page's rhythm.
-- **An editor moves the meter down** — the same page with the meter ordered
-  below the "Why Support Harvard in Tech?" narrative, demonstrating that
-  position is an Order field, not a code change.
-- **Goal meter section with no widget id** — the band drops out and the page
-  reads continuously, with the advisory in the build log rather than a gap.
-- **Goal meter held as coming soon** — `comingSoon: true`, showing the
-  placeholder named by the new `SECTION_LABELS` entry.
-- **Isolated `GoalMeter`** — configured and blank-id states, captured on their
-  own.
-- **The CMS side** — the "Analytics & embeds" screen with the new Givebutter
-  account box, and the Momentum Fund section editor with "goal-meter" offered in
-  the Section type dropdown and the widget id box beneath it.
-- **Account id cleared site-wide** — no loader script in `<head>` anywhere,
-  confirming the off state ships zero third-party markup.
+Every goal-meter section below is **scenario seed data**, not committed content —
+no such section ships (see section 4). And because the band collapses when the
+widget does not render, the third-party meter itself will not appear in a
+capture: what these scenarios prove is where the band sits in the page's rhythm
+and that it collapses cleanly, while the isolated component and the CMS screens
+carry the visual demo.
+
+**What was actually registered, and what the collapse decision cost.** The list
+below was written before the consequence was measured. Because the band reveals
+itself only when Givebutter's script defines the element — and that script never
+runs in a capture — a configured meter, a meter missing its widget id, and a page
+with no meter at all ALL produce frames byte-identical to the untouched
+`/donate`. Registering them would have added scenarios that prove nothing and
+that a reviewer cannot tell apart. So the page-level states collapsed to the one
+that genuinely renders, and the rest are pinned by unit tests instead.
+
+Registered:
+
+- **`GoalMeter - The Band Around Givebutter's Meter`** — the frame the site owns,
+  on its own harness page. The harness defeats the collapse with a global style
+  so the layout is reviewable at all; the empty area beneath the heading is
+  exactly the boundary between our band and their progress bar.
+- **`GoalMeter - A Campaign Name That Runs Long`** — the edge state, and the one
+  that earned its place: it caught the heading running the full width of the band
+  while the meter below stopped at 720px. Fixed, then re-captured.
+- **`Momentum Fund - The Goal Meter Held As Coming Soon`** — the only page-level
+  goal-meter state a screenshot can show, because `comingSoon` replaces the band
+  wholesale with the designed placeholder. Ordered under the hero so it lands
+  inside a viewport capture, and it exercises the new `SECTION_LABELS` entry: the
+  entry carries no title of its own, and the placeholder still announces "Our
+  progress".
+- **The two CMS screens**, folded into the EXISTING `cms-analytics-and-embeds`
+  and `cms-section-editor-section-type-is-a-dropdown` scenarios rather than added
+  beside them — the account box and the widget-id box are new fields on screens
+  that already had scenarios. The section-editor scenario also gained the
+  description it had been missing entirely.
+
+Deliberately not registered, with what covers them instead:
+
+- **The meter placed above the closing ask, and moved under the hero** — both
+  capture identically to the untouched page. Placement is instead documented in
+  the CMS field hint and in `docs/editing-the-site.md`.
+- **A goal-meter section with no widget id** — same identical frame; covered by
+  `goalMetersMissingWidgetId`'s seven unit tests, which assert the slug the build
+  advisory names.
+- **Account id cleared site-wide** — verified by hand end-to-end (loader script
+  present on `/donate` and the homepage with the id set, absent with it cleared,
+  and the two-step fallback confirmed by clearing only the CMS box) and pinned by
+  `givebutterScriptSrc`'s and `mergeIntegrations`' tests. No visual difference to
+  capture: the difference is a `<script>` tag in `<head>`.
+- **`/donate` exactly as it ships** — already covered by the existing
+  `momentum-fund-public-visitor`, which recaptured with no substantive change,
+  which is itself the proof that this work leaves the page alone.

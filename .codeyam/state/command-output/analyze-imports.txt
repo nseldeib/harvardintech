@@ -1,9 +1,10 @@
-{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786566697,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3883190}
-analyze-imports: scoped to 9 changed / 2 deleted file(s) since HEAD
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/br6goamkj.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/br6goamkj.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"analyze-imports","elapsed_secs":0,"emitted_at_unix":1786986231,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3436178}
+analyze-imports: scoped to 36 changed / 5 deleted file(s) since HEAD
+Analyzed 17 files, found 52 import edges, graph has 352 nodes
 {
-Analyzed 1 files, found 1 import edges, graph has 347 nodes
-  "analyzed": 1,
-  "entityCount": 432,
-  "graphSize": 347,
-  "totalImports": 1
+  "analyzed": 17,
+  "entityCount": 426,
+  "graphSize": 352,
+  "totalImports": 52
 }

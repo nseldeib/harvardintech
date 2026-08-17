@@ -1,6 +1,6 @@
 {
   "name": "MomentumHero - Video Backdrop",
-  "id": "3f48b302-15e5-4c8a-9ba8-f3f350a94ac0",
+  "id": "c0871795-ec48-45ca-9e32-5d0392b08a5a",
   "url": "/isolated-components/MomentumHero-Video",
   "dimensions": [
     "Desktop"
@@ -9,8 +9,8 @@
   "componentName": "MomentumHero",
   "scenarioType": "component",
   "pageFilePath": "src/components/donate/MomentumHero.astro",
+  "description": "The hero with the Hero video field set to a real committed file. READ THE CAPTURE CAREFULLY: it shows the hero PHOTO, not a frame of video, and that is correct rather than a failure. A video element displays its poster until playback starts, the poster here IS the hero image, and playback does not start in the headless capture browser (confirmed: a VP9 WebM behaves identically, so it is not a codec gap). So this frame is the poster path — the same pixels a visitor sees for the instant before the video starts, and the same pixels they keep if it never does. What it proves is the layout claim: the headline, subhead and Give button are exactly where they are without a video, because the hero gained a backdrop rather than becoming a player. The greeting name here is deliberately different from the photo-hero scenario's: because the video shows its poster — which is the hero image — this frame would otherwise be pixel-identical to MomentumHero's, and two scenarios rendering the same frame are a collision the distinct-capture audit rejects, since it cannot tell a real state from a dropped seed. It keeps a NAMED headline rather than falling back to the generic one, because the generic headline is what the missing-video scenario renders.",
   "demonstratesState": {
     "branches": "branch-1"
-  },
-  "description": "The hero with the Hero video field set to a real committed file. READ THE CAPTURE CAREFULLY: it shows the hero PHOTO, not a frame of video, and that is correct rather than a failure. A video element displays its poster until playback starts, the poster here IS the hero image, and playback does not start in the headless capture browser (confirmed: a VP9 WebM behaves identically, so it is not a codec gap). So this frame is the poster path — the same pixels a visitor sees for the instant before the video starts, and the same pixels they keep if it never does. What it proves is the layout claim: the headline, subhead and Give button are exactly where they are without a video, because the hero gained a backdrop rather than becoming a player."
+  }
 }

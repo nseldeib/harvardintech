@@ -1,5 +1,5 @@
 // codeyam-generated — DO NOT EDIT.
-// codeyam-editor: 0.1.7  source-sha256: 48342371cbd9448e9b9d1914c27de8f1d32f3aa4561ef4136ea6f04600347faf
+// codeyam-editor: 0.1.7  source-sha256: a84aee625b706c3a27da82e4ae4fead4048e612fba8c4cd106bd47b1d2d5032b
 const {
   hasLoadingMarkers,
   shouldStopWaitingForImages,
@@ -148,20 +148,54 @@ function defaultReadServerState() {
   return JSON.parse(fs.readFileSync(statePath, "utf8"));
 }
 
-// Resolve the `localhost` origin that serves the iframe-harness route. The
-// harness is mounted on the editor's control-api listener, whose port is
-// recorded in `.codeyam/server-state.json` as `controlPort` (the same file the
-// top-level loader already reads for `appPort`). Returns
-// `http://localhost:<controlPort>` — a secure context the nested iframe
-// inherits — or null when the state file is missing/unreadable, in which case
-// the caller falls back to the legacy in-page `setContent` harness.
-// `readStateFile` is injectable so the resolver is unit-testable without disk.
-function resolveHarnessOrigin({ readStateFile = defaultReadServerState } = {}) {
+// Resolve the loopback origin that serves the iframe-harness route. The harness
+// is mounted on the editor's control-api listener, whose port is recorded in
+// `.codeyam/server-state.json` as `controlPort` (the same file the top-level
+// loader already reads for `appPort`). Returns `http://127.0.0.1:<controlPort>`
+// — a secure context the nested iframe inherits, exactly as `localhost` is — or
+// null when the state file is missing/unreadable, in which case the caller falls
+// back to the legacy in-page `setContent` harness. `readStateFile` is injectable
+// so the resolver is unit-testable without disk.
+//
+// The HOST is taken from `targetUrl` — the URL the iframe will load — and only
+// the port comes from server-state. That mirroring is load-bearing, because the
+// two capture modes address the editor by different loopback spellings:
+// `/__codeyam_preview` captures are pinned to `127.0.0.1` (PROXY_CAPTURE_LOOPBACK
+// in handlers.rs, matching the forwarder's own pinning) while direct app-port
+// captures use `localhost`. `localhost` and `127.0.0.1` are DIFFERENT sites to
+// the cookie jar, so whenever the harness host and the iframe host disagree the
+// nested load is cross-site — and the `cy_session` cookie is `SameSite=Lax`,
+// which rides top-level navigations only. It is therefore withheld from the
+// iframe request (and from the `/api/*` calls the framed page makes), and the
+// token-gated routes answer 401 on a non-loopback bind.
+//
+// Hardcoding EITHER spelling only moves the failure between the two modes:
+// `localhost` 401s every `/__codeyam_preview` capture, `127.0.0.1` 401s the
+// framed page's own `/api/scenarios` + `/api/render-environment` calls. Raising
+// the cookie to `SameSite=None` fixes neither — Chromium rejects `None` without
+// `Secure`, and these origins are plain http. Mirroring the target's host is what
+// keeps the harness same-site in both modes, which is also the same-origin model
+// the `/__codeyam_preview` subpath proxy exists to provide.
+//
+// `targetUrl` omitted or unparseable falls back to `127.0.0.1`, the spelling the
+// proxy-route capture (the token-gated one) uses.
+function resolveHarnessOrigin({
+  readStateFile = defaultReadServerState,
+  targetUrl = null,
+} = {}) {
   try {
     const state = readStateFile();
     const port = state && state.controlPort;
     if (typeof port === "number" && port > 0) {
-      return `http://localhost:${port}`;
+      let host = "127.0.0.1";
+      if (targetUrl) {
+        try {
+          host = new URL(targetUrl).hostname || host;
+        } catch (_) {
+          /* unparseable target — keep the proxy-route default */
+        }
+      }
+      return `http://${host}:${port}`;
     }
   } catch (_) {
     /* missing/unreadable state — fall back to setContent */
@@ -302,16 +336,28 @@ async function collectVisibleTextLength(target) {
 }
 
 // Inject a capture-only stylesheet that snaps entrance animations to their
-// FINAL frame: remove animation/transition timing and force the common
-// "hidden until revealed" symptoms (`opacity:0`, an entrance `transform`) back
-// to their resting values. This is the belt to `scrollThroughDocument`'s
-// suspenders — it covers pure-CSS keyframe entrances that are mid-flight or
-// stuck at an `opacity:0` start state even after the observers fired. It
-// targets the generic CSS symptom, not any framework's reveal class, so it
-// works for any stack. The caller gates this OFF when a scenario declares an
-// interactive state, so an intentionally animated/collapsed interactive frame
-// is never clobbered. Idempotent (a single injected style id) and best-effort.
-// Returns true when the style is present after the call.
+// FINAL frame: remove animation/transition timing, then reveal the elements an
+// entrance animation left INVISIBLE. This is the belt to
+// `scrollThroughDocument`'s suspenders — it covers pure-CSS keyframe entrances
+// that are mid-flight or stuck at an `opacity:0` start state even after the
+// observers fired. It targets the generic CSS symptom, not any framework's
+// reveal class, so it works for any stack. The caller gates this OFF when a
+// scenario declares an interactive state, so an intentionally animated /
+// collapsed interactive frame is never clobbered. Idempotent (a single injected
+// style id) and best-effort. Returns true when the style is present after the
+// call.
+//
+// The reveal is per-element and conditional ON THE ELEMENT BEING INVISIBLE,
+// never a blanket `opacity: 1 !important` / `transform: none !important` over
+// `*`. A blanket rule cannot tell an entrance animation's `opacity: 0` from
+// DELIBERATE, resting state — a disabled control's dim, a muted row, a
+// collapsed chevron's rotation — so it silently flattened every one of them out
+// of every screenshot the capture pipeline produced. Two scenarios differing
+// only in such a state then captured byte-identically and collided in the
+// distinct-capture gate, and the collision was unfixable in the component: the
+// state rendered correctly in a real browser (verified: computed opacity 0.4 vs
+// 1) and was erased only at capture time. Anything already visible is now left
+// exactly as the app rendered it.
 async function forceFinalVisualState(target) {
   return target.evaluate(() => {
     const STYLE_ID = "__codeyam_force_final_state";
@@ -324,16 +370,39 @@ async function forceFinalVisualState(target) {
     if (typeof document.createElement !== "function") return false;
     const style = document.createElement("style");
     style.id = STYLE_ID;
+    // Temporal properties only — these carry no resting state, so removing
+    // them cannot erase anything the app meant to show.
     style.textContent =
       "*, *::before, *::after {" +
       "animation: none !important;" +
       "transition: none !important;" +
-      "opacity: 1 !important;" +
-      "transform: none !important;" +
       "}";
     const head = document.head || document.documentElement;
     if (!head || typeof head.appendChild !== "function") return false;
     head.appendChild(style);
+
+    // With animations disabled above, an element held back by an entrance
+    // animation now computes to its pre-animation resting state — typically
+    // `opacity: 0`, often paired with a translate/scale that parks it offscreen.
+    // Reveal exactly those, and only those: a fully transparent element shows
+    // nothing either way, so forcing it can hide no real state, while an element
+    // at any visible opacity is left untouched.
+    if (typeof document.querySelectorAll !== "function") return true;
+    const INVISIBLE_EPSILON = 0.01;
+    for (const el of document.querySelectorAll("*")) {
+      let computed = null;
+      try {
+        computed = getComputedStyle(el);
+      } catch (_) {
+        continue;
+      }
+      if (!computed) continue;
+      const opacity = parseFloat(computed.opacity);
+      if (!Number.isFinite(opacity) || opacity > INVISIBLE_EPSILON) continue;
+      if (!el.style || typeof el.style.setProperty !== "function") continue;
+      el.style.setProperty("opacity", "1", "important");
+      el.style.setProperty("transform", "none", "important");
+    }
     return true;
   });
 }

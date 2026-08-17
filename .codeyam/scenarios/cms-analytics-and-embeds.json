@@ -1,6 +1,6 @@
 {
   "name": "CMS Analytics And Embeds",
-  "id": "dc1f0df4-25ce-4ce6-8ba1-57f7339a23d4",
+  "id": "d606d6da-e92d-4280-979b-5dc7d3967117",
   "url": "/admin/siteIntegrations/site",
   "dimensions": [
     "Desktop"
@@ -9,6 +9,7 @@
   "seed": {
     "siteIntegrations": [
       {
+        "givebutterAccountId": "khqJtxj5uVUZ1eO8",
         "googleAnalyticsId": "G-GCBX577FFD",
         "slug": "site",
         "title": "Analytics & embeds"
@@ -17,5 +18,5 @@
   },
   "scenarioType": "application",
   "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
-  "description": "The measurement id and the raw head/body HTML boxes, on a screen of their own. These were always real editable data on settings.json, but the CMS settings form renders inputs for five scalar keys and round-trips the rest untouched — so adding a verification tag meant a developer and a deploy. Note the View-on-site control: this collection is declared as having no page of its own, so it reads 'This content has no page of its own' instead of offering a link. It configures every page, so there is no single page to send an editor to, and the old behaviour — a link to /siteIntegrations/site — pointed at a 404."
+  "description": "The site-wide integration keys on a screen of their own: the analytics measurement id, the Givebutter account id, and the raw head/body HTML boxes. All of these were always real editable data on settings.json, but the CMS settings form renders inputs for five scalar keys and round-trips the rest untouched — so setting any of them meant a developer and a deploy. The Givebutter account id is the newest and follows the same narrow, template-owned split as the analytics id: an editor types a key, never a script tag, because the box beneath it (Custom head HTML) is the inject-anything escape hatch where a typo is a broken head on every page. Blank means the site loads no Givebutter code at all, which is the shipping default for a site with no giving platform. Note the View-on-site control: this collection is declared as having no page of its own, so it reads 'This content has no page of its own' rather than offering a link — it configures every page, so there is no single page to send an editor to."
 }

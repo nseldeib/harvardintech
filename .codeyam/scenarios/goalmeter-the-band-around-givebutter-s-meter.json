@@ -1,0 +1,13 @@
+{
+  "name": "GoalMeter - The Band Around Givebutter's Meter",
+  "id": "f59c4e3f-1fa7-427a-821f-f4506d100bda",
+  "url": "/isolated-components/GoalMeter",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GoalMeter",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/GoalMeter.astro",
+  "description": "The frame the site owns around a third-party fundraising meter: the paper-2 band, the serif heading, and the area beneath it, matching MomentumStats so progress reads as part of the campaign page rather than a pasted-in box. READ THE CAPTURE CAREFULLY. The area under the heading is empty because Givebutter's widget script does not run here — and would not run inside any capture — so no screenshot can show their progress bar. On a real page the band ships COLLAPSED and reveals itself only once that script defines the givebutter-widget element; this harness page overrides the collapse with a global style so the layout is reviewable at all. The frame proves our half of the boundary and deliberately cannot prove theirs. A capture showing a filled meter here would mean the collapse had stopped working."
+}

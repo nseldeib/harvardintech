@@ -55,7 +55,7 @@ sections** in the admin sidebar and you will see one entry per section of the
 page, between the big photo header at the top and the "Help power what comes
 next" band at the bottom.
 
-There are two kinds of entry, and the difference matters:
+There are three kinds of entry, and the difference matters:
 
 **Sections you write here.** An entry whose *Section type* is `narrative` — "Why
 Support Harvard Alumni in Tech?" and "And Every Number Represents a Story" — holds its
@@ -74,6 +74,39 @@ Where their content actually lives:
 | "What Your Gift Powers" cards | the same |
 | The numbers band (`stats`) | the same |
 | The member quotes | the **Testimonials** collection in the sidebar |
+
+**The fundraising meter.** An entry whose type is `goal-meter` is a third thing
+again: you choose where it sits and what it is called, and Givebutter fills in
+the progress. See the next question.
+
+## "Can we show how much has been raised?"
+
+Yes — a live progress meter from Givebutter, placed like any other section.
+
+1. In **Momentum Fund sections**, add a section and set *Section type* to
+   `goal-meter`.
+2. Give it a **Heading** — this one is yours, e.g. "Our progress". `goal-meter`
+   is the only non-narrative section that uses the Heading field.
+3. Paste the **Goal meter widget ID** from Givebutter: in their dashboard open
+   the campaign → **Share** → **Embed**, and copy the `id=` value out of the code
+   they show you. Paste just that value, not the whole snippet.
+4. Set **Order**. Just above the closing "Help power what comes next" band reads
+   best — progress and the Give button land as one moment — but anywhere works.
+
+**If the widget ID is blank the section shows nothing at all.** Not an empty box,
+not a placeholder: the page reads as though the section were not there. That is
+deliberate, so a half-finished edit never looks broken to a visitor — but it does
+mean a meter you thought you added and cannot find is almost always a missing ID.
+
+The meter itself is drawn by Givebutter, not by us, so the figure in it comes
+from your campaign and updates on its own. If Givebutter is slow to load, or a
+visitor has JavaScript switched off, the band quietly disappears rather than
+leaving a heading stranded over an empty space.
+
+One part only the team can do: the **Givebutter account ID** under **Settings →
+Analytics & embeds** has to be filled in before any meter can appear. It already
+is, so you should not need to touch it — but if every meter on the site vanishes
+at once, that box is the first place to look.
 
 ## "Can the big photo at the top of the Momentum Fund page be a video?"
 
@@ -165,9 +198,6 @@ These are not in the CMS. Ask the team to change them:
 - **Video files.** The media library only accepts images, so a hero video has to
   be added by the team before you can point the **Hero video** field at it. Once
   it is there, setting, swapping and clearing it are yours.
-- The **Google Analytics ID**, and the custom `<head>` / `<body>` HTML boxes
-  (verification tags, pixels). These live in the site's settings file but the
-  editor renders no input for them yet.
 - The **sponsorship** and **volunteer** page copy.
 - Anything about the site's colors, fonts, or layout.
 
@@ -181,6 +211,14 @@ or hidden, because they are the frame those sections sit inside.
 The accomplishment cards, the gift-pillar cards, the homepage hero and the
 homepage figures used to be on this list. They are now collections in /admin —
 see the table above.
+
+**The analytics and embed settings are no longer on this list either.** The
+Google Analytics ID, the Givebutter account ID, and the custom `<head>` /
+`<body>` HTML boxes for verification tags and pixels all have their own screen at
+**Settings → Analytics & embeds**. Treat the two HTML boxes with care: whatever
+you paste runs on every page of the site, so only paste markup you trust and got
+from a service you recognise. The two ID boxes are the safe ones — they take a
+key, not code.
 
 ## A note on timing
 

@@ -1,23 +1,32 @@
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786567123,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3890697}
-⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786567123,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3890697}
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/b6alzwoq6.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/b6alzwoq6.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1786988582,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3476314}
+[refresh-tests --changed] scope: 19 changed path(s) (21 untracked included)
+[refresh-tests --changed]   matched runner(s): tests
+[refresh-tests --changed] narrowing WITHHELD — 3 changed file(s) may declare a test the registry does not know yet:
+[refresh-tests --changed]   src/lib/givebutter.test.ts — no source walker for this file type, so its tests could not be checked
+[refresh-tests --changed]   src/lib/momentumSections.test.ts — no source walker for this file type, so its tests could not be checked
+[refresh-tests --changed]   src/lib/pageCopyMerge.test.ts — no source walker for this file type, so its tests could not be checked
+[refresh-tests --changed]   the run therefore widens to each owning runner's changedCommand (whole-package scope), so a brand-new test still executes.
+[refresh-tests --changed]   to narrow instead, register the test(s) first: codeyam-editor editor reconcile-registry --auto-apply
+[refresh-tests --changed]   partition scope: all
+
+action required: 1 brand-new test file(s) ran scoped to themselves, but will NOT reach the audit-gate cache via --changed — re-run with --force before finalize
+note: --changed is a partial run: it updates only the affected partition cache(s),
+note: NOT the audit-gate full-suite cache. The untracked test file(s):
+  src/lib/givebutter.test.ts
+note: to land them in the gated full-suite cache (required before finalize), run:
+note:   codeyam-editor editor refresh-tests --force
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
-{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786567133,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3890697}
-{"command":"refresh-tests","elapsed_secs":10,"emitted_at_unix":1786567133,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3890697}
-[  12s] Still running: tests
-{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786567143,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3890697}
-{"command":"refresh-tests","elapsed_secs":20,"emitted_at_unix":1786567143,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3890697}
-[  22s] Still running: tests
-[  24s] Tests completed.
-All 1 tests passed.
-{"failed":0,"passed":1,"skipped":801,"success":true,"total":1}
+[   6s] Tests completed.
+All 134 tests passed.
+{"failed":0,"passed":134,"skipped":0,"success":true,"total":134}
 
 Partial run — partition caches WERE updated; the full-suite test-cache.json was
 NOT (full-suite hash invariant). If a stale-partition bail sent you here, that
 recovery has landed — re-run the command that bailed.
-Audit gates read the full-suite cache; run `codeyam-editor editor refresh-tests`
-(no flags) to refresh it before `editor audit` or step-5 advance.
+Audit gates read the full-suite cache. Flag-free `refresh-tests` updates it but
+is gated until `finalize`. To update the full-suite cache now (e.g. for
+brand-new tests), run: codeyam-editor editor refresh-tests --force

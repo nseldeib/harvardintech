@@ -20,6 +20,15 @@ import "../../../src/styles/tokens.css";
 // A separate page per state rather than one `?s=`-switched page: this is a
 // prerendered static build, so query params are empty at build time and a single
 // page would capture its default frame for every state.
+//
+// The greeting name is deliberately NOT the one the photo-hero scenario uses.
+// Because the video shows its poster — which IS the hero image — this capture is
+// otherwise pixel-identical to `MomentumHero.astro`, and two scenarios that
+// render the same frame are a collision the distinct-capture audit rejects: it
+// cannot tell a real state from a dropped seed. Varying the name is the smallest
+// honest difference, and it leaves both claims intact. It must not fall back to
+// the GENERIC headline either — that is what `MomentumHero-VideoMissing.astro`
+// renders, and matching it would just move the collision.
 ---
 
 <html lang="en">
@@ -39,7 +48,7 @@ import "../../../src/styles/tokens.css";
         ctaLabel="Make a Gift"
         email="ben@harvardintech.com"
         campaignName="The Momentum Fund"
-        previewName="Ben"
+        previewName="Nadia"
       />
     </div>
   </body>

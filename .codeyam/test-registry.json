@@ -2306,6 +2306,132 @@
       "runner": "tests"
     },
     {
+      "description": "The configured case: a real account id produces Givebutter's loader with the acct and p parameters their embed snippet carries.",
+      "file": "src/lib/givebutter.test.ts",
+      "format": "vitest",
+      "key": "givebutterScriptSrc › builds the loader URL from an account id",
+      "line": 12,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A fragment character would otherwise cut the URL short, dropping p=other.",
+      "file": "src/lib/givebutter.test.ts",
+      "format": "vitest",
+      "key": "givebutterScriptSrc › encodes a hash so it cannot truncate the URL",
+      "line": 52,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason the id is encoded rather than interpolated raw: a pasted value carrying a query-significant character must not be able to add parameters or truncate the ones already there.",
+      "file": "src/lib/givebutter.test.ts",
+      "format": "vitest",
+      "key": "givebutterScriptSrc › encodes characters that would otherwise alter the query string",
+      "line": 45,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A cleared CMS box arrives as an empty string, and must not produce acct=.",
+      "file": "src/lib/givebutter.test.ts",
+      "format": "vitest",
+      "key": "givebutterScriptSrc › returns undefined for an empty account id",
+      "line": 25,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "No account configured at all — the default state of the site. undefined is the caller's signal to render nothing, not to render an empty script tag.",
+      "file": "src/lib/givebutter.test.ts",
+      "format": "vitest",
+      "key": "givebutterScriptSrc › returns undefined when the account id is absent",
+      "line": 20,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Whitespace is what a box someone spacebarred into holds. Same as cleared.",
+      "file": "src/lib/givebutter.test.ts",
+      "format": "vitest",
+      "key": "givebutterScriptSrc › treats a whitespace-only account id as absent",
+      "line": 30,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The id arrives by copy-paste, so surrounding whitespace is routine and must not survive into the URL.",
+      "file": "src/lib/givebutter.test.ts",
+      "format": "vitest",
+      "key": "givebutterScriptSrc › trims surrounding whitespace before building the URL",
+      "line": 36,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Sections reach this from a content collection, where the slug is the filename and always present — but the type allows its absence, and a warning naming \"undefined\" would be worse than useless.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "goalMetersMissingWidgetId › falls back to a readable label when a section has no slug",
+      "line": 158,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The field is goal-meter-specific. Every other kind ignores it, so a section that happens to carry no widget id is not a problem and must not be named.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "goalMetersMissingWidgetId › ignores sections of every other kind",
+      "line": 130,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every offender gets named, not just the first — an editor fixing one should not have to rebuild to discover the next.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "goalMetersMissingWidgetId › reports every offending meter on a page with more than one",
+      "line": 141,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A page with no sections at all warns about nothing.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "goalMetersMissingWidgetId › reports nothing for an empty section list",
+      "line": 151,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A finished meter is not a mistake — the normal build must stay quiet.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "goalMetersMissingWidgetId › reports nothing when the goal meter has a widget id",
+      "line": 112,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The advisory that makes a silent state diagnosable: a goal meter with no widget id renders nothing, so without the slug in the log an editor cannot tell a deliberately-blank band from one they forgot to finish.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "goalMetersMissingWidgetId › reports the slug of a goal meter carrying no widget id",
+      "line": 103,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank and whitespace-only match what the component does with them — both render nothing — so both have to earn the same warning. A meter whose id was cleared, or spacebarred, is exactly the case this advisory exists for.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "goalMetersMissingWidgetId › treats an empty or whitespace-only widget id as missing",
+      "line": 120,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
       "description": "These have no single shared page to group under, so they share a heading that states the thing worth knowing: adding an entry adds a page.",
       "file": "src/lib/dashboardGrouping.test.ts",
       "format": "vitest",
@@ -3458,11 +3584,29 @@
       "runner": "tests"
     },
     {
+      "description": "Clearing the box alone must not unhook the meter site-wide. Turning Givebutter off is deliberately a two-step edit, exactly as it is for analytics.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › keeps the committed Givebutter account id when the editor cleared the box",
+      "line": 444,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The Givebutter account id inherits the analytics id's fallback rule, and for a comparable reason: losing it does not break a page, it silently stops every goal meter on the site from rendering. The band collapses, so there is nothing on screen to notice — the same class of invisible failure.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › keeps the committed Givebutter account id when there is no entry",
+      "line": 437,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
       "description": "The invisible failure this guards: a site that silently stopped measuring.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
-      "line": 419,
+      "line": 420,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -3471,7 +3615,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
-      "line": 414,
+      "line": 415,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -3480,7 +3624,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
-      "line": 448,
+      "line": 480,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -3489,8 +3633,26 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
-      "line": 457,
+      "line": 489,
       "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The genuine off state: nothing on either side. This is what makes the site ship no Givebutter loader at all, so it has to come back falsy rather than as an empty string that some caller might still treat as configured.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › leaves the Givebutter account id falsy when neither side sets it",
+      "line": 460,
+      "registeredAt": "2026-08-17T17:02:18Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Moving to a different Givebutter account is a one-box edit.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeIntegrations › takes a re-pointed Givebutter account id",
+      "line": 451,
+      "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
     {
@@ -3498,7 +3660,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed analytics id",
-      "line": 426,
+      "line": 427,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -3507,7 +3669,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes custom head and body HTML the editor added",
-      "line": 434,
+      "line": 466,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4029,7 +4191,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › drops sections whose kind matches no renderer",
-      "line": 43,
+      "line": 45,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4038,7 +4200,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › keeps every kind it declares support for",
-      "line": 54,
+      "line": 56,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4047,7 +4209,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › returns a new array and leaves the source untouched",
-      "line": 60,
+      "line": 62,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4056,7 +4218,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › returns an empty array unchanged",
-      "line": 72,
+      "line": 74,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4065,7 +4227,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › sorts a section with no order after every ordered section",
-      "line": 28,
+      "line": 29,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -4074,7 +4236,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › sorts sections by their order field",
-      "line": 13,
+      "line": 14,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5010,7 +5172,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › falls back to text-only for an absent or blank value",
-      "line": 162,
+      "line": 240,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5019,7 +5181,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › falls back to text-only for an unrecognized value",
-      "line": 169,
+      "line": 247,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5028,7 +5190,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › normalizes casing and surrounding whitespace",
-      "line": 174,
+      "line": 252,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5037,7 +5199,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › passes through the image layouts",
-      "line": 155,
+      "line": 233,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6531,8 +6693,17 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › alternates the tint across narrative sections",
-      "line": 100,
+      "line": 166,
       "registeredAt": "2026-07-31T19:59:08Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The goal meter is the newest interleaved band, and it carries its own paper-2 background like the others — so dropping a meter between two narratives must leave the prose rhythm below it exactly as it was.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "tintedFlags › does not let a goal meter shift the narrative alternation",
+      "line": 203,
+      "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
     {
@@ -6540,7 +6711,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › does not let an interleaved band shift the narrative alternation",
-      "line": 123,
+      "line": 189,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6549,7 +6720,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › never tints a non-narrative section",
-      "line": 111,
+      "line": 177,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6558,7 +6729,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns an empty array unchanged",
-      "line": 72,
+      "line": 74,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6567,7 +6738,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns one flag per section",
-      "line": 142,
+      "line": 220,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6576,7 +6747,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns the same flags when called repeatedly on the same input",
-      "line": 136,
+      "line": 214,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6783,7 +6954,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › de-duplicates a repeated unknown kind",
-      "line": 86,
+      "line": 88,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6792,7 +6963,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › reports kinds that match no renderer",
-      "line": 80,
+      "line": 82,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6801,7 +6972,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › reports nothing when every kind is known",
-      "line": 92,
+      "line": 94,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },

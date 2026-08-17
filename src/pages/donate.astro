@@ -24,6 +24,7 @@ import { donatePage, settings } from '../lib/site';
 import { publishedEntries } from '../lib/drafts';
 import { INCLUDE_DRAFTS } from '../lib/draftVisibility';
 import { loadMomentumSections } from '../lib/momentumSectionsContent';
+import { SECTION_KINDS, goalMetersMissingWidgetId } from '../lib/momentumSections';
 import { loadDonors } from '../lib/donorsContent';
 import {
   loadAccomplishments,
@@ -46,15 +47,30 @@ const donors = await loadDonors();
 // props-only and the isolated-component scenarios can hand it their own list.
 const { sections, unknownKinds } = await loadMomentumSections();
 
-// Advisory, never build-failing — `kind` is free text because the CMS has no
-// select control, so a typo is an ordinary editing mistake. It costs that editor
-// one missing section and this log line, not the deploy. Same treatment
-// `chapters/[slug].astro` gives an orphan event tag.
+// Advisory, never build-failing. The CMS renders `kind` as a select now, but the
+// schema stays free text on purpose, so a value from a hand-edited file or a
+// scenario seed costs that editor one missing section and this log line rather
+// than the deploy. Same treatment `chapters/[slug].astro` gives an orphan event
+// tag.
 if (unknownKinds.length > 0) {
   console.warn(
     `[donate] ${unknownKinds.length} Momentum Fund section(s) have an unrecognized type and ` +
       `will not appear on the page: ${unknownKinds.map((k) => JSON.stringify(k)).join(', ')}. ` +
-      `Use one of: narrative, accomplishments, pillars, testimonials, stats.`,
+      `Use one of: ${SECTION_KINDS.join(', ')}.`,
+  );
+}
+
+// The same advisory shape for the goal meter's own half-finished state: a
+// published `goal-meter` section with no widget id renders nothing at all, which
+// is deliberate but indistinguishable from a section an editor forgot. Naming
+// the slug is what makes it diagnosable.
+const metersMissingId = goalMetersMissingWidgetId(sections);
+if (metersMissingId.length > 0) {
+  console.warn(
+    `[donate] ${metersMissingId.length} goal meter section(s) have no widget ID and ` +
+      `will not appear on the page: ` +
+      `${metersMissingId.map((slug) => JSON.stringify(slug)).join(', ')}. ` +
+      `Add the widget ID from Givebutter, or switch the section to Draft to hide it deliberately.`,
   );
 }
 

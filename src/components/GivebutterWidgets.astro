@@ -1,0 +1,26 @@
+---
+// Givebutter's widget loader script. Renders nothing unless an account id is
+// configured, so the default state of the site ships zero third-party markup.
+//
+// Editors only ever type the account key in the CMS — this template owns the
+// script markup, exactly the split `Analytics.astro` makes for the GA4
+// measurement id. Givebutter's own instructions say "paste this <script> into
+// your <head>", and `customHeadHtml` would take it verbatim today; that box is
+// the inject-anything escape hatch, where a typo is a broken <head> on every
+// page. A narrow field cannot break page structure. `customHeadHtml` stays
+// available for whatever Givebutter asks for next.
+//
+// Site-wide rather than /donate-only, via HeadExtras: it is the one <head>
+// partial every shell includes, so a widget dropped on the homepage or a blog
+// post later works with no second wiring step, and no route can silently miss
+// the script. `is:inline` for the same reason Analytics uses it — Astro must
+// ship the third-party URL untouched rather than trying to bundle it.
+import { settings } from '../lib/site';
+import { loadIntegrations } from '../lib/integrationsContent';
+import { givebutterScriptSrc } from '../lib/givebutter';
+
+const { givebutterAccountId } = await loadIntegrations(settings);
+const src = givebutterScriptSrc(givebutterAccountId);
+---
+
+{src ? <script is:inline async src={src} /> : null}

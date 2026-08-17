@@ -405,6 +405,7 @@ describe('mergeDonateFrame', () => {
 describe('mergeIntegrations', () => {
   const SETTINGS = {
     googleAnalyticsId: 'G-GCBX577FFD',
+    givebutterAccountId: 'khqJtxj5uVUZ1eO8',
     customHeadHtml: '',
     customBodyHtml: '',
   };
@@ -427,6 +428,37 @@ describe('mergeIntegrations', () => {
     expect(mergeIntegrations(SETTINGS, { googleAnalyticsId: 'G-NEW12345' }).googleAnalyticsId).toBe(
       'G-NEW12345',
     );
+  });
+
+  // The Givebutter account id inherits the analytics id's fallback rule, and for
+  // a comparable reason: losing it does not break a page, it silently stops
+  // every goal meter on the site from rendering. The band collapses, so there is
+  // nothing on screen to notice — the same class of invisible failure.
+  it('keeps the committed Givebutter account id when there is no entry', () => {
+    expect(mergeIntegrations(SETTINGS).givebutterAccountId).toBe('khqJtxj5uVUZ1eO8');
+  });
+
+  // Clearing the box alone must not unhook the meter site-wide. Turning
+  // Givebutter off is deliberately a two-step edit, exactly as it is for
+  // analytics.
+  it('keeps the committed Givebutter account id when the editor cleared the box', () => {
+    expect(
+      mergeIntegrations(SETTINGS, { givebutterAccountId: '' }).givebutterAccountId,
+    ).toBe('khqJtxj5uVUZ1eO8');
+  });
+
+  // Moving to a different Givebutter account is a one-box edit.
+  it('takes a re-pointed Givebutter account id', () => {
+    expect(
+      mergeIntegrations(SETTINGS, { givebutterAccountId: 'newAcct99' }).givebutterAccountId,
+    ).toBe('newAcct99');
+  });
+
+  // The genuine off state: nothing on either side. This is what makes the site
+  // ship no Givebutter loader at all, so it has to come back falsy rather than
+  // as an empty string that some caller might still treat as configured.
+  it('leaves the Givebutter account id falsy when neither side sets it', () => {
+    expect(mergeIntegrations({ ...SETTINGS, givebutterAccountId: '' }).givebutterAccountId).toBeFalsy();
   });
 
   // The escape hatch working — a verification tag and an end-of-page snippet both

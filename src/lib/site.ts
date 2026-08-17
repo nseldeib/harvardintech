@@ -37,6 +37,11 @@ export interface SiteSettings {
   // without them still parse and default to "off".
   // GA4 Measurement ID (e.g. `G-XXXXXXXXXX`); empty/absent = analytics off.
   googleAnalyticsId?: string;
+  // Givebutter account key — the `acct=` value from their embed snippet.
+  // Empty/absent = the widgets loader script is not shipped at all, so a site
+  // with no Givebutter account emits zero third-party markup. Required before
+  // any goal-meter section can render a meter.
+  givebutterAccountId?: string;
   // Raw HTML injected verbatim into every page's <head> / before </body>
   // (verification tags, pixels, chat widgets). Power-user escape hatch — the
   // snippet runs on every page, so only trusted markup belongs here.

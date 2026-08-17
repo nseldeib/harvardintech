@@ -1,0 +1,47 @@
+---
+import Component from "../../../src/components/donate/GoalMeter.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GoalMeter with a long heading — the one piece of content
+// this band actually owns, and therefore the one an editor can overrun.
+//
+// The heading sits at `clamp(26px, 3vw, 34px)` with negative letter-spacing and
+// no width bound of its own, so a campaign name longer than the two or three
+// words the default assumes is where the band's typography either holds or
+// breaks. Worth its own page rather than a variant of the default: on a static
+// build `?s=` query params are empty at capture time, so each state must be its
+// own prerendered route.
+//
+// Same two harness overrides as the default page, for the same reasons — see
+// GoalMeter.astro for the full explanation of what these captures can and
+// cannot prove about Givebutter's half of the band.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GoalMeter - Long Title</title>
+    <style is:global>
+      /* Harness-only: defeats the component's collapse so the band is
+         reviewable. `is:global` because the band carries the COMPONENT's scope
+         id, not this page's — a scoped rule here would match nothing. */
+      #codeyam-capture .goal-meter.is-collapsed {
+        display: block;
+      }
+      /* Page-like width, so the heading wraps where it would wrap on /donate
+         rather than against a fit-content box. */
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        title="Our progress toward the 2026 Momentum Fund goal, and what it makes possible for every chapter"
+        widgetId="MRDbEz"
+      />
+    </div>
+  </body>
+</html>

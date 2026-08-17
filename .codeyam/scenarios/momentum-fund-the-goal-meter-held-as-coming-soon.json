@@ -1,0 +1,66 @@
+{
+  "name": "Momentum Fund - The Goal Meter Held As Coming Soon",
+  "id": "90be2b5e-4254-47b5-9f98-12d9cc37f017",
+  "url": "/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "### Harvard Alumni in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals who are building, mentoring, launching, and opening doors for one another.\n\nTogether, we can create an impact that lasts beyond any one event, message, or moment.\n\nTo meet this moment, we need the infrastructure to support the momentum we are already seeing. That means creating more consistent programming, expanding access to meaningful connections, supporting volunteers with stronger tools and resources, growing our digital presence, and building the operational foundation needed to serve our community at a higher level.\n\n### This is why your support matters\n\nIt gives Harvard Alumni in Tech the ability to plan ahead, invest more intentionally, and create a stronger, more sustainable alumni-powered ecosystem.\n\nNow is the time to move from informal support to intentional investment.\n\nBecause the future of this network will not be built by chance. It will be built by alumni who believe in what this community can become and choose to help power it forward every month.",
+        "image": "/images/gallery/event-04.jpg",
+        "kind": "narrative",
+        "layout": "image-right",
+        "order": 2,
+        "slug": "why",
+        "title": "Why Support Harvard Alumni in Tech?"
+      },
+      {
+        "body": "The \"What we've accomplished so far\" band. Its heading and the figures beneath it\nare edited under Settings → Momentum Fund page copy, not here — this entry only\ndecides where the band sits on the page.",
+        "kind": "accomplishments",
+        "order": 3,
+        "slug": "accomplishments"
+      },
+      {
+        "body": "Behind every event, chapter, and member of our network is an opportunity for a conversation, introduction, or shared experience that has helped Harvard alumni in tech move forward.\n\n> Sometimes, the most meaningful opportunities begin with a single conversation.\n\nAn introduction to someone who has been where you are going. A roundtable where a new idea becomes sharper. A community gathering that turns a shared interest into a lasting collaboration.\n\nA moment of encouragement that reminds someone they are not building alone.\n\nHarvard Alumni in Tech exists to create more of these moments, the kind that help alumni find one another, support one another, and move further together.\n\nAcross cities, industries, and career stages, our network brings together founders, builders, operators, students, investors, and innovators who believe in the power of community.\n\nBecause when exceptional people are connected to the right community, one conversation can open a door, one relationship can shape a path, and one network can help create what comes next.",
+        "image": "/images/gallery/event-15.jpg",
+        "kind": "narrative",
+        "layout": "image-left",
+        "order": 4,
+        "slug": "story",
+        "title": "And Every Number Represents a Story"
+      },
+      {
+        "body": "The \"What Your Gift Powers\" cards. Their titles, copy, icons, and links are\nedited under Settings → Momentum Fund page copy, not here — this entry only\ndecides where the cards sit on the page.",
+        "kind": "pillars",
+        "order": 5,
+        "slug": "pillars"
+      },
+      {
+        "body": "The member-quotes band. The quotes themselves live in the Testimonials\ncollection, and the band hides itself entirely until there is at least one — this\nentry only decides where it sits once quotes exist.",
+        "kind": "testimonials",
+        "order": 6,
+        "slug": "testimonials"
+      },
+      {
+        "body": "The donor recognition wall. The names come from the Donors collection, and the\nheading, intro, giving levels, and the \"no donors yet\" message are edited under\nSettings → Momentum Fund page copy — this entry only decides where the wall sits\non the page. It sits after the member quotes and before the closing ask, so a\nreader meets the people already behind the fund immediately before being asked to\njoin them. Move it with the Order field or hide it with the Draft toggle.",
+        "kind": "donors",
+        "order": 7,
+        "slug": "donors"
+      },
+      {
+        "body": "Held back until the campaign opens, and ordered under the hero so the placeholder is what a visitor meets first.",
+        "comingSoon": true,
+        "kind": "goal-meter",
+        "order": 1,
+        "slug": "goal-meter"
+      }
+    ],
+    "testimonials": []
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "An editor has added the goal meter to the campaign page but is holding it back until the campaign opens. This is the ONE goal-meter page state a screenshot can show, and it is ordered directly under the hero so it falls inside a viewport capture. Everywhere else the band collapses: it reveals itself only when Givebutter's script defines the widget element, which never happens in a capture, so a configured meter, a meter missing its widget ID, and a page with no meter at all all render frames identical to the untouched /donate. Coming soon is different because it replaces the band wholesale with the designed placeholder. It also exercises the new section label: this entry carries no title of its own, and the placeholder still announces 'Our progress' because the label for the kind supplies it — without that label a held-back meter would have nothing to name itself."
+}

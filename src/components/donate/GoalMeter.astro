@@ -1,0 +1,101 @@
+---
+// The live fundraising progress band on the Momentum Fund page.
+//
+// A thin frame around Givebutter's own widget: the heading is ours, the meter
+// inside is theirs, rendered by the loader script `GivebutterWidgets.astro` puts
+// in every page's <head>. Styled to match `MomentumStats.astro` — the same
+// paper-2 band, the same section rhythm — so progress reads as part of the
+// campaign page rather than a pasted-in third-party box.
+//
+// THE BAND SHIPS HIDDEN AND REVEALS ITSELF. The meter is third-party JavaScript
+// from a CDN, so it does not render for a no-JS visitor, when the CDN is blocked,
+// or inside a screenshot capture. Rather than leave a heading stranded over an
+// empty progress area in those cases, the band collapses entirely and the page
+// reads exactly as it would with no meter at all — the same end state as a
+// section with no widget id.
+//
+// The reveal waits on `customElements.whenDefined`, not a timer. That is a real
+// "did Givebutter's code arrive" test: it resolves only once the loader script
+// has run and defined the element, so a slow CDN still shows the meter whenever
+// it lands instead of a fixed window silently swallowing it. It is also
+// independent of layout, which matters because a `display: none` band gives its
+// children no box to measure — a height-based check could never un-hide itself.
+//
+// Once the element is defined the band is revealed and the widget owns what it
+// draws inside, including its own empty and error states. That is the right
+// boundary: past that point the question is Givebutter's to answer, not ours.
+interface Props {
+  title?: string;
+  /** The Givebutter widget id. Blank renders NOTHING — not an empty band and not
+   *  a placeholder — so a half-finished edit costs one missing section rather
+   *  than a broken-looking page. `/donate` logs an advisory naming the section. */
+  widgetId?: string;
+}
+const { title, widgetId } = Astro.props as Props;
+
+const id = widgetId?.trim();
+---
+
+{
+  id ? (
+    <section class="goal-meter is-collapsed" data-goal-meter>
+      {title ? <h2>{title}</h2> : null}
+      <div class="meter">
+        {/* Written open/close rather than self-closing: a custom element is not
+            a void element, and a self-closing tag would be parsed as an open one. */}
+        <givebutter-widget id={id}></givebutter-widget>
+      </div>
+    </section>
+  ) : null
+}
+
+{
+  id ? (
+    <script is:inline>
+      {`(function () {
+  if (window.__goalMeterReveal) return;
+  window.__goalMeterReveal = true;
+  if (!window.customElements) return;
+  customElements.whenDefined('givebutter-widget').then(function () {
+    document
+      .querySelectorAll('[data-goal-meter]')
+      .forEach(function (band) { band.classList.remove('is-collapsed'); });
+  });
+})();`}
+    </script>
+  ) : null
+}
+
+<style>
+  .goal-meter {
+    background: var(--paper-2);
+    padding: 56px 24px;
+    text-align: center;
+  }
+  /* The collapse. A class rather than the `hidden` attribute: `hidden` is
+     stronger than it looks — tooling that walks the DOM treats the attribute
+     itself as "not rendered" and skips the subtree whatever the cascade says,
+     which makes the band unreviewable in isolation even when a harness page
+     deliberately shows it. `display: none` keeps it out of the a11y tree either
+     way, which is the part that actually has to hold for a no-JS visitor. */
+  .goal-meter.is-collapsed {
+    display: none;
+  }
+  h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    /* Bounded to the meter's own width, and centered over it. A campaign name
+       longer than a few words would otherwise run the full width of the band
+       while the meter beneath it stops at 720px — an unreadable measure sitting
+       over a narrow one. The long-title scenario is what surfaced this. */
+    max-width: 720px;
+    margin: 0 auto 28px;
+  }
+  .meter {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+</style>

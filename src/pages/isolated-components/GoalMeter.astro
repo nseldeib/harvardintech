@@ -1,0 +1,54 @@
+---
+import Component from "../../../src/components/donate/GoalMeter.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GoalMeter — codeyam screenshots the #codeyam-capture wrapper
+// by navigating to /isolated-components/GoalMeter.
+//
+// READ THE CAPTURE CAREFULLY, because this page overrides the component's own
+// behaviour to produce one.
+//
+// The band ships hidden and reveals itself only once Givebutter's loader script
+// has defined `<givebutter-widget>`. Neither thing happens here: the loader is
+// not on this page, and the capture browser does not run the reveal even when it
+// is (confirmed empirically — a JS-driven reveal that works in a live browser
+// still captures blank). So on a real page inside a capture, this band collapses
+// to nothing, which is the DESIGNED behaviour and not a fault.
+//
+// The style block below therefore forces the band visible, so the frame we own —
+// the paper-2 band, the heading, the reserved meter area, the section rhythm —
+// can be seen and reviewed at all. What this frame proves is that layout. What
+// it does NOT prove is that the meter renders: the empty area under the heading
+// is exactly the boundary between our band and Givebutter's progress bar, and no
+// screenshot taken here can show their side of it.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GoalMeter</title>
+    <style is:global>
+      /* Harness-only. Defeats the component's collapse so the band is
+         reviewable; see the note above for what that does and does not show.
+         `is:global` because the band is rendered by the imported component and
+         so carries ITS scope id, not this page's — a scoped rule here would be
+         rewritten to a selector that matches nothing. */
+      #codeyam-capture .goal-meter.is-collapsed {
+        display: block;
+      }
+      /* The capture wrapper is fit-content, and this band's only intrinsic
+         width is its heading — the meter area is empty here because Givebutter
+         draws nothing on this page. Pin a page-like width so the band is
+         reviewed at the proportions it actually has on /donate. */
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component title="Our progress" widgetId="MRDbEz" />
+    </div>
+  </body>
+</html>

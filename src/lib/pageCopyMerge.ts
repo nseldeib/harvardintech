@@ -259,6 +259,7 @@ export function mergeDonateFrame(
  *  caller cannot reach the rest of the settings singleton through this door. */
 export interface SiteIntegrations {
   googleAnalyticsId?: string;
+  givebutterAccountId?: string;
   customHeadHtml?: string;
   customBodyHtml?: string;
 }
@@ -275,11 +276,19 @@ export interface SiteIntegrations {
  * unhooking measurement from the whole site.
  */
 export function mergeIntegrations(
-  fallback: Pick<SiteSettings, 'googleAnalyticsId' | 'customHeadHtml' | 'customBodyHtml'>,
+  fallback: Pick<
+    SiteSettings,
+    'googleAnalyticsId' | 'givebutterAccountId' | 'customHeadHtml' | 'customBodyHtml'
+  >,
   entry?: SiteIntegrations,
 ): SiteIntegrations {
   return {
     googleAnalyticsId: preferText(entry?.googleAnalyticsId, fallback.googleAnalyticsId),
+    // Same fallback rule for the same reason: a cleared box must not silently
+    // unhook the goal meter site-wide. The failure is quieter than analytics —
+    // the meter simply stops rendering, and the band collapses to nothing — so
+    // falling back to the committed settings matters here too.
+    givebutterAccountId: preferText(entry?.givebutterAccountId, fallback.givebutterAccountId),
     customHeadHtml: preferText(entry?.customHeadHtml, fallback.customHeadHtml),
     customBodyHtml: preferText(entry?.customBodyHtml, fallback.customBodyHtml),
   };

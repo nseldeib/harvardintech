@@ -344,11 +344,14 @@ const donors = defineCollection({
 // whose card data still lives in `donatePage.json` — modelling those as markdown
 // would trade a tailored design for editability nobody asked for.
 //
-// `kind` and `layout` are free text, not enums, because the CMS field types stop
-// at `text | number | textarea | date | image | boolean | list` — there is no
-// select control to back an enum, and a schema enum would turn a typo into a
-// build failure. `src/lib/momentumSections.ts` validates instead: an unknown
-// `kind` is dropped with a warning, an unknown `layout` falls back to text-only.
+// `kind` and `layout` are free text here rather than schema enums. The CMS now
+// DOES render them as select controls (`src/data/collections.json`, kept in step
+// with the code lists by `src/lib/selectOptions.test.ts`), so an editor picks
+// from a dropdown — but the schema stays permissive on purpose: a value that
+// predates an option, or arrives from a hand-edited file or a scenario seed,
+// must not turn a typo into a build failure. `src/lib/momentumSections.ts`
+// validates instead: an unknown `kind` is dropped with a warning, an unknown
+// `layout` falls back to text-only.
 const momentumSections = defineCollection({
   loader: collectionGlob('momentumSections'),
   schema: z.object({
@@ -356,6 +359,12 @@ const momentumSections = defineCollection({
     title: z.string().optional(),
     layout: z.string().optional(),
     image: z.string().optional(),
+    // The Givebutter widget id, for `goal-meter` sections only — the same
+    // kind-specific treatment `layout` and `image` get for narratives. It lives
+    // on the section rather than on `donatePage.json` because it belongs to the
+    // band that renders it: a page with no meter has no use for the field, and a
+    // second meter needs no new singleton key.
+    widgetId: z.string().optional(),
     order: z.number().optional(),
     comingSoon: z.boolean().optional(),
     draft: z.boolean().optional(),
@@ -620,6 +629,12 @@ const siteIntegrations = defineCollection({
     title: z.string(),
     // GA4 Measurement ID (`G-XXXXXXXXXX`); blank turns analytics off entirely.
     googleAnalyticsId: z.string().optional(),
+    // The Givebutter account key — the `acct=` value out of the embed snippet
+    // Givebutter hands you. Blank ships no widgets script at all, so a site with
+    // no Givebutter account carries zero third-party markup. The same narrow,
+    // template-owned split as the analytics id above: an editor types a key, not
+    // a <script> tag.
+    givebutterAccountId: z.string().optional(),
     // Raw HTML injected verbatim into every page. The snippet runs site-wide, so
     // only trusted markup belongs here — this is the power-user escape hatch the
     // narrow, template-owned analytics field deliberately is not.

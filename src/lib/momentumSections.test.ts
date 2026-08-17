@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   SECTION_KINDS,
+  goalMetersMissingWidgetId,
   orderedSections,
   resolveLayout,
   tintedFlags,
@@ -38,8 +39,9 @@ describe('orderedSections', () => {
     ]);
   });
 
-  // `kind` is free text because the CMS has no select control, so a typo is a
-  // normal editing mistake. It costs that one section, never the page.
+  // The CMS renders `kind` as a select, but the schema stays free text, so a
+  // stray value can still arrive from a hand-edited file or a scenario seed. It
+  // costs that one section, never the page.
   it('drops sections whose kind matches no renderer', () => {
     const sections = [
       { kind: 'narrative', order: 1 },
@@ -94,6 +96,70 @@ describe('unknownSectionKinds', () => {
   });
 });
 
+describe('goalMetersMissingWidgetId', () => {
+  // The advisory that makes a silent state diagnosable: a goal meter with no
+  // widget id renders nothing, so without the slug in the log an editor cannot
+  // tell a deliberately-blank band from one they forgot to finish.
+  it('reports the slug of a goal meter carrying no widget id', () => {
+    const sections = [
+      { slug: 'why', kind: 'narrative' },
+      { slug: 'progress', kind: 'goal-meter' },
+    ];
+    expect(goalMetersMissingWidgetId(sections)).toEqual(['progress']);
+  });
+
+  // A finished meter is not a mistake — the normal build must stay quiet.
+  it('reports nothing when the goal meter has a widget id', () => {
+    const sections = [{ slug: 'progress', kind: 'goal-meter', widgetId: 'MRDbEz' }];
+    expect(goalMetersMissingWidgetId(sections)).toEqual([]);
+  });
+
+  // Blank and whitespace-only match what the component does with them — both
+  // render nothing — so both have to earn the same warning. A meter whose id was
+  // cleared, or spacebarred, is exactly the case this advisory exists for.
+  it('treats an empty or whitespace-only widget id as missing', () => {
+    const sections = [
+      { slug: 'blank', kind: 'goal-meter', widgetId: '' },
+      { slug: 'spaces', kind: 'goal-meter', widgetId: '   ' },
+    ];
+    expect(goalMetersMissingWidgetId(sections)).toEqual(['blank', 'spaces']);
+  });
+
+  // The field is goal-meter-specific. Every other kind ignores it, so a section
+  // that happens to carry no widget id is not a problem and must not be named.
+  it('ignores sections of every other kind', () => {
+    const sections = [
+      { slug: 'why', kind: 'narrative' },
+      { slug: 'stats', kind: 'stats' },
+      { slug: 'donors', kind: 'donors' },
+    ];
+    expect(goalMetersMissingWidgetId(sections)).toEqual([]);
+  });
+
+  // Every offender gets named, not just the first — an editor fixing one should
+  // not have to rebuild to discover the next.
+  it('reports every offending meter on a page with more than one', () => {
+    const sections = [
+      { slug: 'first', kind: 'goal-meter' },
+      { slug: 'ok', kind: 'goal-meter', widgetId: 'MRDbEz' },
+      { slug: 'second', kind: 'goal-meter' },
+    ];
+    expect(goalMetersMissingWidgetId(sections)).toEqual(['first', 'second']);
+  });
+
+  // A page with no sections at all warns about nothing.
+  it('reports nothing for an empty section list', () => {
+    expect(goalMetersMissingWidgetId([])).toEqual([]);
+  });
+
+  // Sections reach this from a content collection, where the slug is the
+  // filename and always present — but the type allows its absence, and a
+  // warning naming "undefined" would be worse than useless.
+  it('falls back to a readable label when a section has no slug', () => {
+    expect(goalMetersMissingWidgetId([{ kind: 'goal-meter' }])).toEqual(['(unnamed section)']);
+  });
+});
+
 describe('tintedFlags', () => {
   // Consecutive prose sections need separating, so narratives alternate
   // tinted / untinted down the page.
@@ -129,6 +195,18 @@ describe('tintedFlags', () => {
       { kind: 'narrative' },
     ]);
     expect(flags).toEqual([true, false, false, false, true]);
+  });
+
+  // The goal meter is the newest interleaved band, and it carries its own
+  // paper-2 background like the others — so dropping a meter between two
+  // narratives must leave the prose rhythm below it exactly as it was.
+  it('does not let a goal meter shift the narrative alternation', () => {
+    const flags = tintedFlags([
+      { kind: 'narrative' },
+      { kind: 'goal-meter' },
+      { kind: 'narrative' },
+    ]);
+    expect(flags).toEqual([true, false, false]);
   });
 
   // Order-independent and non-mutating: calling twice gives the same answer,

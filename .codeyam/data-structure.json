@@ -252,7 +252,7 @@
   },
   {
     "name": "Settings",
-    "description": "Site-wide editable settings singleton (`src/data/settings.json`): title, description, contact email, footer, socials, plus integrations/discoverability (Google Analytics id, custom head/body HTML). Loaded by every layout; edited by the CMS as a file collection.",
+    "description": "Site-wide editable settings singleton (`src/data/settings.json`): title, description, contact email, footer, socials, plus integrations/discoverability (Google Analytics id, Givebutter account id, custom head/body HTML). Loaded by every layout; edited by the CMS as a file collection.",
     "category": "datastore",
     "order": 5,
     "fields": [
@@ -278,6 +278,11 @@
       },
       {
         "name": "googleAnalyticsId",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "givebutterAccountId",
         "type": "string",
         "required": false
       },
@@ -961,7 +966,7 @@
   },
   {
     "name": "MomentumSection",
-    "description": "One reorderable section in the middle of the /donate Momentum Fund campaign page, stored as a markdown file in the `momentumSections` content collection and editable from the CMS. `kind` selects the renderer: `narrative` uses the entry's own title/body/image, while `accomplishments`, `pillars`, `testimonials`, and `stats` are slots whose card data still comes from `donatePage.json`. `order` is how an editor moves a section up or down (lower appears higher); `draft` hides one without deleting it. The hero and closing CTA are a fixed frame and are not sections.",
+    "description": "One reorderable section in the middle of the /donate Momentum Fund campaign page, stored as a markdown file in the `momentumSections` content collection and editable from the CMS. `kind` selects the renderer: `narrative` uses the entry's own title/body/image, `goal-meter` renders a live Givebutter fundraising meter from its own `widgetId`, while `accomplishments`, `pillars`, `testimonials`, and `stats` are slots whose card data still comes from `donatePage.json`. `order` is how an editor moves a section up or down (lower appears higher); `draft` hides one without deleting it. The hero and closing CTA are a fixed frame and are not sections.",
     "category": "datastore",
     "order": 16,
     "fields": [
@@ -988,6 +993,11 @@
       },
       {
         "name": "image",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "widgetId",
         "type": "string",
         "required": false
       },
@@ -1333,7 +1343,7 @@
   },
   {
     "name": "SiteIntegrations",
-    "description": "The site-wide integration keys \u2014 GA4 measurement id and the raw custom `<head>` / `<body>` HTML escape hatches \u2014 as a single-entry markdown collection. These have always been real editable data on the `settings.json` singleton, but the CMS settings screen renders inputs for five scalar keys plus socials and round-trips the rest untouched, so they were data with nowhere to edit them. Deliberately its own collection rather than extra fields on `pageCopy`: the editor renders every declared field for every entry, so sharing would put an analytics box on the Momentum Fund page s screen. `settings.json` remains the fallback, so deleting this entry cannot silently unhook analytics from every page.",
+    "description": "The site-wide integration keys \u2014 GA4 measurement id, the Givebutter account id, and the raw custom `<head>` / `<body>` HTML escape hatches \u2014 as a single-entry markdown collection. These have always been real editable data on the `settings.json` singleton, but the CMS settings screen renders inputs for five scalar keys plus socials and round-trips the rest untouched, so they were data with nowhere to edit them. Deliberately its own collection rather than extra fields on `pageCopy`: the editor renders every declared field for every entry, so sharing would put an analytics box on the Momentum Fund page s screen. `settings.json` remains the fallback, so deleting this entry cannot silently unhook analytics from every page. `givebutterAccountId` is the `acct=` value from Givebutter's embed snippet; blank means the widgets loader script is not shipped at all, so a site with no Givebutter account emits zero third-party markup.",
     "category": "datastore",
     "order": 24,
     "fields": [
@@ -1350,6 +1360,11 @@
       },
       {
         "name": "googleAnalyticsId",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "givebutterAccountId",
         "type": "string",
         "required": false
       },

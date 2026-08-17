@@ -1,0 +1,13 @@
+{
+  "name": "GoalMeter - A Campaign Name That Runs Long",
+  "id": "edb0857c-e3e6-4bf1-bbe1-35498cb455fb",
+  "url": "/isolated-components/GoalMeter-LongTitle",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GoalMeter",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/GoalMeter.astro",
+  "description": "The heading is the only content this band owns, so it is the only thing an editor can overrun — and this state is what caught that it was unbounded. Before the fix the title ran the full width of the band while the meter beneath it stopped at 720px: an unreadable measure sitting over a narrow one. It is now capped to the meter's own width and centered over it, so a long campaign name wraps to two balanced lines and the band grows to fit rather than stretching the type. As in the default state, the area beneath is empty because Givebutter's script does not run in a capture; what this frame proves is the typography, not the meter."
+}

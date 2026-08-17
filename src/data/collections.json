@@ -422,9 +422,10 @@
           "name": "kind",
           "label": "Section type",
           "type": "select",
-          "hint": "Which section this is. Only \"narrative\" uses the title, layout, image, and body below \u2014 the others are bands whose content is edited in their own collection.",
+          "hint": "Which section this is. Only \"narrative\" uses the title, layout, image, and body below; \"goal-meter\" uses the title and the Goal meter widget ID \u2014 the others are bands whose content is edited in their own collection.",
           "options": [
             "narrative",
+            "goal-meter",
             "accomplishments",
             "pillars",
             "testimonials",
@@ -457,6 +458,13 @@
           "type": "image",
           "optional": true,
           "hint": "Shown beside the text on image-left / image-right sections. Blank shows the text full width."
+        },
+        {
+          "name": "widgetId",
+          "label": "Goal meter widget ID",
+          "type": "text",
+          "optional": true,
+          "hint": "Goal meter sections only. The widget ID from Givebutter (Dashboard \u2192 your campaign \u2192 Share \u2192 Embed): the id= value in the code they give you. Blank means the section shows nothing at all. Best placed just above the closing ask, so progress and the Give button read as one moment."
         },
         {
           "name": "order",
@@ -1029,6 +1037,13 @@
           "type": "text",
           "optional": true,
           "hint": "A GA4 measurement ID, e.g. G-XXXXXXXXXX. Leave blank and the site ships no analytics at all."
+        },
+        {
+          "name": "givebutterAccountId",
+          "label": "Givebutter account ID",
+          "type": "text",
+          "optional": true,
+          "hint": "The acct= value from the embed code Givebutter gives you (Dashboard \u2192 Integrations \u2192 Embeds). Leave blank and the site loads no Givebutter code at all. Required before a Goal meter section can show a meter."
         },
         {
           "name": "customHeadHtml",

@@ -1,6 +1,6 @@
 {
   "name": "CMS Section Editor - Section Type Is A Dropdown",
-  "id": "11a93c1b-2a0a-4f7b-8e76-545b96b71c68",
+  "id": "a82f5884-a00d-4df9-9d2f-ce379429b6ad",
   "url": "/admin/momentumSections/donors",
   "dimensions": [
     "Desktop"
@@ -25,5 +25,6 @@
     ]
   },
   "scenarioType": "application",
-  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro"
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The Momentum Fund section editor, and the reason Section type is a dropdown rather than a text box: the value selects the renderer, and a typo used to cost an editor a section that silently never appeared. The list now carries goal-meter alongside the narrative and slot bands, so adding a live fundraising meter is a choice from a menu rather than a string typed exactly right. Beneath the layout and image fields sits the Goal meter widget ID box that kind uses — kind-specific in the same way layout and image are narrative-specific, so an editor sees every field but only fills the ones their chosen type reads. The schema stays permissive behind this dropdown on purpose: a hand-edited file or a scenario seed carrying an unknown kind is dropped with a build-log line rather than failing the deploy."
 }
