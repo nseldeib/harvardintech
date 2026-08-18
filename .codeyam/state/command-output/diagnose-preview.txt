@@ -1,13 +1,11 @@
-{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786998648,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3628563}
-⚠️  CODEYAM: stdout is piped through tail/grep — the consumer block-buffers its input to EOF, so this task's `.output` would be empty until the command exits. Liveness is being mirrored to stderr (below) so it stays visible.
-> liveness is mirrored to stderr (this file) because stdout is piped through tail/grep. Run this command BARE instead and block with `codeyam-editor editor wait-for <task .output path printed by the harness>` — a pipe reports the filter's exit code, not the command's. If you piped it to shorten the output, you did not need to: run bare and the command prints a `CODEYAM_FULL_OUTPUT` line naming a file that holds the COMPLETE output, which you can `cat` afterwards (or capture with `tee` if you want both at once).
-{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1786998648,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3628563}
-━━━ Preview Diagnostic: /admin/blog ━━━
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/b8b312ex7.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/b8b312ex7.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"diagnose-preview","elapsed_secs":0,"emitted_at_unix":1787077720,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":149026}
+━━━ Preview Diagnostic: / ━━━
 
-  proxy port 4321 — HTTP 504, no Transfer-Encoding, Content-Length: 0
-  direct port 4322 — HTTP 504, no Transfer-Encoding, Content-Length: 0
+  proxy port 4321 — HTTP 200, no Transfer-Encoding, Content-Length: 86929
+  direct port 4322 — HTTP 200, Transfer-Encoding: chunked, no Content-Length
 
-Script tags — proxy: 0, direct: 0
+Script tags — proxy: 33, direct: 29
   No script delta between proxy and direct.
 
 Most likely cause: no HTTP-level anomaly detected between proxy and direct dev port. If the page still won't hydrate, run `editor client-errors` to check for console errors or JavaScript exceptions.

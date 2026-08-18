@@ -28,6 +28,15 @@
       "runner": "tests"
     },
     {
+      "description": "A duplicated option is indistinguishable from its twin in the dropdown, and a blank one is indistinguishable from the control's own unset entry. Either would ship an editor a choice they cannot reason about.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "HARVARD_SCHOOLS › lists every school exactly once, with no blank entry",
+      "line": 345,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
       "description": "The placeholder always has a heading to show, whichever band was held back.",
       "file": "src/lib/homeSections.test.ts",
       "format": "vitest",
@@ -1562,7 +1571,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorDisplayName › returns the name for a donor who did not ask for anonymity",
-      "line": 142,
+      "line": 146,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1571,7 +1580,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorDisplayName › returns the name when anonymity is explicitly off",
-      "line": 155,
+      "line": 159,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1580,7 +1589,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorDisplayName › returns the standing label for an anonymous donor",
-      "line": 147,
+      "line": 151,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1589,7 +1598,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorLinkHref › returns the url for a named donor",
-      "line": 162,
+      "line": 166,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1598,7 +1607,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorLinkHref › returns undefined when there is no url",
-      "line": 178,
+      "line": 182,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1607,7 +1616,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorLinkHref › suppresses the url of an anonymous donor",
-      "line": 171,
+      "line": 175,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1616,7 +1625,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorLinkHref › treats a blank url as no url",
-      "line": 184,
+      "line": 188,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1625,7 +1634,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorMonogram › handles a multi-word name that is not a person",
-      "line": 231,
+      "line": 235,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1634,7 +1643,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorMonogram › returns a neutral mark for an anonymous donor rather than their initials",
-      "line": 223,
+      "line": 227,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1643,7 +1652,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorMonogram › returns the initials of a named donor",
-      "line": 217,
+      "line": 221,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1652,7 +1661,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorPhoto › returns the photo for a named donor",
-      "line": 191,
+      "line": 195,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1661,7 +1670,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorPhoto › returns undefined when there is no photo",
-      "line": 204,
+      "line": 208,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1670,7 +1679,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorPhoto › suppresses the photo of an anonymous donor",
-      "line": 197,
+      "line": 201,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -1679,8 +1688,107 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "donorPhoto › treats a blank photo as no photo",
-      "line": 210,
+      "line": 214,
       "registeredAt": "2026-08-01T01:16:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An unrecognized school is dropped rather than printed, matching resolveSchool.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPublicIdentity › drops an unrecognized school instead of printing it on the node",
+      "line": 445,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The fields stay ON the entry for the team's records — this function is what keeps them off the page, not a deletion.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPublicIdentity › leaves the withheld values on the entry itself",
+      "line": 416,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The school passes through the same resolver the dropdown is backed by, so a hand-edited value lands on its canonical spelling rather than reaching the node panel in whatever case it was typed.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPublicIdentity › normalizes the school rather than echoing what was typed",
+      "line": 438,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every existing donor on the wall is in this state, and none of them may break.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPublicIdentity › returns just the name when no affiliation fields are set",
+      "line": 431,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A named supporter's node shows everything they gave us.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPublicIdentity › returns the name, school, class year, and location for a named supporter",
+      "line": 382,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A location of spaces is not a location; it would render as an empty line under the name on the node panel.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPublicIdentity › treats a whitespace-only location as absent",
+      "line": 454,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE load-bearing test in this feature. A school plus a class year plus a city identifies someone in a community this size as surely as their name does — frequently uniquely. Anonymity that dropped the name and kept the other three would be anonymity in appearance only, and publishing it is the one failure no later edit takes back. If this test ever goes green with one of the three still returned, the guarantee is broken.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorPublicIdentity › withholds the school, class year, and location together for an anonymous supporter",
+      "line": 403,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The predicate the share rule turns on: no message means the line is removed from the badge entirely rather than rendered blank. Absent, empty, and whitespace-only all have to collapse to the same answer — three spaces is not a message.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorWhy › returns nothing for an absent, empty, or whitespace-only message",
+      "line": 479,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The message the share badge pre-fills with.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorWhy › returns the supporter own message",
+      "line": 462,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Trimmed, because the stored value came out of a textarea.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorWhy › trims surrounding whitespace from the message",
+      "line": 469,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A personal statement is identifying, and often more so than a school or a city: it is in the supporter's own voice and frequently names where they work or what happened to them.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "donorWhy › withholds the message for an anonymous supporter even when one is set",
+      "line": 488,
+      "registeredAt": "2026-08-18T18:44:27Z",
       "runner": "tests"
     },
     {
@@ -1702,11 +1810,20 @@
       "runner": "tests"
     },
     {
+      "description": "This one matters more than the four above it, because School feeds a SEARCH. resolveSchool drops anything not on the code list, so a school offered in the CMS but missing from HARVARD_SCHOOLS would let an editor file a supporter under a value the network then refuses to match — the supporter simply never turns up in 'find your school', with nothing on the page to explain why.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "dropdown options match the validators that enforce them › donors.school offers exactly the schools the resolver accepts",
+      "line": 72,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
       "description": "An unlisted kind is dropped from the page with a warning, so an option the code does not know is an option that silently does nothing.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › homeSections.kind offers exactly the kinds the homepage renders",
-      "line": 45,
+      "line": 47,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -1715,7 +1832,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › momentumSections.kind offers exactly the Momentum Fund section kinds",
-      "line": 51,
+      "line": 53,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -1724,7 +1841,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › momentumSections.layout offers exactly the layouts",
-      "line": 56,
+      "line": 58,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -1733,7 +1850,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › pillars.icon offers exactly the drawn glyphs",
-      "line": 61,
+      "line": 63,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -1963,6 +2080,14 @@
       "runner": "tests"
     },
     {
+      "description": "Asserts the donors.school field is a select control rather than a text box, so an editor picks a school from the list instead of typing a spelling the network's find-your-school search would then fail to match.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "enum-shaped fields are dropdowns, not text boxes › donors.school is a select",
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
       "description": "Asserts the CMS renders homeSections.kind as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
@@ -2116,7 +2241,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "every declared select is usable › gives each select a non-empty options list",
-      "line": 69,
+      "line": 80,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -2125,8 +2250,16 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "every declared select is usable › gives no select a duplicate or blank option",
-      "line": 80,
+      "line": 91,
       "registeredAt": "2026-08-04T18:59:29Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Asserts every school value already committed to a donor markdown file is still one the dropdown offers, so a value typed as free text before the list existed cannot leave the site rendering something the CMS now calls invalid. Vacuous while the donors collection ships empty; it starts biting the moment the first supporter is added.",
+      "file": "src/lib/selectOptions.test.ts",
+      "format": "vitest",
+      "key": "existing content still validates against the new dropdowns › every committed donors.school value is offered",
+      "registeredAt": "2026-08-18T18:44:27Z",
       "runner": "tests"
     },
     {
@@ -2310,7 +2443,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "foundingDonors › returns nothing when no donor is flagged",
-      "line": 301,
+      "line": 305,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2319,7 +2452,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "foundingDonors › returns the flagged donors across every tier",
-      "line": 290,
+      "line": 294,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2328,7 +2461,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "foundingDonorsSummary › names the count in the plural",
-      "line": 238,
+      "line": 242,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2337,7 +2470,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "foundingDonorsSummary › reads correctly for exactly one donor",
-      "line": 246,
+      "line": 250,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2346,7 +2479,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "foundingDonorsSummary › returns nothing for a negative count",
-      "line": 258,
+      "line": 262,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2355,7 +2488,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "foundingDonorsSummary › returns nothing when no donor carries the badge",
-      "line": 253,
+      "line": 257,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2742,7 +2875,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › carries the declared tier description onto its group",
-      "line": 129,
+      "line": 133,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2751,7 +2884,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › collects a donor whose tier matches no declared level into a trailing group",
-      "line": 94,
+      "line": 98,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2760,7 +2893,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › omits a tier that has no donors",
-      "line": 84,
+      "line": 88,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2769,7 +2902,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › orders groups by the declared tier order, not the donor order",
-      "line": 32,
+      "line": 36,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2778,7 +2911,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › puts an untagged donor in the trailing group",
-      "line": 107,
+      "line": 111,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2787,7 +2920,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › puts every donor in the trailing group when no tiers are declared",
-      "line": 121,
+      "line": 125,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2796,7 +2929,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › returns no groups for no donors",
-      "line": 115,
+      "line": 119,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2805,7 +2938,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › sorts an anonymous donor by the label shown, not their withheld name",
-      "line": 66,
+      "line": 70,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -2814,7 +2947,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "groupDonorsByTier › sorts within a tier by the order pin, then by name",
-      "line": 48,
+      "line": 52,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -3660,7 +3793,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "matchesTier › does not match a declared-tier donor against the trailing group",
-      "line": 330,
+      "line": 334,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -3669,7 +3802,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "matchesTier › matches a donor against their own declared tier",
-      "line": 308,
+      "line": 312,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -3678,7 +3811,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "matchesTier › matches an unmatched-tier donor against the trailing group",
-      "line": 317,
+      "line": 321,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -3687,7 +3820,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "matchesTier › matches an untagged donor against the trailing group",
-      "line": 325,
+      "line": 329,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -5510,6 +5643,42 @@
       "runner": "tests"
     },
     {
+      "description": "A hand-edited markdown file or a scenario seed will not match the dropdown's casing and spacing exactly, and an editor is not owed an empty result for it.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "resolveSchool › matches case-insensitively and ignores surrounding whitespace",
+      "line": 359,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank, whitespace-only, and absent all mean the same thing: not filed.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "resolveSchool › returns nothing for a blank, whitespace-only, or absent value",
+      "line": 365,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Deliberately NOT a fallback to some default school. Filing someone under the wrong school is worse than filing them under none — the network's search would surface them to the wrong people.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "resolveSchool › returns nothing for an unrecognized school rather than guessing one",
+      "line": 374,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The ordinary case: a value the CMS dropdown itself produced.",
+      "file": "src/lib/donors.test.ts",
+      "format": "vitest",
+      "key": "resolveSchool › returns the school for an exact match",
+      "line": 353,
+      "registeredAt": "2026-08-18T18:44:27Z",
+      "runner": "tests"
+    },
+    {
       "description": "Draft keeps its site-wide meaning here — off the public build — so an editor learns one rule, not two.",
       "file": "src/lib/homeSections.test.ts",
       "format": "vitest",
@@ -6405,7 +6574,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "shouldShowTierChips › hides chips when there are no bands at all",
-      "line": 282,
+      "line": 286,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -6414,7 +6583,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "shouldShowTierChips › hides chips when there is only one band",
-      "line": 275,
+      "line": 279,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },
@@ -6423,7 +6592,7 @@
       "file": "src/lib/donors.test.ts",
       "format": "vitest",
       "key": "shouldShowTierChips › shows chips once there is more than one band",
-      "line": 265,
+      "line": 269,
       "registeredAt": "2026-08-01T01:16:59Z",
       "runner": "tests"
     },

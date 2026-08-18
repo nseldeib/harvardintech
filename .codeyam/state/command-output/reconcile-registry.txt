@@ -1,47 +1,38 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/buu7gde8e.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/b36dfe95-d18d-4974-8a3c-04431088411c/tasks/buu7gde8e.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1787001059,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":3655649}
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/bv8rej24s.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/bv8rej24s.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1787078674,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":162422}
 {
-auto-apply: 17 action(s) applied; 0 add(s) skipped.
+auto-apply: 59 action(s) applied; 0 add(s) skipped.
   "summary": {
     "realOrphans": 0,
     "stalePhantoms": 0,
     "adds": 0,
     "renames": 0,
-    "updateLines": 17,
+    "updateLines": 59,
     "gateUpdates": 0
   },
   "actions": [
     {
       "kind": "updateLine",
-      "key": "canDuplicate › allows duplicating an ordinary entry",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "HARVARD_SCHOOLS › lists every school exactly once, with no blank entry",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 141,
-      "new_line": 145,
+      "old_line": null,
+      "new_line": 345,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "canDuplicate › refuses to duplicate a preview row",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorDisplayName › returns the name for a donor who did not ask for anonymity",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 147,
-      "new_line": 151,
+      "old_line": 142,
+      "new_line": 146,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "duplicateHref › encodes the source slug",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "runner": "tests",
-      "old_line": 163,
-      "new_line": 167,
-      "classification": "change-introduced"
-    },
-    {
-      "kind": "updateLine",
-      "key": "duplicateHref › points at the create form for the row collection",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorDisplayName › returns the name when anonymity is explicitly off",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
       "old_line": 155,
       "new_line": 159,
@@ -49,122 +40,510 @@ auto-apply: 17 action(s) applied; 0 add(s) skipped.
     },
     {
       "kind": "updateLine",
-      "key": "duplicateLabel › leaves a blank or whitespace-only label blank",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorDisplayName › returns the standing label for an anonymous donor",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 77,
-      "new_line": 81,
+      "old_line": 147,
+      "new_line": 151,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "duplicateLabel › marks the copied label as a copy",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorLinkHref › returns the url for a named donor",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 71,
-      "new_line": 75,
+      "old_line": 162,
+      "new_line": 166,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "duplicateLabel › trims the source label before appending the suffix",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorLinkHref › returns undefined when there is no url",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 83,
-      "new_line": 87,
+      "old_line": 178,
+      "new_line": 182,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "duplicateValues › copies every declared field verbatim, order included",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorLinkHref › suppresses the url of an anonymous donor",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 93,
-      "new_line": 97,
+      "old_line": 171,
+      "new_line": 175,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "duplicateValues › drops the preview markers rather than minting a second clone",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorLinkHref › treats a blank url as no url",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 101,
-      "new_line": 105,
+      "old_line": 184,
+      "new_line": 188,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "duplicateValues › ignores keys the collection registry does not declare",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorMonogram › handles a multi-word name that is not a person",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 118,
-      "new_line": 122,
+      "old_line": 231,
+      "new_line": 235,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "duplicateValues › omits fields the source entry does not carry",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorMonogram › returns a neutral mark for an anonymous donor rather than their initials",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 125,
-      "new_line": 129,
+      "old_line": 223,
+      "new_line": 227,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "duplicateValues › preserves falsy values that are genuinely set",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorMonogram › returns the initials of a named donor",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 132,
-      "new_line": 136,
+      "old_line": 217,
+      "new_line": 221,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "nextFreeSlug › avoids a slug that exists only as a staged change",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorPhoto › returns the photo for a named donor",
+      "file": "src/lib/donors.test.ts",
       "runner": "tests",
-      "old_line": 57,
-      "new_line": 61,
+      "old_line": 191,
+      "new_line": 195,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "nextFreeSlug › counts on from the base when the source is itself numbered",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "donorPhoto › returns undefined when there is no photo",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 204,
+      "new_line": 208,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPhoto › suppresses the photo of an anonymous donor",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 197,
+      "new_line": 201,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPhoto › treats a blank photo as no photo",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 210,
+      "new_line": 214,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPublicIdentity › drops an unrecognized school instead of printing it on the node",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 445,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPublicIdentity › leaves the withheld values on the entry itself",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 416,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPublicIdentity › normalizes the school rather than echoing what was typed",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 438,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPublicIdentity › returns just the name when no affiliation fields are set",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 431,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPublicIdentity › returns the name, school, class year, and location for a named supporter",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 382,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPublicIdentity › treats a whitespace-only location as absent",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 454,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorPublicIdentity › withholds the school, class year, and location together for an anonymous supporter",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 403,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorWhy › returns nothing for an absent, empty, or whitespace-only message",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 479,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorWhy › returns the supporter own message",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 462,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorWhy › trims surrounding whitespace from the message",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 469,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "donorWhy › withholds the message for an anonymous supporter even when one is set",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 488,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "dropdown options match the validators that enforce them › donors.school offers exactly the schools the resolver accepts",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 72,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "dropdown options match the validators that enforce them › homeSections.kind offers exactly the kinds the homepage renders",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": 45,
+      "new_line": 47,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "dropdown options match the validators that enforce them › momentumSections.kind offers exactly the Momentum Fund section kinds",
+      "file": "src/lib/selectOptions.test.ts",
       "runner": "tests",
       "old_line": 51,
-      "new_line": 55,
+      "new_line": 53,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "nextFreeSlug › numbers from two even when no slug is taken",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "dropdown options match the validators that enforce them › momentumSections.layout offers exactly the layouts",
+      "file": "src/lib/selectOptions.test.ts",
       "runner": "tests",
-      "old_line": 63,
-      "new_line": 67,
+      "old_line": 56,
+      "new_line": 58,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "nextFreeSlug › skips slugs already taken and keeps counting",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "dropdown options match the validators that enforce them › pillars.icon offers exactly the drawn glyphs",
+      "file": "src/lib/selectOptions.test.ts",
       "runner": "tests",
-      "old_line": 44,
-      "new_line": 48,
+      "old_line": 61,
+      "new_line": 63,
       "classification": "change-introduced"
     },
     {
       "kind": "updateLine",
-      "key": "nextFreeSlug › suggests the source slug numbered from two",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "key": "every declared select is usable › gives each select a non-empty options list",
+      "file": "src/lib/selectOptions.test.ts",
       "runner": "tests",
-      "old_line": 38,
-      "new_line": 42,
+      "old_line": 69,
+      "new_line": 80,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "every declared select is usable › gives no select a duplicate or blank option",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": 80,
+      "new_line": 91,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "foundingDonors › returns nothing when no donor is flagged",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 301,
+      "new_line": 305,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "foundingDonors › returns the flagged donors across every tier",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 290,
+      "new_line": 294,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "foundingDonorsSummary › names the count in the plural",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 238,
+      "new_line": 242,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "foundingDonorsSummary › reads correctly for exactly one donor",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 246,
+      "new_line": 250,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "foundingDonorsSummary › returns nothing for a negative count",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 258,
+      "new_line": 262,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "foundingDonorsSummary › returns nothing when no donor carries the badge",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 253,
+      "new_line": 257,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › carries the declared tier description onto its group",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 129,
+      "new_line": 133,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › collects a donor whose tier matches no declared level into a trailing group",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 94,
+      "new_line": 98,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › omits a tier that has no donors",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 84,
+      "new_line": 88,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › orders groups by the declared tier order, not the donor order",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 32,
+      "new_line": 36,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › puts an untagged donor in the trailing group",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 107,
+      "new_line": 111,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › puts every donor in the trailing group when no tiers are declared",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 121,
+      "new_line": 125,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › returns no groups for no donors",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 115,
+      "new_line": 119,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › sorts an anonymous donor by the label shown, not their withheld name",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 66,
+      "new_line": 70,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "groupDonorsByTier › sorts within a tier by the order pin, then by name",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 48,
+      "new_line": 52,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "matchesTier › does not match a declared-tier donor against the trailing group",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 330,
+      "new_line": 334,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "matchesTier › matches a donor against their own declared tier",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 308,
+      "new_line": 312,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "matchesTier › matches an unmatched-tier donor against the trailing group",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 317,
+      "new_line": 321,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "matchesTier › matches an untagged donor against the trailing group",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 325,
+      "new_line": 329,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "resolveSchool › matches case-insensitively and ignores surrounding whitespace",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 359,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "resolveSchool › returns nothing for a blank, whitespace-only, or absent value",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 365,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "resolveSchool › returns nothing for an unrecognized school rather than guessing one",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 374,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "resolveSchool › returns the school for an exact match",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": null,
+      "new_line": 353,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "shouldShowTierChips › hides chips when there are no bands at all",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 282,
+      "new_line": 286,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "shouldShowTierChips › hides chips when there is only one band",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 275,
+      "new_line": 279,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "shouldShowTierChips › shows chips once there is more than one band",
+      "file": "src/lib/donors.test.ts",
+      "runner": "tests",
+      "old_line": 265,
+      "new_line": 269,
       "classification": "change-introduced"
     }
   ],
   "platform_gated_absences": [],
   "runner_gated_absences": []
 }
+  backfilled 17 missing description(s) on existing entr(y/ies) from source comments — no separate `backfill-descriptions` run needed.

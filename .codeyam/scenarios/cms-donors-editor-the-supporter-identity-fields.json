@@ -1,0 +1,38 @@
+{
+  "name": "CMS Donors Editor - The Supporter Identity Fields",
+  "id": "5d689a91-4e2e-43e6-9bec-59c808adfe5e",
+  "url": "/admin/donors",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
+  "description": "The Donors editor with the four fields The Momentum Network draws a supporter node from — School, Class year, Location, and Why I gave — filled in on a new entry. Reached by driving the form rather than by URL, because the CMS renders the new-entry editor in place; the fills also scroll the new block into a viewport-sized frame, which is the only way it lands above the fold. Note what the frame does and does not prove: School renders as a DROPDOWN rather than the text box a free-text field would give, but it reads '— none —' because a native select option cannot be committed through the capture harness's verbs. That the dropdown offers exactly the thirteen schools resolveSchool accepts is asserted in src/lib/selectOptions.test.ts, which is a durable check rather than a screenshot of an open menu.",
+  "interactions": [
+    {
+      "action": "click",
+      "text": "+ New"
+    },
+    {
+      "action": "fill",
+      "selector": "#f-name",
+      "value": "Margaret Chen-Alvarez"
+    },
+    {
+      "action": "fill",
+      "selector": "#f-gradYear",
+      "value": "2004"
+    },
+    {
+      "action": "fill",
+      "selector": "#f-location",
+      "value": "San Francisco, CA"
+    },
+    {
+      "action": "fill",
+      "selector": "#f-why",
+      "value": "I got my first board seat through someone I met at a Harvard in Tech dinner. This is how I pay that forward."
+    }
+  ]
+}

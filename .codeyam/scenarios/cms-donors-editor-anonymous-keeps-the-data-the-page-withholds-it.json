@@ -1,0 +1,42 @@
+{
+  "name": "CMS Donors Editor - Anonymous Keeps The Data, The Page Withholds It",
+  "id": "ea39ff5b-6660-4aeb-8332-f5912c544c18",
+  "url": "/admin/donors",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/index.astro",
+  "description": "The same supporter with 'List anonymously' switched on, and every one of the four identity values still sitting in the form. That is the point of the frame, not an oversight: the entry keeps the school, the class year, the location and the message for the team's records, and donorPublicIdentity and donorWhy are what stop them reaching a reader. Each of the four hints says so at the moment an editor is deciding whether to type something in. The suppression itself is not visible here — nothing renders these fields yet, since the network that will draw them does not exist — so it is pinned in src/lib/donors.test.ts, where withholding school, class year and location TOGETHER for an anonymous supporter is the load-bearing assertion of this feature.",
+  "interactions": [
+    {
+      "action": "click",
+      "text": "+ New"
+    },
+    {
+      "action": "fill",
+      "selector": "#f-name",
+      "value": "Margaret Chen-Alvarez"
+    },
+    {
+      "action": "fill",
+      "selector": "#f-gradYear",
+      "value": "2004"
+    },
+    {
+      "action": "fill",
+      "selector": "#f-location",
+      "value": "San Francisco, CA"
+    },
+    {
+      "action": "fill",
+      "selector": "#f-why",
+      "value": "I got my first board seat through someone I met at a Harvard in Tech dinner. This is how I pay that forward."
+    },
+    {
+      "action": "click",
+      "text": "List anonymously"
+    }
+  ]
+}

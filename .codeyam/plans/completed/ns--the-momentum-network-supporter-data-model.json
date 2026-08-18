@@ -1,0 +1,29 @@
+{
+  "claimStartedAt": "2026-08-18T14:54:55Z",
+  "completedAt": "2026-08-18T19:33:26Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "machine": "codeyam-editor-codeyam-editor-1",
+    "originId": "057ec9fa-08a8-4791-b811-59ddf8ab552b",
+    "pid": 37959,
+    "priority": 0,
+    "selectedPlan": "ns--the-momentum-network-supporter-data-model",
+    "sessionId": "fd28fa10-7b3d-4538-b09c-6c7f4bed8922",
+    "startedAt": "2026-08-18T14:54:55Z"
+  },
+  "createdAt": "2026-08-18T00:33:58Z",
+  "deliverables": [
+    "src/content/config.ts",
+    "src/data/collections.json",
+    "src/lib/donors.test.ts",
+    "src/lib/donors.ts",
+    "src/lib/selectOptions.test.ts",
+    "src/pages/isolated-components/[name].astro"
+  ],
+  "journalTimestamp": "2026-08-18T19:33:26Z",
+  "mode": "ui",
+  "planFile": "completed/ns--the-momentum-network-supporter-data-model.md",
+  "slug": "ns--the-momentum-network-supporter-data-model",
+  "title": "NS -- The Momentum Network Supporter Data Model"
+}

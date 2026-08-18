@@ -1030,7 +1030,7 @@
   },
   {
     "name": "Donor",
-    "description": "One person or household who gave to the Momentum Fund, listed on the /donate recognition wall. Stored as a markdown file in the `donors` content collection and added from the CMS. `tier` groups the wall by giving level and must match a tier id in `donatePage.json` \u2014 an unmatched or untagged donor collects in a trailing group rather than vanishing, the same tolerance the sponsor wall has. `founding` is a badge, not a tier: it renders the Founding Donor mark on whichever giving level the donor sits in. `anonymous` renders 'Anonymous donor' on the site while the entry keeps the real name for the team's records, and suppresses the outbound `url` link so an anonymous donor cannot be identified through it. `note` is the short line revealed on the card; the body is an optional longer thank-you. `draft` holds an entry back until the gift clears. The collection starts empty in production, where the wall renders its invitation state.",
+    "description": "One person or household who gave to the Momentum Fund, listed on the /donate recognition wall. Stored as a markdown file in the `donors` content collection and added from the CMS. `tier` groups the wall by giving level and must match a tier id in `donatePage.json` \u2014 an unmatched or untagged donor collects in a trailing group rather than vanishing, the same tolerance the sponsor wall has. `founding` is a badge, not a tier: it renders the Founding Donor mark on whichever giving level the donor sits in. `anonymous` renders 'Anonymous donor' on the site while the entry keeps the real name for the team's records, and suppresses the outbound `url` link so an anonymous donor cannot be identified through it. `note` is the short line revealed on the card; the body is an optional longer thank-you. `draft` holds an entry back until the gift clears. The collection starts empty in production, where the wall renders its invitation state. `school`, `gradYear`, and `location` are the affiliation fields The Momentum Network draws a supporter node from: the school and class year the selected-node panel prints, and the location the 'find your place in the network' search filters on. `school` is a CMS dropdown backed by a fixed list (`HARVARD_SCHOOLS`) rather than free text, because the search matches on the stored value and free text would split one school across several spellings; `location` stays free text because supporters are global and the set is open-ended. `why` is the supporter's OWN words on why they gave, used to pre-fill the share badge message and left out entirely when blank — deliberately distinct from `note`, which is the line the team writes for the wall, because the share rule turns on whether the supporter themselves submitted one. All four are withheld for an `anonymous` entry alongside the name and the outbound link: a school plus a class year plus a city identifies someone in a community this size as surely as the name would. Reader-facing code reaches them only through `donorPublicIdentity()` and `donorWhy()`, never the raw entry. All four are optional, so existing donors need no migration.",
     "category": "datastore",
     "order": 17,
     "fields": [
@@ -1062,6 +1062,26 @@
       },
       {
         "name": "note",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "school",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "gradYear",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "location",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "why",
         "type": "string",
         "required": false
       },

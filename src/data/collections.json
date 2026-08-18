@@ -393,6 +393,49 @@
           "hint": "One short line shown on the donor's card. Their words, or ours about them."
         },
         {
+          "name": "school",
+          "label": "School",
+          "type": "select",
+          "optional": true,
+          "hint": "Which Harvard school they came through. Shown on their node in the network, and what 'find your school' searches on — so pick from the list rather than inventing a spelling the search will miss. Hidden when the gift is listed anonymously.",
+          "options": [
+            "Harvard College",
+            "Harvard Business School",
+            "Harvard Law School",
+            "Harvard Medical School",
+            "Harvard Kennedy School",
+            "Harvard Graduate School of Design",
+            "Harvard Graduate School of Education",
+            "Harvard Division of Continuing Education",
+            "Harvard Divinity School",
+            "Harvard T.H. Chan School of Public Health",
+            "Harvard School of Dental Medicine",
+            "Harvard John A. Paulson School of Engineering and Applied Sciences",
+            "Harvard Graduate School of Arts and Sciences"
+          ]
+        },
+        {
+          "name": "gradYear",
+          "label": "Class year",
+          "type": "number",
+          "optional": true,
+          "hint": "The year they graduated, shown beside the school on their node. Hidden when the gift is listed anonymously."
+        },
+        {
+          "name": "location",
+          "label": "Location",
+          "type": "text",
+          "optional": true,
+          "hint": "City or region, as they would say it — 'London, United Kingdom', 'San Francisco, CA'. Used by the network's location search. Hidden when the gift is listed anonymously."
+        },
+        {
+          "name": "why",
+          "label": "Why I gave",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The supporter's OWN words, used to pre-fill the message when they share their badge. Different from Note above, which is the line we write for the wall — leave this blank unless they told us themselves, and the share message simply leaves the line out. Hidden when the gift is listed anonymously."
+        },
+        {
           "name": "url",
           "label": "Website",
           "type": "text",

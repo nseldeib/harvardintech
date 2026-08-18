@@ -9,7 +9,11 @@ import {
   foundingDonorsSummary,
   shouldShowTierChips,
   matchesTier,
+  resolveSchool,
+  donorPublicIdentity,
+  donorWhy,
   ANONYMOUS_DONOR_LABEL,
+  HARVARD_SCHOOLS,
   OTHER_TIER_ID,
   type DonorGroup,
   type DonorLike,
@@ -331,5 +335,162 @@ describe('matchesTier', () => {
     expect(matchesTier(donor('a', 'Aisha Rahman', { tier: 'leadership' }), OTHER_TIER_ID, TIERS)).toBe(
       false,
     );
+  });
+});
+
+describe('HARVARD_SCHOOLS', () => {
+  // A duplicated option is indistinguishable from its twin in the dropdown, and a
+  // blank one is indistinguishable from the control's own unset entry. Either
+  // would ship an editor a choice they cannot reason about.
+  it('lists every school exactly once, with no blank entry', () => {
+    expect(new Set(HARVARD_SCHOOLS).size).toBe(HARVARD_SCHOOLS.length);
+    expect(HARVARD_SCHOOLS.filter((school) => school.trim() === '')).toEqual([]);
+  });
+});
+
+describe('resolveSchool', () => {
+  // The ordinary case: a value the CMS dropdown itself produced.
+  it('returns the school for an exact match', () => {
+    expect(resolveSchool('Harvard Business School')).toBe('Harvard Business School');
+  });
+
+  // A hand-edited markdown file or a scenario seed will not match the dropdown's
+  // casing and spacing exactly, and an editor is not owed an empty result for it.
+  it('matches case-insensitively and ignores surrounding whitespace', () => {
+    expect(resolveSchool('  harvard law school  ')).toBe('Harvard Law School');
+    expect(resolveSchool('HARVARD COLLEGE')).toBe('Harvard College');
+  });
+
+  // Blank, whitespace-only, and absent all mean the same thing: not filed.
+  it('returns nothing for a blank, whitespace-only, or absent value', () => {
+    expect(resolveSchool('')).toBeUndefined();
+    expect(resolveSchool('   ')).toBeUndefined();
+    expect(resolveSchool(undefined)).toBeUndefined();
+  });
+
+  // Deliberately NOT a fallback to some default school. Filing someone under the
+  // wrong school is worse than filing them under none — the network's search
+  // would surface them to the wrong people.
+  it('returns nothing for an unrecognized school rather than guessing one', () => {
+    expect(resolveSchool('Yale School of Management')).toBeUndefined();
+    expect(resolveSchool('HBS')).toBeUndefined();
+  });
+});
+
+describe('donorPublicIdentity', () => {
+  // A named supporter's node shows everything they gave us.
+  it('returns the name, school, class year, and location for a named supporter', () => {
+    const d = donor('m', 'Margaret Chen-Alvarez', {
+      school: 'Harvard Business School',
+      gradYear: 2004,
+      location: 'San Francisco, CA',
+    });
+
+    expect(donorPublicIdentity(d)).toEqual({
+      name: 'Margaret Chen-Alvarez',
+      school: 'Harvard Business School',
+      gradYear: 2004,
+      location: 'San Francisco, CA',
+    });
+  });
+
+  // THE load-bearing test in this feature. A school plus a class year plus a city
+  // identifies someone in a community this size as surely as their name does —
+  // frequently uniquely. Anonymity that dropped the name and kept the other three
+  // would be anonymity in appearance only, and publishing it is the one failure
+  // no later edit takes back. If this test ever goes green with one of the three
+  // still returned, the guarantee is broken.
+  it('withholds the school, class year, and location together for an anonymous supporter', () => {
+    const d = donor('r', 'Robert K. Whitmore', {
+      anonymous: true,
+      school: 'Harvard Law School',
+      gradYear: 1998,
+      location: 'Greenwich, CT',
+    });
+
+    expect(donorPublicIdentity(d)).toEqual({ name: ANONYMOUS_DONOR_LABEL });
+  });
+
+  // The fields stay ON the entry for the team's records — this function is what
+  // keeps them off the page, not a deletion.
+  it('leaves the withheld values on the entry itself', () => {
+    const d = donor('r', 'Robert K. Whitmore', {
+      anonymous: true,
+      school: 'Harvard Law School',
+      gradYear: 1998,
+    });
+
+    donorPublicIdentity(d);
+
+    expect(d.name).toBe('Robert K. Whitmore');
+    expect(d.school).toBe('Harvard Law School');
+    expect(d.gradYear).toBe(1998);
+  });
+
+  // Every existing donor on the wall is in this state, and none of them may break.
+  it('returns just the name when no affiliation fields are set', () => {
+    expect(donorPublicIdentity(donor('c', 'Clara Ndiaye'))).toEqual({ name: 'Clara Ndiaye' });
+  });
+
+  // The school passes through the same resolver the dropdown is backed by, so a
+  // hand-edited value lands on its canonical spelling rather than reaching the
+  // node panel in whatever case it was typed.
+  it('normalizes the school rather than echoing what was typed', () => {
+    const d = donor('d', 'David Osei-Bonsu', { school: 'harvard kennedy school' });
+
+    expect(donorPublicIdentity(d).school).toBe('Harvard Kennedy School');
+  });
+
+  // An unrecognized school is dropped rather than printed, matching resolveSchool.
+  it('drops an unrecognized school instead of printing it on the node', () => {
+    const d = donor('x', 'Someone Else', { school: 'Stanford GSB', location: 'Palo Alto, CA' });
+
+    expect(donorPublicIdentity(d).school).toBeUndefined();
+    expect(donorPublicIdentity(d).location).toBe('Palo Alto, CA');
+  });
+
+  // A location of spaces is not a location; it would render as an empty line
+  // under the name on the node panel.
+  it('treats a whitespace-only location as absent', () => {
+    expect(donorPublicIdentity(donor('j', 'Jonathan Feld', { location: '   ' })).location)
+      .toBeUndefined();
+  });
+});
+
+describe('donorWhy', () => {
+  // The message the share badge pre-fills with.
+  it('returns the supporter own message', () => {
+    const d = donor('a', 'Aisha Rahman', { why: 'For the London chapter.' });
+
+    expect(donorWhy(d)).toBe('For the London chapter.');
+  });
+
+  // Trimmed, because the stored value came out of a textarea.
+  it('trims surrounding whitespace from the message', () => {
+    expect(donorWhy(donor('a', 'Aisha Rahman', { why: '  For the London chapter.  ' }))).toBe(
+      'For the London chapter.',
+    );
+  });
+
+  // The predicate the share rule turns on: no message means the line is removed
+  // from the badge entirely rather than rendered blank. Absent, empty, and
+  // whitespace-only all have to collapse to the same answer — three spaces is
+  // not a message.
+  it('returns nothing for an absent, empty, or whitespace-only message', () => {
+    expect(donorWhy(donor('b', 'Ben Wei'))).toBeUndefined();
+    expect(donorWhy(donor('b', 'Ben Wei', { why: '' }))).toBeUndefined();
+    expect(donorWhy(donor('b', 'Ben Wei', { why: '   ' }))).toBeUndefined();
+  });
+
+  // A personal statement is identifying, and often more so than a school or a
+  // city: it is in the supporter's own voice and frequently names where they
+  // work or what happened to them.
+  it('withholds the message for an anonymous supporter even when one is set', () => {
+    const d = donor('n', 'Nina Petrova', {
+      anonymous: true,
+      why: 'My employer would read anything I put my name to as a statement.',
+    });
+
+    expect(donorWhy(d)).toBeUndefined();
   });
 });

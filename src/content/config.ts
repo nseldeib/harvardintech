@@ -325,6 +325,28 @@ const donors = defineCollection({
     founding: z.boolean().optional(),
     anonymous: z.boolean().optional(),
     note: z.string().optional(),
+    // The affiliation fields The Momentum Network draws a supporter node from:
+    // the school and class year its selected-node panel prints, and the location
+    // its "find your place in the network" search filters on.
+    //
+    // `school` is free text HERE and a select in the CMS — the same "permissive
+    // on purpose" treatment `kind` and `layout` get on `momentumSections` above,
+    // and for the same reason: a value that predates an option, or arrives from a
+    // hand-edited file or a scenario seed, must not turn a typo into a build
+    // failure. `resolveSchool` in `src/lib/donors.ts` validates instead, matching
+    // case-insensitively and returning nothing for an unrecognized value.
+    // `location` stays free text everywhere — supporters are global and the set
+    // is open-ended, so there is no list a dropdown could offer.
+    school: z.string().optional(),
+    gradYear: z.number().optional(),
+    location: z.string().optional(),
+    // The supporter's OWN words on why they gave. Deliberately NOT `note`, which
+    // is above and reads almost the same: `note` is "their words, or ours about
+    // them" and is written by whoever maintains the wall, whereas the share badge
+    // must drop this line entirely when the SUPPORTER did not submit one. A field
+    // with two possible authors cannot answer "did they submit one?", so
+    // conflating the two would make that rule unimplementable.
+    why: z.string().optional(),
     url: z.string().optional(),
     photo: z.string().optional(),
     order: z.number().optional(),

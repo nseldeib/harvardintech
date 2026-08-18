@@ -1,0 +1,271 @@
+{
+  "timestamp": "2026-08-18T19:33:26Z",
+  "title": "The Momentum Network Supporter Data Model",
+  "type": "feature",
+  "userRequest": "## Summary\n\nGive a supporter the fields The Momentum Network needs to draw them as a node:\nthe Harvard school and graduation year the selected-node panel displays, the\nlocation the \"Find your place in the network\" search filters on, and the\nsupporter's own \"why I contributed\" message the share badge pre-populates. Add\nthem to the `donors` collection, its CMS editor, and the site's anonymity rule —\nwhich currently protects a name and a link and must now also protect a school, a\nyear, and a city. Purely additive: the live donor wall renders exactly as it does\ntoday, so this lands before the visualization exists and is what unblocks it.\n\n## Key Decisions\n\n- **Additive only — nothing about the current wall changes.** The tier bands,\n  cards, avatars, and chips keep working untouched. The network replaces them in\n  a later plan, and until it does the page must not regress. This is also why\n  `photo` is left alone here even though the design direction forbids portraits\n  and avatars: it still feeds `DonorAvatar` on the live wall, and it retires when\n  the wall does, not before.\n\n- **Extend anonymity to the new fields, through ONE function rather than\n  field-by-field.** `donorLinkHref` already documents the principle: a LinkedIn\n  URL beside \"Anonymous donor\" identifies someone as surely as printing the name\n  would, so anonymity that stopped at the name would be anonymity in appearance\n  only. School plus graduation year plus city is a stronger identifier than a\n  URL — in a community this size it is frequently unique. So the plan adds\n  `donorPublicIdentity(donor)`, returning the whole set of reader-facing identity\n  fields at once with every one suppressed for an anonymous supporter. A single\n  function is the point: three separate getters is three chances for a future\n  component to reach past one, and the failure mode is publishing something\n  against an explicit request, which no later edit takes back.\n\n- **School is a CMS dropdown backed by permissive schema text.** Exactly the\n  treatment `kind`, `layout`, and `icon` already get: `z.string().optional()` in\n  the schema so a hand-edited file or a scenario seed cannot fail the build, a\n  `select` in the registry so an editor picks rather than types, and a code list\n  that `src/lib/selectOptions.test.ts` keeps in step with the registry options.\n  This matters more here than for the existing three, because \"Find your school\"\n  is a **search** feature: free text would split Harvard Business School across\n  \"HBS\", \"Business School\", and \"Harvard Business School\", and a search that\n  silently misses supporters is worse than no search.\n\n- **Location stays free text.** Supporters are global and the set is open-ended,\n  so there is no list a dropdown could offer. This is the same reasoning `group`\n  carries on the section collections.\n\n- **The \"why\" message is its own field, not `note`.** `note` is documented as\n  \"Their words, or ours about them\" and is written by whoever maintains the wall.\n  The share message needs specifically the supporter's own words, because §5 of\n  the direction turns on it: *\"If the person did not submit a 'why I contributed'\n  message, automatically remove that line.\"* A field with two possible authors\n  cannot answer \"did the supporter submit one?\", so conflating them would make\n  that rule unimplementable.\n\n- **Graduation year is a number.** It sorts and filters correctly, and the CMS\n  renders a number input. Noted as an assumption to confirm: this models **one**\n  degree per supporter, and the direction document says \"graduation year\"\n  singular. An alum with a College degree and an HBS degree can only be filed\n  under one, which is a real limitation to surface before it becomes 200 rows of\n  data.\n\n- **Giving levels are retained.** `tier`, `donorTiers`, and `groupDonorsByTier`\n  all stay exactly as they are. The direction document never mentions levels and\n  treats every node as \"Founding Supporter\", but the decision here is that they\n  survive and are expressed differently in the network — node size, cluster, or\n  brightness — which is a visualization concern and belongs in that plan, not\n  this one. No schema change is needed to support it.\n\n## Open question this plan cannot settle\n\n**The school list needs the team's confirmation before an editor uses it.** The\nplan proposes the schools to seed the dropdown with, but a missing school is a\nsupporter who cannot be filed correctly, and the fix after the fact is editing\nrows one at a time. The execution step should confirm the list against how\nHarvard Alumni in Tech actually describes its membership — in particular whether\nextension-school and cross-registration alumni are included, and whether the\nlabel should be the full school name or the common abbreviation, since the\ndropdown value is what the search matches on and what the node panel prints.\n\nProposed starting list, to confirm: Harvard College, Harvard Business School,\nHarvard Law School, Harvard Medical School, Harvard Kennedy School, Harvard\nGraduate School of Design, Harvard Graduate School of Education, Harvard\nDivision of Continuing Education, Harvard Divinity School, Harvard T.H. Chan\nSchool of Public Health, Harvard School of Dental Medicine, Harvard John A.\nPaulson School of Engineering and Applied Sciences, Harvard Graduate School of\nArts and Sciences.\n\n## Implementation\n\n### 1. The supporter identity rules\n\n**File**: `src/lib/donors.ts`\n\n- Extend `DonorLike` with `school?: string`, `gradYear?: number`,\n  `location?: string`, and `why?: string`, each documented with what reads it —\n  the node panel, the search, the share message — so the next reader knows why a\n  field exists before finding its consumer.\n- Add `HARVARD_SCHOOLS` as an `as const` list, in the shape `SECTION_KINDS` and\n  `PILLAR_ICONS` already use, with a comment recording that the list is the\n  authority the CMS dropdown and the search both read.\n- Add `resolveSchool(value?)`: the matching school, or `undefined` for blank or\n  unrecognized. Trimmed and case-insensitive, matching `normalizeGroup`'s\n  reasoning in `src/lib/sectionGroups.ts` — an editor is not owed an empty result\n  for a capitalization difference. Falls back to `undefined` rather than a\n  default, since there is no sensible school to guess.\n- Add `donorPublicIdentity(donor)`: returns `{ name, school, gradYear, location }`\n  where `name` is `donorDisplayName(donor)` and the other three are `undefined`\n  whenever `anonymous === true`. Document it as the ONLY way reader-facing code\n  should reach these fields, in the same voice `donorDisplayName` already uses\n  for exactly this reason.\n- Add `donorWhy(donor)`: the trimmed message, or `undefined` when blank or\n  whitespace-only — the predicate the share rule's \"remove that line\" depends on.\n  Suppressed for an anonymous supporter as well: a personal statement is\n  identifying, and often more so than the fields above it.\n\n### 2. Tests for the identity rules\n\n**File**: `src/lib/donors.test.ts`\n\nExtend in the file's existing style:\n\n- `resolveSchool` — matches an exact name; matches with different case and\n  surrounding whitespace; returns `undefined` for blank, absent, and an\n  unrecognized value.\n- `donorPublicIdentity` — returns every field for a named supporter; returns the\n  anonymous label **and drops school, year, and location together** for an\n  anonymous one. That second test is the load-bearing one in this plan and its\n  comment should say so: it is the difference between anonymity and the\n  appearance of it.\n- `donorWhy` — returns the message; returns `undefined` for blank,\n  whitespace-only, and absent; returns `undefined` for an anonymous supporter\n  even when a message is present.\n- A guard that every entry in `HARVARD_SCHOOLS` is unique and non-blank, so a\n  duplicated or empty dropdown option cannot ship.\n\n### 3. The schema\n\n**File**: `src/content/config.ts`\n\nAdd `school: z.string().optional()`, `gradYear: z.number().optional()`,\n`location: z.string().optional()`, and `why: z.string().optional()` to the\n`donors` collection. Comment `school` with the same \"permissive on purpose\"\nreasoning the `momentumSections` block above it carries, and `why` with how it\ndiffers from `note` — the two look interchangeable and are not.\n\nNote the coupling: `src/data/collections.test.ts` asserts in both directions that\nevery schema key has an editor input and every editor field is a real schema key,\nso steps 3 and 4 land together or the suite fails.\n\n### 4. The CMS fields\n\n**File**: `src/data/collections.json`\n\nAdd four fields to the `donors` collection, after `note` and before `url`, so the\nidentity fields read as one block:\n\n- **School** — `select`, optional, options from `HARVARD_SCHOOLS`. Hint: shown on\n  the supporter's node and used by \"find your school\"; hidden for an anonymous\n  gift.\n- **Class year** — `number`, optional. Hint: the graduation year shown beside the\n  school; hidden for an anonymous gift.\n- **Location** — `text`, optional. Hint: city or region, used by the network's\n  location search; hidden for an anonymous gift.\n- **Why I gave** — `textarea`, optional. Hint: the supporter's **own** words, used\n  to pre-fill the message when they share their badge, and left out entirely when\n  blank. Say explicitly that this is different from Note, which is the line the\n  team writes for the wall.\n\nEvery one of the four hints must state that the field is hidden for an anonymous\ngift. That is the field-level restatement of the rule in step 1, at the moment an\neditor is deciding whether to type something in.\n\n### 5. Keep the dropdown honest\n\n**File**: `src/lib/selectOptions.test.ts`\n\nAdd `['donors', 'school']` to the `it.each` table of enum-shaped fields, and add\nthe `HARVARD_SCHOOLS` case to the block that asserts the registry options equal\nthe code list. Without this the two copies drift, which is the exact failure that\nfile exists to prevent.\n\n## Reused existing code\n\n- `donorDisplayName` from `src/lib/donors.ts` (glossary entry:\n  `donorDisplayName`) — called by the new public-identity resolver rather than\n  reimplemented,\n  so there is one anonymity rule for the name.\n- `donorLinkHref` from `src/lib/donors.ts` (glossary entry: `donorLinkHref`) —\n  the precedent and the documented argument this plan extends: suppress anything\n  that identifies, not merely the name.\n- `ANONYMOUS_DONOR_LABEL` from `src/lib/donors.ts` — the standing label, unchanged.\n- `groupDonorsByTier` from `src/lib/donors.ts` (glossary entry:\n  `groupDonorsByTier`) — untouched; giving levels survive this plan intact.\n- `normalizeGroup` from `src/lib/sectionGroups.ts` (glossary entry:\n  `normalizeGroup`) — the trimmed, lowercased matching convention the new school\n  resolver follows.\n- `resolveLayout` from `src/lib/momentumSections.ts` (glossary entry:\n  `resolveLayout`) — the shape of a resolver over a fixed list; the new school\n  resolver differs only in returning `undefined` rather than a default, and its\n  comment should say why.\n- `src/lib/selectOptions.test.ts` — the existing drift guard step 5 extends\n  rather than duplicates.\n- `src/data/collections.test.ts` — the existing bidirectional registry/schema\n  guard; it covers the four new fields once steps 3 and 4 land, so no new test is\n  needed there.\n- `PILLAR_ICONS` from `src/lib/pillars.ts` — the `as const` code-list shape the\n  new school list copies.\n\n**Existing-implementation survey.** Checked the `donors` collection for anything\nequivalent before adding fields. It carries `name`, `tier`, `founding`,\n`anonymous`, `note`, `url`, `photo`, `order`, and `draft` — **none** of which\nholds a school, a graduation year, or a location, and no other collection on the\nsite does either (`team` carries `role` and a bio, `donors` is the only\nperson-with-affiliation collection on /donate). `note` is the only near-miss and\nis deliberately not reused, for the reason given in Key Decisions. There is no\nexisting school or year list anywhere in `src/lib/` to reuse, and no existing\nhelper that filters identity by anonymity beyond `donorDisplayName` and\n`donorLinkHref`, both of which this plan builds on rather than replaces.\n\n## Scenarios to Demonstrate\n\n- **A fully filled-in supporter** — the donor entry in the CMS with school, class\n  year, location, and \"why I gave\" all completed, showing the four new controls\n  in place.\n- **An anonymous supporter** — the same entry with \"List anonymously\" switched\n  on, and the resolved public identity showing the anonymous label with school,\n  year, location, and the why-message all withheld. The privacy guarantee, made\n  visible.\n- **The school dropdown** — the Donors editor showing School as a picker rather\n  than a text box, so an editor cannot invent a spelling the search will miss.\n- **A supporter with nothing filled in** — the entry as every existing donor\n  looks today: four blank optional fields, no validation error, nothing broken.\n  The proof this ships without migrating content.\n- **The live donor wall, unchanged** — /donate rendering exactly as it does now.\n  The regression floor for a plan that is meant to be invisible until the network\n  arrives.",
+  "description": "Gave a supporter the fields The Momentum Network needs to draw them as a node — the Harvard school and class year its selected-node panel prints, the location its find-your-place search filters on, and the supporter's own why-I-contributed message the share badge pre-populates — across the donors schema, its CMS editor, and the site's anonymity rule. School is a dropdown backed by a thirteen-school code list rather than free text, because the search matches on the stored value and free text would split one school across several spellings; location stays free text since supporters are global. The why message is deliberately its own field rather than the existing note, which is written by whoever maintains the wall: the share rule turns on whether the SUPPORTER submitted one, and a field with two possible authors cannot answer that. The load-bearing piece is donorPublicIdentity, which returns name, school, class year and location as ONE object with all three affiliation fields withheld together for an anonymous supporter — extending the argument donorLinkHref already documents, since a school plus a class year plus a city identifies someone in a community this size as surely as a profile link would, and three separate getters would be three chances for a future component to reach past one. Purely additive: every field is optional so existing donors need no migration, and the live /donate wall renders exactly as before, which is what lets this land ahead of the visualization it unblocks.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--custom-html-override-for-a-campaign-section.md\t.codeyam/plans/completed/ns--custom-html-override-for-a-campaign-section.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/completed/ns--the-momentum-network-supporter-data-model.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/301692b7d141219c28aa4c961d23663ef83d992574e1c9b2ae6381814764ace4.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/51d7bd4f495f4717523abcb3648778510cece53ef1e79febd3873063dda149d0.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/649e525c1b1893d24a5e225bf366e63b32230669ac8aa68992c8e2f691346016.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/9e3d4e3fdcbcc9ee60eec3673f6678ed245bf593602bd6958ba3312bc133a4eb.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/donors.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/donors.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/selectOptions.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-donors-editor-anonymous-keeps-the-data-the-page-withholds-it.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-donors-editor-the-supporter-identity-fields.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-donate-donorwall-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-lib-donors-ts.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-donors-editor-anonymous-keeps-the-data-the-page-withholds-it--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-donors-editor-anonymous-keeps-the-data-the-page-withholds-it--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-donors-editor-the-supporter-identity-fields--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-donors-editor-the-supporter-identity-fields--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/29c51de40308538e04f627fae3365b3d3a9b39c7e0dea99e003b1225026526ba.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/3c7ff85b76eb14387e96f2d976a8e430f7b9588721893e41297edcf67e4e15f6.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/76c470c59b93ffea4f17d42dea39eb98aeaf5d9b2e08a29ec43d033e1b938add.json",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "CMS Donors Editor - The Supporter Identity Fields",
+      "screenshotPath": "cms-donors-editor-the-supporter-identity-fields--desktop.png"
+    },
+    {
+      "name": "CMS Donors Editor - Anonymous Keeps The Data, The Page Withholds It",
+      "screenshotPath": "cms-donors-editor-anonymous-keeps-the-data-the-page-withholds-it--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Giving Platform Is Chosen",
+      "screenshotPath": "momentum-fund-a-giving-platform-is-chosen--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Filtering The Donor Wall",
+      "screenshotPath": "momentum-fund-filtering-the-donor-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Donor Wall Moved To The Top",
+      "screenshotPath": "momentum-fund-the-donor-wall-moved-to-the-top--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The First Donor On The Wall",
+      "screenshotPath": "momentum-fund-the-first-donor-on-the-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Goal Meter Held As Coming Soon",
+      "screenshotPath": "momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Two Pillar Bands With Their Own Cards",
+      "screenshotPath": "momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 95,
+    "passed": 95,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 95,
+        "passed": 95
+      }
+    ]
+  }
+}

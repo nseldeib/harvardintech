@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { HARVARD_SCHOOLS } from './donors';
 import { HOME_SECTION_KINDS } from './homeSections';
 import { SECTION_KINDS, SECTION_LAYOUTS } from './momentumSections';
 import { PILLAR_ICONS } from './pillars';
@@ -34,6 +35,7 @@ describe('enum-shaped fields are dropdowns, not text boxes', () => {
     ['momentumSections', 'kind'],
     ['momentumSections', 'layout'],
     ['pillars', 'icon'],
+    ['donors', 'school'],
   ])('%s.%s is a select', (collectionId, fieldName) => {
     expect(field(collectionId, fieldName).type).toBe('select');
   });
@@ -60,6 +62,15 @@ describe('dropdown options match the validators that enforce them', () => {
   // An unrecognized icon falls back to people, so a typo quietly changes the art.
   it('pillars.icon offers exactly the drawn glyphs', () => {
     expect(field('pillars', 'icon').options).toEqual([...PILLAR_ICONS]);
+  });
+
+  // This one matters more than the four above it, because School feeds a SEARCH.
+  // resolveSchool drops anything not on the code list, so a school offered in the
+  // CMS but missing from HARVARD_SCHOOLS would let an editor file a supporter
+  // under a value the network then refuses to match — the supporter simply never
+  // turns up in 'find your school', with nothing on the page to explain why.
+  it('donors.school offers exactly the schools the resolver accepts', () => {
+    expect(field('donors', 'school').options).toEqual([...HARVARD_SCHOOLS]);
   });
 });
 
@@ -103,6 +114,9 @@ describe('existing content still validates against the new dropdowns', () => {
     ['momentumSections', 'kind'],
     ['momentumSections', 'layout'],
     ['pillars', 'icon'],
+    // Vacuous while the donors collection is empty in production, which it is
+    // today — it starts biting the moment the first supporter is added.
+    ['donors', 'school'],
   ])('every committed %s.%s value is offered', (collectionId, fieldName) => {
     const options = new Set(field(collectionId, fieldName).options ?? []);
     const dir = `src/content/${collectionId}`;

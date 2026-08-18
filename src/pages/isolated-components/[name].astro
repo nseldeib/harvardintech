@@ -641,24 +641,30 @@ const sponsorInquiryStates = {
 //     under the trailing group, rather than vanishing from the wall.
 const DONOR_COPY = donatePage;
 const DONOR_TIERS = donatePage.donorTiers ?? [];
+// The `school` / `gradYear` / `location` / `why` fields are what The Momentum
+// Network draws a supporter node from. They are carried here on the ANONYMOUS
+// entries too, deliberately: the entry keeps them for the team's records and the
+// page must withhold them, so an anonymity fixture with the fields left blank
+// would prove nothing. Several entries leave them unset, because that is the
+// state every donor already on the wall is in and the wall must not care.
 const FULL_DONORS = [
-  { slug: 'margaret-chen-alvarez', name: 'Margaret Chen-Alvarez', tier: 'leadership', founding: true, order: 1, url: 'https://example.com/margaret', note: 'Gave the week the fund opened, before there was anything to show for it.' },
-  { slug: 'robert-whitmore', name: 'Robert K. Whitmore', tier: 'leadership', founding: true, anonymous: true, order: 2, url: 'https://example.com/robert' },
-  { slug: 'david-osei-bonsu', name: 'David Osei-Bonsu', tier: 'leadership', order: 3, url: 'https://example.com/david' },
-  { slug: 'priya-raman', name: 'Priya Raman', tier: 'sustaining', founding: true, order: 1, photo: '/images/team/jessica-li.png', note: 'Two intros from a founder dinner turned into my first enterprise customer.' },
-  { slug: 'jonathan-feld', name: 'Jonathan Feld', tier: 'sustaining', order: 2 },
-  { slug: 'aisha-rahman', name: 'Aisha Rahman', tier: 'sustaining', order: 3, note: 'For the London chapter, which is the only reason I still feel connected.' },
-  { slug: 'tomas-vidal', name: 'Tomás Vidal', tier: 'sustaining', order: 4, url: 'https://example.com/tomas' },
-  { slug: 'hannah-brightwell', name: 'Hannah Brightwell', tier: 'sustaining', order: 5, photo: '/images/team/krysia-lenzo.png' },
-  { slug: 'kwame-boateng', name: 'Kwame Boateng', tier: 'supporting', order: 1, note: 'Small gift, every year, for as long as this keeps going.' },
-  { slug: 'elena-marchetti', name: 'Elena Marchetti', tier: 'supporting', order: 2 },
-  { slug: 'samuel-oyelaran', name: 'Samuel Oyelaran', tier: 'supporting', order: 3 },
-  { slug: 'grace-lindqvist', name: 'Grace Lindqvist', tier: 'supporting', founding: true, order: 4 },
-  { slug: 'nina-petrova', name: 'Nina Petrova', tier: 'supporting', anonymous: true, order: 5 },
-  { slug: 'michael-okonkwo', name: 'Michael Okonkwo', tier: 'supporting', order: 6, url: 'https://example.com/michael' },
-  { slug: 'rebecca-stern', name: 'Rebecca Stern', tier: 'supporting', order: 7, photo: '/images/team/nadia-eldeib.png' },
-  { slug: 'yusuf-al-amin', name: 'Yusuf Al-Amin', tier: 'supporting', order: 8 },
-  { slug: 'the-lindgren-family', name: 'The Lindgren Family', tier: 'legacy-circle', order: 1, note: 'Tagged with a giving level that no longer exists on the page.' },
+  { slug: 'margaret-chen-alvarez', name: 'Margaret Chen-Alvarez', tier: 'leadership', founding: true, order: 1, url: 'https://example.com/margaret', note: 'Gave the week the fund opened, before there was anything to show for it.', school: 'Harvard Business School', gradYear: 2004, location: 'San Francisco, CA', why: 'I got my first board seat through someone I met at a Harvard in Tech dinner. This is how I pay that forward.' },
+  { slug: 'robert-whitmore', name: 'Robert K. Whitmore', tier: 'leadership', founding: true, anonymous: true, order: 2, url: 'https://example.com/robert', school: 'Harvard Law School', gradYear: 1998, location: 'Greenwich, CT', why: 'I would rather the fund got the attention than I did.' },
+  { slug: 'david-osei-bonsu', name: 'David Osei-Bonsu', tier: 'leadership', order: 3, url: 'https://example.com/david', school: 'Harvard John A. Paulson School of Engineering and Applied Sciences', gradYear: 2011, location: 'Accra, Ghana', why: 'Building here should not mean leaving the network behind.' },
+  { slug: 'priya-raman', name: 'Priya Raman', tier: 'sustaining', founding: true, order: 1, photo: '/images/team/jessica-li.png', note: 'Two intros from a founder dinner turned into my first enterprise customer.', school: 'Harvard Graduate School of Arts and Sciences', gradYear: 2015, location: 'Bengaluru, India', why: 'Two intros from a founder dinner turned into my first enterprise customer. That is not luck, that is a network doing its job.' },
+  { slug: 'jonathan-feld', name: 'Jonathan Feld', tier: 'sustaining', order: 2, school: 'Harvard College', gradYear: 2009, location: 'Austin, TX' },
+  { slug: 'aisha-rahman', name: 'Aisha Rahman', tier: 'sustaining', order: 3, note: 'For the London chapter, which is the only reason I still feel connected.', school: 'Harvard Kennedy School', gradYear: 2013, location: 'London, United Kingdom', why: 'For the London chapter. It is the only reason I still feel connected.' },
+  { slug: 'tomas-vidal', name: 'Tomás Vidal', tier: 'sustaining', order: 4, url: 'https://example.com/tomas', school: 'Harvard Graduate School of Design', gradYear: 2017, location: 'Mexico City, Mexico' },
+  { slug: 'hannah-brightwell', name: 'Hannah Brightwell', tier: 'sustaining', order: 5, photo: '/images/team/krysia-lenzo.png', school: 'Harvard Medical School', gradYear: 2012, location: 'Boston, MA', why: 'Health tech is lonely until you find the other people doing it.' },
+  { slug: 'kwame-boateng', name: 'Kwame Boateng', tier: 'supporting', order: 1, note: 'Small gift, every year, for as long as this keeps going.', school: 'Harvard Division of Continuing Education', gradYear: 2019, location: 'Toronto, ON', why: 'Small gift, every year, for as long as this keeps going.' },
+  { slug: 'elena-marchetti', name: 'Elena Marchetti', tier: 'supporting', order: 2, school: 'Harvard College', gradYear: 2021, location: 'Milan, Italy' },
+  { slug: 'samuel-oyelaran', name: 'Samuel Oyelaran', tier: 'supporting', order: 3, school: 'Harvard T.H. Chan School of Public Health', gradYear: 2016, location: 'Lagos, Nigeria' },
+  { slug: 'grace-lindqvist', name: 'Grace Lindqvist', tier: 'supporting', founding: true, order: 4, school: 'Harvard Graduate School of Education', gradYear: 2008, location: 'Stockholm, Sweden', why: 'I joined when there were eleven of us on a mailing list.' },
+  { slug: 'nina-petrova', name: 'Nina Petrova', tier: 'supporting', anonymous: true, order: 5, school: 'Harvard Business School', gradYear: 2018, location: 'Berlin, Germany', why: 'My employer would read anything I put my name to as a statement, so I am giving quietly.' },
+  { slug: 'michael-okonkwo', name: 'Michael Okonkwo', tier: 'supporting', order: 6, url: 'https://example.com/michael', school: 'Harvard College', gradYear: 2014, location: 'New York, NY' },
+  { slug: 'rebecca-stern', name: 'Rebecca Stern', tier: 'supporting', order: 7, photo: '/images/team/nadia-eldeib.png', school: 'Harvard Divinity School', gradYear: 2010, location: 'Seattle, WA', why: 'Ethics work in AI needs the humanities people in the room, and this is where I found them.' },
+  { slug: 'yusuf-al-amin', name: 'Yusuf Al-Amin', tier: 'supporting', order: 8, school: 'Harvard School of Dental Medicine', gradYear: 2007, location: 'Dubai, UAE' },
+  { slug: 'the-lindgren-family', name: 'The Lindgren Family', tier: 'legacy-circle', order: 1, note: 'Tagged with a giving level that no longer exists on the page.', location: 'Minneapolis, MN' },
   { slug: 'clara-ndiaye', name: 'Clara Ndiaye', order: 2 },
 ];
 const FIRST_DONORS = [FULL_DONORS[0]];

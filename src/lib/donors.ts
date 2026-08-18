@@ -20,6 +20,22 @@ export interface DonorLike {
   url?: string;
   photo?: string;
   order?: number;
+  /** Which Harvard school they came through — one of `HARVARD_SCHOOLS`. Printed
+   *  on the selected-node panel in The Momentum Network, and one of the two
+   *  things "find your place in the network" searches on. */
+  school?: string;
+  /** The year they graduated, shown beside the school. A number so it sorts and
+   *  filters; the CMS renders it as a number input. Models ONE degree per
+   *  supporter, which is the shape the network's node panel assumes. */
+  gradYear?: number;
+  /** Where they are now — city or region, free text. The other axis "find your
+   *  place in the network" filters on. */
+  location?: string;
+  /** The supporter's OWN words on why they gave, used to pre-fill the message
+   *  when they share their badge. Distinct from `note`, which is the line the
+   *  team writes for the wall: the share rule turns on whether the SUPPORTER
+   *  submitted one, and a field with two possible authors cannot answer that. */
+  why?: string;
 }
 
 /** A giving level as `donatePage.json` declares it. */
@@ -42,6 +58,37 @@ export const OTHER_TIER_ID = 'other';
 
 /** What the wall shows in place of a name when a donor asked not to be named. */
 export const ANONYMOUS_DONOR_LABEL = 'Anonymous donor';
+
+/**
+ * The Harvard schools a supporter can be filed under.
+ *
+ * This list is the AUTHORITY: the CMS dropdown (`src/data/collections.json`)
+ * offers exactly these, `src/lib/selectOptions.test.ts` holds the two copies in
+ * step, and the network's "find your school" search matches on the stored value.
+ * That last one is why this is a fixed list where `location` is free text —
+ * free-typed schools would split Harvard Business School across "HBS",
+ * "Business School", and the full name, and a search that silently misses
+ * supporters is worse than no search at all.
+ *
+ * The same `as const` shape as `SECTION_KINDS` and `PILLAR_ICONS`.
+ */
+export const HARVARD_SCHOOLS = [
+  'Harvard College',
+  'Harvard Business School',
+  'Harvard Law School',
+  'Harvard Medical School',
+  'Harvard Kennedy School',
+  'Harvard Graduate School of Design',
+  'Harvard Graduate School of Education',
+  'Harvard Division of Continuing Education',
+  'Harvard Divinity School',
+  'Harvard T.H. Chan School of Public Health',
+  'Harvard School of Dental Medicine',
+  'Harvard John A. Paulson School of Engineering and Applied Sciences',
+  'Harvard Graduate School of Arts and Sciences',
+] as const;
+
+export type HarvardSchool = (typeof HARVARD_SCHOOLS)[number];
 
 /**
  * Donors grouped by giving level, in the order the levels are declared — so the
@@ -147,6 +194,86 @@ export function donorPhoto(donor: DonorLike): string | undefined {
  */
 export function donorMonogram(donor: DonorLike): string {
   return donor.anonymous === true ? '—' : initials(donor.name);
+}
+
+/**
+ * Normalize a `school` value to one of `HARVARD_SCHOOLS`, or `undefined`.
+ *
+ * Trimmed and case-insensitive, following `normalizeGroup` in
+ * `./sectionGroups.ts`: an editor is not owed an empty result for a
+ * capitalization difference, and a value that arrives from a hand-edited file or
+ * a scenario seed should still land where it was meant to.
+ *
+ * The shape of `resolveLayout` in `./momentumSections.ts`, differing in one way
+ * that matters: it falls back to `undefined` rather than a default, because
+ * there is no sensible school to guess. Filing someone under the wrong school
+ * would be worse than filing them under none — the network's search would show
+ * them to the wrong people.
+ */
+export function resolveSchool(value?: string): HarvardSchool | undefined {
+  const normalized = value?.trim().toLowerCase() ?? '';
+  if (normalized.length === 0) return undefined;
+  return HARVARD_SCHOOLS.find((school) => school.toLowerCase() === normalized);
+}
+
+/** The reader-facing identity of a supporter, with anonymity already applied. */
+export interface DonorPublicIdentity {
+  name: string;
+  school?: string;
+  gradYear?: number;
+  location?: string;
+}
+
+/**
+ * Everything reader-facing code may print about WHO a supporter is.
+ *
+ * This is the ONLY way reader-facing code should reach `school`, `gradYear`, and
+ * `location` — the same rule `donorDisplayName` states for the name, and for the
+ * same reason. `donorLinkHref` already makes the argument: a LinkedIn URL beside
+ * "Anonymous donor" identifies someone as surely as printing the name would. A
+ * school plus a graduation year plus a city is a STRONGER identifier than that
+ * URL — in a community this size it is frequently unique — so all three are
+ * withheld together for an anonymous supporter.
+ *
+ * They are returned as one object rather than as three separate getters
+ * deliberately: three getters is three chances for a future component to reach
+ * past one of them, and the failure mode is publishing something against an
+ * explicit request, which no later edit takes back. Ask for the identity, get
+ * the whole of it, correctly filtered.
+ *
+ * The fields stay on the entry — the team may still want them for their records
+ * — they simply never reach the page.
+ */
+export function donorPublicIdentity(donor: DonorLike): DonorPublicIdentity {
+  const name = donorDisplayName(donor);
+  if (donor.anonymous === true) return { name };
+
+  return {
+    name,
+    school: resolveSchool(donor.school),
+    gradYear: donor.gradYear,
+    location: donor.location && donor.location.trim().length > 0 ? donor.location.trim() : undefined,
+  };
+}
+
+/**
+ * The supporter's own "why I contributed" message, or `undefined` when there
+ * isn't one.
+ *
+ * This is the predicate the share rule depends on: when a supporter did not
+ * submit a message, that line is removed from the share badge entirely rather
+ * than rendered blank. So "absent", "empty", and "whitespace only" all have to
+ * collapse to the same answer — a message of three spaces is not a message.
+ *
+ * Suppressed for an anonymous supporter as well, alongside the fields in
+ * `donorPublicIdentity`. A personal statement about why someone gave is
+ * identifying, and often more so than their school or city: it is written in
+ * their own voice and frequently names where they work or what happened to them.
+ */
+export function donorWhy(donor: DonorLike): string | undefined {
+  if (donor.anonymous === true) return undefined;
+  const trimmed = donor.why?.trim() ?? '';
+  return trimmed.length > 0 ? trimmed : undefined;
 }
 
 /**

@@ -1,0 +1,96 @@
+{
+  "surface": "src/lib/donors.ts",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "groups",
+      "value": "empty",
+      "rationale": "source-derived state groups=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "groups",
+      "value": "one",
+      "rationale": "source-derived state groups=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "groups",
+      "value": "many",
+      "rationale": "source-derived state groups=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "trimmed",
+      "value": "empty",
+      "rationale": "source-derived state trimmed=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "trimmed",
+      "value": "one",
+      "rationale": "source-derived state trimmed=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "trimmed",
+      "value": "many",
+      "rationale": "source-derived state trimmed=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "normalized",
+      "value": "empty",
+      "rationale": "source-derived state normalized=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "normalized",
+      "value": "one",
+      "rationale": "source-derived state normalized=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "normalized",
+      "value": "many",
+      "rationale": "source-derived state normalized=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "unmatched",
+      "value": "empty",
+      "rationale": "source-derived state unmatched=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "unmatched",
+      "value": "one",
+      "rationale": "source-derived state unmatched=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "unmatched",
+      "value": "many",
+      "rationale": "source-derived state unmatched=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "members",
+      "value": "empty",
+      "rationale": "source-derived state members=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "members",
+      "value": "one",
+      "rationale": "source-derived state members=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "members",
+      "value": "many",
+      "rationale": "source-derived state members=many",
+      "status": "covered"
+    }
+  ]
+}
