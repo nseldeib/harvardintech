@@ -82,6 +82,10 @@
       "description": "Every gift at every size, from alumni who wanted to be part of it."
     }
   ],
+  "networkTitle": "The Momentum Network — Powering Harvard Alumni in Tech",
+  "networkTagline": "Every light belongs to a founding supporter. Together, they illuminate what comes next.",
+  "networkSearchTitle": "Find your place in the network",
+  "shareMessage": "Harvard Alumni in Tech Momentum Fund and help strengthen the network that gives back to the network.\n\nI contributed because [SUPPORTER MESSAGE]\n\nIf this community has helped you make a connection, discover an opportunity, or move an idea forward, I invite you to join me in helping power what comes next.\n\nSupport the Momentum Fund: [DONATION LINK]",
   "ctaTitle": "Help power what comes next.",
   "ctaBody": "Join the alumni choosing to move from informal support to intentional investment, every month.",
   "ctaLabel": "Make a Gift",

@@ -568,7 +568,7 @@
   },
   {
     "name": "DonatePageCopy",
-    "description": "The page s FRAME fields \u2014 hero headline named/generic, subhead, photo, and the closing ask \u2014 now live on the `donate` PageCopy entry so an editor can rewrite them; `donatePage.json` is the fallback. `accomplishments`, `pillars`, and `donateUrl` already migrated to their own collections in the launch-ready-editing cycle. What remains below describes the singleton s full shape, which is still what the route grafts its content-sourced values onto. Editable copy for the /donate Momentum Fund campaign page, held in the `donatePage.json` singleton under the data root. `accomplishments` is the campaign's track record \u2014 the concrete things the community has already done (community size, reach, events, new chapters) \u2014 shown between the stats band and the story, because the campaign doc asks a reader to fund momentum that is already visible rather than a promise. `stats` are the headline figures the story title (\"And Every Number Represents a Story\") refers back to. `donateUrl` stays empty until a donation platform is chosen, at which point the CTA stops falling back to a giving-inquiry mailto. `donorTiers` are the giving levels the Donor Recognition wall groups by; each carries the `id` a Donor's `tier` matches on, mirroring `levels` in `sponsorPage.json`, and renaming a tier is a copy edit while its `id` stays the stable key.",
+    "description": "NETWORK COPY: `networkTitle` is the label in the visualization's top-left corner, `networkTagline` the line beneath the band heading, `networkSearchTitle` the heading over the find-your-place search, and `shareMessage` the template a supporter's badge pre-populates its LinkedIn and Facebook share with. `shareMessage` carries two placeholders, a supporter-message slot and a donation-link slot; the supporter-message LINE is removed outright when `donorWhy` returns nothing, rather than substituted with an empty string, so a supporter who wrote nothing never shares a dangling sentence. All four are editable copy for the same reason the rest of this entity is. The page s FRAME fields \u2014 hero headline named/generic, subhead, photo, and the closing ask \u2014 now live on the `donate` PageCopy entry so an editor can rewrite them; `donatePage.json` is the fallback. `accomplishments`, `pillars`, and `donateUrl` already migrated to their own collections in the launch-ready-editing cycle. What remains below describes the singleton s full shape, which is still what the route grafts its content-sourced values onto. Editable copy for the /donate Momentum Fund campaign page, held in the `donatePage.json` singleton under the data root. `accomplishments` is the campaign's track record \u2014 the concrete things the community has already done (community size, reach, events, new chapters) \u2014 shown between the stats band and the story, because the campaign doc asks a reader to fund momentum that is already visible rather than a promise. `stats` are the headline figures the story title (\"And Every Number Represents a Story\") refers back to. `donateUrl` stays empty until a donation platform is chosen, at which point the CTA stops falling back to a giving-inquiry mailto. `donorTiers` are the giving levels the Donor Recognition wall groups by; each carries the `id` a Donor's `tier` matches on, mirroring `levels` in `sponsorPage.json`, and renaming a tier is a copy edit while its `id` stays the stable key.",
     "category": "datastore",
     "order": 11,
     "fields": [
@@ -700,6 +700,26 @@
       {
         "name": "donorTiers",
         "type": "array",
+        "required": false
+      },
+      {
+        "name": "networkTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "networkTagline",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "networkSearchTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "shareMessage",
+        "type": "string",
         "required": false
       }
     ]

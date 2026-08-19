@@ -168,6 +168,19 @@ export interface DonatePageCopy {
   donorsIntro?: string;
   donorsEmptyMessage?: string;
   donorTiers?: { id: string; name: string; description?: string }[];
+  /** The Momentum Network band. `networkTitle` is the label in the
+   *  visualization's top-left corner and `networkTagline` the line beneath the
+   *  heading — both are copy the design direction specifies word for word, so
+   *  they live here rather than in the component that draws them.
+   *  `shareMessage` is the template a supporter's badge pre-populates its
+   *  LinkedIn and Facebook share with; it carries a supporter-message slot and a
+   *  donation-link slot, and the supporter-message LINE is dropped outright when
+   *  the supporter wrote nothing — see `shareMessage` in `./supporterBadge.ts`,
+   *  which owns that rule. */
+  networkTitle?: string;
+  networkTagline?: string;
+  networkSearchTitle?: string;
+  shareMessage?: string;
   ctaTitle?: string;
   ctaBody?: string;
   ctaLabel?: string;

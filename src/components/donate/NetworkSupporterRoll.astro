@@ -1,0 +1,157 @@
+---
+// Every supporter, as text, beneath the visualization.
+//
+// This is not a fallback in the apologetic sense — it is the part of the band
+// that does the actual recognising. The SVG above is rendered on the server, so
+// it survives JavaScript being off, but an SVG of circles is unreadable to a
+// screen reader however it was produced, and a name inside a `<circle>` is not
+// a name anyone can copy, search or read aloud. The wall this band replaces put
+// every supporter in static HTML under a real heading; that property is kept
+// here rather than dropped in exchange for a graphic.
+//
+// Anonymity is `donorDisplayName`'s job, and the ordering is the same
+// displayed-name sort `groupDonorsByTier` documents — sorting on a withheld real
+// name breaks the alphabetical run exactly where the anonymous entries sit.
+import { donorDisplayName, donorPublicIdentity, type DonorLike, type DonorTierLike } from '../../lib/donors';
+import { shortSchoolLabel, FOUNDING_SUPPORTER_LABEL } from '../../lib/momentumNetwork';
+
+interface Props {
+  donors?: DonorLike[];
+  tiers?: DonorTierLike[];
+}
+
+const { donors = [], tiers = [] } = Astro.props;
+const tierName = (id?: string) => tiers.find((tier) => tier.id === id)?.name;
+
+/** The one line printed after a supporter's name: their school and class year
+ *  when they gave them, and nothing at all when they did not — an empty
+ *  parenthetical reads as missing data rather than as a supporter who simply
+ *  left the field blank. Anonymous supporters reach this with every field
+ *  already withheld, so they correctly print a bare label. */
+function credit(donor: DonorLike): string | undefined {
+  const identity = donorPublicIdentity(donor);
+  const parts = [
+    shortSchoolLabel(identity.school),
+    identity.gradYear ? String(identity.gradYear) : undefined,
+    identity.location,
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(' · ') : undefined;
+}
+---
+
+<div class="roll">
+  <h3 class="roll-heading">Every supporter in the network</h3>
+  <ul class="roll-list">
+    {
+      donors.map((donor) => (
+        <li class="roll-item">
+          {/* A named supporter's row opens their node; an anonymous one is inert
+              text, the same rule the graphic applies to their circle. A real
+              <button> rather than a click handler on a span, so it is reachable
+              and announced by keyboard and screen reader without extra ARIA. */}
+          {donor.anonymous === true ? (
+            <span class="roll-name">{donorDisplayName(donor)}</span>
+          ) : (
+            <button type="button" class="roll-name roll-name--link" data-network-roll-entry={donor.slug}>
+              {donorDisplayName(donor)}
+            </button>
+          )}
+          {donor.founding === true ? (
+            <span class="roll-standing">{FOUNDING_SUPPORTER_LABEL}</span>
+          ) : tierName(donor.tier) ? (
+            <span class="roll-standing roll-standing--tier">{tierName(donor.tier)}</span>
+          ) : null}
+          {credit(donor) ? <span class="roll-credit">{credit(donor)}</span> : null}
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  /* Paper, like the rest of the page. Only the graphic is dark. */
+  .roll {
+    margin-top: 40px;
+    padding-top: 32px;
+    padding-bottom: 78px;
+    border-top: 1px solid var(--line);
+    text-align: left;
+  }
+
+  /* An eyebrow, matching `.kick`'s mono/11px/0.16em — the band has one heading
+     and this list is not a second one. */
+  .roll-heading {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0 0 20px;
+    color: var(--color-faint);
+  }
+
+  .roll-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 0.6rem 1.5rem;
+  }
+
+  .roll-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .roll-name {
+    font-weight: 700;
+    color: var(--color-fg);
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  .roll-name--link {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    border-bottom: 1px solid transparent;
+  }
+
+  .roll-name--link:hover,
+  .roll-name--link:focus-visible {
+    color: var(--crimson);
+    border-bottom-color: currentColor;
+  }
+
+  /* Crimson for the badge, teal for a giving level — the same two colours doing
+     the same two jobs they do in the graph above, so the list and the picture
+     are legibly one thing. */
+  .roll-standing {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: var(--radius);
+    color: var(--crimson);
+    border: 1px solid rgba(165, 16, 52, 0.7);
+  }
+
+  .roll-standing--tier {
+    color: #04797f;
+    border-color: rgba(4, 151, 158, 0.55);
+  }
+
+  .roll-credit {
+    flex-basis: 100%;
+    font-size: 0.82rem;
+    color: var(--color-muted);
+  }
+</style>

@@ -1,0 +1,13 @@
+{
+  "name": "Momentum Network - The First Gift",
+  "id": "ae68ca1f-2803-4be4-9a45-862690997e66",
+  "url": "/isolated-components/MomentumNetwork-First",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNetwork",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNetwork.astro",
+  "description": "The day after the first gift clears: one node, no web yet. The network has to survive being looked at before it is a network, which is why the canvas floors at a minimum width — without that floor a single supporter would be drawn as one enormous disc filling the frame."
+}

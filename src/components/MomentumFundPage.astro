@@ -26,7 +26,7 @@ import MomentumAccomplishments from './donate/MomentumAccomplishments.astro';
 import MomentumNarrative from './donate/MomentumNarrative.astro';
 import GiftPillars from './donate/GiftPillars.astro';
 import MomentumTestimonials from './donate/MomentumTestimonials.astro';
-import DonorWall from './donate/DonorWall.astro';
+import MomentumNetwork from './donate/MomentumNetwork.astro';
 import MomentumClose from './donate/MomentumClose.astro';
 import type { TestimonialLike } from './donate/MomentumTestimonials.astro';
 import ComingSoon from './ComingSoon.astro';
@@ -155,9 +155,11 @@ const tinted = tintedFlags(sections);
         );
       case 'donors':
         return (
-          <DonorWall
+          <MomentumNetwork
             title={sectionHeading(section, copy.donorsTitle)}
-            intro={copy.donorsIntro}
+            networkTitle={copy.networkTitle}
+            tagline={copy.networkTagline}
+            searchTitle={copy.networkSearchTitle}
             emptyMessage={copy.donorsEmptyMessage}
             donors={donors}
             tiers={copy.donorTiers ?? []}
@@ -165,6 +167,7 @@ const tinted = tintedFlags(sections);
             donateUrl={copy.donateUrl}
             email={email}
             campaignName={copy.campaignName}
+            shareTemplate={copy.shareMessage}
           />
         );
       case 'stats':

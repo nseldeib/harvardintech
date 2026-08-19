@@ -1,0 +1,126 @@
+{
+  "surface": "src/lib/momentumNetwork.ts",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "needle",
+      "value": "empty",
+      "rationale": "source-derived state needle=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "needle",
+      "value": "one",
+      "rationale": "source-derived state needle=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "needle",
+      "value": "many",
+      "rationale": "source-derived state needle=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "donors",
+      "value": "empty",
+      "rationale": "source-derived state donors=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "donors",
+      "value": "one",
+      "rationale": "source-derived state donors=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "donors",
+      "value": "many",
+      "rationale": "source-derived state donors=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "schools",
+      "value": "empty",
+      "rationale": "source-derived state schools=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "schools",
+      "value": "one",
+      "rationale": "source-derived state schools=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "schools",
+      "value": "many",
+      "rationale": "source-derived state schools=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "trimmed",
+      "value": "empty",
+      "rationale": "source-derived state trimmed=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "trimmed",
+      "value": "one",
+      "rationale": "source-derived state trimmed=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "trimmed",
+      "value": "many",
+      "rationale": "source-derived state trimmed=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "centre",
+      "value": "true",
+      "rationale": "source-derived state centre=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "centre",
+      "value": "false",
+      "rationale": "source-derived state centre=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "school",
+      "value": "true",
+      "rationale": "source-derived state school=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "school",
+      "value": "false",
+      "rationale": "source-derived state school=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "resolved",
+      "value": "true",
+      "rationale": "source-derived state resolved=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "resolved",
+      "value": "false",
+      "rationale": "source-derived state resolved=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "founding",
+      "value": "true",
+      "rationale": "source-derived state founding=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "founding",
+      "value": "false",
+      "rationale": "source-derived state founding=false",
+      "status": "covered"
+    }
+  ]
+}

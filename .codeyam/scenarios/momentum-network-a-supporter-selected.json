@@ -1,0 +1,19 @@
+{
+  "name": "Momentum Network - A Supporter Selected",
+  "id": "71b41251-c199-462d-af02-cdfad8a3f44b",
+  "url": "/isolated-components/MomentumNetwork",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNetwork",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNetwork.astro",
+  "description": "The interaction the whole band is built around, which a resting capture cannot show: the selected node turns gold while every other node stays crimson, that supporter's own connections brighten to full teal while the rest of the web settles back, and the panel opens with their name, school, class year and Founding Supporter. Their badge is pre-populated below it with their own words already in the share message, ready to edit and post to LinkedIn or Facebook.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "[data-network-node=\"margaret-chen-alvarez\"]"
+    }
+  ]
+}

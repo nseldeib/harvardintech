@@ -1,0 +1,13 @@
+{
+  "name": "Momentum Network - Day One, The Grid Unlit",
+  "id": "32da37b2-cbba-407e-a016-82ce76ee1398",
+  "url": "/isolated-components/MomentumNetwork-DayOne",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNetwork",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNetwork.astro",
+  "description": "The PRODUCTION DEFAULT, and the state /donate is in right now: no gift recorded, so there is no graph to draw. The band keeps its label and heading and shows the invitation with the giving CTA, because the visitor most likely to be reading an empty supporter wall is deciding whether to be the first name on it. Every design has to survive being looked at on day one, and one that only reads well once it is full greets the first visitor with nothing."
+}

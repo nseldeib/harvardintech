@@ -260,6 +260,12 @@
     "testFile": "src/lib/cutoverTicks.test.ts"
   },
   {
+    "description": "The supporter badge: what it prints about the person it belongs to. Reads every field through donorPublicIdentity and donorWhy rather than off the entry, for the reason those functions exist — so an anonymous supporter's badge cannot carry what the network withholds, even though the network never offers them one. The standing line is the founding badge, or the level they gave at, or a plain label: a blank line under a name reads as missing data rather than as someone who simply gave.",
+    "filePath": "src/lib/supporterBadge.ts",
+    "name": "badgeFor",
+    "testFile": "src/lib/supporterBadge.test.ts"
+  },
+  {
     "description": "Renders the decision ids in a step's 'Waiting on …' line as English. Replaces an inline join(' and ') that read correctly for the one and two cases the runbook has today and produced 'D1 and D2 and D3' for three — invisible because no step needs three decisions, which is exactly why it earned a function with a test. The page names what it is waiting on so the reader knows what to resolve; garbling the list undercuts the only reason it is printed.",
     "filePath": "src/lib/cutoverProgress.ts",
     "name": "blockedLabel",
@@ -290,6 +296,12 @@
     "testFile": "src/lib/cutoverProgress.test.ts"
   },
   {
+    "description": "Whether the share controls are offered at all. One disqualifier: an anonymous supporter, who has no badge by design, because a shareable badge is a name, a school and a year published to a social network — the precise opposite of what they asked for. A blank donation URL used to disqualify a badge too, which was wrong on both counts: it hid the whole feature on the live campaign where the URL is still unset, and it treated 'the campaign has not published its link' as if it were 'this person has nothing to share'. shareMessage drops the donation line instead.",
+    "filePath": "src/lib/supporterBadge.ts",
+    "name": "canShareBadge",
+    "testFile": "src/lib/supporterBadge.test.ts"
+  },
+  {
     "description": "Whether this browser holds a GitHub token that could commit a runbook tick at all. Everyone can read the checklist; only repo-write holders can change it.",
     "filePath": "src/lib/cutoverTicks.ts",
     "name": "canTick",
@@ -317,10 +329,22 @@
     "testFile": "src/lib/donorFilter.test.ts"
   },
   {
+    "description": "Holds a placed supporter inside the drawable canvas. A node whose jittered offset carries it past the frame is a supporter the picture silently fails to recognise, so the coordinate is bounded rather than the offset being made timid — clamping keeps the clusters loose while guaranteeing nobody falls off the edge.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "clamp",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
     "description": "One upload row normalized, matched, and carrying everything still undecided about it. Its ready flag means 'nothing about this row needs a human before it lands', NOT 'complete' — tier, founding and anonymous are unanswered for every row in the file no matter how clean, which is why summarizeImport reports those once for the whole import rather than as an issue on each row.",
     "filePath": "src/lib/donorImport.js",
     "name": "classifyRow",
     "testFile": "src/lib/donorImport.test.ts"
+  },
+  {
+    "description": "Where each school's cluster of supporters sits, distributed on a phyllotaxis spiral — the golden angle a sunflower packs its seeds on — rather than a grid. A grid of ceil(sqrt(n)) columns leaves its last row part-empty at any non-square count, and with thirteen schools that is a visibly bare corner: precisely the large empty area the design direction rules out. The spiral fills the ellipse evenly at ANY count and without leaving rows and columns legible in the finished picture, which is also what 'organic' asks for.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "clusterCentres",
+    "testFile": "src/lib/momentumNetwork.test.ts"
   },
   {
     "description": "Dev-only Astro integration exposing a content-layer refresh endpoint the seed adapter calls after writing a scenario's markdown. Astro normally notices a seed via its file watcher, but a collection whose directory had no matching files at boot never got a watcher at all — so seeding donors or testimonials for the first time in a session changed nothing on the page. Refreshing re-runs every loader, which both ingests the new files and registers the skipped watcher. It also invalidates the data-store module and pushes a reload before answering, because Astro only invalidates rendered pages when it sees the store change on disk, and that write lands after the refresh resolves — which would leave the very next request, the capture, serving the pre-seed render.",
@@ -360,6 +384,12 @@
     "filePath": "src/lib/contentRoot.ts",
     "name": "contentRoot",
     "testFile": "src/lib/contentRoot.test.ts"
+  },
+  {
+    "description": "The one line printed under a supporter's name in the roll: school, class year and location, joined only where they exist. Returns nothing at all rather than an empty parenthetical, because a bare separator reads as missing data rather than as a supporter who simply left the field blank. Anonymous supporters reach this with every field already withheld by donorPublicIdentity, so they correctly print no credit line at all.",
+    "filePath": "src/components/donate/NetworkSupporterRoll.astro",
+    "name": "credit",
+    "testFile": "src/lib/momentumNetwork.test.ts"
   },
   {
     "description": "Returns the directory the JSON singletons (settings, nav) load from: the CODEYAM_DATA_ROOT sandbox during a codeyam session, else the committed src/data.",
@@ -447,6 +477,18 @@
     "filePath": "src/lib/events.ts",
     "name": "eventsTaggedTo",
     "testFile": "src/lib/events.test.ts"
+  },
+  {
+    "description": "Where 'share to Facebook' sends a supporter — same shape and same caveat as the LinkedIn helper: Facebook dropped prefilled quote support, so the composed message belongs in the copyable field on the page rather than in a parameter that will be ignored.",
+    "filePath": "src/lib/supporterBadge.ts",
+    "name": "facebookShareUrl",
+    "testFile": "src/lib/supporterBadge.test.ts"
+  },
+  {
+    "description": "Writes one supporter into the selection panel's slots, and points the share links at that supporter's own URL. A slot with nothing to show is HIDDEN rather than emptied: a supporter who left their location blank should not get a stray label over an empty line. The share hrefs are set from values the server precomposed, so the link a supporter posts and the badge they are reading cannot be for two different people.",
+    "filePath": "src/lib/momentumNetworkDom.ts",
+    "name": "fillPanel",
+    "testFile": "src/lib/momentumNetworkDom.test.ts"
   },
   {
     "description": "Returns a new array of board members visible on the public Board of Directors, keeping every member whose active field is not explicitly false — so existing entries with no active field (and members who never toggled the CMS checkbox) remain shown. Does not mutate the input.",
@@ -653,6 +695,12 @@
     "testFile": "src/lib/lightbox.test.ts"
   },
   {
+    "description": "Interaction wiring for the network — hover, selection, search, sound, deep link. Progressive enhancement in the donorFilter mould, and for a stronger reason than usual: the SVG is rendered on the SERVER from networkLayout, so the picture is real HTML before this file loads and nothing here draws anything. Selecting keeps the address bar in step so the URL a supporter copies is the URL that reopens their badge, and reads that same parameter on load so a shared link arrives at the person rather than the page. An anonymous supporter's node carries no detail record and an empty search haystack, so it cannot be opened or found however it is approached. No-ops cleanly when the band is absent, which is every route but /donate.",
+    "filePath": "src/lib/momentumNetworkDom.ts",
+    "name": "initMomentumNetwork",
+    "testFile": "src/lib/momentumNetworkDom.test.ts"
+  },
+  {
     "description": "Idempotent client-side DOM wiring for the banner parallax: no-op under SSR/vitest and on re-invocation. When parallaxEnabled (read via matchMedia) is true, sizes every [data-parallax] <img> to 100vh and, on a rAF-throttled scroll/resize listener, sets translateY(parallaxOffset(rootTop)) so the photo stays fixed while its [data-parallax-root] section scrolls over it; otherwise leaves the images as static object-fit: cover. Hoisted from Hero.astro and GetInvolved.astro.",
     "filePath": "src/lib/parallax.ts",
     "name": "initParallax",
@@ -701,6 +749,12 @@
     "testFile": "src/lib/donorNetwork.test.ts"
   },
   {
+    "description": "Whether a supporter's node can be opened into the detail panel. An anonymous supporter IS a node — their gift strengthens the network, and withholding it would make the picture undercount people who asked only not to be named — but the panel prints a school, a graduation year and a location, and that trio identifies someone in a community this size about as surely as their name would. So the node is drawn and counted, and it does not open.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "isSelectableNode",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
     "description": "Whether a runbook step is recorded done in the progress singleton. A step absent from the file reads as not done rather than throwing — the file is committed and hand-editable, so an entry predating a step is reachable rather than theoretical.",
     "filePath": "src/lib/cutoverProgress.ts",
     "name": "isStepDone",
@@ -717,6 +771,12 @@
     "filePath": "src/lib/lightbox.ts",
     "name": "lightboxKeyAction",
     "testFile": "src/lib/lightbox.test.ts"
+  },
+  {
+    "description": "Where 'share to LinkedIn' sends a supporter. LinkedIn's share endpoint takes a URL and composes its own preview from that page's metadata; it does NOT accept prefilled body text. So the composed message is not smuggled into the query string where it would be silently dropped — the page shows it in an editable field instead, which is also what makes 'editable by supporters' true rather than decorative.",
+    "filePath": "src/lib/supporterBadge.ts",
+    "name": "linkedInShareUrl",
+    "testFile": "src/lib/supporterBadge.test.ts"
   },
   {
     "description": "Reads the accomplishments collection into the card shape MomentumAccomplishments already took from copy.accomplishments. Migrated out of donatePage.json, a singleton the CMS does not model at all, which is what made these cards developer-only. Maps the schema's description key onto the component's body prop because body is a reserved field id in the CMS registry and a custom field claiming it is dropped from the editor without comment.",
@@ -862,6 +922,12 @@
     "testFile": "src/lib/donorImport.test.ts"
   },
   {
+    "description": "Whether a supporter matches the find-your-place-in-the-network search. Matches on school and location — the two axes the direction names — case- and whitespace-insensitively, against BOTH the stored full school name and its short label, because someone who knows themselves as SEAS should not have to type John A. Paulson. A blank query matches EVERYONE rather than nobody, which is what makes the search a highlight rather than a destructive filter. An anonymous supporter never matches whatever the query: a search box that confirmed 'yes, someone from Harvard Law class of 1998 in Greenwich gave' would undo the anonymity the node itself protects.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "matchesNetworkSearch",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
     "description": "Whether a donor belongs under a given giving-level id — the predicate behind the filter chips, shared by the server render and the client script on purpose. Two copies of 'which tier is this donor in?' is two answers that can disagree, and the one a visitor sees would be the client's. The trailing-group id matches exactly the donors groupDonorsByTier files there: untagged, or tagged with a level the page does not declare.",
     "filePath": "src/lib/donors.ts",
     "name": "matchesTier",
@@ -902,6 +968,36 @@
     "filePath": "src/lib/personalize.ts",
     "name": "nameFromSearch",
     "testFile": "src/lib/personalize.test.ts"
+  },
+  {
+    "description": "The connections: every supporter wired to their several nearest neighbours. THE load-bearing decision in the visualization and the one the design feedback turned on — the exploration gave each supporter a single line back to their school's junction, which is why it read as 'a constellation of stars', because a point with one thread to a hub is a star on a string rather than a node. Nearest-neighbour wiring produces what the direction asks for instead: several connections per node, dense webs inside a school, and cross-school edges that appear wherever clusters overlap without anyone authoring them. Edges are undirected and deduplicated, so a mutual nearest pair yields ONE connection rather than a double-drawn line that renders visibly brighter and implies a relationship that is not there.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "nearestNeighborEdges",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "The whole picture: supporters placed, wired, and the glow clusters under them, in one seeded pass. Centres are computed here and passed down rather than recomputed inside placeNodes, so the blooms and the people they sit under come from the same draw of the same stream — computing them twice would advance the PRNG differently and drift the light away from the supporters. Callers pass donors already draft-filtered by publishedEntries.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "networkLayout",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "What the panel shows for a selected supporter: name, school, class year, location, and the standing line. Every identity field comes through donorPublicIdentity, so anonymity is applied once upstream rather than re-checked here. The standing is the one addition — the design direction treats every node as a Founding Supporter, but the giving levels survived the data-model plan, so a supporter without the badge shows the level they actually gave at instead of an empty line. The school is shortened, because the longest real name is 66 characters and would push the year out of a narrow panel.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "networkNodeDetail",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "Seeded PRNG (mulberry32) behind every placement decision in the layout. The network must be reproducible: one that reshuffles between renders is a different design on every page load, and a screenshot the team has already reviewed would quietly stop matching what ships. Same supporters in, same picture out.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "networkRng",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "The canvas a network of N supporters is drawn in, grown with the square root of the count so the SPACING between supporters stays constant. This is the number that decides whether the picture reads as dense digital infrastructure or as stars floating in space — not the palette. A fixed canvas is what made the first pass a constellation: nineteen supporters in a frame composed for two hundred are inherently sparse, and they degrade exactly when the campaign is youngest and the page matters most. Sizing the canvas to its contents is also what satisfies 'fill the central canvas' and 'avoid large empty areas' without special-casing either. Floors at a minimum width so one supporter is a small network in a normal frame rather than a single enormous disc.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "networkViewBox",
+    "testFile": "src/lib/momentumNetwork.test.ts"
   },
   {
     "description": "The gallery index `delta` steps from `current`, wrapping at both ends. Wraps rather than clamps because a lightbox is a carousel, not a list: arrowing past the last photo should reach the first, and a disabled arrow at each end is a dead control the user has to notice. Returns 0 for an empty gallery so a caller cannot index into nothing, and normalizes the negative modulo that a naive expression would produce going backwards off the front.",
@@ -994,6 +1090,18 @@
     "testFile": "src/lib/reviewGate.test.ts"
   },
   {
+    "description": "Every supporter placed on the canvas, in their school's cluster at an offset scaled to how many share it. A supporter with NO school is neither dropped nor hidden in a corner: they are placed across the middle where the clusters overlap, so they wire into the network like everyone else — their gift counts the same, and a visualization that quietly omitted them would undercount the community it exists to show. Founding supporters are drawn larger, which is how the badge survives a design where every node is otherwise the same crimson, and the selectable flag it sets is what makes an anonymous supporter's node inert in the DOM.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "placeNodes",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "Plays one activation pulse through the Web Audio API. There is no audio FILE: 'a quiet pulse, like a light switching on' is a shape — fast attack, short decay, no sustain — and a shape is easier to tune in four numbers than to source as an asset, ships no bytes, and needs no network fetch inside a visualization that is already drawing. The gain ramps rather than steps, because an instantaneous gain change is an audible click, which is a defect on top of the tone it is supposed to start.",
+    "filePath": "src/lib/networkSound.ts",
+    "name": "playActivationTone",
+    "testFile": "src/lib/networkSound.test.ts"
+  },
+  {
     "description": "The editor's value for a copy field if it holds anything, otherwise the value committed in JSON. Whitespace-only counts as empty, because a field an editor cleared usually still holds the newline the textarea left behind and treating that as real copy puts a blank heading on the live page. The returned value is trimmed. The deliberate consequence is that a field cannot be blanked from the CMS while the JSON still carries a value: emptying a heading is a two-step edit, which is the right trade when the opposite choice's failure mode is a live page with a missing headline.",
     "filePath": "src/lib/pageCopyMerge.ts",
     "name": "preferText",
@@ -1028,6 +1136,12 @@
     "filePath": "src/lib/deployTracks.ts",
     "name": "pushTargetRepo",
     "testFile": "src/lib/deployTracks.test.ts"
+  },
+  {
+    "description": "Reads the server's supporter-detail payload out of the page. Returns an empty map when the script tag is missing or its JSON will not parse, so a broken payload costs the selection panel and nothing else — the graphic itself is server-rendered SVG and keeps working, which is the whole reason the drawing and the interaction are split.",
+    "filePath": "src/lib/momentumNetworkDom.ts",
+    "name": "readDetails",
+    "testFile": "src/lib/momentumNetworkDom.test.ts"
   },
   {
     "description": "Reads the CMS media library manifest from `<dataRoot>/media.json` — the singleton the package writes from /admin — returning an empty library when the file is absent or malformed, so production before the first upload and any scenario that seeds no media still render rather than failing the build. Goes through `dataRoot()` like the settings and nav singletons so a codeyam session's sandbox redirect reaches it and the seed adapter can seed a `media` key per scenario.",
@@ -1130,6 +1244,30 @@
     "testFile": "src/lib/personalize.test.ts"
   },
   {
+    "description": "The Harvard schools these supporters actually came through, densest first so the biggest clusters are placed before the rest. Reads through resolveSchool, so a hand-edited or seeded value in the wrong case joins its real cluster instead of founding a cluster of one. Ties break on the canonical school order rather than on input order, so the same people in a different row order cannot produce a different picture.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "schoolsPresent",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "What each node is searchable on, precomputed on the server so the browser matches exactly the strings matchesNetworkSearch would. An anonymous supporter gets an EMPTY haystack rather than being filtered later — the privacy rule is carried into the DOM as data, so no client-side code path can reintroduce them into a result by forgetting a check.",
+    "filePath": "src/components/donate/MomentumNetwork.astro",
+    "name": "searchHaystack",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "The supporters a query selects, in input order — the list form of matchesNetworkSearch, returning everyone for a blank query rather than nobody so the resting state of the search box is not a filter.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "searchNetwork",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "The line under the search box reporting what a query found. Says 'No supporters here yet — yours would be the first' rather than a zero, because the miss is a real answer on this page: someone searching their own school before anyone from it has given should read an invitation, not a count of nothing. Silent for an empty box, since a count under an untouched field reads as a result nobody asked for.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "searchSummary",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
     "description": "The element id a band's coming-soon placeholder must carry so a menu link still lands on it, derived from that band's entry in HOME_SECTION_ANCHORS. Derived rather than a second table because the anchor and the id are the same fact written two ways, and a hand-maintained copy would eventually disagree and leave a placeholder unreachable from the menu still linking to it.",
     "filePath": "src/lib/homeSections.ts",
     "name": "sectionAnchorId",
@@ -1160,6 +1298,12 @@
     "testFile": "src/lib/sitePages.test.ts"
   },
   {
+    "description": "The message a supporter's badge pre-populates its LinkedIn and Facebook share with. Carries the rule the design direction states outright: when a supporter submitted no 'why I contributed' message the LINE IS REMOVED — not left as 'I contributed because .' and not filled with a sentence they never wrote. That is why it takes the template apart by lines rather than substituting over it: replacing the token with an empty string leaves the orphaned 'I contributed because' behind, which is the failure this exists to prevent. The blank line above a removed line goes with it, so the message never ships with a double gap. The donation-link line gets the same treatment when no URL is set, which is the LIVE case on this campaign rather than a defensive one — a line reading 'Support the Momentum Fund:' with nothing after it asks a reader to act and gives them nowhere to go.",
+    "filePath": "src/lib/supporterBadge.ts",
+    "name": "shareMessage",
+    "testFile": "src/lib/supporterBadge.test.ts"
+  },
+  {
     "description": "Formats an ISO timestamp as a short '8 Aug' for the attribution line beside a GitHub login on the cutover runbook. Day and month only — every tick happens inside one migration window, so a year costs width and tells the reader nothing. An unparseable value yields an empty string rather than 'Invalid Date', because the timestamps live in a committed, hand-editable JSON file and a mangled one should cost a missing date, not a broken-looking page.",
     "filePath": "src/lib/cutoverFormat.ts",
     "name": "shortDate",
@@ -1170,6 +1314,18 @@
     "filePath": "src/lib/donorNetwork.js",
     "name": "shortSchool",
     "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
+    "description": "The short label for a Harvard school — HBS, HKS, SEAS — for the node panel and the supporter roll, where the full name would wrap to three lines and push the class year out of view. The STORED value stays the full name, since that is what the search matches and what the CMS offers; this is display only. Deliberately rebuilt against HARVARD_SCHOOLS rather than reused from the design exploration's donorNetwork.js, whose keys name schools that list does not contain, so every lookup there would miss and print the long name anyway. Falls back to the value as given rather than to nothing: losing the school entirely would be worse than printing it long.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "shortSchoolLabel",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "Whether a node's activation sound should play right now. Pure so the overlap guard is testable without a browser or a clock — the caller passes the current time rather than the function reading it, which is what lets a test assert that two activations 30ms apart produce one sound. Sweeping a pointer across a dense network crosses a dozen nodes in well under a second, and without a floor that is a dozen overlapping tones: the loud chime the direction rules out, produced by a sound that is individually correct.",
+    "filePath": "src/lib/networkSound.ts",
+    "name": "shouldPlayActivation",
+    "testFile": "src/lib/networkSound.test.ts"
   },
   {
     "description": "Whether the wall is worth putting filter chips on. One band means the chips would read 'All donors / Leadership Circle' over a list already on screen — a control that filters nothing, which is worse than no control. Chips earn their place only once there is somewhere else to go.",
@@ -1202,6 +1358,18 @@
     "testFile": "src/lib/order.test.ts"
   },
   {
+    "description": "Whether the activation sound starts switched on for this visitor. Off when they have asked for reduced motion: that flag is nominally about movement, but it is the closest thing the platform gives to 'this page should not do things at me', and someone who has set it is not expecting a page to make noise.",
+    "filePath": "src/lib/networkSound.ts",
+    "name": "soundEnabledByDefault",
+    "testFile": "src/lib/networkSound.test.ts"
+  },
+  {
+    "description": "The label the sound control shows. Names what is TRUE rather than what a click would do, because a button reading 'Sound off' is ambiguous about which of those two things it means — and the direction asks for a visible control, which a guessable one is not.",
+    "filePath": "src/lib/networkSound.ts",
+    "name": "soundToggleLabel",
+    "testFile": "src/lib/networkSound.test.ts"
+  },
+  {
     "description": "Splits a flat event list into upcoming (date >= now, soonest first) and past (date < now, most recent first) relative to a reference time; events at now count as upcoming.",
     "filePath": "src/lib/events.ts",
     "name": "splitEvents",
@@ -1232,10 +1400,28 @@
     "testFile": "src/lib/cutoverProgress.test.ts"
   },
   {
+    "description": "The search summary line as the browser writes it. Mirrors searchSummary, which owns the wording — the server cannot precompute this because the count changes on every keystroke, so the phrasing exists in two places and this is the copy that a visitor actually reads. Both are asserted against the same strings so they cannot drift apart silently.",
+    "filePath": "src/lib/momentumNetworkDom.ts",
+    "name": "summaryText",
+    "testFile": "src/lib/momentumNetworkDom.test.ts"
+  },
+  {
     "description": "The mark drawn in a supporter's avatar on the network explorations: their initials, or a neutral dash when they asked not to be named. Named for what it produces rather than reusing 'initials' from team.ts, which takes a name string and knows nothing about anonymity — this one takes the whole supporter because the anonymous case must return a mark identifying nobody. Initials would leak the withheld name, since two letters beside 'Anonymous supporter' identifies them to anyone who knows them. Capped at two letters so a long name cannot spell itself out.",
     "filePath": "src/lib/donorNetwork.js",
     "name": "supporterMonogram",
     "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
+    "description": "The URL that opens the network with one supporter's node already selected — the address a badge is shared as. Without it, 'share your badge' posts a link to the campaign page and leaves whoever follows it to find the sharer among a few hundred identical dots, which is sharing a page rather than sharing a badge. Appends to an existing query, because /donate already takes ?name= from the email campaign, and drops any fragment, which would otherwise land after the query and break the parameter.",
+    "filePath": "src/lib/supporterBadge.ts",
+    "name": "supporterPageUrl",
+    "testFile": "src/lib/supporterBadge.test.ts"
+  },
+  {
+    "description": "Every supporter as text beneath the visualization, sorted by DISPLAYED name. Not a fallback in the apologetic sense: an SVG of circles is unreadable to a screen reader however it was produced, and a name inside a circle is not a name anyone can copy, search or read aloud — so this is the part of the band that does the actual recognising, and it is also the route into a supporter that works by keyboard alone. Sorting on the displayed name rather than the stored one is the reasoning groupDonorsByTier already documents: sorting anonymous entries by their withheld real name breaks the alphabetical run exactly where they sit and hints at the hidden first letter.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "supporterRoll",
+    "testFile": "src/lib/momentumNetwork.test.ts"
   },
   {
     "description": "N items spread evenly across a larger list, used to place supporters through points sampled from a letterform. Taking the first N instead would fill the top of the first glyph and leave the rest of the word empty, because the sampler emits points in scan order. Returns a copy, so a caller cannot mutate the sampled source.",
@@ -1248,6 +1434,18 @@
     "filePath": "src/lib/cutoverTicks.ts",
     "name": "tickCommitMessage",
     "testFile": "src/lib/cutoverTicks.test.ts"
+  },
+  {
+    "description": "Resolves a supporter's tier id to the giving level's display name from donatePage.json. Needed because the network shows a supporter's level where they carry no Founding Supporter badge, and the entry stores the stable id an editor files them under rather than the label an editor can rename.",
+    "filePath": "src/components/donate/MomentumNetwork.astro",
+    "name": "tierName",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
+    "description": "The roll's copy of the tier-id-to-name lookup, resolving a supporter's giving level for the pill beside their name. Deliberately local to the component rather than shared with the network band above it: both take the tiers as a prop, so neither reaches into page copy, and the roll stays renderable on its own in isolation.",
+    "filePath": "src/components/donate/NetworkSupporterRoll.astro",
+    "name": "tierName",
+    "testFile": "src/lib/momentumNetwork.test.ts"
   },
   {
     "description": "One boolean per section saying whether it renders on the tinted band. Narrative sections alternate tinted and untinted so consecutive prose stays separated; the counter advances only on narratives, so a bespoke band between two of them does not flip the rhythm. Pure, replacing a counter that was mutated inside the page's render map.",

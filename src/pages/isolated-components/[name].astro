@@ -32,6 +32,7 @@ import SponsorInquiry from '../../components/sponsor/SponsorInquiry.astro';
 import MomentumAccomplishments from '../../components/donate/MomentumAccomplishments.astro';
 import MomentumNarrative from '../../components/donate/MomentumNarrative.astro';
 import DonorWall from '../../components/donate/DonorWall.astro';
+import MomentumNetwork from '../../components/donate/MomentumNetwork.astro';
 import DonorCard from '../../components/donate/DonorCard.astro';
 import DonorWallEmpty from '../../components/donate/DonorWallEmpty.astro';
 import FoundingBadge from '../../components/donate/FoundingBadge.astro';
@@ -691,6 +692,39 @@ const donorWallStates = {
   Anonymity: { ...donorWallBase, donors: ANONYMITY_DONORS },
 };
 
+// MomentumNetwork states — the visualization that replaces the wall. The same
+// supporters, so the two can be compared directly, and the states are the ones
+// the design direction turns on rather than data variations:
+//   • Default   — the campaign at scale: every school represented, clusters
+//     overlapping, which is the density the direction was composed for.
+//   • DayOne    — the PRODUCTION DEFAULT. No gift recorded, the grid dark, the
+//     invitation showing. Every design has to survive being looked at on day one.
+//   • First     — the day after the first gift: one node, no web yet.
+//   • Anonymity — a network holding anonymous supporters, whose nodes are drawn
+//     and counted but cannot be opened or found. The privacy guarantee, visible.
+const NETWORK_SHARE_TEMPLATE = donatePage.shareMessage;
+const momentumNetworkBase = {
+  title: DONOR_COPY.donorsTitle,
+  networkTitle: donatePage.networkTitle,
+  tagline: donatePage.networkTagline,
+  searchTitle: donatePage.networkSearchTitle,
+  emptyMessage: DONOR_COPY.donorsEmptyMessage,
+  tiers: DONOR_TIERS,
+  ctaLabel: DONOR_COPY.ctaLabel,
+  // A real link on purpose: the share controls are hidden without one, so a
+  // blank value here would quietly hide the feature these scenarios exist for.
+  donateUrl: 'https://www.givebutter.com/harvard-in-tech-momentum',
+  email: 'ben@harvardintech.com',
+  campaignName: DONOR_COPY.campaignName,
+  shareTemplate: NETWORK_SHARE_TEMPLATE,
+};
+const momentumNetworkStates = {
+  Default: { ...momentumNetworkBase, donors: FULL_DONORS },
+  DayOne: { ...momentumNetworkBase, donors: [] as typeof FULL_DONORS },
+  First: { ...momentumNetworkBase, donors: FIRST_DONORS },
+  Anonymity: { ...momentumNetworkBase, donors: ANONYMITY_DONORS },
+};
+
 // DonorCard states — the four card shapes, each proving one rule the wall
 // depends on: the plain named card, a founding donor with a note, an anonymous
 // entry (name, photo, and link all withheld), and the photo-less monogram.
@@ -840,6 +874,10 @@ export async function getStaticPaths() {
     { params: { name: 'MomentumNarrative-ImageRight' } },
     { params: { name: 'MomentumNarrative-TextOnly' } },
     { params: { name: 'MomentumNarrative-NoImage' } },
+    { params: { name: 'MomentumNetwork' } },
+    { params: { name: 'MomentumNetwork-DayOne' } },
+    { params: { name: 'MomentumNetwork-First' } },
+    { params: { name: 'MomentumNetwork-Anonymity' } },
     { params: { name: 'DonorWall' } },
     { params: { name: 'DonorWall-First' } },
     { params: { name: 'DonorWall-Full' } },
@@ -1025,6 +1063,14 @@ if (name && !donorWallEmptyProps && !name.startsWith('DonorWallIntro') && name.s
   donorWallProps = donorWallStates[stateKey] ?? donorWallStates.Default;
 }
 
+let momentumNetworkProps: (typeof momentumNetworkStates)[keyof typeof momentumNetworkStates] | null = null;
+if (name && name.startsWith('MomentumNetwork')) {
+  const stateKey = (
+    name === 'MomentumNetwork' ? 'Default' : name.slice('MomentumNetwork-'.length)
+  ) as keyof typeof momentumNetworkStates;
+  momentumNetworkProps = momentumNetworkStates[stateKey] ?? momentumNetworkStates.Default;
+}
+
 let donorCardProps: (typeof donorCardStates)[keyof typeof donorCardStates] | null = null;
 if (name && name.startsWith('DonorCard')) {
   const stateKey = (name === 'DonorCard' ? 'Default' : name.slice('DonorCard-'.length)) as keyof typeof donorCardStates;
@@ -1083,6 +1129,16 @@ if (name && name.startsWith('DonorTierBand')) {
         ) : donorWallIntroProps ? (
           <div style="width: 1180px; max-width: 100%;">
             <DonorWallIntro {...donorWallIntroProps} />
+          </div>
+        ) : momentumNetworkProps ? (
+          /* The network is a FULL-BLEED band on /donate — it runs edge to edge
+             and constrains its own contents with `.wrap`, like every other
+             section here. The harness wraps captures in `--space-lg` of padding,
+             which framed the band in whitespace and showed a floating card that
+             does not exist on the real page; the negative margin cancels exactly
+             that padding so the isolated capture matches the shipped band. */
+          <div style="margin: calc(var(--space-lg) * -1);">
+            <MomentumNetwork {...momentumNetworkProps} />
           </div>
         ) : donorWallProps ? (
           <DonorWall {...donorWallProps} />

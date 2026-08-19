@@ -1,0 +1,771 @@
+---
+// The Momentum Network — the supporter recognition band on /donate.
+//
+// Replaces the tier-banded donor wall. Composition + the one thing that cannot
+// be delegated: the SVG is built HERE, on the server, from `networkLayout`.
+// That is deliberate. A canvas assembled in the browser is an empty frame to
+// anyone without JavaScript, and this band is how the campaign thanks the
+// people who paid for it — the recognition cannot be contingent on a script
+// running. `momentumNetworkDom.ts` adds hover, selection, search and sound on
+// top of a picture that is already there.
+//
+// Two states, and they are not variations of one another:
+//   • No supporters → the invitation, exactly as the wall did it. The grid is
+//     built and dark, which is the production default.
+//   • Supporters present → the network, the search, and the roll beneath it.
+import GiveButton from './GiveButton.astro';
+import NetworkSupporterRoll from './NetworkSupporterRoll.astro';
+import {
+  networkLayout,
+  networkNodeDetail,
+  matchesNetworkSearch,
+  shortSchoolLabel,
+  supporterRoll,
+} from '../../lib/momentumNetwork';
+import {
+  badgeFor,
+  shareMessage,
+  canShareBadge,
+  linkedInShareUrl,
+  facebookShareUrl,
+  supporterPageUrl,
+} from '../../lib/supporterBadge';
+import { donorPublicIdentity, type DonorLike, type DonorTierLike } from '../../lib/donors';
+
+interface Props {
+  title?: string;
+  /** The label in the visualization's top-left corner. */
+  networkTitle?: string;
+  /** The line beneath the heading. */
+  tagline?: string;
+  searchTitle?: string;
+  emptyMessage?: string;
+  donors?: DonorLike[];
+  tiers?: DonorTierLike[];
+  ctaLabel?: string;
+  donateUrl?: string;
+  email?: string;
+  campaignName?: string;
+  /** The template the share message pre-populates from. */
+  shareTemplate?: string;
+  /** Where a shared badge points. */
+  pageUrl?: string;
+}
+
+const {
+  title = 'The people behind the fund',
+  networkTitle = 'The Momentum Network — Powering Harvard Alumni in Tech',
+  tagline = 'Every light belongs to a founding supporter. Together, they illuminate what comes next.',
+  searchTitle = 'Find your place in the network',
+  emptyMessage,
+  donors = [],
+  tiers = [],
+  ctaLabel,
+  donateUrl,
+  // Defaulted rather than optional-forwarded: the empty state's Give button
+  // falls back to a mailto when no donation URL is set, so it needs an address.
+  email = 'ben@harvardintech.com',
+  campaignName,
+  shareTemplate,
+  pageUrl = 'https://www.harvardintech.com/donate',
+} = Astro.props;
+
+const defaultEmptyMessage =
+  'The grid is built and dark. The first gift lights the first node, and every gift after it adds another light and another connection.';
+
+const hasDonors = donors.length > 0;
+const { nodes, edges, viewBox, clusters } = networkLayout(donors);
+const bySlug = new Map(donors.map((donor) => [donor.slug, donor]));
+const tierName = (id?: string) => tiers.find((tier) => tier.id === id)?.name;
+
+// The panel payload. Every field already passed through `donorPublicIdentity`,
+// so anonymity is applied once — and an anonymous supporter simply has no entry
+// here, which is what makes their node inert rather than merely unstyled.
+const details: Record<string, unknown> = {};
+for (const donor of donors) {
+  if (donor.anonymous === true) continue;
+  const detail = networkNodeDetail(donor, tierName(donor.tier));
+  const badge = badgeFor(donor, tierName(donor.tier));
+  details[donor.slug] = {
+    ...detail,
+    shareMessage: canShareBadge(donor)
+      ? shareMessage(badge, { template: shareTemplate, donationUrl: donateUrl })
+      : undefined,
+    // Each supporter's badge is shared as ITS OWN url, not the campaign page's,
+    // so whoever follows the link arrives with that supporter's node already
+    // open rather than looking for one dot among many.
+    shareUrl: canShareBadge(donor) ? supporterPageUrl(pageUrl, donor.slug) : undefined,
+    linkedInUrl: canShareBadge(donor)
+      ? linkedInShareUrl(supporterPageUrl(pageUrl, donor.slug))
+      : undefined,
+    facebookUrl: canShareBadge(donor)
+      ? facebookShareUrl(supporterPageUrl(pageUrl, donor.slug))
+      : undefined,
+  };
+}
+
+/** What each node is searchable on, precomputed so the browser matches the same
+ *  strings the server would. An anonymous supporter gets an empty haystack —
+ *  the rule `matchesNetworkSearch` states, carried into the DOM. */
+function searchHaystack(donor: DonorLike): string {
+  if (!matchesNetworkSearch(donor, '')) return '';
+  if (donor.anonymous === true) return '';
+  const identity = donorPublicIdentity(donor);
+  return [identity.school, shortSchoolLabel(identity.school), identity.location]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+}
+
+const roll = supporterRoll(donors);
+---
+
+{
+  !hasDonors ? (
+    /* Day one, and the state /donate is in RIGHT NOW. The band stays dark and
+       keeps its label and headline — the grid is built and unlit, waiting for
+       the first gift to energize it — rather than dropping to a plain white
+       panel that gives no hint of what this section becomes. The invitation and
+       the giving CTA are the whole content, because the visitor most likely to
+       be reading an empty supporter wall is deciding whether to be first on it. */
+    <section class="network network--empty" id="donors" aria-labelledby="momentum-network-title">
+      <div class="wrap network-empty-in">
+        <p class="kick network-label">{networkTitle}</p>
+        <h2 id="momentum-network-title" class="network-headline">{title}</h2>
+        <p class="network-empty-message">{emptyMessage ?? defaultEmptyMessage}</p>
+        <GiveButton label={ctaLabel} donateUrl={donateUrl} email={email} campaignName={campaignName} />
+      </div>
+    </section>
+  ) : (
+    <section class="network" data-momentum-network aria-labelledby="momentum-network-title">
+      {/* The editorial band. On paper, in the site's own type, with the same
+          `.wrap` margins as every other section — so the band is introduced the
+          way the page introduces everything else, and the graphic below it reads
+          as the illustration to this heading rather than as a separate object
+          that happens to follow it. */}
+      <div class="wrap network-intro">
+        <p class="kick">{campaignName ?? 'The Momentum Fund'}</p>
+        <h2 id="momentum-network-title" class="network-headline">{title}</h2>
+        <p class="network-tagline">{tagline}</p>
+      </div>
+
+      <div class="network-stage" data-network-stage>
+        <svg
+          class="network-svg"
+          viewBox={`0 0 ${viewBox.width} ${viewBox.height}`}
+          preserveAspectRatio="xMidYMid slice"
+          role="img"
+          aria-label={`${donors.length} supporters, drawn as a connected network. Every name is listed below.`}
+        >
+          <defs>
+            {/* TEAL-dominant, not crimson. Crimson bloomed over navy at low
+                opacity mixes to a purple-magenta wash exactly where two clusters
+                overlap — one of the colours the direction rules out by name, and
+                arrived at by accident rather than by choice. Teal over navy stays
+                in the blue-green family however the blooms stack, so the light
+                can never drift off-brand. */}
+            <radialGradient id="network-bloom">
+              <stop offset="0%" stop-color="#04979e" stop-opacity="0.2" />
+              <stop offset="60%" stop-color="#04979e" stop-opacity="0.07" />
+              <stop offset="100%" stop-color="#04979e" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+
+          {/* The light the band is named for. Each cluster of supporters sits in
+              a soft bloom, so the grid reads as lit FROM WITHIN rather than as
+              dots drawn on a dark rectangle. Kept well below the brightness of
+              anything above it — the direction asks for refined and restrained,
+              and a bloom that competes with its own nodes is neither. */}
+          <g class="network-blooms" aria-hidden="true">
+            {clusters.map((cluster) => (
+              <circle cx={cluster.x} cy={cluster.y} r={cluster.r} fill="url(#network-bloom)" />
+            ))}
+          </g>
+
+          <g class="network-edges">
+            {edges.map((edge, i) => (
+              <>
+                <line
+                  class="network-edge-base"
+                  x1={nodes[edge.a].x}
+                  y1={nodes[edge.a].y}
+                  x2={nodes[edge.b].x}
+                  y2={nodes[edge.b].y}
+                  data-network-edge={`${nodes[edge.a].slug}|${nodes[edge.b].slug}`}
+                />
+                {/* The second layer on the identical path is the "subtle energy
+                    movement" the direction asks for in teal: a short bright dash
+                    travelling a dim standing conductor. One dashed line on its
+                    own reads as a dotted border; two layers read as current.
+                    `pathLength="100"` normalises every edge so the dash takes
+                    the same time to cross a short link as a long one, and the
+                    staggered delay stops the whole web pulsing in lockstep. */}
+                <line
+                  class="network-edge-current"
+                  x1={nodes[edge.a].x}
+                  y1={nodes[edge.a].y}
+                  x2={nodes[edge.b].x}
+                  y2={nodes[edge.b].y}
+                  pathLength="100"
+                  style={`--net-current-delay: ${((i % 9) * 480).toFixed(0)}ms`}
+                  aria-hidden="true"
+                />
+              </>
+            ))}
+          </g>
+
+          <g class="network-nodes">
+            {nodes.map((node, i) => (
+              <g class="network-node-group" style={`--net-delay: ${(i * 55).toFixed(0)}ms`}>
+                {/* The halo is what turns a flat disc into a light. It is a
+                    sibling rather than a filter on the node itself so that
+                    selecting can brighten the node without inflating its glow
+                    into the neighbours. */}
+                <circle
+                  class:list={['network-halo', { 'is-founding': node.founding }]}
+                  cx={node.x}
+                  cy={node.y}
+                  r={node.r * 1.85}
+                  aria-hidden="true"
+                />
+                <circle
+                  cx={node.x}
+                  cy={node.y}
+                  r={node.r}
+                  class:list={['network-node', { 'is-founding': node.founding }]}
+                  data-network-node={node.slug}
+                  data-selectable={String(node.selectable)}
+                  data-network-haystack={searchHaystack(bySlug.get(node.slug)!)}
+                  tabindex={node.selectable ? 0 : undefined}
+                  role={node.selectable ? 'button' : undefined}
+                  aria-label={node.selectable ? details[node.slug] ? (details[node.slug] as { name: string }).name : undefined : undefined}
+                />
+              </g>
+            ))}
+          </g>
+        </svg>
+
+        {/* The one piece of copy that belongs ON the artwork: the direction asks
+            for this line in the grid's top-left corner. Everything else lives in
+            the light band above, where the page keeps its headings. */}
+        <p class="kick network-label">{networkTitle}</p>
+
+        <div class="network-panel" data-network-panel hidden>
+          <button type="button" class="network-dismiss" data-network-dismiss aria-label="Close supporter details">×</button>
+          <p class="network-panel-name" data-network-field="name"></p>
+          <p class="network-panel-standing" data-network-field="standing"></p>
+          <p class="network-panel-school" data-network-field="school"></p>
+          <p class="network-panel-location" data-network-field="location"></p>
+
+          <div class="network-share" data-network-share hidden>
+            <label class="network-share-label" for="network-share-message">Share your badge</label>
+            <textarea id="network-share-message" class="network-share-message" data-network-share-message rows="7"></textarea>
+            <p class="network-share-hint">Edit this before you post it — it is yours.</p>
+            <div class="network-share-links">
+              <a data-network-share-linkedin href="#" target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
+              <a data-network-share-facebook href="#" target="_blank" rel="noopener noreferrer">Share on Facebook</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap network-tools">
+        <div class="network-search-box">
+          <label class="network-search-label" for="network-search">{searchTitle}</label>
+          <input
+            id="network-search"
+            type="search"
+            class="network-search"
+            data-network-search
+            placeholder="Your school or city — “Kennedy”, “London”"
+            autocomplete="off"
+          />
+          <p class="network-summary" data-network-summary aria-live="polite"></p>
+        </div>
+        <button type="button" class="btn btn-out network-sound" data-network-sound aria-pressed="true">Sound on</button>
+      </div>
+
+      <div class="wrap">
+        <NetworkSupporterRoll donors={roll} tiers={tiers} />
+      </div>
+
+      <script is:inline type="application/json" data-network-details set:html={JSON.stringify(details)} />
+    </section>
+  )
+}
+
+<script>
+  import { initMomentumNetwork } from '../../lib/momentumNetworkDom';
+  initMomentumNetwork();
+</script>
+
+<style>
+  /* The palette is the design direction's, and the four colours carry meaning:
+     crimson is a supporter, teal is the connection between them, gold is the one
+     node under the pointer, navy is the ground. Declared as tokens so the
+     "no magenta, no purple, no cobalt" constraint is legible in one place. */
+  .network {
+    --net-bg: #031731;
+    --net-node: #a51034;
+    --net-edge: #04979e;
+    --net-active: #f6c76b;
+  }
+
+  /* The whole band is dark and full-bleed — the sections on this page are
+     edge-to-edge with `.wrap` constraining their contents, so the network reads
+     as one deliberate band of the page rather than a dark card floating in it. */
+  /* The section is PAPER, like every other section on this page. Only the
+     graphic is dark. That inversion is the whole point of the restructure: a
+     wall-to-wall dark band made the network a foreign object on the page, where
+     a dark illustration under a normal heading is just a figure. */
+  .network {
+    padding: 78px 0 0;
+  }
+
+  .network-intro {
+    margin-bottom: 40px;
+  }
+
+  .network-headline {
+    font-family: var(--font-title, Georgia, serif);
+    font-size: clamp(28px, 3.6vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 10px 0 16px;
+    max-width: 18ch;
+    color: var(--color-title);
+  }
+
+  .network-tagline {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-muted);
+    max-width: 52ch;
+  }
+
+  /* The stage. The SVG covers it with `slice`, so the artwork always fills the
+     frame at any viewport — which is what keeps "fill the central canvas / no
+     large empty areas" true on a phone as well as a desktop. */
+  .network-stage {
+    position: relative;
+    height: clamp(22rem, 38vw, 34rem);
+    overflow: hidden;
+    background: var(--net-bg);
+  }
+
+  .network--empty {
+    padding-bottom: 90px;
+  }
+
+  .network-empty-in {
+    max-width: 46rem;
+    padding-bottom: 1rem;
+  }
+
+  .network-empty-message {
+    margin: 0 0 1.75rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: rgba(238, 244, 250, 0.78);
+    max-width: 44ch;
+  }
+
+  .network-svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Copy over the artwork, top-left. The gradient behind it is what keeps the
+     text legible wherever a bright cluster happens to land underneath — without
+     it the headline would depend on the layout's seed, which is not a
+     contrast guarantee. */
+  /* `.kick` on the artwork. Only the colour is overridden — the token's crimson
+     is unreadable on navy, and gold is the direction's own accent. */
+  .network-label {
+    position: absolute;
+    top: 22px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    margin: 0 auto;
+    padding: 0 48px;
+    max-width: var(--content-width);
+    color: var(--net-active);
+    pointer-events: none;
+  }
+
+  /* Connections. Teal, and deliberately faint at rest — the direction asks for
+     restraint, and an edge as bright as a node turns the web into a mesh of
+     lines with dots on it rather than a network of people. */
+  .network-edge-base {
+    stroke: var(--net-edge);
+    stroke-width: 0.7;
+    opacity: 0.3;
+    transition: opacity 160ms ease, stroke 160ms ease;
+  }
+
+  /* The travelling current. A short dash on a normalised path length, so every
+     connection carries the same pulse at the same speed however long it is. */
+  /* A longer, softer dash than the first pass. 3-in-100 was a blip — it read as
+     a fault in the line rather than as something moving along it. 14-in-100 at
+     a slower cycle reads as current: you see it travel, and you can look away
+     without the movement demanding attention back. The dash fades in and out at
+     the ends of its run so it never pops into existence at a node. */
+  /* Teal rather than near-white, and thinner. A bright dash on a dark ground
+     reads as a scratch on the image when it is caught in a still — and stills
+     are how this design gets reviewed — where a teal one reads as the same
+     connection, briefly carrying something. "Subtle energy movement" is the
+     brief, and subtle has to survive being paused. */
+  .network-edge-current {
+    stroke: var(--net-edge);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    stroke-dasharray: 14 86;
+    opacity: 0;
+    animation: network-current 7.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    animation-delay: var(--net-current-delay, 0ms);
+  }
+
+  @keyframes network-current {
+    0% {
+      stroke-dashoffset: 100;
+      opacity: 0;
+    }
+    18% {
+      opacity: 0.85;
+    }
+    72% {
+      opacity: 0.85;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  /* The halo is a TIGHT ring of light around the node, not a wide cloud. A halo
+     several times the node's radius reads as a soft blob and buries the crisp
+     dot inside it — the "digital infrastructure" the direction asks for is made
+     of definite points, so the glow has to stay close enough to the node to
+     still be read as that node's light. */
+  .network-halo {
+    fill: var(--net-node);
+    opacity: 0.2;
+  }
+
+  .network-halo.is-founding {
+    opacity: 0.3;
+  }
+
+  .network-node {
+    fill: var(--net-node);
+    opacity: 1;
+    transition: fill 140ms ease, opacity 140ms ease;
+  }
+
+  .network-node.is-founding {
+    filter: drop-shadow(0 0 3px rgba(165, 16, 52, 0.9));
+  }
+
+  .network-node[data-selectable='true'] {
+    cursor: pointer;
+  }
+
+  /* Gold is reserved for exactly three moments the direction names: hovered,
+     focused, and selected. Nothing else on the stage may use it. */
+  .network-node[data-selectable='true']:hover,
+  .network-node[data-selectable='true']:focus-visible,
+  .network-node.is-selected {
+    fill: var(--net-active);
+    opacity: 1;
+    filter: drop-shadow(0 0 9px rgba(246, 199, 107, 0.9));
+    outline: none;
+  }
+
+  /* Selecting settles the whole web and then brings the selected supporter's own
+     connections back up — the contrast between the two is what makes "immediate
+     connections" legible. Raising the live edges without dropping the rest would
+     not read at all on a dense network, where a brighter line among hundreds is
+     just another line. */
+  .network.is-selecting .network-edge-base {
+    opacity: 0.08;
+  }
+
+  /* The current stops while a supporter is being read. Movement across a panel
+     someone is trying to read is noise, and the direction wants the energy
+     subtle — subtle includes knowing when to stop. */
+  .network.is-selecting .network-edge-current {
+    animation-play-state: paused;
+    opacity: 0;
+  }
+
+  .network.is-selecting .network-edge-base.is-live {
+    opacity: 0.95;
+    stroke-width: 1.2;
+    filter: drop-shadow(0 0 3px rgba(4, 151, 158, 0.85));
+  }
+
+  .network-node.is-dimmed {
+    opacity: 0.16;
+  }
+
+  .network-node.is-found {
+    fill: var(--net-active);
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(246, 199, 107, 0.75));
+  }
+
+  .network-panel {
+    position: absolute;
+    right: clamp(1rem, 4vw, 3rem);
+    bottom: clamp(1rem, 4vw, 3rem);
+    z-index: 3;
+    width: min(23rem, calc(100% - 2.5rem));
+    padding: 20px 22px 22px;
+    background: rgba(3, 23, 49, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius);
+    color: #f2f6fa;
+    text-align: left;
+    animation: network-panel-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* The panel rises a few pixels as it arrives, so the connection between the
+     node just clicked and the card that appears is legible as cause and effect
+     rather than as a card that was always there and suddenly is not hidden. */
+  @keyframes network-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  .network-dismiss {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.5rem;
+    background: none;
+    border: 0;
+    color: rgba(242, 246, 250, 0.7);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .network-panel-name {
+    margin: 0 0 8px;
+    font-family: var(--font-title, Georgia, serif);
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .network-panel-standing {
+    margin: 0 0 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--net-active);
+  }
+
+  .network-panel-school,
+  .network-panel-location {
+    margin: 0 0 4px;
+    font-size: 15px;
+    color: rgba(242, 246, 250, 0.8);
+  }
+
+  .network-share {
+    margin-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    padding-top: 16px;
+  }
+
+  .network-share-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(242, 246, 250, 0.62);
+    margin-bottom: 8px;
+  }
+
+  .network-share-message {
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.5;
+    color: #f2f6fa;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    resize: vertical;
+  }
+
+  .network-share-hint {
+    margin: 8px 0 12px;
+    font-size: 13px;
+    color: rgba(242, 246, 250, 0.55);
+  }
+
+  .network-share-links {
+    display: flex;
+    gap: 18px;
+  }
+
+  .network-share-links a {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--net-active);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(246, 199, 107, 0.4);
+  }
+
+  .network-tools {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-top: 40px;
+  }
+
+  .network-search-box {
+    flex: 1 1 22rem;
+    text-align: left;
+  }
+
+  /* The search label is an eyebrow, not a second heading — the band already has
+     one heading, and a serif sub-head here competed with it. */
+  .network-search-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+    margin-bottom: 10px;
+  }
+
+  /* `--radius: 3px` is the site's corner, everywhere. The 8px and 999px pills
+     this had before are the single loudest tell that the band was styled apart
+     from the rest of the site. */
+  .network-search {
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    color: var(--color-fg);
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  .network-search::placeholder {
+    color: var(--color-faint);
+  }
+
+  .network-search:focus-visible {
+    outline: 2px solid var(--crimson);
+    outline-offset: 1px;
+  }
+
+  .network-summary {
+    margin: 10px 0 0;
+    min-height: 1.2em;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--crimson);
+  }
+
+  /* `.btn .btn-out` from tokens.css — the site's own outline button, now that
+     the controls sit on paper rather than on the artwork. */
+  .network-sound {
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+
+  .network-sound[aria-pressed='false'] {
+    opacity: 0.5;
+  }
+
+  /* Growth, made visible. The direction asks that a supporter joining "illuminate
+     and connect to the existing network" rather than appear as an isolated
+     point — so the network lights itself up in sequence on load, each node
+     coming up after the one before it and its connections arriving with it.
+     Staggered rather than simultaneous because simultaneous is a fade-in, and a
+     fade-in says nothing about people joining one at a time.
+
+     Note what this is NOT: no travelling particles, no starbursts, no drifting
+     motes. The energy is the illumination itself, which is what "subtle energy
+     movement" leaves room for and what the ruled-out effects would swamp. */
+  /* Overshoot slightly and settle, rather than scaling straight to size — a
+     light switching on has a moment of being brighter than it ends up, and the
+     settle is what separates "illuminating" from "fading in". */
+  @keyframes network-illuminate {
+    0% {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.18);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes network-connect {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* The illumination runs on the GROUP, so a supporter's node and its halo come
+     up together as one light rather than as a disc and a glow arriving apart. */
+  .network-node-group {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: network-illuminate 760ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+    animation-delay: var(--net-delay, 0ms);
+  }
+
+  .network-edge-base {
+    animation: network-connect 900ms ease-out both;
+    animation-delay: 220ms;
+  }
+
+  /* Reduced motion gets the finished network, immediately. The point of the
+     animation is the story of it filling up; someone who has asked for less
+     movement should get the result rather than a slower version of the story. */
+  @media (prefers-reduced-motion: reduce) {
+    .network-edge-base,
+    .network-node-group,
+    .network-panel,
+    .network-node {
+      transition: none;
+      animation: none;
+    }
+
+    /* The travelling current is removed outright, not slowed. It is the one
+       genuinely continuous motion on the page, and "reduce" is the request it
+       most directly answers. */
+    .network-edge-current {
+      animation: none;
+      opacity: 0;
+    }
+  }
+</style>

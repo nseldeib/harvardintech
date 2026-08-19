@@ -1,0 +1,13 @@
+{
+  "name": "Momentum Network - The Campaign At Scale",
+  "id": "d49344b7-f68d-41ee-bac9-824221469594",
+  "url": "/isolated-components/MomentumNetwork",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNetwork",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNetwork.astro",
+  "description": "The network the campaign is working toward: every Harvard school represented, clusters overlapping, each supporter wired to several neighbours rather than hung off a school junction. This is the density the design direction was composed for, and the state that answers its central note — the exploration read as a constellation of stars because a point with one thread to a hub is a star on a string, not a node. The canvas is sized to the supporter count, so this same picture reads as densely with nineteen people as with two hundred."
+}

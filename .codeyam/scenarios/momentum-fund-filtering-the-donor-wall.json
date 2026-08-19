@@ -1,5 +1,5 @@
 {
-  "name": "Momentum Fund - Filtering The Donor Wall",
+  "name": "Momentum Fund - Finding Your Place In The Network",
   "id": "feb3e1f6-4c62-4ceb-bf54-b3cdcde82d32",
   "url": "/donate",
   "dimensions": [
@@ -16,7 +16,11 @@
         "order": 1,
         "slug": "margaret-chen-alvarez",
         "tier": "leadership",
-        "url": "https://www.linkedin.com/in/example-margaret"
+        "url": "https://www.linkedin.com/in/example-margaret",
+        "school": "Harvard Business School",
+        "gradYear": 2004,
+        "location": "San Francisco, CA",
+        "why": "I got my first board seat through someone I met at a Harvard in Tech dinner. This is how I pay that forward."
       },
       {
         "anonymous": true,
@@ -26,14 +30,22 @@
         "order": 2,
         "slug": "robert-whitmore",
         "tier": "leadership",
-        "url": "https://www.linkedin.com/in/example-robert"
+        "url": "https://www.linkedin.com/in/example-robert",
+        "school": "Harvard Law School",
+        "gradYear": 1998,
+        "location": "Greenwich, CT",
+        "why": "I would rather the fund got the attention than I did."
       },
       {
         "name": "David Osei-Bonsu",
         "order": 3,
         "slug": "david-osei-bonsu",
         "tier": "leadership",
-        "url": "https://www.linkedin.com/in/example-david"
+        "url": "https://www.linkedin.com/in/example-david",
+        "school": "Harvard John A. Paulson School of Engineering and Applied Sciences",
+        "gradYear": 2011,
+        "location": "Accra, Ghana",
+        "why": "Building here should not mean leaving the network behind."
       },
       {
         "founding": true,
@@ -42,94 +54,141 @@
         "order": 1,
         "photo": "/images/team/jessica-li.png",
         "slug": "priya-raman",
-        "tier": "sustaining"
+        "tier": "sustaining",
+        "school": "Harvard Graduate School of Arts and Sciences",
+        "gradYear": 2015,
+        "location": "Bengaluru, India",
+        "why": "Two intros from a founder dinner turned into my first enterprise customer. That is not luck, that is a network doing its job."
       },
       {
         "name": "Jonathan Feld",
         "order": 2,
         "slug": "jonathan-feld",
-        "tier": "sustaining"
+        "tier": "sustaining",
+        "school": "Harvard College",
+        "gradYear": 2009,
+        "location": "Austin, TX"
       },
       {
         "name": "Aisha Rahman",
         "note": "For the London chapter, which is the only reason I still feel connected.",
         "order": 3,
         "slug": "aisha-rahman",
-        "tier": "sustaining"
+        "tier": "sustaining",
+        "school": "Harvard Kennedy School",
+        "gradYear": 2013,
+        "location": "London, United Kingdom",
+        "why": "For the London chapter. It is the only reason I still feel connected."
       },
       {
-        "name": "Tomás Vidal",
+        "name": "Tom\u00e1s Vidal",
         "order": 4,
         "slug": "tomas-vidal",
         "tier": "sustaining",
-        "url": "https://www.linkedin.com/in/example-tomas"
+        "url": "https://www.linkedin.com/in/example-tomas",
+        "school": "Harvard Graduate School of Design",
+        "gradYear": 2017,
+        "location": "Mexico City, Mexico"
       },
       {
         "name": "Hannah Brightwell",
         "order": 5,
         "photo": "/images/team/krysia-lenzo.png",
         "slug": "hannah-brightwell",
-        "tier": "sustaining"
+        "tier": "sustaining",
+        "school": "Harvard Medical School",
+        "gradYear": 2012,
+        "location": "Boston, MA",
+        "why": "Health tech is lonely until you find the other people doing it."
       },
       {
         "name": "Kwame Boateng",
         "note": "Small gift, every year, for as long as this keeps going.",
         "order": 1,
         "slug": "kwame-boateng",
-        "tier": "supporting"
+        "tier": "supporting",
+        "school": "Harvard Division of Continuing Education",
+        "gradYear": 2019,
+        "location": "Toronto, ON",
+        "why": "Small gift, every year, for as long as this keeps going."
       },
       {
         "name": "Elena Marchetti",
         "order": 2,
         "slug": "elena-marchetti",
-        "tier": "supporting"
+        "tier": "supporting",
+        "school": "Harvard College",
+        "gradYear": 2021,
+        "location": "Milan, Italy"
       },
       {
         "name": "Samuel Oyelaran",
         "order": 3,
         "slug": "samuel-oyelaran",
-        "tier": "supporting"
+        "tier": "supporting",
+        "school": "Harvard T.H. Chan School of Public Health",
+        "gradYear": 2016,
+        "location": "Lagos, Nigeria"
       },
       {
         "founding": true,
         "name": "Grace Lindqvist",
         "order": 4,
         "slug": "grace-lindqvist",
-        "tier": "supporting"
+        "tier": "supporting",
+        "school": "Harvard Graduate School of Education",
+        "gradYear": 2008,
+        "location": "Stockholm, Sweden",
+        "why": "I joined when there were eleven of us on a mailing list."
       },
       {
         "anonymous": true,
         "name": "Nina Petrova",
         "order": 5,
         "slug": "nina-petrova",
-        "tier": "supporting"
+        "tier": "supporting",
+        "school": "Harvard Business School",
+        "gradYear": 2018,
+        "location": "Berlin, Germany",
+        "why": "My employer would read anything I put my name to as a statement, so I am giving quietly."
       },
       {
         "name": "Michael Okonkwo",
         "order": 6,
         "slug": "michael-okonkwo",
         "tier": "supporting",
-        "url": "https://www.linkedin.com/in/example-michael"
+        "url": "https://www.linkedin.com/in/example-michael",
+        "school": "Harvard College",
+        "gradYear": 2014,
+        "location": "New York, NY"
       },
       {
         "name": "Rebecca Stern",
         "order": 7,
         "photo": "/images/team/nadia-eldeib.png",
         "slug": "rebecca-stern",
-        "tier": "supporting"
+        "tier": "supporting",
+        "school": "Harvard Divinity School",
+        "gradYear": 2010,
+        "location": "Seattle, WA",
+        "why": "Ethics work in AI needs the humanities people in the room, and this is where I found them."
       },
       {
         "name": "Yusuf Al-Amin",
         "order": 8,
         "slug": "yusuf-al-amin",
-        "tier": "supporting"
+        "tier": "supporting",
+        "school": "Harvard School of Dental Medicine",
+        "gradYear": 2007,
+        "location": "Dubai, UAE"
       },
       {
         "name": "The Lindgren Family",
         "note": "Tagged with a giving level that no longer exists on the page.",
         "order": 1,
         "slug": "the-lindgren-family",
-        "tier": "legacy-circle"
+        "tier": "legacy-circle",
+        "location": "Minneapolis, MN"
       },
       {
         "name": "Clara Ndiaye",
@@ -177,11 +236,12 @@
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/donate.astro",
-  "description": "The wall's one interactive affordance, driven on the real page: a giving level is selected, its band stays, and the others hide with their donors rather than leaving headings over empty rows. Nothing is removed from the page to achieve it — every donor is still in the HTML under a real heading, which is why the wall stays complete for search engines, screen readers, and visitors with JavaScript off.",
+  "description": "The find-your-place search in use, which a resting capture cannot show: one supporter's node lit gold and the rest of the network dimmed around it. This scenario used to demonstrate the donor wall's tier chips; the network replaced the wall, and the chips with it, so it was renamed and re-pointed at the affordance that now does the same job \u2014 letting a visitor find themselves in a page full of other people. Searching on a school rather than a name is deliberate: the network deliberately has no name lookup, because an anonymous supporter must not be confirmable by typing one.",
   "interactions": [
     {
-      "action": "click",
-      "selector": "[data-donor-chip=\"sustaining\"]"
+      "action": "fill",
+      "selector": "[data-network-search]",
+      "value": "kennedy"
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "name": "Momentum Network - Anonymity Among Named Supporters",
+  "id": "94a81b91-ba68-4bde-a890-37bf9b8c828e",
+  "url": "/isolated-components/MomentumNetwork-Anonymity",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNetwork",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNetwork.astro",
+  "description": "The privacy guarantee. Anonymous supporters sit in the network as ordinary crimson nodes — their gift strengthens the picture, and withholding it would make the visualization undercount people who asked only not to be named. Note what this frame does and does not show: it shows them present and indistinguishable, which is the point, but their node being inert and their roll entry reading 'Anonymous donor' with no school, class year or city both sit below the fold of a viewport capture. Those are asserted in src/lib/momentumNetwork.test.ts and src/lib/momentumNetworkDom.test.ts instead, which is a durable check rather than a screenshot that happens to frame the right scroll position. The entries behind these nodes carry a school, a year and a city, so the withholding is real rather than an absence of data."
+}

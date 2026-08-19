@@ -389,6 +389,35 @@
         "reason": "The only action on this page is the giving CTA, which hands off to an external mail client (donateUrl is still empty) rather than changing any in-app state, so there is no post-interaction frame to capture. Reordering, the feature's real interaction, happens in the CMS at /admin, not on this page."
       }
     },
+    "MomentumNetwork": {
+      "empty": {
+        "status": "covered"
+      },
+      "single": {
+        "status": "covered"
+      },
+      "typical": {
+        "status": "covered"
+      },
+      "many": {
+        "status": "n-a",
+        "reason": "The canvas is sized to the supporter count, so the network never overflows or truncates — more supporters make a denser picture in the same frame rather than a longer one with rows falling off the end. That constant-density scaling is what the typical scenario already demonstrates, and it is unit-tested in networkViewBox; a two-hundred-supporter capture would show the same composition at a smaller node size."
+      },
+      "loading": {
+        "status": "n-a",
+        "reason": "The SVG is rendered on the server from networkLayout and arrives complete in the HTML — nothing about the graphic is fetched or assembled in the browser, so there is no pending state to capture. The client script only adds hover, selection and search on top of a picture that is already there."
+      },
+      "edge": {
+        "status": "covered"
+      },
+      "error": {
+        "status": "n-a",
+        "reason": "Nothing on this band can fail at runtime: the supporters resolve at build time, and the two things that could go wrong degrade rather than error — a malformed detail payload costs the panel and leaves the graphic, and a browser refusing audio costs the pulse and leaves the hover highlight. Both are asserted in momentumNetworkDom.test.ts rather than photographed."
+      },
+      "key-interaction": {
+        "status": "covered"
+      }
+    },
     "VolunteerProjectPage": {
       "empty": {
         "status": "covered"

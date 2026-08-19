@@ -1,0 +1,19 @@
+{
+  "name": "Momentum Network - A Supporter Who Wrote No Message",
+  "id": "46adc083-1580-4730-98e1-ec9345ef5bf0",
+  "url": "/isolated-components/MomentumNetwork",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNetwork",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNetwork.astro",
+  "description": "The conditional the design direction states outright, made visible. This supporter submitted no why-I-contributed message, so the share text runs straight from the opening line to 'If this community has helped you' — the 'I contributed because' line is REMOVED rather than left blank or filled with words they never wrote, and the paragraph gap closes behind it. He also carries no Founding Donor badge, so the panel shows the giving level he actually gave at instead.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "[data-network-node=\"jonathan-feld\"]"
+    }
+  ]
+}

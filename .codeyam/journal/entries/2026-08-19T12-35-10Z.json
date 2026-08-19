@@ -1,0 +1,827 @@
+{
+  "timestamp": "2026-08-19T12:35:10Z",
+  "title": "The Momentum Network Visualization",
+  "type": "feature",
+  "userRequest": "Now build the network visualization; use the feedback from Nicole. The Momentum Network\nPowering Harvard Alumni in Tech\nINTERACTIVE DESIGN DIRECTION & FEATURE REQUIREMENTS  |  August 12, 2026\n\n\n1  |  Visual Direction\nInteractive design selection- Power grid at night\n\n\n \nAppearance:\nThe grid currently looks like a constellation of stars; it should look like nodes.\nWhat it should look like:\n\nRedesign the visualization as a dense, interconnected digital network. Each illuminated node represents a founding supporter and should connect to several surrounding nodes, forming an organic web of overlapping clusters. The network should fill the central canvas and feel like active digital infrastructure powered by people, not stars floating in space.\nUse the brand colors purposefully:\nFounding-supporter nodes: Harvard burgundy/crimson (#A51034)\nConnecting lines and subtle energy movement: teal (#04979E)\nSelected, hovered, or newly activated node: gold (#F6C76B)\nBackground: deep navy-black (#031731)\n\n \nDesign constraints\nKeep the glow refined and restrained. Avoid magenta, purple, cobalt blue, scattered particles, starbursts, constellation patterns, and large empty areas. Do not use portraits, avatars, or human figures.\nSelected-node behavior\nWhen a node is selected, change that node to gold, brighten its immediate teal connections, and display the supporter’s name, Harvard school, graduation year, and “Founding Supporter.” All other nodes should remain crimson.\nNetwork growth behavior\nAs founding supporters join, new crimson nodes should illuminate and connect to the existing network, causing the visualization to become progressively denser and brighter. Each addition should visibly strengthen the shared network rather than appear as an isolated point.\n2  |  Grid Copy and Labeling\nInside the grid image under “ A grid, lit from within.” add the text below:\nEvery light belongs to a founding supporter. Together, they illuminate what comes next.\nIn the top-left corner of the grid, it should say:\nThe Momentum Network — Powering Harvard Alumni in Tech\n3  |  Interaction and Search\nSound effects:\nAdd a short, soft digital activation sound when a visitor hovers over a founding-supporter node. The sound should feel like a quiet pulse or light switching on, not a loud chime or arcade effect. Play it only when the pointer first enters a node, not continuously while it remains hovered. Keep the volume low, prevent overlapping sounds when someone moves quickly across nodes, and include a visible sound on/off control. On mobile, trigger the sound when a node is tapped. \nFind your place in the network feature, can we also include:\nSearch  by location\nFind your school\n\n \n\n4  |  Supporter Badge\nThis badge should pre-populate ( let’s call this a badge instead of a card)\nWill create a template\n\n\n \nSharing the badge\n\n5  |  Share Feature\nShare feature (accessed when someone views their supporter badge on the grid)\nCan we add sharing for LinkedIn and Facebook?\nWhen sharing, a pre-populated message should be included that can be edited by supporters.\nPre-populated message\nHarvard Alumni in Tech Momentum Fund and help strengthen the network that gives back to the network.\n\nI contributed because [SUPPORTER MESSAGE]\n\nIf this community has helped you make a connection, discover an opportunity, or move an idea forward, I invite you to join me in helping power what comes next.\n\nSupport the Momentum Fund: [DONATION LINK]\n \nNote: If the person did not submit a “why I contributed” message, automatically remove that line before populating the badge.",
+  "description": "Replaced the donor recognition wall on /donate with The Momentum Network, built to Nicole's interactive design direction. Her central note — 'the grid looks like a constellation of stars; it should look like nodes' — turned out to be topology and density rather than colour, and two changes answer it: supporters now wire to their several nearest neighbours instead of hanging off a single thread to a school junction, and the canvas grows with the supporter count so the spacing between people stays constant. A fixed frame is precisely why nineteen supporters read as scattered, and it degrades worst when the campaign is youngest. Cluster centres sit on a phyllotaxis spiral rather than a grid, because a grid of thirteen schools leaves a visibly bare corner — the large empty area the direction rules out. The palette is the specified one: navy ground, crimson supporters, teal connections carrying a slow current, gold for the selected node. Worth recording that a first pass reached a purple-magenta wash by BLOOMING crimson over navy rather than by declaring it, which is a ruled-out colour arrived at by accident; the glow is teal-dominant now so it cannot drift off-brand however the clusters stack. Selecting a node turns it gold, brightens that supporter's own connections while the rest settle, and opens a badge with their name, school, class year and standing. Nodes are ADDRESSABLE: selecting rewrites the URL, ?supporter=<slug> opens straight to that person, and the LinkedIn and Facebook links share their own URL rather than the campaign page — without that, 'share your badge' posts a link and leaves whoever follows it hunting one dot among hundreds. The share message drops the 'I contributed because' line outright when a supporter wrote nothing, per the direction, and drops the donation line the same way when no donation URL is set, which is the live state of this campaign. The badge was previously gated on that URL, which conflated 'the campaign has not published a link' with 'this person has nothing to share' and hid the feature entirely on the real site. Find-your-place searches school and location but deliberately not names, since an anonymous supporter must not be confirmable by typing one. Sound is a synthesized Web Audio pulse on pointer-enter only, with an overlap guard so sweeping across a dense network cannot stack into a buzz, and a visible on/off control. The SVG is rendered on the SERVER and a full text roll sits beneath it, so every supporter is recognised even with JavaScript off or a screen reader — the recognition cannot be contingent on a script running, and the roll doubles as the keyboard route into any node. Anonymous supporters are drawn and counted as ordinary nodes, because withholding them would make the picture undercount people who asked only not to be named, but they cannot be opened, searched, deep-linked or shared: every reader-facing field goes through donorPublicIdentity rather than being re-derived here.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-filtering-the-donor-wall.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-the-donor-wall-moved-to-the-top.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-the-first-donor-on-the-wall.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-preview-link-shared-draft--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-a-single-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-curated-and-capped--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-photo-enlarged--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-show-all-revealed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-three-photos-three-columns--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-longest-chapter-name-wraps--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-a-tick-that-could-not-be-saved--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-complete--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-cutover-day--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-decisions-answered-nothing-begun--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-nothing-started--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-partway-through--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-waiting-on-one-answer--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-password-required--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-unlocked-with-the-password--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-wrong-password--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-communities-derived--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-a-page-written-in-the-cms--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-a-page-written-in-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-long-title-and-no-description--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-long-title-and-no-description--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-rewritten-from-the-cms--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-rewritten-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-retired-projects-never-suggested--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-retired-projects-never-suggested--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/change-origin.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/wait-for.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/scenario-taxonomy.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/9d9db487f97d4c37eda4332b1410740e643b8aadf3f828dcf6b5fdda444736c2.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/d8f5ababd24a5a90db0124a3edaf160673862d77ebd4f924ee995a9f99f5b089.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/donatePage.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/[name].astro",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-donate-momentumnetwork-astro.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-lib-momentumnetwork-ts.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-network-a-supporter-selected.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-network-a-supporter-who-wrote-no-message.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-network-anonymity-among-named-supporters.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-network-day-one-the-grid-unlit.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-network-the-campaign-at-scale.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-network-the-first-gift.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-network-a-supporter-selected--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-network-a-supporter-who-wrote-no-message--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-network-anonymity-among-named-supporters--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-network-day-one-the-grid-unlit--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-network-the-campaign-at-scale--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-network-the-first-gift--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/7897a9103c6e5df569ed4fe1682fd68ad72decf19affb3b3ecf9e36daf21d4b7.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/e27fde9fbe496f6805aa0801f4c1677cfb296aeeb594ae54a4f0bc813dbe8a7a.json",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumNetwork.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/NetworkSupporterRoll.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/momentumNetwork.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/momentumNetwork.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/momentumNetworkDom.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/momentumNetworkDom.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/networkSound.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/networkSound.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/supporterBadge.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/supporterBadge.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Momentum Network - The Campaign At Scale",
+      "screenshotPath": "momentum-network-the-campaign-at-scale--desktop.png"
+    },
+    {
+      "name": "Momentum Network - A Supporter Selected",
+      "screenshotPath": "momentum-network-a-supporter-selected--desktop.png"
+    },
+    {
+      "name": "Momentum Network - A Supporter Who Wrote No Message",
+      "screenshotPath": "momentum-network-a-supporter-who-wrote-no-message--desktop.png"
+    },
+    {
+      "name": "Momentum Network - Anonymity Among Named Supporters",
+      "screenshotPath": "momentum-network-anonymity-among-named-supporters--desktop.png"
+    },
+    {
+      "name": "Momentum Network - Day One, The Grid Unlit",
+      "screenshotPath": "momentum-network-day-one-the-grid-unlit--desktop.png"
+    },
+    {
+      "name": "Momentum Network - The First Gift",
+      "screenshotPath": "momentum-network-the-first-gift--desktop.png"
+    },
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Blog Preview Link - Shared Draft",
+      "screenshotPath": "blog-preview-link-shared-draft--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - A Single Photo",
+      "screenshotPath": "chapter-gallery-a-single-photo--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Curated and Capped",
+      "screenshotPath": "chapter-gallery-curated-and-capped--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Photo Enlarged",
+      "screenshotPath": "chapter-gallery-photo-enlarged--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Show All Revealed",
+      "screenshotPath": "chapter-gallery-show-all-revealed--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Three Photos, Three Columns",
+      "screenshotPath": "chapter-gallery-three-photos-three-columns--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Longest Chapter Name Wraps",
+      "screenshotPath": "chapter-route-longest-chapter-name-wraps--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - A Tick That Could Not Be Saved",
+      "screenshotPath": "cutover-runbook-a-tick-that-could-not-be-saved--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Complete",
+      "screenshotPath": "cutover-runbook-complete--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Cutover Day",
+      "screenshotPath": "cutover-runbook-cutover-day--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Decisions Answered Nothing Begun",
+      "screenshotPath": "cutover-runbook-decisions-answered-nothing-begun--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Nothing Started",
+      "screenshotPath": "cutover-runbook-nothing-started--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Partway Through",
+      "screenshotPath": "cutover-runbook-partway-through--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - The Records On A Phone",
+      "screenshotPath": "cutover-runbook-the-records-on-a-phone--mobile.png"
+    },
+    {
+      "name": "Cutover Runbook - Waiting On One Answer",
+      "screenshotPath": "cutover-runbook-waiting-on-one-answer--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Homepage Phased For Launch",
+      "screenshotPath": "harvard-in-tech-homepage-phased-for-launch--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Upcoming Events Excludes Past Ones",
+      "screenshotPath": "harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Password Required",
+      "screenshotPath": "locked-preview-password-required--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Unlocked With The Password",
+      "screenshotPath": "locked-preview-unlocked-with-the-password--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Wrong Password",
+      "screenshotPath": "locked-preview-wrong-password--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Giving Platform Is Chosen",
+      "screenshotPath": "momentum-fund-a-giving-platform-is-chosen--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Finding Your Place In The Network",
+      "screenshotPath": "momentum-fund-filtering-the-donor-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Donor Wall Moved To The Top",
+      "screenshotPath": "momentum-fund-the-donor-wall-moved-to-the-top--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The First Donor On The Wall",
+      "screenshotPath": "momentum-fund-the-first-donor-on-the-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Goal Meter Held As Coming Soon",
+      "screenshotPath": "momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Two Pillar Bands With Their Own Cards",
+      "screenshotPath": "momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png"
+    },
+    {
+      "name": "Site Page - A Page Written In The CMS",
+      "screenshotPath": "site-page-a-page-written-in-the-cms--desktop.png"
+    },
+    {
+      "name": "Site Page - Long Title And No Description",
+      "screenshotPath": "site-page-long-title-and-no-description--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Rewritten From The CMS",
+      "screenshotPath": "volunteer-page-rewritten-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Retired Projects Never Suggested",
+      "screenshotPath": "volunteer-project-detail-retired-projects-never-suggested--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Communities Derived",
+      "screenshotPath": "primarynav-communities-derived--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 996,
+    "passed": 996,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 996,
+        "passed": 996
+      }
+    ]
+  }
+}

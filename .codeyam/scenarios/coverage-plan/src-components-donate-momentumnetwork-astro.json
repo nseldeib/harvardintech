@@ -1,0 +1,24 @@
+{
+  "surface": "src/components/donate/MomentumNetwork.astro",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "branches",
+      "value": "branch-1",
+      "rationale": "source-derived state branches=branch-1",
+      "status": "covered"
+    },
+    {
+      "dimension": "branches",
+      "value": "branch-2",
+      "rationale": "source-derived state branches=branch-2",
+      "status": "planned"
+    },
+    {
+      "dimension": "branches",
+      "value": "branch-3",
+      "rationale": "source-derived state branches=branch-3",
+      "status": "planned"
+    }
+  ]
+}

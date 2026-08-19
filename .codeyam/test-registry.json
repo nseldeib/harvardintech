@@ -1,6 +1,33 @@
 {
   "tests": [
     {
+      "description": "\"Like a light switching on\" is a shape: fast attack, short decay, no sustain. A long envelope would be a swell, which is a different sound.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "ACTIVATION_TONE › is over quickly, with a fast attack",
+      "line": 80,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Too low reads as a thud, too high as a beep; the brief asks for neither.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "ACTIVATION_TONE › sits in a register that reads as digital without being piercing",
+      "line": 86,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The brief asks for a quiet pulse, explicitly not a loud chime. Gain is the number that decides which of those a visitor gets, so it is pinned rather than left to drift on a later tweak.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "ACTIVATION_TONE › stays quiet",
+      "line": 74,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "Clicking the button increments the hydrated counter, proving the island is genuinely interactive and not a static render.",
       "file": "src/components/Greeting.test.tsx",
       "format": "vitest",
@@ -43,6 +70,15 @@
       "key": "HOME_SECTION_LABELS › names every band a placeholder can stand in for",
       "line": 118,
       "registeredAt": "2026-08-03T21:22:17Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The direction rules colours OUT by name — no magenta, purple or cobalt. An earlier pass reached a purple-magenta wash by BLOOMING crimson over navy rather than by declaring it, so this pins the four declared values against an edit that drifts them.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "NETWORK_COLORS › is exactly the four colours the design direction specifies",
+      "line": 556,
+      "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
     {
@@ -289,6 +325,42 @@
       "runner": "tests"
     },
     {
+      "description": "The badge is the thing a supporter posts about themselves, so every field on it has to be the one their node panel showed.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "badgeFor › carries the supporter identity the badge prints",
+      "line": 34,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An untagged supporter still needs a word under their name — a blank line there reads as missing data rather than as someone who simply gave.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "badgeFor › falls back to a plain label when there is no level either",
+      "line": 54,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Not every supporter is founding; theirs should read as the level they gave at rather than borrowing a badge they were not given.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "badgeFor › shows the giving level for a supporter without the founding badge",
+      "line": 46,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Reads every field through donorPublicIdentity / donorWhy rather than off the entry, so an anonymous supporter's badge cannot carry what the network withholds — even though the network never offers them one.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "badgeFor › withholds every identity field for an anonymous supporter",
+      "line": 61,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "S6 today — the only two-decision step.",
       "file": "src/lib/cutoverProgress.test.ts",
       "format": "vitest",
@@ -532,6 +604,33 @@
       "runner": "tests"
     },
     {
+      "description": "The ordinary case, and the one the whole share feature exists for.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "canShareBadge › offers a badge to a named supporter",
+      "line": 230,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An anonymous supporter has no badge by design: a shareable badge is a name, a school and a year published to a social network, which is the precise opposite of what they asked for.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "canShareBadge › refuses an anonymous supporter",
+      "line": 237,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Deliberately NOT gated on the donation url. Hiding the whole feature when the campaign has not published a link conflated \"nothing to link to\" with \"this person has nothing to share\", and hid the badge on the live site.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "canShareBadge › still offers a badge when the campaign has no donation link yet",
+      "line": 244,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "An editor typing 'Capital Projects' on the section and 'capital projects' on the card meant one group; a rule that disagreed would hand them an empty band with no visible cause.",
       "file": "src/lib/sectionGroups.test.ts",
       "format": "vitest",
@@ -664,6 +763,33 @@
       "key": "class year › refuses to guess at anything else",
       "line": 162,
       "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The phyllotaxis spiral replaced a grid precisely because a grid leaves its last row part-empty at any non-square count. Distinct centres are the minimum evidence that it is distributing rather than stacking.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "clusterCentres › gives each school its own distinct centre",
+      "line": 177,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every cluster has to land inside the frame, or its supporters are drawn off the edge of the picture.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "clusterCentres › places every centre inside the canvas",
+      "line": 159,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Day one, before anyone has given: the layout still has to answer.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "clusterCentres › returns nothing when there are no schools",
+      "line": 170,
+      "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
     {
@@ -3438,6 +3564,33 @@
       "runner": "tests"
     },
     {
+      "description": "The band is one section of /donate, not the whole page, and the module is imported by the page bundle regardless. A throw here would take the whole campaign page down.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "initMomentumNetwork › does nothing when the network is not on the page",
+      "line": 83,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The empty state renders the band without a graph, and the same page bundle still runs this.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "initMomentumNetwork › does nothing when the network renders no nodes",
+      "line": 90,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The server ships the panel hidden; init must not open it, or every visitor arrives with a stranger's card already on screen.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "initMomentumNetwork › leaves the panel closed until something is selected",
+      "line": 97,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "No [data-parallax] images on the page → a clean no-op, not a throw.",
       "file": "src/lib/parallax.test.ts",
       "format": "vitest",
@@ -3600,6 +3753,24 @@
       "runner": "tests"
     },
     {
+      "description": "The ordinary case; without it the rule above could pass by refusing everyone.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "isSelectableNode › allows a named supporter",
+      "line": 366,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An anonymous supporter is drawn and counted, and cannot be opened: the panel prints a school, a year and a city, which together identify someone about as surely as their name.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "isSelectableNode › refuses an anonymous supporter",
+      "line": 360,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "A recorded tick reads as done.",
       "file": "src/lib/cutoverProgress.test.ts",
       "format": "vitest",
@@ -3717,6 +3888,33 @@
       "runner": "tests"
     },
     {
+      "description": "Both endpoints compose their own preview from the target page and ignore prefilled body text, so the message must NOT be smuggled into the query where it would be silently dropped — it belongs in the editable field.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "linkedInShareUrl and facebookShareUrl › carries no message text in either share url",
+      "line": 222,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same contract on the other network, asserted separately so a change to one helper cannot quietly take the other with it.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "linkedInShareUrl and facebookShareUrl › sends Facebook the supporter own url, encoded",
+      "line": 213,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The share endpoint reads one parameter; an unencoded url silently truncates at the first ampersand and shares the wrong page.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "linkedInShareUrl and facebookShareUrl › sends LinkedIn the supporter own url, encoded",
+      "line": 205,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "Leads with the org name as an H1 and the description as a blockquote.",
       "file": "src/lib/seoEndpoints.test.ts",
       "format": "vitest",
@@ -3786,6 +3984,78 @@
       "key": "mapping the spreadsheet columns › returns an empty object for a non-row rather than throwing",
       "line": 52,
       "registeredAt": "2026-08-05T19:34:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A search that matched everything would be a control that filters nothing.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "matchesNetworkSearch › does not match on a value nobody carries",
+      "line": 452,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Deliberately NOT searchable by name: the search is for finding your school or your city, and a name lookup is a different feature with a different privacy question attached.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "matchesNetworkSearch › does not match on the supporter name",
+      "line": 459,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nobody types their city with the same capitalisation the record has.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "matchesNetworkSearch › ignores case and surrounding whitespace",
+      "line": 440,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The resting state of the search box is not a filter — an empty field must not empty the network.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "matchesNetworkSearch › matches everyone for a blank query",
+      "line": 446,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "One of the two axes the direction names for find-your-place.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "matchesNetworkSearch › matches on location",
+      "line": 424,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other named axis, matched on the value the CMS dropdown stores.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "matchesNetworkSearch › matches on the school name",
+      "line": 429,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A supporter who knows themselves as \"HKS\" should not have to type the long form, so the short label is searchable too.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "matchesNetworkSearch › matches on the school short label",
+      "line": 435,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The load-bearing privacy assertion on this function. A search box that confirmed \"yes, someone from Harvard Law class of 1998 in Greenwich gave\" would undo the anonymity the node itself protects.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "matchesNetworkSearch › never matches an anonymous supporter, whatever the query",
+      "line": 466,
+      "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
     {
@@ -4365,6 +4635,195 @@
       "runner": "tests"
     },
     {
+      "description": "One spelling per pair is what makes the dedup above sound; two orderings would let the same connection through twice.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "nearestNeighborEdges › always orders an edge low index first, so a pair has one spelling",
+      "line": 264,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE decision the whole design turns on. One edge per node back to a hub is what made the exploration read as \"a constellation of stars\"; several edges per node is what makes it read as a network.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "nearestNeighborEdges › gives a node more than one connection",
+      "line": 247,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A self-edge renders as a dot on a dot and reads as a rendering fault.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "nearestNeighborEdges › never connects a node to itself",
+      "line": 271,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A mutual nearest pair must not yield the same connection twice: a double-drawn line renders visibly brighter than its neighbours and implies a relationship that is not there.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "nearestNeighborEdges › never repeats the same connection",
+      "line": 256,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The day after the first gift, which is a state the page really ships in.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "nearestNeighborEdges › returns nothing for a single node, which has nobody to connect to",
+      "line": 278,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "One node and no web: the network has to survive being looked at before it is a network.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkLayout › handles a single supporter, who has no connections yet",
+      "line": 321,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The production default until the first gift clears — it must not throw on the page every visitor currently sees.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkLayout › handles an empty network without throwing",
+      "line": 313,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every edge index has to address a real node, or the component renders a line from undefined coordinates.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkLayout › only produces edges that address real nodes",
+      "line": 295,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The composed result is what the component consumes, so its three parts are asserted together rather than only through their helpers.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkLayout › returns a node for every supporter, with edges and a viewBox",
+      "line": 286,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The blooms are placed from the same seeded draw as the supporters under them; a cluster with no light, or light with no cluster, means the two have drifted apart.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkLayout › returns one glow cluster per school present",
+      "line": 306,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The four fields the design direction lists for a selected node, in the shortened form the narrow panel can actually fit.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkNodeDetail › returns the identity a named supporter node panel prints",
+      "line": 374,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The design direction treats every node as a Founding Supporter, but the giving levels survived the data-model plan — so a supporter without the badge shows the level they actually gave at rather than an empty line.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkNodeDetail › shows the giving level for a supporter without the founding badge",
+      "line": 394,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Anonymity is applied upstream by donorPublicIdentity, not re-checked here — this test is what proves the delegation actually holds.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkNodeDetail › withholds every identity field for an anonymous supporter",
+      "line": 401,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A scenario pins its own seed to keep a reviewed layout; that only works if seeds actually diverge.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkRng › produces a different sequence for a different seed",
+      "line": 96,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The layout must be reproducible: a network that reshuffles between renders is a different picture on every load, and a reviewed screenshot would stop matching what ships.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkRng › produces the same sequence for the same seed",
+      "line": 88,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every caller multiplies this by a canvas dimension, so a value outside [0,1) places a supporter off the picture.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkRng › stays within the unit interval",
+      "line": 102,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The canvas grows with the count so the SPACING between supporters stays constant — this is what keeps the picture reading as a dense network at nineteen supporters as well as at two hundred.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkViewBox › grows with the supporter count",
+      "line": 42,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Constant density means area per supporter stays roughly fixed — the property the whole approach rests on, asserted directly rather than inferred from the width alone.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkViewBox › keeps the area per supporter roughly constant as the count grows",
+      "line": 51,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The network sits as a band across the page, so a canvas taller than it is wide would letterbox inside its own frame.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkViewBox › keeps the canvas wider than it is tall",
+      "line": 78,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty network still needs a frame to draw its empty state in.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkViewBox › returns a usable box for no supporters at all",
+      "line": 71,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Below the floor the box stops shrinking, so one supporter is a small network in a normal frame rather than a single enormous disc.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "networkViewBox › stops shrinking at a floor for a tiny network",
+      "line": 66,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "The list the caller passes includes staged-but-unpublished slugs, so a suggestion cannot collide with a duplicate created moments earlier.",
       "file": "src/lib/entryDuplicate.test.ts",
       "format": "vitest",
@@ -4542,6 +5001,33 @@
       "key": "openProjects › returns an empty array when every project is closed",
       "line": 61,
       "registeredAt": "2026-07-22T20:43:59Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A stale or hand-typed link lands on the network rather than erroring.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "opening from a shared link › ignores a slug that names nobody",
+      "line": 218,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An anonymous supporter's slug in a url must not open what their node will not — otherwise the deep link is a way around the anonymity rule.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "opening from a shared link › ignores an anonymous supporter slug",
+      "line": 228,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other half of a shareable badge: following the link has to arrive at the person, not at the page.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "opening from a shared link › opens straight to the supporter the url names",
+      "line": 208,
+      "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
     {
@@ -4974,6 +5460,51 @@
       "key": "passphraseAccepted › stays case-sensitive",
       "line": 32,
       "registeredAt": "2026-08-05T17:34:57Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Founding supporters read larger, which is how the badge survives a design where every node is otherwise the same crimson.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "placeNodes › draws a founding supporter larger than the rest",
+      "line": 213,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Same supporters in, same picture out — otherwise every page load is a different design and a reviewed screenshot stops matching what ships.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "placeNodes › is reproducible for the same seed",
+      "line": 231,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A supporter drawn outside the viewBox is a supporter the page silently fails to recognise.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "placeNodes › keeps every node inside the canvas",
+      "line": 202,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The selectable flag is what makes an anonymous node inert in the DOM.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "placeNodes › marks an anonymous supporter as not selectable",
+      "line": 221,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nobody is dropped, including the supporter with no school — a visualization that quietly omitted them would undercount the community it exists to show.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "placeNodes › places every supporter, including one with no school",
+      "line": 194,
+      "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
     {
@@ -6156,6 +6687,150 @@
       "runner": "tests"
     },
     {
+      "description": "A tie is broken by the canonical school order rather than by whichever supporter happened to be read first — otherwise the same people in a different row order would produce a different picture.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "schoolsPresent › breaks a tie by the canonical school order, not by input order",
+      "line": 129,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Read through resolveSchool, so a differently-cased value joins its real cluster instead of founding a cluster of one.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "schoolsPresent › folds a differently-cased school into one cluster",
+      "line": 141,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A supporter with no school founds no cluster — they are placed among the others instead, rather than creating an empty band of one.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "schoolsPresent › ignores supporters with no school",
+      "line": 151,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Densest first, so the biggest clusters are placed before the rest. Built with a clear winner rather than reusing the shared population, where two schools tie at two members and the result is decided by the tiebreak below.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "schoolsPresent › lists the schools present, most supporters first",
+      "line": 116,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A highlight, not a destructive filter.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "searchNetwork › returns everyone for a blank query",
+      "line": 487,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The miss has to be empty rather than everyone, or the summary line lies.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "searchNetwork › returns nobody when nothing matches",
+      "line": 492,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The list form of the predicate, which is what drives the highlight.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "searchNetwork › returns the supporters a query selects",
+      "line": 481,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The miss is a real answer on this page: someone searching their own school before anyone from it has given should read a sentence, not a zero.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "searchSummary › answers a miss with an invitation rather than a count",
+      "line": 516,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "\"1 supporters\" is the small error that makes a page feel unfinished.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "searchSummary › counts a single match in the singular",
+      "line": 505,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other half of the pluralisation, so neither branch can rot alone.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "searchSummary › counts several matches in the plural",
+      "line": 510,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A count under an untouched search box would read as a result nobody asked for.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "searchSummary › says nothing at all when the box is empty",
+      "line": 500,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Searching your own school before anyone from it has given is a likely first experience, and it should read as an opening rather than a zero.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "searching the network › answers a miss with an invitation rather than a count",
+      "line": 268,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The count is how a visitor knows the search ran at all on a dense graph.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "searching the network › counts what it found",
+      "line": 261,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Find-your-place is a highlight over the whole network rather than a filter that removes people from it.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "searching the network › highlights the matches and dims the rest",
+      "line": 253,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The anonymous node carries an empty haystack, so it can never match however the query is typed — the search cannot become a way to confirm who gave.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "searching the network › never matches the anonymous supporter node",
+      "line": 286,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The resting state is not a filter — emptying the box must restore the whole network rather than leaving it dimmed.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "searching the network › restores every node when the box is emptied",
+      "line": 275,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "The anti-drift guarantee: the id is DERIVED from the anchor, so the two can never disagree the way two hand-maintained tables would.",
       "file": "src/lib/homeSections.test.ts",
       "format": "vitest",
@@ -6372,6 +7047,87 @@
       "runner": "tests"
     },
     {
+      "description": "A stale ?supporter= left behind would reopen someone else's badge on the next reload or share of that url.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › clears the address bar and closes the panel on dismiss",
+      "line": 174,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An anonymous supporter's node is drawn and counted and stays inert — no panel, so nothing invites a visitor to try to identify them.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › does not open a panel for an anonymous supporter node",
+      "line": 186,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A slot with nothing to show is hidden rather than emptied, so the panel never renders a stray label over a blank line.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › hides a field the supporter did not fill in",
+      "line": 144,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "\"Brighten its immediate teal connections\" — the selected supporter's OWN edges, read from the endpoints the server wrote, not re-derived here.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › marks only the edges touching the selected supporter",
+      "line": 132,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "\"All other nodes should remain crimson\" — gold is reserved for the one node being read.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › marks the selected node and only that node",
+      "line": 123,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The other half of a shareable badge: the url a supporter copies has to be the url that reopens it.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › names the supporter in the address bar",
+      "line": 166,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The roll is the route into a supporter that works by keyboard alone without hunting a circle in an SVG — the accessible path to the same content.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › opens a supporter from their row in the roll",
+      "line": 195,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The core interaction the design direction describes for a selected node.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › opens the panel with that supporter identity",
+      "line": 111,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The link a supporter posts and the badge they are looking at must be for the same person.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "selecting a supporter › points the share links at that supporter own url",
+      "line": 153,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "Lets the shadow rule be exercised without depending on this site's routes.",
       "file": "src/lib/sitePages.test.ts",
       "format": "vitest",
@@ -6507,6 +7263,96 @@
       "runner": "tests"
     },
     {
+      "description": "The blank line above the removed line goes with it, so the message never ships with a double gap where someone's words would have been.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › closes the paragraph gap left by the removed line",
+      "line": 118,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A cleared CMS field must not leave supporters sharing an empty message.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › falls back to the shipped default for a blank template",
+      "line": 155,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A literal [SUPPORTER MESSAGE] reaching LinkedIn is the most visible way this feature can fail, and it fails in public on someone's own profile.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › never leaves an unreplaced placeholder in the posted text",
+      "line": 96,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Both conditional lines gone at once still has to leave a coherent message rather than a fragment — the two rules must compose.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › removes both lines when the supporter wrote nothing and there is no link",
+      "line": 136,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE rule the design direction states outright: with no message from the supporter the line is REMOVED, not left as \"I contributed because .\" — which is why this takes the template apart by lines instead of substituting an empty string into it.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › removes the contributed-because line entirely when the supporter wrote nothing",
+      "line": 106,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The same treatment for a campaign with no donation link yet — which is the LIVE case, not a defensive one. A line reading \"Support the Momentum Fund:\" with nothing after it asks a reader to act and gives them nowhere to go.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › removes the donation line entirely when no donation url is set",
+      "line": 128,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "If the default lost a placeholder, every substitution rule below it would pass while doing nothing at all.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › ships a default template carrying both placeholders",
+      "line": 163,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The message is an ask, and the ask needs somewhere to go.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › substitutes the donation link",
+      "line": 89,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole point of collecting a why-message: it reaches the post in the supporter's own voice.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › substitutes the supporter own words into the message",
+      "line": 83,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The message is editable copy in the CMS, so an edited template has to be what actually ships rather than the default silently winning.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "shareMessage › uses an editor-supplied template over the shipped default",
+      "line": 145,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "A date-only string (no time) is still a legitimate ISO value someone might type by hand into the JSON; it must format rather than fall through.",
       "file": "src/lib/cutoverFormat.test.ts",
       "format": "vitest",
@@ -6567,6 +7413,87 @@
       "key": "shortSchool › shortens the schools the upload uses",
       "line": 141,
       "registeredAt": "2026-08-05T15:59:21Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Losing the school entirely would be worse than printing it long.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "shortSchoolLabel › falls back to the value as given for an unrecognized school",
+      "line": 344,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A hand-edited or seeded value should still shorten rather than falling through to its long form.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "shortSchoolLabel › matches case-insensitively, like the resolver behind it",
+      "line": 339,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Nothing to print is not the same as an empty string to print — the panel hides the slot rather than rendering a label over a blank line.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "shortSchoolLabel › returns nothing for a blank or absent school",
+      "line": 350,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The panel prints the school beside a year in a narrow column, and the longest real school name is 66 characters.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "shortSchoolLabel › shortens the longest school name",
+      "line": 331,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The guard has to open again, or the sound plays once per page load and the feature is silently dead after the first node.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "shouldPlayActivation › allows the next activation once the window has passed",
+      "line": 28,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The elapsed-time branch must not be able to re-enable a muted page: the interval check and the enabled check are AND, not OR.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "shouldPlayActivation › keeps sound off even long after the last activation",
+      "line": 40,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The visitor's switch wins over everything else.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "shouldPlayActivation › never plays while sound is switched off",
+      "line": 34,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The one a visitor actually came for: entering a node with sound on plays.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "shouldPlayActivation › plays the first activation",
+      "line": 12,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The overlap guard, tested without a browser or a clock because the caller passes the time in. Sweeping a pointer across a dense network crosses a dozen nodes in under a second; without a floor that is a dozen overlapping tones — the \"loud chime / arcade effect\" the direction rules out, produced by a sound that is individually correct.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "shouldPlayActivation › refuses a second activation inside the overlap window",
+      "line": 21,
+      "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
     {
@@ -6804,6 +7731,33 @@
       "runner": "tests"
     },
     {
+      "description": "`prefers-reduced-motion` is nominally about movement, but it is the closest thing the platform gives to \"this page should not do things at me\", and someone who has set it is not expecting a page to make noise.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "soundEnabledByDefault › starts off for a visitor who asked for reduced motion",
+      "line": 55,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The sound is part of the feature, so the ordinary visitor gets it — the control exists to turn it off, not to opt in.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "soundEnabledByDefault › starts on for a visitor with no motion preference",
+      "line": 48,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The label names what is TRUE, not what a click would do — a button reading \"Sound off\" is ambiguous about which of those two things it means, and the direction asks for a visible control rather than a guessable one.",
+      "file": "src/lib/networkSound.test.ts",
+      "format": "vitest",
+      "key": "soundToggleLabel › reports the current state rather than the action",
+      "line": 64,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "The original input array is not mutated by sorting.",
       "file": "src/lib/events.test.ts",
       "format": "vitest",
@@ -6993,6 +7947,69 @@
       "runner": "tests"
     },
     {
+      "description": "/donate already takes ?name= from the email campaign, so the supporter parameter has to join an existing query rather than replace it.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "supporterPageUrl › appends to a url that already carries a query",
+      "line": 181,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A fragment would end up after the query and break the parameter.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "supporterPageUrl › drops a fragment rather than appending the query after it",
+      "line": 188,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A slug is editor-controlled, so it cannot be trusted to be url-safe.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "supporterPageUrl › encodes a slug that needs it",
+      "line": 195,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The address a badge is shared as. Without it, \"share your badge\" posts a link to the campaign page and leaves whoever follows it hunting one dot among many.",
+      "file": "src/lib/supporterBadge.test.ts",
+      "format": "vitest",
+      "key": "supporterPageUrl › names the supporter in the url",
+      "line": 173,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The same donor array feeds the graph and the roll; sorting in place would silently reorder the nodes too.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "supporterRoll › does not mutate the list it was given",
+      "line": 543,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Sorting on a withheld real name breaks the alphabetical run exactly where the anonymous entries sit and hints at the hidden first letter — the same reasoning groupDonorsByTier already documents.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "supporterRoll › sorts an anonymous supporter under their displayed label, not their real name",
+      "line": 531,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The roll is how a reader looks someone up, so it has to be scannable.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "supporterRoll › sorts supporters alphabetically by displayed name",
+      "line": 523,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
       "description": "Initials leak the withheld name: \"RKW\" beside \"Anonymous supporter\" names them to anyone who knows them, so the anonymous case gets a mark that identifies nobody.",
       "file": "src/lib/donorNetwork.test.ts",
       "format": "vitest",
@@ -7089,6 +8106,42 @@
       "key": "the committed media manifest › records an alt value for every asset, empty or otherwise",
       "line": 140,
       "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The direction asks for a VISIBLE control; a button that does not say what is true is not one.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "the sound control › reports the state it is in",
+      "line": 302,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Hovering a node must never throw, whatever the browser does about audio — the same handler drives the hover highlight.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "the sound control › survives a pointer entering a node with no audio available",
+      "line": 326,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A toggle that only travels one way is a mute button, not a toggle.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "the sound control › switches back on",
+      "line": 317,
+      "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Both the label and aria-pressed have to move, or the control lies to one audience or the other.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "the sound control › switches off and says so",
+      "line": 309,
+      "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
     {
