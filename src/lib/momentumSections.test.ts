@@ -1,10 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import {
+  KINDS_WITH_BODY,
   SECTION_KINDS,
+  campaignLink,
+  giftOrdinal,
   goalMetersMissingWidgetId,
   orderedSections,
   resolveLayout,
   sectionHeading,
+  sectionKicker,
   tintedFlags,
   unknownSectionKinds,
 } from './momentumSections';
@@ -52,6 +56,17 @@ describe('orderedSections', () => {
     expect(orderedSections(sections).map((s) => s.kind)).toEqual(['narrative', 'pillars']);
   });
 
+  // The mission band survives the known-kinds filter. A kind the component
+  // renders but this list does not know would be dropped before it ever
+  // reached the page — silently, and only in the real build.
+  it('keeps a mission section', () => {
+    const sections = [
+      { kind: 'mission', order: 1 },
+      { kind: 'narrative', order: 2 },
+    ];
+    expect(orderedSections(sections).map((s) => s.kind)).toEqual(['mission', 'narrative']);
+  });
+
   // Every declared kind is renderable — this fails if SECTION_KINDS and the
   // filter ever drift apart.
   it('keeps every kind it declares support for', () => {
@@ -94,6 +109,13 @@ describe('unknownSectionKinds', () => {
   // A correct page warns about nothing — no noise in the normal build.
   it('reports nothing when every kind is known', () => {
     expect(unknownSectionKinds(SECTION_KINDS.map((kind) => ({ kind })))).toEqual([]);
+  });
+
+  // The mission band is a real kind, not an unrecognized one. A new kind that
+  // reached only the component and not this list would be DROPPED from the page
+  // and warned about — the exact silent failure this guards.
+  it('does not report the mission kind', () => {
+    expect(unknownSectionKinds([{ kind: 'mission' }])).toEqual([]);
   });
 });
 
@@ -184,6 +206,19 @@ describe('tintedFlags', () => {
     expect(flags).toEqual([false, false, false]);
   });
 
+  // The mission band paints its own gold ground, so it is never tinted — and,
+  // more importantly, it must not advance the counter. A new kind that flipped
+  // the tint on every narrative below it is the regression a kind addition can
+  // silently cause, and it would move the background of half the page.
+  it('is unchanged by a mission band sitting between two narratives', () => {
+    const flags = tintedFlags([
+      { kind: 'narrative' },
+      { kind: 'mission' },
+      { kind: 'narrative' },
+    ]);
+    expect(flags).toEqual([true, false, false]);
+  });
+
   // The counter advances only on narratives. A band sitting between two of them
   // must not flip the rhythm — otherwise an editor inserting the stats band
   // would invert the tint on every section below it.
@@ -249,6 +284,20 @@ describe('resolveLayout', () => {
     expect(resolveLayout('image-middle')).toBe('text-only');
   });
 
+  // The campaign design's two-column prose treatment. An ADDITION to the list,
+  // not a new renderer — which is why it needs no change to this function.
+  it('passes through the columns layout', () => {
+    expect(resolveLayout('columns')).toBe('columns');
+    expect(resolveLayout(' Columns ')).toBe('columns');
+  });
+
+  // And a typo OF the new value degrades like any other, rather than rendering
+  // a band with two empty columns.
+  it('falls back to text-only for a typo of columns', () => {
+    expect(resolveLayout('column')).toBe('text-only');
+    expect(resolveLayout('two-columns')).toBe('text-only');
+  });
+
   // Editors type into a free-text box, so casing and stray spaces are expected.
   it('normalizes casing and surrounding whitespace', () => {
     expect(resolveLayout('  Image-Left ')).toBe('image-left');
@@ -296,5 +345,97 @@ describe('sectionHeading', () => {
   it('yields undefined when there is neither a title nor a fallback', () => {
     expect(sectionHeading({})).toBeUndefined();
     expect(sectionHeading({ title: '  ' })).toBeUndefined();
+  });
+});
+
+describe('sectionKicker', () => {
+  // The field applies to EVERY kind, unlike layout/image/widgetId, because the
+  // campaign design puts an eyebrow over every band on the page.
+  it('returns the trimmed kicker', () => {
+    expect(sectionKicker({ kicker: '  What your gift powers  ' })).toBe('What your gift powers');
+  });
+
+  // Blank means draw nothing — the band as it looked before the field existed.
+  // Deliberately NOT borrowing a per-kind label the way sectionHeading does:
+  // there is no shared eyebrow to fall back to.
+  it('yields undefined for an absent or whitespace-only kicker', () => {
+    expect(sectionKicker({})).toBeUndefined();
+    expect(sectionKicker({ kicker: '' })).toBeUndefined();
+    expect(sectionKicker({ kicker: '   ' })).toBeUndefined();
+  });
+
+  // A caller that DOES have something to fall back to can still supply it —
+  // the network band passes the campaign name, which is what it drew before.
+  it('uses the caller fallback when the kicker is blank', () => {
+    expect(sectionKicker({ kicker: '  ' }, 'The Momentum Fund')).toBe('The Momentum Fund');
+    expect(sectionKicker({ kicker: 'Our mission' }, 'The Momentum Fund')).toBe('Our mission');
+  });
+});
+
+describe('campaignLink', () => {
+  // The ordinary case: both boxes filled draws the link beside the heading.
+  it('returns the trimmed label and url when both are present', () => {
+    expect(campaignLink({ linkLabel: ' View the campaign ', linkUrl: ' https://x.test/c ' })).toEqual(
+      { label: 'View the campaign', url: 'https://x.test/c' },
+    );
+  });
+
+  // The rule the goal-meter entry documents to the editor: a label alone draws
+  // NOTHING, because a link that goes nowhere is worse than no link. This is
+  // the shipped state — goal-meter.md carries the label with a blank url.
+  it('draws nothing when the url is missing or blank', () => {
+    expect(campaignLink({ linkLabel: 'View the campaign' })).toBeUndefined();
+    expect(campaignLink({ linkLabel: 'View the campaign', linkUrl: '   ' })).toBeUndefined();
+  });
+
+  // And the mirror: a url with no label has nothing to click.
+  it('draws nothing when the label is missing or blank', () => {
+    expect(campaignLink({ linkUrl: 'https://x.test/c' })).toBeUndefined();
+    expect(campaignLink({ linkLabel: '  ', linkUrl: 'https://x.test/c' })).toBeUndefined();
+  });
+
+  // Neither box filled is the band as it renders today.
+  it('draws nothing when neither is set', () => {
+    expect(campaignLink({})).toBeUndefined();
+  });
+});
+
+describe('giftOrdinal', () => {
+  // Zero-padded to two digits, matching the campaign design's 01 / 02 / 03.
+  it('numbers from 01 for the first card', () => {
+    expect(giftOrdinal(0)).toBe('01');
+    expect(giftOrdinal(1)).toBe('02');
+    expect(giftOrdinal(2)).toBe('03');
+  });
+
+  // The point of the function: the index is the card's position WITHIN ITS
+  // BAND, so a duplicated grouped band restarts at 01 rather than continuing
+  // at 04. Passing 0 again is exactly what the second band does.
+  it('restarts at 01 for a second band rather than continuing a running count', () => {
+    expect(giftOrdinal(0)).toBe('01');
+  });
+
+  // Past ninety-nine it grows a digit rather than truncating — the page would
+  // be absurd long before this, but dropping a leading digit would be worse.
+  it('grows to three digits rather than truncating', () => {
+    expect(giftOrdinal(99)).toBe('100');
+  });
+});
+
+describe('KINDS_WITH_BODY', () => {
+  // The kinds whose markdown body is rendered onto the page. `mission` and
+  // `testimonials` joined `narrative` when the campaign design gave them prose
+  // of their own — a fact about the kinds, so it lives beside them.
+  it('contains exactly the kinds that render prose', () => {
+    expect([...KINDS_WITH_BODY].sort()).toEqual(['mission', 'narrative', 'testimonials']);
+  });
+
+  // The remaining bands still draw every word from donatePage.json and their
+  // own collections, so their entry body stays an editing note that never
+  // reaches the page. Regressing this would publish those notes to visitors.
+  it('excludes the slot bands whose entry body is an editing note', () => {
+    for (const kind of ['goal-meter', 'accomplishments', 'pillars', 'donors', 'stats']) {
+      expect(KINDS_WITH_BODY.has(kind)).toBe(false);
+    }
   });
 });

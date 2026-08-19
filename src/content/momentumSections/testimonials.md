@@ -1,13 +1,8 @@
 ---
 kind: testimonials
+kicker: Every number represents a story
+title: One connection can change what's possible.
 order: 5
 ---
 
-The member-quotes band. The quotes themselves live in **Testimonials** — on the
-admin dashboard that collection sits under /donate, alongside this one — and the
-band hides itself entirely until there is at least one.
-
-This entry decides where the band sits once quotes exist and, via its Heading
-field, what the band is called. Blank Heading falls back to `testimonialsTitle`
-in `src/data/donatePage.json`, which is not editable in the CMS and needs a
-developer to change.
+Behind every event, chapter, and member of our network is a conversation, an introduction, or a shared experience that helped someone move forward. These are a few of them, in the words of the people they happened to.

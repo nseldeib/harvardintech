@@ -1,0 +1,98 @@
+---
+// The gold mission band near the top of the Momentum Fund page: a kicker, one
+// large serif sentence, and a paragraph saying what the fund is for.
+//
+// A SECTION KIND rather than markup composed into `MomentumFundPage`, which is
+// the whole point of it existing as a file. Hardcoding this band into the page
+// would have matched the campaign design just as fast and quietly undone the
+// editability the last several plans on this page were about: as a kind it
+// reorders with the arrows, drafts, renames, and rewrites exactly like every
+// other band.
+//
+// The heading supports an EMPHASIZED TAIL — `Helping exceptional people *go
+// further together.*` renders the closing clause in crimson — so the accent the
+// design puts on the end of that sentence is something an editor writes with
+// markdown emphasis rather than a span someone has to hand-edit into a template.
+// The parsing rule, and every way it can degrade, lives in `emphasizedHeading`.
+import { emphasizedHeading } from '../../lib/campaignCopy';
+
+interface Props {
+  kicker?: string;
+  title?: string;
+}
+const { kicker, title } = Astro.props as Props;
+
+const heading = emphasizedHeading(title);
+---
+
+<section class="mission">
+  <div class="inner">
+    {kicker ? <p class="kick">{kicker}</p> : null}
+    {
+      heading ? (
+        <h2>
+          {heading.head}
+          {heading.accent ? <em>{heading.accent}</em> : null}
+          {heading.tail}
+        </h2>
+      ) : null
+    }
+    <div class="prose">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  /* The band owns its own background, like every other band on this page. The
+     alternating `tintedFlags` tint stays reserved for consecutive narratives —
+     it is not what decides the colour here. */
+  .mission {
+    background: var(--momentum-gold);
+    padding: 84px 24px;
+  }
+  .inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .kick {
+    margin: 0 0 18px;
+  }
+  h2 {
+    font-family: var(--font-title);
+    font-size: clamp(34px, 4vw, 54px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--momentum-navy);
+    margin: 0 0 28px;
+    max-width: 760px;
+  }
+  /* Same weight as the rest of the sentence, not italic — the accent is a colour
+     shift, so making it lighter or slanted would read as a quotation instead of
+     as emphasis. */
+  em {
+    font-style: normal;
+    font-weight: inherit;
+    color: var(--crimson);
+  }
+
+  /* Markdown body through the slot, so its elements are reached by descendant
+     selectors and need `:global` — scoped styles do not cross the slot boundary. */
+  .prose :global(p) {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--momentum-navy);
+    margin: 0 0 18px;
+    max-width: 720px;
+  }
+  .prose :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 900px) {
+    .mission {
+      padding: 60px 24px;
+    }
+  }
+</style>

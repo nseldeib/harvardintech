@@ -11,10 +11,15 @@
 import { getCollection, render } from 'astro:content';
 import { publishedEntries } from './drafts';
 import { INCLUDE_DRAFTS } from './draftVisibility';
-import { orderedSections, unknownSectionKinds, type SectionLike } from './momentumSections';
+import {
+  KINDS_WITH_BODY,
+  orderedSections,
+  unknownSectionKinds,
+  type SectionLike,
+} from './momentumSections';
 
-/** One section ready to render: its frontmatter plus, for a narrative, the
- *  component `render()` produced for its markdown body. */
+/** One section ready to render: its frontmatter plus, for the kinds that carry
+ *  prose, the component `render()` produced for its markdown body. */
 export interface LoadedSection extends SectionLike {
   slug: string;
   Content?: unknown;
@@ -39,9 +44,14 @@ export async function loadMomentumSections(): Promise<{
   const sections = await Promise.all(
     ordered.map(async ({ entry, ...section }) => ({
       ...section,
-      // Only narrative sections have a body worth rendering; the slot bands draw
-      // their content from `donatePage.json` and the testimonials collection.
-      Content: section.kind === 'narrative' ? (await render(entry)).Content : undefined,
+      // Which kinds carry prose is a fact about the kinds, so it lives in
+      // `KINDS_WITH_BODY` beside them rather than as a comparison here — that
+      // is what makes it unit-testable. It is no longer just `narrative`: the
+      // campaign design gives the mission band a paragraph and the testimonials
+      // band a lede above the quotes, both written in the entry itself. The
+      // REMAINING slot bands still draw every word from `donatePage.json` and
+      // their own collections.
+      Content: KINDS_WITH_BODY.has(section.kind) ? (await render(entry)).Content : undefined,
     })),
   );
 

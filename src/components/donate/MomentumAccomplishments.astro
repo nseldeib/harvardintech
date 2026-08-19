@@ -17,21 +17,23 @@ interface Accomplishment {
   body?: string;
 }
 interface Props {
+  /** The eyebrow above the heading. Was hardcoded to "Momentum"; it is a prop
+   *  now because the campaign design words it per band, and because a duplicated
+   *  evidence strip should be able to name itself differently from the first. */
+  kicker?: string;
   title?: string;
   items?: Accomplishment[];
 }
-const { title = "What we've accomplished so far", items = [] } = Astro.props as Props;
+const { kicker, title = "What we've accomplished so far", items = [] } = Astro.props as Props;
 ---
 
 {
   items.length > 0 ? (
-    <section class="sec" id="accomplishments">
+    <section class="acc-band" id="accomplishments">
       <div class="wrap">
-        <div class="sec-head">
-          <div>
-            <span class="kick">Momentum</span>
-            <h2>{title}</h2>
-          </div>
+        <div class="acc-head">
+          {kicker ? <span class="kick">{kicker}</span> : null}
+          <h2>{title}</h2>
         </div>
         <div class="acc-grid">
           {items.map((item) => (
@@ -44,10 +46,53 @@ const { title = "What we've accomplished so far", items = [] } = Astro.props as 
 }
 
 <style>
+  /* White band, so the evidence strip reads as the page's clearest surface —
+     the campaign design puts it directly under the gold mission band. */
+  .acc-band {
+    background: var(--paper);
+    padding: 86px 0;
+  }
+  .acc-head {
+    margin-bottom: 44px;
+  }
+  .acc-head .kick {
+    display: block;
+    margin-bottom: 14px;
+  }
+  .acc-head h2 {
+    font-family: var(--font-title);
+    font-size: clamp(32px, 4.2vw, 56px);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--momentum-navy);
+    margin: 0;
+    max-width: 900px;
+  }
+  /* A bordered STRIP, not a row of cards: the grid draws the top and left rules
+     and each cell draws its own right and bottom, so the four cells share single-
+     pixel rules instead of doubling them where they meet. Fixed at four across
+     rather than `auto-fit`, because the design's rhythm depends on the count. */
   .acc-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
     align-items: stretch;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  @media (max-width: 1000px) {
+    .acc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .acc-band {
+      padding: 60px 0;
+    }
+    .acc-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

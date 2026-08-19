@@ -1,23 +1,26 @@
 ---
-// One "What Your Gift Powers" card: icon badge, title, body, and an optional
+// One "What Your Gift Powers" card: an ordinal, title, body, and an optional
 // inline link that reads as part of the sentence ("… Check out our past
 // events.") rather than as a separate call to action.
-import PillarIcon from './PillarIcon.astro';
+//
+// The ordinal REPLACED an icon badge. It is passed in already zero-padded rather
+// than derived here, because the number a card shows is a fact about its
+// position in its band — which only the band knows, and which is why a grouped
+// second gift band starts again at 01.
 import { withBase } from '../../lib/url';
-import type { PillarIcon as PillarIconName } from '../../lib/site';
 
 interface Props {
-  icon?: PillarIconName;
+  number?: string;
   title: string;
   body: string;
   linkLabel?: string;
   linkUrl?: string;
 }
-const { icon, title, body, linkLabel, linkUrl } = Astro.props as Props;
+const { number, title, body, linkLabel, linkUrl } = Astro.props as Props;
 ---
 
 <article class="pil">
-  <PillarIcon icon={icon} />
+  {number ? <span class="num">{number}</span> : null}
   <h3>{title}</h3>
   <p>
     {body}
@@ -28,16 +31,32 @@ const { icon, title, body, linkLabel, linkUrl } = Astro.props as Props;
 </article>
 
 <style>
+  /* The cell draws its RIGHT and BOTTOM rules only; `GiftPillars` draws the top
+     and left on the grid, so adjacent cells share one hairline rather than
+     doubling it. Translucent white over the cream band, so the grid reads as
+     lighter panels on the band rather than as boxes floating over it. */
   .pil {
-    background: var(--paper-2);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 32px 30px 36px;
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+    background: rgba(255, 255, 255, 0.55);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 34px 32px 38px;
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    color: var(--crimson);
+    margin-bottom: 22px;
   }
   h3 {
-    font-size: 18px;
-    font-weight: 800;
+    font-family: var(--font-title);
+    font-size: 24px;
+    font-weight: 700;
     letter-spacing: -0.01em;
+    color: var(--momentum-navy);
     margin: 0 0 14px;
   }
   p {

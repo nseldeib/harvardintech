@@ -24,6 +24,8 @@ import { withBase } from '../../lib/url';
 import GiveButton from './GiveButton.astro';
 
 interface Props {
+  /** The uppercase eyebrow above the headline, naming the campaign. */
+  kicker?: string;
   /** Contains a `{name}` placeholder, filled client-side. */
   headlineNamed: string;
   headlineGeneric: string;
@@ -41,6 +43,7 @@ interface Props {
   previewName?: string;
 }
 const {
+  kicker,
   headlineNamed,
   headlineGeneric,
   subhead,
@@ -81,6 +84,7 @@ const heroVideo = video ? withBase(video) : null;
     ) : null
   }
   <div class="hero-in">
+    {kicker ? <p class="kick kick--light">{kicker}</p> : null}
     <h1
       class="headline"
       data-named={headlineNamed}
@@ -116,12 +120,17 @@ const heroVideo = video ? withBase(video) : null;
 <style>
   .hero {
     position: relative;
-    background-color: var(--ink);
+    background-color: var(--momentum-navy);
     background-image: var(--hero-img);
     background-size: cover;
     background-position: center;
+    /* Tall enough for the campaign design's proportions, and the content is
+       bottom-aligned within it so the headline sits on the photo rather than
+       floating in the middle of it. */
+    min-height: 680px;
+    display: flex;
+    align-items: flex-end;
     padding: 120px 24px 104px;
-    text-align: center;
   }
   /* The video covers the photo rather than replacing it: the background image
      above is still painted underneath, so a src that 404s or a browser that
@@ -139,19 +148,32 @@ const heroVideo = video ? withBase(video) : null;
   /* Scrim: the headline sits over a photo of a crowded room, so it needs a
      guaranteed contrast floor regardless of which photo is used — and the same
      floor over an arbitrary FRAME of an arbitrary video, which is why the video
-     goes beneath it rather than above. */
+     goes beneath it rather than above. `z-index: 1` keeps it under the content
+     and over the video, so every fallback path (a 404, blocked autoplay,
+     reduced motion) is unaffected by the change of colour and direction.
+     Left-to-right navy now rather than a flat two-stop wash: the copy is
+     left-aligned, so the density belongs on the side the words are, and the
+     bottom lift keeps the button legible where the photo is brightest. */
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(24, 20, 21, 0.72), rgba(24, 20, 21, 0.62));
+    background:
+      linear-gradient(180deg, rgba(3, 26, 54, 0) 45%, rgba(3, 26, 54, 0.75) 100%),
+      linear-gradient(90deg, rgba(3, 26, 54, 0.92) 0%, rgba(3, 26, 54, 0.72) 45%, rgba(3, 26, 54, 0.28) 100%);
     z-index: 1;
   }
+  /* Left-aligned in a bounded column rather than centred in a 900px block: the
+     campaign design runs the copy down the left of the photo. `68%` keeps the
+     measure from stretching on a wide monitor while `760px` caps it outright. */
   .hero-in {
     position: relative;
-    max-width: 900px;
-    margin: 0 auto;
+    width: min(760px, 68%);
+    margin: 0;
     z-index: 2;
+  }
+  .hero-in .kick {
+    margin: 0 0 18px;
   }
   /* Reduced motion: hide the video entirely, revealing the background photo
      that was underneath it all along. A media query rather than a script, so it
@@ -161,21 +183,40 @@ const heroVideo = video ? withBase(video) : null;
       display: none;
     }
   }
-  /* Matches the homepage hero type scale (HeroCarousel .intro h1). */
+  /* The campaign design's serif headline, at its scale. Departs from the
+     homepage hero's 800-weight sans deliberately — this page's whole type
+     register is the serif sentence-heading. */
   .headline {
-    font-size: clamp(40px, 6.4vw, 82px);
-    font-weight: 800;
+    font-family: var(--font-title);
+    font-size: clamp(40px, 6vw, 78px);
+    font-weight: 700;
     letter-spacing: -0.03em;
-    line-height: 1;
+    line-height: 1.02;
     color: #fff;
     margin: 0 0 22px;
   }
   .sub {
-    font-family: var(--font-serif);
-    font-size: 21px;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.9);
-    max-width: 46ch;
-    margin: 0 auto 34px;
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.82);
+    max-width: 52ch;
+    margin: 0 0 34px;
+  }
+
+  /* On a phone the 68% column leaves the headline in a sliver, and the
+     left-to-right gradient has no width to travel across — so the copy takes the
+     full width and the scrim becomes a straight top-to-bottom wash. */
+  @media (max-width: 820px) {
+    .hero {
+      min-height: 540px;
+      padding: 96px 24px 72px;
+    }
+    .hero-in {
+      width: 100%;
+    }
+    .hero::before {
+      background: linear-gradient(180deg, rgba(3, 26, 54, 0.7), rgba(3, 26, 54, 0.88));
+    }
   }
 </style>

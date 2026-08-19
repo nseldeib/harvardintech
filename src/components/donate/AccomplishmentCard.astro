@@ -21,32 +21,40 @@ const { value, label, body } = Astro.props as Props;
 </article>
 
 <style>
+  /* The cell draws its RIGHT and BOTTOM rules only; the grid in
+     `MomentumAccomplishments` draws the top and left. That is what keeps the
+     four cells sharing single-pixel rules instead of doubling them at every
+     seam, and it means a cell renders correctly at any column count. */
   .acc {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 24px 22px;
-    background: var(--paper-2);
+    min-height: 260px;
+    padding: 32px 28px;
+    background: #f6f3f0;
     border-top: 3px solid var(--crimson);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
   .acc-v {
     font-family: var(--font-title);
-    font-size: 2.4rem;
-    line-height: 1.1;
+    font-size: clamp(2.6rem, 3.4vw, 3.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
     color: var(--crimson);
   }
   .acc-l {
-    margin-top: 6px;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
+    margin-top: 10px;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-faint);
+    color: var(--ink-2);
   }
   .acc-b {
-    margin: 14px 0 0;
-    color: var(--color-muted);
+    margin: 18px 0 0;
+    color: var(--ink-2);
     font-family: var(--font-serif);
     font-size: 1rem;
-    line-height: 1.65;
+    line-height: 1.6;
   }
 </style>

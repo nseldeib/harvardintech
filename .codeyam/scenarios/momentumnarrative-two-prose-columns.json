@@ -1,0 +1,13 @@
+{
+  "name": "MomentumNarrative - Two Prose Columns",
+  "id": "d267357a-9843-4606-9fbb-a89f66e0b172",
+  "url": "/isolated-components/MomentumNarrative-Columns",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumNarrative",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumNarrative.astro",
+  "description": "The narrative band in its new columns layout: two columns of prose, no figure at all, and the pull-quote spanning both beneath them. The layout the other three narrative frames cannot show — image-left, image-right and text-only all answer where the picture goes, and this one answers what if there is no picture. Tinted because that is how it renders on /donate as the page's first narrative, and because the pull quote is a WHITE card that would be invisible on an untinted band."
+}

@@ -4,6 +4,11 @@ import "../../../src/styles/tokens.css";
 
 // Isolation page for MomentumClose — codeyam screenshots the #codeyam-capture wrapper
 // by navigating to /isolated-components/MomentumClose.
+//
+// The NO-IMAGE case: with no `ctaImage` the band has no photo column to balance,
+// so the copy centres across the full width instead of sitting in half an empty
+// row. `MomentumClose-Split.astro` beside it is the photo case. A closing band
+// with no photo chosen yet is a state that ships, which is why it has a frame.
 ---
 
 <html lang="en">
@@ -15,9 +20,11 @@ import "../../../src/styles/tokens.css";
   <body>
     <div id="codeyam-capture">
       <Component
-        title="Help power what comes next."
-        body="Join the alumni choosing to move from informal support to intentional investment, every month."
-        ctaLabel="Make a Gift"
+        kicker="The Momentum Fund"
+        title="Become part of the foundation."
+        body="Join the alumni choosing to move from informal support to intentional investment, and help build what the next decade of Harvard Alumni in Tech will stand on."
+        tagline="One community. Shared momentum. A stronger network."
+        ctaLabel="Become a Founding Supporter"
         email="ben@harvardintech.com"
         campaignName="The Momentum Fund"
       />

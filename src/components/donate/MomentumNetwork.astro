@@ -33,6 +33,9 @@ import {
 import { donorPublicIdentity, type DonorLike, type DonorTierLike } from '../../lib/donors';
 
 interface Props {
+  /** The band's eyebrow. Falls back to the campaign name, which is what this
+   *  band drew before the field existed. */
+  kicker?: string;
   title?: string;
   /** The label in the visualization's top-left corner. */
   networkTitle?: string;
@@ -53,6 +56,7 @@ interface Props {
 }
 
 const {
+  kicker,
   title = 'The people behind the fund',
   networkTitle = 'The Momentum Network — Powering Harvard Alumni in Tech',
   tagline = 'Every light belongs to a founding supporter. Together, they illuminate what comes next.',
@@ -144,7 +148,7 @@ const roll = supporterRoll(donors);
           as the illustration to this heading rather than as a separate object
           that happens to follow it. */}
       <div class="wrap network-intro">
-        <p class="kick">{campaignName ?? 'The Momentum Fund'}</p>
+        <p class="kick kick--light">{kicker ?? campaignName ?? 'The Momentum Fund'}</p>
         <h2 id="momentum-network-title" class="network-headline">{title}</h2>
         <p class="network-tagline">{tagline}</p>
       </div>
@@ -311,37 +315,53 @@ const roll = supporterRoll(donors);
     --net-active: #f6c76b;
   }
 
-  /* The whole band is dark and full-bleed — the sections on this page are
-     edge-to-edge with `.wrap` constraining their contents, so the network reads
-     as one deliberate band of the page rather than a dark card floating in it. */
-  /* The section is PAPER, like every other section on this page. Only the
-     graphic is dark. That inversion is the whole point of the restructure: a
-     wall-to-wall dark band made the network a foreign object on the page, where
-     a dark illustration under a normal heading is just a figure. */
+  /* The band is NAVY now, continuous with the dark stage below it, so the
+     heading and the graphic read as one object rather than a dark illustration
+     under a paper heading. The campaign design puts this band between two light
+     ones, which is what earns it the weight. CHROME ONLY — everything from
+     `.network-stage` down (the visualization, its controls, the supporter roll,
+     the search) is untouched. */
   .network {
-    padding: 78px 0 0;
+    /* The containing block for `.network-label`, which is absolutely
+       positioned. In the populated band the label sits inside `.network-stage`,
+       which is positioned and captures it — but the EMPTY band has no stage, so
+       without this the label escaped to the initial containing block and landed
+       over the site header at the top of the page. Empty is the production
+       state today, so that was the view most visitors got. */
+    position: relative;
+    background: var(--momentum-navy);
+    background-image: radial-gradient(
+      ellipse at 18% 0%,
+      rgba(165, 16, 52, 0.32),
+      transparent 58%
+    );
+    padding: 86px 0 0;
   }
 
   .network-intro {
-    margin-bottom: 40px;
+    margin-bottom: 44px;
   }
 
   .network-headline {
     font-family: var(--font-title, Georgia, serif);
-    font-size: clamp(28px, 3.6vw, 44px);
-    font-weight: 800;
+    font-size: clamp(32px, 4.2vw, 56px);
+    font-weight: 700;
     letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin: 10px 0 16px;
+    line-height: 1.06;
+    margin: 14px 0 16px;
     max-width: 18ch;
-    color: var(--color-title);
+    color: #fff;
   }
 
+  /* The design's italic accent line under the heading — the existing tagline
+     prop supplies it, so this is a restyle rather than a new field. */
   .network-tagline {
     margin: 0;
-    font-size: 17px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 19px;
     line-height: 1.6;
-    color: var(--color-muted);
+    color: var(--momentum-gold);
     max-width: 52ch;
   }
 
@@ -387,6 +407,13 @@ const roll = supporterRoll(donors);
   /* `.kick` on the artwork. Only the colour is overridden — the token's crimson
      is unreadable on navy, and gold is the direction's own accent. */
   .network-label {
+    color: var(--net-active);
+  }
+  /* Pinning it to the grid's top-left corner belongs to the label ON THE
+     ARTWORK, and only there. The EMPTY band reuses the same element as an
+     ordinary kicker above its heading, where absolute positioning had nothing
+     to anchor to — so it is scoped to the stage rather than left on the class. */
+  .network-stage .network-label {
     position: absolute;
     top: 22px;
     left: 0;
@@ -395,7 +422,6 @@ const roll = supporterRoll(donors);
     margin: 0 auto;
     padding: 0 48px;
     max-width: var(--content-width);
-    color: var(--net-active);
     pointer-events: none;
   }
 

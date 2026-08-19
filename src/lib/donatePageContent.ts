@@ -15,7 +15,6 @@ import { getCollection } from 'astro:content';
 import { publishedEntries } from './drafts';
 import { INCLUDE_DRAFTS } from './draftVisibility';
 import { sortByOrder } from './order';
-import { resolvePillarIcon } from './pillars';
 import { mergeDonateFrame } from './pageCopyMerge';
 import { selectGroup } from './sectionGroups';
 import type { DonatePageCopy } from './site';
@@ -50,9 +49,10 @@ export async function loadAccomplishments(group?: string): Promise<Accomplishmen
 /**
  * The "What Your Gift Powers" cards in editor order.
  *
- * `icon` is free text for the same reason `kind` and `layout` are — the CMS has
- * no select control — so it passes through `resolvePillarIcon`, which turns
- * whatever an editor typed into one of the three glyphs the badge actually draws.
+ * The cards carry no icon field. The campaign design numbers them `01` / `02` /
+ * `03` from their position in the band instead, and that ordinal is derived by
+ * `GiftPillars` at render time rather than stored — so there is nothing here to
+ * resolve, and no editor control that silently draws nothing.
  */
 export async function loadPillars(group?: string): Promise<Pillar[]> {
   const entries = publishedEntries(await getCollection('pillars'), INCLUDE_DRAFTS).map(
@@ -60,10 +60,9 @@ export async function loadPillars(group?: string): Promise<Pillar[]> {
   );
 
   return sortByOrder(selectGroup(entries, group)).map(
-    ({ title, description, icon, linkLabel, linkUrl, group: cardGroup }) => ({
+    ({ title, description, linkLabel, linkUrl, group: cardGroup }) => ({
       title,
       body: description,
-      icon: resolvePillarIcon(icon),
       linkLabel,
       linkUrl,
       group: cardGroup,

@@ -1,15 +1,872 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/bljpy1v42.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/bljpy1v42.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1787149656,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":834557}
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/b9hjcufv0.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/b9hjcufv0.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"reconcile-registry","elapsed_secs":0,"emitted_at_unix":1787159778,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":942775}
 {
+auto-apply: 95 action(s) applied; 0 add(s) skipped.
   "summary": {
     "realOrphans": 0,
     "stalePhantoms": 0,
     "adds": 0,
     "renames": 0,
-    "updateLines": 0,
+    "updateLines": 95,
     "gateUpdates": 0
   },
-  "actions": [],
+  "actions": [
+    {
+      "kind": "updateLine",
+      "key": "dropdown options match the validators that enforce them › donors.school offers exactly the schools the resolver accepts",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": 72,
+      "new_line": 65,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "dropdown options match the validators that enforce them › homeSections.kind offers exactly the kinds the homepage renders",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": 47,
+      "new_line": 45,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "dropdown options match the validators that enforce them › momentumSections.kind offers exactly the Momentum Fund section kinds",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": 53,
+      "new_line": 51,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "dropdown options match the validators that enforce them › momentumSections.layout offers exactly the layouts",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": 58,
+      "new_line": 56,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "every declared select is usable › gives each select a non-empty options list",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": 80,
+      "new_line": 73,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "every declared select is usable › gives no select a duplicate or blank option",
+      "file": "src/lib/selectOptions.test.ts",
+      "runner": "tests",
+      "old_line": 91,
+      "new_line": 84,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "goalMetersMissingWidgetId › falls back to a readable label when a section has no slug",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 159,
+      "new_line": 181,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "goalMetersMissingWidgetId › ignores sections of every other kind",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 131,
+      "new_line": 153,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "goalMetersMissingWidgetId › reports every offending meter on a page with more than one",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 142,
+      "new_line": 164,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "goalMetersMissingWidgetId › reports nothing for an empty section list",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 152,
+      "new_line": 174,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "goalMetersMissingWidgetId › reports nothing when the goal meter has a widget id",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 113,
+      "new_line": 135,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "goalMetersMissingWidgetId › reports the slug of a goal meter carrying no widget id",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 104,
+      "new_line": 126,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "goalMetersMissingWidgetId › treats an empty or whitespace-only widget id as missing",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 121,
+      "new_line": 143,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › clears the video when the editor empties the box",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 376,
+      "new_line": 419,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › keeps both committed headlines when the editor cleared them",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 331,
+      "new_line": 335,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › leaves the video undefined when the entry carries no heroVideo",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 384,
+      "new_line": 427,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › passes the {name} placeholder through untouched",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 340,
+      "new_line": 344,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › returns nothing to spread when there is no entry",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 313,
+      "new_line": 317,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › returns only frame keys, never the rest of the campaign copy",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 349,
+      "new_line": 353,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › still carries the hero image alongside a video",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 394,
+      "new_line": 437,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › takes the frame fields the editor filled in",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 319,
+      "new_line": 323,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeDonateFrame › takes the hero video path the editor pasted",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 365,
+      "new_line": 408,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › keeps the committed Givebutter account id when the editor cleared the box",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 444,
+      "new_line": 487,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › keeps the committed Givebutter account id when there is no entry",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 437,
+      "new_line": 480,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 420,
+      "new_line": 463,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 415,
+      "new_line": 458,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 480,
+      "new_line": 523,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 489,
+      "new_line": 532,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › leaves the Givebutter account id falsy when neither side sets it",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 460,
+      "new_line": 503,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › takes a re-pointed Givebutter account id",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 451,
+      "new_line": 494,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › takes a re-pointed analytics id",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 427,
+      "new_line": 470,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeIntegrations › takes custom head and body HTML the editor added",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 466,
+      "new_line": 509,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeSponsorCopy › falls back for an inquiry form URL the entry omits",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 302,
+      "new_line": 306,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeSponsorCopy › falls back to the committed levels when the collection is empty",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 266,
+      "new_line": 270,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeSponsorCopy › honours an editor deleting every level",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 272,
+      "new_line": 276,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeSponsorCopy › keeps the committed copy for fields the editor left blank",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 277,
+      "new_line": 281,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeSponsorCopy › lets the editor clear the inquiry form URL",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 288,
+      "new_line": 292,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeSponsorCopy › returns the committed copy when there is neither an entry nor levels",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 254,
+      "new_line": 258,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeSponsorCopy › takes a newly set inquiry form URL",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 294,
+      "new_line": 298,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeSponsorCopy › takes the levels from content when they exist",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 259,
+      "new_line": 263,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeVolunteerCopy › honours an emptied benefits list instead of restoring the committed one",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 132,
+      "new_line": 136,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeVolunteerCopy › keeps the committed headline when the editor cleared it",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 113,
+      "new_line": 117,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeVolunteerCopy › keeps the committed value for every field the editor left blank",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 103,
+      "new_line": 107,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeVolunteerCopy › replaces the whole benefits list rather than merging it",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 120,
+      "new_line": 124,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeVolunteerCopy › restores the committed benefits when the entry omits them entirely",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 138,
+      "new_line": 142,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeVolunteerCopy › returns the committed copy untouched when there is no entry",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 86,
+      "new_line": 90,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "mergeVolunteerCopy › takes each field the editor filled in",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 91,
+      "new_line": 95,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "momentumSections entry notes › names only CMS screens that exist in the registry",
+      "file": "src/lib/sectionNotes.test.ts",
+      "runner": "tests",
+      "old_line": 103,
+      "new_line": 121,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "momentumSections entry notes › sees a screen reference in every note that points an editor somewhere",
+      "file": "src/lib/sectionNotes.test.ts",
+      "runner": "tests",
+      "old_line": 111,
+      "new_line": 140,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "momentumSections entry notes › takes its valid screen names from the collection labels",
+      "file": "src/lib/sectionNotes.test.ts",
+      "runner": "tests",
+      "old_line": 124,
+      "new_line": 168,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "orderedSections › drops sections whose kind matches no renderer",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 46,
+      "new_line": 50,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "orderedSections › keeps every kind it declares support for",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 57,
+      "new_line": 72,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "orderedSections › returns a new array and leaves the source untouched",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 63,
+      "new_line": 78,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "orderedSections › returns an empty array unchanged",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 75,
+      "new_line": 90,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "orderedSections › sorts a section with no order after every ordered section",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 30,
+      "new_line": 34,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "orderedSections › sorts sections by their order field",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 15,
+      "new_line": 19,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "preferText › falls back on an empty string",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 58,
+      "new_line": 62,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "preferText › falls back on whitespace only",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 65,
+      "new_line": 69,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "preferText › falls back when the editor value is absent",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 53,
+      "new_line": 57,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "preferText › is undefined when neither side has a value",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 71,
+      "new_line": 75,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "preferText › takes the editor value when it holds something",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 47,
+      "new_line": 51,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "preferText › trims the value it returns",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 78,
+      "new_line": 82,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "resolveLayout › falls back to text-only for an absent or blank value",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 241,
+      "new_line": 276,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "resolveLayout › falls back to text-only for an unrecognized value",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 248,
+      "new_line": 283,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "resolveLayout › normalizes casing and surrounding whitespace",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 253,
+      "new_line": 302,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "resolveLayout › passes through the image layouts",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 234,
+      "new_line": 269,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "screenReferences › collects every reference in one note",
+      "file": "src/lib/sectionNotes.test.ts",
+      "runner": "tests",
+      "old_line": 169,
+      "new_line": 213,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "screenReferences › ignores code spans and ordinary prose",
+      "file": "src/lib/sectionNotes.test.ts",
+      "runner": "tests",
+      "old_line": 161,
+      "new_line": 205,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "screenReferences › picks up a bolded collection name",
+      "file": "src/lib/sectionNotes.test.ts",
+      "runner": "tests",
+      "old_line": 135,
+      "new_line": 179,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "screenReferences › picks up the destination of an arrow navigation path",
+      "file": "src/lib/sectionNotes.test.ts",
+      "runner": "tests",
+      "old_line": 144,
+      "new_line": 188,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "screenReferences › reads a reference split across a line break as one name",
+      "file": "src/lib/sectionNotes.test.ts",
+      "runner": "tests",
+      "old_line": 153,
+      "new_line": 197,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sectionHeading › falls back to the shared heading when the section has no title",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 273,
+      "new_line": 322,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sectionHeading › passes a titled heading through unchanged",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 288,
+      "new_line": 337,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sectionHeading › prefers the section title over the shared fallback heading",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 265,
+      "new_line": 314,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sectionHeading › treats a blank or whitespace-only title as absent",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 282,
+      "new_line": 331,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sectionHeading › yields undefined when there is neither a title nor a fallback",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 296,
+      "new_line": 345,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sponsorLevelsFrom › orders levels by the editor order pin",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 212,
+      "new_line": 216,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sponsorLevelsFrom › reshapes the benefit rows while ordering",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 235,
+      "new_line": 239,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sponsorLevelsFrom › returns a single level unchanged in order",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 247,
+      "new_line": 251,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sponsorLevelsFrom › returns null for no entries rather than an empty list",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 206,
+      "new_line": 210,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "sponsorLevelsFrom › sorts a level with no order pin after the pinned ones",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 224,
+      "new_line": 228,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tintedFlags › alternates the tint across narrative sections",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 167,
+      "new_line": 189,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tintedFlags › does not let a goal meter shift the narrative alternation",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 204,
+      "new_line": 239,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tintedFlags › does not let an interleaved band shift the narrative alternation",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 190,
+      "new_line": 225,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tintedFlags › never tints a non-narrative section",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 178,
+      "new_line": 200,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tintedFlags › returns an empty array unchanged",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 75,
+      "new_line": 90,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tintedFlags › returns one flag per section",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 221,
+      "new_line": 256,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "tintedFlags › returns the same flags when called repeatedly on the same input",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 215,
+      "new_line": 250,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toSponsorLevels › flattens the benefit rows into plain strings",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 149,
+      "new_line": 153,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toSponsorLevels › leaves benefits undefined for a level that lists none",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 185,
+      "new_line": 189,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toSponsorLevels › returns an empty list for no entries",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 192,
+      "new_line": 196,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "toSponsorLevels › takes the level key from the entry id, never from the name",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "runner": "tests",
+      "old_line": 174,
+      "new_line": 178,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "unknownSectionKinds › de-duplicates a repeated unknown kind",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 89,
+      "new_line": 104,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "unknownSectionKinds › reports kinds that match no renderer",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 83,
+      "new_line": 98,
+      "classification": "change-introduced"
+    },
+    {
+      "kind": "updateLine",
+      "key": "unknownSectionKinds › reports nothing when every kind is known",
+      "file": "src/lib/momentumSections.test.ts",
+      "runner": "tests",
+      "old_line": 95,
+      "new_line": 110,
+      "classification": "change-introduced"
+    }
+  ],
   "platform_gated_absences": [],
   "runner_gated_absences": []
 }

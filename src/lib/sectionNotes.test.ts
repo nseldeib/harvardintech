@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { KINDS_WITH_BODY } from './momentumSections';
 
 // The notes in the `momentumSections` entries tell an editor WHERE to go to edit
 // each band's content, which makes them navigation instructions written in prose
@@ -71,6 +72,23 @@ function screenReferences(body: string): string[] {
   return names.map((name) => name.trim()).filter(Boolean);
 }
 
+/**
+ * Each entry's `kind`, keyed by filename.
+ *
+ * Read from the frontmatter rather than hardcoded, so a band that changes kind —
+ * or a new entry file — is classified correctly without anyone remembering to
+ * update a list here.
+ */
+const KIND_OF: Record<string, string> = Object.fromEntries(
+  fs
+    .readdirSync(path.join(process.cwd(), ENTRY_DIR))
+    .filter((f) => f.endsWith('.md'))
+    .map((file) => {
+      const raw = fs.readFileSync(path.join(process.cwd(), ENTRY_DIR, file), 'utf8');
+      return [file, raw.match(/^kind:\s*(\S+)/m)?.[1] ?? ''];
+    }),
+);
+
 /** The entry bodies, keyed by filename, with frontmatter stripped. */
 function entryBodies(): Record<string, string> {
   const dir = path.join(process.cwd(), ENTRY_DIR);
@@ -108,12 +126,38 @@ describe('momentumSections entry notes', () => {
   // silently stop guarding anything, which is the failure mode a prose test is
   // most prone to. Every note that sends an editor somewhere must be SEEN doing
   // it, so the guard's own reach is asserted rather than assumed.
+  //
+  // `testimonials.md` LEFT this list when the campaign redesign gave that band a
+  // rendered body. Its entry body is no longer a note to an editor — it is the
+  // lede printed above the quotes on /donate — so a navigation instruction there
+  // would be published to visitors. The same is true of the new `mission.md`,
+  // which is why it never joined. Both kinds are named in `KINDS_WITH_BODY`, and
+  // their editor guidance moved to the `kind` field's hint in
+  // `src/data/collections.json`, which is where an editor picking the section
+  // type actually reads it. Removing a file from this list is only legitimate
+  // for that reason — a note that still exists and still points somewhere must
+  // stay covered.
   it('sees a screen reference in every note that points an editor somewhere', () => {
     const bodies = entryBodies();
-    const pointing = ['pillars.md', 'accomplishments.md', 'donors.md', 'testimonials.md'];
+    const pointing = ['pillars.md', 'accomplishments.md', 'donors.md'];
     for (const file of pointing) {
       expect(bodies[file], `${file} is missing`).toBeDefined();
       expect(screenReferences(bodies[file]).length, `${file} names no screen`).toBeGreaterThan(0);
+    }
+  });
+
+  // The other half of that change, asserted rather than left implicit: a band
+  // whose body RENDERS must carry no editing note at all. The failure this
+  // prevents is not a stale pointer but a published one — an instruction to
+  // "edit this in Testimonials" appearing on the live campaign page, where the
+  // lede is supposed to be. Keyed off KINDS_WITH_BODY so a future kind that
+  // gains a rendered body is covered the day it is added.
+  it('leaves no editor-facing note in a band whose body renders on the page', () => {
+    const bodies = entryBodies();
+    for (const [file, body] of Object.entries(bodies)) {
+      const kind = KIND_OF[file];
+      if (!kind || !KINDS_WITH_BODY.has(kind)) continue;
+      expect(screenReferences(body), `${file} renders its body but names a CMS screen`).toEqual([]);
     }
   });
 

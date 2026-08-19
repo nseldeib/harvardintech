@@ -4,6 +4,14 @@ import "../../../src/styles/tokens.css";
 
 // Isolation page for TestimonialCard — codeyam screenshots the #codeyam-capture wrapper
 // by navigating to /isolated-components/TestimonialCard.
+//
+// The card is a full-width ROW now, not a boxed card, so it is framed at a
+// page-like width rather than in a 380px column.
+//
+// This is the SOLO case — no event photo, so there is no second column and the
+// quote runs the full width. It is the floor the card has to render at: every
+// field except the quote and the name is optional, and the campaign's own
+// Colorado quote ships without a portrait.
 ---
 
 <html lang="en">
@@ -11,16 +19,22 @@ import "../../../src/styles/tokens.css";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Isolated: TestimonialCard</title>
+    <style is:global>
+      #codeyam-capture {
+        width: 1000px;
+        padding: 40px;
+        background: var(--momentum-aqua);
+      }
+    </style>
   </head>
   <body>
     <div id="codeyam-capture">
-      <div style="max-width: 380px;">
-        <Component
-          quote="I came to a founder dinner knowing nobody. I left with two intros that turned into my first enterprise customer."
-          name="Priya Raman"
-          role="Founder · AB ’14"
-        />
-      </div>
+      <Component
+        quote="I came to a founder dinner knowing nobody. I left with two intros that turned into my first enterprise customer."
+        name="Priya Raman"
+        affiliation="Harvard University Alumni · Class of 2014"
+        role="Founder"
+      />
     </div>
   </body>
 </html>

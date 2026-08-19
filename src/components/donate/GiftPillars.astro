@@ -1,31 +1,42 @@
 ---
 // "What Your Gift Powers" — the three-card grid showing where a gift goes.
 import GiftPillarCard from './GiftPillarCard.astro';
+import { giftOrdinal } from '../../lib/momentumSections';
 import type { DonatePageCopy } from '../../lib/site';
 
 type Pillar = NonNullable<DonatePageCopy['pillars']>[number];
 
 interface Props {
+  kicker?: string;
   title?: string;
   pillars?: Pillar[];
 }
-const { title = 'What Your Gift Powers', pillars = [] } = Astro.props as Props;
+const { kicker, title = 'What Your Gift Powers', pillars = [] } = Astro.props as Props;
 ---
 
 {
   pillars.length > 0 ? (
     <section class="pillars">
-      <h2>{title}</h2>
-      <div class="grid">
-        {pillars.map((p) => (
-          <GiftPillarCard
-            icon={p.icon}
-            title={p.title}
-            body={p.body}
-            linkLabel={p.linkLabel}
-            linkUrl={p.linkUrl}
-          />
-        ))}
+      <div class="inner">
+        <div class="head">
+          {kicker ? <p class="kick">{kicker}</p> : null}
+          <h2>{title}</h2>
+        </div>
+        <div class="grid">
+          {/* Numbered from the card's position WITHIN THIS BAND, so a second
+              grouped gift band numbers from 01 again rather than continuing the
+              first band's count — `cardsInGroup` has already narrowed the list
+              by the time it reaches here. */}
+          {pillars.map((p, index) => (
+            <GiftPillarCard
+              number={giftOrdinal(index)}
+              title={p.title}
+              body={p.body}
+              linkLabel={p.linkLabel}
+              linkUrl={p.linkUrl}
+            />
+          ))}
+        </div>
       </div>
     </section>
   ) : null
@@ -33,23 +44,53 @@ const { title = 'What Your Gift Powers', pillars = [] } = Astro.props as Props;
 
 <style>
   .pillars {
-    padding: 76px 24px;
+    background: var(--momentum-cream);
+    padding: 86px 24px;
+  }
+  .inner {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .head {
+    margin-bottom: 48px;
+    max-width: 860px;
+  }
+  .head .kick {
+    margin: 0 0 14px;
   }
   h2 {
-    font-size: clamp(28px, 3.6vw, 44px);
+    font-family: var(--font-title);
+    font-size: clamp(32px, 4.2vw, 56px);
+    line-height: 1.06;
     letter-spacing: -0.02em;
-    font-weight: 800;
-    margin: 0 0 24px;
-    text-align: center;
+    font-weight: 700;
+    color: var(--momentum-navy);
+    margin: 0;
   }
+  /* Bordered cells sharing single-pixel rules, the same construction the
+     evidence strip uses: the grid draws top and left, each cell right and
+     bottom. */
   .grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-    max-width: 1180px;
-    margin: 40px auto 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
   }
-  @media (max-width: 900px) {
+
+  @media (max-width: 820px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* Three cards across two columns leaves a hole, so the last one spans. */
+    .grid > :global(:last-child:nth-child(odd)) {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 560px) {
+    .pillars {
+      padding: 60px 24px;
+    }
     .grid {
       grid-template-columns: 1fr;
     }

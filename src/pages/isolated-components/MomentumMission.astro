@@ -1,0 +1,38 @@
+---
+import Component from "../../../src/components/donate/MomentumMission.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for MomentumMission — codeyam screenshots the #codeyam-capture
+// wrapper by navigating to /isolated-components/MomentumMission.
+//
+// The heading carries the `*emphasis*` marker the component parses, so the
+// capture shows the crimson tail treatment rather than a plain sentence — which
+// is the one thing about this band that is not obvious from its props.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: MomentumMission</title>
+    <style is:global>
+      /* The capture wrapper is fit-content; pin a page-like width so the band is
+         reviewed at the proportions it has on /donate. */
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component kicker="Our mission" title="Helping exceptional people *go further together.*">
+        <p>
+          Harvard Alumni in Tech exists to turn a shared credential into a working community — one
+          where a founder in Berlin, an operator in Austin, and a student in Cambridge can find each
+          other, help each other, and build something none of them would have built alone. The
+          Momentum Fund is how we pay for that to keep happening.
+        </p>
+      </Component>
+    </div>
+  </body>
+</html>

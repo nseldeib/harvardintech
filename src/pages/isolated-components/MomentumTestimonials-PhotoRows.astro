@@ -1,0 +1,65 @@
+---
+import Component from "../../../src/components/donate/MomentumTestimonials.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for the impact band as the campaign design draws it: alternating
+// photo/quote rows on aqua, under a kicker, a serif heading, and a slotted lede.
+//
+// The two quotes are deliberately UNEQUAL. The first carries a portrait and the
+// second does not, which is the production state — there is no photo on file for
+// Mohammed Ally, and the card is built to render without one rather than borrow
+// a face that is not his. A frame where both had portraits would hide the case
+// that actually ships.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: MomentumTestimonials-PhotoRows</title>
+    <style is:global>
+      /* The rows are two columns only at a page-like width; the fit-content
+         wrapper would stack every photo above its quote. */
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        kicker="Every number represents a story"
+        title="One connection can change what's possible."
+        testimonials={[
+          {
+            quote:
+              'I moved to the Bay Area knowing almost no one in tech. The first Harvard Alumni in Tech event I walked into, I met three people who are still in my corner two years later. That is not networking. That is a community deciding you belong.',
+            name: 'Jessica Li',
+            affiliation: 'Harvard University Alumni · Class of 2019',
+            role: 'San Francisco Event Lead',
+            photo: '/images/team/jessica-li.png',
+            eventPhoto: '/images/gallery/event-07.jpg',
+            eventCaption: 'Leaders in Engineering · San Francisco',
+            order: 1,
+          },
+          {
+            quote:
+              'Colorado did not have a chapter. We started with six people in a co-working space on a Saturday afternoon. What the fund pays for is the part nobody sees — the space, the coffee, the follow-up that turns a one-time afternoon into something people plan their month around.',
+            name: 'Mohammed Ally',
+            affiliation: 'Harvard Extension School Alumni · Class of 2023',
+            role: 'HIT Colorado Co-Event Lead',
+            eventPhoto: '/images/gallery/event-11.jpg',
+            eventCaption: 'HIT Colorado Co-working Afternoon · Improper City',
+            order: 2,
+          },
+        ]}
+      >
+        <p>
+          Behind every event, chapter, and member of our network is a conversation, an introduction,
+          or a shared experience that helped someone move forward. These are a few of them, in the
+          words of the people they happened to.
+        </p>
+      </Component>
+    </div>
+  </body>
+</html>

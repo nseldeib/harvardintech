@@ -1,0 +1,13 @@
+{
+  "name": "MomentumTestimonials - Photo-Led Rows",
+  "id": "655237b7-02c0-4750-9b6a-450736ba2011",
+  "url": "/isolated-components/MomentumTestimonials-PhotoRows",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumTestimonials",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumTestimonials.astro",
+  "description": "The impact band as the campaign design draws it: alternating photo and quote rows on aqua, under a kicker, a serif heading, and a slotted lede. The two quotes are deliberately unequal — the first carries a portrait and the second does not, which is the production state, because there is no photo on file for Mohammed Ally and the card renders without one rather than borrowing a face that is not his. A frame where both had portraits would hide the case that actually ships."
+}

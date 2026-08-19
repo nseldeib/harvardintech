@@ -4,6 +4,12 @@ import "../../../src/styles/tokens.css";
 
 // Isolation page for MomentumTestimonials — codeyam screenshots the #codeyam-capture wrapper
 // by navigating to /isolated-components/MomentumTestimonials.
+//
+// THREE quotes, none of them carrying a photo, and no slotted lede: the band
+// reduced to the parts every testimonial has. It is the control for
+// `MomentumTestimonials-PhotoRows.astro`, which shows the campaign design's
+// photo-led treatment — the alternation of sides has to read correctly with an
+// odd count and with no pictures at all, and this is where that is visible.
 ---
 
 <html lang="en">
@@ -14,7 +20,7 @@ import "../../../src/styles/tokens.css";
   </head>
   <body>
     <div id="codeyam-capture">
-      <Component title="From our community" testimonials={[
+      <Component kicker="From our community" title="One connection can change what's possible." testimonials={[
   {
     quote: 'I came to a founder dinner knowing nobody. I left with two intros that turned into my first enterprise customer.',
     name: 'Priya Raman',

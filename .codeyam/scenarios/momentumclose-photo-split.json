@@ -1,0 +1,13 @@
+{
+  "name": "MomentumClose - Photo Split",
+  "id": "60206d02-519d-4f63-bc6c-7c2f412db667",
+  "url": "/isolated-components/MomentumClose-Split",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumClose",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumClose.astro",
+  "description": "The new closing ask: photo on the left behind a 20px gold rule, aqua copy on the right, a navy button carrying the design's arrow glyph, and an uppercase tagline beneath. The body arrives as one field and splitParagraphs turns its blank line into two paragraphs, which is why the closing ask needed no second schema field. Paired with the MomentumClose frame beside it, which is the no-photo case."
+}

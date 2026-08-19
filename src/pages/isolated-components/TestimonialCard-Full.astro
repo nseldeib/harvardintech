@@ -1,0 +1,45 @@
+---
+import Component from "../../../src/components/donate/TestimonialCard.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for TestimonialCard with EVERY field filled — the card doing its
+// whole job, which the sibling `TestimonialCard.astro` frame deliberately does not
+// show.
+//
+// That frame is the floor: no event photo, no portrait, the state the Colorado
+// quote ships in. This one is the ceiling: both photos, the caption bar, the
+// affiliation line above the role. Between them they bracket every optional the
+// card carries, which matters because almost every field on this component is
+// optional and a single frame of either extreme misrepresents it.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: TestimonialCard-Full</title>
+    <style is:global>
+      /* The two-column row exists only at a page-like width; the fit-content
+         wrapper would stack the photo above the quote and hide the split. Aqua
+         because that is the band this card always sits on. */
+      #codeyam-capture {
+        width: 1000px;
+        padding: 40px;
+        background: var(--momentum-aqua);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        quote="I moved to the Bay Area knowing almost no one in tech. The first Harvard Alumni in Tech event I walked into, I met three people who are still in my corner two years later. That is not networking. That is a community deciding you belong."
+        name="Jessica Li"
+        affiliation="Harvard University Alumni · Class of 2019"
+        role="San Francisco Event Lead"
+        photo="/images/team/jessica-li.png"
+        eventPhoto="/images/gallery/event-07.jpg"
+        eventCaption="Leaders in Engineering · San Francisco"
+      />
+    </div>
+  </body>
+</html>

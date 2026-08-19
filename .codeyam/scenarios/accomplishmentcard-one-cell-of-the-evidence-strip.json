@@ -1,0 +1,13 @@
+{
+  "name": "AccomplishmentCard - One Cell Of The Evidence Strip",
+  "id": "a78176ea-9e74-49c3-8700-9246b064b24f",
+  "url": "/isolated-components/AccomplishmentCard",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "AccomplishmentCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/AccomplishmentCard.astro",
+  "description": "One cell of the four-up evidence strip, framed at grid-cell width because that is the only shape this card ever takes. The 260px floor is the point: it keeps four cells the same height when one carries a sentence and another carries none. The rules look asymmetric on purpose — the card draws only its right and bottom, and the parent grid draws the strip's top and left, so adjacent cells share one hairline rather than doubling it."
+}

@@ -1,0 +1,27 @@
+{
+  "name": "CMS Testimonials - The Fields Behind A Quote",
+  "id": "97fa407a-5ade-4ed7-a31a-33b579b59e82",
+  "url": "/admin/testimonials/jessica-li",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "testimonials": [
+      {
+        "affiliation": "Harvard University Alumni · Class of 2019",
+        "eventCaption": "Leaders in Engineering · San Francisco",
+        "eventPhoto": "/images/gallery/event-07.jpg",
+        "name": "Jessica Li",
+        "order": 1,
+        "photo": "/images/team/jessica-li.png",
+        "quote": "I moved to the Bay Area knowing almost no one in tech. The first Harvard Alumni in Tech event I walked into, I met three people who are still in my corner two years later. That is not networking. That is a community deciding you belong.",
+        "role": "San Francisco Event Lead",
+        "slug": "jessica-li"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The editor form for one member quote, which is where every picture on the impact band is changed without touching code. Affiliation, Event photo and Event photo caption are new with the campaign redesign; Photo and Event photo are both image pickers, so the portrait beside a name and the large picture beside a quote are each swapped from the media library. This is the answer to \"can Nicole update these herself\" for the two photos the impact band carries."
+}

@@ -296,6 +296,12 @@
     "testFile": "src/lib/cutoverProgress.test.ts"
   },
   {
+    "description": "The goal-meter band's optional link out to the campaign, or undefined when it should not be drawn. BOTH halves are required, which is the whole rule: a label with no destination would render a link that goes nowhere — worse than no link, since a reader who clicks it learns the page is broken — and a url with no label has nothing to click. Either box alone therefore draws nothing, which is the shipped state and exactly what the goal-meter entry documents to the editor. Whitespace-only counts as blank, and the trimmed values are returned so a pasted trailing newline never reaches the href.",
+    "filePath": "src/lib/momentumSections.ts",
+    "name": "campaignLink",
+    "testFile": "src/lib/momentumSections.test.ts"
+  },
+  {
     "description": "Whether the share controls are offered at all. One disqualifier: an anonymous supporter, who has no badge by design, because a shareable badge is a name, a school and a year published to a social network — the precise opposite of what they asked for. A blank donation URL used to disqualify a badge too, which was wrong on both counts: it hid the whole feature on the live campaign where the URL is still unset, and it treated 'the campaign has not published its link' as if it were 'this person has nothing to share'. shareMessage drops the donation line instead.",
     "filePath": "src/lib/supporterBadge.ts",
     "name": "canShareBadge",
@@ -461,6 +467,12 @@
     "testFile": "src/lib/donors.test.ts"
   },
   {
+    "description": "Splits a campaign heading around its first *emphasized* clause into head / accent / tail, so the crimson accent the campaign design puts on the end of the mission band's sentence is something an editor writes with markdown emphasis rather than a span hand-edited into the template. The title arrives as plain frontmatter text, not rendered markdown, so the marker is parsed here rather than slotted through render(). Only the FIRST pair is honoured and * is the only marker — one deliberate affordance, not a second markdown implementation. Every degenerate input yields a plain heading: no marker, an unclosed marker, and an empty ** all return the whole string as head, because a stray asterisk on the page's largest sentence is worse than no accent at all.",
+    "filePath": "src/lib/campaignCopy.ts",
+    "name": "emphasizedHeading",
+    "testFile": "src/lib/campaignCopy.test.ts"
+  },
+  {
     "description": "The slugs of sections whose group matches no card in the set they draw from, for a build-time advisory warn — the same shape unknownSectionKinds and goalMetersMissingWidgetId already use on this page. It exists because the empty band cardsInGroup produces is SILENT: a section pointing at a group nobody typed renders nothing, which is indistinguishable from a band an editor has not filled in yet, so naming the slug is what makes it diagnosable. Sections carrying no group are never reported, since an ungrouped band drawing on an empty collection is the ordinary nothing-published-yet state; kinds absent from the card map are not card-backed and are skipped.",
     "filePath": "src/lib/sectionGroups.ts",
     "name": "emptyGroups",
@@ -600,6 +612,12 @@
       "volunteer-project-detail-full-description-no-photo",
       "volunteer-project-detail-photo-and-own-sign-up-link"
     ]
+  },
+  {
+    "description": "The zero-padded ordinal a gift card shows, derived from its position in its band — the 01 / 02 / 03 that replaced the icon badges. A named rule rather than an expression in a map() because of what the position is measured against: the cards of THIS band, after cardsInGroup has narrowed them, not the whole pillars collection. That is what makes a duplicated grouped gift band start again at 01 instead of continuing at 04, and it is the one thing about the numbering anyone could get wrong. Past ninety-nine it grows a third digit rather than truncating.",
+    "filePath": "src/lib/momentumSections.ts",
+    "name": "giftOrdinal",
+    "testFile": "src/lib/momentumSections.test.ts"
   },
   {
     "description": "Where to load Givebutter's widget loader from, or undefined when no account id is configured. The undefined case is the DEFAULT and the shipping state for a site that has not chosen a giving platform, so it has to mean no third-party request at all rather than an empty tag pointing at a CDN; blank and whitespace-only are treated as absent so a cleared CMS box cannot produce acct=. The id is URL-encoded because it arrives by copy-paste from Givebutter's dashboard, and a pasted value carrying & or # must not be able to add query parameters or truncate the ones already there. Pure and framework-free, the same shape as resolveGiveHref in ./giving.ts.",
@@ -1184,12 +1202,6 @@
     "testFile": "src/lib/momentumSections.test.ts"
   },
   {
-    "description": "Normalizes a gift-pillar icon value to one of the three glyphs PillarIcon actually draws, falling back to people for a typo, a blank, or an absent key. The boundary that lets icon be free text: the CMS has no select control, so an editor types the value, and a mistake must cost them the icon they wanted rather than the build. Mirrors resolveLayout in momentumSections.ts.",
-    "filePath": "src/lib/pillars.ts",
-    "name": "resolvePillarIcon",
-    "testFile": "src/lib/pillars.test.ts"
-  },
-  {
     "description": "Normalizes a school value to one of HARVARD_SCHOOLS, or nothing. Trimmed and case-insensitive, following normalizeGroup's reasoning — an editor is not owed an empty result for a capitalization difference, and a value from a hand-edited file or a scenario seed should still land where it was meant to. Shaped like resolveLayout but differing in the one way that matters: it falls back to nothing rather than to a default, because there is no sensible school to guess. Filing someone under the wrong school is worse than filing them under none, since the network's search would then surface them to the wrong people.",
     "filePath": "src/lib/donors.ts",
     "name": "resolveSchool",
@@ -1277,6 +1289,12 @@
     "description": "What a band is called: the section's own title when it has one, otherwise the shared heading the page has always used for that kind. The slot bands took their heading from donatePage.json and ignored the title they could already carry, which is why two pillars sections were indistinguishable both on the page and in the CMS list, where the row label falls back to the slug — so letting a section USE its title is what names a duplicated band. Deliberately one field rather than two: a separate CMS label and page heading could disagree, and an editor renaming a band means both. Whitespace-only counts as blank, and no title with no fallback yields undefined rather than the string undefined, since the band components already treat a missing heading as draw-no-heading.",
     "filePath": "src/lib/momentumSections.ts",
     "name": "sectionHeading",
+    "testFile": "src/lib/momentumSections.test.ts"
+  },
+  {
+    "description": "The uppercase eyebrow drawn above a band's heading, or undefined when there is none. Modelled on sectionHeading but deliberately a SEPARATE function rather than a second call into it: the two fall back to different things — a band with no heading borrows the shared label for its kind, while a band with no kicker simply has no kicker, because there is no per-kind eyebrow to borrow — and a heading with no kicker is a perfectly ordinary band rather than a half-filled one, so returning undefined has to stay unremarkable at every call site. Unlike layout, image and widgetId, the field applies to EVERY kind, because the campaign design puts an eyebrow over every band on the page.",
+    "filePath": "src/lib/momentumSections.ts",
+    "name": "sectionKicker",
     "testFile": "src/lib/momentumSections.test.ts"
   },
   {
@@ -1374,6 +1392,12 @@
     "filePath": "src/lib/events.ts",
     "name": "splitEvents",
     "testFile": "src/lib/events.test.ts"
+  },
+  {
+    "description": "Splits a body of editor-written copy into paragraphs on blank lines, trimming each and dropping the empties. This is what lets the closing ask's two sentences be ONE ctaBody field rather than ctaBody and ctaBody2: an editor writing a third paragraph needs no schema change, and there is no second box that can be left half-filled. The trailing newline a textarea leaves behind, and a doubled blank line, both fail to produce an empty paragraph — which would otherwise render as an unexplained gap. A single newline is a soft wrap, not a break, so wrapped prose is not shattered into fragments.",
+    "filePath": "src/lib/campaignCopy.ts",
+    "name": "splitParagraphs",
+    "testFile": "src/lib/campaignCopy.test.ts"
   },
   {
     "description": "Splits a board member's role into display lines on a '·' separator (e.g. \"Founder · Harvard C'08\" -> [\"Founder\", \"Harvard C'08\"]), trimming surrounding whitespace; a role without a separator returns a single-element array. Used by BoardMemberCard to render the role over two lines.",

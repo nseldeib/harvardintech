@@ -19,6 +19,21 @@
   --paper-2: #f6f3f1;
   --line: rgba(30, 26, 27, 0.14);
 
+  /* Campaign accents — scoped by convention to /donate, where the Momentum Fund
+     campaign design calls for band backgrounds the Atlas palette has no answer
+     for. BACKGROUNDS AND ACCENTS ONLY: the type stays Crimson Pro + Inter and
+     the primary action stays `--crimson`, so a visitor crossing from the site
+     nav into the campaign page meets the same brand in a different register
+     rather than a second brand. They live here because stack.json names this
+     file the token source; a second stylesheet would put half the palette
+     somewhere codeyam does not look. */
+  --momentum-navy: #031a36;
+  --momentum-navy-2: #081326;
+  --momentum-gold: #f6c768;
+  --momentum-teal: #049ca4;
+  --momentum-aqua: #dcefeb;
+  --momentum-cream: #f8f4ee;
+
   /* Semantic aliases — remapped onto Atlas so existing components adopt the
      crimson editorial look with no markup change. */
   --color-bg: var(--paper);
@@ -165,6 +180,20 @@ h3 {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--crimson);
+}
+/* Colour-only modifiers, so every band's eyebrow stays the SAME element at the
+   same size, family and tracking and only the accent moves. Deliberately not
+   three new kicker classes: a parallel implementation is how two eyebrows drift
+   apart, and the campaign page needs the eyebrow on gold, navy and aqua bands
+   where crimson would either vanish or shout. */
+.kick--light {
+  color: rgba(255, 255, 255, 0.86);
+}
+.kick--gold {
+  color: var(--momentum-gold);
+}
+.kick--teal {
+  color: var(--momentum-teal);
 }
 .btn {
   display: inline-block;

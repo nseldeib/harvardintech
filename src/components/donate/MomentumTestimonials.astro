@@ -12,26 +12,52 @@ export interface TestimonialLike {
   quote: string;
   name: string;
   role?: string;
+  affiliation?: string;
   photo?: string;
+  eventPhoto?: string;
+  eventCaption?: string;
   order?: number;
 }
 
 interface Props {
+  kicker?: string;
   title?: string;
   testimonials?: TestimonialLike[];
 }
-const { title = 'From our community', testimonials = [] } = Astro.props as Props;
+const { kicker, title = 'From our community', testimonials = [] } = Astro.props as Props;
 const quotes = sortByOrder(testimonials);
 ---
 
 {
   quotes.length > 0 ? (
     <section class="quotes">
-      <h2>{title}</h2>
-      <div class="grid">
-        {quotes.map((t) => (
-          <TestimonialCard quote={t.quote} name={t.name} role={t.role} photo={t.photo} />
-        ))}
+      <div class="inner">
+        <div class="head">
+          {kicker ? <p class="kick kick--teal">{kicker}</p> : null}
+          <h2>{title}</h2>
+          {/* The lede, written in the section entry's markdown body. Slotted
+              rather than a prop because it is prose an editor formats. */}
+          <div class="lede">
+            <slot />
+          </div>
+        </div>
+        <div class="rows">
+          {/* Sides alternate by SORTED position, so the ordering rule an editor
+              already controls is what drives the layout — no second field to
+              keep in step with the first. */}
+          {quotes.map((t, index) => (
+            <TestimonialCard
+              quote={t.quote}
+              name={t.name}
+              role={t.role}
+              affiliation={t.affiliation}
+              photo={t.photo}
+              eventPhoto={t.eventPhoto}
+              eventCaption={t.eventCaption}
+              flipped={index % 2 === 1}
+            />
+          ))}
+        </div>
       </div>
     </section>
   ) : null
@@ -39,25 +65,43 @@ const quotes = sortByOrder(testimonials);
 
 <style>
   .quotes {
-    padding: 76px 24px;
+    background: var(--momentum-aqua);
+    padding: 86px 24px;
+  }
+  .inner {
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+  .head {
+    margin-bottom: 56px;
+    max-width: 760px;
+  }
+  .head .kick {
+    margin: 0 0 14px;
   }
   h2 {
-    font-size: clamp(28px, 3.6vw, 44px);
+    font-family: var(--font-title);
+    font-size: clamp(32px, 4.2vw, 56px);
+    line-height: 1.06;
     letter-spacing: -0.02em;
-    font-weight: 800;
-    margin: 0 0 24px;
-    text-align: center;
+    font-weight: 700;
+    color: var(--momentum-navy);
+    margin: 0;
   }
-  .grid {
+  /* The lede arrives through the slot as rendered markdown, so it is reached by
+     descendant selectors and needs `:global`. Empty when the entry has no body,
+     in which case it contributes nothing but its own zero height. */
+  .lede :global(p) {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--momentum-navy);
+    margin: 22px 0 0;
+  }
+  /* Full-width rows rather than a card grid — the design gives each quote a
+     photo and the room to carry it. */
+  .rows {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-    max-width: 1180px;
-    margin: 40px auto 0;
-  }
-  @media (max-width: 900px) {
-    .grid {
-      grid-template-columns: 1fr;
-    }
+    gap: 56px;
   }
 </style>

@@ -73,6 +73,24 @@
       "runner": "tests"
     },
     {
+      "description": "mission and testimonials joined narrative when the campaign design gave them prose of their own.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "KINDS_WITH_BODY › contains exactly the kinds that render prose",
+      "line": 429,
+      "registeredAt": "2026-08-19T17:04:46.459476559+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "The slot bands entry bodies are editor guidance that must never reach the page — regressing this would publish those notes to visitors.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "KINDS_WITH_BODY › excludes the slot bands whose entry body is an editing note",
+      "line": 436,
+      "registeredAt": "2026-08-19T17:04:46.483561958+00:00",
+      "runner": "vitest"
+    },
+    {
       "description": "The direction rules colours OUT by name — no magenta, purple or cobalt. An earlier pass reached a purple-magenta wash by BLOOMING crimson over navy rather than by declaring it, so this pins the four declared values against an edit that drifts them.",
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
@@ -584,6 +602,42 @@
       "line": 205,
       "registeredAt": "2026-08-06T15:24:46Z",
       "runner": "tests"
+    },
+    {
+      "description": "Neither box filled is the progress band as it renders today.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "campaignLink › draws nothing when neither is set",
+      "line": 398,
+      "registeredAt": "2026-08-19T17:04:46.365399812+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "The mirror rule — a url with no label has nothing to click.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "campaignLink › draws nothing when the label is missing or blank",
+      "line": 392,
+      "registeredAt": "2026-08-19T17:04:46.342013238+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "The shipped state: a label with no destination draws nothing, because a link that goes nowhere is worse than no link.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "campaignLink › draws nothing when the url is missing or blank",
+      "line": 386,
+      "registeredAt": "2026-08-19T17:04:46.318672032+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "The goal meter link beside the heading, with both halves trimmed so a pasted trailing newline never reaches the href.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "campaignLink › returns the trimmed label and url when both are present",
+      "line": 377,
+      "registeredAt": "2026-08-19T17:04:46.296048795+00:00",
+      "runner": "vitest"
     },
     {
       "description": "Every ordinary row offers it — gating the action to one collection would be extra code to make the feature smaller.",
@@ -1940,7 +1994,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › donors.school offers exactly the schools the resolver accepts",
-      "line": 72,
+      "line": 65,
       "registeredAt": "2026-08-18T18:44:27Z",
       "runner": "tests"
     },
@@ -1949,7 +2003,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › homeSections.kind offers exactly the kinds the homepage renders",
-      "line": 47,
+      "line": 45,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -1958,7 +2012,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › momentumSections.kind offers exactly the Momentum Fund section kinds",
-      "line": 53,
+      "line": 51,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -1967,16 +2021,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › momentumSections.layout offers exactly the layouts",
-      "line": 58,
-      "registeredAt": "2026-08-04T18:59:29Z",
-      "runner": "tests"
-    },
-    {
-      "description": "An unrecognized icon falls back to people, so a typo quietly changes the art.",
-      "file": "src/lib/selectOptions.test.ts",
-      "format": "vitest",
-      "key": "dropdown options match the validators that enforce them › pillars.icon offers exactly the drawn glyphs",
-      "line": 63,
+      "line": 56,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -2069,6 +2114,69 @@
       "line": 136,
       "registeredAt": "2026-08-17T19:07:20Z",
       "runner": "tests"
+    },
+    {
+      "description": "Double-asterisk has nothing between the markers, so it must not emit an empty accent element.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "emphasizedHeading › degrades to a plain heading on an empty marker pair",
+      "line": 43,
+      "registeredAt": "2026-08-19T17:03:01.056350650+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "A half-typed marker must not leak a stray asterisk onto the pages largest sentence — no accent beats a stray glyph.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "emphasizedHeading › degrades to a plain heading when the marker is never closed",
+      "line": 35,
+      "registeredAt": "2026-08-19T17:03:01.035534732+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "Only the first pair is parsed — this is one deliberate affordance, not a second markdown implementation.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "emphasizedHeading › honours only the first marker pair",
+      "line": 49,
+      "registeredAt": "2026-08-19T17:03:01.076408522+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "The accent need not be the tail — text before and after an emphasized clause both survive the split.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "emphasizedHeading › keeps the text on both sides of a mid-sentence accent",
+      "line": 17,
+      "registeredAt": "2026-08-19T17:03:00.994820139+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "A heading with no emphasis is the ordinary case for every other band and renders whole and unstyled.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "emphasizedHeading › returns the whole heading as head when there is no marker",
+      "line": 27,
+      "registeredAt": "2026-08-19T17:03:01.016087007+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "No heading means draw no heading, matching sectionHeading, rather than an object the component must unpack to find nothing.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "emphasizedHeading › returns undefined for a missing or empty heading",
+      "line": 59,
+      "registeredAt": "2026-08-19T17:03:01.096622023+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "emphasizedHeading splits the mission heading on its first markdown emphasis pair, so the crimson accent on the campaign design sentence is something an editor writes rather than a hardcoded span.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "emphasizedHeading › splits a heading around its emphasized clause",
+      "line": 7,
+      "registeredAt": "2026-08-19T17:03:00.973644148+00:00",
+      "runner": "vitest"
     },
     {
       "description": "A section with no slug still has to be nameable in the log line.",
@@ -2238,14 +2346,6 @@
       "runner": "tests"
     },
     {
-      "description": "Asserts the CMS renders pillars.icon as a dropdown rather than a free-text box, so an editor picks from the values the code understands instead of typing one the site silently drops.",
-      "file": "src/lib/selectOptions.test.ts",
-      "format": "vitest",
-      "key": "enum-shaped fields are dropdowns, not text boxes › pillars.icon is a select",
-      "registeredAt": "2026-08-07T12:04:36Z",
-      "runner": "tests"
-    },
-    {
       "description": "Whitespace padding from a hand-edited YAML value is not silently trimmed.",
       "file": "src/lib/envFlag.test.ts",
       "format": "vitest",
@@ -2367,7 +2467,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "every declared select is usable › gives each select a non-empty options list",
-      "line": 80,
+      "line": 73,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -2376,7 +2476,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "every declared select is usable › gives no select a duplicate or blank option",
-      "line": 91,
+      "line": 84,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -2409,14 +2509,6 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "existing content still validates against the new dropdowns › every committed momentumSections.layout value is offered",
-      "registeredAt": "2026-08-07T12:04:36Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Checks every pillars.icon value already committed as free text appears in the dropdown's options. A value that is not offered means the site renders something the CMS calls invalid, and the two lists have drifted apart.",
-      "file": "src/lib/selectOptions.test.ts",
-      "format": "vitest",
-      "key": "existing content still validates against the new dropdowns › every committed pillars.icon value is offered",
       "registeredAt": "2026-08-07T12:04:36Z",
       "runner": "tests"
     },
@@ -2790,6 +2882,33 @@
       "runner": "tests"
     },
     {
+      "description": "Past ninety-nine it grows a digit; silently dropping a leading digit would be worse than an unpadded number.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "giftOrdinal › grows to three digits rather than truncating",
+      "line": 420,
+      "registeredAt": "2026-08-19T17:04:46.437217719+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "Zero-padded to two digits, matching the campaign designs 01 02 03 treatment.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "giftOrdinal › numbers from 01 for the first card",
+      "line": 405,
+      "registeredAt": "2026-08-19T17:04:46.391311336+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "The point of the function: the index is position WITHIN the band, so a duplicated grouped gift band restarts rather than continuing at 04.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "giftOrdinal › restarts at 01 for a second band rather than continuing a running count",
+      "line": 414,
+      "registeredAt": "2026-08-19T17:04:46.414252481+00:00",
+      "runner": "vitest"
+    },
+    {
       "description": "The configured case: a real account id produces Givebutter's loader with the acct and p parameters their embed snippet carries.",
       "file": "src/lib/givebutter.test.ts",
       "format": "vitest",
@@ -2857,7 +2976,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › falls back to a readable label when a section has no slug",
-      "line": 159,
+      "line": 181,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2866,7 +2985,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › ignores sections of every other kind",
-      "line": 131,
+      "line": 153,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2875,7 +2994,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › reports every offending meter on a page with more than one",
-      "line": 142,
+      "line": 164,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2884,7 +3003,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › reports nothing for an empty section list",
-      "line": 152,
+      "line": 174,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2893,7 +3012,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › reports nothing when the goal meter has a widget id",
-      "line": 113,
+      "line": 135,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2902,7 +3021,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › reports the slug of a goal meter carrying no widget id",
-      "line": 104,
+      "line": 126,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -2911,7 +3030,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "goalMetersMissingWidgetId › treats an empty or whitespace-only widget id as missing",
-      "line": 121,
+      "line": 143,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4135,16 +4254,25 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › clears the video when the editor empties the box",
-      "line": 376,
+      "line": 419,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
+    },
+    {
+      "description": "They follow the ctaTitle clause, not the heroVideo one — a cleared box restores the committed copy rather than blanking the band.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › falls back to the committed value when a campaign frame box is cleared",
+      "line": 391,
+      "registeredAt": "2026-08-19T17:04:46.654731914+00:00",
+      "runner": "vitest"
     },
     {
       "description": "The personalized headline is what the whole email campaign is built around, so a cleared one has to fall back rather than ship a hero with no headline.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › keeps both committed headlines when the editor cleared them",
-      "line": 331,
+      "line": 335,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4153,7 +4281,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › leaves the video undefined when the entry carries no heroVideo",
-      "line": 384,
+      "line": 427,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -4162,7 +4290,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › passes the {name} placeholder through untouched",
-      "line": 340,
+      "line": 344,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4171,7 +4299,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › returns nothing to spread when there is no entry",
-      "line": 313,
+      "line": 317,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4180,7 +4308,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › returns only frame keys, never the rest of the campaign copy",
-      "line": 349,
+      "line": 353,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4189,16 +4317,25 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › still carries the hero image alongside a video",
-      "line": 394,
+      "line": 437,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
+    },
+    {
+      "description": "The four fields the redesign added to the frame — two kickers, the closing photo, and the sign-off line.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › takes the campaign frame fields the editor filled in",
+      "line": 373,
+      "registeredAt": "2026-08-19T17:04:46.631225551+00:00",
+      "runner": "vitest"
     },
     {
       "description": "The migration working for the frame: the hero and closing ask are now copy an editor owns rather than values in a file only a developer opens.",
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › takes the frame fields the editor filled in",
-      "line": 319,
+      "line": 323,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4207,7 +4344,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › takes the hero video path the editor pasted",
-      "line": 365,
+      "line": 408,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -4216,7 +4353,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed Givebutter account id when the editor cleared the box",
-      "line": 444,
+      "line": 487,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4225,7 +4362,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed Givebutter account id when there is no entry",
-      "line": 437,
+      "line": 480,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4234,7 +4371,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
-      "line": 420,
+      "line": 463,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4243,7 +4380,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
-      "line": 415,
+      "line": 458,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4252,7 +4389,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
-      "line": 480,
+      "line": 523,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4261,7 +4398,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
-      "line": 489,
+      "line": 532,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4270,7 +4407,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves the Givebutter account id falsy when neither side sets it",
-      "line": 460,
+      "line": 503,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4279,7 +4416,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed Givebutter account id",
-      "line": 451,
+      "line": 494,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4288,7 +4425,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed analytics id",
-      "line": 427,
+      "line": 470,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4297,7 +4434,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes custom head and body HTML the editor added",
-      "line": 466,
+      "line": 509,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4306,7 +4443,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeSponsorCopy › falls back for an inquiry form URL the entry omits",
-      "line": 302,
+      "line": 306,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4315,7 +4452,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeSponsorCopy › falls back to the committed levels when the collection is empty",
-      "line": 266,
+      "line": 270,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4324,7 +4461,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeSponsorCopy › honours an editor deleting every level",
-      "line": 272,
+      "line": 276,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4333,7 +4470,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeSponsorCopy › keeps the committed copy for fields the editor left blank",
-      "line": 277,
+      "line": 281,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4342,7 +4479,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeSponsorCopy › lets the editor clear the inquiry form URL",
-      "line": 288,
+      "line": 292,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4351,7 +4488,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeSponsorCopy › returns the committed copy when there is neither an entry nor levels",
-      "line": 254,
+      "line": 258,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4360,7 +4497,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeSponsorCopy › takes a newly set inquiry form URL",
-      "line": 294,
+      "line": 298,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4369,7 +4506,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeSponsorCopy › takes the levels from content when they exist",
-      "line": 259,
+      "line": 263,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4378,7 +4515,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeVolunteerCopy › honours an emptied benefits list instead of restoring the committed one",
-      "line": 132,
+      "line": 136,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4387,7 +4524,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeVolunteerCopy › keeps the committed headline when the editor cleared it",
-      "line": 113,
+      "line": 117,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4396,7 +4533,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeVolunteerCopy › keeps the committed value for every field the editor left blank",
-      "line": 103,
+      "line": 107,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4405,7 +4542,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeVolunteerCopy › replaces the whole benefits list rather than merging it",
-      "line": 120,
+      "line": 124,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4414,7 +4551,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeVolunteerCopy › restores the committed benefits when the entry omits them entirely",
-      "line": 138,
+      "line": 142,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4423,7 +4560,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeVolunteerCopy › returns the committed copy untouched when there is no entry",
-      "line": 86,
+      "line": 90,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4432,7 +4569,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeVolunteerCopy › takes each field the editor filled in",
-      "line": 91,
+      "line": 95,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4527,11 +4664,20 @@
       "runner": "tests"
     },
     {
+      "description": "A band whose markdown body renders on /donate must carry no editor-facing note, or the instruction is published to visitors where the lede belongs. Keyed off KINDS_WITH_BODY so a future kind that gains a rendered body is covered the day it is added.",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "momentumSections entry notes › leaves no editor-facing note in a band whose body renders on the page",
+      "line": 155,
+      "registeredAt": "2026-08-19T17:10:34.208057020+00:00",
+      "runner": "vitest"
+    },
+    {
       "description": "The reproduction test. The editor is being sent somewhere, and it has to exist — this is the assertion the three stale notes failed.",
       "file": "src/lib/sectionNotes.test.ts",
       "format": "vitest",
       "key": "momentumSections entry notes › names only CMS screens that exist in the registry",
-      "line": 103,
+      "line": 121,
       "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
@@ -4540,7 +4686,7 @@
       "file": "src/lib/sectionNotes.test.ts",
       "format": "vitest",
       "key": "momentumSections entry notes › sees a screen reference in every note that points an editor somewhere",
-      "line": 111,
+      "line": 140,
       "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
@@ -4549,7 +4695,7 @@
       "file": "src/lib/sectionNotes.test.ts",
       "format": "vitest",
       "key": "momentumSections entry notes › takes its valid screen names from the collection labels",
-      "line": 124,
+      "line": 168,
       "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
@@ -5107,16 +5253,25 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › drops sections whose kind matches no renderer",
-      "line": 46,
+      "line": 50,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
+    },
+    {
+      "description": "A kind the component renders but the known-kinds list does not know would be silently dropped before reaching the page.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "orderedSections › keeps a mission section",
+      "line": 62,
+      "registeredAt": "2026-08-19T17:04:46.507354317+00:00",
+      "runner": "vitest"
     },
     {
       "description": "Every declared kind is renderable — this fails if SECTION_KINDS and the filter ever drift apart.",
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › keeps every kind it declares support for",
-      "line": 57,
+      "line": 72,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5125,7 +5280,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › returns a new array and leaves the source untouched",
-      "line": 63,
+      "line": 78,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5134,7 +5289,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › returns an empty array unchanged",
-      "line": 75,
+      "line": 90,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5143,7 +5298,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › sorts a section with no order after every ordered section",
-      "line": 30,
+      "line": 34,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5152,7 +5307,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "orderedSections › sorts sections by their order field",
-      "line": 15,
+      "line": 19,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -5539,7 +5694,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "preferText › falls back on an empty string",
-      "line": 58,
+      "line": 62,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -5548,7 +5703,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "preferText › falls back on whitespace only",
-      "line": 65,
+      "line": 69,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -5557,7 +5712,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "preferText › falls back when the editor value is absent",
-      "line": 53,
+      "line": 57,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -5566,7 +5721,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "preferText › is undefined when neither side has a value",
-      "line": 71,
+      "line": 75,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -5575,7 +5730,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "preferText › takes the editor value when it holds something",
-      "line": 47,
+      "line": 51,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -5584,7 +5739,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "preferText › trims the value it returns",
-      "line": 78,
+      "line": 82,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -6129,11 +6284,20 @@
       "runner": "tests"
     },
     {
+      "description": "A typo of the new value degrades like any other rather than rendering a band with two empty columns.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "resolveLayout › falls back to text-only for a typo of columns",
+      "line": 296,
+      "registeredAt": "2026-08-19T17:04:46.584575151+00:00",
+      "runner": "vitest"
+    },
+    {
       "description": "A blank or absent field is the CMS's normal \"not filled in\" state.",
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › falls back to text-only for an absent or blank value",
-      "line": 241,
+      "line": 276,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6142,7 +6306,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › falls back to text-only for an unrecognized value",
-      "line": 248,
+      "line": 283,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -6151,53 +6315,26 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › normalizes casing and surrounding whitespace",
-      "line": 253,
+      "line": 302,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
+    },
+    {
+      "description": "The campaign designs two-column prose treatment — an addition to the layout list, not a new renderer.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "resolveLayout › passes through the columns layout",
+      "line": 289,
+      "registeredAt": "2026-08-19T17:04:46.557794935+00:00",
+      "runner": "vitest"
     },
     {
       "description": "The two layouts Nicole asked for, passed through unchanged.",
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "resolveLayout › passes through the image layouts",
-      "line": 234,
+      "line": 269,
       "registeredAt": "2026-07-31T19:59:08Z",
-      "runner": "tests"
-    },
-    {
-      "description": "A free-text field collects human typing; trailing spaces and capitals are normal input, not mistakes worth punishing.",
-      "file": "src/lib/pillars.test.ts",
-      "format": "vitest",
-      "key": "resolvePillarIcon › accepts a value an editor typed with stray case or spacing",
-      "line": 14,
-      "registeredAt": "2026-08-03T21:22:17Z",
-      "runner": "tests"
-    },
-    {
-      "description": "A card with no icon chosen still gets a badge rather than an empty circle.",
-      "file": "src/lib/pillars.test.ts",
-      "format": "vitest",
-      "key": "resolvePillarIcon › falls back to people for a blank or absent icon",
-      "line": 25,
-      "registeredAt": "2026-08-03T21:22:17Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The reason this is free text at all: the CMS has no select control, so a typo is a normal editing mistake. It costs the icon, never the build.",
-      "file": "src/lib/pillars.test.ts",
-      "format": "vitest",
-      "key": "resolvePillarIcon › falls back to people for a mistyped icon",
-      "line": 20,
-      "registeredAt": "2026-08-03T21:22:17Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The three supported icons round-trip unchanged — the whole point of the field.",
-      "file": "src/lib/pillars.test.ts",
-      "format": "vitest",
-      "key": "resolvePillarIcon › keeps every glyph the component draws",
-      "line": 6,
-      "registeredAt": "2026-08-03T21:22:17Z",
       "runner": "tests"
     },
     {
@@ -6754,7 +6891,7 @@
       "file": "src/lib/sectionNotes.test.ts",
       "format": "vitest",
       "key": "screenReferences › collects every reference in one note",
-      "line": 169,
+      "line": 213,
       "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
@@ -6763,7 +6900,7 @@
       "file": "src/lib/sectionNotes.test.ts",
       "format": "vitest",
       "key": "screenReferences › ignores code spans and ordinary prose",
-      "line": 161,
+      "line": 205,
       "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
@@ -6772,7 +6909,7 @@
       "file": "src/lib/sectionNotes.test.ts",
       "format": "vitest",
       "key": "screenReferences › picks up a bolded collection name",
-      "line": 135,
+      "line": 179,
       "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
@@ -6781,7 +6918,7 @@
       "file": "src/lib/sectionNotes.test.ts",
       "format": "vitest",
       "key": "screenReferences › picks up the destination of an arrow navigation path",
-      "line": 144,
+      "line": 188,
       "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
@@ -6790,7 +6927,7 @@
       "file": "src/lib/sectionNotes.test.ts",
       "format": "vitest",
       "key": "screenReferences › reads a reference split across a line break as one name",
-      "line": 153,
+      "line": 197,
       "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
@@ -6943,7 +7080,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "sectionHeading › falls back to the shared heading when the section has no title",
-      "line": 273,
+      "line": 322,
       "registeredAt": "2026-08-17T19:07:20Z",
       "runner": "tests"
     },
@@ -6952,7 +7089,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "sectionHeading › passes a titled heading through unchanged",
-      "line": 288,
+      "line": 337,
       "registeredAt": "2026-08-17T19:07:20Z",
       "runner": "tests"
     },
@@ -6961,7 +7098,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "sectionHeading › prefers the section title over the shared fallback heading",
-      "line": 265,
+      "line": 314,
       "registeredAt": "2026-08-17T19:07:20Z",
       "runner": "tests"
     },
@@ -6970,7 +7107,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "sectionHeading › treats a blank or whitespace-only title as absent",
-      "line": 282,
+      "line": 331,
       "registeredAt": "2026-08-17T19:07:20Z",
       "runner": "tests"
     },
@@ -6979,9 +7116,36 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "sectionHeading › yields undefined when there is neither a title nor a fallback",
-      "line": 296,
+      "line": 345,
       "registeredAt": "2026-08-17T19:07:20Z",
       "runner": "tests"
+    },
+    {
+      "description": "The kicker applies to every section kind, unlike layout or widgetId, because the campaign design puts an eyebrow over every band.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "sectionKicker › returns the trimmed kicker",
+      "line": 354,
+      "registeredAt": "2026-08-19T17:04:46.225598427+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "A caller with something to fall back to can supply it; the network band passes the campaign name it drew before.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "sectionKicker › uses the caller fallback when the kicker is blank",
+      "line": 369,
+      "registeredAt": "2026-08-19T17:04:46.273562228+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "Blank draws nothing — the band as it looked before the field existed. There is no per-kind eyebrow to borrow, unlike sectionHeading.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "sectionKicker › yields undefined for an absent or whitespace-only kicker",
+      "line": 361,
+      "registeredAt": "2026-08-19T17:04:46.251103431+00:00",
+      "runner": "vitest"
     },
     {
       "description": "every seeded member must declare a non-empty photo — this is the exact contract that was silently broken on the live site",
@@ -7893,6 +8057,60 @@
       "runner": "tests"
     },
     {
+      "description": "Doubled blank lines and pasted indentation are normalized rather than surviving into the markup.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "splitParagraphs › collapses extra blank lines and trims each paragraph",
+      "line": 95,
+      "registeredAt": "2026-08-19T17:03:01.194842836+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "A single newline is a textarea soft wrap, not a paragraph break; splitting on it would shatter wrapped prose.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "splitParagraphs › does not split on a single newline",
+      "line": 83,
+      "registeredAt": "2026-08-19T17:03:01.156698387+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "The trailing newline a textarea leaves must not render an empty paragraph, which shows on the page as an unexplained gap.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "splitParagraphs › drops the empty trailing entry a textarea leaves behind",
+      "line": 89,
+      "registeredAt": "2026-08-19T17:03:01.176070538+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "A body with no blank line is a single paragraph — what the band rendered before the field could hold two.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "splitParagraphs › returns a body with no blank line as one paragraph",
+      "line": 77,
+      "registeredAt": "2026-08-19T17:03:01.137733746+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "A whitespace-only body yields no paragraphs, so the band draws its heading and button with no stranded prose block.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "splitParagraphs › returns no paragraphs for a blank or missing body",
+      "line": 101,
+      "registeredAt": "2026-08-19T17:03:01.215348212+00:00",
+      "runner": "vitest"
+    },
+    {
+      "description": "The reason the closing ask is ONE ctaBody field: blank lines make paragraphs, so there is no second box to leave half-filled.",
+      "file": "src/lib/campaignCopy.test.ts",
+      "format": "vitest",
+      "key": "splitParagraphs › splits a body on blank lines into paragraphs",
+      "line": 68,
+      "registeredAt": "2026-08-19T17:03:01.118052836+00:00",
+      "runner": "vitest"
+    },
+    {
       "description": "an empty role yields a single empty line, never throws",
       "file": "src/lib/team.test.ts",
       "format": "vitest",
@@ -7942,7 +8160,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "sponsorLevelsFrom › orders levels by the editor order pin",
-      "line": 212,
+      "line": 216,
       "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
       "runner": "tests"
     },
@@ -7951,7 +8169,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "sponsorLevelsFrom › reshapes the benefit rows while ordering",
-      "line": 235,
+      "line": 239,
       "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
       "runner": "tests"
     },
@@ -7960,7 +8178,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "sponsorLevelsFrom › returns a single level unchanged in order",
-      "line": 247,
+      "line": 251,
       "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
       "runner": "tests"
     },
@@ -7969,7 +8187,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "sponsorLevelsFrom › returns null for no entries rather than an empty list",
-      "line": 206,
+      "line": 210,
       "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
       "runner": "tests"
     },
@@ -7978,7 +8196,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "sponsorLevelsFrom › sorts a level with no order pin after the pinned ones",
-      "line": 224,
+      "line": 228,
       "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
       "runner": "tests"
     },
@@ -8338,7 +8556,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › alternates the tint across narrative sections",
-      "line": 167,
+      "line": 189,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -8347,7 +8565,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › does not let a goal meter shift the narrative alternation",
-      "line": 204,
+      "line": 239,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -8356,16 +8574,25 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › does not let an interleaved band shift the narrative alternation",
-      "line": 190,
+      "line": 225,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
+    },
+    {
+      "description": "The regression a new kind can silently cause: advancing the tint counter would move the background of every narrative below it.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "tintedFlags › is unchanged by a mission band sitting between two narratives",
+      "line": 213,
+      "registeredAt": "2026-08-19T17:04:46.607752790+00:00",
+      "runner": "vitest"
     },
     {
       "description": "The bespoke bands carry their own background, so they are never tinted by this rule.",
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › never tints a non-narrative section",
-      "line": 178,
+      "line": 200,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -8374,7 +8601,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns an empty array unchanged",
-      "line": 75,
+      "line": 90,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -8383,7 +8610,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns one flag per section",
-      "line": 221,
+      "line": 256,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -8392,7 +8619,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "tintedFlags › returns the same flags when called repeatedly on the same input",
-      "line": 215,
+      "line": 250,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -8473,7 +8700,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "toSponsorLevels › flattens the benefit rows into plain strings",
-      "line": 149,
+      "line": 153,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -8482,7 +8709,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "toSponsorLevels › leaves benefits undefined for a level that lists none",
-      "line": 185,
+      "line": 189,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -8491,7 +8718,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "toSponsorLevels › returns an empty list for no entries",
-      "line": 192,
+      "line": 196,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -8500,7 +8727,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "toSponsorLevels › takes the level key from the entry id, never from the name",
-      "line": 174,
+      "line": 178,
       "registeredAt": "2026-08-04T15:07:23Z",
       "runner": "tests"
     },
@@ -8599,16 +8826,25 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › de-duplicates a repeated unknown kind",
-      "line": 89,
+      "line": 104,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
+    },
+    {
+      "description": "The mission band is a real kind, not an unrecognized one.",
+      "file": "src/lib/momentumSections.test.ts",
+      "format": "vitest",
+      "key": "unknownSectionKinds › does not report the mission kind",
+      "line": 117,
+      "registeredAt": "2026-08-19T17:04:46.530095457+00:00",
+      "runner": "vitest"
     },
     {
       "description": "The advisory the route warns with, so a dropped section is visible in the build log rather than silently missing from the page.",
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › reports kinds that match no renderer",
-      "line": 83,
+      "line": 98,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },
@@ -8617,7 +8853,7 @@
       "file": "src/lib/momentumSections.test.ts",
       "format": "vitest",
       "key": "unknownSectionKinds › reports nothing when every kind is known",
-      "line": 95,
+      "line": 110,
       "registeredAt": "2026-07-31T19:59:08Z",
       "runner": "tests"
     },

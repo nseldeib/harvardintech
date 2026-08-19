@@ -293,6 +293,17 @@ const testimonials = defineCollection({
     quote: z.string(),
     name: z.string(),
     role: z.string().optional(),
+    // The line above the role in the cite block — the member's connection to
+    // Harvard ("Harvard Extension School Alumni · Class of 2023"), which is a
+    // different fact from what they DO for the community and is why it is a
+    // second field rather than more text crammed into `role`.
+    affiliation: z.string().optional(),
+    // A photo of the event this quote came out of, shown beside the quote with
+    // `eventCaption` in a bar beneath it. Distinct from `photo`, which is the
+    // member's own portrait: absent `eventPhoto` drops the photo column and
+    // leaves the quote full-width, so a quote with no picture is a normal state.
+    eventPhoto: z.string().optional(),
+    eventCaption: z.string().optional(),
     photo: z.string().optional(),
     order: z.number().optional(),
     draft: z.boolean().optional(),
@@ -379,6 +390,12 @@ const momentumSections = defineCollection({
   schema: z.object({
     kind: z.string(),
     title: z.string().optional(),
+    // The uppercase eyebrow above the heading. Unlike `layout`, `image` and
+    // `widgetId` below — each of which belongs to exactly one kind — this
+    // applies to EVERY kind, because the campaign design puts a kicker over
+    // every band on the page. Blank draws nothing, which is how every band
+    // rendered before the field existed.
+    kicker: z.string().optional(),
     layout: z.string().optional(),
     image: z.string().optional(),
     // The Givebutter widget id, for `goal-meter` sections only — the same
@@ -387,6 +404,12 @@ const momentumSections = defineCollection({
     // band that renders it: a page with no meter has no use for the field, and a
     // second meter needs no new singleton key.
     widgetId: z.string().optional(),
+    // The goal-meter band's optional link out to the campaign page itself, drawn
+    // on the same row as the heading. Both blank is the band as it renders
+    // today; a label with no url draws nothing at all, since a link that goes
+    // nowhere is worse than no link.
+    linkLabel: z.string().optional(),
+    linkUrl: z.string().optional(),
     // Which set of cards a SLOT band shows. Free text for the same reason `kind`
     // and `layout` are: groups are invented by an editor as they split a band, so
     // there is no fixed list a select could offer. Blank matches the cards that
@@ -488,16 +511,16 @@ const accomplishments = defineCollection({
 });
 
 // Cards in the Momentum Fund's "What Your Gift Powers" band, also migrated out of
-// `donatePage.json`. `icon` names one of the three inline SVG glyphs as free text
-// validated in `src/lib/pillars.ts` — the same treatment `kind` and `layout` get —
-// so an unrecognized value falls back to a drawn icon instead of failing the
-// build. A card with no `linkLabel`/`linkUrl` renders as plain copy.
+// `donatePage.json`. The cards carry NO icon field: the campaign design numbers
+// them 01 / 02 / 03 from their position in the band, which `GiftPillars` derives
+// at render time. Keeping the field while nothing drew it would have left an
+// editor a control that silently does nothing. A card with no
+// `linkLabel`/`linkUrl` renders as plain copy.
 const pillars = defineCollection({
   loader: collectionGlob('pillars'),
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    icon: z.string().optional(),
     linkLabel: z.string().optional(),
     linkUrl: z.string().optional(),
     // Which band this card belongs to. See `accomplishments` above and
@@ -537,6 +560,10 @@ const pageCopy = defineCollection({
     // named one would leave the public audience on the old wording.
     heroHeadlineNamed: z.string().optional(),
     heroHeadlineGeneric: z.string().optional(),
+    // The uppercase eyebrow above the hero headline, naming the campaign. The
+    // frame's counterpart to a section's `kicker` — the hero is deliberately not
+    // a section, so it needs its own field rather than borrowing one.
+    heroKicker: z.string().optional(),
     heroSubhead: z.string().optional(),
     heroImage: z.string().optional(),
     // The hero's optional MOVING backdrop: a path like `/videos/momentum.mp4`
@@ -550,8 +577,19 @@ const pageCopy = defineCollection({
     // of a black rectangle, with no JavaScript on any of those paths.
     heroVideo: z.string().optional(),
     // The closing ask at the bottom of the page.
+    ctaKicker: z.string().optional(),
     ctaTitle: z.string().optional(),
+    // Splits on blank lines into paragraphs, so the closing ask's two sentences
+    // need one field rather than two — an editor writing a third paragraph does
+    // not need a schema change to get it.
     ctaBody: z.string().optional(),
+    // The photo beside the closing copy. Blank collapses the band to copy alone
+    // rather than leaving a hole, so the picture is genuinely optional.
+    ctaImage: z.string().optional(),
+    // The uppercase line beneath the closing button. Distinct from `ctaBody`:
+    // this is the campaign's sign-off phrase, not prose, and it is styled as
+    // such wherever it appears.
+    ctaTagline: z.string().optional(),
     // The giving button's label — ONE field, not one per band. The same text is
     // rendered on the hero button, the donor wall's button, and the closing
     // one, because they are the same ask in three places; splitting it per band

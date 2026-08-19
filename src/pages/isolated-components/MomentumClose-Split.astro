@@ -1,0 +1,41 @@
+---
+import Component from "../../../src/components/donate/MomentumClose.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for the closing ask as the campaign design draws it: the photo
+// on the left behind a 20px gold rule, the copy on the right on aqua, and the
+// navy ↗ button over an uppercase tagline.
+//
+// `MomentumClose.astro` beside it keeps the NO-IMAGE case, where the band
+// collapses to centred copy alone. The two frames are the pair — a closing band
+// with no photo chosen yet is a state that ships, not a broken one.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: MomentumClose-Split</title>
+    <style is:global>
+      /* The split is two columns only at a page-like width; the fit-content
+         wrapper would stack the photo over the copy and hide the gold rule. */
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        kicker="The Momentum Fund"
+        title="Become part of the foundation."
+        body={"Every gift to the Momentum Fund goes directly into the events, chapters, and connections that make this community worth belonging to.\n\nJoin the alumni choosing to move from informal support to intentional investment, and help build what the next decade of Harvard Alumni in Tech will stand on."}
+        image="/images/gallery/event-02.jpg"
+        tagline="One community. Shared momentum. A stronger network."
+        ctaLabel="Become a Founding Supporter"
+        email="ben@harvardintech.com"
+        campaignName="The Momentum Fund"
+      />
+    </div>
+  </body>
+</html>

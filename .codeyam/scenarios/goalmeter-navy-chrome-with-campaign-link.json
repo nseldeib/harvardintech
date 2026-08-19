@@ -1,0 +1,13 @@
+{
+  "name": "GoalMeter - Navy Chrome With Campaign Link",
+  "id": "2af34d23-044d-4370-b3b0-eb1a44da2bbe",
+  "url": "/isolated-components/GoalMeter-WithLink",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GoalMeter",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/GoalMeter.astro",
+  "description": "The progress band's new navy-and-gold chrome: gold kicker, white serif heading, and the View the campaign link sharing the heading's row. The meter area beneath is EMPTY on purpose — Givebutter's loader never runs inside a capture, so this frame proves the chrome we own and cannot prove their progress bar. The harness page forces the band visible past its own collapse-until-defined guard to produce a capture at all."
+}

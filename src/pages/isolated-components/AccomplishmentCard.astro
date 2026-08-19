@@ -1,0 +1,40 @@
+---
+import Component from "../../../src/components/donate/AccomplishmentCard.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for AccomplishmentCard — one cell of the campaign page's
+// four-up evidence strip.
+//
+// Framed as a GRID CELL, not full width, because that is the only place this card
+// ever appears and its proportions are the whole point of it: the 260px floor is
+// what keeps four cells the same height when one carries a sentence and another
+// carries none. A full-width capture would show a shape the card never takes.
+//
+// The right and bottom rules look asymmetric here on purpose — the card draws
+// only those two, and `MomentumAccomplishments` draws the strip's top and left,
+// so adjacent cells share one hairline instead of doubling it.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: AccomplishmentCard</title>
+    <style is:global>
+      #codeyam-capture {
+        width: 300px;
+        border-top: 1px solid var(--line);
+        border-left: 1px solid var(--line);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        value="600+"
+        label="Community members"
+        body="A WhatsApp community that started as one city's group chat and now spans six chapters and three continents."
+      />
+    </div>
+  </body>
+</html>

@@ -79,10 +79,6 @@ export interface VolunteerPageCopy {
   ctaUrl?: string;
 }
 
-/** Icon badge on a "What Your Gift Powers" card. Matches the campaign mockup;
- *  drawn as inline SVG so there is no image request per card. */
-export type PillarIcon = 'people' | 'book' | 'globe';
-
 /** Editable copy for the /donate Momentum Fund campaign page. */
 /** Editable copy for /sponsor. Same model as VolunteerPageCopy: the pitch, the
  *  partnership levels, and the legal line are all CMS edits, never code changes. */
@@ -121,6 +117,10 @@ export interface DonatePageCopy {
    *  lib/personalize.ts). With no usable name, `heroHeadlineGeneric` is used. */
   heroHeadlineNamed: string;
   heroHeadlineGeneric: string;
+  /** The uppercase eyebrow above the hero headline, naming the campaign. The
+   *  frame's counterpart to a section's `kicker` — the hero is deliberately not
+   *  a section, so it carries its own field rather than borrowing one. */
+  heroKicker?: string;
   heroSubhead?: string;
   /** Full-bleed background photo behind the hero. */
   heroImage?: string;
@@ -148,7 +148,6 @@ export interface DonatePageCopy {
   // bespoke bands, which those sections merely position.
   pillarsTitle?: string;
   pillars?: {
-    icon?: PillarIcon;
     title: string;
     body: string;
     linkLabel?: string;
@@ -181,8 +180,17 @@ export interface DonatePageCopy {
   networkTagline?: string;
   networkSearchTitle?: string;
   shareMessage?: string;
+  ctaKicker?: string;
   ctaTitle?: string;
+  /** Splits on blank lines into paragraphs, so the closing ask's two sentences
+   *  need one field rather than two. */
   ctaBody?: string;
+  /** The photo beside the closing copy. Blank collapses the band to copy alone
+   *  rather than leaving a hole, so the picture is genuinely optional. */
+  ctaImage?: string;
+  /** The uppercase sign-off line beneath the closing button. Distinct from
+   *  `ctaBody`: this is a phrase, not prose, and is styled as one. */
+  ctaTagline?: string;
   ctaLabel?: string;
   /** Empty until a donation platform is chosen; the CTA then falls back to a
    *  giving-inquiry mailto (same model as Sponsorship). */

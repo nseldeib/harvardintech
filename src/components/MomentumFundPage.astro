@@ -24,13 +24,14 @@ import MomentumStats from './donate/MomentumStats.astro';
 import GoalMeter from './donate/GoalMeter.astro';
 import MomentumAccomplishments from './donate/MomentumAccomplishments.astro';
 import MomentumNarrative from './donate/MomentumNarrative.astro';
+import MomentumMission from './donate/MomentumMission.astro';
 import GiftPillars from './donate/GiftPillars.astro';
 import MomentumTestimonials from './donate/MomentumTestimonials.astro';
 import MomentumNetwork from './donate/MomentumNetwork.astro';
 import MomentumClose from './donate/MomentumClose.astro';
 import type { TestimonialLike } from './donate/MomentumTestimonials.astro';
 import ComingSoon from './ComingSoon.astro';
-import { SECTION_LABELS, sectionHeading, tintedFlags, type SectionKind, type SectionLike } from '../lib/momentumSections';
+import { SECTION_LABELS, sectionHeading, sectionKicker, tintedFlags, type SectionKind, type SectionLike } from '../lib/momentumSections';
 import { cardsInGroup } from '../lib/sectionGroups';
 import { resolveVisibility } from '../lib/homeSections';
 import type { DonorLike } from '../lib/donors';
@@ -80,6 +81,7 @@ const tinted = tintedFlags(sections);
 ---
 
 <MomentumHero
+  kicker={copy.heroKicker}
   headlineNamed={copy.heroHeadlineNamed}
   headlineGeneric={copy.heroHeadlineGeneric}
   subhead={copy.heroSubhead}
@@ -113,6 +115,7 @@ const tinted = tintedFlags(sections);
       case 'narrative':
         return (
           <MomentumNarrative
+            kicker={sectionKicker(section)}
             title={section.title}
             layout={section.layout}
             image={section.image}
@@ -121,11 +124,27 @@ const tinted = tintedFlags(sections);
             {Body ? <Body /> : null}
           </MomentumNarrative>
         );
+      // Like `narrative`, this band draws entirely from its own entry — kicker,
+      // heading, and body — so it takes no `donatePage.json` fallback.
+      case 'mission':
+        return (
+          <MomentumMission kicker={sectionKicker(section)} title={sectionHeading(section)}>
+            {Body ? <Body /> : null}
+          </MomentumMission>
+        );
       // The section's own `title` is the heading here, not a `donatePage.json`
       // key: the meter has no card data of its own, which puts it closer to
       // `narrative` than to the slot bands in that one respect.
       case 'goal-meter':
-        return <GoalMeter title={section.title} widgetId={section.widgetId} />;
+        return (
+          <GoalMeter
+            kicker={sectionKicker(section)}
+            title={section.title}
+            widgetId={section.widgetId}
+            linkLabel={section.linkLabel}
+            linkUrl={section.linkUrl}
+          />
+        );
       // The slot bands select their own cards and name themselves. Both are what
       // make a DUPLICATED section a distinct band rather than a second copy: the
       // heading is the section's own `title` when it has one, and `cardsInGroup`
@@ -135,6 +154,7 @@ const tinted = tintedFlags(sections);
       case 'accomplishments':
         return (
           <MomentumAccomplishments
+            kicker={sectionKicker(section)}
             title={sectionHeading(section, copy.accomplishmentsTitle)}
             items={cardsInGroup(copy.accomplishments ?? [], section.group)}
           />
@@ -142,6 +162,7 @@ const tinted = tintedFlags(sections);
       case 'pillars':
         return (
           <GiftPillars
+            kicker={sectionKicker(section)}
             title={sectionHeading(section, copy.pillarsTitle)}
             pillars={cardsInGroup(copy.pillars ?? [], section.group)}
           />
@@ -149,13 +170,17 @@ const tinted = tintedFlags(sections);
       case 'testimonials':
         return (
           <MomentumTestimonials
+            kicker={sectionKicker(section)}
             title={sectionHeading(section, copy.testimonialsTitle)}
             testimonials={testimonials}
-          />
+          >
+            {Body ? <Body /> : null}
+          </MomentumTestimonials>
         );
       case 'donors':
         return (
           <MomentumNetwork
+            kicker={sectionKicker(section)}
             title={sectionHeading(section, copy.donorsTitle)}
             networkTitle={copy.networkTitle}
             tagline={copy.networkTagline}
@@ -182,8 +207,11 @@ const tinted = tintedFlags(sections);
 }
 
 <MomentumClose
+  kicker={copy.ctaKicker}
   title={copy.ctaTitle}
   body={copy.ctaBody}
+  image={copy.ctaImage}
+  tagline={copy.ctaTagline}
   ctaLabel={copy.ctaLabel}
   donateUrl={copy.donateUrl}
   email={email}

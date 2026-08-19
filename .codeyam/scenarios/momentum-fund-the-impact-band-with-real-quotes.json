@@ -1,0 +1,54 @@
+{
+  "name": "Momentum Fund - The Impact Band With Real Quotes",
+  "id": "868849bb-3294-42e1-a907-1effb3926357",
+  "url": "/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "Behind every event, chapter, and member of our network is a conversation, an introduction, or a shared experience that helped someone move forward. These are a few of them, in the words of the people they happened to.",
+        "kicker": "Every number represents a story",
+        "kind": "testimonials",
+        "order": 1,
+        "slug": "testimonials",
+        "title": "One connection can change what's possible."
+      },
+      {
+        "kicker": "What we've accomplished so far",
+        "kind": "accomplishments",
+        "order": 2,
+        "slug": "accomplishments",
+        "title": "Momentum already exists."
+      }
+    ],
+    "testimonials": [
+      {
+        "affiliation": "Harvard University Alumni · Class of 2019",
+        "eventCaption": "Leaders in Engineering · San Francisco",
+        "eventPhoto": "/images/gallery/event-07.jpg",
+        "name": "Jessica Li",
+        "order": 1,
+        "photo": "/images/team/jessica-li.png",
+        "quote": "I moved to the Bay Area knowing almost no one in tech. The first Harvard Alumni in Tech event I walked into, I met three people who are still in my corner two years later. That is not networking. That is a community deciding you belong.",
+        "role": "San Francisco Event Lead",
+        "slug": "jessica-li"
+      },
+      {
+        "affiliation": "Harvard Extension School Alumni · Class of 2023",
+        "eventCaption": "HIT Colorado Co-working Afternoon · Improper City",
+        "eventPhoto": "/images/gallery/event-11.jpg",
+        "name": "Mohammed Ally",
+        "order": 2,
+        "quote": "Colorado did not have a chapter. We started with six people in a co-working space on a Saturday afternoon. What the fund pays for is the part nobody sees — the space, the coffee, the follow-up that turns a one-time afternoon into something people plan their month around.",
+        "role": "HIT Colorado Co-Event Lead",
+        "slug": "mohammed-ally"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "src/pages/donate.astro",
+  "description": "The impact band on the real page once quotes exist — the counterpart to the public-visitor scenario, where the collection is still empty and the band renders nothing at all. Both quotes are real entries with an affiliation and an event photo, and the second deliberately has no portrait: there is no photo on file for that member, and the card renders without one rather than borrowing a face that is not his. The band is ordered FIRST here so the capture reaches it at all: the redesigned hero is 680px tall and fills the 900px desktop viewport, so a band in its natural sixth position would be several screens below the fold and this frame would be indistinguishable from every other /donate scenario. Even first, only the band's aqua ground and its teal kicker clear the fold — the quotes themselves are shown in the momentumtestimonials-photo-led-rows component scenario. The same framing choice the two-pillar-bands scenario documents."
+}

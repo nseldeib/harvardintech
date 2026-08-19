@@ -1,8 +1,9 @@
 {
   "campaignName": "The Momentum Fund",
-  "heroHeadlineNamed": "{name}, let's go further together",
-  "heroHeadlineGeneric": "Let's go further together",
-  "heroSubhead": "Help sustain the Harvard Alumni in Tech community and the connections, opportunities, and support that move us forward.",
+  "heroHeadlineNamed": "{name}, let's go further together.",
+  "heroHeadlineGeneric": "Let's go further together.",
+  "heroKicker": "The Momentum Fund",
+  "heroSubhead": "Help build the foundation Harvard Alumni in Tech needs to sustain its momentum and serve a growing global community.",
   "heroImage": "/images/bg/hero-bg.jpg",
   "stats": [
     {
@@ -44,19 +45,16 @@
   "pillarsTitle": "What Your Gift Powers",
   "pillars": [
     {
-      "icon": "people",
       "title": "Create Meaningful Connections",
       "body": "Support events, roundtables, and gatherings that help alumni build valuable relationships and discover new opportunities.",
       "linkLabel": "Check out our past events",
       "linkUrl": "/events"
     },
     {
-      "icon": "book",
       "title": "Expand Access to Knowledge",
-      "body": "Power practical content, mentorship, and conversations that help founders, innovators, and tech professionals grow."
+      "body": "Power practical content, mentorship, and conversations that help founders, innovators, and technology professionals grow."
     },
     {
-      "icon": "globe",
       "title": "Strengthen the Network",
       "body": "Build the infrastructure, volunteer resources, and city chapters needed to serve more alumni and sustain the community."
     }
@@ -86,8 +84,11 @@
   "networkTagline": "Every light belongs to a founding supporter. Together, they illuminate what comes next.",
   "networkSearchTitle": "Find your place in the network",
   "shareMessage": "Harvard Alumni in Tech Momentum Fund and help strengthen the network that gives back to the network.\n\nI contributed because [SUPPORTER MESSAGE]\n\nIf this community has helped you make a connection, discover an opportunity, or move an idea forward, I invite you to join me in helping power what comes next.\n\nSupport the Momentum Fund: [DONATION LINK]",
-  "ctaTitle": "Help power what comes next.",
-  "ctaBody": "Join the alumni choosing to move from informal support to intentional investment, every month.",
-  "ctaLabel": "Make a Gift",
+  "ctaKicker": "The Momentum Fund",
+  "ctaTitle": "Become part of the foundation.",
+  "ctaBody": "Every gift to the Momentum Fund goes directly into the events, chapters, and connections that make this community worth belonging to.\n\nJoin the alumni choosing to move from informal support to intentional investment, and help build what the next decade of Harvard Alumni in Tech will stand on.",
+  "ctaImage": "/images/gallery/event-02.jpg",
+  "ctaTagline": "One community. Shared momentum. A stronger network.",
+  "ctaLabel": "Become a Founding Supporter",
   "donateUrl": ""
 }

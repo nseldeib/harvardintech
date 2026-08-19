@@ -1,0 +1,13 @@
+{
+  "name": "GiftPillars - Numbered Bordered Grid",
+  "id": "280d7fbe-7f45-4849-8c8f-4e0547b0a5b7",
+  "url": "/isolated-components/GiftPillars-Numbered",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiftPillars",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/GiftPillars.astro",
+  "description": "The gift grid on cream with 01 / 02 / 03 in bordered cells sharing single-pixel rules, replacing the three icon badges. The numerals are NOT passed in — giftOrdinal derives them from each card's position in the band, so this frame proves the derivation rather than a list someone typed. That is the same rule that makes a duplicated grouped gift band restart at 01 instead of continuing at 04."
+}

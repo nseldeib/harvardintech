@@ -1,0 +1,13 @@
+{
+  "name": "MomentumMission - Gold Band",
+  "id": "6ad49725-8d38-43b6-a96b-7ca580d443af",
+  "url": "/isolated-components/MomentumMission",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "MomentumMission",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/MomentumMission.astro",
+  "description": "The new gold mission band, second on the campaign page. The crimson tail of the heading is markdown emphasis an editor wrote, parsed by emphasizedHeading rather than hardcoded as a span — which is the one thing about this band that its props alone do not show. A section kind rather than markup composed into the page, so it reorders, drafts and renames like every other band."
+}

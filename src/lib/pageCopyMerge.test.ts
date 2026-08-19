@@ -37,8 +37,12 @@ const DONATE = {
   campaignName: 'The Momentum Fund',
   heroHeadlineNamed: "{name}, let's go further together",
   heroHeadlineGeneric: "Let's go further together",
+  heroKicker: 'The Momentum Fund',
   heroSubhead: 'Help sustain the community.',
+  ctaKicker: 'The Momentum Fund',
   ctaTitle: 'Help power what comes next.',
+  ctaImage: '/images/gallery/event-01.jpg',
+  ctaTagline: 'One community. Shared momentum.',
   ctaLabel: 'Make a Gift',
 } as DonatePageCopy;
 
@@ -349,14 +353,53 @@ describe('mergeDonateFrame', () => {
   it('returns only frame keys, never the rest of the campaign copy', () => {
     expect(Object.keys(mergeDonateFrame(DONATE, { ctaTitle: 'Give' })).sort()).toEqual([
       'ctaBody',
+      'ctaImage',
+      'ctaKicker',
       'ctaLabel',
+      'ctaTagline',
       'ctaTitle',
       'heroHeadlineGeneric',
       'heroHeadlineNamed',
       'heroImage',
+      'heroKicker',
       'heroSubhead',
       'heroVideo',
     ]);
+  });
+
+  // The four campaign-frame fields the redesign added: two kickers, the closing
+  // photo, and the sign-off line. All ordinary editable copy, so they arrive
+  // through the same door as `ctaTitle` — an editor who fills them in sees them.
+  it('takes the campaign frame fields the editor filled in', () => {
+    const merged = mergeDonateFrame(DONATE, {
+      heroKicker: 'The Momentum Fund',
+      ctaKicker: 'The Momentum Fund',
+      ctaImage: '/images/gallery/event-02.jpg',
+      ctaTagline: 'One community. Shared momentum.',
+    });
+
+    expect(merged.heroKicker).toBe('The Momentum Fund');
+    expect(merged.ctaKicker).toBe('The Momentum Fund');
+    expect(merged.ctaImage).toBe('/images/gallery/event-02.jpg');
+    expect(merged.ctaTagline).toBe('One community. Shared momentum.');
+  });
+
+  // They follow the `ctaTitle` clause, NOT the `heroVideo` one: a cleared box
+  // falls back to the committed JSON rather than blanking the band. That is the
+  // ordinary rule on this page, and `heroVideo` is the single exception — a test
+  // here because the two sit side by side and are easy to conflate.
+  it('falls back to the committed value when a campaign frame box is cleared', () => {
+    const merged = mergeDonateFrame(DONATE, {
+      heroKicker: '',
+      ctaKicker: '   ',
+      ctaImage: '',
+      ctaTagline: '  ',
+    });
+
+    expect(merged.heroKicker).toBe(DONATE.heroKicker);
+    expect(merged.ctaKicker).toBe(DONATE.ctaKicker);
+    expect(merged.ctaImage).toBe(DONATE.ctaImage);
+    expect(merged.ctaTagline).toBe(DONATE.ctaTagline);
   });
 
   // The hero's optional moving backdrop, joining the frame rather than getting a

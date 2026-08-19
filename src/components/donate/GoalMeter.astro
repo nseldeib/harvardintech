@@ -24,22 +24,41 @@
 // Once the element is defined the band is revealed and the widget owns what it
 // draws inside, including its own empty and error states. That is the right
 // boundary: past that point the question is Givebutter's to answer, not ours.
+import { campaignLink } from '../../lib/momentumSections';
+
 interface Props {
+  kicker?: string;
   title?: string;
   /** The Givebutter widget id. Blank renders NOTHING — not an empty band and not
    *  a placeholder — so a half-finished edit costs one missing section rather
    *  than a broken-looking page. `/donate` logs an advisory naming the section. */
   widgetId?: string;
+  /** The optional link out to the campaign itself, drawn beside the heading.
+   *  Both halves are required to draw it — a label with no destination would be
+   *  a link that goes nowhere, which is worse than no link. */
+  linkLabel?: string;
+  linkUrl?: string;
 }
-const { title, widgetId } = Astro.props as Props;
+const { kicker, title, widgetId, linkLabel, linkUrl } = Astro.props as Props;
 
 const id = widgetId?.trim();
+const link = campaignLink({ linkLabel, linkUrl });
 ---
 
 {
   id ? (
     <section class="goal-meter is-collapsed" data-goal-meter>
-      {title ? <h2>{title}</h2> : null}
+      <div class="gm-head">
+        <div class="gm-title">
+          {kicker ? <p class="kick kick--gold">{kicker}</p> : null}
+          {title ? <h2>{title}</h2> : null}
+        </div>
+        {link ? (
+          <a class="gm-link" href={link.url}>
+            {link.label} <span aria-hidden="true">→</span>
+          </a>
+        ) : null}
+      </div>
       <div class="meter">
         {/* Written open/close rather than self-closing: a custom element is not
             a void element, and a self-closing tag would be parsed as an open one. */}
@@ -67,10 +86,43 @@ const id = widgetId?.trim();
 }
 
 <style>
+  /* Navy with a soft gold lift behind the meter — the campaign design's chrome
+     for this band. Left-aligned now rather than centred, so the heading and the
+     campaign link share one row the way the design draws them. */
   .goal-meter {
-    background: var(--paper-2);
-    padding: 56px 24px;
-    text-align: center;
+    background: var(--momentum-navy-2);
+    background-image: radial-gradient(
+      ellipse at 50% 120%,
+      rgba(246, 199, 104, 0.18),
+      transparent 62%
+    );
+    padding: 78px 24px;
+  }
+  .gm-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto 36px;
+  }
+  .gm-title {
+    min-width: 0;
+  }
+  .gm-title .kick {
+    margin: 0 0 14px;
+  }
+  .gm-link {
+    flex: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--momentum-gold);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    padding-bottom: 6px;
+  }
+  .gm-link:hover {
+    color: #fff;
   }
   /* The collapse. A class rather than the `hidden` attribute: `hidden` is
      stronger than it looks — tooling that walks the DOM treats the attribute
@@ -82,20 +134,34 @@ const id = widgetId?.trim();
     display: none;
   }
   h2 {
-    font-family: var(--font-serif);
-    font-size: clamp(26px, 3vw, 34px);
+    font-family: var(--font-title);
+    font-size: clamp(28px, 3.4vw, 44px);
     font-weight: 700;
+    line-height: 1.08;
     letter-spacing: -0.02em;
-    color: var(--ink);
-    /* Bounded to the meter's own width, and centered over it. A campaign name
-       longer than a few words would otherwise run the full width of the band
-       while the meter beneath it stops at 720px — an unreadable measure sitting
-       over a narrow one. The long-title scenario is what surfaced this. */
+    color: #fff;
+    /* Still bounded rather than free-running. A campaign name longer than a few
+       words would otherwise stretch the full width of the band while the meter
+       beneath it stops at 720px — an unreadable measure sitting over a narrow
+       one. The long-title scenario is what surfaced this. */
     max-width: 720px;
-    margin: 0 auto 28px;
+    margin: 0;
   }
   .meter {
     max-width: 720px;
     margin: 0 auto;
+  }
+
+  /* The link drops beneath the heading rather than squeezing it — on a narrow
+     band a right-aligned link and a wrapping serif heading fight for the row. */
+  @media (max-width: 720px) {
+    .goal-meter {
+      padding: 56px 24px;
+    }
+    .gm-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
   }
 </style>

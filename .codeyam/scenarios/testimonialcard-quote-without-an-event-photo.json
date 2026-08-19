@@ -1,0 +1,13 @@
+{
+  "name": "TestimonialCard - Quote Without An Event Photo",
+  "id": "0ac5f61a-991c-4dff-a063-377c414b2f44",
+  "url": "/isolated-components/TestimonialCard",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "TestimonialCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/TestimonialCard.astro",
+  "description": "The testimonial as a full-width row rather than the boxed card it used to be, in its solo state: no event photo, so there is no second column and the quote runs the full width. The floor the card has to render at — every field except the quote and the name is optional, and the campaign's own Colorado quote ships with neither portrait nor a real event photo of its own."
+}

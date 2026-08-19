@@ -14,6 +14,7 @@ import { sortByOrder } from './order';
  */
 export const SECTION_KINDS = [
   'narrative',
+  'mission',
   'goal-meter',
   'accomplishments',
   'pillars',
@@ -23,6 +24,18 @@ export const SECTION_KINDS = [
 ] as const;
 
 export type SectionKind = (typeof SECTION_KINDS)[number];
+
+/**
+ * The kinds whose markdown body is rendered onto the page.
+ *
+ * A fact about the kinds, so it lives beside them rather than as a `===`
+ * comparison inside the astro:content loader where it cannot be unit-tested.
+ * `narrative` was the only member for as long as the slot bands drew every word
+ * from `donatePage.json`; the campaign design gives `mission` a paragraph of its
+ * own and `testimonials` a lede above the quotes, so both now carry prose an
+ * editor writes in the entry itself.
+ */
+export const KINDS_WITH_BODY = new Set<string>(['narrative', 'mission', 'testimonials']);
 
 /**
  * What each band is called when a "coming soon" placeholder has to name it.
@@ -36,6 +49,7 @@ export type SectionKind = (typeof SECTION_KINDS)[number];
  * is one testable fact per page instead of markup.
  */
 export const SECTION_LABELS: Partial<Record<SectionKind, string>> = {
+  mission: 'Our mission',
   'goal-meter': 'Our progress',
   accomplishments: 'What we have accomplished so far',
   pillars: 'What your gift powers',
@@ -44,8 +58,12 @@ export const SECTION_LABELS: Partial<Record<SectionKind, string>> = {
   stats: 'By the numbers',
 };
 
-/** The layouts a `narrative` section can use. `text-only` is the fallback. */
-export const SECTION_LAYOUTS = ['image-left', 'image-right', 'text-only'] as const;
+/** The layouts a `narrative` section can use. `text-only` is the fallback.
+ *  `columns` sets the prose in two columns with no figure at all, which is what
+ *  the campaign design asks of the "why support us" band — a layout value rather
+ *  than a fourth renderer, so it degrades through `resolveLayout` like any
+ *  other and the CMS dropdown picks it up with no second list to keep in step. */
+export const SECTION_LAYOUTS = ['image-left', 'image-right', 'text-only', 'columns'] as const;
 
 export type SectionLayout = (typeof SECTION_LAYOUTS)[number];
 
@@ -53,12 +71,22 @@ export type SectionLayout = (typeof SECTION_LAYOUTS)[number];
 export interface SectionLike {
   kind: string;
   title?: string;
+  /** The uppercase eyebrow drawn above the heading. Unlike `layout`, `image` and
+   *  `widgetId` — each of which belongs to one kind — this applies to EVERY
+   *  kind: the campaign design puts a kicker over every band on the page. Blank
+   *  draws nothing, which is every band before this field existed. */
+  kicker?: string;
   layout?: string;
   image?: string;
   /** The Givebutter widget id. `goal-meter` sections only — the same
    *  kind-specific treatment `layout` and `image` get for narratives. Blank
    *  renders no band at all. */
   widgetId?: string;
+  /** The goal-meter band's optional "View the campaign →" link. Both blank is
+   *  the band as it renders today; a label with no url draws nothing, since a
+   *  link that goes nowhere is worse than no link. */
+  linkLabel?: string;
+  linkUrl?: string;
   /** Which set of cards a SLOT band shows. Blank matches the ungrouped cards,
    *  which is the page as it renders today. The matching rule lives in
    *  `./sectionGroups.ts` because both card loaders need the identical one. */
@@ -172,6 +200,73 @@ export function sectionHeading(
   fallback?: string,
 ): string | undefined {
   return section.title?.trim() || fallback;
+}
+
+/**
+ * The eyebrow drawn above a band's heading, or `undefined` when there is none.
+ *
+ * Deliberately a SEPARATE function from `sectionHeading` rather than a second
+ * call into it, for two reasons. The two fall back to different things — a band
+ * with no heading borrows the shared label for its kind, while a band with no
+ * kicker simply has no kicker, because there is no per-kind eyebrow to borrow.
+ * And a heading with no kicker is a perfectly ordinary band, not a half-filled
+ * one, so this returning `undefined` must stay unremarkable at every call site.
+ *
+ * Whitespace-only counts as blank and `undefined` means draw-no-kicker, matching
+ * `sectionHeading` exactly — an editor who clears the box gets the band back the
+ * way it looked before the field existed.
+ */
+export function sectionKicker(
+  section: Pick<SectionLike, 'kicker'>,
+  fallback?: string,
+): string | undefined {
+  return section.kicker?.trim() || fallback;
+}
+
+/** The goal-meter band's optional link out to the campaign. */
+export interface CampaignLink {
+  label: string;
+  url: string;
+}
+
+/**
+ * The "View the campaign →" link beside the progress band's heading, or
+ * `undefined` when it should not be drawn.
+ *
+ * BOTH halves are required, which is the whole rule. A label with no
+ * destination would render a link that goes nowhere — worse than no link, since
+ * a reader who clicks it learns the page is broken — and a url with no label has
+ * nothing to click. Either box alone therefore draws nothing at all, and
+ * `goal-meter.md` documents exactly that to the editor.
+ *
+ * Whitespace-only counts as blank, matching every other free-text field on this
+ * page. The trimmed values are returned rather than the raw ones, so a url with
+ * a stray trailing newline from a paste does not end up in the `href`.
+ */
+export function campaignLink(
+  section: Pick<SectionLike, 'linkLabel' | 'linkUrl'>,
+): CampaignLink | undefined {
+  const label = section.linkLabel?.trim();
+  const url = section.linkUrl?.trim();
+  return label && url ? { label, url } : undefined;
+}
+
+/**
+ * The ordinal a gift card shows, from its zero-based position in its band.
+ *
+ * A named rule rather than an expression in a `.map()` because of what the
+ * position is measured against: the cards of THIS band, after `cardsInGroup`
+ * has narrowed them — not the whole pillars collection. That is what makes a
+ * duplicated, grouped gift band start again at `01` instead of continuing at
+ * `04`, and it is the one thing about the numbering anyone could get wrong.
+ *
+ * Zero-padded to two digits, matching the campaign design. A band with more than
+ * ninety-nine cards simply grows to three digits rather than truncating — the
+ * page would be absurd long before that, but silently dropping a leading digit
+ * would be worse than an unpadded one.
+ */
+export function giftOrdinal(index: number): string {
+  return String(index + 1).padStart(2, '0');
 }
 
 /**

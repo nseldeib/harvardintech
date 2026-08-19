@@ -1,0 +1,55 @@
+---
+import Component from "../../../src/components/donate/GoalMeter.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for the progress band's NEW chrome — navy ground, gold kicker,
+// white serif heading, and the "View the campaign →" link sharing the heading's
+// row.
+//
+// READ THE CAPTURE CAREFULLY, because this page overrides the component's own
+// behaviour to produce one — the same caveat as `GoalMeter.astro` beside it.
+//
+// The band ships hidden and reveals itself only once Givebutter's loader script
+// has defined `<givebutter-widget>`. Neither thing happens here: the loader is
+// not on this page, and the capture browser does not run the reveal even when it
+// is. So on a real page inside a capture, this band collapses to nothing, which
+// is the DESIGNED behaviour and not a fault.
+//
+// The style block below therefore forces the band visible, so the frame we own
+// can be reviewed. What this frame proves is the chrome and the link. What it
+// does NOT prove is that the meter renders: the empty area under the heading is
+// exactly the boundary between our band and Givebutter's progress bar, and no
+// screenshot taken here can show their side of it.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GoalMeter-WithLink</title>
+    <style is:global>
+      /* Harness-only. Defeats the component's collapse so the band is
+         reviewable. `is:global` because the band carries the COMPONENT's scope
+         id, not this page's — a scoped rule here would match nothing. */
+      #codeyam-capture .goal-meter.is-collapsed {
+        display: block;
+      }
+      /* The heading and the link share a row, which only happens at a page-like
+         width; the fit-content wrapper would stack them. */
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        kicker="Campaign progress · Live from Givebutter"
+        title="Our first gifts are already building momentum."
+        widgetId="MRDbEz"
+        linkLabel="View the campaign"
+        linkUrl="https://example.org/campaign"
+      />
+    </div>
+  </body>
+</html>

@@ -12,8 +12,13 @@ interface Props {
   donateUrl?: string;
   email: string;
   campaignName?: string;
-  /** `light` inverts to a white button for use on the crimson/ink bands. */
-  variant?: 'crimson' | 'light';
+  /** `light` inverts to a white button for use on the crimson/ink bands.
+   *  `navy` is the campaign page's closing button, which sits on a PALE band
+   *  where both the crimson and the white variant lose their footing. */
+  variant?: 'crimson' | 'light' | 'navy';
+  /** Appends the campaign design's ↗ glyph. Decorative and `aria-hidden`, so
+   *  the link still reads as its label alone to a screen reader. */
+  glyph?: boolean;
 }
 const {
   label = 'Make a Gift',
@@ -21,13 +26,18 @@ const {
   email,
   campaignName,
   variant = 'crimson',
+  glyph = false,
 } = Astro.props as Props;
 
 const href = resolveGiveHref({ donateUrl, email, campaignName });
 ---
 
-<a class:list={['give', variant === 'light' && 'give--light']} href={href} rel="noopener">
-  {label}
+<a
+  class:list={['give', variant === 'light' && 'give--light', variant === 'navy' && 'give--navy']}
+  href={href}
+  rel="noopener"
+>
+  {label}{glyph ? <span class="glyph" aria-hidden="true">↗</span> : null}
 </a>
 
 <style>
@@ -54,5 +64,15 @@ const href = resolveGiveHref({ donateUrl, email, campaignName });
   }
   .give--light:hover {
     background: rgba(255, 255, 255, 0.9);
+  }
+  .give--navy {
+    background: var(--momentum-navy);
+    color: #fff;
+  }
+  .give--navy:hover {
+    background: var(--momentum-navy-2);
+  }
+  .glyph {
+    margin-left: 10px;
   }
 </style>

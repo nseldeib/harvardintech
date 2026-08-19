@@ -206,11 +206,15 @@ export function mergeSponsorCopy(
 export interface DonateFrameEntry {
   heroHeadlineNamed?: string;
   heroHeadlineGeneric?: string;
+  heroKicker?: string;
   heroSubhead?: string;
   heroImage?: string;
   heroVideo?: string;
+  ctaKicker?: string;
   ctaTitle?: string;
   ctaBody?: string;
+  ctaImage?: string;
+  ctaTagline?: string;
   ctaLabel?: string;
 }
 
@@ -239,6 +243,12 @@ export function mergeDonateFrame(
     heroHeadlineGeneric:
       preferText(entry.heroHeadlineGeneric, fallback.heroHeadlineGeneric) ??
       fallback.heroHeadlineGeneric,
+    // The four campaign-frame fields below follow the `ctaTitle` / `ctaBody`
+    // clause, NOT the `heroVideo` one: they are copy and imagery the JSON
+    // carries, so a cleared box falls back to the committed value rather than
+    // blanking the band. That is the ordinary rule on this page; `heroVideo` is
+    // the single documented exception.
+    heroKicker: preferText(entry.heroKicker, fallback.heroKicker),
     heroSubhead: preferText(entry.heroSubhead, fallback.heroSubhead),
     heroImage: preferText(entry.heroImage, fallback.heroImage),
     // The one frame field whose fallback is expected to be `undefined`:
@@ -249,8 +259,11 @@ export function mergeDonateFrame(
     // resurrect the JSON value. The inverse of `inquiryFormUrl` in
     // `mergeSponsorCopy`, and the reason the key is absent from the JSON.
     heroVideo: preferText(entry.heroVideo, fallback.heroVideo),
+    ctaKicker: preferText(entry.ctaKicker, fallback.ctaKicker),
     ctaTitle: preferText(entry.ctaTitle, fallback.ctaTitle),
     ctaBody: preferText(entry.ctaBody, fallback.ctaBody),
+    ctaImage: preferText(entry.ctaImage, fallback.ctaImage),
+    ctaTagline: preferText(entry.ctaTagline, fallback.ctaTagline),
     ctaLabel: preferText(entry.ctaLabel, fallback.ctaLabel),
   };
 }

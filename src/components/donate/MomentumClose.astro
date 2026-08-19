@@ -1,58 +1,157 @@
 ---
-// The closing ask: a dark band repeating the giving CTA for readers who made it
-// to the bottom of the campaign narrative.
+// The closing ask: the last band of the campaign page, pairing a photo of the
+// community with the final invitation to join it.
+//
+// A TWO-COLUMN SPLIT rather than the centred dark band this used to be. The
+// campaign design ends on a picture of the people the fund is for, which is a
+// stronger close than a colour field — and the photo is optional, so a page with
+// none collapses cleanly to copy alone rather than leaving a hole.
+//
+// `body` splits on blank lines into paragraphs, so the design's two sentences
+// need one CMS field rather than two, and an editor writing a third paragraph
+// needs no schema change to get it.
+import { splitParagraphs } from '../../lib/campaignCopy';
+import { altFor } from '../../lib/media';
+import { withBase } from '../../lib/url';
 import GiveButton from './GiveButton.astro';
 
 interface Props {
+  kicker?: string;
   title?: string;
   body?: string;
+  /** The photo beside the copy. Blank runs the copy full width. */
+  image?: string;
+  /** The uppercase sign-off beneath the button. A phrase, not prose. */
+  tagline?: string;
   ctaLabel?: string;
   donateUrl?: string;
   email: string;
   campaignName?: string;
 }
 const {
+  kicker,
   title = 'Help power what comes next.',
   body,
+  image,
+  tagline,
   ctaLabel,
   donateUrl,
   email,
   campaignName,
 } = Astro.props as Props;
+
+const paragraphs = splitParagraphs(body);
 ---
 
-<section class="close" id="give">
-  <h2>{title}</h2>
-  {body ? <p>{body}</p> : null}
-  <GiveButton
-    label={ctaLabel}
-    donateUrl={donateUrl}
-    email={email}
-    campaignName={campaignName}
-    variant="light"
-  />
+<section class:list={['close', { solo: !image }]} id="give">
+  {
+    image ? (
+      <div class="photo">
+        <img src={withBase(image)} alt={altFor(image, 'Harvard Alumni in Tech')} loading="lazy" />
+      </div>
+    ) : null
+  }
+  <div class="copy">
+    <div class="copy-in">
+      {kicker ? <p class="kick kick--teal">{kicker}</p> : null}
+      <h2>{title}</h2>
+      {paragraphs.map((p) => <p class="body">{p}</p>)}
+      <GiveButton
+        label={ctaLabel}
+        donateUrl={donateUrl}
+        email={email}
+        campaignName={campaignName}
+        variant="navy"
+        glyph
+      />
+      {tagline ? <p class="tagline">{tagline}</p> : null}
+    </div>
+  </div>
 </section>
 
 <style>
   .close {
-    background: var(--ink);
-    color: #fff;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    background: var(--momentum-aqua);
+  }
+  /* With no photo there is no column to balance, so the copy centres in the band
+     rather than sitting in half of an empty row. */
+  .close.solo {
+    grid-template-columns: 1fr;
+  }
+  .close.solo .copy-in {
+    margin: 0 auto;
     text-align: center;
-    padding: 84px 24px;
+  }
+
+  .photo {
+    position: relative;
+    min-height: 520px;
+    /* The design's gold rule between the picture and the copy. On the element
+       rather than as a border on the grid, so it stays put when the band stacks
+       and the rule has to move to the bottom edge. */
+    border-right: 20px solid var(--momentum-gold);
+  }
+  .photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .copy {
+    display: flex;
+    align-items: center;
+    padding: 84px 56px;
+  }
+  .copy-in {
+    max-width: 52ch;
+  }
+  .copy-in .kick {
+    margin: 0 0 16px;
   }
   h2 {
-    font-size: clamp(28px, 3.6vw, 44px);
+    font-family: var(--font-title);
+    font-size: clamp(32px, 4vw, 54px);
+    line-height: 1.06;
     letter-spacing: -0.02em;
-    font-weight: 800;
-    color: #fff;
-    margin: 0 0 14px;
+    font-weight: 700;
+    color: var(--momentum-navy);
+    margin: 0 0 22px;
   }
-  p {
+  .body {
     font-family: var(--font-serif);
     font-size: 18px;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.82);
-    max-width: 52ch;
-    margin: 0 auto 32px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 18px;
+  }
+  .body:last-of-type {
+    margin-bottom: 32px;
+  }
+  .tagline {
+    margin: 26px 0 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--momentum-navy);
+  }
+
+  /* Photo over copy below 820px, with the gold rule moving from the right edge
+     to the bottom one so it still separates the two. */
+  @media (max-width: 820px) {
+    .close {
+      grid-template-columns: 1fr;
+    }
+    .photo {
+      min-height: 300px;
+      border-right: none;
+      border-bottom: 20px solid var(--momentum-gold);
+    }
+    .copy {
+      padding: 56px 24px;
+    }
   }
 </style>

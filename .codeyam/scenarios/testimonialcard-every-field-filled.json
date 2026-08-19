@@ -1,0 +1,13 @@
+{
+  "name": "TestimonialCard - Every Field Filled",
+  "id": "df8c4e76-b164-43fb-a051-6b349ef8baad",
+  "url": "/isolated-components/TestimonialCard-Full",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "TestimonialCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/donate/TestimonialCard.astro",
+  "description": "The card doing its whole job: event photo with its navy caption bar on the left, and on the right the quote under a crimson rule with a gold-ringed portrait above an affiliation and a role. The ceiling to the sibling scenario's floor — almost every field on this component is optional, so a frame of only the degenerate state would misrepresent it. Between the two they bracket every optional the card carries."
+}

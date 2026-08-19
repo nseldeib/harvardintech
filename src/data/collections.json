@@ -542,10 +542,32 @@
           "optional": true
         },
         {
+          "name": "affiliation",
+          "label": "Affiliation",
+          "type": "text",
+          "optional": true,
+          "hint": "Their connection to Harvard, shown above the role — for example \"Harvard Extension School Alumni · Class of 2023\". Blank shows the role on its own."
+        },
+        {
           "name": "photo",
           "label": "Photo",
           "type": "image",
-          "optional": true
+          "optional": true,
+          "hint": "A portrait of the person quoted, shown as a small round photo beside their name. Blank shows the name and role without a picture."
+        },
+        {
+          "name": "eventPhoto",
+          "label": "Event photo",
+          "type": "image",
+          "optional": true,
+          "hint": "A photo from the event this quote came out of, shown as a large picture beside the quote. Different from the Photo above, which is the person. Blank runs the quote across the full width."
+        },
+        {
+          "name": "eventCaption",
+          "label": "Event photo caption",
+          "type": "text",
+          "optional": true,
+          "hint": "The line printed under the event photo, naming the event and the city. Only shows when there is an event photo."
         },
         {
           "name": "order",
@@ -564,9 +586,10 @@
           "name": "kind",
           "label": "Section type",
           "type": "select",
-          "hint": "Which section this is. Only \"narrative\" uses the title, layout, image, and body below; \"goal-meter\" uses the title and the Goal meter widget ID \u2014 the others are bands whose content is edited in their own collection.",
+          "hint": "Which section this is. \"narrative\" uses the title, layout, image, and body below; \"mission\" and \"testimonials\" use the title and the body (testimonials shows the body as an intro above the quotes); \"goal-meter\" uses the title, the Goal meter widget ID, and the link boxes \u2014 the rest are bands whose content is edited in their own collection. Every type shows the Kicker below.",
           "options": [
             "narrative",
+            "mission",
             "goal-meter",
             "accomplishments",
             "pillars",
@@ -583,6 +606,13 @@
           "hint": "The heading shown above this section on the page, and the name this section goes by in this list. Fill it in to tell two sections of the same type apart — two \"pillars\" bands, for example. Blank keeps the standard heading for the section type."
         },
         {
+          "name": "kicker",
+          "label": "Kicker",
+          "type": "text",
+          "optional": true,
+          "hint": "The small uppercase line above the heading — for example \"What your gift powers\". Works on every section type. Blank shows the heading on its own."
+        },
+        {
           "name": "group",
           "label": "Card group",
           "type": "text",
@@ -594,11 +624,12 @@
           "label": "Layout",
           "type": "select",
           "optional": true,
-          "hint": "Narrative sections only. Where the photo sits. Leave as none to run the text full width.",
+          "hint": "Narrative sections only. Where the photo sits. Choose \"columns\" to set the text in two newspaper-style columns with no photo at all. Leave as none to run the text full width.",
           "options": [
             "image-left",
             "image-right",
-            "text-only"
+            "text-only",
+            "columns"
           ]
         },
         {
@@ -614,6 +645,20 @@
           "type": "text",
           "optional": true,
           "hint": "Goal meter sections only. The widget ID from Givebutter (Dashboard \u2192 your campaign \u2192 Share \u2192 Embed): the id= value in the code they give you. Blank means the section shows nothing at all. Best placed just above the closing ask, so progress and the Give button read as one moment."
+        },
+        {
+          "name": "linkLabel",
+          "label": "Goal meter link text",
+          "type": "text",
+          "optional": true,
+          "hint": "Goal meter sections only. The wording of the link beside the heading \u2014 for example \"View the campaign\". Needs the link address below to show at all."
+        },
+        {
+          "name": "linkUrl",
+          "label": "Goal meter link address",
+          "type": "text",
+          "optional": true,
+          "hint": "Where the link beside the goal meter heading goes \u2014 usually your Givebutter campaign page. Needs the link text above to show at all."
         },
         {
           "name": "order",
@@ -829,18 +874,6 @@
           "hint": "What this gift powers."
         },
         {
-          "name": "icon",
-          "label": "Icon",
-          "type": "select",
-          "optional": true,
-          "hint": "One of people, book, or globe. Anything else falls back to people.",
-          "options": [
-            "people",
-            "book",
-            "globe"
-          ]
-        },
-        {
           "name": "linkLabel",
           "label": "Link label",
           "type": "text",
@@ -902,6 +935,13 @@
           "hint": "Shown to everyone else, and to anyone whose link carries no name. Keep the two headlines saying the same thing."
         },
         {
+          "name": "heroKicker",
+          "label": "Hero kicker",
+          "type": "text",
+          "optional": true,
+          "hint": "The small uppercase line above the hero headline, naming the campaign. Blank shows the headline on its own."
+        },
+        {
           "name": "heroSubhead",
           "label": "Hero text",
           "type": "textarea",
@@ -923,6 +963,13 @@
           "hint": "Optional moving backdrop. Paste a path like /videos/momentum.mp4 for a video file committed under public/videos/. It plays silently on a loop with no controls, the hero image above is used as its first frame and as the fallback if it cannot play, and clearing this box brings the photo back. Keep it to a few megabytes \u2014 every visitor downloads it."
         },
         {
+          "name": "ctaKicker",
+          "label": "Closing kicker",
+          "type": "text",
+          "optional": true,
+          "hint": "The small uppercase line above the closing heading."
+        },
+        {
           "name": "ctaTitle",
           "label": "Closing heading",
           "type": "text",
@@ -934,7 +981,21 @@
           "label": "Closing text",
           "type": "textarea",
           "optional": true,
-          "hint": "The paragraph under it."
+          "hint": "The paragraph under it. Leave a blank line between paragraphs to write more than one."
+        },
+        {
+          "name": "ctaImage",
+          "label": "Closing image",
+          "type": "image",
+          "optional": true,
+          "hint": "The photo beside the closing ask. Blank runs the closing text across the full width instead."
+        },
+        {
+          "name": "ctaTagline",
+          "label": "Closing tagline",
+          "type": "text",
+          "optional": true,
+          "hint": "A short uppercase sign-off under the give button — for example \"One community. Shared momentum.\" Blank shows nothing."
         },
         {
           "name": "ctaLabel",

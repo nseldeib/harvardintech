@@ -55,6 +55,12 @@
       "value": "branch-9",
       "rationale": "source-derived state branches=branch-9",
       "status": "planned"
+    },
+    {
+      "dimension": "branches",
+      "value": "branch-10",
+      "rationale": "source-derived state branches=branch-10",
+      "status": "planned"
     }
   ]
 }

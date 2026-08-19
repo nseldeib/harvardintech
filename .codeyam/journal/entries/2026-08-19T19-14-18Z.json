@@ -1,0 +1,983 @@
+{
+  "timestamp": "2026-08-19T19:14:18Z",
+  "title": "Rebuild The Momentum Fund Page To The Campaign Design",
+  "type": "feature",
+  "userRequest": "## Summary\n\nRebuild `/donate` to the campaign design at\n<https://www.subscribepage.com/a3d9j8>. The page keeps everything that makes it\neditable — the reorderable `momentumSections` middle, the collections behind each\nband, the hero and closing frame — and changes how every band *looks* and what it\n*says*: an uppercase kicker over a large serif sentence-heading on every band,\nnavy and gold accent bands breaking up the paper ones, a two-column prose treatment\nwith a pull-quote card, a bordered four-up evidence strip, a numbered three-up gift\ngrid, and photo-led testimonial and closing bands.\n\nTwo bands are genuinely new: a gold **mission** band above the narrative, and a\nclosing ask that pairs a photo with the copy. Two more get real content for the\nfirst time — the Givebutter progress band (built, but never added to the page) and\nthe testimonials band (built, but empty in production), which gains the two quotes\nthe mockup shows.\n\nThe palette is a hybrid, by decision: the site's Atlas crimson, ink, paper and\nCrimson Pro stay as the base, and the mockup's navy, gold, teal and aqua join them\nas campaign-page accent tokens. `/donate` gains the mockup's rhythm and weight\nwithout seceding from harvardintech.com.\n\n## Key Decisions\n\n- **Hybrid palette — Atlas base, campaign accents.** The mockup runs on navy\n  `#031a36`, gold `#f6c768`, teal `#049ca4`, hot pink `#ff315b`, cream `#f8f4ee`\n  and Georgia. Adopting it whole would give the campaign page a typeface and a\n  brand the rest of the site does not share, and `/donate` is linked from the site\n  nav — a visitor crosses that boundary in one click. So the type stays Crimson Pro\n  + Inter, the primary action stays Harvard crimson, and the mockup's navy, gold,\n  teal and aqua enter as new tokens used for **band backgrounds and accents only**.\n  Every structural decision in the mockup — band order, kicker-over-heading,\n  bordered grids, photo treatments, spacing — is adopted unchanged, because that is\n  what carries the design.\n\n- **Every new band is a section kind, not hardcoded composition.** The mission\n  band becomes a `mission` kind rather than markup inside `MomentumFundPage.astro`,\n  so an editor can reorder it, rename it, draft it, and rewrite its prose exactly\n  like every other band. The alternative — composing the new design directly in the\n  page component — would match the mockup faster and quietly undo the editability\n  the last several plans on this page were about.\n\n- **The mockup's \"impact\" band is the existing `testimonials` band redesigned, not\n  a new kind.** In the mockup, \"Every number represents a story / One connection can\n  change what's possible\" sits over two photo-led quotes. That is a heading, a lede,\n  and the testimonials collection — three things the page already models. Adding an\n  `impact` kind would create a second band that renders testimonials, and an editor\n  would have two indistinguishable options in the kind dropdown. Instead\n  `testimonials` gains a kicker and a rendered markdown lede, and its cards become\n  the alternating photo/quote rows. **This is the one place the answer to \"new\n  section kinds\" was applied with judgment rather than literally**, and it is called\n  out here so the choice is reviewable.\n\n- **The narrative band gets a fourth layout rather than a fourth component.** The\n  mockup's \"Why support…\" band is two columns of prose with a pull-quote beneath —\n  no photo. `resolveLayout` already normalizes `image-left` / `image-right` /\n  `text-only`, so this is a `columns` value in the same list, degrading to\n  `text-only` like any other unrecognized input. One new string, no new renderer,\n  and the CMS dropdown picks it up through the existing select-options test.\n\n- **The progress band keeps the Givebutter widget.** The mockup draws its own bar\n  with `$5,000 / $50,000` hardcoded and says in its own footnote that \"the\n  production meter will sync automatically with Givebutter.\" The site already\n  shipped that sync as `GoalMeter.astro`. A hand-drawn bar on a static build cannot\n  know the real raised figure, so replacing the widget would trade live numbers for\n  a number that is wrong the day after it is typed. The band adopts the mockup's\n  navy-and-gold chrome around the widget instead, and keeps the collapse-if-the-\n  script-never-arrives behaviour untouched.\n\n- **Gift pillars become numbered, and the icon field is removed rather than left\n  dead.** The mockup replaces the three icon badges with `01` / `02` / `03` derived\n  from card order. Keeping the `icon` field in the CMS while nothing renders it\n  would leave an editor a control that silently does nothing — the exact failure\n  the `sectionsWithIgnoredFields` idea exists to prevent elsewhere. So the field,\n  its resolver, its glyph component, its test, and its isolated frame all go. This\n  is the most reversible decision in the plan and the easiest to disagree with; it\n  is a separate implementation step so it can be dropped without touching the rest.\n\n- **The Momentum Network's visualization is not touched.** It shipped two commits\n  ago, it is 27KB of bespoke canvas work, and the mockup only changes the band\n  *around* it — kicker, heading, italic accent line, navy background, CTA. Restyling\n  the chrome and leaving the visualization alone is what keeps this plan from\n  swallowing that one.\n\n- **Each band owns its background; the alternating tint stays for narratives\n  only.** `tintedFlags` alternates the tinted band by counting `narrative` sections,\n  which was right when the page was mostly prose. The mockup assigns a fixed\n  background per band (gold mission, white evidence, navy progress, aqua impact,\n  cream gifts, navy network, aqua close). Those are set by each component, so\n  `tintedFlags` keeps working and keeps mattering exactly where it still applies —\n  two `narrative` bands would still alternate. Changing it would move every band's\n  background on a page that no longer wants alternation.\n\n- **The kicker reuses the site's existing `.kick` class, not a new one.** Atlas\n  already defines an uppercase mono kicker in `src/styles/tokens.css`, and\n  `SponsorHero.astro`, `EventGallery.astro`, `VolunteerHero.astro` and\n  `MomentumAccomplishments.astro` already use it. The mockup's eyebrow is the same\n  idea; it needs colour modifiers (gold on navy, teal on aqua, white on the hero),\n  not a parallel implementation.\n\n- **The Colorado testimonial ships with a portrait gap, named rather than\n  papered over.** `public/images/team/jessica-li.png` exists; there is no photo for\n  Mohammed Ally anywhere in `public/images/`. `TestimonialCard.astro` already\n  renders without a `photo`, so the entry ships photo-less and the plan names the\n  file to drop in. Substituting a stock or unrelated face on a real person's\n  attributed quote is not a thing to do quietly.\n\n## Reference: the target structure\n\nCaptured from the mockup's own markup so this plan does not depend on the\nsubscribepage URL staying up. Band order, kicker → heading, and background:\n\n| # | Band | Kicker | Heading | Background |\n|---|---|---|---|---|\n| 1 | Hero (frame) | The Momentum Fund | `{name}`, let's go further together. | navy photo + left gradient |\n| 2 | Mission (new) | Our mission | Helping exceptional people *go further together.* | gold |\n| 3 | Narrative \"why\" | Why support Harvard Alumni in Tech? | We are at an important turning point. | paper |\n| 4 | Accomplishments | What we've accomplished so far | Momentum already exists. | white, bordered 4-up |\n| 5 | Goal meter | Campaign progress · Live from Givebutter | Our first gifts are already building momentum. | navy + gold |\n| 6 | Testimonials | Every number represents a story | One connection can change what's possible. | aqua, photo-led rows |\n| 7 | Pillars | What your gift powers | Three ways support moves the Harvard Alumni in Tech community forward. | cream, bordered 3-up, numbered |\n| 8 | Donors / Network | The people behind the fund | The Momentum Network | navy |\n| 9 | Close (frame) | The Momentum Fund | Become part of the foundation. | aqua, photo left |\n\nStructural details worth keeping: the hero copy is left-aligned in a\n`min(760px, 68%)` column over a left-to-right navy gradient rather than centred\nover a flat scrim; the evidence and gift grids are single-pixel bordered cells with\na crimson top rule rather than rounded cards; the testimonial quote sits under a\n2px crimson rule with a 64px round portrait bordered in gold; event photos carry a\nnavy caption bar; and the closing band is a two-column split with a 20px gold rule\nbetween photo and copy.\n\n## Implementation\n\n### 1. Campaign accent tokens\n\n**File**: `src/styles/tokens.css`\n\nAdd the campaign accents to `:root` beneath the Atlas palette, commented as\n`/donate`-scoped by convention (the file is the project's declared token source, so\nthey belong here rather than in a second stylesheet):\n`--momentum-navy: #031a36`, `--momentum-navy-2: #081326`,\n`--momentum-gold: #f6c768`, `--momentum-teal: #049ca4`,\n`--momentum-aqua: #dcefeb`, `--momentum-cream: #f8f4ee`.\n\nAdd colour modifiers beside the existing `.kick` rule — `.kick--light`,\n`.kick--gold`, `.kick--teal` — so every band's kicker is the same element with a\ndifferent accent. Do not change `.kick`'s own size, tracking, or family.\n\n### 2. Section kicker, the `mission` kind, and the `columns` layout\n\n**File**: `src/lib/momentumSections.ts`\n\n- Add `'mission'` to `SECTION_KINDS` and a `SECTION_LABELS.mission` entry\n  (`'Our mission'`) so a held-back mission band can name itself.\n- Add `'columns'` to `SECTION_LAYOUTS`. `resolveLayout` needs no change — the new\n  value is simply now in the accepted list, and anything unrecognized still falls\n  back to `text-only`.\n- Add `kicker?: string` to `SectionLike`, documented as applying to every kind\n  (unlike `layout`, `image`, and `widgetId`, which are kind-specific).\n- Add `sectionKicker(section, fallback?)` mirroring `sectionHeading` exactly —\n  trim-to-blank, `undefined` when there is nothing to draw. A separate function\n  rather than reusing `sectionHeading` because the two fall back to different\n  things, and because a band with a heading and no kicker is a normal state.\n\n**File**: `src/lib/momentumSections.test.ts`\n\nExtend, in the file's existing comment-the-why style: `mission` is kept by\n`orderedSections` and is not reported by `unknownSectionKinds`; `columns` survives\n`resolveLayout` and a typo of it still degrades to `text-only`; `sectionKicker`\nreturns the trimmed value, falls back, and treats whitespace-only as blank;\n`tintedFlags` is unchanged by a `mission` section sitting between two narratives\n(the regression that a new kind could silently cause).\n\n**File**: `src/content/config.ts`\n\nAdd `kicker: z.string().optional()` to the `momentumSections` schema, and\n`linkLabel` / `linkUrl` (both optional strings) for the goal-meter band's \"View the\ncampaign →\" link. Comment them at the density of the `widgetId` and `group` blocks\nabove: which kinds use them, and that blank means \"draw nothing\".\n\n**File**: `src/data/collections.json`\n\nAdd the matching `momentumSections` fields — `kicker` (text), `linkLabel` (text),\n`linkUrl` (text) — and add `mission` to the `kind` select's options and `columns`\nto the `layout` select's options. `src/lib/selectOptions.test.ts` asserts both\noption lists equal `SECTION_KINDS` and `SECTION_LAYOUTS` exactly, and\n`src/data/collections.test.ts` asserts the schema/registry pair in both directions,\nso steps 2's three files land together or the suite fails.\n\n### 3. Render markdown bodies for `mission` and `testimonials`\n\n**File**: `src/lib/momentumSectionsContent.ts`\n\nThe `Content:` line renders the body only for `kind === 'narrative'`. Extend it to\n`mission` and `testimonials`, which now carry prose of their own. Replace the\nhardcoded comparison with a small `KINDS_WITH_BODY` set in\n`src/lib/momentumSections.ts` so the fact lives beside the kinds it names and is\nunit-testable, and update the comment above it — it currently asserts that the slot\nbands draw content only from `donatePage.json` and the testimonials collection,\nwhich stops being true here.\n\n### 4. The mission band\n\n**New file**: `src/components/donate/MomentumMission.astro`\n\nProps: `kicker`, `title`, and the rendered body via slot. Gold background\n(`--momentum-gold`), `.kick` with the default crimson accent, a serif heading\nbounded to ~760px, and one paragraph of body copy in navy — the mockup's\n`mission-band`. The heading supports an emphasized tail (`*go further together.*`\nin markdown renders as `<em>`), which the component styles in crimson at the same\nweight, so the accent is an authoring choice rather than a hardcoded span.\n\n**File**: `src/components/MomentumFundPage.astro`\n\nAdd the `mission` case to the kind switch, passing `sectionKicker(section)`,\n`sectionHeading(section)` and the body slot. Add `kicker` to the props each existing\nband already receives (steps 5–10).\n\n### 5. The narrative band\n\n**File**: `src/components/donate/MomentumNarrative.astro`\n\n- Accept and render `kicker` above the heading.\n- Add the `columns` mode: full-width, no figure, prose in a two-column grid\n  collapsing to one below 820px.\n- Restyle the heading to the mockup's serif sentence scale\n  (`clamp(38px, 4.5vw, 62px)`, tight tracking, navy) instead of the current\n  800-weight sans.\n- Restyle the slotted `blockquote` from a left-ruled inline quote to the mockup's\n  white card — 28px/32px padding, 5px crimson left border, serif, sitting 48px\n  below the prose.\n\n### 6. The evidence band\n\n**File**: `src/components/donate/MomentumAccomplishments.astro`\n\nTake `kicker` as a prop instead of the hardcoded `<span class=\"kick\">Momentum</span>`\nit currently emits, add the large serif heading, and replace the\n`auto-fit/minmax(240px)` grid with the mockup's four-up bordered strip (single-pixel\ntop and left rules on the grid, right and bottom on each cell) on a white band.\n\n**File**: `src/components/donate/AccomplishmentCard.astro`\n\nCard chrome to match: `min-height: 260px`, `#f6f3f0` fill, 3px crimson top rule\n(already present), uppercase tracked label, serif body. Mostly a spacing and\nsizing pass — this card is already the closest component to its mockup counterpart.\n\n### 7. The progress band\n\n**File**: `src/components/donate/GoalMeter.astro`\n\nAdd `kicker`, `linkLabel` and `linkUrl` props. Navy background\n(`--momentum-navy-2`) with the mockup's soft gold radial, a gold `.kick--gold`, a\nwhite serif heading left-aligned, and the optional gold underlined link on the\nright of the same row, wrapping beneath the heading on narrow screens. The widget\nsits below in its existing 720px column. **The collapse behaviour is unchanged** —\nstill `is-collapsed` until `customElements.whenDefined('givebutter-widget')`\nresolves — so a blocked CDN still leaves no stranded band, which now matters more\nbecause the band has a kicker and a link that would otherwise strand with it.\n\n### 8. The impact / testimonials band\n\n**File**: `src/components/donate/MomentumTestimonials.astro`\n\n- Accept `kicker` and a body slot (the lede), rendered above the quotes.\n- Replace the three-up card grid with alternating full-width rows: photo column and\n  copy column, swapping sides on each successive testimonial, collapsing to\n  photo-then-quote on one column below 820px.\n- Aqua band background (`--momentum-aqua`).\n- The band still renders nothing when the collection is empty — the existing\n  guarantee, and now also true of its kicker and lede.\n\n**File**: `src/components/donate/TestimonialCard.astro`\n\nRestyle to the mockup's quote: no rounded card, a 2px crimson top rule, serif quote\nat 19px, and a footer pairing a 64px round portrait bordered in gold with an\nuppercase tracked cite block of name / affiliation / role. Accept the new\n`affiliation`, `eventPhoto` and `eventCaption` props; the event photo renders as a\n`<figure>` with a navy caption bar, and its absence simply drops the photo column.\n\n**File**: `src/content/config.ts` and **File**: `src/data/collections.json`\n\nAdd `affiliation`, `eventPhoto` (image) and `eventCaption` to the `testimonials`\ncollection schema and editor fields.\n\n### 9. The numbered gift grid\n\n**File**: `src/components/donate/GiftPillars.astro`\n\nAdd `kicker`, the large serif heading, cream band background, and the mockup's\nbordered three-up grid (`min-height: 320px` cells, single-pixel rules, translucent\nwhite fill), collapsing to two columns with the last card spanning both below\n820px.\n\n**File**: `src/components/donate/GiftPillarCard.astro`\n\nTake a `number` prop (the 1-based position, zero-padded by the parent) and render it\nas the crimson `01` label where the icon badge is today. Drop the `PillarIcon`\nimport and the `icon` prop.\n\n### 10. Remove the pillar icon\n\n**Delete**: `src/components/donate/PillarIcon.astro`,\n`src/pages/isolated-components/PillarIcon.astro`, `src/lib/pillars.ts`,\n`src/lib/pillars.test.ts`.\n\n**File**: `src/lib/site.ts` — drop the `PillarIcon` type and the `icon` key from\n`DonatePageCopy['pillars']`.\n\n**File**: `src/lib/donatePageContent.ts` — drop the `resolvePillarIcon` import and\nthe `icon` mapping in `loadPillars`, and the paragraph of comment explaining why the\nfield was free text.\n\n**File**: `src/content/config.ts` and **File**: `src/data/collections.json` — remove\n`icon` from the `pillars` collection schema and editor fields.\n\n**File**: `src/data/donatePage.json` — remove the three `icon` keys.\n\nDeliberately its own step: if the icons are wanted after all, drop this step and\nkeep step 9's numeral as an addition rather than a replacement.\n\n### 11. The hero frame\n\n**File**: `src/components/donate/MomentumHero.astro`\n\n- Accept and render a `kicker` above the headline.\n- Left-align the content in a `min(760px, 68%)` column, `min-height: 680px`,\n  replacing the centred 900px block.\n- Replace the flat two-stop scrim with the mockup's left-to-right navy gradient\n  plus a soft bottom lift, keeping `z-index: 1` under the content and over the\n  video so every existing fallback path (404, blocked autoplay, reduced motion) is\n  unaffected.\n- Serif headline at the mockup's scale; subhead at 18px in 82%-white.\n\nThis is the same file the hero-banner-modes plan edits. That plan is the\nprerequisite: it introduces the mode branch that this styling sits inside, so the\ncustom-HTML banner correctly ignores every rule above.\n\n### 12. The network band chrome\n\n**File**: `src/components/donate/MomentumNetwork.astro`\n\nBand-level only: navy background with the mockup's crimson radial, `.kick--light`\nkicker, white serif `h2`, and an italic accent `h3` in the hot accent beneath it\n(the mockup's \"A grid, lit from within.\"). The existing tagline prop supplies that\nline. **No change below the band header** — the visualization, its controls, the\nsupporter roll, and the search keep their current markup and behaviour.\n\nAdd `kicker` and keep every existing prop; `MomentumFundPage.astro` passes\n`sectionKicker(section)` through.\n\n### 13. The closing frame\n\n**File**: `src/components/donate/MomentumClose.astro`\n\nReplace the centred dark band with the mockup's two-column split: photo on the left\nat `min-height: 520px` with a 20px gold right rule, copy on the right on aqua with a\nteal `.kick--teal` kicker, navy serif heading, two body paragraphs, a navy button\ncarrying a `↗` glyph, and an uppercase tracked tagline beneath. Collapses to photo-\nover-copy below 820px with the gold rule moving to the bottom edge.\n\nNew props: `kicker`, `image`, `tagline`. `body` splits on blank lines into\nparagraphs so the mockup's two sentences do not need two fields.\n\n**File**: `src/lib/site.ts`, **File**: `src/lib/pageCopyMerge.ts`,\n**File**: `src/content/config.ts`, **File**: `src/data/collections.json`\n\nAdd `heroKicker`, `ctaKicker`, `ctaImage`, `ctaTagline` to `DonatePageCopy`, to\n`mergeDonateFrame` (all via `preferText` against the JSON fallback, matching\n`ctaTitle` / `ctaBody` beside them), to the `pageCopy` schema, and to the editor\nfields.\n\n**File**: `src/lib/pageCopyMerge.test.ts` — extend the `mergeDonateFrame` cases to\ncover the four new fields, including that a cleared box falls back to the JSON\nvalue (the opposite of `heroVideo`'s rule, and the reason the two are commented\ndifferently).\n\n### 14. Page copy and section content\n\n**File**: `src/data/donatePage.json`\n\n- `heroKicker`: `The Momentum Fund`\n- `heroSubhead`: `Help build the foundation Harvard Alumni in Tech needs to sustain\n  its momentum and serve a growing global community.`\n- `ctaLabel`: `Become a Founding Supporter` — one field, so this relabels the hero,\n  network and closing buttons together, which is what the mockup shows.\n- `ctaKicker`: `The Momentum Fund`; `ctaTitle`: `Become part of the foundation.`;\n  `ctaBody`: the mockup's two sentences separated by a blank line;\n  `ctaTagline`: `One community. Shared momentum. A stronger network.`;\n  `ctaImage`: an existing community photo from `public/images/gallery/`.\n- Pillar card copy: `tech professionals` → `technology professionals`, matching the\n  mockup.\n\n**New file**: `src/content/momentumSections/mission.md` — `kind: mission`,\n`order: 1`, kicker `Our mission`, title `Helping exceptional people *go further\ntogether.*`, body the mockup's one paragraph, plus the editing note every section\nentry in this collection carries.\n\n**File**: `src/content/momentumSections/why.md` — kicker `Why support Harvard\nAlumni in Tech?`, title `We are at an important turning point.`, `layout: columns`,\n`order: 2`, and the body rewritten to the mockup's two prose columns plus the\nclosing pull-quote (`> The future of this network will not be built by chance…`).\nThe current `image: /images/gallery/event-04.jpg` is dropped with the photo layout.\n\n**File**: `src/content/momentumSections/accomplishments.md` — kicker `What we've\naccomplished so far`, title `Momentum already exists.`, `order: 3`.\n\n**New file**: `src/content/momentumSections/goal-meter.md` — `kind: goal-meter`,\n`order: 4`, kicker `Campaign progress · Live from Givebutter`, title `Our first\ngifts are already building momentum.`, `linkLabel: View the campaign`,\n`linkUrl` pointing at the Givebutter campaign. **`widgetId` is left blank and is a\nnamed gap**: the band renders nothing and logs the existing advisory until the real\nid is pasted in. Blank is deliberately not guessed — a wrong id renders someone\nelse's meter.\n\n**File**: `src/content/momentumSections/testimonials.md` — kicker `Every number\nrepresents a story`, title `One connection can change what's possible.`, `order: 5`,\nbody the mockup's lede paragraph.\n\n**Delete**: `src/content/momentumSections/story.md`. Its heading (\"And Every Number\nRepresents a Story\") and its theme move into the testimonials band above, which is\nwhere the mockup puts them; keeping it would render the same idea twice. Git retains\nthe copy. If a softer landing is wanted, set `draft: true` instead — but note a\ndrafted section still renders on the review track, so the duplicate would be visible\nto Nicole.\n\n**File**: `src/content/momentumSections/pillars.md` — kicker `What your gift\npowers`, title `Three ways support moves the Harvard Alumni in Tech community\nforward.`, `order: 6`.\n\n**File**: `src/content/momentumSections/donors.md` — kicker `The people behind the\nfund`, title `The Momentum Network`, `order: 7`.\n\n**New file**: `src/content/testimonials/jessica-li.md` — the mockup's SF quote,\n`name: Jessica Li`, `affiliation: Harvard University Alumni · Class of 2019`,\n`role: San Francisco Event Lead`, `photo: /images/team/jessica-li.png`,\n`eventCaption: Leaders in Engineering · San Francisco`, `order: 1`.\n\n**New file**: `src/content/testimonials/mohammed-ally.md` — the mockup's Colorado\nquote, `name: Mohammed Ally`, `affiliation: Harvard Extension School Alumni · Class\nof 2023`, `role: HIT Colorado Co-Event Lead`, `eventCaption: HIT Colorado\nCo-working Afternoon · Improper City`, `order: 2`, **no `photo`** — see the gap\nbelow.\n\nEvery `momentumSections` entry in this repo carries a body explaining to an editor\nwhat the band does and where its content lives. Those notes must be updated\nwherever this plan changes the answer — in particular `story.md`'s deletion and the\nnew kicker field. Note that a queued plan\n(`ns--fix-the-stale-editing-notes-on-the-momentum-fund-section-entries`) is already\nin flight over these same notes; reconcile rather than overwrite.\n\n### 15. Named content gaps\n\nNot blockers — the page renders correctly without them — but they are the\ndifference between this page and the mockup, so they belong in the plan rather than\nin a reviewer's head:\n\n- **Mohammed Ally's portrait.** No file exists under `public/images/`. Drop one at\n  `public/images/team/mohammed-ally.png` and add `photo:` to his entry.\n- **The Givebutter widget id** for the progress band (step 14).\n- **Event photos.** The mockup uses a four-image SF gallery and a Colorado event\n  photo. Until real ones are supplied, point `eventPhoto` at the closest existing\n  `public/images/gallery/event-*.jpg` and note the substitution in the entry body.\n- **The closing band photo** — likewise from the existing gallery until a chosen\n  one arrives.\n\n### 16. Isolated capture frames\n\nFollowing `src/pages/isolated-components/GiftPillars-DuplicatedBand.astro` — import\n`src/styles/tokens.css`, wrap in `<div id=\"codeyam-capture\">`, pass realistic props\nthrough the real components:\n\n**New**: `MomentumMission.astro`, `MomentumNarrative-Columns.astro`,\n`GoalMeter-WithLink.astro`, `MomentumTestimonials-PhotoRows.astro`,\n`GiftPillars-Numbered.astro`, `MomentumClose-Split.astro`.\n\n**Update**: the existing `GiftPillars.astro`, `GiftPillarCard.astro`,\n`MomentumTestimonials.astro`, `MomentumClose.astro`, `MomentumStats.astro`,\n`GoalMeter.astro` and `GoalMeter-LongTitle.astro` frames for the changed props.\n**Delete**: `PillarIcon.astro` (step 10).\n\n## Reused existing code\n\n- `orderedSections`, `unknownSectionKinds`, `tintedFlags`, `sectionHeading`,\n  `resolveLayout`, `goalMetersMissingWidgetId`, `SECTION_KINDS`, `SECTION_LABELS`,\n  `SECTION_LAYOUTS` from `src/lib/momentumSections.ts` (glossary entries:\n  `orderedSections`, `unknownSectionKinds`, `tintedFlags`, `sectionHeading`,\n  `resolveLayout`, `goalMetersMissingWidgetId`) — the whole section machinery is\n  extended, not replaced. `sectionKicker` is modelled directly on `sectionHeading`.\n- `resolveVisibility` from `src/lib/homeSections.ts` (glossary entry:\n  `resolveVisibility`) — unchanged; `draft` and `comingSoon` keep winning ahead of\n  the kind switch, including for the new `mission` kind.\n- `cardsInGroup` / `selectGroup` from `src/lib/sectionGroups.ts` and `emptyGroups`\n  — unchanged; the numbered pillars still select by group, so a duplicated gift\n  band still numbers from `01` within its own band.\n- `sortByOrder` from `src/lib/order.ts` (glossary entry: `sortByOrder`) — the\n  testimonial rows alternate sides by their sorted index, so the ordering rule that\n  already exists is what drives the layout.\n- `mergeDonateFrame` and `preferText` from `src/lib/pageCopyMerge.ts` (glossary\n  entry: `mergeDonateFrame`) — the four new frame fields follow the `ctaTitle` /\n  `ctaBody` clause exactly, not the `heroVideo` one.\n- `loadAccomplishments`, `loadPillars`, `loadDonateUrl`, `loadDonateFrame` from\n  `src/lib/donatePageContent.ts` — unchanged apart from dropping the pillar icon\n  mapping.\n- `loadMomentumSections` from `src/lib/momentumSectionsContent.ts` — extended in\n  step 3 only; both `/donate` and the isolated harness keep reading sections through\n  it rather than growing a second pipeline.\n- `publishedEntries` / `INCLUDE_DRAFTS` from `src/lib/drafts.ts` and\n  `src/lib/draftVisibility.ts` — unchanged, and the reason the new mission and\n  goal-meter sections can be drafted into the review track before going public.\n- `resolveGiveHref` from `src/lib/giving.ts` via\n  `src/components/donate/GiveButton.astro` (glossary entry: `resolveGiveHref`) —\n  unchanged. Relabelling every button is one `ctaLabel` edit precisely because this\n  already centralises the destination.\n- `withBase` from `src/lib/url.ts` and `altFor` from `src/lib/media.ts` — the\n  existing helpers every new image in this plan goes through, so the GitHub Pages\n  subpath keeps working.\n- `.kick`, `.wrap`, `.sec`, `.sec-head` in `src/styles/tokens.css` — the Atlas\n  editorial idiom the new bands adopt rather than re-inventing; already used by\n  `src/components/sponsor/SponsorHero.astro`,\n  `src/components/landing/EventGallery.astro`,\n  `src/components/volunteer/VolunteerHero.astro` and\n  `src/components/donate/MomentumAccomplishments.astro`.\n- `src/lib/selectOptions.test.ts` and `src/data/collections.test.ts` — the existing\n  guards that force the new kind, the new layout and every new field to appear in\n  both the schema and the editor registry; no new test is needed in either.\n- `src/pages/isolated-components/GiftPillars-DuplicatedBand.astro` — the frame\n  pattern step 16 follows.\n\n**Existing-implementation survey.** Checked before proposing new fields:\n\n- A **kicker** already exists site-wide as the `.kick` class and as a `kicker`\n  field on `volunteerPage` and `sponsorPage` in `src/data/collections.json` — but\n  **not** on `momentumSections`, whose schema carries only `kind`, `title`,\n  `layout`, `image`, `widgetId`, `group`, `order`, `comingSoon`, `draft`. This plan\n  adds the field there and reuses the class.\n- A **goal meter** is fully built (`src/components/donate/GoalMeter.astro`, the\n  `goal-meter` kind, `widgetId`, and the `goalMetersMissingWidgetId` advisory) and\n  is simply **not on the page** — no entry exists in\n  `src/content/momentumSections/`. This plan adds the entry rather than a second\n  meter.\n- **Testimonials** are fully built (`src/components/donate/MomentumTestimonials.astro`,\n  `src/components/donate/TestimonialCard.astro`, the collection, the\n  `testimonials` kind) with the\n  collection deliberately empty — `src/content/testimonials/` holds only a\n  `.gitkeep`. This plan restyles and seeds rather than rebuilds.\n- **Per-band backgrounds** have no existing mechanism beyond `tintedFlags`'\n  narrative alternation; each component sets its own, which is what the mockup\n  needs and what the existing components already do (`MomentumStats` and\n  `GoalMeter` both hardcode `--paper-2`).\n- No existing `mission` kind, `columns` layout, `affiliation` / `eventPhoto` /\n  `eventCaption` testimonial field, or `ctaImage` / `ctaTagline` / `heroKicker` /\n  `ctaKicker` page-copy field. Nothing here duplicates a field that already exists.\n\n## Scenarios to Demonstrate\n\n- **The full page, generic visitor** — `/donate` end to end in the new design, all\n  nine bands in order. The headline deliverable.\n- **The full page, personalized** — the same page with `previewName` set, showing\n  the hero greeting a named subscriber over the new left-aligned navy gradient.\n- **The mission band** — the gold band with its crimson-emphasized heading tail,\n  captured on its own.\n- **The narrative in `columns` layout** — two columns of prose with the white\n  pull-quote card beneath, and no photo.\n- **The narrative still in `image-right`** — proof the new layout is an addition,\n  not a replacement, and that existing narrative sections are unaffected.\n- **The evidence strip** — the four bordered cells with crimson top rules, and the\n  same band at two columns below 820px.\n- **The progress band with a widget id** — navy and gold chrome, kicker, heading\n  and the gold \"View the campaign\" link, with the Givebutter widget inside.\n- **The progress band with no widget id** — the band renders nothing at all and the\n  build names the section, exactly as today. The kicker and link do not strand.\n- **The impact band with two testimonials** — alternating photo/quote rows on aqua,\n  with the SF quote showing a portrait and the Colorado quote showing the\n  portrait-less fallback.\n- **The impact band with an empty collection** — nothing renders, kicker and lede\n  included, which is production today.\n- **The numbered gift grid** — `01` / `02` / `03` in the bordered cream grid, and a\n  second grouped gift band numbering from `01` again within itself.\n- **The network band** — new navy chrome, kicker, white heading and italic accent\n  line, with the visualization inside visibly unchanged.\n- **The closing band** — the aqua split with the gold rule, the navy `↗` button and\n  the tagline; and the same band with no `ctaImage`, falling back to copy alone.\n- **A section reordered and a section drafted** — the mission band moved below the\n  narrative, and the progress band drafted, proving the redesign did not cost any\n  editability.\n- **The CMS editor** — the `momentumSections` form showing the new Kicker field and\n  `mission` in the section-type dropdown, and the `pageCopy` form showing the four\n  new frame fields.\n- **Mobile at 390px** — the whole page in one column: hero copy full-width, prose\n  single-column, evidence and gift grids at two columns with the last gift card\n  spanning, testimonial photo above its quote, closing photo above its copy.",
+  "description": "Rebuilt /donate to the campaign design as nine bands — navy-gradient hero, a new gold mission band, the narrative in a new two-column layout with a white pull-quote card, a four-up bordered evidence strip, navy-and-gold progress chrome around the untouched Givebutter widget, an aqua photo-led impact band, a numbered cream gift grid, navy network chrome, and a new photo-split closing ask behind a 20px gold rule. Every band keeps its editability: the new mission band is a section KIND rather than markup in the page, so it reorders, drafts and renames like the rest, and the two-column treatment is a `columns` value in the existing layout list rather than a fourth renderer.\n\nThe palette is a hybrid by decision. Crimson Pro, Inter and Harvard crimson stay as the base; the mockup's navy, gold, teal and aqua enter as `--momentum-*` tokens used for band backgrounds and accents ONLY, so a visitor crossing from the site nav into the campaign page meets the same brand in a different register rather than a second brand. Kickers reuse the site's existing `.kick` class with three colour-only modifiers instead of a parallel implementation.\n\nThe gift cards lost their icon field and gained ordinals derived from position within their band, so a duplicated grouped band restarts at 01 rather than continuing at 04 — the field, its resolver, its glyph component and its test were all removed rather than left as a CMS control that silently draws nothing. Ten new fields reached the CMS with plain-English hints, four of them image pickers (testimonial portrait and event photo, closing image, hero image), so every picture on the page is swappable without code. Two guards already enforce that pairing: selectOptions.test.ts asserts the dropdowns match the code lists and collections.test.ts asserts schema and registry agree in both directions.\n\nFour helpers came out of the components into tested modules — emphasizedHeading and splitParagraphs in the new src/lib/campaignCopy.ts, campaignLink and giftOrdinal in momentumSections.ts — with 32 new tests. Two deliberate gaps ship named rather than guessed: the Givebutter widget id is blank, so the progress band renders nothing until the real id is pasted (a wrong one would display someone else's meter), and Mohammed Ally's quote ships without a portrait because there is no photo on file and a real person's attributed quote is better faceless than wearing someone else's.\n\nOne consequence worth recording: the 680px hero fills the 900px desktop capture viewport, so /donate app scenarios now frame the hero and the top of the next band only. The bands themselves are covered by nine component scenarios, and the two app scenarios whose subjects sit deeper were differentiated at the seed level rather than suppressed — the impact band is ordered first so the capture reaches it, and the giving-platform scenario's narrative gained a photo so it contrasts with the missing-photo scenario beside it.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/data-structure.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/glossary.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--hero-banner-photo-video-or-custom-html-with-live-personalization.md\t.codeyam/plans/completed/ns--hero-banner-photo-video-or-custom-html-with-live-personalization.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--rebuild-the-momentum-fund-page-to-the-campaign-design.md\t.codeyam/plans/completed/ns--rebuild-the-momentum-fund-page-to-the-campaign-design.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/coverage-plan/src-components-momentumfundpage-astro.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-a-giving-platform-is-chosen.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-two-pillar-bands-with-their-own-cards.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/pillaricon-all-three-variants.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-post-welcome--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/blog-preview-link-shared-draft--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-a-single-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-curated-and-capped--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-photo-enlarged--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-show-all-revealed--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-gallery-three-photos-three-columns--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-events-tagged-to-this-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-longest-chapter-name-wraps--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-new-york-city--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapter-route-sf-bay-area--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterconnect-default--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/chapterpage-full-chapter--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-new-section-prefilled-by-duplicate--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-page-settings-momentum-fund-page--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-section-type-is-a-dropdown--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-the-donor-fields-no-editor-can-change--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-the-second-band-pointed-at-its-own-cards--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-where-the-pillar-cards-actually-live--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-ai-on-day-one--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/community-route-founders-with-leads-and-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-a-tick-that-could-not-be-saved--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-complete--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-cutover-day--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-decisions-answered-nothing-begun--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-nothing-started--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-partway-through--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-the-records-on-a-phone--mobile.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cutover-runbook-waiting-on-one-answer--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/events-route-upcoming-and-past--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-board-of-directors--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-homepage-phased-for-launch--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-landing-page--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-no-upcoming-events--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-password-required--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-unlocked-with-the-password--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/locked-preview-wrong-password--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-giving-platform-is-chosen--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-arriving-from-the-email--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-every-section-hidden--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-filtering-the-donor-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-public-visitor--mobile.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-donor-wall-moved-to-the-top--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-first-donor-on-the-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/pillaricon-all-three-variants--desktop.png",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-communities-derived--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-derived-chapters--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-no-chapters-yet--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/primarynav-sixth-chapter-published--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-a-page-written-in-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/site-page-long-title-and-no-description--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/sponsor-route-example-partner-wall--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-no-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-open-projects--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-page-rewritten-from-the-cms--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-full-description-no-photo--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-photo-and-own-sign-up-link--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/volunteer-project-detail-retired-projects-never-suggested--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/diagnose-preview.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/172181b11723609a2da774ada53c4a785ca8912eba2b2f1472da849a8b7c3c31.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/7adb5106cacb30af2c29e97f097468a9eb5eac5c1b467a15e0bcb8ed9a683d56.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/MomentumFundPage.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/AccomplishmentCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/GiftPillarCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/GiftPillars.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/GiveButton.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/GoalMeter.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/MomentumAccomplishments.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/MomentumClose.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/MomentumHero.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/MomentumNarrative.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/MomentumNetwork.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/MomentumTestimonials.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/donate/PillarIcon.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/components/donate/TestimonialCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/config.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/accomplishments.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/donors.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/pillars.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/story.md",
+      "status": "deleted"
+    },
+    {
+      "path": "src/content/momentumSections/testimonials.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/why.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/pageCopy/donate.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/collections.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/data/donatePage.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/donatePageContent.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSections.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSections.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/momentumSectionsContent.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/pageCopyMerge.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/pageCopyMerge.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/pillars.test.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/pillars.ts",
+      "status": "deleted"
+    },
+    {
+      "path": "src/lib/sectionNotes.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/selectOptions.test.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/lib/site.ts",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/GiftPillarCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/GiftPillars-DuplicatedBand.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/GiftPillars.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumClose.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumTestimonials.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/pages/isolated-components/PillarIcon.astro",
+      "status": "deleted"
+    },
+    {
+      "path": "src/pages/isolated-components/TestimonialCard.astro",
+      "status": "modified"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/accomplishmentcard-one-cell-of-the-evidence-strip.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-testimonials-the-fields-behind-a-quote.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/giftpillars-numbered-bordered-grid.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/goalmeter-navy-chrome-with-campaign-link.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentum-fund-the-impact-band-with-real-quotes.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumclose-photo-split.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentummission-gold-band.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumnarrative-two-prose-columns.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/momentumtestimonials-photo-led-rows.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/accomplishmentcard-one-cell-of-the-evidence-strip--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-testimonials-the-fields-behind-a-quote--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-testimonials-the-fields-behind-a-quote--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/giftpillars-numbered-bordered-grid--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/goalmeter-navy-chrome-with-campaign-link--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-impact-band-with-real-quotes--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentum-fund-the-impact-band-with-real-quotes--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumclose-photo-split--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentummission-gold-band--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumnarrative-two-prose-columns--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/momentumtestimonials-photo-led-rows--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/testimonialcard-every-field-filled--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/testimonialcard-quote-without-an-event-photo--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/testimonialcard-every-field-filled.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/testimonialcard-quote-without-an-event-photo.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/7a500116f1a1da1e3bd86f564403a763db0f51e61f73ec76710118b4d769ef70.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/c6c63e4954c3fd76be772d3e9b877c7f54d3bb140a3182a91da5f01d2b4b4c7c.json",
+      "status": "added"
+    },
+    {
+      "path": "src/components/donate/MomentumMission.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/content/momentumSections/goal-meter.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/momentumSections/mission.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/testimonials/jessica-li.md",
+      "status": "added"
+    },
+    {
+      "path": "src/content/testimonials/mohammed-ally.md",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/campaignCopy.test.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/campaignCopy.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/AccomplishmentCard.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GiftPillars-Numbered.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/GoalMeter-WithLink.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumClose-Split.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumMission.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumNarrative-Columns.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/MomentumTestimonials-PhotoRows.astro",
+      "status": "added"
+    },
+    {
+      "path": "src/pages/isolated-components/TestimonialCard-Full.astro",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "Blog Post - Welcome",
+      "screenshotPath": "blog-post-welcome--desktop.png"
+    },
+    {
+      "name": "Blog Preview Link - Shared Draft",
+      "screenshotPath": "blog-preview-link-shared-draft--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - A Single Photo",
+      "screenshotPath": "chapter-gallery-a-single-photo--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Curated and Capped",
+      "screenshotPath": "chapter-gallery-curated-and-capped--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Photo Enlarged",
+      "screenshotPath": "chapter-gallery-photo-enlarged--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Show All Revealed",
+      "screenshotPath": "chapter-gallery-show-all-revealed--desktop.png"
+    },
+    {
+      "name": "Chapter Gallery - Three Photos, Three Columns",
+      "screenshotPath": "chapter-gallery-three-photos-three-columns--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Events Tagged To This Chapter",
+      "screenshotPath": "chapter-route-events-tagged-to-this-chapter--desktop.png"
+    },
+    {
+      "name": "Chapter Route - Longest Chapter Name Wraps",
+      "screenshotPath": "chapter-route-longest-chapter-name-wraps--desktop.png"
+    },
+    {
+      "name": "Chapter Route - New York City",
+      "screenshotPath": "chapter-route-new-york-city--desktop.png"
+    },
+    {
+      "name": "Chapter Route - SF & Bay Area",
+      "screenshotPath": "chapter-route-sf-bay-area--desktop.png"
+    },
+    {
+      "name": "Community Route - AI On Day One",
+      "screenshotPath": "community-route-ai-on-day-one--desktop.png"
+    },
+    {
+      "name": "Community Route - Founders With Leads And Events",
+      "screenshotPath": "community-route-founders-with-leads-and-events--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - A Tick That Could Not Be Saved",
+      "screenshotPath": "cutover-runbook-a-tick-that-could-not-be-saved--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Complete",
+      "screenshotPath": "cutover-runbook-complete--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Cutover Day",
+      "screenshotPath": "cutover-runbook-cutover-day--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Decisions Answered Nothing Begun",
+      "screenshotPath": "cutover-runbook-decisions-answered-nothing-begun--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Nothing Started",
+      "screenshotPath": "cutover-runbook-nothing-started--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - Partway Through",
+      "screenshotPath": "cutover-runbook-partway-through--desktop.png"
+    },
+    {
+      "name": "Cutover Runbook - The Records On A Phone",
+      "screenshotPath": "cutover-runbook-the-records-on-a-phone--mobile.png"
+    },
+    {
+      "name": "Cutover Runbook - Waiting On One Answer",
+      "screenshotPath": "cutover-runbook-waiting-on-one-answer--desktop.png"
+    },
+    {
+      "name": "Events Route - Upcoming and Past",
+      "screenshotPath": "events-route-upcoming-and-past--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Board of Directors",
+      "screenshotPath": "harvard-in-tech-board-of-directors--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Chapter Published Since The Menu Was Written",
+      "screenshotPath": "harvard-in-tech-chapter-published-since-the-menu-was-written--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Homepage Phased For Launch",
+      "screenshotPath": "harvard-in-tech-homepage-phased-for-launch--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Landing Page",
+      "screenshotPath": "harvard-in-tech-landing-page--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - No Upcoming Events",
+      "screenshotPath": "harvard-in-tech-no-upcoming-events--desktop.png"
+    },
+    {
+      "name": "Harvard in Tech - Upcoming Events Excludes Past Ones",
+      "screenshotPath": "harvard-in-tech-upcoming-events-excludes-past-ones--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Password Required",
+      "screenshotPath": "locked-preview-password-required--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Unlocked With The Password",
+      "screenshotPath": "locked-preview-unlocked-with-the-password--desktop.png"
+    },
+    {
+      "name": "Locked Preview - Wrong Password",
+      "screenshotPath": "locked-preview-wrong-password--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Giving Platform Is Chosen",
+      "screenshotPath": "momentum-fund-a-giving-platform-is-chosen--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - A Mistyped Section Type And A Missing Photo",
+      "screenshotPath": "momentum-fund-a-mistyped-section-type-and-a-missing-photo--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Arriving From The Email",
+      "screenshotPath": "momentum-fund-arriving-from-the-email--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Every Section Hidden",
+      "screenshotPath": "momentum-fund-every-section-hidden--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Finding Your Place In The Network",
+      "screenshotPath": "momentum-fund-filtering-the-donor-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Public Visitor",
+      "screenshotPath": "momentum-fund-public-visitor--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Donor Wall Moved To The Top",
+      "screenshotPath": "momentum-fund-the-donor-wall-moved-to-the-top--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The First Donor On The Wall",
+      "screenshotPath": "momentum-fund-the-first-donor-on-the-wall--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Goal Meter Held As Coming Soon",
+      "screenshotPath": "momentum-fund-the-goal-meter-held-as-coming-soon--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - The Impact Band With Real Quotes",
+      "screenshotPath": "momentum-fund-the-impact-band-with-real-quotes--desktop.png"
+    },
+    {
+      "name": "Momentum Fund - Two Pillar Bands With Their Own Cards",
+      "screenshotPath": "momentum-fund-two-pillar-bands-with-their-own-cards--desktop.png"
+    },
+    {
+      "name": "Site Page - A Page Written In The CMS",
+      "screenshotPath": "site-page-a-page-written-in-the-cms--desktop.png"
+    },
+    {
+      "name": "Site Page - Long Title And No Description",
+      "screenshotPath": "site-page-long-title-and-no-description--desktop.png"
+    },
+    {
+      "name": "Sponsor Route - Example Partner Wall",
+      "screenshotPath": "sponsor-route-example-partner-wall--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - No Open Projects",
+      "screenshotPath": "volunteer-page-no-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Open Projects",
+      "screenshotPath": "volunteer-page-open-projects--desktop.png"
+    },
+    {
+      "name": "Volunteer Page - Rewritten From The CMS",
+      "screenshotPath": "volunteer-page-rewritten-from-the-cms--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Full Description No Photo",
+      "screenshotPath": "volunteer-project-detail-full-description-no-photo--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Photo And Own Sign-up Link",
+      "screenshotPath": "volunteer-project-detail-photo-and-own-sign-up-link--desktop.png"
+    },
+    {
+      "name": "Volunteer Project Detail - Retired Projects Never Suggested",
+      "screenshotPath": "volunteer-project-detail-retired-projects-never-suggested--desktop.png"
+    },
+    {
+      "name": "ChapterConnect - Default",
+      "screenshotPath": "chapterconnect-default--desktop.png"
+    },
+    {
+      "name": "ChapterPage - Full Chapter",
+      "screenshotPath": "chapterpage-full-chapter--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Communities Derived",
+      "screenshotPath": "primarynav-communities-derived--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Derived Chapters",
+      "screenshotPath": "primarynav-derived-chapters--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - No Chapters Yet",
+      "screenshotPath": "primarynav-no-chapters-yet--desktop.png"
+    },
+    {
+      "name": "PrimaryNav - Sixth Chapter Published",
+      "screenshotPath": "primarynav-sixth-chapter-published--desktop.png"
+    }
+  ],
+  "testResults": {
+    "total": 1030,
+    "passed": 1030,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 1030,
+        "passed": 1030
+      }
+    ]
+  }
+}

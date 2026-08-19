@@ -15,36 +15,49 @@ import { altFor } from '../../lib/media';
 import { resolveLayout } from '../../lib/momentumSections';
 
 interface Props {
+  kicker?: string;
   title?: string;
-  /** `image-left` | `image-right` | `text-only`; anything else degrades to
-   *  text-only rather than rendering an empty column. */
+  /** `image-left` | `image-right` | `text-only` | `columns`; anything else
+   *  degrades to text-only rather than rendering an empty column. */
   layout?: string;
   image?: string;
   /** Tints the band and rules it top and bottom, the way the old "Why Support"
    *  section broke up the page. Alternated by the page, not by the editor. */
   tinted?: boolean;
 }
-const { title, layout, image, tinted = false } = Astro.props as Props;
+const { kicker, title, layout, image, tinted = false } = Astro.props as Props;
 
-// A two-column layout with no photo would render a blank column, so an absent
-// image falls back to full-width prose regardless of what the editor chose.
+// A two-column PHOTO layout with no photo would render a blank column, so an
+// absent image falls back to full-width prose regardless of what the editor
+// chose. `columns` is exempt: its two columns are both prose, so it is the one
+// multi-column layout that is correct precisely when there is no image.
 const resolved = resolveLayout(layout);
-const mode = image ? resolved : 'text-only';
+const mode = image || resolved === 'columns' ? resolved : 'text-only';
 const alt = image ? altFor(image, title ?? 'Harvard Alumni in Tech') : '';
 ---
 
 <section class:list={['narrative', { tinted }]}>
   <div class:list={['inner', mode]}>
     {
-      mode !== 'text-only' && image ? (
+      mode !== 'text-only' && mode !== 'columns' && image ? (
         <div class="figure">
           <img src={image} alt={alt} loading="lazy" />
         </div>
       ) : null
     }
     <div class="prose">
-      {title ? <h2>{title}</h2> : null}
-      <slot />
+      {/* The head sits OUTSIDE the flowing body so `columns` can split the prose
+          into two columns without dragging the kicker and heading in with it —
+          a heading that flowed into column one would read as a caption. */}
+      {kicker || title ? (
+        <div class="head">
+          {kicker ? <p class="kick">{kicker}</p> : null}
+          {title ? <h2>{title}</h2> : null}
+        </div>
+      ) : null}
+      <div class="body">
+        <slot />
+      </div>
     </div>
   </div>
 </section>
@@ -74,6 +87,11 @@ const alt = image ? altFor(image, title ?? 'Harvard Alumni in Tech') : '';
     max-width: 68ch;
     grid-template-columns: 1fr;
   }
+  /* `columns` runs the FULL band width — the prose is what splits in two, not
+     the grid — so it deliberately does not take text-only's reading-width cap. */
+  .inner.columns {
+    grid-template-columns: 1fr;
+  }
   .inner.image-left,
   .inner.image-right {
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
@@ -96,15 +114,37 @@ const alt = image ? altFor(image, title ?? 'Harvard Alumni in Tech') : '';
     object-fit: cover;
     border-radius: 4px;
   }
+  .kick {
+    margin: 0 0 14px;
+  }
+  /* The campaign design's sentence-heading: a large serif statement rather than
+     the 800-weight sans label this band used to carry. Sized off the viewport so
+     it holds the same weight beside a photo and across the full band. */
   h2 {
-    font-size: clamp(28px, 3.6vw, 44px);
+    font-family: var(--font-title);
+    font-size: clamp(32px, 4.2vw, 58px);
     letter-spacing: -0.02em;
-    font-weight: 800;
+    font-weight: 700;
+    color: var(--momentum-navy);
     /* Set explicitly, unlike the full-width bands that inherit the body value:
-       in a half-width column these headings wrap, and body line-height at 44px
+       in a half-width column these headings wrap, and body line-height at 58px
        leaves a gap wide enough to read as two separate headings. */
-    line-height: 1.1;
-    margin: 0 0 24px;
+    line-height: 1.06;
+    margin: 0 0 28px;
+  }
+  /* Two columns of prose, the newspaper treatment the campaign design gives the
+     "why support us" band. `column-fill: balance` keeps the two ending near the
+     same line however much an editor writes. */
+  .inner.columns .body {
+    column-count: 2;
+    column-gap: 56px;
+    column-fill: balance;
+  }
+  /* The pull quote must NOT be split across the two columns, and it reads as a
+     card beneath the prose rather than as part of it. */
+  .inner.columns .body :global(blockquote) {
+    column-span: all;
+    break-inside: avoid;
   }
 
   /* The markdown body arrives through the slot, so its elements are styled by
@@ -139,14 +179,18 @@ const alt = image ? altFor(image, title ?? 'Harvard Alumni in Tech') : '';
   .prose :global(h3:first-child) {
     margin-top: 0;
   }
+  /* The campaign design's pull quote: a white card standing off the band rather
+     than an inline rule in the text flow. It sits well below the prose because
+     in `columns` it spans both columns and closes the band. */
   .prose :global(blockquote) {
     font-family: var(--font-serif);
-    font-size: clamp(21px, 2.4vw, 28px);
+    font-size: clamp(20px, 2.2vw, 26px);
     line-height: 1.4;
-    color: var(--ink);
-    border-left: 3px solid var(--crimson);
-    padding-left: 24px;
-    margin: 0 0 28px;
+    color: var(--momentum-navy);
+    background: var(--paper);
+    border-left: 5px solid var(--crimson);
+    padding: 28px 32px;
+    margin: 48px 0 0;
   }
   .prose :global(blockquote p) {
     font-size: inherit;
@@ -171,6 +215,15 @@ const alt = image ? altFor(image, title ?? 'Harvard Alumni in Tech') : '';
     }
     .figure img {
       max-height: 320px;
+    }
+  }
+
+  /* Two prose columns are unreadable on a phone — the measure collapses to a few
+     words a line — so `columns` becomes one column at the same breakpoint the
+     photo layouts stack. */
+  @media (max-width: 820px) {
+    .inner.columns .body {
+      column-count: 1;
     }
   }
 </style>

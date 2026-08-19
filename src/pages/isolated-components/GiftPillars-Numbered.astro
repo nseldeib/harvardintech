@@ -1,0 +1,51 @@
+---
+import Component from "../../../src/components/donate/GiftPillars.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for the gift grid as the campaign design draws it: 01 / 02 / 03
+// in bordered cells on a cream band, under a kicker and a serif heading.
+//
+// The numerals are NOT passed in — they are derived by the band from each card's
+// position, so this frame proves the derivation rather than a list someone
+// typed. That matters because it is the same rule that makes a duplicated,
+// grouped gift band start again at 01 instead of continuing from 03.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiftPillars-Numbered</title>
+    <style is:global>
+      /* Three across only at a page-like width; the fit-content wrapper would
+         collapse the grid to one column and hide the bordered strip. */
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        kicker="What your gift powers"
+        title="Three ways support moves the Harvard Alumni in Tech community forward."
+        pillars={[
+          {
+            title: 'Create Meaningful Connections',
+            body: 'Support events, roundtables, and gatherings that help alumni build valuable relationships and discover new opportunities.',
+            linkLabel: 'Check out our past events',
+            linkUrl: '/events',
+          },
+          {
+            title: 'Expand Access to Knowledge',
+            body: 'Power practical content, mentorship, and conversations that help founders, innovators, and technology professionals grow.',
+          },
+          {
+            title: 'Strengthen the Network',
+            body: 'Build the infrastructure, volunteer resources, and city chapters needed to serve more alumni and sustain the community.',
+          },
+        ]}
+      />
+    </div>
+  </body>
+</html>
