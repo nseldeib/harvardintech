@@ -1,0 +1,29 @@
+{
+  "name": "CMS Section Editor - The Donor Fields No Editor Can Change",
+  "id": "570d75ba-2887-412d-bd97-8df446ffb3c6",
+  "url": "/admin/momentumSections/donors",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The donor recognition wall. The names come from **Donors** — on the admin\ndashboard that collection sits under /donate, alongside this one.\n\nThis entry decides where the wall sits on the page and, via its Heading field,\nwhat the wall is called. It sits after the member quotes and before the closing\nask, so a reader meets the people already behind the fund immediately before\nbeing asked to join them. Move it with the Order field or hide it with the Draft\ntoggle.\n\nEverything else on the wall is NOT editable in the CMS: the intro paragraph, the\ngiving levels, the \"no donors yet\" message, and the heading used when Heading is\nblank are `donorsIntro`, `donorTiers`, `donorsEmptyMessage`, and `donorsTitle` in\n`src/data/donatePage.json`. Changing any of them needs a developer — **Page\nsettings** does not carry them, so there is nowhere in the CMS to look.",
+        "kind": "donors",
+        "order": 6,
+        "slug": "donors",
+        "title": "Our Founding Supporters"
+      },
+      {
+        "body": "The member-quotes band. The quotes themselves live in **Testimonials** — on the\nadmin dashboard that collection sits under /donate, alongside this one — and the\nband hides itself entirely until there is at least one.\n\nThis entry decides where the band sits once quotes exist and, via its Heading\nfield, what the band is called. Blank Heading falls back to `testimonialsTitle`\nin `src/data/donatePage.json`, which is not editable in the CMS and needs a\ndeveloper to change.",
+        "kind": "testimonials",
+        "order": 5,
+        "slug": "testimonials"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The donor wall entry with its Heading filled in — the one control on this screen that changes what the wall is called, sitting beside the note explaining exactly that. Everything else the wall shows is out of reach: the intro, the giving levels, and the 'no donors yet' message are plain keys in src/data/donatePage.json with no editor input anywhere, because the Page settings collection renders ten fields and none of them are these. The old note claimed all of it was editable under a screen that does not exist, sending an editor hunting for a control that was never built. Naming the limitation at the point of confusion is the whole value of the note. This capture is deliberately the FILLED-Heading state so it is not a second photograph of the resting entry that the Section Type Is A Dropdown scenario already shows on this same route — the difference on screen is the difference the note is about."
+}

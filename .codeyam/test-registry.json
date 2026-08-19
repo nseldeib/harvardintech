@@ -4527,6 +4527,33 @@
       "runner": "tests"
     },
     {
+      "description": "The reproduction test. The editor is being sent somewhere, and it has to exist — this is the assertion the three stale notes failed.",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "momentumSections entry notes › names only CMS screens that exist in the registry",
+      "line": 103,
+      "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A scanner that matched nothing would satisfy the test above trivially and silently stop guarding anything, which is the failure mode a prose test is most prone to. Every note that sends an editor somewhere must be SEEN doing it, so the guard's own reach is asserted rather than assumed.",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "momentumSections entry notes › sees a screen reference in every note that points an editor somewhere",
+      "line": 111,
+      "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The registry is what carries the authority for what a screen is CALLED, and this is the specific fact the whole guard turns on: the collection an editor was being sent to is labelled \"Page settings\" and has never been labelled \"Momentum Fund page copy\".",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "momentumSections entry notes › takes its valid screen names from the collection labels",
+      "line": 124,
+      "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
+      "runner": "tests"
+    },
+    {
       "description": "Non-mutating, like every other rule here.",
       "file": "src/lib/cmsOrderControls.test.ts",
       "format": "vitest",
@@ -6720,6 +6747,51 @@
       "key": "schoolsPresent › lists the schools present, most supporters first",
       "line": 116,
       "registeredAt": "2026-08-19T00:32:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A note that names several screens has to have all of them checked, not just the first — the donor wall note names two.",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "screenReferences › collects every reference in one note",
+      "line": 169,
+      "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "Field names, filenames, and JSON keys are written in backticks precisely so they are NOT read as places to navigate to. Only the deliberate forms count.",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "screenReferences › ignores code spans and ordinary prose",
+      "line": 161,
+      "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The form the rewritten notes use to name a collection.",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "screenReferences › picks up a bolded collection name",
+      "line": 135,
+      "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The form the stale notes used. Matched so the guard can still see the original failure, and so reintroducing that phrasing fails rather than slipping through unreferenced.",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "screenReferences › picks up the destination of an arrow navigation path",
+      "line": 144,
+      "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "These files are hard-wrapped at 80 columns, so a two-word screen name lands across a line break often enough that a line-oriented scan would miss it and report a name that was never really written.",
+      "file": "src/lib/sectionNotes.test.ts",
+      "format": "vitest",
+      "key": "screenReferences › reads a reference split across a line break as one name",
+      "line": 153,
+      "registeredAt": "2026-08-19T13:56:16.344783238+00:00",
       "runner": "tests"
     },
     {

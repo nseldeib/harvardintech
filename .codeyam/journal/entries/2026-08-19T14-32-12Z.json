@@ -1,0 +1,191 @@
+{
+  "timestamp": "2026-08-19T14:32:12Z",
+  "title": "Fix The Stale Editing Notes On The Momentum Fund Section Entries",
+  "type": "feature",
+  "userRequest": "## Summary\n\nThe notes inside the `momentumSections` entries tell an editor where to go to\nedit each band's content, and three of them now name a screen that does not\nexist. `pillars.md`, `accomplishments.md`, and `donors.md` all say the content is\nedited under \"Settings → Momentum Fund page copy\". The pillar cards and the\naccomplishment figures have since moved into their own collections, the\n`pageCopy` collection is labelled **Page settings** in the CMS (not \"Momentum\nFund page copy\"), and the admin dashboard groups collections **by page** rather\nthan under a Settings menu — so the instruction is wrong about the content, wrong\nabout the screen name, and wrong about the navigation. It is also authoritative-\nlooking prose an editor has every reason to trust, which is what makes it worse\nthan no note. Rewrite the four notes to describe where each band's content\nactually lives, and add a drift guard so the next migration cannot quietly leave\nthem stale again.\n\n## Key Decisions\n\n- **Fix all four entries in one pass, not just `pillars.md`.** They are one\n  concern — the same sentence pattern, written at the same time, made wrong by\n  the same migration. Fixing the one that was noticed and leaving two identically\n  wrong notes beside it would be the worse outcome, and a reviewer looking at one\n  diff would want the others in it.\n\n- **Add a test, because prose is exactly what rots unnoticed.** Nothing today\n  connects these notes to the registry they describe, so the CMS migration that\n  invalidated them broke no build and failed no test. The guard is the same\n  species as `src/lib/collectionPlacement.test.ts`, which exists for the same\n  reason in the same repo: hand-maintained config that mirrors something else,\n  and an editor who gets sent somewhere wrong by a link that looks authoritative.\n\n- **Guard the screen NAME, not the whole sentence.** The test resolves every CMS\n  screen a note names against the real `label` values in\n  `src/data/collections.json`. That is the part that is machine-checkable and the\n  part that actually went wrong; asserting on the prose itself would fail on\n  every future wording change and teach the next author to delete the test.\n\n- **Say plainly which fields the CMS cannot reach.** The donor wall's intro,\n  giving levels, and empty-state message are still keys in\n  `src/data/donatePage.json` with no editor input anywhere — the CMS `pageCopy`\n  collection renders ten fields and none of them are these. A note that quietly\n  omitted that would send an editor hunting for a control that does not exist, so\n  each note names the developer-only fields explicitly.\n\n- **Tell editors the heading is now the section's own field.** Since the bands\n  started using `sectionHeading`, the Heading box on the section entry overrides\n  the shared title from `donatePage.json` — which is precisely the control an\n  editor needs to tell two duplicated bands apart, and none of the four notes\n  mentions it. This is the one place the rewrite adds guidance rather than just\n  correcting it, and it is worth it: the notes are read at the exact moment that\n  question comes up.\n\n- **Do not widen this into making the developer-only fields editable.** Adding\n  `donorsIntro`, `donorTiers`, and `donorsEmptyMessage` to the CMS is a real gap\n  and a reasonable next plan, but it is a schema-and-registry change with its own\n  migration, and bundling it would hold a four-file text correction behind it.\n\n## Implementation\n\n### 1. The pillars band note\n\n**File**: `src/content/momentumSections/pillars.md`\n\nRewrite the body (frontmatter untouched). It should say that the cards are edited\nin the **Momentum Fund gift pillars** collection — grouped under `/donate` on the\nadmin dashboard — that this entry decides where the band sits and, via its\nHeading field, what the band is called, and that **Card group** here plus\n**Group** on each card is what makes a duplicated band show different cards.\nBlank on both sides shows the ungrouped cards, which is how the band reads today.\n\n### 2. The accomplishments band note\n\n**File**: `src/content/momentumSections/accomplishments.md`\n\nSame correction: the figures are entries in the **Momentum Fund accomplishments**\ncollection, not page copy. The heading comes from this entry's Heading field,\nfalling back to `accomplishmentsTitle` in `src/data/donatePage.json` when blank.\nCard grouping works exactly as it does for pillars.\n\n### 3. The donor wall note\n\n**File**: `src/content/momentumSections/donors.md`\n\nThe names come from the **Donors** collection and the heading from this entry's\nHeading field. The intro, the giving levels, and the \"no donors yet\" message are\n**not editable in the CMS** — they are `donorsIntro`, `donorTiers`, and\n`donorsEmptyMessage` in `src/data/donatePage.json`, which needs a developer. Say\nso directly; that is the whole value of this note.\n\n### 4. The testimonials band note\n\n**File**: `src/content/momentumSections/testimonials.md`\n\nNot wrong today, but incomplete in the same way: add that the heading comes from\nthis entry's Heading field (falling back to `testimonialsTitle`), so all four\nnotes describe the same controls consistently. Keep the existing, accurate\nsentence about the band hiding itself until a quote exists.\n\n### 5. The drift guard\n\n**New file**: `src/lib/sectionNotes.test.ts`\n\nA standalone test file with no module beside it, exactly like\n`src/lib/collectionPlacement.test.ts`. It reads the `momentumSections` entry\nfiles and `src/data/collections.json` from disk with `node:fs` and asserts that\nevery CMS screen the notes name is a real collection label.\n\n- Build the set of valid screen names from `collections.json` — every\n  collection label, plus the built-in screen names an entry might sensibly\n  reference.\n- Scan each entry body for screen references. Match the **bolded / quoted screen\n  name** form the rewritten notes use, so the check keys on the deliberate\n  reference rather than on any capitalised phrase in ordinary prose.\n- Assert the set of unresolved names is empty, reporting the entry filename\n  alongside each so a failure names the file to fix.\n\nKeep the file's header comment in the style of `collectionPlacement.test.ts`:\nwhat rots, why nothing else catches it, and that this test is the reminder.\n\n## Reused existing code\n\n- `src/lib/collectionPlacement.test.ts` — the model for step 5 in every respect:\n  a test-only file with no module, reading `src/data/collections.json` via\n  `node:fs`, guarding hand-maintained config that mirrors something else, with a\n  header comment naming the rot it exists to catch.\n- `src/data/collections.json` — the registry whose the label values\n  carry the authority for what a CMS screen is called. The three labels this plan\n  turns on: **Page settings** (`pageCopy`), **Momentum Fund gift pillars**\n  (`pillars`), and **Momentum Fund accomplishments** (`accomplishments`).\n- `src/data/donatePage.json` — where `accomplishmentsTitle`, `pillarsTitle`,\n  `testimonialsTitle`, `donorsTitle`, `donorsIntro`, `donorTiers`, and\n  `donorsEmptyMessage` actually live; the notes cite it as the developer-only\n  fallback.\n- `sectionHeading` from `src/lib/momentumSections.ts` (glossary entry:\n  `sectionHeading`) — the rule the corrected notes describe: the section's own\n  Heading wins, the shared title is the fallback.\n- `cardsInGroup` and `normalizeGroup` from `src/lib/sectionGroups.ts` (glossary\n  entries: `cardsInGroup`, `normalizeGroup`) — the grouping rule the pillars and\n  accomplishments notes describe, including that blank matches blank and that\n  matching is trimmed and case-insensitive.\n- `src/lib/dashboardGrouping.test.ts` — confirms the dashboard groups collections\n  by the page they build (`paths` maps `pillars`, `accomplishments`, `donors`,\n  and `pageCopy` to `/donate`), which is why the corrected notes say \"grouped\n  under /donate\" rather than \"under Settings\".\n\n**Existing-implementation survey.** Grepped for an existing guard over these\nnotes before proposing one: `grep -rn \"Momentum Fund page copy\" src/` returns the\nthree stale entry bodies and **nothing else** — no test, no doc, no lint rule\nreferences the phrase, which is why the migration that invalidated it was silent.\nNo existing test reads `src/content/momentumSections/` at all. The nearest\nexisting guards are `src/lib/collectionPlacement.test.ts` (registry `paths` vs\nreal routes) and `src/data/collections.test.ts` (registry fields vs Zod schema);\nboth guard registry-against-code, and neither looks at content prose. There is no\nexisting helper for resolving a screen name to a collection label to reuse.\n\n## Reproduction Test\n\nPins the stale guidance: an entry note naming a CMS screen that does not exist.\n\n**Target**: `src/lib/sectionNotes.test.ts` (new) — created by step 5, run with\n`codeyam-editor editor refresh-tests --test sectionNotes`.\n\n```ts\n// Every CMS screen these notes name must be a real collection in the registry —\n// the editor is being sent somewhere, and it has to exist.\nit('names only CMS screens that exist in the registry', () => {\n  expect(unresolvedScreenReferences()).toEqual([]);\n});\n```\n\nStatus: PROPOSED — confirm red at execution. Expected failure: three entries\n(`pillars.md`, `accomplishments.md`, `donors.md`) name \"Momentum Fund page copy\",\nwhich matches no collection label in `src/data/collections.json` — the pageCopy\ncollection is labelled \"Page settings\" — so the array is non-empty and the\n`toEqual([])` assertion fails, listing the three filenames.\n\nNote for execution: the helper and its reference-matching shape are written as\npart of step 5, so confirming the red means writing the scanner against the\nCURRENT (stale) bodies first, watching it report the three files, and only then\nrewriting the notes in steps 1–4 to turn it green.\n\n## Scenarios to Demonstrate\n\n- **The CMS sections list** — the `momentumSections` entries showing their\n  corrected notes, which is where an editor actually reads them.\n- **The pillars section entry** — its note in the editor, naming the Momentum\n  Fund gift pillars collection and explaining the Card group pairing, next to the\n  Card group field it describes.\n- **The donor wall entry** — its note naming the three fields that need a\n  developer, so the limitation is visible at the point of confusion.\n- **A duplicated pillars band** — the two-band state that prompted this, with the\n  note that now explains how to make the second band distinct.",
+  "description": "The notes inside the momentumSections entries tell an editor where to go to edit each band's content, and three of them named a screen that does not exist: pillars.md, accomplishments.md and donors.md all said the content was edited under 'Settings -> Momentum Fund page copy'. The pillar cards and accomplishment figures had since moved into their own collections, pageCopy had been relabelled 'Page settings', and the admin dashboard had stopped grouping collections under a Settings menu — so the instruction was wrong about the content, wrong about the screen name, and wrong about the navigation, while still reading as authoritative. All four notes were rewritten to name the collection that actually holds each band's content, to explain that the entry's own Heading field is what renames a band and tells two duplicated bands apart, and to explain the Card group / Group pairing on the two card-backed bands. The donor note now states outright that the intro, the giving levels, the empty-state message and the fallback heading are donorsIntro, donorTiers, donorsEmptyMessage and donorsTitle in src/data/donatePage.json with no editor control anywhere — naming the limitation at the point of confusion rather than sending an editor hunting for a screen that was never built. A new guard, src/lib/sectionNotes.test.ts, resolves every CMS screen name a note references against the real collection labels in src/data/collections.json, so the next migration cannot quietly invalidate them again; it is modelled on collectionPlacement.test.ts, which exists in this repo for the same reason. The guard deliberately matches BOTH reference forms — the bold names the rewritten notes use and the legacy 'Settings -> X' navigation form — because a scanner that only knew the new form would find nothing in the old bodies and pass vacuously, pinning no fault at all. prove-red confirms both assertions go red with the notes reverted and green with them. Deliberately out of scope: making donorsIntro, donorTiers and donorsEmptyMessage editable in the CMS is a real gap but a schema-and-registry change with its own migration, and bundling it would have held a four-file text correction behind it.",
+  "modifiedFiles": [
+    {
+      "path": ".codeyam/dependency-graph.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/per-test-evidence.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--fix-the-stale-editing-notes-on-the-momentum-fund-section-entries.md\t.codeyam/plans/completed/ns--fix-the-stale-editing-notes-on-the-momentum-fund-section-entries.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-section-editor-section-type-is-a-dropdown.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/.capture-pipeline.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-section-type-is-a-dropdown--desktop.png",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-section-type-is-a-dropdown--desktop.png.hash",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/analyze-imports.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/audit.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/recapture-stale.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/reconcile-registry.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/refresh-tests.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/command-output/verify-build.txt",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/refusal-fingerprints.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/state/tool-loading-injected.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/all.json",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/7897a9103c6e5df569ed4fe1682fd68ad72decf19affb3b3ecf9e36daf21d4b7.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/e27fde9fbe496f6805aa0801f4c1677cfb296aeeb594ae54a4f0bc813dbe8a7a.json",
+      "status": "deleted"
+    },
+    {
+      "path": ".codeyam/test-registry.json",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/accomplishments.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/donors.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/pillars.md",
+      "status": "modified"
+    },
+    {
+      "path": "src/content/momentumSections/testimonials.md",
+      "status": "modified"
+    },
+    {
+      "path": ".codeyam/plans/ns--hero-banner-photo-video-or-custom-html-with-live-personalization.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/plans/ns--rebuild-the-momentum-fund-page-to-the-campaign-design.md",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-section-editor-the-donor-fields-no-editor-can-change.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-section-editor-the-second-band-pointed-at-its-own-cards.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/cms-section-editor-where-the-pillar-cards-actually-live.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-the-donor-fields-no-editor-can-change--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-the-donor-fields-no-editor-can-change--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-the-second-band-pointed-at-its-own-cards--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-the-second-band-pointed-at-its-own-cards--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-where-the-pillar-cards-actually-live--desktop.png",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/scenarios/screenshots/cms-section-editor-where-the-pillar-cards-actually-live--desktop.png.hash",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/state/red-proof.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/172181b11723609a2da774ada53c4a785ca8912eba2b2f1472da849a8b7c3c31.json",
+      "status": "added"
+    },
+    {
+      "path": ".codeyam/test-cache/blobs/7adb5106cacb30af2c29e97f097468a9eb5eac5c1b467a15e0bcb8ed9a683d56.json",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/sectionNotes.test.ts",
+      "status": "added"
+    }
+  ],
+  "scenarioScreenshots": [
+    {
+      "name": "CMS Section Editor - Where The Pillar Cards Actually Live"
+    },
+    {
+      "name": "CMS Section Editor - The Donor Fields No Editor Can Change"
+    },
+    {
+      "name": "CMS Section Editor - The Second Band Pointed At Its Own Cards"
+    },
+    {
+      "name": "CMS Section Editor - Section Type Is A Dropdown"
+    }
+  ],
+  "testResults": {
+    "total": 1004,
+    "passed": 1004,
+    "failed": 0,
+    "runners": [
+      {
+        "name": "tests",
+        "total": 1004,
+        "passed": 1004
+      }
+    ]
+  }
+}

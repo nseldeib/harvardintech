@@ -1,0 +1,28 @@
+{
+  "name": "CMS Section Editor - Where The Pillar Cards Actually Live",
+  "id": "c9e432b5-1e82-48a6-8ae5-af98bb9d1f0f",
+  "url": "/admin/momentumSections/pillars",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The \"What Your Gift Powers\" cards. Their titles, copy, icons, and links are\nedited in **Momentum Fund gift pillars**, not here — on the admin dashboard that\ncollection sits under /donate, alongside this one.\n\nThis entry decides where the band sits on the page and, via its Heading field,\nwhat the band is called. Blank Heading keeps the shared \"What Your Gift Powers\"\ntitle, which lives in `src/data/donatePage.json` as `pillarsTitle` and needs a\ndeveloper to change; filling Heading in here renames the band yourself, and is\nwhat tells two pillars bands apart.\n\nWhich cards this band shows is the Card group box here paired with the Group box\non each pillar — type the same word in both. Blank on both sides shows the\nungrouped cards, which is how the band reads today, so leave Card group alone\nunless you are splitting the band in two.",
+        "kind": "pillars",
+        "order": 4,
+        "slug": "pillars"
+      },
+      {
+        "body": "The \"What we've accomplished so far\" band. The figures beneath the heading are\nentries in **Momentum Fund accomplishments**, not page copy — on the admin\ndashboard that collection sits under /donate, alongside this one.\n\nThis entry decides where the band sits on the page and, via its Heading field,\nwhat the band is called. Blank Heading falls back to `accomplishmentsTitle` in\n`src/data/donatePage.json`, which is not editable in the CMS and needs a\ndeveloper to change; filling Heading in here renames the band yourself, and is\nwhat tells two accomplishments bands apart.\n\nWhich figures this band shows is the Card group box here paired with the Group\nbox on each figure — type the same word in both. Blank on both sides shows the\nungrouped cards, which is how the band reads today.",
+        "kind": "accomplishments",
+        "order": 2,
+        "slug": "accomplishments"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The note an editor reads when they open the pillars band looking for the card copy, and the entry that prompted this fix. It used to send them to 'Settings -> Momentum Fund page copy' — a screen that does not exist: the cards had moved into their own collection, pageCopy had been relabelled 'Page settings', and the dashboard had stopped grouping anything under Settings. It now names Momentum Fund gift pillars, which is real, and sits directly beside the two controls it explains. That adjacency is the point of the capture: the Heading box the note says renames the band, and the Card group box it pairs with the Group box on each card, are both on screen next to the sentence describing them. A wrong note here costs an editor a hunt for a screen that was never there, and nothing in the build would have caught it — which is why the guard test exists alongside this scenario."
+}

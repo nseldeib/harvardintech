@@ -1,0 +1,62 @@
+{
+  "name": "CMS Section Editor - The Second Band Pointed At Its Own Cards",
+  "id": "ad25e356-639c-4e8d-a49e-ab5ff9c04667",
+  "url": "/admin/momentumSections/pillars-2",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "seed": {
+    "momentumSections": [
+      {
+        "body": "The \"What Your Gift Powers\" cards. Their titles, copy, icons, and links are\nedited in **Momentum Fund gift pillars**, not here — on the admin dashboard that\ncollection sits under /donate, alongside this one.\n\nThis entry decides where the band sits on the page and, via its Heading field,\nwhat the band is called. Blank Heading keeps the shared \"What Your Gift Powers\"\ntitle, which lives in `src/data/donatePage.json` as `pillarsTitle` and needs a\ndeveloper to change; filling Heading in here renames the band yourself, and is\nwhat tells two pillars bands apart.\n\nWhich cards this band shows is the Card group box here paired with the Group box\non each pillar — type the same word in both. Blank on both sides shows the\nungrouped cards, which is how the band reads today, so leave Card group alone\nunless you are splitting the band in two.",
+        "kind": "pillars",
+        "order": 4,
+        "slug": "pillars"
+      },
+      {
+        "body": "The \"What Your Gift Powers\" cards. Their titles, copy, icons, and links are\nedited in **Momentum Fund gift pillars**, not here — on the admin dashboard that\ncollection sits under /donate, alongside this one.\n\nThis entry decides where the band sits on the page and, via its Heading field,\nwhat the band is called. Blank Heading keeps the shared \"What Your Gift Powers\"\ntitle, which lives in `src/data/donatePage.json` as `pillarsTitle` and needs a\ndeveloper to change; filling Heading in here renames the band yourself, and is\nwhat tells two pillars bands apart.\n\nWhich cards this band shows is the Card group box here paired with the Group box\non each pillar — type the same word in both. Blank on both sides shows the\nungrouped cards, which is how the band reads today, so leave Card group alone\nunless you are splitting the band in two.",
+        "group": "capital",
+        "kind": "pillars",
+        "order": 5,
+        "slug": "pillars-2",
+        "title": "How Your Support Will Be Used"
+      }
+    ],
+    "pillars": [
+      {
+        "description": "Support events, roundtables, and the introductions that turn a directory into a network.",
+        "icon": "people",
+        "order": 1,
+        "slug": "connections",
+        "title": "Create Meaningful Connections"
+      },
+      {
+        "description": "Fund the talks, workshops, and written guides that let members learn from each other.",
+        "icon": "book",
+        "order": 2,
+        "slug": "learning",
+        "title": "Share What We Know"
+      },
+      {
+        "description": "Seed the first events in cities where alumni are ready to gather but have nowhere to start.",
+        "group": "capital",
+        "icon": "globe",
+        "order": 1,
+        "slug": "new-chapters",
+        "title": "Open New Chapters"
+      },
+      {
+        "description": "Cover the recurring costs that keep a calendar full rather than occasional.",
+        "group": "capital",
+        "icon": "people",
+        "order": 2,
+        "slug": "programming-fund",
+        "title": "Sustain Year-Round Programming"
+      }
+    ]
+  },
+  "scenarioType": "application",
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The duplicated pillars band that prompted this fix, opened at the moment its note is actually being acted on. Both controls the note describes are filled in here rather than blank: a Heading that gives the copy its own name instead of leaving two rows reading 'pillars', and a Card group naming the set of cards this band shows. That is the difference from the resting pillars entry — there the note explains what the boxes are for while both sit empty and the band shows the ungrouped cards; here it is the instruction an editor has followed. This is the state where the old note failed hardest: an editor duplicating a band and looking for the card copy was sent to a screen that does not exist, at exactly the point they needed to know that Card group here pairs with Group on each card."
+}

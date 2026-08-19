@@ -1,0 +1,26 @@
+{
+  "provenAt": "2026-08-19T13:58:50Z",
+  "paths": [
+    "src/content/momentumSections/pillars.md",
+    "src/content/momentumSections/accomplishments.md",
+    "src/content/momentumSections/donors.md",
+    "src/content/momentumSections/testimonials.md"
+  ],
+  "tests": {
+    "momentumSections entry notes › names only CMS screens that exist in the registry": {
+      "withoutFix": "fail",
+      "withFix": "pass"
+    },
+    "momentumSections entry notes › sees a screen reference in every note that points an editor somewhere": {
+      "withoutFix": "fail",
+      "withFix": "pass"
+    }
+  },
+  "proof": {
+    "verdict": "proven",
+    "flipped": [
+      "momentumSections entry notes › names only CMS screens that exist in the registry",
+      "momentumSections entry notes › sees a screen reference in every note that points an editor somewhere"
+    ]
+  }
+}

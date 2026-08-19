@@ -9,7 +9,7 @@
   "seed": {
     "momentumSections": [
       {
-        "body": "The donor recognition wall. The names come from the Donors collection; this entry only decides where the wall sits on the page.",
+        "body": "The donor recognition wall. The names come from **Donors** — on the admin\ndashboard that collection sits under /donate, alongside this one.\n\nThis entry decides where the wall sits on the page and, via its Heading field,\nwhat the wall is called. It sits after the member quotes and before the closing\nask, so a reader meets the people already behind the fund immediately before\nbeing asked to join them. Move it with the Order field or hide it with the Draft\ntoggle.\n\nEverything else on the wall is NOT editable in the CMS: the intro paragraph, the\ngiving levels, the \"no donors yet\" message, and the heading used when Heading is\nblank are `donorsIntro`, `donorTiers`, `donorsEmptyMessage`, and `donorsTitle` in\n`src/data/donatePage.json`. Changing any of them needs a developer — **Page\nsettings** does not carry them, so there is nowhere in the CMS to look.",
         "kind": "donors",
         "order": 6,
         "slug": "donors"

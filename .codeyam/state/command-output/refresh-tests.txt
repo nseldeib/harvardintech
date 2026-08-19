@@ -1,33 +1,18 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/b87chq45z.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/b87chq45z.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1787099590,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":376646}
-════════════════════════════════════════════════════════════════════
-WARNING: refresh-tests --force is running the ENTIRE test suite.
-════════════════════════════════════════════════════════════════════
-You're at ui step 13: register-incremental. The full suite is reserved
-for the `finalize` step, where `session-finalize` runs it
-automatically. Running it here is slow and almost always avoidable.
-
-To update the cache for a NEW or RENAMED test, use:
-  codeyam-editor editor refresh-tests --test <name>
-  codeyam-editor editor refresh-tests --changed
-  codeyam-editor editor refresh-tests --runner <name>
-
-If the audit just bailed reporting cache staleness, the documented
-recovery is flag-free `refresh-tests` (no `--force`). See
-`reconcile.txt` for the full guidance.
-
-Proceeding with the full suite anyway.
-════════════════════════════════════════════════════════════════════
-
-warning: about to run the FULL test suite (~996 tests) — this can take many minutes.
-warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/bjr2rrpul.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/bjr2rrpul.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1787149707,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":835295}
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
-note: full re-run requested; merkle-hash optimization skipped
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
 [  12s] Still running: tests
 [  22s] Still running: tests
-[  26s] Tests completed.
-{"failed":0,"passed":996,"skipped":0,"success":true,"total":996}
-All 996 tests passed.
+[  28s] Tests completed.
+All 1004 tests passed.
+{"failed":0,"passed":1004,"skipped":0,"success":true,"total":1004}
+
+Partial run — partition caches WERE updated; the full-suite test-cache.json was
+NOT (full-suite hash invariant). If a stale-partition bail sent you here, that
+recovery has landed — re-run the command that bailed.
+Audit gates read the full-suite cache. Flag-free `refresh-tests` updates it but
+is gated until `finalize`. To update the full-suite cache now (e.g. for
+brand-new tests), run: codeyam-editor editor refresh-tests --force
