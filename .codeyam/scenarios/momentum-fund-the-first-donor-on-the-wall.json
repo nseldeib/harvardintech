@@ -10,15 +10,15 @@
     "donors": [
       {
         "founding": true,
+        "gradYear": 2004,
+        "location": "San Francisco, CA",
         "name": "Margaret Chen-Alvarez",
         "note": "Gave the week the fund opened, before there was anything to show for it.",
         "order": 1,
+        "school": "Harvard Business School",
         "slug": "margaret-chen-alvarez",
         "tier": "leadership",
         "url": "https://www.linkedin.com/in/example-margaret",
-        "school": "Harvard Business School",
-        "gradYear": 2004,
-        "location": "San Francisco, CA",
         "why": "I got my first board seat through someone I met at a Harvard in Tech dinner. This is how I pay that forward."
       }
     ],
@@ -54,5 +54,11 @@
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/donate.astro",
-  "description": "The day the first gift clears, on the real page. One band, one badge, and no filter chips \u2014 a lone All / Leadership Circle pair would filter nothing and only add furniture. The founding line reads in the singular, which is the one day the wall says it. The step between the invitation state production ships today and the populated wall the campaign is working toward."
+  "description": "The day the first gift clears, on the real page, framed on the wall itself rather than the hero: one band, one badge, and no filter chips — a lone All / Leadership Circle pair would filter nothing and only add furniture. The founding line reads in the singular, which is the one day the wall says it. The step between the invitation state production ships today and the populated wall its pair, 'The Donor Wall Moved To The Top', shows at nineteen supporters.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "[data-network-search]"
+    }
+  ]
 }

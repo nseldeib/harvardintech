@@ -164,6 +164,14 @@ export interface DonatePageCopy {
    *  production shows today: the wall starts with no names, so its empty state
    *  is the default view rather than an edge case. */
   donorsTitle?: string;
+  /** The wall's intro paragraph — still rendered by `DonorWall`, which the live
+   *  `/donate` page no longer mounts: the Momentum Network replaced the wall
+   *  there, as `ns--the-momentum-network-supporter-data-model` said it would.
+   *  So this reaches only the wall's isolated-component scenarios today. Kept
+   *  rather than deleted because those scenarios are the wall's last live
+   *  rendering, and it is deliberately NOT given a CMS field — a box that edits
+   *  nothing a visitor can see would be worse than no box. Retire it with the
+   *  wall, not before. */
   donorsIntro?: string;
   donorsEmptyMessage?: string;
   donorTiers?: { id: string; name: string; description?: string }[];

@@ -404,6 +404,12 @@
     "testFile": "src/lib/contentRoot.test.ts"
   },
   {
+    "description": "The top-level frontmatter keys a registry field list declares. A list's sub-fields are row keys inside the array value rather than frontmatter keys of their own, so they are deliberately excluded — counting them would make donorTiers' id, name and description look like three missing top-level schema keys. Extracted from src/data/collections.test.ts alongside the other drift rules.",
+    "filePath": "src/lib/collectionRegistryDrift.ts",
+    "name": "declaredFieldNames",
+    "testFile": "src/lib/collectionRegistryDrift.test.ts"
+  },
+  {
     "description": "A design direction's id as every surface writes it: zero-padded to two digits. It exists because the page contradicted itself — variations.js carries num as a NUMBER, so the card badge and the full-screen bar rendered '3' while the contents list, the open questions, the README and the doc outline all said '03'. The whole purpose of the id scheme is that a reviewer writing '3' in a doc means exactly one thing, so a card labelled differently from the line they type under reintroduces the ambiguity the renumbering removed. A value that is not a number returns nothing rather than a guess, since a wrong id points a comment at the wrong design.",
     "filePath": "src/lib/reviewOutline.js",
     "name": "directionLabel",
@@ -952,7 +958,7 @@
     "testFile": "src/lib/donors.test.ts"
   },
   {
-    "description": "The Momentum Fund page's fixed frame — the hero above the reorderable sections and the closing ask below them — over the committed donatePage.json. Returns ONLY the frame keys so the route can spread it over the copy object without clobbering the fields loadAccomplishments, loadPillars and loadDonateUrl own. The frame becomes editable copy and deliberately stays out of the momentumSections collection: a page whose hero could be dragged to the bottom is a page an editor can break, and making the wording changeable does not make the position changeable. The personalized headline carries the name placeholder the browser fills from the campaign link, so a cleared one falling back is what protects the email campaign's whole premise.",
+    "description": "The Momentum Fund page's editable copy over the committed donatePage.json. Returns ONLY the keys it owns, so the route can spread it over the copy object without clobbering the fields loadAccomplishments, loadPillars and loadDonateUrl own — those three are assigned after the spread, and a leaked key here is what would silently overwrite one of them. Originally just the fixed frame: the hero above the reorderable sections and the closing ask below them, deliberately outside momentumSections because a page whose hero could be dragged to the bottom is a page an editor can break. It now also carries the campaign copy that had lived in the JSON with no editor anywhere — the campaign name, the headline figures, the donor wall's empty-state message and recognition tiers, the Momentum Network's heading, tagline and search label, and the supporter share message. The six text fields follow the ordinary preferText rule, so a cleared box falls back to the committed value rather than blanking a band; the two list fields take the all-or-nothing rule benefits already uses, because an editor part-way through rebuilding a list means the list they are building and topping it up from the JSON would reinstate a row they had just removed. The personalized headline's name placeholder and the share message's SUPPORTER MESSAGE / DONATION LINK tokens all survive the merge verbatim — substitution happens in the browser, not here.",
     "filePath": "src/lib/pageCopyMerge.ts",
     "name": "mergeDonateFrame",
     "testFile": "src/lib/pageCopyMerge.test.ts"
@@ -980,6 +986,12 @@
     "filePath": "src/lib/donorNetwork.js",
     "name": "milestoneCrossed",
     "testFile": "src/lib/donorNetwork.test.ts"
+  },
+  {
+    "description": "Schema keys the CMS renders no input for — the quiet direction of registry drift. Nothing breaks: the key renders on the site and validates fine, but it is absent from /admin, so an editor can neither set it nor learn it exists. The exempt list names keys that legitimately have no input. Extracted from src/data/collections.test.ts so the singleton guard could share it rather than carry a second copy.",
+    "filePath": "src/lib/collectionRegistryDrift.ts",
+    "name": "missingFields",
+    "testFile": "src/lib/collectionRegistryDrift.test.ts"
   },
   {
     "description": "Pulls the `name` parameter out of a full URL or a bare query string, returning null when absent or unparseable.",
@@ -1256,6 +1268,12 @@
     "testFile": "src/lib/personalize.test.ts"
   },
   {
+    "description": "Top-level keys of one collection's z.object in the content-config source. Walks brace depth so a nested shape — a z.array(z.object) row like stats or donorTiers — contributes none of its own keys, which is what stops a row key looking like a missing top-level field. Returns an empty list for an undeclared collection rather than throwing, so the caller decides whether that is a failure. Extracted from src/data/collections.test.ts when the singleton guard became a second caller.",
+    "filePath": "src/lib/collectionRegistryDrift.ts",
+    "name": "schemaKeysFor",
+    "testFile": "src/lib/collectionRegistryDrift.test.ts"
+  },
+  {
     "description": "The Harvard schools these supporters actually came through, densest first so the biggest clusters are placed before the rest. Reads through resolveSchool, so a hand-edited or seeded value in the wrong case joins its real cluster instead of founding a cluster of one. Ties break on the canonical school order rather than on input order, so the same people in a different row order cannot produce a different picture.",
     "filePath": "src/lib/momentumNetwork.ts",
     "name": "schoolsPresent",
@@ -1352,6 +1370,12 @@
     "testFile": "src/lib/donors.test.ts"
   },
   {
+    "description": "Keys of a committed JSON page singleton that the CMS renders no editor input for. The third drift direction, and the one nothing guarded until the Momentum Network shipped its whole copy surface — heading, tagline, search label, share message — reachable only by hand-editing donatePage.json. The registry-vs-schema checks compare COLLECTIONS to SCHEMAS and structurally cannot see this, because a singleton is not a collection: it is the fallback pageCopyMerge reads when a CMS box is blank, so a key living only there renders on the live site and is editable by nobody. The retired list is the escape hatch and is meant to sting slightly — naming a key there claims no visitor can see it, so each entry carries its reason.",
+    "filePath": "src/lib/collectionRegistryDrift.ts",
+    "name": "singletonKeysWithoutEditor",
+    "testFile": "src/lib/collectionRegistryDrift.test.ts"
+  },
+  {
     "description": "Loads the editable settings/nav singletons from the resolved data root (sandbox-aware) via readSingleton: fs read + JSON.parse.",
     "filePath": "src/lib/site.ts",
     "name": "site",
@@ -1410,6 +1434,12 @@
     "filePath": "src/lib/pageCopyMerge.ts",
     "name": "sponsorLevelsFrom",
     "testFile": "src/lib/pageCopyMerge.test.ts"
+  },
+  {
+    "description": "Strips line comments from the content-config source so a prose colon inside one is never read as a schema key, with a guard that leaves a protocol URL in a string literal alone. Block comments are deliberately NOT stripped: every collection loader carries a recursive markdown glob whose text contains both a block-comment opener and, a line later, a closer, so a naive block-comment regex matches from one loader to the next and eats the entire schema between them — which is exactly how the built-in collections once came back with zero keys.",
+    "filePath": "src/lib/collectionRegistryDrift.ts",
+    "name": "stripComments",
+    "testFile": "src/lib/collectionRegistryDrift.test.ts"
   },
   {
     "description": "The whole upload classified, plus the fields it structurally cannot fill. The unresolvable and unmodelled lists come back unconditionally rather than only when something goes wrong, because they are properties of the FILE FORMAT and not of any row: a spreadsheet where every line is spotless still cannot say who gave at what level, who is a founding donor, or who asked to stay anonymous, and it still carries school and class year the donors collection has no field for. A summary that hid them on a clean file would report success for a job it did a third of.",
@@ -1500,6 +1530,12 @@
     "filePath": "src/lib/pageCopyMerge.ts",
     "name": "toSponsorLevels",
     "testFile": "src/lib/pageCopyMerge.test.ts"
+  },
+  {
+    "description": "Registry-declared keys with no counterpart in the content schema — the dangerous direction of registry drift. The CMS happily renders the input, an editor fills it in, and the build then rejects the entry against the Zod schema, so the failure lands on a deploy rather than on the person who added the field. Extracted from src/data/collections.test.ts alongside the other drift rules.",
+    "filePath": "src/lib/collectionRegistryDrift.ts",
+    "name": "unknownFields",
+    "testFile": "src/lib/collectionRegistryDrift.test.ts"
   },
   {
     "description": "The unrecognized kind values on the homepage, de-duplicated and in first-seen order, for an advisory build-time warning. Advisory rather than build-failing for the same reason unknownSectionKinds is: kind is free text because the CMS has no select control, so a typo must cost that editor one band and a log line, never the deploy.",

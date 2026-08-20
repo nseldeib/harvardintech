@@ -216,6 +216,14 @@ export interface DonateFrameEntry {
   ctaImage?: string;
   ctaTagline?: string;
   ctaLabel?: string;
+  campaignName?: string;
+  stats?: { value: string; label: string }[];
+  donorsEmptyMessage?: string;
+  donorTiers?: { id: string; name: string; description?: string }[];
+  networkTitle?: string;
+  networkTagline?: string;
+  networkSearchTitle?: string;
+  shareMessage?: string;
 }
 
 /**
@@ -265,6 +273,22 @@ export function mergeDonateFrame(
     ctaImage: preferText(entry.ctaImage, fallback.ctaImage),
     ctaTagline: preferText(entry.ctaTagline, fallback.ctaTagline),
     ctaLabel: preferText(entry.ctaLabel, fallback.ctaLabel),
+    campaignName:
+      preferText(entry.campaignName, fallback.campaignName) ?? fallback.campaignName,
+    donorsEmptyMessage: preferText(entry.donorsEmptyMessage, fallback.donorsEmptyMessage),
+    networkTitle: preferText(entry.networkTitle, fallback.networkTitle),
+    networkTagline: preferText(entry.networkTagline, fallback.networkTagline),
+    networkSearchTitle: preferText(entry.networkSearchTitle, fallback.networkSearchTitle),
+    shareMessage: preferText(entry.shareMessage, fallback.shareMessage),
+    // The two LIST fields take the all-or-nothing rule `mergeVolunteerCopy`
+    // already applies to `benefits`, not the `preferText` one above: an editor
+    // part-way through rebuilding the figures means the list they are building,
+    // so topping a half-finished list up with leftovers from the JSON would
+    // silently reinstate a figure they had just removed. An EMPTY list is a real
+    // edit too — it removes the band — which is why the test is on the key being
+    // present rather than on its length.
+    stats: entry.stats ?? fallback.stats,
+    donorTiers: entry.donorTiers ?? fallback.donorTiers,
   };
 }
 

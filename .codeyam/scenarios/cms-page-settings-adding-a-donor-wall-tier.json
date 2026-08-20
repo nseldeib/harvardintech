@@ -1,0 +1,17 @@
+{
+  "name": "CMS Page Settings - Adding A Donor Wall Tier",
+  "id": "6823933f-de83-432e-bd23-a09ab7b2c02d",
+  "url": "/admin/pageCopy/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "description": "The donor wall's recognition tiers, which until this change existed only as a donorTiers array in donatePage.json that no editor could reach. The frame catches the list mid-edit: the last committed tier — id supporting, name Supporting Donors, description filled — above the blank row the Add button just created, each row carrying its own reorder arrows and remove button. What the resting form cannot show and this can is that the list is genuinely editable rather than merely displayed. The Tier ID hint is deliberately in frame twice: id is the key each donor's Tier field points at, so renaming one drops every donor already filed under it off the wall, and the hint is the only thing on the screen that distinguishes the one box here that can break the page from the two beside it that cannot.",
+  "interactions": [
+    {
+      "action": "click",
+      "text": "+ Add Donor wall tier"
+    }
+  ]
+}

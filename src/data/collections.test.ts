@@ -5,6 +5,14 @@ import {
   resolveCollections,
   type CollectionsRegistry,
 } from '@codeyam/cms/lib/collectionRegistry';
+import {
+  declaredFieldNames,
+  missingFields,
+  schemaKeysFor,
+  singletonKeysWithoutEditor,
+  unknownFields,
+  type RegistryField,
+} from '../lib/collectionRegistryDrift';
 
 // Schema-drift guard for the CMS registry.
 //
@@ -27,90 +35,11 @@ import {
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
 
-interface RegistryField {
-  name: string;
-  type: string;
-  fields?: RegistryField[];
-  // The presentation half of a field definition. The drift checks do not need it
-  // — they compare names against the Zod schema — but the hero-video case below
-  // asserts it directly, because the label an editor reads and the hint telling
-  // her the file has to be committed by the team are that field's usability.
-  label?: string;
-  optional?: boolean;
-  hint?: string;
-}
-
-/** The top-level frontmatter keys a registry field list declares. Sub-fields of a
- * `list` are row keys, not frontmatter keys, so they are deliberately excluded. */
-function declaredFieldNames(fields: RegistryField[]): string[] {
-  return fields.map((f) => f.name);
-}
-
-/** Registry-declared keys with no counterpart in the content schema — the drift
- * that would let an editor author a field the build rejects. */
-function unknownFields(fields: RegistryField[], schemaKeys: string[]): string[] {
-  const known = new Set(schemaKeys);
-  return declaredFieldNames(fields).filter((name) => !known.has(name));
-}
-
-/** Schema keys the editor renders no input for — the quiet direction of the same
- * drift. Nothing breaks: the key renders on the site and validates fine, but it
- * is absent from /admin, so an editor has no way to set it and no way to learn
- * it exists. `exempt` names the keys that legitimately have no input. */
-function missingFields(
-  schemaKeys: string[],
-  editorFieldNames: string[],
-  exempt: string[] = [],
-): string[] {
-  const rendered = new Set(editorFieldNames);
-  const skip = new Set(exempt);
-  return schemaKeys.filter((key) => !rendered.has(key) && !skip.has(key));
-}
-
-// Strip `//` line comments so prose colons inside them are never read as schema
-// keys. The `[^:]` guard leaves `https://` inside string literals alone.
-//
-// Block comments are deliberately NOT stripped. Every collection's loader carries
-// a recursive markdown glob, and that glob's text contains both a block-comment
-// opener and, one loader line later, a closer. A naive block-comment regex
-// therefore matches from one loader to the next and eats the entire collection
-// schema between them — which is exactly how the built-in collections first came
-// back with zero keys. The content config uses only line comments, so stripping
-// just those is sufficient and cannot silently delete a collection.
-function stripComments(source: string): string {
-  return source.replace(/(^|[^:])\/\/.*$/gm, '$1');
-}
-
-/** Top-level keys of one collection's `z.object({...})` in the content config
- * source. Walks brace depth so nested shapes — a `z.array(z.object({...}))` row —
- * contribute none of their own keys. Returns [] for a collection that isn't declared. */
-function schemaKeysFor(source: string, collection: string): string[] {
-  const src = stripComments(source);
-  const declIdx = src.indexOf(`const ${collection} = defineCollection(`);
-  if (declIdx === -1) return [];
-  const objIdx = src.indexOf('z.object({', declIdx);
-  if (objIdx === -1) return [];
-
-  const start = src.indexOf('{', objIdx + 'z.object'.length);
-  const keys: string[] = [];
-  let depth = 0;
-  for (let i = start; i < src.length; i++) {
-    const ch = src[i];
-    if (ch === '{') {
-      depth++;
-    } else if (ch === '}') {
-      depth--;
-      if (depth === 0) break;
-    } else if (depth === 1 && /[A-Za-z_$]/.test(ch)) {
-      const match = /^([A-Za-z0-9_$]+)\s*:/.exec(src.slice(i));
-      if (match) {
-        keys.push(match[1]);
-        i += match[1].length;
-      }
-    }
-  }
-  return keys;
-}
+// `declaredFieldNames`, `unknownFields`, `missingFields`, `stripComments` and
+// `schemaKeysFor` were defined here until a second guard — the singleton check
+// at the bottom of this file — needed them too. They now live in
+// `src/lib/collectionRegistryDrift.ts`, unit-tested there against hand-built
+// inputs; this file keeps the assertions that read the REAL committed files.
 
 const CONFIG_SOURCE = fs.readFileSync(
   path.join(REPO_ROOT, 'src/content/config.ts'),
@@ -140,138 +69,13 @@ const PACKAGE_REGISTRY = JSON.parse(REGISTRY_SOURCE) as CollectionsRegistry;
 // addition is the guard being silenced rather than satisfied.
 const EXEMPT_SCHEMA_KEYS: Record<string, string[]> = {};
 
-// A miniature stand-in for the real content config, shaped exactly like it —
-// including a nested row object and a comment carrying a colon.
-const FIXTURE_CONFIG = `
-// A city: one per chapter.
-const chapters = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: \`\${root}/chapters\` }),
-  schema: z.object({
-    city: z.string(),
-    // tagline: this line is commented out and must not count as a key
-    order: z.number().optional(),
-    leads: z.array(z.object({ name: z.string(), role: z.string().optional() })).optional(),
-  }),
-});
-`;
-
-describe('declaredFieldNames', () => {
-  // The ordinary case: every top-level field contributes its frontmatter key.
-  it('returns each top-level field name in declaration order', () => {
-    const fields: RegistryField[] = [
-      { name: 'city', type: 'text' },
-      { name: 'order', type: 'number' },
-    ];
-    expect(declaredFieldNames(fields)).toEqual(['city', 'order']);
-  });
-
-  // A `list`'s sub-fields are row keys inside the array, NOT frontmatter keys, so
-  // they must not leak into the comparison against the schema.
-  it('excludes the sub-fields of a repeatable list', () => {
-    const fields: RegistryField[] = [
-      {
-        name: 'leads',
-        type: 'list',
-        fields: [
-          { name: 'name', type: 'text' },
-          { name: 'role', type: 'text' },
-        ],
-      },
-    ];
-    expect(declaredFieldNames(fields)).toEqual(['leads']);
-  });
-
-  // Empty input is legitimate — a built-in with no consumer extras declared.
-  it('returns an empty list for no fields', () => {
-    expect(declaredFieldNames([])).toEqual([]);
-  });
-});
-
-describe('unknownFields', () => {
-  // The healthy state: everything the editor renders exists in the schema.
-  it('reports nothing when every declared field exists in the schema', () => {
-    const fields: RegistryField[] = [
-      { name: 'city', type: 'text' },
-      { name: 'order', type: 'number' },
-    ];
-    expect(unknownFields(fields, ['city', 'order', 'region'])).toEqual([]);
-  });
-
-  // The failure this guard exists to catch: a registry key with no schema
-  // counterpart, which builds fine until an editor actually fills it in.
-  it('names a field that drifted out of the schema', () => {
-    const fields: RegistryField[] = [
-      { name: 'city', type: 'text' },
-      { name: 'subtitle', type: 'text' },
-    ];
-    expect(unknownFields(fields, ['city'])).toEqual(['subtitle']);
-  });
-
-  // Degenerate edge: an empty schema makes every declared field unknown.
-  it('treats every field as unknown when the schema has no keys', () => {
-    const fields: RegistryField[] = [{ name: 'city', type: 'text' }];
-    expect(unknownFields(fields, [])).toEqual(['city']);
-  });
-
-  // The other degenerate edge: nothing declared can never drift.
-  it('reports nothing when no fields are declared', () => {
-    expect(unknownFields([], ['city'])).toEqual([]);
-  });
-});
-
-describe('missingFields', () => {
-  // The healthy state: every schema key has an input an editor can fill in.
-  it('reports nothing when the editor renders an input for every key', () => {
-    expect(missingFields(['city', 'order'], ['city', 'order', 'draft'])).toEqual([]);
-  });
-
-  // The failure this guard exists to catch: a key that renders on the site but
-  // is invisible in /admin, so no editor can ever set it.
-  it('names a key that drifted out of the editor', () => {
-    expect(missingFields(['city', 'tagline'], ['city'])).toEqual(['tagline']);
-  });
-
-  // An exempted key is absent from the editor on purpose and must stay quiet.
-  it('ignores an exempted key', () => {
-    expect(missingFields(['city', 'draft'], ['city'], ['draft'])).toEqual([]);
-  });
-
-  // Degenerate edge: no editor fields at all makes every key missing.
-  it('treats every key as missing when the editor renders nothing', () => {
-    expect(missingFields(['city'], [])).toEqual(['city']);
-  });
-
-  // The other degenerate edge: an empty schema can never be missing anything.
-  it('reports nothing when the schema has no keys', () => {
-    expect(missingFields([], ['city'])).toEqual([]);
-  });
-});
-
-describe('schemaKeysFor', () => {
-  // Parses the top-level keys and nothing else.
-  it('extracts the top-level schema keys of a collection', () => {
-    expect(schemaKeysFor(FIXTURE_CONFIG, 'chapters')).toEqual([
-      'city',
-      'order',
-      'leads',
-    ]);
-  });
-
-  // Nested row keys sit at brace depth 2 and a commented-out key is stripped
-  // before parsing — neither may be mistaken for a frontmatter key.
-  it('ignores nested row keys and commented-out keys', () => {
-    const keys = schemaKeysFor(FIXTURE_CONFIG, 'chapters');
-    expect(keys).not.toContain('role');
-    expect(keys).not.toContain('tagline');
-  });
-
-  // An undeclared collection yields nothing rather than throwing, so a renamed
-  // collection fails as a visible empty-schema mismatch below.
-  it('returns an empty list for a collection that is not declared', () => {
-    expect(schemaKeysFor(FIXTURE_CONFIG, 'podcasts')).toEqual([]);
-  });
-});
-
+// MOVED: the unit cases for the five helpers above — declaredFieldNames,
+// unknownFields, missingFields, stripComments, schemaKeysFor — now live beside
+// the functions themselves in `src/lib/collectionRegistryDrift.test.ts`, against
+// the same hand-built fixture. They are deliberately NOT duplicated here: two
+// copies of one rule's tests is how the copies stop agreeing. What stays below
+// is the part only this file can do — the assertions that read the real
+// committed `config.ts`, `collections.json`, and `*Page.json`.
 describe('committed CMS registry vs content schema', () => {
   // The headline contract: every field a custom collection's editor renders is a
   // real key in that collection's Zod schema. Nothing but this test keeps
@@ -411,6 +215,128 @@ describe('committed CMS registry vs content schema', () => {
       const schemaKeys = schemaKeysFor(CONFIG_SOURCE, collection);
       for (const name of seoNames) {
         expect(schemaKeys).toContain(name);
+      }
+    }
+  });
+});
+
+// The THIRD drift direction, and the one nothing guarded until the Momentum
+// Network shipped its whole copy surface — heading, tagline, search label, share
+// message — reachable only by editing `donatePage.json` by hand.
+//
+// The suite above compares COLLECTIONS to SCHEMAS. It is thorough in both
+// directions and it structurally cannot see this: a singleton is not a
+// collection. `src/lib/site.ts` reads these three files through `readSingleton`,
+// and `src/lib/pageCopyMerge.ts` merges a CMS entry OVER them, so the JSON is the
+// fallback and the collection is the override. A key present in the fallback but
+// absent from the registry therefore renders on the live site and appears in no
+// editor anywhere — no build error, no failing test, just copy nobody but a
+// developer can change.
+describe('committed page singletons vs CMS registry', () => {
+  // Each singleton paired with the collection whose editor is supposed to cover
+  // it, plus the keys that legitimately have no input.
+  //
+  // RETIRED is not a convenience list. Every entry asserts that no visitor can
+  // see the key, so each one carries the reason it is dead — and an entry added
+  // without one is this guard being silenced rather than satisfied.
+  const SINGLETONS: {
+    file: string;
+    collection: string;
+    retired: string[];
+  }[] = [
+    {
+      file: 'donatePage.json',
+      collection: 'pageCopy',
+      retired: [
+        // Band headings. Each is the FALLBACK behind its section's own Heading
+        // field — `sectionHeading(section, copy.xTitle)` in MomentumFundPage —
+        // so an editor renames the band from the section entry in
+        // `momentumSections`, and a second box here would be a competing one.
+        'accomplishmentsTitle',
+        'pillarsTitle',
+        'testimonialsTitle',
+        'donorsTitle',
+        // The donor wall's intro paragraph. The wall itself is no longer mounted
+        // on `/donate` — the Momentum Network replaced it — so this reaches only
+        // the wall's isolated-component scenarios. A box editing something no
+        // visitor can see would be worse than its absence. Retire it with the
+        // wall, not before.
+        'donorsIntro',
+      ],
+    },
+    { file: 'volunteerPage.json', collection: 'volunteerPage', retired: [] },
+    {
+      file: 'sponsorPage.json',
+      collection: 'sponsorPage',
+      retired: [
+        // Moved out to the `sponsorLevels` collection, which is where an editor
+        // adds, reorders and rewrites a tier. What is left in the JSON is the
+        // fallback behind that collection.
+        'levels',
+      ],
+    },
+  ];
+
+  const readSingletonKeys = (file: string): string[] =>
+    Object.keys(
+      JSON.parse(
+        fs.readFileSync(path.join(REPO_ROOT, 'src/data', file), 'utf-8'),
+      ) as Record<string, unknown>,
+    );
+
+  const editorFieldNamesFor = (collection: string): string[] => {
+    const resolved = resolveCollections(PACKAGE_REGISTRY).find(
+      (c) => c.id === collection,
+    );
+    expect({ collection, found: resolved !== undefined }).toEqual({
+      collection,
+      found: true,
+    });
+    return resolved!.fields.map((f) => f.name);
+  };
+
+  // The headline contract, over all three singletons at once: every key in a
+  // committed fallback either has an editor input or is named as retired.
+  // Deliberately a loop over the table rather than one case per file — a fourth
+  // singleton must be covered by adding a row, not by remembering to add a test.
+  it('renders an editor input for every key of every committed page singleton', () => {
+    for (const { file, collection, retired } of SINGLETONS) {
+      const singletonKeys = readSingletonKeys(file);
+      expect({ file, hasKeys: singletonKeys.length > 0 }).toEqual({
+        file,
+        hasKeys: true,
+      });
+
+      expect({
+        file,
+        withoutEditor: singletonKeysWithoutEditor(
+          singletonKeys,
+          editorFieldNamesFor(collection),
+          retired,
+        ),
+      }).toEqual({ file, withoutEditor: [] });
+    }
+  });
+
+  // A retired key that has since GAINED an input, or that has been deleted from
+  // the JSON, leaves a stale excuse behind — and a stale excuse is how a future
+  // key slips through under a name someone already forgave.
+  it('keeps every retired-key excuse pointing at something real and still uneditable', () => {
+    for (const { file, collection, retired } of SINGLETONS) {
+      const singletonKeys = new Set(readSingletonKeys(file));
+      const editorFieldNames = new Set(editorFieldNamesFor(collection));
+
+      for (const key of retired) {
+        expect({ file, key, presentInJson: singletonKeys.has(key) }).toEqual({
+          file,
+          key,
+          presentInJson: true,
+        });
+        expect({ file, key, hasEditorInput: editorFieldNames.has(key) }).toEqual({
+          file,
+          key,
+          hasEditorInput: false,
+        });
       }
     }
   });

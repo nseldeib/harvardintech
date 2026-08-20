@@ -1,17 +1,10 @@
 {
-  "provenAt": "2026-08-19T13:58:50Z",
+  "provenAt": "2026-08-19T20:32:51Z",
   "paths": [
-    "src/content/momentumSections/pillars.md",
-    "src/content/momentumSections/accomplishments.md",
-    "src/content/momentumSections/donors.md",
-    "src/content/momentumSections/testimonials.md"
+    "src/data/collections.json"
   ],
   "tests": {
-    "momentumSections entry notes › names only CMS screens that exist in the registry": {
-      "withoutFix": "fail",
-      "withFix": "pass"
-    },
-    "momentumSections entry notes › sees a screen reference in every note that points an editor somewhere": {
+    "committed page singletons vs CMS registry › renders an editor input for every key of every committed page singleton": {
       "withoutFix": "fail",
       "withFix": "pass"
     }
@@ -19,8 +12,7 @@
   "proof": {
     "verdict": "proven",
     "flipped": [
-      "momentumSections entry notes › names only CMS screens that exist in the registry",
-      "momentumSections entry notes › sees a screen reference in every note that points an editor somewhere"
+      "committed page singletons vs CMS registry › renders an editor input for every key of every committed page singleton"
     ]
   }
 }

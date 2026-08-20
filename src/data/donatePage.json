@@ -20,45 +20,7 @@
     }
   ],
   "accomplishmentsTitle": "What we've accomplished so far",
-  "accomplishments": [
-    {
-      "value": "600+",
-      "label": "WhatsApp community members",
-      "body": "Built and grew a WhatsApp community where alumni ask, answer, and introduce each other every day."
-    },
-    {
-      "value": "8,000+",
-      "label": "LinkedIn followers",
-      "body": "Grew our LinkedIn following into the widest reach this community has ever had."
-    },
-    {
-      "value": "100+",
-      "label": "Events hosted and co-hosted",
-      "body": "Hosted and co-hosted high-impact events, from founder dinners to panels with alumni operators."
-    },
-    {
-      "value": "2",
-      "label": "New chapters launched",
-      "body": "Expanded our global reach with new chapters in London and San Francisco."
-    }
-  ],
   "pillarsTitle": "What Your Gift Powers",
-  "pillars": [
-    {
-      "title": "Create Meaningful Connections",
-      "body": "Support events, roundtables, and gatherings that help alumni build valuable relationships and discover new opportunities.",
-      "linkLabel": "Check out our past events",
-      "linkUrl": "/events"
-    },
-    {
-      "title": "Expand Access to Knowledge",
-      "body": "Power practical content, mentorship, and conversations that help founders, innovators, and technology professionals grow."
-    },
-    {
-      "title": "Strengthen the Network",
-      "body": "Build the infrastructure, volunteer resources, and city chapters needed to serve more alumni and sustain the community."
-    }
-  ],
   "testimonialsTitle": "From our community",
   "donorsTitle": "The people behind the fund",
   "donorsIntro": "Every name here chose to put something behind this community. Founding donors gave before there was anything to point to.",

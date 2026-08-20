@@ -1,0 +1,168 @@
+{
+  "surface": "node_modules/@codeyam/cms/src/components/admin/EntryEditor.tsx",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "kind",
+      "value": "listImage",
+      "rationale": "source-derived state kind=listImage",
+      "status": "planned"
+    },
+    {
+      "dimension": "kind",
+      "value": "field",
+      "rationale": "source-derived state kind=field",
+      "status": "covered"
+    },
+    {
+      "dimension": "kind",
+      "value": "body",
+      "rationale": "source-derived state kind=body",
+      "status": "covered"
+    },
+    {
+      "dimension": "type",
+      "value": "image",
+      "rationale": "source-derived state type=image",
+      "status": "covered"
+    },
+    {
+      "dimension": "type",
+      "value": "list",
+      "rationale": "source-derived state type=list",
+      "status": "covered"
+    },
+    {
+      "dimension": "seoFields",
+      "value": "empty",
+      "rationale": "source-derived state seoFields=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "seoFields",
+      "value": "one",
+      "rationale": "source-derived state seoFields=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "seoFields",
+      "value": "many",
+      "rationale": "source-derived state seoFields=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "body",
+      "value": "empty",
+      "rationale": "source-derived state body=empty",
+      "status": "covered"
+    },
+    {
+      "dimension": "body",
+      "value": "one",
+      "rationale": "source-derived state body=one",
+      "status": "covered"
+    },
+    {
+      "dimension": "body",
+      "value": "many",
+      "rationale": "source-derived state body=many",
+      "status": "covered"
+    },
+    {
+      "dimension": "pendingHref",
+      "value": "true",
+      "rationale": "source-derived state pendingHref=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "pendingHref",
+      "value": "false",
+      "rationale": "source-derived state pendingHref=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "sealChange",
+      "value": "true",
+      "rationale": "source-derived state sealChange=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "sealChange",
+      "value": "false",
+      "rationale": "source-derived state sealChange=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "canStage",
+      "value": "true",
+      "rationale": "source-derived state canStage=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "canStage",
+      "value": "false",
+      "rationale": "source-derived state canStage=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "el",
+      "value": "true",
+      "rationale": "source-derived state el=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "el",
+      "value": "false",
+      "rationale": "source-derived state el=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "picker",
+      "value": "true",
+      "rationale": "source-derived state picker=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "picker",
+      "value": "false",
+      "rationale": "source-derived state picker=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "staged",
+      "value": "true",
+      "rationale": "source-derived state staged=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "staged",
+      "value": "false",
+      "rationale": "source-derived state staged=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "before",
+      "value": "true",
+      "rationale": "source-derived state before=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "before",
+      "value": "false",
+      "rationale": "source-derived state before=false",
+      "status": "covered"
+    },
+    {
+      "dimension": "dirty",
+      "value": "true",
+      "rationale": "source-derived state dirty=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "dirty",
+      "value": "false",
+      "rationale": "source-derived state dirty=false",
+      "status": "covered"
+    }
+  ]
+}

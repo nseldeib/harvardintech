@@ -596,6 +596,58 @@ const pageCopy = defineCollection({
     // would let an editor change "Make a Gift" in one spot and leave the page
     // contradicting itself further down.
     ctaLabel: z.string().optional(),
+    // The campaign's own name, rendered as the browser tab title, in the share
+    // badge, and in the closing band. It reached production as a `donatePage.json`
+    // key with no editor, so renaming the campaign was a developer's job on a
+    // page whose entire purpose is the campaign.
+    campaignName: z.string().optional(),
+    // The three figures above the narrative. A repeating pair rather than six
+    // flat fields, so a fourth figure is an editor's decision instead of a
+    // schema change.
+    //
+    // Deliberately NOT the `stats` collection beside it: that collection is the
+    // HOMEPAGE's figures, and pointing both pages at one list would make editing
+    // the campaign's numbers silently rewrite the homepage. The card bands on
+    // this page (`accomplishments`, `pillars`) earned their own collections
+    // because sections select them by `group`; these are fixed to the one band
+    // and belong with the page they frame.
+    stats: z
+      .array(z.object({ value: z.string(), label: z.string() }))
+      .optional(),
+    // What the donor wall says before the first gift clears. It is the state a
+    // prospective first donor is looking at, which is exactly why it should not
+    // have needed a developer to reword.
+    donorsEmptyMessage: z.string().optional(),
+    // The recognition tiers the donor wall groups names under.
+    //
+    // `id` is STRUCTURAL, not copy: each donor's `tier` field holds one of these
+    // ids, so renaming an id silently drops every donor who pointed at the old
+    // one out of the wall. `name` and `description` are the copy, and rewriting
+    // either is safe. The editor hint says so, because nothing about the form
+    // otherwise distinguishes the one field that can break the page from the two
+    // beside it that cannot.
+    donorTiers: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          description: z.string().optional(),
+        }),
+      )
+      .optional(),
+    // The Momentum Network band — the visualization's heading, its tagline, and
+    // the label over the "find your place" search. All three shipped with the
+    // network itself and none had an editor, so the newest band on the page was
+    // also the only one whose words were locked in code.
+    networkTitle: z.string().optional(),
+    networkTagline: z.string().optional(),
+    networkSearchTitle: z.string().optional(),
+    // The message a supporter shares from their badge. Carries two placeholders
+    // the badge fills in — `[SUPPORTER MESSAGE]` and `[DONATION LINK]` — which is
+    // why it needs the hint beside it in the editor: the tokens look like prose
+    // and an editor rewriting the message has no other way to learn they are load-
+    // bearing.
+    shareMessage: z.string().optional(),
   }),
 });
 

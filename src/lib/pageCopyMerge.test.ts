@@ -347,24 +347,51 @@ describe('mergeDonateFrame', () => {
     ).toBe('{name}, thank you');
   });
 
-  // Only the frame. The route spreads this over a copy object whose other keys
-  // belong to loadAccomplishments / loadPillars / loadDonateUrl, so leaking a
-  // key here would silently clobber one of theirs.
+  // The exact key set this function owns. It grew when the campaign copy that
+  // had lived only in `donatePage.json` — the campaign name, the headline
+  // figures, the donor wall's empty state and tiers, the Momentum Network band,
+  // the share message — gained editors, so the frame now carries all of them.
   it('returns only frame keys, never the rest of the campaign copy', () => {
     expect(Object.keys(mergeDonateFrame(DONATE, { ctaTitle: 'Give' })).sort()).toEqual([
+      'campaignName',
       'ctaBody',
       'ctaImage',
       'ctaKicker',
       'ctaLabel',
       'ctaTagline',
       'ctaTitle',
+      'donorTiers',
+      'donorsEmptyMessage',
       'heroHeadlineGeneric',
       'heroHeadlineNamed',
       'heroImage',
       'heroKicker',
       'heroSubhead',
       'heroVideo',
+      'networkSearchTitle',
+      'networkTagline',
+      'networkTitle',
+      'shareMessage',
+      'stats',
     ]);
+  });
+
+  // The HAZARD the case above guards, stated directly rather than implied by a
+  // key-set snapshot. `donate.astro` spreads this result over the copy object and
+  // then assigns `accomplishments`, `pillars` and `donateUrl` from their own
+  // loaders. Those three assignments come after the spread, so today the ordering
+  // alone protects them — which is exactly why this deserves its own assertion:
+  // a future reorder of that object literal would make a leaked key here silently
+  // overwrite a collection-backed one, and a snapshot of twenty key names is not
+  // the thing a reviewer would read as forbidding it.
+  it('never returns a key that a collection loader owns', () => {
+    const keys = Object.keys(
+      mergeDonateFrame(DONATE, { ctaTitle: 'Give', campaignName: 'The Momentum Fund' }),
+    );
+
+    for (const owned of ['accomplishments', 'pillars', 'donateUrl']) {
+      expect({ owned, leaked: keys.includes(owned) }).toEqual({ owned, leaked: false });
+    }
   });
 
   // The four campaign-frame fields the redesign added: two kickers, the closing
@@ -382,6 +409,97 @@ describe('mergeDonateFrame', () => {
     expect(merged.ctaKicker).toBe('The Momentum Fund');
     expect(merged.ctaImage).toBe('/images/gallery/event-02.jpg');
     expect(merged.ctaTagline).toBe('One community. Shared momentum.');
+  });
+
+  // The six text fields that used to live only in `donatePage.json` with no
+  // editor anywhere. They arrive through the same `preferText` door as
+  // `ctaTitle`, so what this pins is that they arrive AT ALL — before this they
+  // were unreachable from /admin no matter what an editor typed.
+  it('takes the donor wall and Momentum Network copy the editor filled in', () => {
+    const merged = mergeDonateFrame(DONATE, {
+      campaignName: 'The Momentum Fund 2027',
+      donorsEmptyMessage: 'Be the first name on this wall.',
+      networkTitle: 'The Momentum Network',
+      networkTagline: 'Every light is a supporter.',
+      networkSearchTitle: 'Find yourself in the network',
+      shareMessage: 'I gave because [SUPPORTER MESSAGE] — join me: [DONATION LINK]',
+    });
+
+    expect(merged.campaignName).toBe('The Momentum Fund 2027');
+    expect(merged.donorsEmptyMessage).toBe('Be the first name on this wall.');
+    expect(merged.networkTitle).toBe('The Momentum Network');
+    expect(merged.networkTagline).toBe('Every light is a supporter.');
+    expect(merged.networkSearchTitle).toBe('Find yourself in the network');
+    expect(merged.shareMessage).toBe(
+      'I gave because [SUPPORTER MESSAGE] — join me: [DONATION LINK]',
+    );
+  });
+
+  // The share message's placeholders are substituted by the badge, not by this
+  // merge. They are ordinary characters here and must survive verbatim — the
+  // same contract `{name}` has in the personalized headline.
+  it('passes the share message placeholders through untouched', () => {
+    const merged = mergeDonateFrame(DONATE, {
+      shareMessage: 'Because [SUPPORTER MESSAGE]. Give: [DONATION LINK]',
+    });
+
+    expect(merged.shareMessage).toContain('[SUPPORTER MESSAGE]');
+    expect(merged.shareMessage).toContain('[DONATION LINK]');
+  });
+
+  // The two LIST fields take the all-or-nothing rule `benefits` already uses,
+  // NOT `preferText`. An editor part-way through rebuilding the figures means
+  // the list they are building, so topping a half-finished list up from the JSON
+  // would silently reinstate a figure they had just removed.
+  it('takes the editor list of headline figures whole, not merged row by row', () => {
+    const fallback = {
+      ...DONATE,
+      stats: [
+        { value: '100+', label: 'Events Hosted' },
+        { value: '8,000+', label: 'Members' },
+      ],
+    } as DonatePageCopy;
+
+    const merged = mergeDonateFrame(fallback, {
+      stats: [{ value: '12', label: 'Chapters' }],
+    });
+
+    expect(merged.stats).toEqual([{ value: '12', label: 'Chapters' }]);
+  });
+
+  // An EMPTY list is a real edit — it removes the band — so it must not be
+  // mistaken for "the editor has not touched this" and refilled from the JSON.
+  it('treats an emptied figures list as a deliberate removal', () => {
+    const fallback = {
+      ...DONATE,
+      stats: [{ value: '100+', label: 'Events Hosted' }],
+    } as DonatePageCopy;
+
+    expect(mergeDonateFrame(fallback, { stats: [] }).stats).toEqual([]);
+  });
+
+  // The entry that never mentions the key at all — an older entry saved before
+  // the field existed, or a scenario seed that omits it. That is the case the
+  // JSON fallback exists for, and it must still fire.
+  it('falls back to the committed tiers when the entry omits them', () => {
+    const tiers = [{ id: 'leadership', name: 'Leadership Circle' }];
+    const fallback = { ...DONATE, donorTiers: tiers } as DonatePageCopy;
+
+    expect(mergeDonateFrame(fallback, { ctaTitle: 'Give' }).donorTiers).toEqual(tiers);
+  });
+
+  // A tier's `id` is what each donor's `tier` field points at, so the merge must
+  // hand it back exactly as written — a normalized or trimmed id would unlink
+  // every donor filed under the original.
+  it('passes tier ids through the merge unchanged', () => {
+    const merged = mergeDonateFrame(DONATE, {
+      donorTiers: [
+        { id: 'leadership', name: 'Leadership Circle', description: 'A year ahead.' },
+        { id: 'sustaining', name: 'Sustaining Donors' },
+      ],
+    });
+
+    expect(merged.donorTiers?.map((t) => t.id)).toEqual(['leadership', 'sustaining']);
   });
 
   // They follow the `ctaTitle` clause, NOT the `heroVideo` one: a cleared box

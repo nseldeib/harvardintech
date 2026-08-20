@@ -1003,6 +1003,97 @@
           "type": "text",
           "optional": true,
           "hint": "Used on EVERY giving button on the page \u2014 hero, donor wall, and the closing ask."
+        },
+        {
+          "name": "campaignName",
+          "label": "Campaign name",
+          "type": "text",
+          "optional": true,
+          "hint": "The campaign's name. Shown in the browser tab, in the closing band, and in the message supporters share."
+        },
+        {
+          "name": "stats",
+          "label": "Headline figures",
+          "type": "list",
+          "optional": true,
+          "hint": "The row of big numbers near the top of the page. These belong to this page only \u2014 the homepage has its own set under Homepage figures.",
+          "fields": [
+            {
+              "name": "value",
+              "label": "Figure",
+              "type": "text",
+              "hint": "The number itself, written how you want it to read \u2014 for example 8,000+."
+            },
+            {
+              "name": "label",
+              "label": "Caption",
+              "type": "text",
+              "hint": "What the number counts, in a few words."
+            }
+          ]
+        },
+        {
+          "name": "donorsEmptyMessage",
+          "label": "Donor wall \u2014 before the first gift",
+          "type": "textarea",
+          "optional": true,
+          "hint": "What the recognition wall says while it is still empty. This is what a prospective first donor reads, so it is worth getting right."
+        },
+        {
+          "name": "donorTiers",
+          "label": "Donor wall tiers",
+          "type": "list",
+          "optional": true,
+          "hint": "The groups the donor wall sorts names into, top to bottom.",
+          "fields": [
+            {
+              "name": "id",
+              "label": "Tier ID",
+              "type": "text",
+              "hint": "CAREFUL: this is the code each donor's Tier field points at, not a label anyone sees. Changing it drops every donor already in this tier off the wall until each one is re-pointed. Rename the Tier name below instead \u2014 that is the part visitors read."
+            },
+            {
+              "name": "name",
+              "label": "Tier name",
+              "type": "text",
+              "hint": "The heading shown above this group on the wall. Safe to reword at any time."
+            },
+            {
+              "name": "description",
+              "label": "Tier description",
+              "type": "textarea",
+              "optional": true,
+              "hint": "The line under the tier heading. Blank shows the heading on its own."
+            }
+          ]
+        },
+        {
+          "name": "networkTitle",
+          "label": "Momentum Network heading",
+          "type": "text",
+          "optional": true,
+          "hint": "The heading above the network visualization."
+        },
+        {
+          "name": "networkTagline",
+          "label": "Momentum Network tagline",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The line under that heading, explaining what the lights represent."
+        },
+        {
+          "name": "networkSearchTitle",
+          "label": "Momentum Network search heading",
+          "type": "text",
+          "optional": true,
+          "hint": "The label over the box where a supporter finds themselves in the network."
+        },
+        {
+          "name": "shareMessage",
+          "label": "Supporter share message",
+          "type": "textarea",
+          "optional": true,
+          "hint": "The message a supporter posts from their badge. Keep [SUPPORTER MESSAGE] and [DONATION LINK] exactly as written \u2014 they are placeholders the badge swaps for the supporter's own words and the giving link. Delete either one and that part goes missing from what they share."
         }
       ]
     },

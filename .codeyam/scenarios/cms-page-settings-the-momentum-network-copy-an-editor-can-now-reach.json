@@ -1,0 +1,17 @@
+{
+  "name": "CMS Page Settings - The Momentum Network Copy An Editor Can Now Reach",
+  "id": "0b138ba9-0958-4c1e-8225-daa5cbfaba0a",
+  "url": "/admin/pageCopy/donate",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "scenarioType": "application",
+  "description": "The stretch of the page-settings form that did not exist before this change. Every word of the Momentum Network band — the heading over the visualization, the tagline explaining what the lights represent, and the label over the find-yourself search — shipped with the network itself as keys in donatePage.json, which meant the newest band on the campaign page was also the only one whose copy needed a developer to change. The frame is taken with the search heading focused so the trio sits in shot together with the supporter share message below it. The share message is the reason this screen needs its hint more than any other field on it: the two bracketed placeholders read as ordinary prose, and an editor who tidies them away silently drops the supporter's own words, or the giving link, out of everything they post. Its sibling frames show the top of the same form and the tier list mid-edit; this one is the gap the audit was looking for, closed.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "#f-networkSearchTitle"
+    }
+  ]
+}

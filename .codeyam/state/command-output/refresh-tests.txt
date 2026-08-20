@@ -1,5 +1,5 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/b94runk7i.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/b94runk7i.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1787159490,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":938876}
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/blz4eq4ef.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/blz4eq4ef.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1787171580,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":1088910}
 ════════════════════════════════════════════════════════════════════
 WARNING: refresh-tests --force is running the ENTIRE test suite.
 ════════════════════════════════════════════════════════════════════
@@ -19,7 +19,7 @@ recovery is flag-free `refresh-tests` (no `--force`). See
 Proceeding with the full suite anyway.
 ════════════════════════════════════════════════════════════════════
 
-warning: about to run the FULL test suite (~1030 tests) — this can take many minutes.
+warning: about to run the FULL test suite (~1047 tests) — this can take many minutes.
 warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
@@ -29,10 +29,5 @@ Test refresh triggered. Waiting for results...
 [  12s] Still running: tests
 [  22s] Still running: tests
 [  26s] Tests completed.
-All 1030 tests passed.
-{"failed":0,"passed":1030,"skipped":0,"success":true,"total":1030}
-
-[warn] per-test-evidence drift: 7 registered tests have no evidence row, 0 evidence rows reference unregistered tests.
-[warn] session-finalize Phase 5 will block until reconciled. Re-run a flag-free
-[warn] `refresh-tests` to cover the missing tests, or `editor remove-test --key <k>`
-[warn] / `editor rename-test --from <old> --to <new>` for orphans.
+{"failed":0,"passed":1047,"skipped":0,"success":true,"total":1047}
+All 1047 tests passed.

@@ -11,184 +11,184 @@
       {
         "body": "Margaret has hosted the Boston founder dinners out of her own office since 2019.",
         "founding": true,
+        "gradYear": 2004,
+        "location": "San Francisco, CA",
         "name": "Margaret Chen-Alvarez",
         "note": "Gave the week the fund opened, before there was anything to show for it.",
         "order": 1,
+        "school": "Harvard Business School",
         "slug": "margaret-chen-alvarez",
         "tier": "leadership",
         "url": "https://www.linkedin.com/in/example-margaret",
-        "school": "Harvard Business School",
-        "gradYear": 2004,
-        "location": "San Francisco, CA",
         "why": "I got my first board seat through someone I met at a Harvard in Tech dinner. This is how I pay that forward."
       },
       {
         "anonymous": true,
         "founding": true,
+        "gradYear": 1998,
+        "location": "Greenwich, CT",
         "name": "Robert K. Whitmore",
         "note": "Asked that the gift be listed without a name.",
         "order": 2,
+        "school": "Harvard Law School",
         "slug": "robert-whitmore",
         "tier": "leadership",
         "url": "https://www.linkedin.com/in/example-robert",
-        "school": "Harvard Law School",
-        "gradYear": 1998,
-        "location": "Greenwich, CT",
         "why": "I would rather the fund got the attention than I did."
       },
       {
+        "gradYear": 2011,
+        "location": "Accra, Ghana",
         "name": "David Osei-Bonsu",
         "order": 3,
+        "school": "Harvard John A. Paulson School of Engineering and Applied Sciences",
         "slug": "david-osei-bonsu",
         "tier": "leadership",
         "url": "https://www.linkedin.com/in/example-david",
-        "school": "Harvard John A. Paulson School of Engineering and Applied Sciences",
-        "gradYear": 2011,
-        "location": "Accra, Ghana",
         "why": "Building here should not mean leaving the network behind."
       },
       {
         "founding": true,
+        "gradYear": 2015,
+        "location": "Bengaluru, India",
         "name": "Priya Raman",
         "note": "Two intros from a founder dinner turned into my first enterprise customer.",
         "order": 1,
         "photo": "/images/team/jessica-li.png",
+        "school": "Harvard Graduate School of Arts and Sciences",
         "slug": "priya-raman",
         "tier": "sustaining",
-        "school": "Harvard Graduate School of Arts and Sciences",
-        "gradYear": 2015,
-        "location": "Bengaluru, India",
         "why": "Two intros from a founder dinner turned into my first enterprise customer. That is not luck, that is a network doing its job."
       },
       {
+        "gradYear": 2009,
+        "location": "Austin, TX",
         "name": "Jonathan Feld",
         "order": 2,
-        "slug": "jonathan-feld",
-        "tier": "sustaining",
         "school": "Harvard College",
-        "gradYear": 2009,
-        "location": "Austin, TX"
+        "slug": "jonathan-feld",
+        "tier": "sustaining"
       },
       {
+        "gradYear": 2013,
+        "location": "London, United Kingdom",
         "name": "Aisha Rahman",
         "note": "For the London chapter, which is the only reason I still feel connected.",
         "order": 3,
+        "school": "Harvard Kennedy School",
         "slug": "aisha-rahman",
         "tier": "sustaining",
-        "school": "Harvard Kennedy School",
-        "gradYear": 2013,
-        "location": "London, United Kingdom",
         "why": "For the London chapter. It is the only reason I still feel connected."
       },
       {
-        "name": "Tom\u00e1s Vidal",
+        "gradYear": 2017,
+        "location": "Mexico City, Mexico",
+        "name": "Tomás Vidal",
         "order": 4,
+        "school": "Harvard Graduate School of Design",
         "slug": "tomas-vidal",
         "tier": "sustaining",
-        "url": "https://www.linkedin.com/in/example-tomas",
-        "school": "Harvard Graduate School of Design",
-        "gradYear": 2017,
-        "location": "Mexico City, Mexico"
+        "url": "https://www.linkedin.com/in/example-tomas"
       },
       {
+        "gradYear": 2012,
+        "location": "Boston, MA",
         "name": "Hannah Brightwell",
         "order": 5,
         "photo": "/images/team/krysia-lenzo.png",
+        "school": "Harvard Medical School",
         "slug": "hannah-brightwell",
         "tier": "sustaining",
-        "school": "Harvard Medical School",
-        "gradYear": 2012,
-        "location": "Boston, MA",
         "why": "Health tech is lonely until you find the other people doing it."
       },
       {
+        "gradYear": 2019,
+        "location": "Toronto, ON",
         "name": "Kwame Boateng",
         "note": "Small gift, every year, for as long as this keeps going.",
         "order": 1,
+        "school": "Harvard Division of Continuing Education",
         "slug": "kwame-boateng",
         "tier": "supporting",
-        "school": "Harvard Division of Continuing Education",
-        "gradYear": 2019,
-        "location": "Toronto, ON",
         "why": "Small gift, every year, for as long as this keeps going."
       },
       {
+        "gradYear": 2021,
+        "location": "Milan, Italy",
         "name": "Elena Marchetti",
         "order": 2,
-        "slug": "elena-marchetti",
-        "tier": "supporting",
         "school": "Harvard College",
-        "gradYear": 2021,
-        "location": "Milan, Italy"
+        "slug": "elena-marchetti",
+        "tier": "supporting"
       },
       {
+        "gradYear": 2016,
+        "location": "Lagos, Nigeria",
         "name": "Samuel Oyelaran",
         "order": 3,
-        "slug": "samuel-oyelaran",
-        "tier": "supporting",
         "school": "Harvard T.H. Chan School of Public Health",
-        "gradYear": 2016,
-        "location": "Lagos, Nigeria"
+        "slug": "samuel-oyelaran",
+        "tier": "supporting"
       },
       {
         "founding": true,
-        "name": "Grace Lindqvist",
-        "order": 4,
-        "slug": "grace-lindqvist",
-        "tier": "supporting",
-        "school": "Harvard Graduate School of Education",
         "gradYear": 2008,
         "location": "Stockholm, Sweden",
+        "name": "Grace Lindqvist",
+        "order": 4,
+        "school": "Harvard Graduate School of Education",
+        "slug": "grace-lindqvist",
+        "tier": "supporting",
         "why": "I joined when there were eleven of us on a mailing list."
       },
       {
         "anonymous": true,
-        "name": "Nina Petrova",
-        "order": 5,
-        "slug": "nina-petrova",
-        "tier": "supporting",
-        "school": "Harvard Business School",
         "gradYear": 2018,
         "location": "Berlin, Germany",
+        "name": "Nina Petrova",
+        "order": 5,
+        "school": "Harvard Business School",
+        "slug": "nina-petrova",
+        "tier": "supporting",
         "why": "My employer would read anything I put my name to as a statement, so I am giving quietly."
       },
       {
+        "gradYear": 2014,
+        "location": "New York, NY",
         "name": "Michael Okonkwo",
         "order": 6,
+        "school": "Harvard College",
         "slug": "michael-okonkwo",
         "tier": "supporting",
-        "url": "https://www.linkedin.com/in/example-michael",
-        "school": "Harvard College",
-        "gradYear": 2014,
-        "location": "New York, NY"
+        "url": "https://www.linkedin.com/in/example-michael"
       },
       {
+        "gradYear": 2010,
+        "location": "Seattle, WA",
         "name": "Rebecca Stern",
         "order": 7,
         "photo": "/images/team/nadia-eldeib.png",
+        "school": "Harvard Divinity School",
         "slug": "rebecca-stern",
         "tier": "supporting",
-        "school": "Harvard Divinity School",
-        "gradYear": 2010,
-        "location": "Seattle, WA",
         "why": "Ethics work in AI needs the humanities people in the room, and this is where I found them."
       },
       {
+        "gradYear": 2007,
+        "location": "Dubai, UAE",
         "name": "Yusuf Al-Amin",
         "order": 8,
-        "slug": "yusuf-al-amin",
-        "tier": "supporting",
         "school": "Harvard School of Dental Medicine",
-        "gradYear": 2007,
-        "location": "Dubai, UAE"
+        "slug": "yusuf-al-amin",
+        "tier": "supporting"
       },
       {
+        "location": "Minneapolis, MN",
         "name": "The Lindgren Family",
         "note": "Tagged with a giving level that no longer exists on the page.",
         "order": 1,
         "slug": "the-lindgren-family",
-        "tier": "legacy-circle",
-        "location": "Minneapolis, MN"
+        "tier": "legacy-circle"
       },
       {
         "name": "Clara Ndiaye",
@@ -236,5 +236,11 @@
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/donate.astro",
-  "description": "The recognition wall on the real /donate page, promoted to the top by an editor changing its Order field \u2014 which is the control Nicole asked about in the same round of feedback, and the reason the wall is a momentumSections entry rather than hardcoded composition. It also shows the wall in real page context, grouped by giving level with Founding badges across the levels, an anonymous donor among the named, and a donor whose tier the page no longer declares collected under Other supporters instead of dropped. Its default position, between the member quotes and the closing ask, is what the committed content ships."
+  "description": "The recognition wall on the real /donate page, promoted above the narrative by an editor changing its Order field — the control Nicole asked about, and the reason the wall is a momentumSections entry rather than hardcoded composition. The frame is taken with the network search focused so the wall itself is in shot rather than the hero that sits above every /donate capture: nineteen supporters grouped by giving level, Founding badges across the levels, and an anonymous donor listed beside named ones. Its pair, 'The First Donor On The Wall', seeds the same page with a single donor — the two frames differ only because both now frame the wall, which is the whole point of seeding them differently.",
+  "interactions": [
+    {
+      "action": "click",
+      "selector": "[data-network-search]"
+    }
+  ]
 }

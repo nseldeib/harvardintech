@@ -914,7 +914,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for every built-in extra",
-      "line": 362,
+      "line": 166,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -923,7 +923,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares only real schema keys for every custom collection",
-      "line": 289,
+      "line": 93,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -932,7 +932,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares the chapters list rows the schema expects",
-      "line": 312,
+      "line": 116,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -941,7 +941,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › declares the hero video as an optional text field with guidance",
-      "line": 337,
+      "line": 141,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -950,7 +950,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › maps the SEO group onto the frontmatter keys this site already uses",
-      "line": 406,
+      "line": 210,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -959,7 +959,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › places the hero video directly after the hero image",
-      "line": 353,
+      "line": 157,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -968,7 +968,7 @@
       "file": "src/data/collections.test.ts",
       "format": "vitest",
       "key": "committed CMS registry vs content schema › renders an editor input for every schema key of every collection",
-      "line": 383,
+      "line": 187,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -1024,6 +1024,24 @@
       "key": "committed nav.json › points every internal link at a page that exists",
       "line": 404,
       "registeredAt": "2026-07-28T15:22:30Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A retired key that has since GAINED an input, or that has been deleted from the JSON, leaves a stale excuse behind — and a stale excuse is how a future key slips through under a name someone already forgave.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed page singletons vs CMS registry › keeps every retired-key excuse pointing at something real and still uneditable",
+      "line": 324,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The headline contract, over all three singletons at once: every key in a committed fallback either has an editor input or is named as retired. Deliberately a loop over the table rather than one case per file — a fourth singleton must be covered by adding a row, not by remembering to add a test.",
+      "file": "src/data/collections.test.ts",
+      "format": "vitest",
+      "key": "committed page singletons vs CMS registry › renders an editor input for every key of every committed page singleton",
+      "line": 302,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
     {
@@ -1271,28 +1289,28 @@
     },
     {
       "description": "A `list`'s sub-fields are row keys inside the array, NOT frontmatter keys, so they must not leak into the comparison against the schema.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › excludes the sub-fields of a repeatable list",
-      "line": 170,
+      "line": 47,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
       "description": "Empty input is legitimate — a built-in with no consumer extras declared.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › returns an empty list for no fields",
-      "line": 185,
+      "line": 62,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
       "description": "The ordinary case: every top-level field contributes its frontmatter key.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "declaredFieldNames › returns each top-level field name in declaration order",
-      "line": 160,
+      "line": 37,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -4254,8 +4272,17 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › clears the video when the editor empties the box",
-      "line": 419,
+      "line": 537,
       "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The entry that never mentions the key at all — an older entry saved before the field existed, or a scenario seed that omits it. That is the case the JSON fallback exists for, and it must still fire.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › falls back to the committed tiers when the entry omits them",
+      "line": 484,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
     {
@@ -4263,7 +4290,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › falls back to the committed value when a campaign frame box is cleared",
-      "line": 391,
+      "line": 509,
       "registeredAt": "2026-08-19T17:04:46.654731914+00:00",
       "runner": "vitest"
     },
@@ -4281,8 +4308,26 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › leaves the video undefined when the entry carries no heroVideo",
-      "line": 427,
+      "line": 545,
       "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The HAZARD the case above guards, stated directly rather than implied by a key-set snapshot. `donate.astro` spreads this result over the copy object and then assigns `accomplishments`, `pillars` and `donateUrl` from their own loaders. Those three assignments come after the spread, so today the ordering alone protects them — which is exactly why this deserves its own assertion: a future reorder of that object literal would make a leaked key here silently overwrite a collection-backed one, and a snapshot of twenty key names is not the thing a reviewer would read as forbidding it.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › never returns a key that a collection loader owns",
+      "line": 387,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The share message's placeholders are substituted by the badge, not by this merge. They are ordinary characters here and must survive verbatim — the same contract `{name}` has in the personalized headline.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › passes the share message placeholders through untouched",
+      "line": 441,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
     {
@@ -4292,6 +4337,15 @@
       "key": "mergeDonateFrame › passes the {name} placeholder through untouched",
       "line": 344,
       "registeredAt": "2026-08-04T13:20:43Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A tier's `id` is what each donor's `tier` field points at, so the merge must hand it back exactly as written — a normalized or trimmed id would unlink every donor filed under the original.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › passes tier ids through the merge unchanged",
+      "line": 494,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
     {
@@ -4308,7 +4362,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › returns only frame keys, never the rest of the campaign copy",
-      "line": 353,
+      "line": 354,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4317,7 +4371,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › still carries the hero image alongside a video",
-      "line": 437,
+      "line": 555,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -4326,9 +4380,27 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › takes the campaign frame fields the editor filled in",
-      "line": 373,
+      "line": 400,
       "registeredAt": "2026-08-19T17:04:46.631225551+00:00",
       "runner": "vitest"
+    },
+    {
+      "description": "The six text fields that used to live only in `donatePage.json` with no editor anywhere. They arrive through the same `preferText` door as `ctaTitle`, so what this pins is that they arrive AT ALL — before this they were unreachable from /admin no matter what an editor typed.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › takes the donor wall and Momentum Network copy the editor filled in",
+      "line": 418,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The two LIST fields take the all-or-nothing rule `benefits` already uses, NOT `preferText`. An editor part-way through rebuilding the figures means the list they are building, so topping a half-finished list up from the JSON would silently reinstate a figure they had just removed.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › takes the editor list of headline figures whole, not merged row by row",
+      "line": 454,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
     },
     {
       "description": "The migration working for the frame: the hero and closing ask are now copy an editor owns rather than values in a file only a developer opens.",
@@ -4344,8 +4416,17 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › takes the hero video path the editor pasted",
-      "line": 408,
+      "line": 526,
       "registeredAt": "2026-08-08T02:12:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An EMPTY list is a real edit — it removes the band — so it must not be mistaken for \"the editor has not touched this\" and refilled from the JSON.",
+      "file": "src/lib/pageCopyMerge.test.ts",
+      "format": "vitest",
+      "key": "mergeDonateFrame › treats an emptied figures list as a deliberate removal",
+      "line": 472,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
     {
@@ -4353,7 +4434,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed Givebutter account id when the editor cleared the box",
-      "line": 487,
+      "line": 605,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4362,7 +4443,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed Givebutter account id when there is no entry",
-      "line": 480,
+      "line": 598,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4371,7 +4452,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
-      "line": 463,
+      "line": 581,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4380,7 +4461,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
-      "line": 458,
+      "line": 576,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4389,7 +4470,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
-      "line": 523,
+      "line": 641,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4398,7 +4479,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
-      "line": 532,
+      "line": 650,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4407,7 +4488,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves the Givebutter account id falsy when neither side sets it",
-      "line": 503,
+      "line": 621,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4416,7 +4497,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed Givebutter account id",
-      "line": 494,
+      "line": 612,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4425,7 +4506,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed analytics id",
-      "line": 470,
+      "line": 588,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4434,7 +4515,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes custom head and body HTML the editor added",
-      "line": 509,
+      "line": 627,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4620,46 +4701,55 @@
     },
     {
       "description": "An exempted key is absent from the editor on purpose and must stay quiet.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "missingFields › ignores an exempted key",
-      "line": 235,
+      "line": 109,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
     {
+      "description": "An exemption for a key that is already rendered is harmless, not an error — it just has nothing to excuse.",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
+      "format": "vitest",
+      "key": "missingFields › leaves a rendered key alone even when it is also exempted",
+      "line": 115,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
       "description": "The failure this guard exists to catch: a key that renders on the site but is invisible in /admin, so no editor can ever set it.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "missingFields › names a key that drifted out of the editor",
-      "line": 230,
+      "line": 104,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
     {
       "description": "The healthy state: every schema key has an input an editor can fill in.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "missingFields › reports nothing when the editor renders an input for every key",
-      "line": 224,
+      "line": 99,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
     {
       "description": "The other degenerate edge: an empty schema can never be missing anything.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "missingFields › reports nothing when the schema has no keys",
-      "line": 245,
+      "line": 125,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
     {
       "description": "Degenerate edge: no editor fields at all makes every key missing.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "missingFields › treats every key as missing when the editor renders nothing",
-      "line": 240,
+      "line": 120,
       "registeredAt": "2026-07-28T20:55:29Z",
       "runner": "tests"
     },
@@ -6798,28 +6888,28 @@
     },
     {
       "description": "Parses the top-level keys and nothing else.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › extracts the top-level schema keys of a collection",
-      "line": 252,
+      "line": 195,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
       "description": "Nested row keys sit at brace depth 2 and a commented-out key is stripped before parsing — neither may be mistaken for a frontmatter key.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › ignores nested row keys and commented-out keys",
-      "line": 262,
+      "line": 202,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
       "description": "An undeclared collection yields nothing rather than throwing, so a renamed collection fails as a visible empty-schema mismatch below.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "schemaKeysFor › returns an empty list for a collection that is not declared",
-      "line": 270,
+      "line": 211,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
@@ -7760,6 +7850,51 @@
       "runner": "tests"
     },
     {
+      "description": "Retiring a key that DOES have an editor input is not an error — the retired list only ever subtracts, so it cannot manufacture a finding.",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
+      "format": "vitest",
+      "key": "singletonKeysWithoutEditor › does not report a retired key that also has an input",
+      "line": 169,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "A key whose band no longer renders anywhere is excused deliberately — `donorsIntro`, whose donor wall is no longer mounted on any page.",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
+      "format": "vitest",
+      "key": "singletonKeysWithoutEditor › ignores a key named as retired",
+      "line": 152,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The regression this rule exists for: copy that reached production through the JSON fallback alone, with no editor anywhere. `networkTitle` is the real key that did exactly this.",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
+      "format": "vitest",
+      "key": "singletonKeysWithoutEditor › names a singleton key the CMS renders no input for",
+      "line": 141,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "An empty singleton cannot be missing anything.",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
+      "format": "vitest",
+      "key": "singletonKeysWithoutEditor › reports nothing for a singleton with no keys",
+      "line": 163,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The clean case: every key in the committed fallback has a box in /admin.",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
+      "format": "vitest",
+      "key": "singletonKeysWithoutEditor › reports nothing when every singleton key has an editor input",
+      "line": 132,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
       "description": "settings + nav are read from the data root and parsed from JSON, so a sandbox data dir fully drives what the site renders",
       "file": "src/lib/site.test.ts",
       "format": "vitest",
@@ -8198,6 +8333,24 @@
       "key": "sponsorLevelsFrom › sorts a level with no order pin after the pinned ones",
       "line": 228,
       "registeredAt": "2026-08-04T13:24:17.810417709+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The guard that keeps a URL in a string literal intact — `https://` is not a comment, and eating the rest of that line would drop real schema text.",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
+      "format": "vitest",
+      "key": "stripComments › leaves a protocol-relative URL in a string literal alone",
+      "line": 187,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The whole point: a colon inside prose must not survive to look like a key.",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
+      "format": "vitest",
+      "key": "stripComments › removes a line comment carrying a colon",
+      "line": 176,
+      "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
     {
@@ -8769,37 +8922,37 @@
     },
     {
       "description": "The failure this guard exists to catch: a registry key with no schema counterpart, which builds fine until an editor actually fills it in.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "unknownFields › names a field that drifted out of the schema",
-      "line": 202,
+      "line": 75,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
       "description": "The healthy state: everything the editor renders exists in the schema.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "unknownFields › reports nothing when every declared field exists in the schema",
-      "line": 192,
+      "line": 69,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
       "description": "The other degenerate edge: nothing declared can never drift.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "unknownFields › reports nothing when no fields are declared",
-      "line": 217,
+      "line": 92,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },
     {
       "description": "Degenerate edge: an empty schema makes every declared field unknown.",
-      "file": "src/data/collections.test.ts",
+      "file": "src/lib/collectionRegistryDrift.test.ts",
       "format": "vitest",
       "key": "unknownFields › treats every field as unknown when the schema has no keys",
-      "line": 211,
+      "line": 86,
       "registeredAt": "2026-07-27T18:48:12Z",
       "runner": "tests"
     },

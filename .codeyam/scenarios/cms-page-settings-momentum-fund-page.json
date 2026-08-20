@@ -1,12 +1,11 @@
 {
   "name": "CMS Page Settings - Momentum Fund Page",
-  "id": "01f62c98-3307-4767-9e54-d92d0da1a0ec",
+  "id": "5a21e04b-99a0-43d9-8f86-683dcaff96f1",
   "url": "/admin/pageCopy/donate",
   "dimensions": [
     "Desktop"
   ],
   "mocks": {},
   "scenarioType": "application",
-  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
-  "description": "The /donate page-settings editor, which is where the new Hero video field lives. Note what this frame does and does not prove: it shows the form rendering with its hero fields intact after the field was added — the regression that matters — but the Hero video box itself sits below Hero image, past the fold of a viewport-sized capture, and the harness cannot scroll here. The field's presence, type, label and hint are asserted in src/data/collections.test.ts instead, which is a durable check rather than a screenshot that happens to frame the right scroll position."
+  "description": "The /donate page-settings editor as an editor opens it — the top of the form: which page these settings belong to, the donation-platform URL, and the two hero headlines in their personalised and generic forms. Note what this frame does and does not prove. The form is far longer than a viewport and the harness cannot scroll a resting capture, so everything below Hero image is out of shot: the Hero video box, and the campaign copy that used to live only in donatePage.json — campaign name, headline figures, the donor wall's empty-state message and tiers, the Momentum Network's heading, tagline and search label, and the supporter share message. Those are covered instead by the sibling scenario 'CMS Page Settings - Adding A Donor Wall Tier', which drives an interaction to reach them, and by assertions in src/data/collections.test.ts — a durable check rather than a screenshot that happens to frame the right scroll position."
 }

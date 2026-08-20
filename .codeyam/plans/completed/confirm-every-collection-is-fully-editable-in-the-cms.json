@@ -1,0 +1,35 @@
+{
+  "claimStartedAt": "2026-08-19T19:59:01Z",
+  "completedAt": "2026-08-20T01:34:18Z",
+  "completedBy": {
+    "agentProvider": "claude",
+    "codeyamEditorVersion": "0.1.0",
+    "currentStep": "ui-step16",
+    "machine": "codeyam-editor-codeyam-editor-1",
+    "originId": "057ec9fa-08a8-4791-b811-59ddf8ab552b",
+    "pid": 1057945,
+    "priority": 0,
+    "selectedPlan": "confirm-every-collection-is-fully-editable-in-the-cms",
+    "sessionId": "e96b0508-d022-4084-97bc-e84e2f0e532e",
+    "startedAt": "2026-08-19T19:59:01Z"
+  },
+  "createdAt": "2026-08-19T19:58:56Z",
+  "deliverables": [
+    "docs/editing-the-site.md",
+    "src/content/config.ts",
+    "src/content/pageCopy/donate.md",
+    "src/data/collections.json",
+    "src/data/collections.test.ts",
+    "src/data/donatePage.json",
+    "src/lib/collectionRegistryDrift.test.ts",
+    "src/lib/collectionRegistryDrift.ts",
+    "src/lib/pageCopyMerge.test.ts",
+    "src/lib/pageCopyMerge.ts",
+    "src/lib/site.ts"
+  ],
+  "journalTimestamp": "2026-08-20T01:34:18Z",
+  "mode": "ui",
+  "planFile": "completed/confirm-every-collection-is-fully-editable-in-the-cms.md",
+  "slug": "confirm-every-collection-is-fully-editable-in-the-cms",
+  "title": "Confirm Every Collection Is Fully Editable In The CMS"
+}

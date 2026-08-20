@@ -1,0 +1,48 @@
+{
+  "surface": "node_modules/@codeyam/cms/src/components/admin/EntryField.tsx",
+  "surface_kind": "file",
+  "states": [
+    {
+      "dimension": "type",
+      "value": "number",
+      "rationale": "source-derived state type=number",
+      "status": "covered"
+    },
+    {
+      "dimension": "type",
+      "value": "date",
+      "rationale": "source-derived state type=date",
+      "status": "covered"
+    },
+    {
+      "dimension": "type",
+      "value": "textarea",
+      "rationale": "source-derived state type=textarea",
+      "status": "planned"
+    },
+    {
+      "dimension": "type",
+      "value": "select",
+      "rationale": "source-derived state type=select",
+      "status": "covered"
+    },
+    {
+      "dimension": "type",
+      "value": "boolean",
+      "rationale": "source-derived state type=boolean",
+      "status": "planned"
+    },
+    {
+      "dimension": "error",
+      "value": "true",
+      "rationale": "source-derived state error=true",
+      "status": "covered"
+    },
+    {
+      "dimension": "error",
+      "value": "false",
+      "rationale": "source-derived state error=false",
+      "status": "covered"
+    }
+  ]
+}

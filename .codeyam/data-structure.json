@@ -1482,7 +1482,7 @@
   },
   {
     "name": "PageCopy",
-    "description": "Per-page settings an editor changes from /admin, one markdown entry per page in the `pageCopy` collection. Today it holds the single `donate` entry: the Momentum Fund page s donation-platform URL (blank keeps every giving button on the giving-inquiry mailto) plus the page s FIXED FRAME \u2014 the hero headline in its named and generic forms, the hero subhead and photo, and the closing ask s title, body, and button label. The frame is deliberately not part of the reorderable `momentumSections` middle: a page whose hero could be dragged to the bottom is a page an editor can break. Making its copy editable does not make it draggable. `donatePage.json` remains the fallback for every field.",
+    "description": "Per-page settings an editor changes from /admin, one markdown entry per page in the `pageCopy` collection. Today it holds the single `donate` entry: the Momentum Fund page s donation-platform URL (blank keeps every giving button on the giving-inquiry mailto) plus the page s FIXED FRAME \u2014 the hero headline in its named and generic forms, the hero subhead and photo, and the closing ask s title, body, and button label. The frame is deliberately not part of the reorderable `momentumSections` middle: a page whose hero could be dragged to the bottom is a page an editor can break. Making its copy editable does not make it draggable. `donatePage.json` remains the fallback for every field.\n\nIt now also holds the campaign copy that used to live ONLY in that fallback, with no editor anywhere: the campaign name, the headline figures, the donor wall's empty-state message and its recognition tiers, the Momentum Network's heading, tagline and search label, and the supporter share message. Those reached production through `donatePage.json` alone, so rewording the newest band on the page was a developer's job. Two carry real hazards the editor hints spell out — a tier's `id` is the key each donor's `tier` points at (renaming it unlinks them), and the share message's `[SUPPORTER MESSAGE]` / `[DONATION LINK]` are placeholders the badge substitutes, not prose.",
     "category": "datastore",
     "order": 22,
     "fields": [
@@ -1554,6 +1554,56 @@
       },
       {
         "name": "ctaTagline",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "heroVideo",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "ctaLabel",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "campaignName",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "stats",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "donorsEmptyMessage",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "donorTiers",
+        "type": "array",
+        "required": false
+      },
+      {
+        "name": "networkTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "networkTagline",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "networkSearchTitle",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "shareMessage",
         "type": "string",
         "required": false
       }

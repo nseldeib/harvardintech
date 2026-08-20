@@ -198,8 +198,18 @@ These are not in the CMS. Ask the team to change them:
 - **Video files.** The media library only accepts images, so a hero video has to
   be added by the team before you can point the **Hero video** field at it. Once
   it is there, setting, swapping and clearing it are yours.
-- The **sponsorship** and **volunteer** page copy.
 - Anything about the site's colors, fonts, or layout.
+- The **donor wall's intro paragraph**, which no longer appears anywhere a
+  visitor can see it — the Momentum Network replaced the wall on the campaign
+  page. It is left out of the CMS deliberately rather than by oversight: a box
+  that edits nothing would waste your time more than its absence does.
+
+**The sponsorship and volunteer page copy are no longer on this list**, and had
+not been for a while before this line was corrected. Both pages are fully
+editable — **Sponsorship page** and **Volunteer page** in /admin carry every
+heading, paragraph, image and button label on them, and the sponsorship tiers are
+their own **Sponsorship levels** collection. If you asked the team to change a
+word on either page recently, you did not need to.
 
 **The photo header and the closing band are no longer on this list.** Their
 *words and images* are yours, in **Page settings → Momentum Fund page**: the two
@@ -211,6 +221,23 @@ or hidden, because they are the frame those sections sit inside.
 The accomplishment cards, the gift-pillar cards, the homepage hero and the
 homepage figures used to be on this list. They are now collections in /admin —
 see the table above.
+
+**The donor wall and the Momentum Network are no longer on this list either.**
+Everything they say is now in **Page settings → Momentum Fund page**, alongside
+the hero and closing fields: the campaign's own name, the row of headline
+figures, what the recognition wall says before its first gift, the tier names and
+their descriptions, the network's heading, tagline and search label, and the
+message a supporter shares from their badge. Two of them come with a warning the
+editor repeats beside the field:
+
+- **Tier ID** is not a label. It is the code each donor's Tier field points at,
+  so changing it drops every donor already in that tier off the wall. Reword the
+  **Tier name** instead — that is the part visitors read, and it is safe to
+  change at any time.
+- The **supporter share message** contains `[SUPPORTER MESSAGE]` and
+  `[DONATION LINK]`. They look like ordinary text and they are not: the badge
+  swaps them for the supporter's own words and the giving link. Rewrite the
+  sentences around them freely, but leave those two exactly as they are.
 
 **The analytics and embed settings are no longer on this list either.** The
 Google Analytics ID, the Givebutter account ID, and the custom `<head>` /
