@@ -6,6 +6,7 @@ commitment: 25 hours
 startDate: 2026-09-01
 endDate: 2026-12-15
 draft: true
+ogImage: /images/volunteers.webp
 ---
 
 For this specific New York event, the volunteer will support the full social media promotion cycle, including:
