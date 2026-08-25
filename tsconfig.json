@@ -4,6 +4,21 @@
   "exclude": ["dist"],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "jsxImportSource": "react",
+    // Resolve @codeyam/cms to its TypeScript SOURCE rather than its published
+    // `dist/`. Required from 0.13.0, the first release to ship prebuilt output:
+    // its exports send `types` at `dist/esm/**/*.d.ts` and offer
+    // `codeyam-source` as the opt-in back to `src/**/*.ts`.
+    //
+    // This repo patches the CMS's `src/` (see CMS_SETUP.md), so without this the
+    // compiler reads the UNPATCHED dist while the runtime does too — the reorder
+    // arrows would vanish from /admin with nothing failing to say so.
+    // `moduleResolution` is `Bundler` via astro/tsconfigs/base, which is what
+    // makes `customConditions` legal here.
+    //
+    // Matching settings live in `astro.config.mjs` and `vitest.config.ts`. All
+    // three must agree, or a tool resolves a different copy of the library than
+    // the other two.
+    "customConditions": ["codeyam-source"]
   }
 }

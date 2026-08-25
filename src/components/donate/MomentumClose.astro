@@ -48,6 +48,21 @@ const paragraphs = splitParagraphs(body);
     image ? (
       <div class="photo">
         <img src={withBase(image)} alt={altFor(image, 'Harvard Alumni in Tech')} loading="lazy" />
+        {/* The sample badge, floating on the field. It is an ILLUSTRATION of
+            what a supporter's own card looks like, not a real supporter — so it
+            carries no name, no school and no year, and `aria-hidden` keeps it
+            out of the reading order entirely. A plausible-looking fake person
+            on a donation page is exactly the thing that must not ship, and the
+            real cards are one scroll up in the hero, where they belong to
+            people who actually gave. */}
+        <div class="sample" aria-hidden="true">
+          <span class="sample-dot" />
+          <div class="sample-lines">
+            <span class="sample-line sample-line--name" />
+            <span class="sample-line sample-line--meta" />
+          </div>
+          <p class="sample-tag">Founding Supporter</p>
+        </div>
       </div>
     ) : null
   }
@@ -56,12 +71,16 @@ const paragraphs = splitParagraphs(body);
       {kicker ? <p class="kick kick--teal">{kicker}</p> : null}
       <h2>{title}</h2>
       {paragraphs.map((p) => <p class="body">{p}</p>)}
+      {/* Crimson (the default), not `navy`. The navy variant exists for this
+          band while it was PALE; on the near-black ground it now sits on,
+          navy-on-black is the same low-contrast pairing the heading just moved
+          off. Crimson is also what the hero's rail uses, so the page's first
+          ask and its last are visibly the same button. */}
       <GiveButton
         label={ctaLabel}
         donateUrl={donateUrl}
         email={email}
         campaignName={campaignName}
-        variant="navy"
         glyph
       />
       {tagline ? <p class="tagline">{tagline}</p> : null}
@@ -70,10 +89,26 @@ const paragraphs = splitParagraphs(body);
 </section>
 
 <style>
+  /* DARK, and lit by the same field the hero opens on — so the page closes on
+     the picture it opened with and the last ask sits inside the network the
+     visitor has just been asked to join, rather than on a pale band that reads
+     as a different page. The field is drawn in CSS rather than by reusing
+     `MomentumNetwork`: this band must not imply a second, different set of
+     supporters, and the real component would draw real people here.
+
+     Layered gradients, not an image: a repeating radial for the points and two
+     wide ellipses for the bloom, so the whole close costs no request and cannot
+     fail to load. */
   .close {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    background: var(--momentum-aqua);
+    background-color: #07070a;
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(165, 16, 52, 0.5) 1.1px, transparent 1.6px),
+      radial-gradient(ellipse 55% 45% at 78% 18%, rgba(4, 151, 158, 0.16), transparent 70%),
+      radial-gradient(ellipse 50% 50% at 12% 82%, rgba(165, 16, 52, 0.16), transparent 72%);
+    background-size: 26px 26px, 100% 100%, 100% 100%;
+    color: #fff;
   }
   /* With no photo there is no column to balance, so the copy centres in the band
      rather than sitting in half of an empty row. */
@@ -117,14 +152,16 @@ const paragraphs = splitParagraphs(body);
     line-height: 1.06;
     letter-spacing: -0.02em;
     font-weight: 700;
-    color: var(--momentum-navy);
+    /* White, not `--momentum-navy` — the band went dark, and navy type on a
+       near-black ground is the same unreadable pairing the supporter roll had. */
+    color: #fff;
     margin: 0 0 22px;
   }
   .body {
     font-family: var(--font-serif);
     font-size: 18px;
     line-height: 1.6;
-    color: var(--ink-2);
+    color: rgba(255, 255, 255, 0.8);
     margin: 0 0 18px;
   }
   .body:last-of-type {
@@ -136,7 +173,66 @@ const paragraphs = splitParagraphs(body);
     font-size: 11px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--momentum-navy);
+    color: var(--momentum-gold);
+  }
+
+  /* The sample badge. Deliberately WORDLESS apart from its standing line: bars
+     stand in for the name and credit, so it reads as "your card goes here"
+     rather than as a person. */
+  .sample {
+    position: absolute;
+    right: clamp(1rem, 6%, 3rem);
+    bottom: clamp(1.5rem, 8%, 3.5rem);
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 10px 12px;
+    padding: 16px 20px;
+    min-width: 15rem;
+    background: rgba(7, 7, 10, 0.86);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius);
+    backdrop-filter: blur(2px);
+  }
+
+  .sample-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--momentum-gold);
+    box-shadow: 0 0 12px rgba(246, 199, 107, 0.85);
+  }
+
+  .sample-lines {
+    display: grid;
+    gap: 7px;
+  }
+
+  .sample-line {
+    display: block;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .sample-line--name {
+    width: 8.5rem;
+  }
+
+  .sample-line--meta {
+    width: 5.5rem;
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .sample-tag {
+    grid-column: 1 / -1;
+    margin: 2px 0 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--momentum-gold);
   }
 
   /* Photo over copy below 820px, with the gold rule moving from the right edge

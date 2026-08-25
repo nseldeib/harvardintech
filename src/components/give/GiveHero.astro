@@ -1,0 +1,58 @@
+---
+// The giving page's opening band: kicker, headline, one supporting line, on navy.
+//
+// Deliberately quiet for a hero — no photo, no button. The photo band and the
+// giving card follow immediately, and the card is where the ask lives; a hero
+// that also asked would put two CTAs within a screen of each other before the
+// reader has been told what the money does.
+interface Props {
+  kicker?: string;
+  title?: string;
+  subhead?: string;
+}
+
+const { kicker, title, subhead } = Astro.props as Props;
+---
+
+<section class="hero">
+  <div class="hero-in">
+    {kicker ? <p class="kick kick--gold">{kicker}</p> : null}
+    {title ? <h1>{title}</h1> : null}
+    {subhead ? <p class="hero-sub">{subhead}</p> : null}
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--momentum-navy);
+    padding: 86px 24px 96px;
+  }
+
+  .hero-in {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-in .kick {
+    margin: 0 0 16px;
+  }
+
+  h1 {
+    font-family: var(--font-title);
+    font-size: clamp(34px, 5vw, 62px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 20px;
+    max-width: 16ch;
+  }
+
+  .hero-sub {
+    margin: 0;
+    max-width: 54ch;
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.76);
+  }
+</style>

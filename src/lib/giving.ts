@@ -28,3 +28,28 @@ export function resolveGiveHref({ donateUrl, email, campaignName }: GiveHrefOpti
     : 'Supporting Harvard Alumni in Tech';
   return buildMailto({ to: email, subject });
 }
+
+/** The giving page this site serves itself. */
+export const GIVE_PAGE_PATH = '/give';
+
+/**
+ * Where a giving CTA on a CAMPAIGN page points — as distinct from the button on
+ * the giving page itself, which is `resolveGiveHref` above.
+ *
+ * The two differ because they are asking different things. A CTA on /donate is
+ * "take me to where I can give", and the best answer is /give: it states the
+ * goal, the amounts and what the money does before asking for anything. The
+ * button at the bottom of /give is "I am giving now", and that has to leave the
+ * site for the platform — or, until one is configured, open the inquiry email.
+ *
+ * A configured `donateUrl` still wins outright here, so choosing a platform
+ * sends every campaign CTA straight to it and /give stops being in the path.
+ * That is deliberate: a real checkout is a better destination than our page, and
+ * the CMS switch keeps working exactly as it always did.
+ *
+ * Without this split the button on /give would resolve to /give and the page
+ * would link to itself — the failure this function exists to make impossible.
+ */
+export function resolveGiveCtaHref({ donateUrl }: Pick<GiveHrefOptions, 'donateUrl'>): string {
+  return donateUrl?.trim() || GIVE_PAGE_PATH;
+}

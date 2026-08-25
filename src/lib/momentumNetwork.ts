@@ -31,8 +31,13 @@ import {
  * can see the whole palette in one place.
  */
 export const NETWORK_COLORS = {
-  /** Deep navy-black — the ground the whole grid sits on. */
-  background: '#031731',
+  /** Near-black — the ground the whole grid sits on.
+   *
+   *  Moved off the earlier deep navy for the reference design. The warning this
+   *  module already carried still applies, and is why the blooms stay dim:
+   *  crimson bloomed at low opacity mixes toward the purple-magenta wash the
+   *  direction rules out by name. Black lowers that risk; it does not remove it. */
+  background: '#07070A',
   /** Harvard burgundy/crimson — a supporter. */
   node: '#A51034',
   /** Teal — the connections, and the energy moving along them. */
@@ -63,13 +68,27 @@ export const NETWORK_VIEWBOX = { width: 1000, height: 620 } as const;
  *  direction's density was composed at. */
 const AREA_PER_SUPPORTER = 2900;
 
-/** The canvas proportions. Wide enough to sit as a band, not so wide that a
- *  handful of supporters strings out into a line. */
-const NETWORK_ASPECT = 1.6;
+/** The canvas proportions — the reference design's wide cinematic band. */
+const NETWORK_ASPECT = 2.2;
 
-/** Below this the box stops shrinking, so one or two supporters are drawn as a
- *  small network in a normal frame rather than as two enormous discs. */
-const MIN_VIEWBOX_WIDTH = 340;
+/**
+ * The floor on the drawn field, and the fix for the density bug.
+ *
+ * This used to be 340, which is smaller than the box any realistic campaign
+ * produces, so it read as a harmless guard against one supporter rendering as
+ * one enormous disc. It was not harmless. `networkViewBox` returns ~348 units
+ * at nineteen supporters, so the field sat AT the floor — and the SVG draws
+ * with `preserveAspectRatio="xMidYMid slice"`, which crops that tiny box and
+ * magnifies it to cover a full-bleed stage. The result was a fraction of an
+ * already-small network, blown up: oversized dots with canyons between them,
+ * which is what the band actually looked like on /donate.
+ *
+ * Raised to the design canvas itself. The frame is now the composition's at
+ * every count, real supporters spread across it, and `ambientField` fills the
+ * space they do not yet occupy. The original concern is still handled — one
+ * supporter in a 1100-unit frame is one small light, which is correct.
+ */
+const MIN_VIEWBOX_WIDTH = 1100;
 
 /**
  * The viewBox for a network of `count` supporters.
@@ -90,6 +109,137 @@ export function networkViewBox(count: number): { width: number; height: number }
   const area = count * AREA_PER_SUPPORTER;
   const width = Math.max(MIN_VIEWBOX_WIDTH, Math.round(Math.sqrt(area * NETWORK_ASPECT)));
   return { width, height: Math.round(width / NETWORK_ASPECT) };
+}
+
+/**
+ * One unlit point in the field. NOT a supporter, and deliberately not shaped
+ * like one — no slug, no school, no `selectable`, no `founding`. There is
+ * nothing here for a consumer to mistake for a person, which is the point: the
+ * type itself is the first line of the honesty guarantee.
+ */
+export interface AmbientPoint {
+  x: number;
+  y: number;
+  r: number;
+}
+
+/** A filament between two ambient points, in absolute coordinates.
+ *
+ *  Coordinates rather than indices, unlike `NetworkEdge`. A supporter edge is
+ *  indexed because the DOM has to find the two nodes it joins and light them;
+ *  nothing ever looks one of these up, so carrying indices would only invite a
+ *  future reader to think it could. */
+export interface AmbientEdge {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+/** The unlit field, drawn and wired. */
+export interface AmbientField {
+  points: AmbientPoint[];
+  edges: AmbientEdge[];
+}
+
+/** Area per point in the unlit field, well below `AREA_PER_SUPPORTER`.
+ *
+ *  The field is what carries the reference design's density, and it has to be
+ *  denser than the supporters ever are: the picture reads as a lattice, and a
+ *  lattice needs enough points that each one's neighbours are CLOSE. At the
+ *  supporter spacing the same field reads as scattered dots with long lines
+ *  strung between them — which is the look this whole change exists to fix. */
+const AREA_PER_AMBIENT = 850;
+
+/**
+ * The unlit points behind the real supporters.
+ *
+ * The campaign starts empty and will hold a few dozen people for a long while,
+ * and the reference design is a FIELD — its impact comes from density. Drawing
+ * nineteen lights in a frame composed for two hundred does not read as a young
+ * network; it reads as a broken graphic. So the frame is filled: real
+ * supporters draw bright with a bloom, and these draw dim, small and flat
+ * behind them.
+ *
+ * The honesty of that is structural rather than a matter of styling restraint.
+ * These points carry no identity, appear in no detail record and no search
+ * haystack, are absent from the supporter roll, and are NEVER counted — the
+ * count on the page reads `donors.length`. A reader can see there is a field;
+ * nothing tells them the field is people.
+ *
+ * They also RECEDE. The target is a constant density, so the number returned is
+ * the frame's capacity minus the supporters already in it: at nineteen
+ * supporters most of the field is ambient, and as real gifts arrive the ambient
+ * points give way to them one for one until, at campaign scale, there are none
+ * left. The picture fills with actual people over time rather than staying
+ * padded forever.
+ */
+export function ambientField(
+  realCount: number,
+  width: number,
+  height: number,
+  rnd: () => number,
+): AmbientField {
+  const capacity = Math.round((width * height) / AREA_PER_AMBIENT);
+  const needed = Math.max(0, capacity - Math.max(0, realCount));
+  if (needed === 0) return { points: [], edges: [] };
+
+  // A jittered grid rather than uniform random placement. Random points clump
+  // and leave holes — at this density that reads as a mistake in the artwork
+  // rather than as a field, and the holes are exactly the "large empty areas"
+  // the direction rules out. A grid with each point knocked off its cell centre
+  // keeps the spacing even while never looking ruled.
+  const cols = Math.max(2, Math.round(Math.sqrt(needed * (width / height))));
+  const rows = Math.max(2, Math.ceil(needed / cols));
+  const cellWidth = width / cols;
+  const cellHeight = height / rows;
+
+  const points: AmbientPoint[] = [];
+  for (let row = 0; row < rows; row += 1) {
+    for (let col = 0; col < cols; col += 1) {
+      points.push({
+        x: (col + 0.5) * cellWidth + (rnd() - 0.5) * cellWidth * 0.8,
+        y: (row + 0.5) * cellHeight + (rnd() - 0.5) * cellHeight * 0.8,
+        // Varied so the field has depth instead of reading as one flat screen
+        // of identical dots. Still under a supporter's 3.2 — but not by much,
+        // because in the reference the unlit points are the same SIZE as the
+        // lit ones and it is the glow, not the diameter, that separates them.
+        r: 1.3 + rnd() * 1.1,
+      });
+    }
+  }
+
+  // Wired along the grid — right and down — rather than by nearest-neighbour
+  // search. The jitter is smaller than a cell, so a point's grid neighbours ARE
+  // its nearest ones, which means an O(n) walk produces the same lattice a
+  // distance sort would at a fraction of the cost. That matters: the field runs
+  // to several hundred points, and this is computed on every render.
+  const edges: AmbientEdge[] = [];
+  const at = (row: number, col: number) => points[row * cols + col];
+  for (let row = 0; row < rows; row += 1) {
+    for (let col = 0; col < cols; col += 1) {
+      const from = at(row, col);
+      if (col + 1 < cols) {
+        const to = at(row, col + 1);
+        edges.push({ x1: from.x, y1: from.y, x2: to.x, y2: to.y });
+      }
+      if (row + 1 < rows) {
+        const to = at(row + 1, col);
+        edges.push({ x1: from.x, y1: from.y, x2: to.x, y2: to.y });
+      }
+      // One diagonal per cell, so the lattice reads as triangulated rather than
+      // as graph paper. Alternating direction by parity keeps it from becoming
+      // a visible corduroy of parallel lines running one way across the field.
+      if (row + 1 < rows && col + 1 < cols) {
+        const down = (row + col) % 2 === 0;
+        const to = down ? at(row + 1, col + 1) : at(row + 1, col);
+        const start = down ? from : at(row, col + 1);
+        edges.push({ x1: start.x, y1: start.y, x2: to.x, y2: to.y });
+      }
+    }
+  }
+
+  return { points, edges };
 }
 
 /** Short labels for the node panel, keyed on the values `HARVARD_SCHOOLS` holds.
@@ -133,6 +283,34 @@ export function shortSchoolLabel(school?: string): string | undefined {
   if (resolved) return SCHOOL_SHORT_LABELS[resolved] ?? resolved;
   const trimmed = school?.trim();
   return trimmed && trimmed.length > 0 ? trimmed : undefined;
+}
+
+/**
+ * A headline with `*asterisked*` runs turned into `<em>`, everything else
+ * escaped.
+ *
+ * The band's heading wants one emphasised phrase in a different colour — "A
+ * grid, *lit from within*." — and the heading is a single CMS string. The
+ * alternatives were both worse: splitting it into two fields makes an editor
+ * assemble a sentence out of parts and forbids them moving the emphasis, and
+ * hardcoding the span in the component takes the heading away from the CMS
+ * entirely, which is the thing several plans on this page exist to prevent.
+ *
+ * Escaping runs FIRST and on the whole string, so the only markup that can
+ * reach the page is the `<em>` this function puts there. The value is
+ * repo-committed rather than user-submitted, which lowers the stakes but does
+ * not remove them — a CMS writes this field, and `set:html` is a loaded gun
+ * pointed at whatever it is handed.
+ */
+export function headlineHtml(text: string): string {
+  const escaped = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  // Non-greedy, and refuses to span an asterisk, so an unclosed `*` is left as
+  // a literal asterisk rather than swallowing the rest of the heading.
+  return escaped.replace(/\*([^*]+)\*/g, '<em>$1</em>');
 }
 
 /** One supporter, placed. */
@@ -365,6 +543,7 @@ export function networkLayout(
 ): NetworkLayout & {
   viewBox: { width: number; height: number };
   clusters: NetworkCluster[];
+  ambient: AmbientField;
 } {
   const box = networkViewBox(donors.length);
   const width = options.width ?? box.width;
@@ -399,6 +578,10 @@ export function networkLayout(
         r: width * (0.035 + Math.sqrt(members) * 0.018),
       };
     }),
+    // Drawn LAST from the shared stream, so adding the field cannot shift a
+    // single supporter or bloom that was placed before it — the reviewed
+    // picture stays the picture.
+    ambient: ambientField(nodes.length, width, height, rnd),
   };
 }
 

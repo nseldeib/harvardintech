@@ -1,7 +1,7 @@
 ---
 kind: donors
 kicker: The people behind the fund
-title: The Momentum Network
+title: A grid, *lit from within*.
 order: 7
 ---
 
@@ -9,11 +9,16 @@ The donor recognition wall and the network visualization. The names come from
 **Donors** — on the admin dashboard that collection sits under /donate, alongside
 this one.
 
-This entry decides where the wall sits on the page and, via its Heading and
-Kicker fields, what the wall is called. It sits after the member quotes and
-before the closing ask, so a reader meets the people already behind the fund
-immediately before being asked to join them. Move it with the Order field or hide
-it with the Draft toggle.
+This band is now the page's HERO — the first thing anyone sees on /donate, in
+place of the photo banner. Because of that, its position is fixed: the Order
+field no longer moves it and the Draft toggle no longer hides it, the same way
+the closing ask cannot be dragged around. A campaign page whose opening frame
+can be moved to the bottom, or switched off entirely, is one an edit can break.
+
+What this entry still controls is the WORDS: its Heading and Kicker are the
+headline and eyebrow drawn over the artwork. The heading understands
+`*asterisks*` — text between them is set in crimson italic, which is how
+"A grid, *lit from within*." gets its emphasis.
 
 Everything else on the wall is NOT editable in the CMS: the intro paragraph, the
 giving levels, the "no donors yet" message, the italic line under the heading,

@@ -1,0 +1,13 @@
+{
+  "name": "GiveStatement - Both Tones Together",
+  "id": "8e3cb101-e1a8-44e3-a088-b6399d907929",
+  "url": "/isolated-components/GiveStatement",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiveStatement",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/give/GiveStatement.astro",
+  "description": "Both tones on one frame, because the component's only real decision is the tone and the thing worth reviewing is that the two do not read as the same band twice. Seen apart each looks fine; seen together you can judge whether the crimson is loud enough and the sage quiet enough to justify one component with a switch rather than two. The crimson is centred and the sage is not, which is how /give uses them — an asymmetry that would be invisible if both were captured the same way."
+}

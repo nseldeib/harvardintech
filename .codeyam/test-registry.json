@@ -95,7 +95,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "NETWORK_COLORS › is exactly the four colours the design direction specifies",
-      "line": 556,
+      "line": 564,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -169,6 +169,87 @@
       "key": "altFor › returns the authored alt for a known image",
       "line": 52,
       "registeredAt": "2026-07-29T16:26:47Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ambient points draw SMALLER than a supporter's 3.2 radius. Size is one of the two cues separating them; the other is the bloom, which is CSS.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › draws every point smaller than an ordinary supporter",
+      "line": 701,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "At zero supporters the field carries the whole picture, so it is at its densest — the production default on day one.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › fills an empty campaign with points",
+      "line": 639,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "THE HONESTY GUARANTEE, pinned. An ambient point carries no slug, no school and no `selectable` — nothing a consumer could read as a person, which is what keeps the field from ever being counted, searched or opened.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › gives an ambient point no identity of any kind",
+      "line": 672,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Seeded and reproducible, for the reason `networkRng` documents: a field that reshuffled per render would change under a reviewed screenshot.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › is reproducible for the same stream",
+      "line": 708,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every point stays inside the drawn frame, so none is clipped at an edge or stranded outside the viewBox where it would silently cost density.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › keeps every point within the frame",
+      "line": 687,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Past capacity there is nothing left to pad, so the field disappears rather than going negative or drawing a stray row.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › returns nothing once supporters exceed the frame capacity",
+      "line": 655,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Not reachable through the UI, but cheap to make total — and zero is the only sensible reading of a negative count.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › treats a negative supporter count as zero",
+      "line": 663,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The points are wired, and that wiring is what makes the field read as a lattice rather than as scattered dots — the difference the recomposition turned on.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › wires the points together",
+      "line": 680,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The field RECEDES as real gifts arrive: capacity is fixed, so each real supporter displaces an ambient point. Without this the picture would stay padded forever and its density would never come to mean anything.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "ambientField › yields fewer points as real supporters arrive",
+      "line": 647,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
@@ -250,6 +331,51 @@
       "key": "applyDecisionAnswer › records the answer text alongside the flag",
       "line": 76,
       "registeredAt": "2026-08-06T15:24:46Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The half the campaign pays for: the merge tag's name reaches the band and the line becomes visible, rather than staying the hidden placeholder it renders as for everyone else.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "applyNetworkGreeting › greets a subscriber arriving from the campaign email",
+      "line": 353,
+      "registeredAt": "2026-08-25T13:49:45Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A scenario pins the greeting server-side so it can be captured; the capture harness never carries a `?name=`, so recomputing would blank the very thing the frame exists to show.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "applyNetworkGreeting › leaves a server-pinned greeting alone",
+      "line": 383,
+      "registeredAt": "2026-08-25T13:49:45Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Every other route, and /donate before the band is on the page.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "applyNetworkGreeting › no-ops when the band is absent",
+      "line": 394,
+      "registeredAt": "2026-08-25T13:49:45Z",
+      "runner": "tests"
+    },
+    {
+      "description": "This URL gets mailed to the whole list and forwarded onward, so a crafted `?name=` is a plausible attack rather than a hypothetical one. It must degrade to the un-greeted page, never render attacker-chosen text.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "applyNetworkGreeting › refuses a name that is not plausibly a name",
+      "line": 373,
+      "registeredAt": "2026-08-25T13:49:45Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The public visitor is the majority, and the design they see is the one the team directed. No name means no line at all — NOT a generic greeting sitting in the slot, which is what the old hero would have done here.",
+      "file": "src/lib/momentumNetworkDom.test.ts",
+      "format": "vitest",
+      "key": "applyNetworkGreeting › shows nothing at all to a visitor with no name in the link",
+      "line": 363,
+      "registeredAt": "2026-08-25T13:49:45Z",
       "runner": "tests"
     },
     {
@@ -640,24 +766,6 @@
       "runner": "vitest"
     },
     {
-      "description": "Every ordinary row offers it — gating the action to one collection would be extra code to make the feature smaller.",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "format": "vitest",
-      "key": "canDuplicate › allows duplicating an ordinary entry",
-      "line": 145,
-      "registeredAt": "2026-08-17T19:07:20Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The one exclusion: a preview is a clone at an unguessable URL, and copying one would mint a second unlisted clone of the same target.",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "format": "vitest",
-      "key": "canDuplicate › refuses to duplicate a preview row",
-      "line": 151,
-      "registeredAt": "2026-08-17T19:07:20Z",
-      "runner": "tests"
-    },
-    {
       "description": "The ordinary case, and the one the whole share feature exists for.",
       "file": "src/lib/supporterBadge.test.ts",
       "format": "vitest",
@@ -824,7 +932,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "clusterCentres › gives each school its own distinct centre",
-      "line": 177,
+      "line": 185,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -833,7 +941,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "clusterCentres › places every centre inside the canvas",
-      "line": 159,
+      "line": 167,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -842,7 +950,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "clusterCentres › returns nothing when there are no schools",
-      "line": 170,
+      "line": 178,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -901,12 +1009,12 @@
       "runner": "tests"
     },
     {
-      "description": "The guard must fire BEFORE any network call, so a refused publish mutates nothing on the branch — the same fail-closed policy as the drift check.",
+      "description": "The guard must refuse BEFORE writing anything, so a refused publish mutates nothing on the branch — the same fail-closed policy as the drift check. @codeyam/cms 0.13.0 reworked HOW it decides, and this test moved with it — which is the job the header describes. `unbackedManifestRecords` now yields CANDIDATES, and the guard probes the branch for each one, refusing only the filenames that come back 404. That closed a false positive: bytes published minutes ago are already on the branch while the build-time manifest baseline still predates them, so they read as unbacked while being perfectly backed. So the assertion that moved is \"no network call at all\" → \"no MUTATING call\": the probe is a read, and reads are what the new guard is made of. Counting every call would now fail on a guard that works, which is the failure mode this file exists to avoid.",
       "file": "src/lib/mediaCommitGuard.test.ts",
       "format": "vitest",
-      "key": "commitAll media guard › refuses to publish a record with no bytes, before touching GitHub",
-      "line": 120,
-      "registeredAt": "2026-07-31T23:04:44Z",
+      "key": "commitAll media guard › refuses to publish a record with no bytes, before writing anything",
+      "line": 132,
+      "registeredAt": "2026-08-25T14:36:35.705696399+00:00",
       "runner": "tests"
     },
     {
@@ -2012,7 +2120,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › donors.school offers exactly the schools the resolver accepts",
-      "line": 65,
+      "line": 71,
       "registeredAt": "2026-08-18T18:44:27Z",
       "runner": "tests"
     },
@@ -2039,98 +2147,89 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "dropdown options match the validators that enforce them › momentumSections.layout offers exactly the layouts",
-      "line": 56,
+      "line": 62,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
     {
-      "description": "Slugs come from filenames, so an unusual character must survive the round trip rather than truncating the query.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "A blank label stays blank rather than becoming a bare \" copy\": an untitled entry is already stopped by the create form's required-field gate, and \" copy\" alone reads as a title rather than as the absence of one.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateHref › encodes the source slug",
-      "line": 167,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the copy is distinguishable from its source › leaves a blank title blank",
+      "line": 47,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
-      "description": "A link to the create form, not a staged action — so opening it and changing your mind leaves nothing in the pending-changes store to undo.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "The whole point of Duplicate is a SECOND entry. A copy carrying the source's title would sit in the list as an identical twin, and the editor's first job would be working out which row is which.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateHref › points at the create form for the row collection",
-      "line": 159,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the copy is distinguishable from its source › marks the copied title as a copy",
+      "line": 40,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
-      "description": "A blank label stays blank so the create form's own missing-title gate is what the editor meets, rather than a row named \"(copy)\" with nothing in front.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "The expensive failure. Slugs are file paths, so a copy reusing a taken slug would not sit beside the original — it would REPLACE it at publish, and the original's content would be gone with no warning at any point in the flow.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateLabel › leaves a blank or whitespace-only label blank",
-      "line": 81,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the copy never overwrites an existing entry › keeps a free slug as-is",
+      "line": 57,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
-      "description": "The suffix is a PROMPT to rename, not a final name — but an editor who duplicates and immediately saves still gets two rows they can tell apart.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "Duplicating the same entry repeatedly has to keep finding free slugs — the suffix itself can collide, and stopping at `-2` would overwrite the copy made a moment earlier.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateLabel › marks the copied label as a copy",
-      "line": 75,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the copy never overwrites an existing entry › keeps counting past a taken suffix",
+      "line": 70,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
-      "description": "Surrounding whitespace is trimmed before the suffix is appended.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "The first collision suffixes rather than failing, so duplicating an entry never asks the editor to invent a name before they have seen the copy.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateLabel › trims the source label before appending the suffix",
-      "line": 87,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the copy never overwrites an existing entry › suffixes a taken slug",
+      "line": 63,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
-      "description": "Verbatim is the contract — including `order`, so the copy appears beside its source where the editor is already looking and the reorder arrows move it.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "A slug carrying a space or a slash would otherwise break the query string or read as a path segment, and the create form would receive a truncated key that matches no stored seed.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateValues › copies every declared field verbatim, order included",
-      "line": 97,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the row hands off to the create form › encodes a slug that needs it",
+      "line": 88,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
-      "description": "The preview markers identify the SOURCE file's role as a preview clone, not its content. Copying them would mint a second unlisted clone of the same target — which is the one thing this action must never do.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "The hand-off is a URL, so it is the one part of the flow that survives a page load — and the create page is STATIC, so the query param is the only thing that can tell the island a duplicate is in progress.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateValues › drops the preview markers rather than minting a second clone",
-      "line": 105,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the row hands off to the create form › points at the create form carrying the source slug",
+      "line": 79,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
-      "description": "Scoped to the registry's declared fields, so a stray key cannot be carried into a file the editor has no input for and therefore cannot change.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "A plain \"+ New\" must open a BLANK form. If an absent or empty param read as anything other than null, every new entry would start life prefilled from whichever entry was copied last.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateValues › ignores keys the collection registry does not declare",
-      "line": 122,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the row hands off to the create form › reads no duplicate from a bare or empty query string",
+      "line": 101,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
-      "description": "A field the source never set stays unset rather than arriving as undefined, which would serialize an empty key into the new file's frontmatter.",
-      "file": "src/lib/entryDuplicate.test.ts",
+      "description": "The other half of the hand-off: the create page is static, so reading the param back is the only way the island learns a duplicate is in progress.",
+      "file": "src/lib/duplicateEntry.test.ts",
       "format": "vitest",
-      "key": "duplicateValues › omits fields the source entry does not carry",
-      "line": 129,
-      "registeredAt": "2026-08-17T19:07:20Z",
-      "runner": "tests"
-    },
-    {
-      "description": "A boolean false is a real value, not an absent one — a drafted source must duplicate as published if that is what it says.",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "format": "vitest",
-      "key": "duplicateValues › preserves falsy values that are genuinely set",
-      "line": 136,
-      "registeredAt": "2026-08-17T19:07:20Z",
+      "key": "duplicate: the row hands off to the create form › reads the slug back off the query string",
+      "line": 94,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
@@ -2485,7 +2584,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "every declared select is usable › gives each select a non-empty options list",
-      "line": 73,
+      "line": 79,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -2494,7 +2593,7 @@
       "file": "src/lib/selectOptions.test.ts",
       "format": "vitest",
       "key": "every declared select is usable › gives no select a duplicate or blank option",
-      "line": 84,
+      "line": 90,
       "registeredAt": "2026-08-04T18:59:29Z",
       "runner": "tests"
     },
@@ -3377,6 +3476,78 @@
       "runner": "tests"
     },
     {
+      "description": "Two separate phrases each get their own em rather than one spanning the text between them.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "headlineHtml › emphasises two phrases independently",
+      "line": 620,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Ampersands and quotes are the two characters a heading is most likely to contain innocently, and both break the attribute or entity parse if they reach the page raw.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "headlineHtml › escapes ampersands and quotes",
+      "line": 602,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Escaping runs BEFORE the em substitution, so a heading carrying both real markup and an asterisked phrase still yields exactly one element.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "headlineHtml › escapes markup even when the heading also carries emphasis",
+      "line": 608,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The escaping is the load-bearing part. `set:html` renders whatever it is handed and this value comes from a CMS field, so the only markup that may reach the page is the em this function creates.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "headlineHtml › escapes markup so only its own em can reach the page",
+      "line": 595,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A heading with no asterisks passes through unchanged, so every existing heading keeps rendering exactly as it did before the syntax existed.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "headlineHtml › leaves a plain heading untouched",
+      "line": 588,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "An unclosed asterisk is a typo an editor will make. It prints literally rather than swallowing the rest of the heading into an em that never ends.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "headlineHtml › leaves an unclosed asterisk as a literal character",
+      "line": 614,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "A cleared CMS heading yields an empty string rather than markup, so the band renders an empty h2 instead of stray characters.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "headlineHtml › returns an empty string unchanged",
+      "line": 626,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The feature: an asterisked run becomes the crimson italic phrase.",
+      "file": "src/lib/momentumNetwork.test.ts",
+      "format": "vitest",
+      "key": "headlineHtml › turns an asterisked run into an em",
+      "line": 582,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
       "description": "A rejected (hostile) name also falls back to the generic greeting.",
       "file": "src/lib/personalize.test.ts",
       "format": "vitest",
@@ -3894,7 +4065,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "isSelectableNode › allows a named supporter",
-      "line": 366,
+      "line": 374,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -3903,7 +4074,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "isSelectableNode › refuses an anonymous supporter",
-      "line": 360,
+      "line": 368,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4128,7 +4299,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "matchesNetworkSearch › does not match on a value nobody carries",
-      "line": 452,
+      "line": 460,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4137,7 +4308,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "matchesNetworkSearch › does not match on the supporter name",
-      "line": 459,
+      "line": 467,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4146,7 +4317,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "matchesNetworkSearch › ignores case and surrounding whitespace",
-      "line": 440,
+      "line": 448,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4155,7 +4326,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "matchesNetworkSearch › matches everyone for a blank query",
-      "line": 446,
+      "line": 454,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4164,7 +4335,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "matchesNetworkSearch › matches on location",
-      "line": 424,
+      "line": 432,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4173,7 +4344,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "matchesNetworkSearch › matches on the school name",
-      "line": 429,
+      "line": 437,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4182,7 +4353,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "matchesNetworkSearch › matches on the school short label",
-      "line": 435,
+      "line": 443,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4191,7 +4362,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "matchesNetworkSearch › never matches an anonymous supporter, whatever the query",
-      "line": 466,
+      "line": 474,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4272,7 +4443,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › clears the video when the editor empties the box",
-      "line": 537,
+      "line": 539,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -4281,7 +4452,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › falls back to the committed tiers when the entry omits them",
-      "line": 484,
+      "line": 486,
       "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
@@ -4290,7 +4461,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › falls back to the committed value when a campaign frame box is cleared",
-      "line": 509,
+      "line": 511,
       "registeredAt": "2026-08-19T17:04:46.654731914+00:00",
       "runner": "vitest"
     },
@@ -4308,7 +4479,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › leaves the video undefined when the entry carries no heroVideo",
-      "line": 545,
+      "line": 547,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -4317,7 +4488,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › never returns a key that a collection loader owns",
-      "line": 387,
+      "line": 389,
       "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
@@ -4326,7 +4497,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › passes the share message placeholders through untouched",
-      "line": 441,
+      "line": 443,
       "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
@@ -4344,7 +4515,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › passes tier ids through the merge unchanged",
-      "line": 494,
+      "line": 496,
       "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
@@ -4371,7 +4542,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › still carries the hero image alongside a video",
-      "line": 555,
+      "line": 557,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -4380,7 +4551,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › takes the campaign frame fields the editor filled in",
-      "line": 400,
+      "line": 402,
       "registeredAt": "2026-08-19T17:04:46.631225551+00:00",
       "runner": "vitest"
     },
@@ -4389,7 +4560,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › takes the donor wall and Momentum Network copy the editor filled in",
-      "line": 418,
+      "line": 420,
       "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
@@ -4398,7 +4569,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › takes the editor list of headline figures whole, not merged row by row",
-      "line": 454,
+      "line": 456,
       "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
@@ -4416,7 +4587,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › takes the hero video path the editor pasted",
-      "line": 526,
+      "line": 528,
       "registeredAt": "2026-08-08T02:12:09Z",
       "runner": "tests"
     },
@@ -4425,7 +4596,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeDonateFrame › treats an emptied figures list as a deliberate removal",
-      "line": 472,
+      "line": 474,
       "registeredAt": "2026-08-19T20:31:11.589811377+00:00",
       "runner": "tests"
     },
@@ -4434,7 +4605,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed Givebutter account id when the editor cleared the box",
-      "line": 605,
+      "line": 607,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4443,7 +4614,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed Givebutter account id when there is no entry",
-      "line": 598,
+      "line": 600,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4452,7 +4623,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when the editor cleared the box",
-      "line": 581,
+      "line": 583,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4461,7 +4632,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › keeps the committed analytics id when there is no entry",
-      "line": 576,
+      "line": 578,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4470,7 +4641,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when neither side sets it",
-      "line": 641,
+      "line": 643,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4479,7 +4650,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves custom HTML falsy when the settings omit the keys",
-      "line": 650,
+      "line": 652,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4488,7 +4659,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › leaves the Givebutter account id falsy when neither side sets it",
-      "line": 621,
+      "line": 623,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4497,7 +4668,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed Givebutter account id",
-      "line": 612,
+      "line": 614,
       "registeredAt": "2026-08-17T17:02:18Z",
       "runner": "tests"
     },
@@ -4506,7 +4677,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes a re-pointed analytics id",
-      "line": 588,
+      "line": 590,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4515,7 +4686,7 @@
       "file": "src/lib/pageCopyMerge.test.ts",
       "format": "vitest",
       "key": "mergeIntegrations › takes custom head and body HTML the editor added",
-      "line": 627,
+      "line": 629,
       "registeredAt": "2026-08-04T13:20:43Z",
       "runner": "tests"
     },
@@ -4902,7 +5073,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "nearestNeighborEdges › always orders an edge low index first, so a pair has one spelling",
-      "line": 264,
+      "line": 272,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4911,7 +5082,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "nearestNeighborEdges › gives a node more than one connection",
-      "line": 247,
+      "line": 255,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4920,7 +5091,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "nearestNeighborEdges › never connects a node to itself",
-      "line": 271,
+      "line": 279,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4929,7 +5100,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "nearestNeighborEdges › never repeats the same connection",
-      "line": 256,
+      "line": 264,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4938,7 +5109,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "nearestNeighborEdges › returns nothing for a single node, which has nobody to connect to",
-      "line": 278,
+      "line": 286,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4947,7 +5118,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkLayout › handles a single supporter, who has no connections yet",
-      "line": 321,
+      "line": 329,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4956,7 +5127,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkLayout › handles an empty network without throwing",
-      "line": 313,
+      "line": 321,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4965,7 +5136,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkLayout › only produces edges that address real nodes",
-      "line": 295,
+      "line": 303,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4974,7 +5145,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkLayout › returns a node for every supporter, with edges and a viewBox",
-      "line": 286,
+      "line": 294,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4983,7 +5154,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkLayout › returns one glow cluster per school present",
-      "line": 306,
+      "line": 314,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -4992,7 +5163,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkNodeDetail › returns the identity a named supporter node panel prints",
-      "line": 374,
+      "line": 382,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5001,7 +5172,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkNodeDetail › shows the giving level for a supporter without the founding badge",
-      "line": 394,
+      "line": 402,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5010,7 +5181,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkNodeDetail › withholds every identity field for an anonymous supporter",
-      "line": 401,
+      "line": 409,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5019,7 +5190,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkRng › produces a different sequence for a different seed",
-      "line": 96,
+      "line": 104,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5028,7 +5199,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkRng › produces the same sequence for the same seed",
-      "line": 88,
+      "line": 96,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5037,7 +5208,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkRng › stays within the unit interval",
-      "line": 102,
+      "line": 110,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5046,7 +5217,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkViewBox › grows with the supporter count",
-      "line": 42,
+      "line": 44,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5055,7 +5226,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkViewBox › keeps the area per supporter roughly constant as the count grows",
-      "line": 51,
+      "line": 53,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5064,7 +5235,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkViewBox › keeps the canvas wider than it is tall",
-      "line": 78,
+      "line": 86,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5073,7 +5244,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkViewBox › returns a usable box for no supporters at all",
-      "line": 71,
+      "line": 79,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5082,53 +5253,8 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "networkViewBox › stops shrinking at a floor for a tiny network",
-      "line": 66,
+      "line": 74,
       "registeredAt": "2026-08-19T00:32:47Z",
-      "runner": "tests"
-    },
-    {
-      "description": "The list the caller passes includes staged-but-unpublished slugs, so a suggestion cannot collide with a duplicate created moments earlier.",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "format": "vitest",
-      "key": "nextFreeSlug › avoids a slug that exists only as a staged change",
-      "line": 61,
-      "registeredAt": "2026-08-17T19:07:20Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Duplicating a duplicate counts on from the base rather than growing a second suffix, so an editor never ends up with `pillars-2-2`.",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "format": "vitest",
-      "key": "nextFreeSlug › counts on from the base when the source is itself numbered",
-      "line": 55,
-      "registeredAt": "2026-08-17T19:07:20Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Nothing taken at all still numbers from two — the source's own slug being absent from the list does not make `-1` correct.",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "format": "vitest",
-      "key": "nextFreeSlug › numbers from two even when no slug is taken",
-      "line": 67,
-      "registeredAt": "2026-08-17T19:07:20Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Keeps counting past every taken slug rather than stopping at the first gap, so duplicating twice in a row cannot suggest the same name twice.",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "format": "vitest",
-      "key": "nextFreeSlug › skips slugs already taken and keeps counting",
-      "line": 48,
-      "registeredAt": "2026-08-17T19:07:20Z",
-      "runner": "tests"
-    },
-    {
-      "description": "Counts from 2 because the SOURCE is the first one — a `-1` suffix would imply the original was numbered too.",
-      "file": "src/lib/entryDuplicate.test.ts",
-      "format": "vitest",
-      "key": "nextFreeSlug › suggests the source slug numbered from two",
-      "line": 42,
-      "registeredAt": "2026-08-17T19:07:20Z",
       "runner": "tests"
     },
     {
@@ -5739,7 +5865,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "placeNodes › draws a founding supporter larger than the rest",
-      "line": 213,
+      "line": 221,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5748,7 +5874,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "placeNodes › is reproducible for the same seed",
-      "line": 231,
+      "line": 239,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5757,7 +5883,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "placeNodes › keeps every node inside the canvas",
-      "line": 202,
+      "line": 210,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5766,7 +5892,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "placeNodes › marks an anonymous supporter as not selectable",
-      "line": 221,
+      "line": 229,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -5775,7 +5901,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "placeNodes › places every supporter, including one with no school",
-      "line": 194,
+      "line": 202,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -6254,6 +6380,51 @@
       "key": "renumberEntries › reports only the rows whose number changed",
       "line": 202,
       "registeredAt": "2026-08-10T21:05:09Z",
+      "runner": "tests"
+    },
+    {
+      "description": "...and AGREE when one is, so choosing a platform routes both the campaign CTA and the giving page's own button to the same place.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveCtaHref › agrees with resolveGiveHref once a platform is configured",
+      "line": 91,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The two resolvers must DISAGREE when no platform is set — that difference is the entire feature. If this ever passes, /give links to itself.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveCtaHref › differs from resolveGiveHref when no platform is configured",
+      "line": 85,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The point of the whole split: with no platform, a campaign CTA goes to the giving page rather than straight to a mailto, so a visitor meets the goal and the amounts before being asked for anything.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveCtaHref › falls back to the giving page when no platform is configured",
+      "line": 72,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Blank and whitespace-only are treated as absent, matching `resolveGiveHref` — an editor who clears the CMS field leaves an empty string, not undefined.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveCtaHref › treats a blank or whitespace-only platform URL as absent",
+      "line": 78,
+      "registeredAt": "2026-08-25T01:10:11Z",
+      "runner": "tests"
+    },
+    {
+      "description": "When a real platform URL is configured, the button points straight at it.",
+      "file": "src/lib/giving.test.ts",
+      "format": "vitest",
+      "key": "resolveGiveCtaHref › uses the donation platform URL when one is configured",
+      "line": 8,
+      "registeredAt": "2026-08-25T01:10:11Z",
       "runner": "tests"
     },
     {
@@ -6945,7 +7116,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "schoolsPresent › breaks a tie by the canonical school order, not by input order",
-      "line": 129,
+      "line": 137,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -6954,7 +7125,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "schoolsPresent › folds a differently-cased school into one cluster",
-      "line": 141,
+      "line": 149,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -6963,7 +7134,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "schoolsPresent › ignores supporters with no school",
-      "line": 151,
+      "line": 159,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -6972,7 +7143,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "schoolsPresent › lists the schools present, most supporters first",
-      "line": 116,
+      "line": 124,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7026,7 +7197,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "searchNetwork › returns everyone for a blank query",
-      "line": 487,
+      "line": 495,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7035,7 +7206,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "searchNetwork › returns nobody when nothing matches",
-      "line": 492,
+      "line": 500,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7044,7 +7215,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "searchNetwork › returns the supporters a query selects",
-      "line": 481,
+      "line": 489,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7053,7 +7224,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "searchSummary › answers a miss with an invitation rather than a count",
-      "line": 516,
+      "line": 524,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7062,7 +7233,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "searchSummary › counts a single match in the singular",
-      "line": 505,
+      "line": 513,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7071,7 +7242,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "searchSummary › counts several matches in the plural",
-      "line": 510,
+      "line": 518,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7080,7 +7251,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "searchSummary › says nothing at all when the box is empty",
-      "line": 500,
+      "line": 508,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7746,7 +7917,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "shortSchoolLabel › falls back to the value as given for an unrecognized school",
-      "line": 344,
+      "line": 352,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7755,7 +7926,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "shortSchoolLabel › matches case-insensitively, like the resolver behind it",
-      "line": 339,
+      "line": 347,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7764,7 +7935,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "shortSchoolLabel › returns nothing for a blank or absent school",
-      "line": 350,
+      "line": 358,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -7773,7 +7944,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "shortSchoolLabel › shortens the longest school name",
-      "line": 331,
+      "line": 339,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -8430,7 +8601,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "supporterRoll › does not mutate the list it was given",
-      "line": 543,
+      "line": 551,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -8439,7 +8610,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "supporterRoll › sorts an anonymous supporter under their displayed label, not their real name",
-      "line": 531,
+      "line": 539,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },
@@ -8448,7 +8619,7 @@
       "file": "src/lib/momentumNetwork.test.ts",
       "format": "vitest",
       "key": "supporterRoll › sorts supporters alphabetically by displayed name",
-      "line": 523,
+      "line": 531,
       "registeredAt": "2026-08-19T00:32:47Z",
       "runner": "tests"
     },

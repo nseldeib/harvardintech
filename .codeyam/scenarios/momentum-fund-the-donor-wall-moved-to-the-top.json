@@ -206,41 +206,35 @@
     ],
     "momentumSections": [
       {
-        "body": "The donor recognition wall, promoted to the top of the page by an Order edit.",
-        "kind": "donors",
-        "order": 1,
-        "slug": "donors"
-      },
-      {
         "body": "### Harvard in Tech is at an important turning point\n\nWe are a volunteer-led alumni community that has grown into a global network of founders, technologists, operators, investors, and professionals.\n",
         "image": "/images/gallery/event-04.jpg",
         "kind": "narrative",
         "layout": "image-right",
-        "order": 2,
+        "order": 1,
         "slug": "why",
         "title": "Why Support Harvard in Tech?"
       },
       {
         "body": "The track-record band.",
         "kind": "accomplishments",
-        "order": 3,
+        "order": 2,
         "slug": "accomplishments"
       },
       {
         "body": "The 'What Your Gift Powers' cards.",
         "kind": "pillars",
-        "order": 4,
+        "order": 3,
         "slug": "pillars"
+      },
+      {
+        "body": "The recognition band, deliberately ordered LAST by an editor — and still the first thing on the page, because it is the hero now.",
+        "kind": "donors",
+        "order": 4,
+        "slug": "donors"
       }
     ]
   },
   "scenarioType": "application",
   "pageFilePath": "src/pages/donate.astro",
-  "description": "The recognition wall on the real /donate page, promoted above the narrative by an editor changing its Order field — the control Nicole asked about, and the reason the wall is a momentumSections entry rather than hardcoded composition. The frame is taken with the network search focused so the wall itself is in shot rather than the hero that sits above every /donate capture: nineteen supporters grouped by giving level, Founding badges across the levels, and an anonymous donor listed beside named ones. Its pair, 'The First Donor On The Wall', seeds the same page with a single donor — the two frames differ only because both now frame the wall, which is the whole point of seeding them differently.",
-  "interactions": [
-    {
-      "action": "click",
-      "selector": "[data-network-search]"
-    }
-  ]
+  "description": "What the Order field can and cannot do now. This seed seats the recognition band LAST — order 4, behind the narrative, the track record and the pillars — and the frame shows it opening the page anyway, because the recomposition pulled it out of the reorderable flow and made it the hero. That is the whole point of the frame: the proof is in the disagreement between the seed and the picture, not in the pixels alone. Before this change the same seed would have buried the band below three sections. The contract it demonstrates is the one the hero and the closing ask already had, and it exists for the stated reason: a page whose hero can be dragged to the bottom is a page an editor can break. Kicker and Heading still drive the band, so the copy stays editable — only the position is fixed, and `momentumSections/donors.md` says so in the editor's own words. Nineteen supporters, an anonymous one among them, so the band is carrying real weight while it holds its place. NOTE: the scenario's NAME still reads 'Moved To The Top' from when an Order edit is what put it there; the slug is load-bearing elsewhere, so the name outlived the behaviour it was named for."
 }

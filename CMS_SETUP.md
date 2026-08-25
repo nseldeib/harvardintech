@@ -31,10 +31,10 @@ mean anything.
 
 ### The patch on top of the package
 
-`patches/@codeyam+cms+0.7.1.patch` is applied by `patch-package` from
+`patches/@codeyam+cms+0.13.0.patch` is applied by `patch-package` from
 `postinstall`, so it lands on every install including CI. It is still true that
 no admin code is hand-written here — the patch edits the dependency, it does not
-add admin pages to this repo. It carries **two** things:
+add admin pages to this repo. It carries **one** thing:
 
 - **Reorder arrows on ordered collection lists.** Any collection declaring a
   numeric `order` field — 13 of them today, including Momentum Fund sections and
@@ -43,16 +43,24 @@ add admin pages to this repo. It carries **two** things:
   changes that ride the normal publish review. The draft state moves onto the row
   as a chip, since those lists no longer have a "Drafts" heading to carry it.
 
-- **Duplicate on every entry row.** An anchor to the ordinary create form with
-  `?from=<slug>`, which prefills the form from the source entry so the copy is
-  renamed BEFORE it exists rather than as a second edit afterwards. It is a link
-  rather than a staged action, so opening it and changing your mind leaves
-  nothing to undo. Preview rows are the one exclusion — copying one would mint a
-  second unlisted clone of the same target. On the static build the prefill is
-  resolved from a `sources` map shipped with the page, since there is no server
-  to answer the query at request time.
+**Duplicate on every entry row was the second half, and 0.13.0 released it.**
+That is the lifecycle below completing for the THIRD time. Our
+`entryDuplicate.ts` was deleted rather than re-derived, because upstream now
+ships `lib/duplicateEntry.ts` and `EntryRow` renders its own Duplicate action —
+**the feature did not leave the product, it moved into the dependency.** Keeping
+both was not an option: two `duplicateHref` exports with different signatures
+land in the same component, which is what broke the first attempt at this
+upgrade with a `ReferenceError` on every collection page.
 
-**The publish deploy watch used to be the second half, and 0.5.0 released it.**
+Upstream's is better than what it replaced. Ours put the source behind a
+`?from=<slug>` param and shipped a `sources` map with every static list page so
+the create form could resolve it; upstream stashes the entry's raw markdown in
+`sessionStorage` and carries only a key in the URL, so the page ships nothing
+extra. `entryDuplicate.test.ts` became `duplicateEntry.test.ts` and now holds
+the released module to its contract — not one symbol survived, so the assertions
+were rewritten rather than re-pointed.
+
+**The publish deploy watch was the first to complete, and 0.5.0 released it.**
 That is the lifecycle described below running to completion for the second time:
 the upstream base now ships `deployWatch.ts`, `deployWatchStore.ts` and
 `DeployChip.tsx`, so the patch dropped them and `deployWatch.test.ts` /
@@ -81,13 +89,58 @@ passes `blockScalars` like its siblings. This is the concrete argument for
 re-deriving rather than replaying: a replayed patch fails loudly only when the
 surrounding lines move, and silently when a signature grows.
 
-**The remaining half is still meant to be temporary.** The lifecycle, which this
-repo has now run twice — the media guard in `@codeyam+cms+0.2.2.patch` (deleted
-by `abc5872` once 0.4.0 shipped it) and the deploy watch above — is: file the
+**The arrows did not land upstream in 0.13.0 either, so the re-derivation ran a
+fourth time** (0.7.1 → 0.13.0, six minor versions — the largest jump yet). Seven
+of the nine edited files rejected outright. Three findings are worth carrying,
+because in every one the code compiled and a tool reported success while
+something was actually wrong:
+
+- **0.13.0 is the first release to ship prebuilt `dist/`.** Through 0.7.1 the
+  package exports pointed at `src/**`, so patching `src/` was the whole story.
+  0.13.0 sends `types` at `dist/esm/**/*.d.ts` and `import` at
+  `dist/esm/**/*.js`, offering a `codeyam-source` condition as the opt-in back
+  to source. Without it the toolchain loads the UNPATCHED dist while `patches/`
+  applies cleanly to a `src/` nobody reads — the arrows vanish with nothing
+  failing. Set in `tsconfig.json` (`customConditions`), `astro.config.mjs`
+  (`vite.resolve.conditions`, defaults respread because Vite replaces the list)
+  and `vitest.config.ts`. The last decides whether the guard suites test the
+  patched library or stock upstream, so all three must agree.
+
+- **A fuzzy merge places code in the wrong scope, silently, and did it three
+  times.** `patch --fuzz=3` reported four rejects and success everywhere else,
+  but three "successful" hunks had landed outside the block they belonged to:
+  `NewEntryEditor`'s `sources` prop inside the *import* list,
+  `EntryListSection`'s `onMove` *above* its function signature, and — the one
+  that produced no error at all — `ordered={hasOrderField(...)}` **after**
+  `</AdminLayout>`, dangling at the end of the file. The first two were syntax
+  errors. The third compiled, passed `verify-build`, served HTTP 200, and simply
+  never passed the prop: the arrows were absent from a page that looked fine.
+  Treat a fuzzy apply as a draft to review line by line, never as a result.
+
+- **`def is not defined`, at render, on every collection page.** 0.13.0 moved
+  the list page's data load into `server/entryPages.ts`, so the module-scope
+  `def` the old hunk read exists only as a lambda parameter inside
+  `getStaticPaths` now. `tsc` and `astro-check` both passed and every
+  `/admin/<collection>` returned a 500 whose body was the single word
+  `undefined`.
+
+**Verify the ADMIN ROUTES, and verify the arrows are on the page.** Every fault
+above was invisible to `verify-build` and to the public `astro build`, because
+`/admin` is excluded from the public track. `verify-routes` over
+`/admin/<collection>` catches the 500s — and the dangling-prop case needs one
+step more, because the route was 200 throughout. Fetch a collection page and
+grep the served HTML for `Move up` / `In order`, or read `"ordered"` out of the
+`EntryListSearch` island's `props` attribute. That is also the check that would
+have caught 0.7.0 quietly removing the built-in collections.
+
+**The arrows are still meant to be temporary.** The lifecycle, which this
+repo has now run three times — the media guard in `@codeyam+cms+0.2.2.patch`
+(deleted by `abc5872` once 0.4.0 shipped it), the deploy watch at 0.5.0, and
+Duplicate at 0.13.0 — is: file the
 change upstream against `codeyam-ai/codeyam-cms`, and delete the patch on the
 release that carries it.
 
-**Pin the dependency EXACTLY** (`"@codeyam/cms": "0.7.1"`, no caret). `npm
+**Pin the dependency EXACTLY** (`"@codeyam/cms": "0.13.0"`, no caret). `npm
 install @codeyam/cms@x` rewrites it to `^x` on its own, and a caret is what makes
 the filename-matching failure below happen silently on a patch release nobody ran
 deliberately.

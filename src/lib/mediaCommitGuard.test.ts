@@ -115,14 +115,29 @@ describe('unbackedManifestRecords', () => {
 });
 
 describe('commitAll media guard', () => {
-  // The guard must fire BEFORE any network call, so a refused publish mutates
+  // The guard must refuse BEFORE writing anything, so a refused publish mutates
   // nothing on the branch — the same fail-closed policy as the drift check.
-  it('refuses to publish a record with no bytes, before touching GitHub', async () => {
+  //
+  // @codeyam/cms 0.13.0 reworked HOW it decides, and this test moved with it —
+  // which is the job the header describes. `unbackedManifestRecords` now yields
+  // CANDIDATES, and the guard probes the branch for each one, refusing only the
+  // filenames that come back 404. That closed a false positive: bytes published
+  // minutes ago are already on the branch while the build-time manifest baseline
+  // still predates them, so they read as unbacked while being perfectly backed.
+  //
+  // So the assertion that moved is "no network call at all" → "no MUTATING call":
+  // the probe is a read, and reads are what the new guard is made of. Counting
+  // every call would now fail on a guard that works, which is the failure mode
+  // this file exists to avoid.
+  it('refuses to publish a record with no bytes, before writing anything', async () => {
     const changes = [manifestChange(BEFORE, AFTER_THREE), imageChange('volunteers.webp')];
-    let called = 0;
-    const fetchFn = (() => {
-      called += 1;
-      return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}), text: () => Promise.resolve('') });
+    let mutating = 0;
+    const fetchFn = ((_url: string, init?: { method?: string }) => {
+      const method = init?.method ?? 'GET';
+      if (method !== 'GET') mutating += 1;
+      // Every probe 404s: on this branch none of the candidate blobs exist, which
+      // is precisely Nicole's case — the manifest record landed, the bytes did not.
+      return Promise.resolve({ ok: false, status: 404, json: () => Promise.resolve({}), text: () => Promise.resolve('') });
     }) as Parameters<typeof commitAll>[4];
 
     const err = await commitAll(
@@ -139,6 +154,7 @@ describe('commitAll media guard', () => {
     expect(err.filenames).toEqual(['volunteers-2.webp', 'gallery/volunteers.webp']);
     // Names the files so the editor knows which upload to redo.
     expect(err.message).toContain('volunteers-2.webp');
-    expect(called).toBe(0);
+    // The refusal cost the branch nothing: reads to decide, no writes.
+    expect(mutating).toBe(0);
   });
 });

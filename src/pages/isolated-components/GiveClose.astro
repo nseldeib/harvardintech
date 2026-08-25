@@ -1,0 +1,38 @@
+---
+import Component from "../../../src/components/give/GiveClose.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiveClose — the giving page's final ask.
+//
+// No `donateUrl`, matching production and matching the GivingCard capture: the
+// button resolves to the giving-enquiry email, which is where it actually goes
+// today.
+//
+// The one thing this frame exists to check is the button. `light` is passed
+// because a crimson button on a crimson band is invisible, and that is a
+// mistake nothing but a capture would catch — the markup reads fine either way.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiveClose</title>
+    <style is:global>
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        kicker="One community. Shared momentum."
+        title="Become part of the foundation."
+        ctaLabel="Become a Founding Supporter"
+        email="ben@harvardintech.com"
+        campaignName="The Momentum Fund"
+      />
+    </div>
+  </body>
+</html>

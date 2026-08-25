@@ -1,0 +1,13 @@
+{
+  "name": "GiveFaq - Every Question Closed",
+  "id": "d712c22c-2df1-49f2-8091-fad54b481503",
+  "url": "/isolated-components/GiveFaq",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiveFaq",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/give/GiveFaq.astro",
+  "description": "All five questions in the resting, collapsed state — the one worth reviewing, because the band's argument is that a reader who has decided to give should meet the button rather than five paragraphs of caveats, and that only holds if the closed list is scannable at a glance. An open accordion would review a state a reader reaches deliberately, one item at a time. Built on native details and summary, so it works with JavaScript off, which on a page asking for money is the difference between an unanswered question and a closed tab."
+}

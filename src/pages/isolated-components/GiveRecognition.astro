@@ -1,0 +1,34 @@
+---
+import Component from "../../../src/components/give/GiveRecognition.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiveRecognition — "your light becomes part of the network".
+//
+// Captured with the component's OWN placeholder defaults rather than a
+// realistic-looking name. That is the point of the capture: the sample card has
+// to be reviewable as obviously a stand-in, and passing "Jessica Li" here would
+// review a card this component must never render. If the placeholder ever stops
+// reading as one, this frame is where that shows.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiveRecognition</title>
+    <style is:global>
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        kicker="Founding supporter recognition"
+        title="Your light becomes part of the network."
+        body="After giving, supporters can choose to have their name, Harvard school, and graduation year included in the Momentum Network, or they may choose to be recognised anonymously. An anonymous supporter is still drawn and still counted — the network shows the whole community, and withholding a name never withholds the gift."
+      />
+    </div>
+  </body>
+</html>

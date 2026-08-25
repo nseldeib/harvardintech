@@ -37,11 +37,15 @@ them, rearranging the donate page means opening each section and typing a number
 while holding the other five in your head, and starting a section from an
 existing one means retyping it. The version is pinned exactly because the patch
 is version-stamped: a floating range would install a version the patch cannot
-apply to and break `npm install` for everyone. Both halves are covered from this
-repo — `src/lib/cmsOrderControls.test.ts` and `src/lib/entryDuplicate.test.ts` —
-so if a future release drops or reworks either, CI says so instead of an editor
-finding the buttons gone. The changes belong upstream; drop the patch once they
-land there. See `CMS_SETUP.md` for the upgrade procedure.
+apply to and break `npm install` for everyone. **Duplicate landed upstream in
+0.13.0**, so that half of the patch was deleted — the feature moved into the
+dependency rather than out of the product. The reorder arrows are still ours.
+Both are covered from this repo — `src/lib/cmsOrderControls.test.ts` for the
+arrows, `src/lib/duplicateEntry.test.ts` now holding the released Duplicate to
+its contract — so if a future release drops or reworks either, CI says so
+instead of an editor finding the buttons gone. The arrows belong upstream too;
+drop the rest of the patch once they land there. See `CMS_SETUP.md` for the
+upgrade procedure.
 
 ## Project shape
 

@@ -19,7 +19,6 @@
 // array) rather than reading the collections, so it renders from the /donate
 // route and from isolated-component scenarios — the same split EventsPage.astro
 // uses.
-import MomentumHero from './donate/MomentumHero.astro';
 import MomentumStats from './donate/MomentumStats.astro';
 import GoalMeter from './donate/GoalMeter.astro';
 import MomentumAccomplishments from './donate/MomentumAccomplishments.astro';
@@ -71,31 +70,69 @@ const {
   testimonials = [],
   donors = [],
   email = 'ben@harvardintech.com',
+  // Read again: the network band is the hero now, and it carries the `?name=`
+  // greeting the photo hero used to. A scenario pins the name here because a
+  // static build has none — the value arrives in the browser, from the URL.
   previewName,
 } = Astro.props as Props;
+
+// The Momentum Network is the page's HERO now — it opens /donate in place of
+// the photo hero, at the team's explicit direction.
+//
+// Two consequences, both deliberate:
+//
+// - The `donors` entry is pulled OUT of the reorderable flow and rendered in the
+//   fixed frame instead. Order and Draft therefore no longer move or hide it,
+//   the same contract the hero and the closing ask already had, and for the same
+//   stated reason: a page whose hero can be dragged to the bottom is a page an
+//   editor can break. Its Kicker and Heading still drive the band, so the copy
+//   stays editable — only the position is now fixed. `momentumSections/donors.md`
+//   says so in the editor's own words.
+// - `MomentumHero` is no longer rendered here. The component and its three
+//   isolated-component scenarios are untouched and still pass; it is this PAGE
+//   that stopped using it. The `?name=` greeting it carried was NOT dropped
+//   with it: `heroHeadlineNamed` now feeds the network band, which renders it
+//   as an additive line above its own headline rather than swapping the
+//   headline out, so a subscriber arriving from the campaign email is still
+//   greeted by name over the grid. See `MomentumNetwork`'s greeting note.
+//   Still inert, and still wanting removal or relabelling in Page settings:
+//   `heroSubhead`, `heroImage` and `heroVideo`. Leaving an editor a field that
+//   changes nothing is its own bug, and those three are NOT fixed here.
+const heroSection = sections.find((section) => section.kind === 'donors');
+const flowSections = sections.filter((section) => section.kind !== 'donors');
 
 // Which sections sit on the tinted band — computed up front from the whole
 // list rather than counted during the render below, so the rule is pure,
 // unit-tested, and independent of how the map happens to run.
-const tinted = tintedFlags(sections);
+const tinted = tintedFlags(flowSections);
 ---
 
-<MomentumHero
-  kicker={copy.heroKicker}
-  headlineNamed={copy.heroHeadlineNamed}
-  headlineGeneric={copy.heroHeadlineGeneric}
-  subhead={copy.heroSubhead}
-  image={copy.heroImage}
-  video={copy.heroVideo}
+{/* The hero. Rendered unconditionally — an absent or drafted `donors` entry
+    leaves the page with no opening frame at all, which is worse than showing
+    the band with its defaults, so the entry supplies COPY here rather than
+    deciding existence. */}
+<MomentumNetwork
+  kicker={heroSection ? sectionKicker(heroSection) : undefined}
+  title={heroSection ? sectionHeading(heroSection, copy.donorsTitle) : copy.donorsTitle}
+  networkTitle={copy.networkTitle}
+  tagline={copy.networkTagline}
+  searchTitle={copy.networkSearchTitle}
+  countLabel={copy.networkCountLabel}
+  railCtaLabel={copy.networkCtaLabel}
+  emptyMessage={copy.donorsEmptyMessage}
+  donors={donors}
+  tiers={copy.donorTiers ?? []}
   ctaLabel={copy.ctaLabel}
   donateUrl={copy.donateUrl}
   email={email}
   campaignName={copy.campaignName}
+  shareTemplate={copy.shareMessage}
+  greetingNamed={copy.heroHeadlineNamed}
   previewName={previewName}
 />
 
 {
-  sections.map((section, index) => {
+  flowSections.map((section, index) => {
     const Body = section.Content as any;
     // Visibility is decided ahead of the kind switch, and the three states are
     // total here rather than relying on the caller: `hidden` renders nothing and
@@ -143,6 +180,9 @@ const tinted = tintedFlags(sections);
             widgetId={section.widgetId}
             linkLabel={section.linkLabel}
             linkUrl={section.linkUrl}
+            raised={section.raised}
+            goal={section.goal}
+            percent={section.percent}
           />
         );
       // The slot bands select their own cards and name themselves. Both are what
@@ -165,6 +205,11 @@ const tinted = tintedFlags(sections);
             kicker={sectionKicker(section)}
             title={sectionHeading(section, copy.pillarsTitle)}
             pillars={cardsInGroup(copy.pillars ?? [], section.group)}
+            layout={section.layout}
+            ctaLabel={section.ctaLabel}
+            donateUrl={copy.donateUrl}
+            email={email}
+            campaignName={copy.campaignName}
           />
         );
       case 'testimonials':
@@ -177,24 +222,9 @@ const tinted = tintedFlags(sections);
             {Body ? <Body /> : null}
           </MomentumTestimonials>
         );
-      case 'donors':
-        return (
-          <MomentumNetwork
-            kicker={sectionKicker(section)}
-            title={sectionHeading(section, copy.donorsTitle)}
-            networkTitle={copy.networkTitle}
-            tagline={copy.networkTagline}
-            searchTitle={copy.networkSearchTitle}
-            emptyMessage={copy.donorsEmptyMessage}
-            donors={donors}
-            tiers={copy.donorTiers ?? []}
-            ctaLabel={copy.ctaLabel}
-            donateUrl={copy.donateUrl}
-            email={email}
-            campaignName={copy.campaignName}
-            shareTemplate={copy.shareMessage}
-          />
-        );
+      // No `case 'donors'`: `flowSections` filters that kind out, because the
+      // network is the hero above and rendering it here too would draw the band
+      // twice. The filter is the single place that decides this.
       case 'stats':
         return <MomentumStats stats={copy.stats} />;
       // Unreachable in practice — `orderedSections` drops unknown kinds before

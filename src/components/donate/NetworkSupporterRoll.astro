@@ -108,9 +108,15 @@ function credit(donor: DonorLike): string | undefined {
     border-bottom: 1px solid var(--line);
   }
 
+  /* White, not `--color-fg`. That token is the site's near-black ink, correct
+     when this roll sat under a paper band and all but invisible now that the
+     band's ground is near-black — the names, which are the entire point of the
+     roll, were the least readable thing on it. The roll only ever renders
+     inside the dark network band, so this is a fixed value rather than a
+     theme. */
   .roll-name {
     font-weight: 700;
-    color: var(--color-fg);
+    color: #fff;
     font-family: inherit;
     font-size: inherit;
   }
@@ -124,9 +130,12 @@ function credit(donor: DonorLike): string | undefined {
     border-bottom: 1px solid transparent;
   }
 
+  /* Same reasoning as the heading's emphasis: `--crimson` is tuned for type on
+     paper and goes muddy on black, so the hover uses the brighter red the
+     headline uses. */
   .roll-name--link:hover,
   .roll-name--link:focus-visible {
-    color: var(--crimson);
+    color: #ef3355;
     border-bottom-color: currentColor;
   }
 

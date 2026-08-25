@@ -1,0 +1,193 @@
+---
+// "Your light becomes part of the network" — what a supporter GETS, shown
+// rather than described.
+//
+// The field behind the card is the same CSS constellation `MomentumClose` uses,
+// and for the same reason stated there: it must not imply a second, different
+// set of supporters, and reusing `MomentumNetwork` would draw real people into
+// an illustration of what happens after you give.
+//
+// The sample card carries a NAME here, unlike the wordless one on the closing
+// band. That is a deliberate difference, and the reason is the copy beside it:
+// this section is explaining that a supporter chooses between being named with
+// their school and year or staying anonymous, and a card of grey bars cannot
+// show what "named" looks like. So it shows a name — and the name is a
+// PLACEHOLDER, marked as one in the props and rendered with a drawn avatar
+// rather than a photograph, so it can never be mistaken for a real supporter's
+// record. See the `sampleName` note.
+interface Props {
+  kicker?: string;
+  title?: string;
+  body?: string;
+  /** The illustrative supporter's name.
+   *
+   *  A stand-in, never a real person. It exists so the card can demonstrate the
+   *  "named" option the copy describes, and it must stay obviously generic:
+   *  putting a real supporter here would publish their record in an example,
+   *  and inventing a plausible alum is the same fabrication risk the closing
+   *  band's wordless card avoids by having no name at all. */
+  sampleName?: string;
+  sampleAffiliation?: string;
+  sampleClass?: string;
+  sampleBadge?: string;
+}
+
+const {
+  kicker,
+  title,
+  body,
+  sampleName = 'Your name here',
+  sampleAffiliation = 'Harvard University Alumni',
+  sampleClass = 'Class of ——',
+  sampleBadge = 'Founding Supporter',
+} = Astro.props as Props;
+---
+
+<section class="rec">
+  <div class="inner">
+    {kicker ? <p class="kick kick--gold">{kicker}</p> : null}
+    {title ? <h2>{title}</h2> : null}
+    {body ? <p class="body">{body}</p> : null}
+
+    <div class="stage">
+      <div class="badge">
+        <p class="badge-tag">{sampleBadge}</p>
+        <div class="badge-row">
+          {/* A drawn mark, not a portrait. A stock face on an example card
+              reads as a real supporter; an initial-less disc cannot. */}
+          <span class="avatar" aria-hidden="true" />
+          <div>
+            <p class="badge-name">{sampleName}</p>
+            <p class="badge-aff">{sampleAffiliation}</p>
+            <p class="badge-class">{sampleClass}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rec {
+    background: var(--momentum-navy);
+    padding: 86px 24px;
+  }
+
+  .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .inner .kick {
+    margin: 0 0 14px;
+  }
+
+  h2 {
+    font-family: var(--font-title);
+    font-size: clamp(30px, 3.8vw, 48px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 18px;
+    max-width: 20ch;
+  }
+
+  .body {
+    margin: 0 0 34px;
+    max-width: 62ch;
+    font-size: 16px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  /* The same layered-gradient field as the closing band: a repeating radial for
+     the points, two ellipses for the bloom. No request, nothing to fail to
+     load, and no chance of it being read as live supporter data. */
+  .stage {
+    position: relative;
+    min-height: clamp(15rem, 26vw, 20rem);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: #07070a;
+    background-image:
+      radial-gradient(circle at 50% 50%, rgba(165, 16, 52, 0.5) 1.1px, transparent 1.6px),
+      radial-gradient(ellipse 55% 45% at 30% 40%, rgba(165, 16, 52, 0.22), transparent 70%),
+      radial-gradient(ellipse 45% 45% at 75% 65%, rgba(4, 151, 158, 0.14), transparent 72%);
+    background-size: 22px 22px, 100% 100%, 100% 100%;
+  }
+
+  .badge {
+    position: absolute;
+    right: clamp(1rem, 6%, 3rem);
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(20rem, calc(100% - 2rem));
+    padding: 16px 18px;
+    background: rgba(3, 26, 54, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius);
+  }
+
+  .badge-tag {
+    display: inline-block;
+    margin: 0 0 12px;
+    padding: 4px 9px;
+    border-radius: var(--radius);
+    background: var(--momentum-gold);
+    color: var(--momentum-navy);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .badge-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08));
+    border: 1px solid rgba(255, 255, 255, 0.28);
+  }
+
+  .badge-name {
+    margin: 0;
+    font-family: var(--font-title);
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .badge-aff {
+    margin: 3px 0 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .badge-class {
+    margin: 2px 0 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--momentum-gold);
+  }
+
+  @media (max-width: 640px) {
+    .badge {
+      position: static;
+      transform: none;
+      width: auto;
+      margin: clamp(8rem, 20vw, 11rem) 1rem 1rem;
+    }
+  }
+</style>

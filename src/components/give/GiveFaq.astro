@@ -1,0 +1,131 @@
+---
+// The pre-gift FAQ.
+//
+// `<details>`/`<summary>`, not a JavaScript accordion. Three reasons, in order
+// of how much they matter here: it works with JavaScript off, which on a page
+// asking for money is the difference between an unanswered question and a
+// closed tab; the browser gives the expand/collapse keyboard and screen-reader
+// behaviour for free, correctly, including on a phone; and it costs the page no
+// script at all.
+//
+// The answers are DELIBERATELY collapsed by default. A visitor who has decided
+// to give should meet the button, not five paragraphs of caveats — and the one
+// who has a specific worry can find it by its question in one scan.
+interface Faq {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  kicker?: string;
+  title?: string;
+  items?: Faq[];
+}
+
+const { kicker, title, items = [] } = Astro.props as Props;
+---
+
+{
+  items.length > 0 ? (
+    <section class="faq">
+      <div class="inner">
+        {kicker ? <p class="kick">{kicker}</p> : null}
+        {title ? <h2>{title}</h2> : null}
+
+        <div class="list">
+          {items.map((item) => (
+            <details class="item">
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : null
+}
+
+<style>
+  .faq {
+    background: var(--momentum-cream);
+    padding: 86px 24px;
+  }
+
+  .inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .inner .kick {
+    margin: 0 0 14px;
+  }
+
+  h2 {
+    font-family: var(--font-title);
+    font-size: clamp(30px, 3.6vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--momentum-navy);
+    margin: 0 0 36px;
+  }
+
+  .list {
+    border-top: 1px solid var(--line);
+  }
+
+  .item {
+    border-bottom: 1px solid var(--line);
+  }
+
+  summary {
+    cursor: pointer;
+    padding: 18px 0;
+    font-family: var(--font-serif);
+    font-size: 17px;
+    color: var(--momentum-navy);
+    /* The default marker is a filled triangle that sits oddly against serif
+       type; `list-item` with a custom marker keeps the native disclosure
+       semantics while letting the glyph match the page. */
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::before {
+    content: '▶';
+    font-size: 9px;
+    color: var(--crimson);
+    transition: transform 140ms ease;
+    display: inline-block;
+  }
+
+  .item[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  summary:focus-visible {
+    outline: 2px solid var(--crimson);
+    outline-offset: 2px;
+  }
+
+  .item p {
+    margin: 0 0 20px;
+    padding-left: 21px;
+    max-width: 68ch;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-muted, #55606d);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    summary::before {
+      transition: none;
+    }
+  }
+</style>

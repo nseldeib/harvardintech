@@ -624,12 +624,13 @@
           "label": "Layout",
           "type": "select",
           "optional": true,
-          "hint": "Narrative sections only. Where the photo sits. Choose \"columns\" to set the text in two newspaper-style columns with no photo at all. Leave as none to run the text full width.",
+          "hint": "Narrative sections: where the photo sits — choose “columns” to set the text in two newspaper-style columns with no photo at all, or leave as none to run the text full width. Gift pillar sections: choose “list” to stack the cards as full-width numbered rows instead of the three-across grid; leave as none for the grid. A value that does not apply to the section's type is ignored.",
           "options": [
             "image-left",
             "image-right",
             "text-only",
-            "columns"
+            "columns",
+            "list"
           ]
         },
         {
@@ -659,6 +660,34 @@
           "type": "text",
           "optional": true,
           "hint": "Where the link beside the goal meter heading goes \u2014 usually your Givebutter campaign page. Needs the link text above to show at all."
+        },
+        {
+          "name": "raised",
+          "label": "Goal meter amount raised",
+          "type": "text",
+          "optional": true,
+          "hint": "Goal meter sections only, and used ONLY when the widget ID above is blank \u2014 a configured Givebutter widget reports the real total and wins outright. Free text, so write it the way you want it read: \"$47,500\". Worth knowing the cost before filling it in: a figure typed here is one somebody has to keep current by hand, which is the job the widget does for you. It is here because the widget draws nothing until a campaign is configured, which left the band invisible."
+        },
+        {
+          "name": "goal",
+          "label": "Goal meter target",
+          "type": "text",
+          "optional": true,
+          "hint": "Goal meter sections only, and used ONLY when the widget ID above is blank. The target the bar fills toward, as free text \u2014 \"$100,000\". Carries the same hand-maintenance cost as the amount raised above."
+        },
+        {
+          "name": "percent",
+          "label": "Goal meter bar fullness",
+          "type": "number",
+          "optional": true,
+          "hint": "Goal meter sections only, and used ONLY when the widget ID above is blank. How full to draw the bar, 0 to 100. This is the one figure that has to be a number rather than free text, because a bar is drawn to a width. Out-of-range values are clamped, so a typo cannot overflow it."
+        },
+        {
+          "name": "ctaLabel",
+          "label": "Giving button under this band",
+          "type": "text",
+          "optional": true,
+          "hint": "Gift pillar sections only. The wording of a giving button shown beneath this band \u2014 for example \"Become a Founding Supporter\". Blank shows no button, which is how every band reads unless it asks for one: a page with a CTA after every section reads as nagging rather than inviting."
         },
         {
           "name": "order",
@@ -887,6 +916,13 @@
           "optional": true
         },
         {
+          "name": "amount",
+          "label": "Amount",
+          "type": "text",
+          "optional": true,
+          "hint": "What this line costs, printed under the description — “$5,000”, “$12,000 / year”, “Funded”. Free text, so ranges and annual figures are fine. It only shows on a band whose Layout is “list”; the three-across grid ignores it. Leave blank to print nothing."
+        },
+        {
           "name": "group",
           "label": "Group",
           "type": "text",
@@ -1087,6 +1123,20 @@
           "type": "text",
           "optional": true,
           "hint": "The label over the box where a supporter finds themselves in the network."
+        },
+        {
+          "name": "networkCountLabel",
+          "label": "Momentum Network count label",
+          "type": "text",
+          "optional": true,
+          "hint": "The word beside the supporter count under the visualization, e.g. “founding supporters”. The NUMBER is counted from the supporters themselves and is not editable here — the field behind it is filled out with faint unlit points so the picture reads at full density, and those are never counted."
+        },
+        {
+          "name": "networkCtaLabel",
+          "label": "Momentum Network button",
+          "type": "text",
+          "optional": true,
+          "hint": "The giving button in the bar under the visualization. Leave blank to reuse the page's main button label."
         },
         {
           "name": "shareMessage",

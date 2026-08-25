@@ -1,0 +1,61 @@
+---
+import Component from "../../../src/components/give/GiveFaq.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiveFaq — the pre-gift questions.
+//
+// All five real questions, all COLLAPSED, which is the resting state and the
+// one worth reviewing: the band's argument is that a visitor who has decided to
+// give should meet the button rather than five paragraphs of caveats, and that
+// only holds if the closed list is scannable. An open accordion would review a
+// state a reader reaches deliberately, one item at a time.
+//
+// The answers are the real ones because the tax answer in particular is the
+// most consequential text on the page — if it is ever wrong, this is where it
+// should be readable.
+const FAQ = [
+  {
+    question: 'Can I make a one-time gift?',
+    answer:
+      'Yes. One-time, monthly, and annual gifts are all welcome. Monthly support helps most with planning, but it is not expected or required, and a single gift counts exactly the same toward the campaign.',
+  },
+  {
+    question: 'Is there a minimum contribution?',
+    answer:
+      'No. There is no minimum and no threshold to be recognised as a founding supporter — every gift made during the founding campaign carries that standing, whatever its size.',
+  },
+  {
+    question: 'Can I remain anonymous?',
+    answer:
+      'Yes. You choose after giving whether your name, Harvard school, and graduation year appear in the Momentum Network. Choosing anonymity withholds all of them together, not just the name — and your gift is still drawn in the network and still counted in the total.',
+  },
+  {
+    question: 'How will my contribution be used?',
+    answer:
+      "The immediate priorities are listed above: establishing the organisation's legal foundation, covering the annual software the community runs on, and funding chapter events and programming. As the fund grows, how it is allocated will be reported back to supporters.",
+  },
+  {
+    question: 'Is my contribution tax-deductible?',
+    answer:
+      'Not yet. Harvard Alumni in Tech is in the process of establishing itself as a 501(c)(6), which is the first of the priorities your gift funds. A 501(c)(6) is a trade association rather than a charity, so contributions are generally not tax-deductible as charitable donations — please check with your own tax adviser, and we will confirm the position here once the filing completes.',
+  },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiveFaq</title>
+    <style is:global>
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component kicker="Before you give" title="Clear answers, no extra searching." items={FAQ} />
+    </div>
+  </body>
+</html>

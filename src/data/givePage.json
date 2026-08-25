@@ -1,0 +1,71 @@
+{
+  "metaTitle": "Give — The Momentum Fund",
+  "metaDescription": "Support the infrastructure, tools, and chapter programming Harvard Alumni in Tech needs to serve a growing global community.",
+
+  "heroKicker": "The Momentum Fund",
+  "heroTitle": "Help build the foundation for what comes next.",
+  "heroSubhead": "Your contribution funds the infrastructure, tools, and chapter programming Harvard Alumni in Tech needs to serve a growing global community.",
+  "heroImage": "/images/hero/hero.jpg",
+
+  "goal": "$50,000",
+  "goalPercent": 8,
+  "processor": "Givebutter",
+  "selectedAmount": "$100",
+  "ctaLabel": "Become a Founding Supporter",
+  "cardNote": "A donation platform is not connected yet, so this opens a giving enquiry by email with the amount and frequency you picked — no payment is taken here. Live campaign progress appears once fundraising opens.",
+
+  "ecosystemKicker": "Beyond a single event",
+  "ecosystemTitle": "This is about building an ecosystem.",
+  "ecosystemBody": "Your support helps create a place where exceptional people can continue learning, connecting, collaborating, and creating impact together.",
+
+  "prioritiesKicker": "Immediate priorities",
+  "prioritiesTitle": "Where your support goes first.",
+
+  "momentumKicker": "Built on real momentum",
+  "momentumTitle": "This is not a standing start.",
+
+  "recognitionKicker": "Founding supporter recognition",
+  "recognitionTitle": "Your light becomes part of the network.",
+  "recognitionBody": "After giving, supporters can choose to have their name, Harvard school, and graduation year included in the Momentum Network, or they may choose to be recognised anonymously. An anonymous supporter is still drawn and still counted — the network shows the whole community, and withholding a name never withholds the gift.",
+
+  "monthlyKicker": "Why monthly support helps",
+  "monthlyTitle": "Consistency turns momentum into capacity.",
+  "monthlyBody": "Monthly gifts help Harvard Alumni in Tech plan ahead rather than event to event, while one-time and annual gifts remain welcome at every level.",
+
+  "faqKicker": "Before you give",
+  "faqTitle": "Clear answers, no extra searching.",
+  "faq": [
+    {
+      "question": "Can I make a one-time gift?",
+      "answer": "Yes. One-time, monthly, and annual gifts are all welcome. Monthly support helps most with planning, but it is not expected or required, and a single gift counts exactly the same toward the campaign."
+    },
+    {
+      "question": "Is there a minimum contribution?",
+      "answer": "No. There is no minimum and no threshold to be recognised as a founding supporter — every gift made during the founding campaign carries that standing, whatever its size."
+    },
+    {
+      "question": "Can I remain anonymous?",
+      "answer": "Yes. You choose after giving whether your name, Harvard school, and graduation year appear in the Momentum Network. Choosing anonymity withholds all of them together, not just the name — and your gift is still drawn in the network and still counted in the total."
+    },
+    {
+      "question": "How will my contribution be used?",
+      "answer": "The immediate priorities are listed above: establishing the organisation's legal foundation, covering the annual software the community runs on, and funding chapter events and programming. As the fund grows, how it is allocated will be reported back to supporters."
+    },
+    {
+      "question": "Is my contribution tax-deductible?",
+      "answer": "Not yet. Harvard Alumni in Tech is in the process of establishing itself as a 501(c)(6), which is the first of the priorities your gift funds. A 501(c)(6) is a trade association rather than a charity, so contributions are generally not tax-deductible as charitable donations — please check with your own tax adviser, and we will confirm the position here once the filing completes."
+    }
+  ],
+
+  "collage": [
+    "/images/gallery/event-01.jpg",
+    "/images/gallery/event-02.jpg",
+    "/images/gallery/event-03.jpg",
+    "/images/gallery/event-04.jpg",
+    "/images/gallery/event-05.jpg",
+    "/images/gallery/event-06.jpg"
+  ],
+
+  "closeKicker": "One community. Shared momentum.",
+  "closeTitle": "Become part of the foundation."
+}

@@ -368,6 +368,8 @@ describe('mergeDonateFrame', () => {
       'heroKicker',
       'heroSubhead',
       'heroVideo',
+      'networkCountLabel',
+      'networkCtaLabel',
       'networkSearchTitle',
       'networkTagline',
       'networkTitle',

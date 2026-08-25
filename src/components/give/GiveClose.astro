@@ -1,0 +1,67 @@
+---
+// The giving page's final ask, on crimson.
+//
+// This is the page's SECOND live button, and that is deliberate rather than an
+// oversight: the card at the top serves someone who arrived already decided,
+// and this one catches the reader who scrolled the whole argument. Both resolve
+// identically — `checkout` sends them to the platform, or to the giving-enquiry
+// email until one is configured.
+import GiveButton from '../donate/GiveButton.astro';
+
+interface Props {
+  kicker?: string;
+  title?: string;
+  ctaLabel?: string;
+  donateUrl?: string;
+  email: string;
+  campaignName?: string;
+}
+
+const { kicker, title, ctaLabel, donateUrl, email, campaignName } = Astro.props as Props;
+---
+
+<section class="close">
+  <div class="close-in">
+    {kicker ? <p class="kick">{kicker}</p> : null}
+    {title ? <h2>{title}</h2> : null}
+    {/* `light` — a crimson button on a crimson band would be invisible. */}
+    <GiveButton
+      label={ctaLabel}
+      donateUrl={donateUrl}
+      email={email}
+      campaignName={campaignName}
+      variant="light"
+      checkout
+    />
+  </div>
+</section>
+
+<style>
+  .close {
+    background: var(--crimson);
+    padding: 78px 24px;
+    text-align: center;
+  }
+
+  .close-in {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  /* The token's crimson would vanish here, so the kicker takes its contrast
+     from the band instead. */
+  .close .kick {
+    margin: 0 0 16px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .close h2 {
+    font-family: var(--font-title);
+    font-size: clamp(30px, 4vw, 50px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 30px;
+  }
+</style>

@@ -2,7 +2,7 @@
 kind: pillars
 kicker: What your gift powers
 title: Three ways support moves the Harvard Alumni in Tech community forward.
-order: 6
+order: 7
 ---
 
 The "what your gift powers" cards. Their titles, copy, and links are edited in

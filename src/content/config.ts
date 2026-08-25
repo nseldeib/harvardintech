@@ -410,6 +410,18 @@ const momentumSections = defineCollection({
     // nowhere is worse than no link.
     linkLabel: z.string().optional(),
     linkUrl: z.string().optional(),
+    // The goal-meter's hand-entered figures, used ONLY when no `widgetId` is
+    // set — a configured Givebutter widget reports the real total and wins. See
+    // the `raised` doc comment in `GoalMeter.astro` for why these are free text,
+    // and for the cost they carry: a figure typed here is a figure somebody has
+    // to keep current, which is exactly what the widget exists to avoid.
+    raised: z.string().optional(),
+    goal: z.string().optional(),
+    percent: z.number().optional(),
+    // Renders a giving button under a `pillars` band. Blank renders none, which
+    // is every band that does not explicitly ask for one — a page with a CTA
+    // after every section reads as nagging rather than inviting.
+    ctaLabel: z.string().optional(),
     // Which set of cards a SLOT band shows. Free text for the same reason `kind`
     // and `layout` are: groups are invented by an editor as they split a band, so
     // there is no fixed list a select could offer. Blank matches the cards that
@@ -523,6 +535,13 @@ const pillars = defineCollection({
     description: z.string(),
     linkLabel: z.string().optional(),
     linkUrl: z.string().optional(),
+    // What this line costs, printed beside it in the `list` layout — "$4,000",
+    // "$12k/yr", "Funded". FREE TEXT and a string, not a number, for two
+    // reasons: the figures are ranges and annualised as often as they are exact
+    // ("$8–12k a year"), and a number field would force a currency and a
+    // formatter onto values that are really editorial copy. The grid layout
+    // ignores it, so adding one to an ungrouped card changes nothing.
+    amount: z.string().optional(),
     // Which band this card belongs to. See `accomplishments` above and
     // `src/lib/sectionGroups.ts` for the matching rule.
     group: z.string().optional(),
@@ -642,6 +661,13 @@ const pageCopy = defineCollection({
     networkTitle: z.string().optional(),
     networkTagline: z.string().optional(),
     networkSearchTitle: z.string().optional(),
+    // The rail beneath the visualization: the word beside the live supporter
+    // count, and the giving CTA that sits with it. The count's NUMBER is not
+    // editable and must not be — it is the real supporter total, and the field
+    // behind it is padded with unlit points so the picture reads at the design's
+    // density. Only the word is copy.
+    networkCountLabel: z.string().optional(),
+    networkCtaLabel: z.string().optional(),
     // The message a supporter shares from their badge. Carries two placeholders
     // the badge fills in — `[SUPPORTER MESSAGE]` and `[DONATION LINK]` — which is
     // why it needs the hint beside it in the editor: the tokens look like prose

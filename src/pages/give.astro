@@ -1,0 +1,121 @@
+---
+// /give — the giving page a Momentum Fund CTA lands on.
+//
+// Every "Become a Founding Supporter" button on /donate points here (see
+// `resolveGiveCtaHref`), and the buttons on THIS page are the ones that leave
+// for the donation platform — or open the giving-enquiry email until a platform
+// is configured. That split is the reason the page exists: /donate argues for
+// the fund, and this page answers the practical questions somebody has once
+// they have decided to give, before asking them to do it.
+//
+// Configuring `donateUrl` in the CMS takes this page OUT of the path entirely —
+// campaign CTAs then go straight to the platform. Deliberate: a real checkout
+// beats our page, and the switch keeps working as it always did.
+//
+// The content is reused rather than restated. The priorities list and the four
+// momentum figures are the same `pillars` (group `priorities`) and
+// `accomplishments` collections /donate renders, so editing a priority once
+// changes both pages. Everything else is this page's own copy and lives in
+// `src/data/givePage.json`.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GiveHero from '../components/give/GiveHero.astro';
+import GivePhoto from '../components/give/GivePhoto.astro';
+import GivingCard from '../components/give/GivingCard.astro';
+import GiveStatement from '../components/give/GiveStatement.astro';
+import GiveRecognition from '../components/give/GiveRecognition.astro';
+import GiveFaq from '../components/give/GiveFaq.astro';
+import GiveCollage from '../components/give/GiveCollage.astro';
+import GiveClose from '../components/give/GiveClose.astro';
+import GiftPillars from '../components/donate/GiftPillars.astro';
+import MomentumAccomplishments from '../components/donate/MomentumAccomplishments.astro';
+import { donatePage, settings } from '../lib/site';
+import { givePage } from '../lib/givePageContent';
+import { loadAccomplishments, loadPillars, loadDonateUrl } from '../lib/donatePageContent';
+
+// `priorities` is the same group /donate's "Where your gift goes" band selects,
+// so the three lines and their amounts are edited in one place for both pages.
+const priorities = await loadPillars('priorities');
+const accomplishments = await loadAccomplishments();
+const donateUrl = await loadDonateUrl(donatePage.donateUrl);
+const email = settings.contactEmail ?? 'ben@harvardintech.com';
+const campaignName = donatePage.campaignName;
+---
+
+<BaseLayout title={givePage.metaTitle} description={givePage.metaDescription}>
+  <GiveHero
+    kicker={givePage.heroKicker}
+    title={givePage.heroTitle}
+    subhead={givePage.heroSubhead}
+  />
+
+  <GivePhoto src={givePage.heroImage} />
+
+  <GivingCard
+    goal={givePage.goal}
+    percent={givePage.goalPercent}
+    processor={givePage.processor}
+    selectedAmount={givePage.selectedAmount}
+    ctaLabel={givePage.ctaLabel}
+    donateUrl={donateUrl}
+    email={email}
+    campaignName={campaignName}
+    note={givePage.cardNote}
+  />
+
+  <GiveStatement
+    tone="crimson"
+    centered
+    kicker={givePage.ecosystemKicker}
+    title={givePage.ecosystemTitle}
+    body={givePage.ecosystemBody}
+  />
+
+  {/* `layout="list"` is the same stacked treatment /donate uses for this band,
+      so the two pages show the priorities identically rather than one as rows
+      and the other as a grid. `checkout` because this page's CTA must leave for
+      the platform — without it the button would resolve to /give, the page it
+      is already on. */}
+  <GiftPillars
+    kicker={givePage.prioritiesKicker}
+    title={givePage.prioritiesTitle}
+    pillars={priorities}
+    layout="list"
+    ctaLabel={givePage.ctaLabel}
+    donateUrl={donateUrl}
+    email={email}
+    campaignName={campaignName}
+    checkout
+  />
+
+  <MomentumAccomplishments
+    kicker={givePage.momentumKicker}
+    title={givePage.momentumTitle}
+    items={accomplishments}
+  />
+
+  <GiveRecognition
+    kicker={givePage.recognitionKicker}
+    title={givePage.recognitionTitle}
+    body={givePage.recognitionBody}
+  />
+
+  <GiveStatement
+    tone="sage"
+    kicker={givePage.monthlyKicker}
+    title={givePage.monthlyTitle}
+    body={givePage.monthlyBody}
+  />
+
+  <GiveFaq kicker={givePage.faqKicker} title={givePage.faqTitle} items={givePage.faq} />
+
+  <GiveCollage images={givePage.collage} />
+
+  <GiveClose
+    kicker={givePage.closeKicker}
+    title={givePage.closeTitle}
+    ctaLabel={givePage.ctaLabel}
+    donateUrl={donateUrl}
+    email={email}
+    campaignName={campaignName}
+  />
+</BaseLayout>

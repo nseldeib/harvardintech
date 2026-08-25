@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
+  headlineHtml,
+  ambientField,
   networkViewBox,
   networkRng,
   clusterCentres,
@@ -56,7 +58,13 @@ describe('networkViewBox', () => {
     // Both counts are above the minimum-width floor on purpose: below it the box
     // deliberately stops shrinking, so density there is expected to rise. The
     // floor is its own test just below.
-    const ratio = perSupporter(400) / perSupporter(50);
+    //
+    // 400 and 800 rather than the original 50 and 400. The floor moved from 340
+    // to 1100 when the band became the page's full-bleed hero — see
+    // `MIN_VIEWBOX_WIDTH` for why — and 50 supporters now sit BELOW it, where
+    // constant density is not the contract. Testing there would assert the
+    // opposite of what the code promises.
+    const ratio = perSupporter(800) / perSupporter(400);
     expect(ratio).toBeGreaterThan(0.9);
     expect(ratio).toBeLessThan(1.1);
   });
@@ -555,10 +563,151 @@ describe('NETWORK_COLORS', () => {
   // an edit that drifts them.
   it('is exactly the four colours the design direction specifies', () => {
     expect(NETWORK_COLORS).toEqual({
-      background: '#031731',
+      // Near-black since the band became the page's hero. The node, edge and
+      // active values are unchanged and still carry their documented meanings.
+      background: '#07070A',
       node: '#A51034',
       edge: '#04979E',
       active: '#F6C76B',
     });
+  });
+});
+
+// The band's heading is ONE CMS string carrying one emphasised phrase, so the
+// asterisk syntax is what lets an editor move the emphasis without a developer.
+// It reaches the page through `set:html`, which is why the escaping below is a
+// safety property rather than a formatting nicety.
+describe('headlineHtml', () => {
+  // The feature: an asterisked run becomes the crimson italic phrase.
+  it('turns an asterisked run into an em', () => {
+    expect(headlineHtml('A grid, *lit from within*.')).toBe('A grid, <em>lit from within</em>.');
+  });
+
+  // A heading with no asterisks passes through unchanged, so every existing
+  // heading keeps rendering exactly as it did before the syntax existed.
+  it('leaves a plain heading untouched', () => {
+    expect(headlineHtml('The people behind the fund')).toBe('The people behind the fund');
+  });
+
+  // The escaping is the load-bearing part. `set:html` renders whatever it is
+  // handed and this value comes from a CMS field, so the only markup that may
+  // reach the page is the em this function creates.
+  it('escapes markup so only its own em can reach the page', () => {
+    expect(headlineHtml('<script>alert(1)</script>')).toBe('&lt;script&gt;alert(1)&lt;/script&gt;');
+  });
+
+  // Ampersands and quotes are the two characters a heading is most likely to
+  // contain innocently, and both break the attribute or entity parse if they
+  // reach the page raw.
+  it('escapes ampersands and quotes', () => {
+    expect(headlineHtml('Tools & "toys"')).toBe('Tools &amp; &quot;toys&quot;');
+  });
+
+  // Escaping runs BEFORE the em substitution, so a heading carrying both real
+  // markup and an asterisked phrase still yields exactly one element.
+  it('escapes markup even when the heading also carries emphasis', () => {
+    expect(headlineHtml('<b>x</b> and *this*')).toBe('&lt;b&gt;x&lt;/b&gt; and <em>this</em>');
+  });
+
+  // An unclosed asterisk is a typo an editor will make. It prints literally
+  // rather than swallowing the rest of the heading into an em that never ends.
+  it('leaves an unclosed asterisk as a literal character', () => {
+    expect(headlineHtml('A grid, *lit from within')).toBe('A grid, *lit from within');
+  });
+
+  // Two separate phrases each get their own em rather than one spanning the
+  // text between them.
+  it('emphasises two phrases independently', () => {
+    expect(headlineHtml('*one* and *two*')).toBe('<em>one</em> and <em>two</em>');
+  });
+
+  // A cleared CMS heading yields an empty string rather than markup, so the
+  // band renders an empty h2 instead of stray characters.
+  it('returns an empty string unchanged', () => {
+    expect(headlineHtml('')).toBe('');
+  });
+});
+
+// The unlit field behind the real supporters. It exists because the campaign
+// starts empty and the design needs density — so the tests that matter most are
+// the ones pinning that it can never be mistaken for supporter data.
+describe('ambientField', () => {
+  const rnd = () => 0.5;
+
+  // At zero supporters the field carries the whole picture, so it is at its
+  // densest — the production default on day one.
+  it('fills an empty campaign with points', () => {
+    const { points } = ambientField(0, 1100, 500, rnd);
+    expect(points.length).toBeGreaterThan(0);
+  });
+
+  // The field RECEDES as real gifts arrive: capacity is fixed, so each real
+  // supporter displaces an ambient point. Without this the picture would stay
+  // padded forever and its density would never come to mean anything.
+  it('yields fewer points as real supporters arrive', () => {
+    const empty = ambientField(0, 1100, 500, rnd).points.length;
+    const busy = ambientField(200, 1100, 500, rnd).points.length;
+    expect(busy).toBeLessThan(empty);
+  });
+
+  // Past capacity there is nothing left to pad, so the field disappears rather
+  // than going negative or drawing a stray row.
+  it('returns nothing once supporters exceed the frame capacity', () => {
+    const { points, edges } = ambientField(100000, 1100, 500, rnd);
+    expect(points).toEqual([]);
+    expect(edges).toEqual([]);
+  });
+
+  // Not reachable through the UI, but cheap to make total — and zero is the
+  // only sensible reading of a negative count.
+  it('treats a negative supporter count as zero', () => {
+    const negative = ambientField(-5, 1100, 500, rnd).points.length;
+    const zero = ambientField(0, 1100, 500, rnd).points.length;
+    expect(negative).toBe(zero);
+  });
+
+  // THE HONESTY GUARANTEE, pinned. An ambient point carries no slug, no school
+  // and no `selectable` — nothing a consumer could read as a person, which is
+  // what keeps the field from ever being counted, searched or opened.
+  it('gives an ambient point no identity of any kind', () => {
+    const { points } = ambientField(0, 1100, 500, rnd);
+    expect(Object.keys(points[0]).sort()).toEqual(['r', 'x', 'y']);
+  });
+
+  // The points are wired, and that wiring is what makes the field read as a
+  // lattice rather than as scattered dots — the difference the recomposition
+  // turned on.
+  it('wires the points together', () => {
+    const { points, edges } = ambientField(0, 1100, 500, rnd);
+    expect(edges.length).toBeGreaterThan(points.length);
+  });
+
+  // Every point stays inside the drawn frame, so none is clipped at an edge or
+  // stranded outside the viewBox where it would silently cost density.
+  it('keeps every point within the frame', () => {
+    const width = 1100;
+    const height = 500;
+    const { points } = ambientField(0, width, height, () => 0.99);
+    for (const p of points) {
+      expect(p.x).toBeGreaterThanOrEqual(0);
+      expect(p.x).toBeLessThanOrEqual(width);
+      expect(p.y).toBeGreaterThanOrEqual(0);
+      expect(p.y).toBeLessThanOrEqual(height);
+    }
+  });
+
+  // Ambient points draw SMALLER than a supporter's 3.2 radius. Size is one of
+  // the two cues separating them; the other is the bloom, which is CSS.
+  it('draws every point smaller than an ordinary supporter', () => {
+    const { points } = ambientField(0, 1100, 500, () => 0.999);
+    for (const p of points) expect(p.r).toBeLessThan(3.2);
+  });
+
+  // Seeded and reproducible, for the reason `networkRng` documents: a field
+  // that reshuffled per render would change under a reviewed screenshot.
+  it('is reproducible for the same stream', () => {
+    const a = ambientField(10, 900, 400, () => 0.25).points;
+    const b = ambientField(10, 900, 400, () => 0.25).points;
+    expect(a).toEqual(b);
   });
 });

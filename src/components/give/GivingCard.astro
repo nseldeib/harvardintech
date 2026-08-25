@@ -1,0 +1,350 @@
+---
+// The giving card: goal, progress, frequency, amounts, and the button that
+// leaves for the platform.
+//
+// IT IS A PLACEHOLDER FOR A FORM THAT DOES NOT EXIST YET, and it says so on its
+// own face. Harvard Alumni in Tech has no donation platform configured, so
+// nothing here can take a payment — the frequency tabs and amount chips are
+// styled controls with no processor behind them. Building them as real inputs
+// that POST nowhere would be worse than useless: an editor would demo it, a
+// visitor would fill it in, and the gift would go into a void with a success
+// screen in front of it.
+//
+// So the controls are DISPLAY ONLY and the note under the button says as much
+// in the visitor's own words. The selected chip is a static highlight, not
+// state. When a platform is configured, this component is where Givebutter's
+// embed replaces the middle — the frame, the goal line and the copy stay.
+//
+// The single working control is the button, which goes wherever
+// `resolveGiveHref` says: the platform when one exists, the giving-inquiry email
+// until then. That is a real destination today, which is the point — the page
+// asks for a gift and the ask connects to a human.
+import GiveButton from '../donate/GiveButton.astro';
+
+interface Props {
+  /** The campaign target, as free text — "$50,000". */
+  goal?: string;
+  /** How full the bar is drawn, 0–100. Clamped. */
+  percent?: number;
+  /** The processor named beside the goal, for the trust line. */
+  processor?: string;
+  /** The frequency tabs, first one shown as selected. */
+  frequencies?: string[];
+  /** The amount chips. */
+  amounts?: string[];
+  /** Which amount renders highlighted. Matched by value; no match highlights none. */
+  selectedAmount?: string;
+  ctaLabel?: string;
+  donateUrl?: string;
+  email: string;
+  campaignName?: string;
+  /** The line under the button. Says what the controls above it are. */
+  note?: string;
+}
+
+const {
+  goal,
+  percent = 0,
+  processor,
+  frequencies = ['One-time', 'Monthly', 'Annual'],
+  amounts = ['$25', '$50', '$100', '$250', 'Other'],
+  selectedAmount,
+  ctaLabel = 'Become a Founding Supporter',
+  donateUrl,
+  email,
+  campaignName,
+  note,
+} = Astro.props as Props;
+
+const pct = Math.max(0, Math.min(100, percent));
+---
+
+<section class="card" aria-labelledby="giving-card-goal">
+  <div class="head">
+    <div>
+      <p class="kick">Campaign goal</p>
+      <p class="goal" id="giving-card-goal">{goal}</p>
+    </div>
+    {processor ? <p class="secure">Secure giving through {processor}</p> : null}
+  </div>
+
+  {/* `role="img"` rather than a progressbar role, for the reason GoalMeter's
+      bar gives: this is a static picture of a number, and a progressbar role
+      would announce it as something that updates. */}
+  <div class="bar" role="img" aria-label={`${pct}% of the ${goal ?? 'campaign'} goal raised`}>
+    <div class="fill" style={`width: ${pct}%`} />
+  </div>
+
+  {/* Real buttons, and the selection is CARRIED rather than decorative.
+      These started as inert `<span>`s because no processor exists to take a
+      payment, and a control that looks pressable but does nothing is a promise
+      the page cannot keep. The fix was not to make them pressable and still
+      inert — it was to give the choice somewhere to go: until a platform is
+      configured the CTA is a giving enquiry, so the amount and frequency are
+      written into that email. Choosing "$100 / Monthly" now means the message
+      says so, which is a real outcome rather than a rehearsal of one.
+
+      `role="radiogroup"` with `aria-checked`, not pressed toggles: these are
+      one-of-N choices and a screen reader should announce them as such. */}
+  <div class="rows">
+    <div class="row" role="radiogroup" aria-label="Giving frequency" data-give-group="frequency">
+      {frequencies.map((f, i) => (
+        <button
+          type="button"
+          role="radio"
+          class:list={['chip', { 'is-on': i === 0 }]}
+          aria-checked={i === 0 ? 'true' : 'false'}
+          data-give-value={f}
+        >{f}</button>
+      ))}
+    </div>
+    <div class="row" role="radiogroup" aria-label="Gift amount" data-give-group="amount">
+      {amounts.map((a) => (
+        <button
+          type="button"
+          role="radio"
+          class:list={['chip', { 'is-on': a === selectedAmount }]}
+          aria-checked={a === selectedAmount ? 'true' : 'false'}
+          data-give-value={a}
+        >{a}</button>
+      ))}
+    </div>
+  </div>
+
+  <div class="action" data-give-action>
+    <GiveButton
+      label={ctaLabel}
+      donateUrl={donateUrl}
+      email={email}
+      campaignName={campaignName}
+      checkout
+    />
+  </div>
+
+  {note ? <p class="note">{note}</p> : null}
+</section>
+
+{/* Progressive enhancement, in the `GoalMeter` mould: the card is complete
+    server-side — a default frequency and amount are already selected, and the
+    CTA already resolves — so with JavaScript off the page still asks for a gift
+    and the enquiry still sends. This only lets a visitor CHANGE the choice.
+
+    Deliberately inline vanilla rather than a React island: the card holds two
+    strings of state and rewrites one href, which is less code than the island
+    boilerplate would be, and it keeps the page free of a hydration boundary
+    whose only job is two radio groups. */}
+{/* Raw JS, NOT a `{\`…\`}` expression. `is:inline` emits the tag's contents
+    verbatim, so a JSX template literal reaches the browser with its braces and
+    backticks intact and parses as a block containing a discarded string — the
+    function is never called, and nothing errors. Written plainly instead. */}
+<script is:inline>
+  (function () {
+  var card = document.currentScript && document.currentScript.previousElementSibling;
+  if (!card || !card.classList || !card.classList.contains('card')) {
+    card = document.querySelector('.card[aria-labelledby="giving-card-goal"]');
+  }
+  if (!card) return;
+
+  var link = card.querySelector('[data-give-action] a');
+  if (!link) return;
+
+  // The server-rendered href is the BASELINE and is never discarded: every
+  // rebuild starts from it, so switching selections repeatedly cannot stack
+  // parameters onto a URL that already has them.
+  var baseHref = link.getAttribute('href') || '';
+
+  function selected(group) {
+    var el = card.querySelector('[data-give-group="' + group + '"] [aria-checked="true"]');
+    return el ? el.getAttribute('data-give-value') : null;
+  }
+
+  function sync() {
+    // A real donation platform owns its own amount handling and every one names
+    // its parameters differently, so guessing them would produce a URL that
+    // silently drops the amount — or worse, lands on an error. The selection is
+    // only carried when the destination is OUR enquiry email, where the format
+    // is ours to decide.
+    if (baseHref.slice(0, 7) !== 'mailto:') return;
+
+    var amount = selected('amount');
+    var frequency = selected('frequency');
+    if (!amount && !frequency) return;
+
+    var phrase = [amount, frequency && frequency.toLowerCase()].filter(Boolean).join(', ');
+    var body =
+      'I would like to become a Founding Supporter of the Momentum Fund.' +
+      String.fromCharCode(10, 10) +
+      'Gift: ' + phrase +
+      String.fromCharCode(10, 10) +
+      'Please send me the details.';
+
+    var sep = baseHref.indexOf('?') === -1 ? '?' : '&';
+    link.setAttribute('href', baseHref + sep + 'body=' + encodeURIComponent(body));
+  }
+
+  card.addEventListener('click', function (ev) {
+    var btn = ev.target && ev.target.closest ? ev.target.closest('[data-give-value]') : null;
+    if (!btn) return;
+    var group = btn.parentElement;
+    if (!group) return;
+
+    var peers = group.querySelectorAll('[data-give-value]');
+    for (var i = 0; i < peers.length; i++) {
+      var on = peers[i] === btn;
+      peers[i].setAttribute('aria-checked', on ? 'true' : 'false');
+      peers[i].classList.toggle('is-on', on);
+    }
+    sync();
+  });
+
+  sync();
+})();
+</script>
+
+<style>
+  /* Lifted off the band it sits on, per the design: the card overlaps the photo
+     above and the band below, which is what makes it read as the page's one
+     object rather than another stripe. */
+  .card {
+    max-width: 640px;
+    margin: -90px auto 0;
+    position: relative;
+    z-index: 2;
+    background: var(--paper, #fff);
+    border-top: 4px solid var(--momentum-gold);
+    box-shadow: 0 24px 60px rgba(3, 26, 54, 0.22);
+    padding: 26px 28px 22px;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .head .kick {
+    margin: 0 0 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+  }
+
+  .goal {
+    margin: 0;
+    font-family: var(--font-title);
+    font-size: clamp(30px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--momentum-navy);
+  }
+
+  .secure {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+  }
+
+  .bar {
+    height: 5px;
+    margin: 16px 0 18px;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .fill {
+    height: 100%;
+    min-width: 3px;
+    border-radius: 999px;
+    background: var(--crimson);
+  }
+
+  .rows {
+    display: grid;
+    gap: 10px;
+  }
+
+  .row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 10px;
+  }
+
+  .chip {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 8px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--color-fg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 120ms ease, color 120ms ease;
+  }
+
+  .chip:hover {
+    border-color: var(--crimson);
+  }
+
+  .chip:focus-visible {
+    outline: 2px solid var(--crimson);
+    outline-offset: 2px;
+  }
+
+  .chip.is-on {
+    color: var(--crimson);
+    border-color: var(--crimson);
+    font-weight: 700;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chip {
+      transition: none;
+    }
+  }
+
+  .action {
+    margin-top: 14px;
+  }
+
+  /* Full-width button — it is the one live control on the card and the row it
+     sits in has nothing to share. */
+  .action :global(.give) {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .note {
+    margin: 12px 0 0;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--color-faint);
+  }
+
+  @media (max-width: 560px) {
+    .card {
+      margin-top: -60px;
+      padding: 22px 18px 18px;
+    }
+    /* Stacked rather than five-across: at this width the chips are narrower
+       than the text inside them. */
+    .row {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

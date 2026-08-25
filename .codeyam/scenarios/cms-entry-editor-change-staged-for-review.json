@@ -128,7 +128,7 @@
   },
   "scenarioType": "application",
   "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
-  "description": "An entry mid-edit with the change saved for publishing but not yet published — the state an editor sits in between typing and committing, and the one the publish review is reached from. Two things about how it is driven, both learned from the @codeyam/cms 0.4.0 upgrade. The button is 'Save for publishing'; it was 'Stage change' until 0.4.0 renamed it while detechnicalising this flow. And the blurb is filled by its `#f-blurb` id rather than by its visible text, because a value-matched target silently stopped matching across that upgrade and left the scenario capturing an unedited form — a stable selector is the difference between a scenario that proves something and one that quietly proves nothing.",
+  "description": "An entry mid-edit with the change saved for publishing but not yet published — the state an editor sits in between typing and committing, and the one the publish review is reached from. Three things about how it is driven, each learned from a @codeyam/cms upgrade that renamed or moved the control underneath it. The button is 'Save changes', and it lives in the floating change bar at the foot of the editor beside 'Preview changes' and 'Review changes'; it was 'Stage change' until 0.4.0, then 'Save for publishing' until 0.13.0 moved the action into that bar. That bar is NOT enumerated in the capture harness's candidate-label list — it is an overlay — so a failure here reports the label as missing even while it is plainly on screen, and the label must be read off a frame rather than off the candidates. And the blurb is filled by its `#f-blurb` id rather than by its visible text, because a value-matched target silently stopped matching across the 0.4.0 upgrade and left the scenario capturing an unedited form — a stable selector is the difference between a scenario that proves something and one that quietly proves nothing. The filled value must also DIFFER from the seeded blurb: the bar only appears when the form is genuinely dirty, so a fill that retypes the seeded value captures a form with no action bar at all.",
   "interactions": [
     {
       "action": "fill",
@@ -137,7 +137,7 @@
     },
     {
       "action": "click",
-      "text": "Save for publishing"
+      "text": "Save changes"
     }
   ]
 }

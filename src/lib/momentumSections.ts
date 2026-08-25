@@ -67,6 +67,29 @@ export const SECTION_LAYOUTS = ['image-left', 'image-right', 'text-only', 'colum
 
 export type SectionLayout = (typeof SECTION_LAYOUTS)[number];
 
+/** The layouts a `pillars` section can use. `list` stacks the cards as
+ *  full-width rows with the ordinal in its own column; absent keeps the
+ *  three-across bordered grid the band has always drawn. */
+export const PILLAR_LAYOUTS = ['list'] as const;
+
+/**
+ * Every value the CMS's Layout dropdown offers, across every kind that reads
+ * the field.
+ *
+ * Kept SEPARATE from `SECTION_LAYOUTS` rather than folded into it, because the
+ * two answer different questions. `SECTION_LAYOUTS` is what `resolveLayout`
+ * will accept for a NARRATIVE — widening it would make `list` a legal narrative
+ * layout, and a narrative carrying an image plus `list` would then resolve to a
+ * photo layout by accident. This list is only what an editor may PICK, and the
+ * kind that reads it decides what it means.
+ *
+ * `src/lib/selectOptions.test.ts` holds the registry to this list, so adding a
+ * layout here without adding it to `collections.json` fails rather than
+ * silently leaving the dropdown short — which is exactly how `list` shipped
+ * unselectable in the first place.
+ */
+export const SECTION_LAYOUT_OPTIONS = [...SECTION_LAYOUTS, ...PILLAR_LAYOUTS] as const;
+
 /** The minimum shape needed to place a section on the page. */
 export interface SectionLike {
   kind: string;
@@ -87,6 +110,13 @@ export interface SectionLike {
    *  link that goes nowhere is worse than no link. */
   linkLabel?: string;
   linkUrl?: string;
+  /** The goal-meter's hand-entered figures, drawn only when no `widgetId` is
+   *  set. See `GoalMeter.astro` for why they are free text and what they cost. */
+  raised?: string;
+  goal?: string;
+  percent?: number;
+  /** Renders a giving button under a `pillars` band. Blank renders none. */
+  ctaLabel?: string;
   /** Which set of cards a SLOT band shows. Blank matches the ungrouped cards,
    *  which is the page as it renders today. The matching rule lives in
    *  `./sectionGroups.ts` because both card loaders need the identical one. */
@@ -152,7 +182,17 @@ export function goalMetersMissingWidgetId(
   sections: readonly (SectionLike & { slug?: string })[],
 ): string[] {
   return sections
-    .filter((section) => section.kind === 'goal-meter' && !section.widgetId?.trim())
+    .filter(
+      (section) =>
+        section.kind === 'goal-meter' &&
+        !section.widgetId?.trim() &&
+        // A band carrying hand-entered figures draws a real bar without a
+        // widget, so it is NOT the silent-blank case this advisory exists to
+        // catch. Warning about it would train the reader to ignore the line,
+        // which costs more than the line is worth.
+        !section.raised?.trim() &&
+        !section.goal?.trim(),
+    )
     .map((section) => section.slug ?? '(unnamed section)');
 }
 

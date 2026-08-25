@@ -1,0 +1,46 @@
+---
+import Component from "../../../src/components/give/GiveStatement.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiveStatement — the one-idea band, in BOTH its tones.
+//
+// Two instances on one page rather than two pages, because the component's only
+// real decision is the tone, and the thing worth reviewing is that the two do
+// not read as the same band twice. Seen apart they both look fine; seen
+// together you can tell whether the crimson is loud enough and the sage quiet
+// enough to justify being one component with a switch.
+//
+// The crimson one is `centered` and the sage one is not, which is how /give
+// uses them — that asymmetry is a real design decision and would be invisible
+// if both were captured the same way.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiveStatement</title>
+    <style is:global>
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        tone="crimson"
+        centered
+        kicker="Beyond a single event"
+        title="This is about building an ecosystem."
+        body="Your support helps create a place where exceptional people can continue learning, connecting, collaborating, and creating impact together."
+      />
+      <Component
+        tone="sage"
+        kicker="Why monthly support helps"
+        title="Consistency turns momentum into capacity."
+        body="Monthly gifts help Harvard Alumni in Tech plan ahead rather than event to event, while one-time and annual gifts remain welcome at every level."
+      />
+    </div>
+  </body>
+</html>

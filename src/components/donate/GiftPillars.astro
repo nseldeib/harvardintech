@@ -1,6 +1,7 @@
 ---
 // "What Your Gift Powers" — the three-card grid showing where a gift goes.
 import GiftPillarCard from './GiftPillarCard.astro';
+import GiveButton from './GiveButton.astro';
 import { giftOrdinal } from '../../lib/momentumSections';
 import type { DonatePageCopy } from '../../lib/site';
 
@@ -10,8 +11,40 @@ interface Props {
   kicker?: string;
   title?: string;
   pillars?: Pillar[];
+  /** `list` stacks the cards as full-width rows separated by hairlines, with the
+   *  ordinal in its own left column. Anything else (including blank) keeps the
+   *  three-up bordered grid this band has always used.
+   *
+   *  Free text and unvalidated, matching how `layout` already behaves on the
+   *  narrative band: the CMS offers a dropdown, but a hand-edited or seeded
+   *  value that matches nothing must degrade to the default rather than fail
+   *  the build. */
+  layout?: string;
+  /** Renders a giving button under the band. Blank renders none, which is every
+   *  gift band on the page except the one that asks for it — a CTA after every
+   *  list would turn the page into a column of buttons. */
+  ctaLabel?: string;
+  donateUrl?: string;
+  email?: string;
+  campaignName?: string;
+  /** Set by the GIVING page, where this band's CTA must leave for the platform
+   *  or the enquiry email. Without it the button resolves to `/give` — which on
+   *  /give itself is a link to the page you are already reading. */
+  checkout?: boolean;
 }
-const { kicker, title = 'What Your Gift Powers', pillars = [] } = Astro.props as Props;
+const {
+  kicker,
+  title = 'What Your Gift Powers',
+  pillars = [],
+  layout,
+  ctaLabel,
+  donateUrl,
+  email = 'ben@harvardintech.com',
+  campaignName,
+  checkout = false,
+} = Astro.props as Props;
+
+const isList = layout?.trim().toLowerCase() === 'list';
 ---
 
 {
@@ -22,21 +55,60 @@ const { kicker, title = 'What Your Gift Powers', pillars = [] } = Astro.props as
           {kicker ? <p class="kick">{kicker}</p> : null}
           <h2>{title}</h2>
         </div>
-        <div class="grid">
-          {/* Numbered from the card's position WITHIN THIS BAND, so a second
-              grouped gift band numbers from 01 again rather than continuing the
-              first band's count — `cardsInGroup` has already narrowed the list
-              by the time it reaches here. */}
-          {pillars.map((p, index) => (
-            <GiftPillarCard
-              number={giftOrdinal(index)}
-              title={p.title}
-              body={p.body}
-              linkLabel={p.linkLabel}
-              linkUrl={p.linkUrl}
+        {/* Numbered from the card's position WITHIN THIS BAND, so a second
+            grouped gift band numbers from 01 again rather than continuing the
+            first band's count — `cardsInGroup` has already narrowed the list
+            by the time it reaches here. Both layouts read the same index, so
+            the numbering cannot drift between them. */}
+        {isList ? (
+          <ol class="rows">
+            {pillars.map((p, index) => (
+              <li class="row">
+                <p class="row-num" aria-hidden="true">{giftOrdinal(index)}</p>
+                <div class="row-body">
+                  <h3 class="row-title">{p.title}</h3>
+                  {p.body ? <p class="row-text">{p.body}</p> : null}
+                  {/* Absent renders nothing rather than an empty slot or a
+                      placeholder dash: a priority whose cost is not yet known
+                      is a real state, and "—" reads as a figure someone forgot
+                      to fill in. */}
+                  {p.amount ? <p class="row-amount">{p.amount}</p> : null}
+                  {p.linkUrl && p.linkLabel ? (
+                    <a class="row-link" href={p.linkUrl}>{p.linkLabel}</a>
+                  ) : null}
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div class="grid">
+            {pillars.map((p, index) => (
+              <GiftPillarCard
+                number={giftOrdinal(index)}
+                title={p.title}
+                body={p.body}
+                linkLabel={p.linkLabel}
+                linkUrl={p.linkUrl}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* After the list, not before it. The band's job is to answer "where
+            does my money go" — the ask only earns its place once that has been
+            read, which is why this sits below the rows rather than beside the
+            heading. */}
+        {ctaLabel ? (
+          <div class="cta">
+            <GiveButton
+              label={ctaLabel}
+              donateUrl={donateUrl}
+              email={email}
+              campaignName={campaignName}
+              checkout={checkout}
             />
-          ))}
-        </div>
+          </div>
+        ) : null}
       </div>
     </section>
   ) : null
@@ -67,6 +139,95 @@ const { kicker, title = 'What Your Gift Powers', pillars = [] } = Astro.props as
     color: var(--momentum-navy);
     margin: 0;
   }
+  /* Aligned with the rows' text column rather than centred, so the button reads
+     as the end of the list it follows instead of as a new centred band. */
+  .cta {
+    margin-top: 38px;
+  }
+
+  /* The `list` layout: full-width rows divided by hairlines, ordinal in its own
+     left column. A priority list reads down rather than across, and three
+     side-by-side cells force each entry into a narrow measure — which is why
+     this is a layout rather than a second component: same cards, same
+     numbering, same collection, different reading order. */
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr);
+    gap: 0 24px;
+    align-items: start;
+    padding: 34px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* `aria-hidden` in the markup: the `<ol>` already tells a screen reader this
+     is item 1 of 3, so voicing the printed numeral too would announce the
+     position twice. It stays visible because the numeral is the design. */
+  .row-num {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--crimson);
+    padding-top: 0.5em;
+  }
+
+  .row-body {
+    max-width: 62ch;
+  }
+
+  .row-title {
+    margin: 0;
+    font-family: var(--font-title);
+    font-size: clamp(21px, 2.2vw, 28px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--momentum-navy);
+  }
+
+  .row-text {
+    margin: 10px 0 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-muted, #55606d);
+  }
+
+  .row-link {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--crimson);
+  }
+
+  /* The figure. Mono and crimson, matching the ordinal in the left column, so
+     the two numerals on a row read as the same kind of thing — a label on the
+     entry rather than part of its prose. */
+  .row-amount {
+    margin: 12px 0 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--crimson);
+  }
+
+  @media (max-width: 560px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 26px 0;
+    }
+    .row-num {
+      padding-top: 0;
+    }
+  }
+
   /* Bordered cells sharing single-pixel rules, the same construction the
      evidence strip uses: the grid draws top and left, each cell right and
      bottom. */

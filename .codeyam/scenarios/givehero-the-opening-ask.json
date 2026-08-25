@@ -1,0 +1,13 @@
+{
+  "name": "GiveHero - The Opening Ask",
+  "id": "4628736c-0ed7-448a-b86f-93e56a0d5f40",
+  "url": "/isolated-components/GiveHero",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiveHero",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/give/GiveHero.astro",
+  "description": "The giving page's first screen, with the real headline rather than a stand-in — its length is what decides whether it breaks over two lines or three against the band's 16ch cap, so a shorter placeholder would review a wrap this band never has. Deliberately quiet for a hero: no photo and no button, because the giving card follows within a screen and a hero that also asked would put two CTAs in front of a reader who has not yet been told what the money does."
+}

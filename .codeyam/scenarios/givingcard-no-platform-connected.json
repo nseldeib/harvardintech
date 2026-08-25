@@ -1,0 +1,13 @@
+{
+  "name": "GivingCard - No Platform Connected",
+  "id": "9e34d5f6-0895-489b-821a-0d02bc5849cf",
+  "url": "/isolated-components/GivingCard",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GivingCard",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/give/GivingCard.astro",
+  "description": "The page's one interactive control, in the state production is actually in: no donation platform configured, so the button resolves to a giving enquiry and the note underneath admits that no payment is taken here. A capture with a platform set would hide exactly that admission. The bar is drawn at 8 percent on purpose — a near-empty bar is what a campaign looks like the day it opens, and a comfortably-full one would misrepresent the state this page ships in. The frequency and amount chips are real buttons whose selection is written into the enquiry email; they began as inert spans and that was wrong, but the fix was giving the choice somewhere to go rather than making it pressable and still inert."
+}

@@ -5,7 +5,8 @@
 // closing band — and both must resolve the same destination. `resolveGiveHref`
 // centralises that: a real donation platform when `donateUrl` is set in the
 // CMS, a giving-inquiry mailto until then.
-import { resolveGiveHref } from '../../lib/giving';
+import { resolveGiveHref, resolveGiveCtaHref } from '../../lib/giving';
+import { withBase } from '../../lib/url';
 
 interface Props {
   label?: string;
@@ -19,6 +20,9 @@ interface Props {
   /** Appends the campaign design's ↗ glyph. Decorative and `aria-hidden`, so
    *  the link still reads as its label alone to a screen reader. */
   glyph?: boolean;
+  /** This is the button that COMPLETES a gift, not one that leads toward it.
+   *  Only the giving page sets it — see the href note below. */
+  checkout?: boolean;
 }
 const {
   label = 'Make a Gift',
@@ -27,9 +31,23 @@ const {
   campaignName,
   variant = 'crimson',
   glyph = false,
+  checkout = false,
 } = Astro.props as Props;
 
-const href = resolveGiveHref({ donateUrl, email, campaignName });
+// Two destinations, and which one this button wants is the `checkout` prop.
+//
+// The default is the giving PAGE: a campaign CTA should land somewhere that
+// states the goal and the amounts before asking for anything. `checkout` is the
+// button on that page — the one that actually leaves for the platform, or opens
+// the inquiry email until a platform exists. See `resolveGiveCtaHref`.
+//
+// `withBase` is applied here rather than inside the resolver because the
+// resolver also returns absolute platform URLs and `mailto:` — neither of which
+// may be prefixed. `withBase` ignores anything not starting with `/`, so this is
+// safe for all three, but the reason it is safe is worth stating.
+const href = checkout
+  ? resolveGiveHref({ donateUrl, email, campaignName })
+  : withBase(resolveGiveCtaHref({ donateUrl }));
 ---
 
 <a

@@ -223,6 +223,8 @@ export interface DonateFrameEntry {
   networkTitle?: string;
   networkTagline?: string;
   networkSearchTitle?: string;
+  networkCountLabel?: string;
+  networkCtaLabel?: string;
   shareMessage?: string;
 }
 
@@ -279,6 +281,8 @@ export function mergeDonateFrame(
     networkTitle: preferText(entry.networkTitle, fallback.networkTitle),
     networkTagline: preferText(entry.networkTagline, fallback.networkTagline),
     networkSearchTitle: preferText(entry.networkSearchTitle, fallback.networkSearchTitle),
+    networkCountLabel: preferText(entry.networkCountLabel, fallback.networkCountLabel),
+    networkCtaLabel: preferText(entry.networkCtaLabel, fallback.networkCtaLabel),
     shareMessage: preferText(entry.shareMessage, fallback.shareMessage),
     // The two LIST fields take the all-or-nothing rule `mergeVolunteerCopy`
     // already applies to `benefits`, not the `preferText` one above: an editor

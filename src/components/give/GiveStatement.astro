@@ -1,0 +1,104 @@
+---
+// A one-idea band: kicker, big centred sentence, one supporting line.
+//
+// Used twice on /give in two different colours — the crimson "building an
+// ecosystem" band and the sage "consistency turns momentum into capacity" one —
+// which is why it is a component with a `tone` rather than two near-identical
+// blocks of markup that drift apart on the first edit.
+interface Props {
+  kicker?: string;
+  title?: string;
+  body?: string;
+  /** `crimson` is the loud mid-page statement; `sage` the quieter one before
+   *  the FAQ. Anything else falls back to `sage`, so a typo is a quiet band
+   *  rather than a broken one. */
+  tone?: 'crimson' | 'sage';
+  /** Centres the copy. The crimson band is centred in the design; the sage one
+   *  is left-aligned with the sections around it. */
+  centered?: boolean;
+}
+
+const { kicker, title, body, tone = 'sage', centered = false } = Astro.props as Props;
+const isCrimson = tone === 'crimson';
+---
+
+<section class:list={['statement', isCrimson ? 'is-crimson' : 'is-sage', { 'is-centered': centered }]}>
+  <div class="inner">
+    {kicker ? <p class="kick">{kicker}</p> : null}
+    {title ? <h2>{title}</h2> : null}
+    {body ? <p class="body">{body}</p> : null}
+  </div>
+</section>
+
+<style>
+  .statement {
+    padding: 78px 24px;
+  }
+
+  .is-crimson {
+    background: var(--crimson);
+  }
+
+  .is-sage {
+    background: var(--momentum-aqua);
+  }
+
+  .inner {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .is-centered .inner {
+    text-align: center;
+  }
+
+  .inner .kick {
+    margin: 0 0 14px;
+  }
+
+  /* The kicker inherits the band's own contrast rather than the token's crimson,
+     which would vanish on the crimson band. */
+  .is-crimson .kick {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .is-sage .kick {
+    color: var(--momentum-teal);
+  }
+
+  h2 {
+    font-family: var(--font-title);
+    font-size: clamp(30px, 3.8vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    margin: 0 0 18px;
+  }
+
+  .is-crimson h2 {
+    color: #fff;
+  }
+
+  .is-sage h2 {
+    color: var(--momentum-navy);
+  }
+
+  .body {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 62ch;
+  }
+
+  .is-centered .body {
+    margin-inline: auto;
+  }
+
+  .is-crimson .body {
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .is-sage .body {
+    color: var(--color-muted, #55606d);
+  }
+</style>

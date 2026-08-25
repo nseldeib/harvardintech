@@ -38,12 +38,82 @@ interface Props {
    *  a link that goes nowhere, which is worse than no link. */
   linkLabel?: string;
   linkUrl?: string;
+  /** Amount raised and the target, as free text — "$47,500", "$100,000".
+   *
+   *  Free text for the same reason `amount` is on a gift pillar: these are
+   *  editorial figures, and forcing a number means forcing a currency and a
+   *  formatter. `percent` is the one number, because a bar has to be drawn to a
+   *  width and a string cannot be.
+   *
+   *  THE COST, stated plainly: a figure typed here is a figure somebody has to
+   *  keep current. The Givebutter widget exists precisely so the amount updates
+   *  itself, and this band's note used to say "there is no figure here for
+   *  anyone to keep up to date" — that stops being true the moment these are
+   *  filled in. They are here because the widget draws nothing until a campaign
+   *  is configured, which left the band invisible; a stale figure on a donation
+   *  page is a real harm, so `widgetId` still WINS when both are present. */
+  raised?: string;
+  goal?: string;
+  /** How full the bar is drawn, 0–100. Clamped, so a typo cannot overflow it. */
+  percent?: number;
 }
-const { kicker, title, widgetId, linkLabel, linkUrl } = Astro.props as Props;
+const { kicker, title, widgetId, linkLabel, linkUrl, raised, goal, percent } =
+  Astro.props as Props;
 
 const id = widgetId?.trim();
 const link = campaignLink({ linkLabel, linkUrl });
+
+// The static bar is the FALLBACK, not the default. A configured Givebutter
+// widget reports the real total and keeps reporting it, so wherever one exists
+// it wins outright — showing both would put a hand-typed figure beside a live
+// one and invite them to disagree in public.
+const hasFigures = Boolean(raised?.trim() || goal?.trim());
+const showStatic = !id && hasFigures;
+const pct = Math.max(0, Math.min(100, percent ?? 0));
 ---
+
+{
+  showStatic ? (
+    <section class="goal-meter">
+      <div class="gm-head">
+        <div class="gm-title">
+          {kicker ? <p class="kick kick--gold">{kicker}</p> : null}
+          {title ? <h2>{title}</h2> : null}
+        </div>
+        {link ? (
+          <a class="gm-link" href={link.url}>
+            {link.label} <span aria-hidden="true">→</span>
+          </a>
+        ) : null}
+      </div>
+
+      <div class="gm-static">
+        <div class="gm-figures">
+          {raised ? (
+            <p class="gm-raised">
+              <span class="gm-raised-value">{raised}</span>
+              <span class="gm-raised-label">raised</span>
+            </p>
+          ) : null}
+          {goal ? <p class="gm-goal">of {goal} goal</p> : null}
+        </div>
+
+        {/* `role="img"` with a composed label rather than a progressbar role:
+            this is a static picture of a number, not a live-updating control,
+            and announcing it as a progressbar would imply it changes. */}
+        <div
+          class="gm-bar"
+          role="img"
+          aria-label={`${pct}% of the ${goal ?? 'campaign'} goal raised`}
+        >
+          <div class="gm-bar-fill" style={`width: ${pct}%`} />
+        </div>
+
+        <p class="gm-percent">{pct}% of goal</p>
+      </div>
+    </section>
+  ) : null
+}
 
 {
   id ? (
@@ -123,6 +193,77 @@ const link = campaignLink({ linkLabel, linkUrl });
   }
   .gm-link:hover {
     color: #fff;
+  }
+
+  /* The static bar. Drawn only when no Givebutter widget is configured — see
+     the `showStatic` note in the frontmatter for why the two never co-exist. */
+  /* Same 900px column and centring as `.gm-head`, so the bar sits under the
+     heading rather than running the full width of the band while the words
+     above it stay in the column. */
+  .gm-static {
+    max-width: 900px;
+    margin: 34px auto 0;
+  }
+
+  .gm-figures {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0 14px;
+    margin-bottom: 18px;
+  }
+
+  .gm-raised {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .gm-raised-value {
+    font-family: var(--font-title);
+    font-size: clamp(34px, 5vw, 56px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--momentum-gold);
+  }
+
+  .gm-raised-label,
+  .gm-goal {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.66);
+  }
+
+  .gm-bar {
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    overflow: hidden;
+  }
+
+  /* Gold on navy, the same pairing the raised figure uses, so the bar reads as
+     the figure drawn out rather than as separate furniture. `min-width` keeps a
+     just-opened campaign from rendering a fill of literally zero pixels, which
+     looks like a broken bar rather than an honest start. */
+  .gm-bar-fill {
+    height: 100%;
+    min-width: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--momentum-teal), var(--momentum-gold));
+  }
+
+  .gm-percent {
+    margin: 14px 0 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--momentum-gold);
   }
   /* The collapse. A class rather than the `hidden` attribute: `hidden` is
      stronger than it looks — tooling that walks the DOM treats the attribute

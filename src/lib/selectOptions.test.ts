@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { HARVARD_SCHOOLS } from './donors';
 import { HOME_SECTION_KINDS } from './homeSections';
-import { SECTION_KINDS, SECTION_LAYOUTS } from './momentumSections';
+import { SECTION_KINDS, SECTION_LAYOUT_OPTIONS } from './momentumSections';
 
 // Several fields on this site are enums in everything but name: the code validates
 // them against a fixed list and silently falls back (or drops the section) on
@@ -53,8 +53,14 @@ describe('dropdown options match the validators that enforce them', () => {
   });
 
   // A mistyped layout silently falls back to text-only, losing the chosen design.
+  //
+  // Held to `SECTION_LAYOUT_OPTIONS`, not `SECTION_LAYOUTS`: the field is read
+  // by two kinds now, and the narrative layouts alone are no longer the whole
+  // dropdown. That gap is what let `list` ship selectable-in-content but
+  // absent-from-the-CMS, so an editor opening the priorities band saw a Layout
+  // box that did not offer the value the band was already using.
   it('momentumSections.layout offers exactly the layouts', () => {
-    expect(field('momentumSections', 'layout').options).toEqual([...SECTION_LAYOUTS]);
+    expect(field('momentumSections', 'layout').options).toEqual([...SECTION_LAYOUT_OPTIONS]);
   });
 
   // This one matters more than the three above it, because School feeds a SEARCH.

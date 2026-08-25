@@ -1,0 +1,13 @@
+{
+  "name": "GiveClose - The Final Ask",
+  "id": "ad0c370e-57c3-4e6c-a39e-cb587a06ae9a",
+  "url": "/isolated-components/GiveClose",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiveClose",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/give/GiveClose.astro",
+  "description": "The page's second and last live button, which is deliberate rather than an oversight: the card at the top serves someone who arrived already decided, this one catches the reader who scrolled the whole argument. Captured with no platform configured, matching production and matching the GivingCard frame. The one thing this capture exists to check is the button variant — a crimson button on a crimson band is invisible, and that is a mistake nothing but a screenshot would catch, because the markup reads perfectly either way."
+}

@@ -22,7 +22,7 @@
   "accomplishmentsTitle": "What we've accomplished so far",
   "pillarsTitle": "What Your Gift Powers",
   "testimonialsTitle": "From our community",
-  "donorsTitle": "The people behind the fund",
+  "donorsTitle": "A grid, *lit from within*.",
   "donorsIntro": "Every name here chose to put something behind this community. Founding donors gave before there was anything to point to.",
   "donorsEmptyMessage": "The Momentum Fund is just beginning, and this wall is waiting for its first names. Give today and yours will be among them.",
   "donorTiers": [
@@ -43,8 +43,10 @@
     }
   ],
   "networkTitle": "The Momentum Network — Powering Harvard Alumni in Tech",
-  "networkTagline": "Every light belongs to a founding supporter. Together, they illuminate what comes next.",
+  "networkTagline": "Every bright light is a founding supporter — the faint ones are places still waiting. Together, they illuminate what comes next.",
   "networkSearchTitle": "Find your place in the network",
+  "networkCountLabel": "founding supporters",
+  "networkCtaLabel": "Become a Founding Supporter",
   "shareMessage": "Harvard Alumni in Tech Momentum Fund and help strengthen the network that gives back to the network.\n\nI contributed because [SUPPORTER MESSAGE]\n\nIf this community has helped you make a connection, discover an opportunity, or move an idea forward, I invite you to join me in helping power what comes next.\n\nSupport the Momentum Fund: [DONATION LINK]",
   "ctaKicker": "The Momentum Fund",
   "ctaTitle": "Become part of the foundation.",

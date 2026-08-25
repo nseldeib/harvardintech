@@ -1,0 +1,48 @@
+---
+import Component from "../../../src/components/give/GivingCard.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GivingCard — the giving page's one interactive control.
+//
+// Captured with NO `donateUrl`, which is production's state today and the one
+// that matters: with no platform configured the button resolves to the giving
+// enquiry, and the note under it is the page's admission that no payment is
+// taken here. A capture with a platform set would hide exactly that.
+//
+// `percent` is deliberately small. A near-empty bar is what a campaign actually
+// looks like on the day it opens, and it is the state a full-looking capture
+// would quietly misrepresent.
+//
+// The card carries a negative top margin so it overlaps the photo band above
+// it on the real page; the padding on the wrapper below stands in for that
+// neighbour so the card is not clipped at the top of the frame.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GivingCard</title>
+    <style is:global>
+      #codeyam-capture {
+        width: 1200px;
+        padding-top: 120px;
+        background: var(--momentum-cream);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        goal="$50,000"
+        percent={8}
+        processor="Givebutter"
+        selectedAmount="$100"
+        ctaLabel="Become a Founding Supporter"
+        email="ben@harvardintech.com"
+        campaignName="The Momentum Fund"
+        note="A donation platform is not connected yet, so this opens a giving enquiry by email with the amount and frequency you picked — no payment is taken here. Live campaign progress appears once fundraising opens."
+      />
+    </div>
+  </body>
+</html>

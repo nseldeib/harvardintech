@@ -1,0 +1,43 @@
+---
+import Component from "../../../src/components/give/GiveCollage.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiveCollage — the gold-framed photo grid.
+//
+// Six real photographs, because the band's whole content is the pictures: the
+// thing to review is that the gold frame reads as one border around the block
+// rather than a grid of separately-framed cells, and that six landscape crops
+// of very different scenes sit together without one dominating. Placeholder
+// blocks would show the geometry and none of that.
+const PHOTOS = [
+  '/images/gallery/event-01.jpg',
+  '/images/gallery/event-02.jpg',
+  '/images/gallery/event-03.jpg',
+  '/images/gallery/event-04.jpg',
+  '/images/gallery/event-05.jpg',
+  '/images/gallery/event-06.jpg',
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiveCollage</title>
+    <style is:global>
+      /* The band's own padding is bottom-only — it sits under the FAQ on the
+         real page — so a little top padding here keeps the frame off the edge
+         of the capture. */
+      #codeyam-capture {
+        width: 1200px;
+        padding-top: 48px;
+        background: var(--momentum-cream);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component images={PHOTOS} />
+    </div>
+  </body>
+</html>

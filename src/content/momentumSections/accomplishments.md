@@ -2,7 +2,7 @@
 kind: accomplishments
 kicker: What we've accomplished so far
 title: Momentum already exists.
-order: 3
+order: 4
 ---
 
 The "what we've accomplished so far" band. The figures beneath the heading are

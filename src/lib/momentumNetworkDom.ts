@@ -16,6 +16,47 @@ import {
   type SoundState,
 } from './networkSound';
 import { SUPPORTER_PARAM } from './supporterBadge';
+import { sanitizeFirstName, nameFromSearch } from './personalize';
+
+/**
+ * Greet a visitor who arrived from the campaign email with `?name=`.
+ *
+ * Deliberately asymmetric with the old photo hero's personalization, which
+ * chose between a named and a generic headline. This band's headline is its
+ * composition, so the greeting is an EXTRA line instead: a named arrival gets
+ * it, everyone else gets the page unchanged. That is why there is no generic
+ * fallback text here — no name means the element simply stays hidden, and a
+ * visitor without one never sees an empty slot where a greeting would go.
+ *
+ * `data-preview` means a scenario pinned the greeting on the server so it can
+ * be captured; leave that alone rather than recomputing it from a URL the
+ * capture harness never carries.
+ *
+ * SECURITY: the name is attacker-controllable (this URL gets mailed to the
+ * whole list and forwarded onward). `sanitizeFirstName` rejects anything that
+ * isn't plausibly a first name, and the result is written with `textContent`,
+ * never `innerHTML` — so a hostile `?name=` renders no greeting at all rather
+ * than attacker-chosen text under Harvard's brand.
+ *
+ * Exported and DOM-injectable so the whole rule is unit-testable without a
+ * browser or a built page.
+ */
+export function applyNetworkGreeting(
+  search: string | null | undefined,
+  scope: ParentNode | null = typeof document === 'undefined' ? null : document,
+): void {
+  if (!scope) return;
+
+  const el = scope.querySelector<HTMLElement>('[data-network-greeting]');
+  if (!el || el.dataset.preview === 'true') return;
+
+  const named = el.dataset.named ?? '';
+  const name = sanitizeFirstName(nameFromSearch(search));
+  if (name === null || !named.includes('{name}')) return;
+
+  el.textContent = named.replace(/\{name\}/g, name);
+  el.hidden = false;
+}
 
 /** What the panel needs about one supporter, as the server hands it over. */
 export interface NetworkDetailRecord {
@@ -50,6 +91,8 @@ export function initMomentumNetwork(): void {
   const search = root.querySelector<HTMLInputElement>('[data-network-search]');
   const summary = root.querySelector<HTMLElement>('[data-network-summary]');
   const toggle = root.querySelector<HTMLButtonElement>('[data-network-sound]');
+  const stage = root.querySelector<HTMLElement>('[data-network-stage]');
+  const hover = root.querySelector<HTMLElement>('[data-network-hover]');
 
   const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   const sound: SoundState = {
@@ -107,6 +150,63 @@ export function initMomentumNetwork(): void {
     }
   };
 
+  /**
+   * The hover preview: name, then school · class year.
+   *
+   * Reads the SAME `details` map the panel reads, which is what carries the
+   * anonymity guarantee into this feature for free — an anonymous supporter has
+   * no entry there, so `detail` is undefined and nothing is shown. The node loop
+   * below also skips them outright. Two independent reasons the preview cannot
+   * name someone who asked not to be named.
+   */
+  const showHover = (node: Element) => {
+    if (!hover || !stage) return;
+    const slug = (node as HTMLElement).dataset?.networkNode ?? '';
+    const detail = details[slug];
+    if (!detail) return;
+
+    const setField = (key: string, value: string) => {
+      const slot = hover.querySelector<HTMLElement>(`[data-network-hover-field="${key}"]`);
+      if (slot) slot.textContent = value;
+    };
+
+    setField('name', detail.name);
+    setField(
+      'meta',
+      [detail.school, detail.gradYear ? String(detail.gradYear) : undefined]
+        .filter(Boolean)
+        .join(' · '),
+    );
+
+    hover.hidden = false;
+
+    // Positioned from the NODE's own box, not the pointer's coordinates.
+    // Pointer coordinates would work for hover and be unavailable for focus,
+    // and this card has to serve both: hover has no keyboard equivalent and no
+    // touch equivalent, so a preview only reachable by pointer is a preview
+    // half the visitors cannot get to. Anchoring to the node gives one
+    // code path and puts the card in the same place either way.
+    //
+    // Measured against the stage rather than the page so the card travels with
+    // the artwork instead of drifting on scroll. Guarded because
+    // `getBoundingClientRect` is absent under JSDOM, where an unguarded call
+    // would throw inside the handler and take the whole feature down with it.
+    if (
+      typeof stage.getBoundingClientRect !== 'function' ||
+      typeof node.getBoundingClientRect !== 'function'
+    ) {
+      return;
+    }
+    const stageBox = stage.getBoundingClientRect();
+    const nodeBox = node.getBoundingClientRect();
+    hover.style.left = `${nodeBox.right - stageBox.left + 14}px`;
+    hover.style.top = `${nodeBox.top - stageBox.top - 8}px`;
+  };
+
+  const hideHover = () => {
+    if (hover) hover.hidden = true;
+  };
+
   const select = (slug: string | null) => {
     for (const node of nodes) {
       node.classList.toggle('is-selected', slug !== null && node.dataset.networkNode === slug);
@@ -143,8 +243,22 @@ export function initMomentumNetwork(): void {
     // child elements inside one node, which would retrigger the sound several
     // times on a single node — exactly the "continuously while hovering" the
     // direction rules out.
-    node.addEventListener('pointerenter', activate);
-    node.addEventListener('click', () => select(node.dataset.networkNode ?? null));
+    node.addEventListener('pointerenter', () => {
+      activate();
+      showHover(node);
+    });
+    node.addEventListener('pointerleave', hideHover);
+    // The keyboard route to the same preview. Every selectable node already
+    // carries `tabindex="0"` and `role="button"` for the panel, so without this
+    // a keyboard user could OPEN a supporter but never skim one.
+    node.addEventListener('focus', () => showHover(node));
+    node.addEventListener('blur', hideHover);
+    // A click promotes the preview into the full badge, so the small card would
+    // otherwise sit on top of the panel it just opened.
+    node.addEventListener('click', () => {
+      hideHover();
+      select(node.dataset.networkNode ?? null);
+    });
     node.addEventListener('keydown', (event) => {
       const key = (event as KeyboardEvent).key;
       if (key !== 'Enter' && key !== ' ') return;

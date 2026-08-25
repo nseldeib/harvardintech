@@ -230,9 +230,27 @@ export default defineConfig({
   // `output: 'static'` ships none of, so nothing about the built site changes.
   devToolbar: { enabled: false },
   vite: {
+    // Resolve @codeyam/cms to its SOURCE rather than its published `dist/`.
+    // Required from 0.13.0, the first release to ship prebuilt output: its
+    // exports point `import` at `dist/esm/**` and offer `codeyam-source` as the
+    // opt-in back to `src/**`.
+    //
+    // This repo patches the CMS's `src/`, so without this Vite loads the
+    // UNPATCHED dist and the reorder arrows are simply not on the page — with
+    // nothing failing, which is the silent-drop CMS_SETUP.md warns about
+    // arriving by a new route. Matching settings are in `tsconfig.json` and
+    // `vitest.config.ts`; all three must agree.
+    //
+    // The defaults are respread rather than replaced: Vite REPLACES this list
+    // when set, and dropping `module` / `browser` / `development|production`
+    // would resolve half the dependency tree to its Node or production build.
+    resolve: {
+      conditions: ['codeyam-source', 'module', 'browser', 'development|production'],
+    },
     optimizeDeps: {
-      // @codeyam/cms ships raw `.ts`/`.tsx` (its package exports point at
-      // `src/**`), so Vite treats it as SOURCE rather than a pre-bundled dep.
+      // @codeyam/cms ships raw `.ts`/`.tsx` and the `codeyam-source` condition
+      // above keeps us on it, so Vite treats it as SOURCE rather than a
+      // pre-bundled dep.
       // Its transitive deps are therefore never scanned, and the admin entry
       // editor's markdown preview pulls `micromark` → `debug`, which is CJS:
       // the browser then fails hydration with "does not provide an export named

@@ -1,0 +1,59 @@
+---
+// The gold-framed photo grid above the closing ask.
+//
+// The frame is on the GRID, not on each photo: the design draws one border
+// around the whole block, and bordering each cell would read as a contact sheet
+// rather than as a single picture of the community.
+//
+// Empty renders nothing at all, so a site with no event photography ends on the
+// closing band rather than on an empty gold rectangle.
+import { altFor } from '../../lib/media';
+import { withBase } from '../../lib/url';
+
+interface Props {
+  images?: string[];
+}
+
+const { images = [] } = Astro.props as Props;
+---
+
+{
+  images.length > 0 ? (
+    <div class="collage">
+      <div class="collage-in">
+        {images.map((src) => (
+          <img src={withBase(src)} alt={altFor(src, 'Harvard Alumni in Tech')} loading="lazy" />
+        ))}
+      </div>
+    </div>
+  ) : null
+}
+
+<style>
+  .collage {
+    background: var(--momentum-cream);
+    padding: 0 24px 86px;
+  }
+
+  .collage-in {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    border: 8px solid var(--momentum-gold);
+  }
+
+  .collage-in img {
+    width: 100%;
+    height: clamp(9rem, 15vw, 13rem);
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (max-width: 640px) {
+    .collage-in {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

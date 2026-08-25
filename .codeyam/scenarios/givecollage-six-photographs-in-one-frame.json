@@ -1,0 +1,13 @@
+{
+  "name": "GiveCollage - Six Photographs In One Frame",
+  "id": "39158bf9-f0de-45ee-9b48-a6d62b261e13",
+  "url": "/isolated-components/GiveCollage",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiveCollage",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/give/GiveCollage.astro",
+  "description": "Six real photographs, because the band's entire content is the pictures. Two things are being judged: that the gold frame reads as one border around the whole block rather than a grid of separately-framed cells, and that six landscape crops of very different scenes sit together without one dominating. Placeholder blocks would show the geometry and none of that."
+}

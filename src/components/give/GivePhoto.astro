@@ -1,0 +1,45 @@
+---
+// The full-bleed photo strip between the hero and the giving card.
+//
+// A band of its own rather than a background on either neighbour, because the
+// giving card overlaps it: the card pulls up with a negative margin and needs a
+// real element to sit against. A CSS background would give it nothing to
+// overlap and the card would float on the navy instead.
+//
+// Renders NOTHING without an image rather than an empty strip — a page with no
+// photo closes the gap between hero and card cleanly instead of showing a band
+// of blank ground where a picture was meant to be.
+import { altFor } from '../../lib/media';
+import { withBase } from '../../lib/url';
+
+interface Props {
+  src?: string;
+  /** Falls back to `altFor`, which reads the media manifest. */
+  alt?: string;
+}
+
+const { src, alt } = Astro.props as Props;
+---
+
+{
+  src ? (
+    <div class="photo">
+      <img src={withBase(src)} alt={alt ?? altFor(src, 'Harvard Alumni in Tech')} />
+    </div>
+  ) : null
+}
+
+<style>
+  .photo {
+    line-height: 0;
+  }
+
+  /* Not lazy: this is above the fold on every viewport, and a lazy image here
+     would leave the giving card overlapping empty space on first paint. */
+  .photo img {
+    width: 100%;
+    height: clamp(16rem, 30vw, 26rem);
+    object-fit: cover;
+    display: block;
+  }
+</style>

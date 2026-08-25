@@ -35,8 +35,10 @@ donorTiers:
     name: Supporting Donors
     description: Every gift at every size, from alumni who wanted to be part of it.
 networkTitle: The Momentum Network — Powering Harvard Alumni in Tech
-networkTagline: Every light belongs to a founding supporter. Together, they illuminate what comes next.
+networkTagline: Every bright light is a founding supporter — the faint ones are places still waiting. Together, they illuminate what comes next.
 networkSearchTitle: Find your place in the network
+networkCountLabel: founding supporters
+networkCtaLabel: Become a Founding Supporter
 shareMessage: |-
   Harvard Alumni in Tech Momentum Fund and help strengthen the network that gives back to the network.
 

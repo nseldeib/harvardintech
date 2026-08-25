@@ -1,0 +1,13 @@
+{
+  "name": "GiveRecognition - The Placeholder Supporter Card",
+  "id": "10bcb98f-315d-4d98-9b15-184351aa3bf2",
+  "url": "/isolated-components/GiveRecognition",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GiveRecognition",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/give/GiveRecognition.astro",
+  "description": "What a supporter gets, shown rather than described. Captured with the component's OWN placeholder defaults rather than a realistic name, and that is the point of the frame: the sample card has to stay obviously a stand-in, and passing a plausible alum here would review a card this component must never render. The avatar is a drawn disc rather than a portrait for the same reason. If the placeholder ever stops reading as one, this is where it shows. The field behind it is CSS, not the real MomentumNetwork, so the illustration can never imply a second set of supporters."
+}

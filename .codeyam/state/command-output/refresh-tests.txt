@@ -1,33 +1,83 @@
-> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/blz4eq4ef.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/bf7a34da-e448-4d4b-9b67-aed9c3250460/tasks/blz4eq4ef.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
-{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1787171580,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":1088910}
-════════════════════════════════════════════════════════════════════
-WARNING: refresh-tests --force is running the ENTIRE test suite.
-════════════════════════════════════════════════════════════════════
-You're at ui step 12: ui-extract-tdd. The full suite is reserved
-for the `finalize` step, where `session-finalize` runs it
-automatically. Running it here is slow and almost always avoidable.
+> auto-backgrounded — the harness completion notification arrives on its own when this exits; you do NOT need to do anything to receive it, and waiting adds nothing. KEEP WORKING: continue with anything that does not depend on this result — the notification interrupts you when it lands. "Do not poll" does NOT mean "stop working": ending the turn to wait is the one response that is never correct. ONLY if you need the result inside the CURRENT turn, block with: codeyam-editor editor wait-for /tmp/claude-0/-workspace/61b048d7-cd69-4a16-9fc9-581f2f1b57b8/tasks/b6gbux77z.output (ONE call, bare — never piped through `| tail`; its budget is capped to fit the tool-call ceiling, so a long run returns WAIT_FOR STILL_RUNNING in-call and the notification still arrives. Re-issue only on LIKELY_WEDGED; do NOT hand-roll an `until grep … sleep` loop, the harness blocks it). Just want to know it is still alive? Read /tmp/claude-0/-workspace/61b048d7-cd69-4a16-9fc9-581f2f1b57b8/tasks/b6gbux77z.heartbeat — one line, always the newest heartbeat; the output file below stays clean of them. Output too long? You do not need `| tail`: run it bare and read the `CODEYAM_FULL_OUTPUT` line the command prints — it names a file holding the COMPLETE output, which you can `cat` afterwards.
+{"command":"refresh-tests","elapsed_secs":0,"emitted_at_unix":1787664972,"heartbeat":"CODEYAM_CMD_RUNNING","note":"still running","pid":1044630}
 
-To update the cache for a NEW or RENAMED test, use:
-  codeyam-editor editor refresh-tests --test <name>
-  codeyam-editor editor refresh-tests --changed
-  codeyam-editor editor refresh-tests --runner <name>
-
-If the audit just bailed reporting cache staleness, the documented
-recovery is flag-free `refresh-tests` (no `--force`). See
-`reconcile.txt` for the full guidance.
-
-Proceeding with the full suite anyway.
-════════════════════════════════════════════════════════════════════
-
-warning: about to run the FULL test suite (~1047 tests) — this can take many minutes.
-warning: narrow with --changed (current diff), --file <path>, or --test <name> to avoid a full run.
+note: --test name(s) not yet in the registry (applyNetworkGreeting) — scoping the run to the current diff so they run without registration first:
+  CMS_SETUP.md
+  README.md
+  astro.config.mjs
+  package-lock.json
+  package.json
+  patches/@codeyam+cms+0.13.0.patch
+  patches/@codeyam+cms+0.7.1.patch
+  src/components/MomentumFundPage.astro
+  src/components/donate/GiftPillars.astro
+  src/components/donate/GiveButton.astro
+  src/components/donate/GoalMeter.astro
+  src/components/donate/MomentumClose.astro
+  src/components/donate/MomentumNetwork.astro
+  src/components/donate/NetworkSupporterRoll.astro
+  src/components/give/GiveClose.astro
+  src/components/give/GiveCollage.astro
+  src/components/give/GiveFaq.astro
+  src/components/give/GiveHero.astro
+  src/components/give/GivePhoto.astro
+  src/components/give/GiveRecognition.astro
+  src/components/give/GiveStatement.astro
+  src/components/give/GivingCard.astro
+  src/content/config.ts
+  src/content/momentumSections/accomplishments.md
+  src/content/momentumSections/donors.md
+  src/content/momentumSections/goal-meter.md
+  src/content/momentumSections/pillars.md
+  src/content/momentumSections/priorities.md
+  src/content/momentumSections/testimonials.md
+  src/content/pageCopy/donate.md
+  src/content/pillars/establish-the-organizational-foundation.md
+  src/content/pillars/fund-chapter-events-and-programming.md
+  src/content/pillars/secure-essential-annual-software.md
+  src/data/collections.json
+  src/data/donatePage.json
+  src/data/givePage.json
+  src/lib/donatePageContent.ts
+  src/lib/duplicateEntry.test.ts
+  src/lib/entryDuplicate.test.ts
+  src/lib/givePageContent.ts
+  src/lib/giving.test.ts
+  src/lib/giving.ts
+  src/lib/momentumNetwork.test.ts
+  src/lib/momentumNetwork.ts
+  src/lib/momentumNetworkDom.test.ts
+  src/lib/momentumNetworkDom.ts
+  src/lib/momentumSections.ts
+  src/lib/pageCopyMerge.test.ts
+  src/lib/pageCopyMerge.ts
+  src/lib/selectOptions.test.ts
+  src/lib/site.ts
+  src/pages/give.astro
+  src/pages/isolated-components/GiveClose.astro
+  src/pages/isolated-components/GiveCollage.astro
+  src/pages/isolated-components/GiveFaq.astro
+  src/pages/isolated-components/GiveHero.astro
+  src/pages/isolated-components/GivePhoto.astro
+  src/pages/isolated-components/GiveRecognition.astro
+  src/pages/isolated-components/GiveStatement.astro
+  src/pages/isolated-components/GivingCard.astro
+  tsconfig.json
+  vitest.config.ts
+note: the named tests run in Targeted mode, narrowed to the changed package(s). No --runner or raw-runner fallback is needed; register them at the Reconcile step as usual.
 Running tests via the configured runner command(s) — use these, do not reconstruct runner flags:
   tests  ::  npx vitest run --reporter=json
-note: full re-run requested; merkle-hash optimization skipped
 Test refresh triggered. Waiting for results...
 [   2s] Running runner: tests
 [  12s] Still running: tests
 [  22s] Still running: tests
 [  26s] Tests completed.
-{"failed":0,"passed":1047,"skipped":0,"success":true,"total":1047}
-All 1047 tests passed.
+{"failed":0,"passed":5,"skipped":1061,"success":true,"total":5}
+All 5 tests passed.
+
+Partial run — partition caches WERE updated; the full-suite test-cache.json was
+NOT (full-suite hash invariant). If a stale-partition bail sent you here, that
+recovery has landed — re-run the command that bailed.
+Audit gates read the full-suite cache. Flag-free `refresh-tests` updates it but
+is gated until `finalize`. To update the full-suite cache now (e.g. for
+brand-new tests), run: codeyam-editor editor refresh-tests --force

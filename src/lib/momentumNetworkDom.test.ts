@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { initMomentumNetwork } from './momentumNetworkDom';
+import { initMomentumNetwork, applyNetworkGreeting } from './momentumNetworkDom';
 import { SUPPORTER_PARAM } from './supporterBadge';
 
 /** The markup the component server-renders, trimmed to what the wiring reads. */
@@ -327,5 +327,73 @@ describe('the sound control', () => {
     expect(() =>
       node('margaret').dispatchEvent(new Event('pointerenter', { bubbles: true })),
     ).not.toThrow();
+  });
+});
+
+// The greeting the campaign email's `?name=` produces over the grid.
+//
+// The band became the page's hero, so it inherited the personalization the photo
+// hero used to carry — but on different terms: an EXTRA line for a named arrival
+// rather than a headline swap, because this band's headline is its composition.
+// That asymmetry is the whole rule, and these cover both halves of it.
+describe('applyNetworkGreeting', () => {
+  const greeting = () => document.querySelector<HTMLElement>('[data-network-greeting]')!;
+
+  function renderGreeting(attrs = ''): void {
+    document.body.innerHTML = `
+      <p class="network-greeting" data-network-greeting
+         data-named="{name}, let's go further together." ${attrs} hidden></p>`;
+  }
+
+  beforeEach(() => renderGreeting());
+
+  // The half the campaign pays for: the merge tag's name reaches the band and
+  // the line becomes visible, rather than staying the hidden placeholder it
+  // renders as for everyone else.
+  it('greets a subscriber arriving from the campaign email', () => {
+    applyNetworkGreeting('?name=Nicole');
+
+    expect(greeting().textContent).toBe("Nicole, let's go further together.");
+    expect(greeting().hidden).toBe(false);
+  });
+
+  // The public visitor is the majority, and the design they see is the one the
+  // team directed. No name means no line at all — NOT a generic greeting sitting
+  // in the slot, which is what the old hero would have done here.
+  it('shows nothing at all to a visitor with no name in the link', () => {
+    applyNetworkGreeting('');
+
+    expect(greeting().hidden).toBe(true);
+    expect(greeting().textContent).toBe('');
+  });
+
+  // This URL gets mailed to the whole list and forwarded onward, so a crafted
+  // `?name=` is a plausible attack rather than a hypothetical one. It must
+  // degrade to the un-greeted page, never render attacker-chosen text.
+  it('refuses a name that is not plausibly a name', () => {
+    applyNetworkGreeting('?name=%3Cscript%3Ealert(1)%3C%2Fscript%3E');
+
+    expect(greeting().hidden).toBe(true);
+    expect(greeting().textContent).toBe('');
+  });
+
+  // A scenario pins the greeting server-side so it can be captured; the capture
+  // harness never carries a `?name=`, so recomputing would blank the very thing
+  // the frame exists to show.
+  it('leaves a server-pinned greeting alone', () => {
+    renderGreeting('data-preview="true"');
+    greeting().textContent = "Ben, let's go further together.";
+    greeting().hidden = false;
+
+    applyNetworkGreeting('?name=Nicole');
+
+    expect(greeting().textContent).toBe("Ben, let's go further together.");
+  });
+
+  // Every other route, and /donate before the band is on the page.
+  it('no-ops when the band is absent', () => {
+    document.body.innerHTML = '';
+
+    expect(() => applyNetworkGreeting('?name=Nicole')).not.toThrow();
   });
 });

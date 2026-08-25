@@ -248,10 +248,22 @@
     "testFile": "src/lib/media.test.ts"
   },
   {
+    "description": "The unlit points behind the real supporters, and the wiring between them. The campaign starts empty and holds a few dozen people for a long while, but the design's impact comes from density — drawing nineteen lights in a frame composed for two hundred reads as a broken graphic rather than as a young network. So the frame is filled: real supporters draw bright with a bloom, these draw dim, small and flat behind them, wired along a jittered grid so the field reads as a lattice rather than as scattered specks. The honesty of that is structural rather than a matter of styling restraint: an AmbientPoint carries no slug, no school and no selectable flag, so there is nothing on it a consumer could mistake for a person, and it appears in no detail record, no search haystack, no supporter roll, and never in the count — which reads donors.length. The field also RECEDES, returning the frame's capacity minus the supporters already in it, so ambient points give way to real gifts one for one until at campaign scale there are none left.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "ambientField",
+    "testFile": "src/lib/momentumNetwork.test.ts"
+  },
+  {
     "description": "Applies one decision answer to a progress object, returning a new one. Keeps the answer text alongside the flag so the page can show what was decided rather than only that something was — the whole reason D1 stayed open is that its answer was never written anywhere durable. Reopening drops the text with the flag, so a decision back in the open column cannot still display a conclusion it no longer holds.",
     "filePath": "src/lib/cutoverTicks.ts",
     "name": "applyDecisionAnswer",
     "testFile": "src/lib/cutoverTicks.test.ts"
+  },
+  {
+    "description": "Greets a visitor who arrived from the campaign email with ?name= over the network grid. Deliberately asymmetric with the photo hero it replaced, which chose between a named and a generic headline: this band's headline is its composition, so the greeting is an EXTRA line a named arrival sees and nobody else does — no name means the element simply stays hidden, and the public visitor gets the page the team signed off on, unchanged. Fills the {name} placeholder from the copy field the old hero used, so heroHeadlineNamed is live again rather than an editor-facing field that changes nothing. Leaves a server-pinned greeting (data-preview) alone so a scenario can capture the state a static build cannot produce, since the name arrives in the browser long after the HTML was written. SECURITY: the value comes from a URL that gets mailed to the whole list and forwarded onward, so it is run through sanitizeFirstName and written with textContent — a hostile ?name= renders no greeting at all rather than attacker-chosen text under Harvard's brand.",
+    "filePath": "src/lib/momentumNetworkDom.ts",
+    "name": "applyNetworkGreeting",
+    "testFile": "src/lib/momentumNetworkDom.test.ts"
   },
   {
     "description": "Applies one step toggle to a progress object, returning a new one. This is the function that decides what 'two people ticked at once' resolves to: ticks on different steps both survive, ticks on the same step converge, and an unknown id is appended rather than dropped so a step added after the file was committed is still tickable. Pure, because the caller holds an optimistic copy to revert to when the commit fails.",
@@ -660,6 +672,12 @@
     "filePath": "src/lib/sponsors.ts",
     "name": "hasPlaceholderSponsors",
     "testFile": "src/lib/sponsors.test.ts"
+  },
+  {
+    "description": "A network-band heading with its asterisked runs turned into em, everything else escaped. The band wants one emphasised phrase in a different colour — 'A grid, *lit from within*.' — and the heading is a single CMS string; splitting it into two fields would make an editor assemble a sentence out of parts and forbid them moving the emphasis, while hardcoding the span in the component would take the heading away from the CMS entirely, which several plans on this page exist to prevent. Escaping runs FIRST and over the whole string, so the only markup that can reach the page is the em this function puts there — the value is repo-committed rather than user-submitted, which lowers the stakes without removing them, since a CMS writes this field and set:html renders whatever it is handed. The asterisk match is non-greedy and refuses to span an asterisk, so an unclosed one prints literally instead of swallowing the rest of the heading.",
+    "filePath": "src/lib/momentumNetwork.ts",
+    "name": "headlineHtml",
+    "testFile": "src/lib/momentumNetwork.test.ts"
   },
   {
     "description": "Chooses the campaign hero headline — the {name} template filled with a sanitized first name, or the generic headline when no usable name is present. Never leaks an unfilled {name} placeholder.",
@@ -1194,6 +1212,12 @@
     "filePath": "src/lib/projects.ts",
     "name": "relatedProjects",
     "testFile": "src/lib/projects.test.ts"
+  },
+  {
+    "description": "Where a giving CTA on a CAMPAIGN page points, as distinct from the button on the giving page itself (which is resolveGiveHref). The two answer different questions: a CTA on /donate means 'take me somewhere I can give', and the best answer is /give, which states the goal, the amounts and what the money funds before asking for anything; the button at the bottom of /give means 'I am giving now', which has to leave the site for the platform or open the giving-inquiry email until one exists. A configured donateUrl wins outright here, so choosing a platform sends every campaign CTA straight to it and takes /give out of the path entirely — a real checkout is a better destination than our page, and the CMS switch keeps working unchanged. Without this split the button on /give would resolve to /give and the page would link to itself, which is the failure this function exists to make impossible.",
+    "filePath": "src/lib/giving.ts",
+    "name": "resolveGiveCtaHref",
+    "testFile": "src/lib/giving.test.ts"
   },
   {
     "description": "Resolves where a giving CTA points: the donation platform when `donateUrl` is configured, otherwise a mailto with a campaign-specific subject. Treats empty/whitespace-only as unset and trims pasted URLs, so a cleared CMS field cannot produce href=\"\".",

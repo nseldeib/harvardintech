@@ -1,0 +1,30 @@
+---
+import Component from "../../../src/components/give/GivePhoto.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GivePhoto — the full-bleed strip between the hero and the
+// giving card.
+//
+// A real committed image rather than a placeholder: the band's whole job is the
+// `object-fit: cover` crop at a clamped height, and a solid-colour stand-in
+// would review the box while showing nothing about how a photograph survives
+// it.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GivePhoto</title>
+    <style is:global>
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component src="/images/hero/hero.jpg" alt="Harvard Alumni in Tech members at a panel event" />
+    </div>
+  </body>
+</html>

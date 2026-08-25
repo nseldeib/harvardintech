@@ -60,11 +60,12 @@ export async function loadPillars(group?: string): Promise<Pillar[]> {
   );
 
   return sortByOrder(selectGroup(entries, group)).map(
-    ({ title, description, linkLabel, linkUrl, group: cardGroup }) => ({
+    ({ title, description, linkLabel, linkUrl, amount, group: cardGroup }) => ({
       title,
       body: description,
       linkLabel,
       linkUrl,
+      amount,
       group: cardGroup,
     }),
   );

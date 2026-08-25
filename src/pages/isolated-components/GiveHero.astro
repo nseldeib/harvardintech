@@ -1,0 +1,34 @@
+---
+import Component from "../../../src/components/give/GiveHero.astro";
+import "../../../src/styles/tokens.css";
+
+// Isolation page for GiveHero — the giving page's opening band.
+//
+// The real copy from `givePage.json`, not lorem: the headline's length is what
+// decides whether it breaks across two lines or three at the band's 16ch cap,
+// and a shorter stand-in would review a wrap this band never has.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Isolated: GiveHero</title>
+    <style is:global>
+      /* The capture wrapper is fit-content; pin a page-like width so the band is
+         reviewed at the proportions it has on /give. */
+      #codeyam-capture {
+        width: 1200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeyam-capture">
+      <Component
+        kicker="The Momentum Fund"
+        title="Help build the foundation for what comes next."
+        subhead="Your contribution funds the infrastructure, tools, and chapter programming Harvard Alumni in Tech needs to serve a growing global community."
+      />
+    </div>
+  </body>
+</html>

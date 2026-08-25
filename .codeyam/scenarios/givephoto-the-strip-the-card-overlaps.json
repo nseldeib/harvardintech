@@ -1,0 +1,13 @@
+{
+  "name": "GivePhoto - The Strip The Card Overlaps",
+  "id": "0dfe6119-c717-4cec-b8db-3e769431b667",
+  "url": "/isolated-components/GivePhoto",
+  "dimensions": [
+    "Desktop"
+  ],
+  "mocks": {},
+  "componentName": "GivePhoto",
+  "scenarioType": "component",
+  "pageFilePath": "src/components/give/GivePhoto.astro",
+  "description": "The full-bleed photograph between the hero and the giving card. A band of its own rather than a background on either neighbour, because the card pulls up over it with a negative margin and needs a real element to sit against. Captured with a real photograph, not a colour block: the whole band is an object-fit cover crop at a clamped height, and a solid stand-in would show the box while proving nothing about how a picture survives it."
+}

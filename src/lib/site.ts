@@ -152,6 +152,8 @@ export interface DonatePageCopy {
     body: string;
     linkLabel?: string;
     linkUrl?: string;
+    /** What this line costs, shown beside it in the `list` layout only. */
+    amount?: string;
     /** Which band shows this card. Carried down to the page component, which
      *  selects per section — see `src/lib/sectionGroups.ts`. */
     group?: string;
@@ -187,6 +189,11 @@ export interface DonatePageCopy {
   networkTitle?: string;
   networkTagline?: string;
   networkSearchTitle?: string;
+  /** The word beside the live supporter count in the network's rail. The number
+   *  itself is counted from the supporters and is deliberately not copy. */
+  networkCountLabel?: string;
+  /** The rail's giving CTA. Falls back to `ctaLabel`. */
+  networkCtaLabel?: string;
   shareMessage?: string;
   ctaKicker?: string;
   ctaTitle?: string;
