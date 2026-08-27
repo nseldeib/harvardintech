@@ -24,7 +24,13 @@ from datetime import datetime, timezone
 # sys.path so the shared loader is importable regardless of the cwd
 # the hook runner launches from.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _step_metadata import cli_command, load_step_metadata, resolve_mode_table  # noqa: E402
+from _step_metadata import (  # noqa: E402
+    cli_command,
+    load_step_metadata,
+    mode_display_prefix,
+    mode_is_build,
+    resolve_mode_table,
+)
 
 
 def resolve_mode(state, metadata):
@@ -81,6 +87,129 @@ def log_event(project_dir, event, data=None):
         pass
 
 
+# ── Question-copy observer ─────────────────────────────────────────────
+#
+# Records what the agent ACTUALLY asked the user, so the question of
+# "did the plain-language guidance work?" is answered with evidence
+# rather than impression. It is the measurement half of a contract whose
+# other half is guidance only: there is deliberately no refusal here and
+# no blocking path, because blocking a question the agent has already
+# composed costs a full round trip and teaches it that asking is risky —
+# and an agent that asks less is a worse outcome than one that asks
+# clumsily.
+#
+# Three properties are load-bearing, and all three are about staying out
+# of the way: it never blocks, it never writes to the agent's stream, and
+# it swallows every error. A logging failure is not worth one interrupted
+# turn.
+
+QUESTION_COPY_LOG = "question-copy.jsonl"
+
+# Seconds to wait for the jargon check before giving up on it. The check
+# is a nicety; the record of what was asked is the point, so a slow or
+# absent binary costs the flagged terms and nothing else.
+JARGON_CHECK_TIMEOUT_S = 3
+
+
+def _flagged_terms(project_dir, text):
+    """Return the jargon terms `check-question-copy` flags in `text`.
+
+    Shells out rather than reimplementing the vocabulary, so the term
+    table has exactly ONE home (`plain_language.rs`) and a term added
+    there protects this log too. Returns [] on any failure — a missing
+    binary, a timeout, a parse error — because a hook that raises is a
+    hook that interrupts a turn.
+
+    Note the deliberate absence of `stderr=STDOUT`: under `--format json`
+    the editor routes every marker line to stderr, so merging the streams
+    is exactly what would break the parse.
+    """
+    try:
+        import subprocess
+
+        proc = subprocess.run(
+            [
+                cli_command(),
+                "editor",
+                "check-question-copy",
+                text,
+                "--format",
+                "json",
+            ],
+            cwd=project_dir,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            timeout=JARGON_CHECK_TIMEOUT_S,
+        )
+        doc = json.loads(proc.stdout.decode("utf-8", "replace"))
+        return [row.get("term") for row in doc.get("entries", [])]
+    except Exception:
+        return []
+
+
+def _log_question_copy(project_dir, event_data):
+    """Append one line per question asked, to .codeyam/logs/question-copy.jsonl.
+
+    Written under `.codeyam/logs/` deliberately: that directory is already
+    gitignored, so the log needs no new ignore rule and therefore no
+    matching entry in `workspace_hygiene`'s LOCAL_ONLY_IGNORES declaration.
+    `.codeyam/state/` is NOT ignored wholesale — only its `command-output/`
+    subdirectory is — so putting it there would leak the log into commits.
+    """
+    try:
+        tool_input = event_data.get("tool_input", {}) or {}
+        questions = tool_input.get("questions", []) or []
+        if not questions:
+            return
+
+        # Best-effort step context. A question asked outside a cycle (no
+        # state file) still gets logged with nulls — those are exactly the
+        # ad-hoc questions the contract most needs to see.
+        slug = None
+        step = None
+        try:
+            state_path = os.path.join(project_dir, ".codeyam", "editor-step.json")
+            with open(state_path, "r") as f:
+                state = json.load(f)
+            slug = state.get("slug")
+            step = state.get("step")
+        except Exception:
+            pass
+
+        logs_dir = os.path.join(project_dir, ".codeyam", "logs")
+        os.makedirs(logs_dir, exist_ok=True)
+        log_path = os.path.join(logs_dir, QUESTION_COPY_LOG)
+        now = datetime.now(timezone.utc).isoformat()
+
+        with open(log_path, "a") as f:
+            for question in questions:
+                text = question.get("question", "") or ""
+                labels = [
+                    (option or {}).get("label", "")
+                    for option in (question.get("options", []) or [])
+                ]
+                # Check the labels alongside the question: an option label
+                # is a question the user has to answer too, and it is where
+                # jargon leaks most.
+                f.write(
+                    json.dumps(
+                        {
+                            "ts": now,
+                            "slug": slug,
+                            "step": step,
+                            "question": text,
+                            "optionLabels": labels,
+                            "flaggedTerms": _flagged_terms(
+                                project_dir, " ".join([text] + labels)
+                            ),
+                        }
+                    )
+                    + "\n"
+                )
+    except Exception:
+        pass
+
+
 def _terminal_signal_missing(project_dir, state):
     """Return True if state.step is the terminal step AND the
     completion-signal field is absent from feature-finalized.json.
@@ -132,8 +261,17 @@ def detect_event():
 # top-level tool in editor PTY sessions (it is not in the session's deferred
 # registry), so a `select:AskUserQuestion` preload was a guaranteed wasted
 # round-trip — it either re-fetched an already-available schema or, on harnesses
-# where it is not deferred, came back "no matching deferred tools". The Task*
-# tools ARE deferred and must be preloaded before the first step hand-off.
+# where it is not deferred, came back "no matching deferred tools".
+#
+# The Task* tools are deferred on SOME harnesses and absent from others. This
+# comment used to assert they "ARE deferred and must be preloaded", and that
+# sentence is what kept the preload unconditional: on the fleet the lookup
+# returns nothing every time, so 39 of 39 measured sessions paid a
+# guaranteed-empty round-trip and then read ~20 step directives prescribing a
+# tool they could not call. Neither answer can be hard-coded — a laptop session
+# genuinely needs the preload — so the preload still fires once, and what the
+# session OBSERVES is recorded (`taskToolsAvailable` below) and honored from
+# then on.
 TOOL_LOADING_SELECT_QUERY = "select:TaskCreate,TaskList,TaskUpdate,TaskGet"
 
 # SessionStart preloads one extra tool beyond the gate-step set: `Monitor`,
@@ -176,7 +314,12 @@ def _tool_loading_already_injected(project_dir, session_id):
 def _mark_tool_loading_injected(project_dir, session_id):
     """Record that this session received the tool-loading-protocol so later
     prompts in the same session skip it. No-op when session_id is absent (the
-    fail-open path keeps injecting rather than persisting an unkeyed marker)."""
+    fail-open path keeps injecting rather than persisting an unkeyed marker).
+
+    Writes a FRESH document, deliberately dropping any `taskToolsAvailable`
+    a previous session recorded. That reset is what lets the editor read the
+    field without knowing a session id: whatever value is present always
+    belongs to the session currently running."""
     if not session_id:
         return
     marker_path = os.path.join(project_dir, _TOOL_LOADING_MARKER_REL)
@@ -186,6 +329,172 @@ def _mark_tool_loading_injected(project_dir, session_id):
             json.dump({"session_id": session_id}, f)
     except Exception:
         pass
+
+
+def _task_tools_available(project_dir):
+    """Return what this session observed about the Task* tools: True, False,
+    or None for not-yet-known.
+
+    Read unkeyed on purpose. A recorded `True` is cleared by the next
+    session's first prompt (`_mark_tool_loading_injected` rewrites the
+    document); a recorded `False` deliberately persists, which is what stops
+    the fleet paying the empty lookup in every subsequent session. A `False`
+    that has gone WRONG — the same project on a harness that does have the
+    tools — self-corrects on that session's first ToolSearch, because the
+    SessionStart preload is unconditional. Until it does, the session renders
+    the `track-step` procedure, which works on every harness.
+
+    Anything unreadable is None, and None behaves exactly as the hook behaved
+    before the field existed."""
+    marker_path = os.path.join(project_dir, _TOOL_LOADING_MARKER_REL)
+    try:
+        with open(marker_path, "r") as f:
+            value = json.load(f).get("taskToolsAvailable")
+    except (IOError, json.JSONDecodeError):
+        return None
+    return value if isinstance(value, bool) else None
+
+
+def _record_task_tools_available(project_dir, available):
+    """Persist an observation about Task* availability beside the session
+    marker. Merges into the existing document so the session id survives; a
+    missing or corrupt document is replaced rather than left to poison every
+    later read."""
+    marker_path = os.path.join(project_dir, _TOOL_LOADING_MARKER_REL)
+    try:
+        doc = {}
+        try:
+            with open(marker_path, "r") as f:
+                loaded = json.load(f)
+            if isinstance(loaded, dict):
+                doc = loaded
+        except (IOError, json.JSONDecodeError):
+            pass
+        if doc.get("taskToolsAvailable") is available:
+            return
+        doc["taskToolsAvailable"] = available
+        os.makedirs(os.path.dirname(marker_path), exist_ok=True)
+        with open(marker_path, "w") as f:
+            json.dump(doc, f)
+    except Exception:
+        pass
+
+
+# Substrings that identify a ToolSearch that found nothing, and a Task* call
+# the harness refused. Both are the SAME observation — this session has no
+# task tool — arriving by two routes, because a harness that hides the tools
+# from `ToolSearch` may still surface a call to them as a hard error.
+_NO_MATCHING_TOOLS_MARKERS = ("no matching deferred tools",)
+_TOOL_UNAVAILABLE_MARKERS = ("no such tool available", "is disabled for this session")
+
+
+def _looks_like_task_tool_query(query):
+    """True when a ToolSearch query is the Task* preload this hook prescribes.
+
+    Matched on the tool NAMES rather than the exact query string so a caller
+    that reorders them, or searches for a subset, still settles the question."""
+    lowered = (query or "").lower()
+    return "select:" in lowered and any(
+        name in lowered for name in ("taskcreate", "tasklist", "taskupdate", "taskget")
+    )
+
+
+def _observe_task_tool_capability(project_dir, tool_name, tool_input, tool_response):
+    """Record what a just-finished tool call proves about Task* availability.
+
+    Three signals, in the order they arrive in a real session: a Task* preload
+    that came back empty (False), a Task* call the harness refused (False), and
+    a Task* call that worked (True). Anything else is not evidence and is
+    ignored — silence must never be read as an absence."""
+    # Name-check BEFORE serializing: this runs on every PostToolUse, and a
+    # `Read` of a large file would otherwise pay a full stringify to learn it
+    # is not a tool this function cares about.
+    if tool_name != "ToolSearch" and not tool_name.startswith("Task"):
+        return
+    blob = json.dumps(tool_response, default=str).lower() if tool_response else ""
+    if tool_name == "ToolSearch":
+        if not _looks_like_task_tool_query((tool_input or {}).get("query")):
+            return
+        if any(marker in blob for marker in _NO_MATCHING_TOOLS_MARKERS):
+            _record_task_tools_available(project_dir, False)
+        elif "taskcreate" in blob:
+            # The schemas came back. Recording the positive matters as much as
+            # the negative: the SessionStart preload still fires every session,
+            # so a harness that GAINS the tools re-settles here rather than
+            # staying on `track-step` forever.
+            _record_task_tools_available(project_dir, True)
+        return
+    if any(marker in blob for marker in _TOOL_UNAVAILABLE_MARKERS):
+        _record_task_tools_available(project_dir, False)
+    else:
+        _record_task_tools_available(project_dir, True)
+
+
+# How long `wedge-check` is allowed to take. It is a directory listing and a
+# handful of small reads, so anything approaching this is itself a malfunction —
+# and a hook that hung would freeze the very turn-end it is instrumenting.
+_WEDGE_CHECK_TIMEOUT_SECS = 10
+
+
+def _wedge_notice(project_dir):
+    """Ask the editor whether any background task is demonstrably stranded.
+
+    Returns the notice text, or "" for the overwhelmingly common case of
+    nothing being wrong. Every failure mode collapses to "" on purpose: the
+    binary being absent or old (a fleet mid-upgrade), the command timing out,
+    a non-zero exit. This runs on EVERY turn end, so a fault here must cost
+    nothing — a backstop that broke ordinary turns would be worse than the
+    stall it looks for.
+
+    `wedge-check` exits 0 whether or not it found something, so emptiness is
+    the signal and the return code is only a fault check.
+    """
+    import subprocess as _sp
+
+    try:
+        result = _sp.run(
+            [cli_command(), "editor", "wedge-check"],
+            cwd=project_dir,
+            capture_output=True,
+            text=True,
+            timeout=_WEDGE_CHECK_TIMEOUT_SECS,
+        )
+    except Exception:
+        return ""
+    if result.returncode != 0:
+        return ""
+    return result.stdout.strip()
+
+
+def emit_wedge_block(project_dir, event_data):
+    """Reopen the turn when a background task is demonstrably stranded.
+
+    Returns True when it emitted a block decision (and the caller must print
+    nothing else, because a Stop hook's stdout is parsed as one JSON document).
+
+    Blocking rather than printing is the whole point. Stop-hook stdout on a
+    plain exit is transcript decoration the agent never reads, and the agent is
+    exactly who has to act: a stranded result means every plan that depends on
+    it is void. A `block` decision puts the notice in front of the agent and
+    reopens the turn, which is the one thing that distinguishes this from the
+    launch trigger that could not reach it.
+
+    Three separate guards keep that from becoming a loop, because reopening a
+    turn is the one failure mode a Stop hook can inflict that nothing else can:
+      * `stop_hook_active` is set by the harness on a turn that a Stop hook
+        already reopened, so we never block twice in a row;
+      * the notice is one-shot per task — `claim_unreported` drops a
+        `.wedge-reported` marker beside the task output, shared with the launch
+        trigger, so the same stall is announced exactly once by either;
+      * any failure at all is silent, and silence means "do not block".
+    """
+    if event_data.get("stop_hook_active"):
+        return False
+    notice = _wedge_notice(project_dir)
+    if not notice:
+        return False
+    print(json.dumps({"decision": "block", "reason": notice}))
+    return True
 
 
 def main():
@@ -245,7 +554,35 @@ def main():
                 except Exception:
                     pass
 
+    # ── Record what was actually asked ─────────────────────────────────
+    # Placed BEFORE the state-file early return on purpose: a question
+    # asked outside a cycle is still a question a user had to answer, and
+    # returning first would blind the log to exactly the ad-hoc questions
+    # the contract most needs to see. Falls through afterwards — this
+    # observer prints nothing and changes no control flow.
+    if event_type == "post_tool_use" and event_data.get("tool_name") == "AskUserQuestion":
+        _log_question_copy(project_dir, event_data)
+
     if not os.path.exists(state_path):
+        # No editor-step.json — a stateless session entry. This is the exact
+        # moment the routing decision gets made AND the request is in hand, so
+        # name triage as the entry rather than leaving it to a self-judged
+        # build-vs-not call made before the request has been read. Advisory,
+        # like every other directive this hook emits, and scoped to a real
+        # user prompt: slash commands carry their own routing.
+        if event_type == "user_prompt":
+            entry_prompt = event_data.get("prompt", "").strip()
+            if entry_prompt and not entry_prompt.startswith("/"):
+                print("<user-prompt-submit-hook>")
+                print(
+                    "Editor Mode — no cycle in flight. Enter this request at triage, not "
+                    "at the build flow: run "
+                    f"`{cli_command()} editor step --slug assist-triage --mode assist`. "
+                    "Triage classifies the request against a written rubric (and defaults "
+                    "to `build` when ambiguous), then hands off to the build flow itself "
+                    "when it really is one — so do not judge build-vs-not yourself here."
+                )
+                print("</user-prompt-submit-hook>")
         return
 
     try:
@@ -261,7 +598,7 @@ def main():
     step_labels = mode_table["labels"]
     step_restrictions = mode_table["restrictions"]
     label = step_labels.get(step, "Unknown")
-    mode_prefix = "Backend Flow" if mode == "backend" else "UI Flow"
+    mode_prefix = mode_display_prefix(mode)
 
     if not step:
         return
@@ -272,6 +609,13 @@ def main():
     if event_type == "post_tool_use":
         tool_name = event_data.get("tool_name", "")
         tool_input = event_data.get("tool_input", {}) or {}
+        # Settle, once per session, whether this harness has the Task* tools
+        # at all. Separate from the step-tracking flags below and deliberately
+        # unconditional: a Task* call that FAILED still answers this question,
+        # even though the flags treat it the same as one that worked.
+        _observe_task_tool_capability(
+            project_dir, tool_name, tool_input, event_data.get("tool_response")
+        )
         # TaskCreate → mark the current step's task as created, provided
         # the subject references this step. If no subject is provided, trust
         # the agent and flip the flag anyway.
@@ -329,10 +673,16 @@ def main():
 
     restriction = step_restrictions.get(step, "")
     _cli = cli_command()
+    # In-cycle, the next step is simply the next step. At the END of a cycle
+    # the next USER REQUEST is not necessarily a build, so route it through
+    # triage rather than booting the build flow: "deploy it and give me the
+    # live URL" is a config/hosting request that a `step 1` fallback drags
+    # through the whole 28-step UI workflow. `assist-triage` classifies it and
+    # hands off to the build flow itself when it really is one.
     next_cmd = (
         f"{_cli} editor step {step + 1}"
         if total_steps and step < total_steps
-        else f"{_cli} editor step 1"
+        else f"{_cli} editor step --slug assist-triage --mode assist"
     )
 
     # ── UserPromptSubmit: inject step context ──────────────────────────
@@ -346,8 +696,15 @@ def main():
         # concern, not a per-prompt one. Injecting it on every UserPromptSubmit
         # re-fired the wasted preload round-trip on every resumed prompt, so gate
         # it behind a session_id-keyed marker and emit it at most once per session.
+        # A session that already looked and found nothing must not be told to
+        # look again. This is the belt to the one-shot marker's braces: when
+        # the harness payload omits session_id the marker fails open and
+        # re-injects on EVERY prompt, which is the shape the fleet measured.
         session_id = event_data.get("session_id")
-        if not _tool_loading_already_injected(project_dir, session_id):
+        if (
+            not _tool_loading_already_injected(project_dir, session_id)
+            and _task_tools_available(project_dir) is not False
+        ):
             lines.extend([
                 '',
                 '<tool-loading-protocol>',
@@ -394,15 +751,34 @@ def main():
                 "make the changes, re-register affected scenarios, and update the journal. "
                 "Then continue from the current step."
             )
-        else:
+        elif mode_is_build(mode):
             lines.append(
                 f"You are on step {step}. Follow the `{_cli} editor` workflow. "
                 f"Do NOT skip ahead or make changes outside the current step."
+            )
+        else:
+            # A non-build track (assist, design) is not walking a build to
+            # completion, so "do not skip ahead" asserts something untrue
+            # about the session on every single prompt — the exact framing
+            # these tracks exist to avoid. Point at the current step without
+            # claiming the session is mid-build.
+            lines.append(
+                f"You are on step {step} of the `{mode}` track. "
+                f"Follow the `{_cli} editor` steps for this track."
             )
         if restriction:
             lines.append(restriction)
         lines.append('</user-prompt-submit-hook>')
         print("\n".join(lines))
+        return
+
+    # ── Stop: the wedge backstop's second trigger ──────────────────────
+    # The detector itself has always been correct; its only trigger was the
+    # launch of a wrapped command, which an agent parked on a result it cannot
+    # get never performs. So the backstop could only rescue an agent that did
+    # not need rescuing. This is the reachable trigger: the end of the turn IS
+    # the moment parking happens, and it needs no suspicion and no agent action.
+    if event_type == "stop" and emit_wedge_block(project_dir, event_data):
         return
 
     # ── Stop: show progress tracker ────────────────────────────────────

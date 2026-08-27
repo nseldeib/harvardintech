@@ -16,4 +16,4 @@ crates/codeyam-editor/src/scaffold/hook_skip_list.json merge=codeyam-generated-a
 crates/codeyam-editor/skills.lock merge=codeyam-generated-artifact
 .codeyam/test-cache/blobs/*.json merge=ours
 .codeyam/state/red-proofs/*.json merge=codeyam-keep-replayed
-.codeyam/test-cache/**/*.json merge=ours
+.codeyam/test-cache/**/*.json merge=codeyam-test-cache-partition
