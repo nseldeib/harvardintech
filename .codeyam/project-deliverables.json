@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "derivedFromHash": "71eb56d0f96b3d74ad67fb60f8439e67ee46add35bce29974d540e821ad361a9",
+  "derivedAt": "2026-08-28T16:43:29.339708166+00:00",
+  "deliverables": [
+    {
+      "id": "faithfully-reproduce-the-harvardintech-com-site",
+      "text": "Faithfully reproduce the harvardintech.com site with modern technology",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    },
+    {
+      "id": "publish-the-site-live-on-github-pages-non-build",
+      "text": "Publish the site live on GitHub Pages (non-build: handled in a working session, not the build flow)",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    },
+    {
+      "id": "a-content-admin-cms-that-runs-locally",
+      "text": "A content admin (CMS) that runs locally",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    },
+    {
+      "id": "the-content-admin-also-running-in-the-cloud-on",
+      "text": "The content admin also running in the cloud on GitHub Pages",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    },
+    {
+      "id": "the-content-admin-protected-by-a-password-and",
+      "text": "The content admin protected by a password and/or GitHub sign-in",
+      "status": "open",
+      "resolvedAt": null,
+      "resolvedInFeature": null,
+      "planSlug": null,
+      "note": null,
+      "decidedBy": null
+    }
+  ]
+}

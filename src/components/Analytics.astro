@@ -18,21 +18,52 @@ import { loadIntegrations } from '../lib/integrationsContent';
 const { googleAnalyticsId: gaId } = await loadIntegrations(settings);
 ---
 
+{gaId ? <div id="ga-config" data-ga-id={gaId} hidden /> : null}
+
 {
-  gaId ? (
-    <Fragment>
-      <script
-        is:inline
-        async
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-      />
-      <script
-        is:inline
-        set:html={`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${gaId}');`}
-      />
-    </Fragment>
-  ) : null
+  /*
+    The measurement id rides on a data attribute rather than being interpolated
+    into the script below, because a bundled `<script>` is a MODULE: Astro emits
+    it once and every page shares that one file, so a value baked into it would
+    be whatever the first page built happened to carry. The attribute is
+    per-page, which is what an editable-in-the-CMS id has to be.
+
+    Loading gtag from here rather than from a `<script is:inline src>` in the
+    head is what makes the suppression possible at all. A static site cannot know
+    at BUILD time whether a given request is a reader or the CMS editor's preview
+    pane — that is a query string, and query strings only exist in the browser.
+    So the tag is injected by script or not at all, and `isEmbeddedPreview`
+    decides which. See src/lib/embeddedPreview.ts.
+
+    The cost is that analytics now loads a moment later, after the module script
+    parses, instead of racing the rest of the head. For a page-view counter that
+    is a fair trade for numbers that aren't inflated by the team's own editing.
+  */
 }
+<script>
+  import { loadScriptUnlessEmbedded } from '../lib/embeddedPreview';
+
+  const gaId = document.getElementById('ga-config')?.dataset.gaId;
+  const src = gaId ? `https://www.googletagmanager.com/gtag/js?id=${gaId}` : undefined;
+
+  // The bootstrap runs only when the tag actually loaded — no id configured, or
+  // the editor's preview pane, and `dataLayer` is never created at all. A
+  // half-initialised gtag would queue events forever against a script that is
+  // not coming.
+  if (loadScriptUnlessEmbedded(document, window.location.search, src)) {
+    // Google's own snippet, unchanged in shape: `dataLayer` is a global array
+    // and `gtag` pushes its raw `arguments` object onto it. Kept literally
+    // rather than modernised — gtag.js reads those pushed entries positionally,
+    // and a rest-parameter array is a different object than the `arguments` the
+    // library is written against.
+    const w = window as unknown as { dataLayer?: unknown[]; gtag?: unknown };
+    w.dataLayer = w.dataLayer || [];
+    function gtag(..._args: unknown[]) {
+      // eslint-disable-next-line prefer-rest-params
+      w.dataLayer!.push(arguments);
+    }
+    w.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', gaId);
+  }
+</script>

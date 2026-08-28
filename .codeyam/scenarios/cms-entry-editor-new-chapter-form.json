@@ -15,5 +15,5 @@
   },
   "scenarioType": "application",
   "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/new/[collection].astro",
-  "description": "The blank creation form an editor meets when adding a chapter — every input comes from the custom collection declared in collections.json, proving the registry drives creation and not just editing."
+  "description": "The blank creation form an editor meets when adding a chapter — every input comes from the custom collection declared in collections.json. Also the live-preview pane's NEW-ENTRY state: an entry's address is built from its slug and a blank form has none, so the pane says 'Name this entry and its page will appear here' instead of showing an empty frame, and it resolves to the real page the moment the entry is named."
 }

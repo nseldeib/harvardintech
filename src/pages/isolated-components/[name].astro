@@ -44,6 +44,7 @@ import { groupDonorsByTier } from '../../lib/donors';
 import PrimaryNav from '../../components/nav/PrimaryNav.astro';
 import UtilityBar from '../../components/nav/UtilityBar.astro';
 import { loadMomentumSections } from '../../lib/momentumSectionsContent';
+import { loadAccomplishments } from '../../lib/donatePageContent';
 import {
   chapterNavItems,
   withChapterGroup,
@@ -537,10 +538,19 @@ const narrativeStates = {
 // MomentumAccomplishments: the campaign's track record. Reads the real copy, so
 // the capture shows the figures the page actually publishes rather than invented
 // ones — the whole point of the section is that the numbers are true.
+//
+// Sourced through `loadAccomplishments()`, the SAME call `/donate` makes, rather
+// than through `donatePage.accomplishments`. That key no longer exists: the
+// entries moved out of the JSON singleton and into the `accomplishments` content
+// collection so an editor could reach them in the CMS, and this route was left
+// reading the old address. `?? []` meant the miss produced an empty array rather
+// than an error, the band hides itself when it has no items, and the scenario
+// captured a BLANK page — green everywhere, showing nothing. Reading from the
+// page's own loader is what keeps the two from drifting apart again.
 const accomplishmentsStates = {
   Default: {
     title: donatePage.accomplishmentsTitle,
-    items: donatePage.accomplishments ?? [],
+    items: await loadAccomplishments(),
   },
 };
 

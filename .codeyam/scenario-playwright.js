@@ -1,5 +1,5 @@
 // codeyam-generated — DO NOT EDIT.
-// codeyam-editor: 0.1.7  source-sha256: a84aee625b706c3a27da82e4ae4fead4048e612fba8c4cd106bd47b1d2d5032b
+// codeyam-editor: 0.1.7  build: 35edbe8f071598316313158a42886bc79f7c5674  source-sha256: 49b3a4f30c5cefe92f9105356aa7cd4dba47710bc3f85524a9725e70e6bd4c8f
 const {
   hasLoadingMarkers,
   shouldStopWaitingForImages,
@@ -358,6 +358,14 @@ async function collectVisibleTextLength(target) {
 // state rendered correctly in a real browser (verified: computed opacity 0.4 vs
 // 1) and was erased only at capture time. Anything already visible is now left
 // exactly as the app rendered it.
+//
+// The reveal's TRANSFORM half additionally stops at the SVG boundary, because a
+// CSS `transform` overrides the SVG `transform` presentation attribute: inside
+// an `<svg>` it erases the static geometry that CONSTRUCTS the drawing instead
+// of neutralizing an entrance animation, so a revealed SVG node lands on the
+// origin. Invisible SVG nodes are therefore revealed in place — opacity forced,
+// transform left alone. See the loop below for why the boundary is
+// `ownerSVGElement` rather than `closest("svg")`.
 async function forceFinalVisualState(target) {
   return target.evaluate(() => {
     const STYLE_ID = "__codeyam_force_final_state";
@@ -387,6 +395,18 @@ async function forceFinalVisualState(target) {
     // Reveal exactly those, and only those: a fully transparent element shows
     // nothing either way, so forcing it can hide no real state, while an element
     // at any visible opacity is left untouched.
+    //
+    // The transform half of the reveal STOPS at the SVG boundary. A CSS
+    // `transform` overrides the SVG `transform` presentation attribute, so
+    // inside an `<svg>` a forced `transform: none` does not neutralize an
+    // entrance animation — it erases the static rotate/translate/scale that
+    // CONSTRUCTS the drawing, revealing the node collapsed on the origin. The
+    // opacity half is still right there (a node at ~0 shows nothing either
+    // way), so an invisible SVG node is revealed IN PLACE. The boundary test is
+    // `ownerSVGElement` and NOT `closest("svg")`: HTML inside a
+    // `<foreignObject>` is a real HTMLElement with no `ownerSVGElement`, so it
+    // keeps the full reveal — `closest("svg")` would silently strand its
+    // genuine CSS entrance transform.
     if (typeof document.querySelectorAll !== "function") return true;
     const INVISIBLE_EPSILON = 0.01;
     for (const el of document.querySelectorAll("*")) {
@@ -400,8 +420,11 @@ async function forceFinalVisualState(target) {
       const opacity = parseFloat(computed.opacity);
       if (!Number.isFinite(opacity) || opacity > INVISIBLE_EPSILON) continue;
       if (!el.style || typeof el.style.setProperty !== "function") continue;
+      const inSvg =
+        el.ownerSVGElement != null ||
+        (typeof el.tagName === "string" && el.tagName.toLowerCase() === "svg");
       el.style.setProperty("opacity", "1", "important");
-      el.style.setProperty("transform", "none", "important");
+      if (!inSvg) el.style.setProperty("transform", "none", "important");
     }
     return true;
   });
@@ -907,6 +930,59 @@ async function collectInteractiveLabels(frame) {
   }, INTERACTIVE_SELECTOR);
 }
 
+// How many candidate labels an error message may echo. Deliberately tighter
+// than `collectInteractiveLabels`' own 20-label read cap: the labels are the
+// USER'S page content, so every one printed is a line of their app leaked into
+// the terminal. Enough to answer "did you mean one of these?", not enough to
+// transcribe the page.
+const CANDIDATE_LABEL_CAP = 8;
+
+// Render the candidate labels for an error message, capped and counted. Shared
+// by the no-match and action-failed paths so the echo policy lives in one place.
+async function candidateLabelSummary(frame) {
+  const candidates = await collectInteractiveLabels(frame);
+  if (candidates.length === 0) return "(none found on page)";
+  const shown = candidates.slice(0, CANDIDATE_LABEL_CAP);
+  const rest = candidates.length - shown.length;
+  return rest > 0 ? `${shown.join(", ")} (+${rest} more)` : shown.join(", ");
+}
+
+// Compose the "no element matched" error, branched on the form the caller
+// ACTUALLY passed. Pure and string-returning so both branches are asserted
+// without a browser.
+//
+// The substring advice ("prefer an exact CSS selector") only applies to a text
+// label. Printing it at a caller who already passed `#id` contradicts its own
+// input and reads as misdirection — the failure mode that sent two sessions
+// hunting a selector bug when the page had simply not hydrated. The candidate
+// labels ride with the text branch for the same reason: they answer "did you
+// mean one of these?", a question only a text match can have asked, and every
+// label printed is a line of the user's own page echoed into the terminal.
+function noMatchGuidance({ targetDesc, matchedByText, candidateLabels }) {
+  const queryParamHint =
+    `Many filter/status/sort states are also reachable directly via a ` +
+    `URL query param (e.g. add "?status=active" to the path) with no ` +
+    `interaction at all.`;
+  if (matchedByText) {
+    return (
+      `preview-interact: no element matched ${targetDesc}. ` +
+      `Text is matched as a case-insensitive SUBSTRING, so a misspelled or ` +
+      `over-specific label matches nothing — prefer an exact/role/testid CSS ` +
+      `selector (e.g. {"selector":"[data-testid=\\"save\\"]"}) for a precise ` +
+      `target. ${queryParamHint} ` +
+      `Candidate interactive labels: ${candidateLabels}`
+    );
+  }
+  return (
+    `preview-interact: no element matched ${targetDesc}. ` +
+    `That is already an exact CSS selector, so nothing on the page matches ` +
+    `it as written — confirm the element is present in THIS state (it may be ` +
+    `behind a tab, dialog, or conditional render), that the id/attribute is ` +
+    `spelled as the markup emits it, and that the page rendered and hydrated ` +
+    `at all. ${queryParamHint}`
+  );
+}
+
 // Describe the elements a substring text match resolved, so an ambiguity
 // warning can name the competing controls (e.g. the preset button "Bet" vs the
 // disclosure button "…or bet on"). Reads each matched element's inner text via
@@ -1054,17 +1130,17 @@ async function performInteraction(
   }
 
   if (matchCount === 0) {
-    const candidates = await collectInteractiveLabels(frame);
-    const candidateList =
-      candidates.length > 0 ? candidates.join(", ") : "(none found on page)";
+    // Candidate labels are collected ONLY for the text branch — see
+    // `noMatchGuidance` for why a CSS-selector miss neither needs them nor
+    // should echo the user's page content back at them.
     throw new Error(
-      `preview-interact: no element matched ${targetDesc}. ` +
-        `Text is matched as a case-insensitive SUBSTRING, so a misspelled or ` +
-        `over-specific label matches nothing — prefer an exact/role/testid CSS ` +
-        `selector (e.g. {"selector":"[data-testid=\\"save\\"]"}) for a precise ` +
-        `target. Many filter/status/sort states are also reachable directly via a ` +
-        `URL query param (e.g. add "?status=active" to the path) with no ` +
-        `interaction at all. Candidate interactive labels: ${candidateList}`,
+      noMatchGuidance({
+        targetDesc,
+        matchedByText,
+        candidateLabels: matchedByText
+          ? await candidateLabelSummary(frame)
+          : null,
+      }),
     );
   }
 
@@ -1106,12 +1182,9 @@ async function performInteraction(
         );
     }
   } catch (error) {
-    const candidates = await collectInteractiveLabels(frame);
-    const candidateList =
-      candidates.length > 0 ? candidates.join(", ") : "(none found on page)";
     throw new Error(
       `preview-interact: action "${action}" failed against ${targetDesc}: ${error.message || String(error)}. ` +
-        `Candidate interactive labels: ${candidateList}`,
+        `Candidate interactive labels: ${await candidateLabelSummary(frame)}`,
     );
   }
 }
@@ -1209,6 +1282,8 @@ module.exports = {
   loadScenarioInIframe,
   loadScenarioTopLevel,
   collectInteractiveLabels,
+  candidateLabelSummary,
+  noMatchGuidance,
   describeMatchCandidates,
   performInteraction,
   waitForPredicate,

@@ -124,6 +124,37 @@ something was actually wrong:
   `/admin/<collection>` returned a 500 whose body was the single word
   `undefined`.
 
+**0.13.0 → 0.14.0 was the first upgrade that needed NO re-derivation, and how
+that was established up front is the reusable part.** 0.14.0 is the
+live-page-preview release: it swaps `EntryPreview` for `LivePagePreview` in the
+entry editor and adds `EmbeddedPagePreviewFrame` / `entryPagePreview` /
+`useLivePreviewFrame` beside it. All of that lands in the entry EDITOR; the
+patch edits the entry LIST. Zero overlap, so `git apply --check` accepted the
+renamed patch against a pristine 0.14.0 tree on the first try — no fuzz, and so
+none of the silently mis-scoped hunks the 0.7.1 → 0.13.0 note describes.
+
+Settle that BEFORE touching `node_modules`, because it decides whether you are
+renaming one file or rewriting nine:
+
+    cd /tmp && npm pack @codeyam/cms@<old> && npm pack @codeyam/cms@<new>
+    diff -rq old/package/src new/package/src        # what upstream actually changed
+    grep -E '^diff --git' patches/@codeyam+cms+<old>.patch   # what the patch touches
+    # empty intersection → rename the patch and `git apply --check` it.
+
+Diff against a PRISTINE tarball, never against your own `node_modules` — that
+tree already has the patch applied, so a diff against it reports your own edits
+back at you as upstream changes and buries the answer.
+
+**`postinstall` did not run the patch on `npm install @codeyam/cms@x`.** The
+install reported `changed 1 package` and exited 0 with the arrows silently
+absent from `node_modules` — the same invisible outcome the version-filename
+mismatch produces, reached by a different route. Run `npx patch-package`
+explicitly after any targeted install, then confirm the patched tree really is
+stock-plus-your-edits:
+
+    diff -rq /tmp/new/package/src node_modules/@codeyam/cms/src
+    # should list ONLY the files the patch touches, plus OrderArrows.tsx as "Only in".
+
 **Verify the ADMIN ROUTES, and verify the arrows are on the page.** Every fault
 above was invisible to `verify-build` and to the public `astro build`, because
 `/admin` is excluded from the public track. `verify-routes` over
@@ -132,6 +163,29 @@ step more, because the route was 200 throughout. Fetch a collection page and
 grep the served HTML for `Move up` / `In order`, or read `"ordered"` out of the
 `EntryListSearch` island's `props` attribute. That is also the check that would
 have caught 0.7.0 quietly removing the built-in collections.
+
+**An upgrade can change what the SITE's pages do, not just the admin's.** 0.14.0
+embeds an entry's real page in an iframe beside the editing form, so every
+third-party tag in that page's `<head>` now fires once per entry an editor
+opens. Before the upgrade that happened only when someone deliberately clicked
+"Preview changes"; after it, it is automatic. Google Analytics was recording the
+team's own editing as site traffic — data that is wrong permanently, because
+those `page_view`s cannot be told apart afterwards — and Givebutter was loading
+a live donation form inside an editing tool.
+
+The CMS marks those loads for exactly this purpose (`cms-embed=1`), so
+`src/lib/embeddedPreview.ts` reads the flag and both `Analytics.astro` and
+`GivebutterWidgets.astro` inject their tag through `loadScriptUnlessEmbedded`
+rather than emitting a `<script is:inline src>`. That indirection is the whole
+reason those two components are not plain head tags any more: a statically built
+page cannot know at build time whether a request is a reader or the pane, so the
+decision has to happen in the browser.
+
+When the next upgrade lands, re-check it — the check is one command per
+direction, and neither failure is visible on the page:
+
+    # reader: expect the third-party requests. pane: expect none.
+    /donate            vs  /donate?cms-embed=1
 
 **The arrows are still meant to be temporary.** The lifecycle, which this
 repo has now run three times — the media guard in `@codeyam+cms+0.2.2.patch`

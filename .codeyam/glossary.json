@@ -767,6 +767,12 @@
     "testFile": "src/lib/cutoverProgress.test.ts"
   },
   {
+    "description": "Whether a page load is the CMS entry editor's live preview pane rather than a reader, decided by the presence of the cms-embed flag in a location.search string. Exists because @codeyam/cms 0.14.0 embeds an entry's real page beside the editing form, so every third-party tag in that page's head now fires once per entry an editor opens: Google Analytics records the team's own editing as site traffic, and Givebutter loads a live donation form inside an editing tool. Parses the query string rather than searching it as text, so a parameter that merely contains the flag name does not match. Keys on the flag being present rather than on its value, because the failure modes are asymmetric - a missed embed corrupts analytics permanently while a false positive costs one uncounted visit. Pure and DOM-free; the flag is duplicated as a literal rather than imported so the site's public pages never depend on the admin package, which ships only on the gated review track.",
+    "filePath": "src/lib/embeddedPreview.ts",
+    "name": "isEmbeddedPreview",
+    "testFile": "src/lib/embeddedPreview.test.ts"
+  },
+  {
     "description": "Whether a preview is password-protected, meaning its title and body are encrypted at rest and the stored body is base64 ciphertext rather than markdown. BlogPostBody branches on this: rendering a locked entry through the ordinary markdown path shows the reader a wall of base64, which is exactly what happened on the first attempt at the feature.",
     "filePath": "src/lib/drafts.ts",
     "name": "isLocked",
@@ -911,6 +917,12 @@
     "scenarios": [
       "momentum-fund-public-visitor"
     ]
+  },
+  {
+    "description": "Appends a third-party async script tag to a document's head unless the load is the CMS editor's preview pane or no source is configured, returning whether it injected. Extracted because Analytics.astro and GivebutterWidgets.astro were carrying the same six lines, which is how the two would have drifted - a later fix to one silently leaving the other loading inside the pane. Takes the Document as a parameter rather than closing over the ambient global so the DOM half is reachable from a unit test. The return value is load-bearing rather than informational: Analytics gates Google's dataLayer and gtag bootstrap on it, because running that against a tag that never loaded leaves a half-initialised global queueing events nothing will send. A missing source is treated exactly like the embedded case, which keeps the shipping default of a site that has chosen no analytics and no giving platform at zero third-party requests instead of an empty tag pointing at a CDN.",
+    "filePath": "src/lib/embeddedPreview.ts",
+    "name": "loadScriptUnlessEmbedded",
+    "testFile": "src/lib/embeddedPreview.test.ts"
   },
   {
     "description": "Reads the single sponsorPage entry and its levels concurrently and merges both over the committed sponsorPage.json, so /sponsor renders from content an editor controls while the JSON remains the fallback.",

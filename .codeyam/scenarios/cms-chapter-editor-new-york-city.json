@@ -127,5 +127,6 @@
     ]
   },
   "scenarioType": "application",
-  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro"
+  "pageFilePath": "node_modules/@codeyam/cms/src/pages/admin/[collection]/[entry].astro",
+  "description": "The canonical entry editor: the form on the left, and — new in @codeyam/cms 0.14.0 — the entry's REAL page rendered live in a pane on the right, addressed by the /chapters/:slug rule the collection declares. This is the frame that shows what the upgrade bought: an editor sees the page they are changing while they change it, instead of saving first and opening a second tab. Chapters is the right collection to show it on because its page is a full site route rather than a band inside a longer page, so the pane holds a whole recognisable screen."
 }

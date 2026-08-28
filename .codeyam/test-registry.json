@@ -4025,6 +4025,69 @@
       "runner": "tests"
     },
     {
+      "description": "`location.search` carries the leading `?` and a hand-built string usually does not. Accepting both means a caller cannot silently disable the suppression by trimming a character.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "isEmbeddedPreview › accepts the flag with or without a leading question mark",
+      "line": 45,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Guards the difference between parsing the query string and searching it as text. The naive `search.includes('cms-embed')` passes every other test in this file and fails only here — so this is the test that keeps the implementation honest about being a parser.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "isEmbeddedPreview › does not match a parameter that merely contains the flag name",
+      "line": 64,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The overwhelmingly common case — a reader who typed the address or followed a plain link. If this ever returned true the site would stop counting essentially all of its traffic, and it would look like a quiet week.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "isEmbeddedPreview › is false for a reader arriving with no query string at all",
+      "line": 23,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The email campaign's `?name=` link is the real traffic most at risk of a sloppy match — it is the one query string ordinary visitors actually carry, and it is exactly the audience a fundraising campaign most needs counted.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "isEmbeddedPreview › is false for a reader carrying unrelated query parameters",
+      "line": 30,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The literal string @codeyam/cms 0.14.0 puts on the iframe it embeds beside the editing form. This is the case the whole module exists for; if only one test here survived, it should be this one.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "isEmbeddedPreview › is true for the flag the CMS actually writes",
+      "line": 38,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The CMS writes `=1` today, but the flag's meaning is its presence. A future `cms-embed` or `cms-embed=true` must suppress just the same, because the costs are asymmetric: a missed embed corrupts analytics permanently, a false positive loses a single visit from someone who hand-typed the parameter.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "isEmbeddedPreview › keys on the flag being PRESENT, not on its value",
+      "line": 54,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Pins the contract with @codeyam/cms's own PREVIEW_EMBED_FLAG. The flag is duplicated as a literal here rather than imported (the site's public pages must not import from the admin package), so if an upgrade renames it this assertion is the thing that says so instead of analytics quietly refilling with editor traffic.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "isEmbeddedPreview › names the flag the CMS uses",
+      "line": 74,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
       "description": "an ordinary page is never locked, whatever its draft state",
       "file": "src/lib/drafts.test.ts",
       "format": "vitest",
@@ -4247,6 +4310,42 @@
       "key": "llms.txt GET › surfaces contact email and socials",
       "line": 62,
       "registeredAt": "2026-07-02T02:11:43.784715267+00:00",
+      "runner": "tests"
+    },
+    {
+      "description": "The path every real visitor takes. `async` is asserted because it is what keeps a third-party tag off the render path — it was an attribute on the hand-written `<script is:inline async>` before this logic moved into a function, and dropping it in the move would slow every page with nothing failing.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "loadScriptUnlessEmbedded › appends an async script for a reader, and reports that it did",
+      "line": 89,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The reason this module exists: an editor opening an entry must not be recorded as a visit. Asserting the empty head as well as the return value, because a tag appended and then ignored still fires its request.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "loadScriptUnlessEmbedded › appends nothing inside the editor preview pane, and reports that it did not",
+      "line": 101,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "The shipping default for a site that has chosen no analytics and no giving platform: zero third-party requests, not an empty tag pointing at a CDN. Mirrors givebutterScriptSrc returning undefined for a blank account id.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "loadScriptUnlessEmbedded › appends nothing when no source is configured",
+      "line": 109,
+      "registeredAt": "2026-08-28T17:12:02Z",
+      "runner": "tests"
+    },
+    {
+      "description": "Analytics.astro gates Google's dataLayer/gtag bootstrap on this return value, so the boolean is load-bearing rather than informational: a suppressed load must not leave a half-initialised global queueing events against a script that is never coming.",
+      "file": "src/lib/embeddedPreview.test.ts",
+      "format": "vitest",
+      "key": "loadScriptUnlessEmbedded › leaves the caller free to skip its own follow-on work",
+      "line": 119,
+      "registeredAt": "2026-08-28T17:12:02Z",
       "runner": "tests"
     },
     {

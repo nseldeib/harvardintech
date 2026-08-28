@@ -81,21 +81,21 @@
   ],
   "formatters": [],
   "screenSizes": {
-    "Tablet": {
-      "width": 768,
-      "height": 1024
+    "Laptop": {
+      "width": 1280,
+      "height": 800
     },
     "Mobile": {
       "width": 390,
       "height": 844
     },
+    "Tablet": {
+      "width": 768,
+      "height": 1024
+    },
     "Desktop": {
       "width": 1440,
       "height": 900
-    },
-    "Laptop": {
-      "width": 1280,
-      "height": 800
     }
   },
   "deviceScaleFactor": 3.0,
@@ -477,6 +477,236 @@
         "filePath": ".claude/hooks/editor-pretool-hook.py",
         "name": "read_rel_skill_path",
         "reason": "derive-generated"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "mode_display_prefix",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/_step_metadata.py",
+        "name": "mode_is_build",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_capture_available",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_commit_gate_phrase",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_emit_verdict",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_git_subcommand",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_heredoc_consumer",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_heredoc_delimiter",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_heredoc_openers",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_offending_stage",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "_pgrep_full_pattern",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "allow",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "classify_write_target",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "compound_stage_evidence",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "describe_call",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "elide_heredoc_bodies",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "explain_requested",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "invokes_codeyam_editor",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "invokes_git_subcommand",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "is_recursive_rm_flag",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "notice",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "parses_command_output_transcript",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "parses_json",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "piped_gating_notice",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "preview_marker_state",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "preview_required_next_action",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "recursive_rm_operands",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "recursive_rm_refusal",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "resolved_context",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "scripted_rewrite_stage",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "scripted_state_read_notice",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "scripted_state_read_refusal",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "scripted_state_read_target",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "self_matching_pgrep_loop",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "self_matching_pgrep_notice",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "tracked_file_count",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "tracked_recursive_rm",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-pretool-hook.py",
+        "name": "writes_into_codeyam",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_flagged_terms",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_log_question_copy",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_looks_like_task_tool_query",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_observe_task_tool_capability",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_record_task_tools_available",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_task_tools_available",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "_wedge_notice",
+        "reason": "editor-shipped"
+      },
+      {
+        "filePath": ".claude/hooks/editor-step-hook.py",
+        "name": "emit_wedge_block",
+        "reason": "editor-shipped"
       }
     ],
     "stepBudget": {
@@ -565,6 +795,7 @@
       "push": {
         "pause": true
       }
-    }
+    },
+    "audience": null
   }
 }

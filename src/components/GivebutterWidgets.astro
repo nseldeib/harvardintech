@@ -23,4 +23,30 @@ const { givebutterAccountId } = await loadIntegrations(settings);
 const src = givebutterScriptSrc(givebutterAccountId);
 ---
 
-{src ? <script is:inline async src={src} /> : null}
+{src ? <div id="givebutter-config" data-src={src} hidden /> : null}
+
+{
+  /*
+    Injected by script rather than emitted as `<script is:inline src>` for the
+    same reason Analytics.astro is — see the note there and
+    src/lib/embeddedPreview.ts. Short version: from @codeyam/cms 0.14.0 the entry
+    editor embeds this page in a pane beside the editing form, so a head tag
+    fires once per entry an editor opens. For Givebutter that means a live
+    donation form loading inside an editing tool, on entries that have nothing to
+    do with donating. Whether a load is a reader or that pane is a query string,
+    which a statically built page can only read in the browser.
+
+    The account id rides on a data attribute because a bundled `<script>` is one
+    shared module across every page, so a build-time interpolation would freeze
+    whatever the first page carried — and this id is editable in the CMS.
+  */
+}
+<script>
+  import { loadScriptUnlessEmbedded } from '../lib/embeddedPreview';
+
+  // No account id configured → zero third-party markup, exactly as before;
+  // `givebutterScriptSrc` already returns undefined in that case, and the helper
+  // treats a missing source and the editor pane the same way.
+  const src = document.getElementById('givebutter-config')?.dataset.src;
+  loadScriptUnlessEmbedded(document, window.location.search, src);
+</script>
