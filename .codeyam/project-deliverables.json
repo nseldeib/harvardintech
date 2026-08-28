@@ -6,52 +6,52 @@
     {
       "id": "faithfully-reproduce-the-harvardintech-com-site",
       "text": "Faithfully reproduce the harvardintech.com site with modern technology",
-      "status": "open",
-      "resolvedAt": null,
-      "resolvedInFeature": null,
+      "status": "deferred",
+      "resolvedAt": "2026-08-28T19:30:17.935508953+00:00",
+      "resolvedInFeature": "Upgrade The Content Admin To 0.14.0",
       "planSlug": null,
       "note": null,
-      "decidedBy": null
+      "decidedBy": "user"
     },
     {
       "id": "publish-the-site-live-on-github-pages-non-build",
       "text": "Publish the site live on GitHub Pages (non-build: handled in a working session, not the build flow)",
-      "status": "open",
-      "resolvedAt": null,
-      "resolvedInFeature": null,
+      "status": "deferred",
+      "resolvedAt": "2026-08-28T19:30:17.951798769+00:00",
+      "resolvedInFeature": "Upgrade The Content Admin To 0.14.0",
       "planSlug": null,
       "note": null,
-      "decidedBy": null
+      "decidedBy": "user"
     },
     {
       "id": "a-content-admin-cms-that-runs-locally",
       "text": "A content admin (CMS) that runs locally",
-      "status": "open",
-      "resolvedAt": null,
-      "resolvedInFeature": null,
+      "status": "deferred",
+      "resolvedAt": "2026-08-28T19:30:17.967265303+00:00",
+      "resolvedInFeature": "Upgrade The Content Admin To 0.14.0",
       "planSlug": null,
       "note": null,
-      "decidedBy": null
+      "decidedBy": "user"
     },
     {
       "id": "the-content-admin-also-running-in-the-cloud-on",
       "text": "The content admin also running in the cloud on GitHub Pages",
-      "status": "open",
-      "resolvedAt": null,
-      "resolvedInFeature": null,
+      "status": "deferred",
+      "resolvedAt": "2026-08-28T19:30:17.983257851+00:00",
+      "resolvedInFeature": "Upgrade The Content Admin To 0.14.0",
       "planSlug": null,
       "note": null,
-      "decidedBy": null
+      "decidedBy": "user"
     },
     {
       "id": "the-content-admin-protected-by-a-password-and",
       "text": "The content admin protected by a password and/or GitHub sign-in",
-      "status": "open",
-      "resolvedAt": null,
-      "resolvedInFeature": null,
+      "status": "deferred",
+      "resolvedAt": "2026-08-28T19:30:17.999234991+00:00",
+      "resolvedInFeature": "Upgrade The Content Admin To 0.14.0",
       "planSlug": null,
       "note": null,
-      "decidedBy": null
+      "decidedBy": "user"
     }
   ]
 }
